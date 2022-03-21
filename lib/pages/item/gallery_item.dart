@@ -30,7 +30,7 @@ final EhConfigService _ehConfigService = Get.find();
 
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
-class GalleryItemWidget extends StatefulWidget {
+class GalleryItemWidget extends StatelessWidget {
   const GalleryItemWidget(
       {Key? key, required this.tabTag, required this.galleryProvider})
       : super(key: key);
@@ -38,28 +38,8 @@ class GalleryItemWidget extends StatefulWidget {
   final GalleryProvider galleryProvider;
   final dynamic tabTag;
 
-  @override
-  State<GalleryItemWidget> createState() => _GalleryItemWidgetState();
-}
-
-class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   GalleryProviderController get galleryProviderController =>
-      Get.find(tag: widget.galleryProvider.gid);
-
-  @override
-  void initState() {
-    super.initState();
-    logger.d('initState');
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    logger.d('didChangeDependencies');
-    galleryProviderController.galleryProvider.copyWith(
-      ratingFallBack: widget.galleryProvider.ratingFallBack,
-    );
-  }
+      Get.find(tag: galleryProvider.gid);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +52,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
               Positioned(
                 left: 4,
                 top: 4,
-                child: Text('${widget.galleryProvider.pageOfList ?? ''}',
+                child: Text('${galleryProvider.pageOfList ?? ''}',
                     style: const TextStyle(
                         fontSize: 20,
                         color: CupertinoColors.secondarySystemBackground,
@@ -88,7 +68,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
         ),
       ),
       behavior: HitTestBehavior.opaque,
-      onTap: () => galleryProviderController.onTap(widget.tabTag),
+      onTap: () => galleryProviderController.onTap(tabTag),
       onTapDown: galleryProviderController.onTapDown,
       onTapUp: galleryProviderController.onTapUp,
       onTapCancel: galleryProviderController.onTapCancel,
@@ -128,7 +108,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                     Expanded(
                       child: _CoverImage(
                         galleryProviderController: galleryProviderController,
-                        tabTag: widget.tabTag,
+                        tabTag: tabTag,
                         cardType: true,
                       ),
                     ),
@@ -151,7 +131,7 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                         const SizedBox(height: 6),
                         // 上传者
                         Text(
-                          widget.galleryProvider.uploader ?? '',
+                          galleryProvider.uploader ?? '',
                           style: const TextStyle(
                               fontSize: 12, color: CupertinoColors.systemGrey),
                         ),
@@ -160,32 +140,33 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                         // 标签
                         if (_ehConfigService.fixedHeightOfListItems)
                           TagWaterfallFlowViewBox(
-                            simpleTags: widget.galleryProvider.simpleTags,
+                            simpleTags: galleryProvider.simpleTags,
                             crossAxisCount: 3,
                           )
                         else
                           TagBox(
-                            simpleTags: widget.galleryProvider.simpleTags ?? [],
+                            simpleTags: galleryProvider.simpleTags ?? [],
                           ),
                         const SizedBox(height: 6),
                         const Spacer(),
                         // 评分行
                         GetBuilder<GalleryProviderController>(
-                          tag: widget.galleryProvider.gid,
+                          tag: galleryProvider.gid,
                           builder: (logic) => Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               // 评分
                               Expanded(
-                                // child: _Rating(
-                                //   rating: galleryProvider.rating,
-                                //   ratingFallBack: galleryProvider.ratingFallBack,
-                                //   colorRating: galleryProvider.colorRating,
-                                // ),
-                                child: _RatingObx(
-                                    galleryProviderController:
-                                        galleryProviderController),
+                                child: _Rating(
+                                  rating: galleryProvider.rating,
+                                  ratingFallBack:
+                                      galleryProvider.ratingFallBack,
+                                  colorRating: galleryProvider.colorRating,
+                                ),
+                                // child: _RatingObx(
+                                //     galleryProviderController:
+                                //         galleryProviderController),
                               ),
                               // _Rating(
                               //   rating: logic.galleryProvider.rating,
@@ -199,8 +180,8 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                               ),
                               // 图片数量
                               _Filecont(
-                                translated: widget.galleryProvider.translated,
-                                filecount: widget.galleryProvider.filecount,
+                                translated: galleryProvider.translated,
+                                filecount: galleryProvider.filecount,
                               ),
                             ],
                           ),
@@ -214,13 +195,13 @@ class _GalleryItemWidgetState extends State<GalleryItemWidget> {
                           children: <Widget>[
                             // 类型
                             _Category(
-                              category: widget.galleryProvider.category,
+                              category: galleryProvider.category,
                             ),
 
                             // 上传时间
                             Expanded(
                                 child: _PostTime(
-                              postTime: widget.galleryProvider.postTime,
+                              postTime: galleryProvider.postTime,
                             )),
                           ],
                         ),
