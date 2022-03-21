@@ -25,21 +25,21 @@ const double kMaxFixCoverRatio = 2.2;
 final EhConfigService _ehConfigService = Get.find();
 
 class GalleryItemGrid extends StatelessWidget {
-  const GalleryItemGrid({Key? key, this.tabTag, required this.galleryItem})
+  const GalleryItemGrid({Key? key, this.tabTag, required this.galleryProvider})
       : super(key: key);
 
   final dynamic tabTag;
-  final GalleryItem galleryItem;
+  final GalleryProvider galleryProvider;
 
-  GalleryItemController get galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  GalleryProviderController get galleryProviderController =>
+      Get.find(tag: galleryProvider.gid);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       final Color _colorCategory = CupertinoDynamicColor.resolve(
-          ThemeColors.catColor[galleryItem.category ?? 'default'] ??
+          ThemeColors.catColor[galleryProvider.category ?? 'default'] ??
               CupertinoColors.systemBackground,
           context);
 
@@ -83,7 +83,7 @@ class GalleryItemGrid extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _CoverImage(
-                                galleryItemController: galleryItemController,
+                                galleryProviderController: galleryProviderController,
                                 tabTag: tabTag,
                                 coverImageHeigth: coverHeight,
                                 coverImageWidth: constraints.maxWidth,
@@ -118,7 +118,7 @@ class GalleryItemGrid extends StatelessWidget {
                       width: (kCategoryWidth + kRadius * 0.8) / 2,
                       alignment: Alignment.center,
                       child: Text(
-                        galleryItem.translated ?? '',
+                        galleryProvider.translated ?? '',
                         style: const TextStyle(
                             fontSize: 7.5,
                             color: CupertinoColors.white,
@@ -145,7 +145,7 @@ class GalleryItemGrid extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     _PostTime(
-                      postTime: galleryItemController.galleryItem.postTime,
+                      postTime: galleryProviderController.galleryProvider.postTime,
                     )
                   ],
                 ).paddingSymmetric(horizontal: 4, vertical: 2),
@@ -158,8 +158,8 @@ class GalleryItemGrid extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: container,
-        onTap: () => galleryItemController.onTap(tabTag),
-        onLongPress: galleryItemController.onLongPress,
+        onTap: () => galleryProviderController.onTap(tabTag),
+        onLongPress: galleryProviderController.onLongPress,
       ).autoCompressKeyboard(context);
     });
   }
@@ -169,7 +169,7 @@ class GalleryItemGrid extends StatelessWidget {
       Widget icon = Icon(
         FontAwesomeIcons.solidHeart,
         size: 12,
-        color: ThemeColors.favColor[galleryItemController.galleryItem.favcat],
+        color: ThemeColors.favColor[galleryProviderController.galleryProvider.favcat],
       );
 
       if (blur) {
@@ -193,7 +193,7 @@ class GalleryItemGrid extends StatelessWidget {
 
       return Container(
         padding: const EdgeInsets.only(left: 2),
-        child: galleryItemController.isFav ? icon : const SizedBox(),
+        child: galleryProviderController.isFav ? icon : const SizedBox(),
       );
     });
   }
@@ -205,10 +205,10 @@ class GalleryItemGrid extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 14.0,
-            rate: galleryItemController.galleryItem.ratingFallBack ?? 0,
+            rate: galleryProviderController.galleryProvider.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
-                galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
+                galleryProviderController.galleryProvider.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context!),
           ),
@@ -219,7 +219,7 @@ class GalleryItemGrid extends StatelessWidget {
 
   Widget _buildCount({bool blur = false}) {
     final text = Text(
-      galleryItemController.galleryItem.filecount ?? '',
+      galleryProviderController.galleryProvider.filecount ?? '',
       style: const TextStyle(
         fontSize: 12,
         color: Color.fromARGB(255, 240, 240, 240),
@@ -257,7 +257,7 @@ class GalleryItemGrid extends StatelessWidget {
   /// 构建标题
   Widget _buildTitle() {
     return Obx(() => Text(
-          galleryItemController.title,
+          galleryProviderController.title,
           maxLines: kTitleMaxLines,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分
@@ -287,25 +287,25 @@ class _PostTime extends StatelessWidget {
 class _CoverImage extends StatelessWidget {
   const _CoverImage({
     Key? key,
-    required this.galleryItemController,
+    required this.galleryProviderController,
     this.tabTag,
     required this.coverImageWidth,
     required this.coverImageHeigth,
   }) : super(key: key);
-  final GalleryItemController galleryItemController;
+  final GalleryProviderController galleryProviderController;
   final dynamic tabTag;
   final double coverImageWidth;
   final double coverImageHeigth;
 
   @override
   Widget build(BuildContext context) {
-    final GalleryItem _item = galleryItemController.galleryItem;
+    final GalleryProvider _provider = galleryProviderController.galleryProvider;
 
     // 图片高宽比
-    final ratio = (_item.imgHeight ?? 0) / (_item.imgWidth ?? 1);
+    final ratio = (_provider.imgHeight ?? 0) / (_provider.imgWidth ?? 1);
 
     logger.v('iRatio:$ratio\n'
-        'w:${_item.imgWidth} h:${_item.imgHeight}\n'
+        'w:${_provider.imgWidth} h:${_provider.imgHeight}\n'
         'cW:$coverImageWidth  cH:$coverImageHeigth');
 
     final containRatio = coverImageHeigth / coverImageWidth;
@@ -324,15 +324,15 @@ class _CoverImage extends StatelessWidget {
     }
 
     Widget image = CoverImg(
-      imgUrl: _item.imgUrl ?? '',
-      width: _item.imgWidth,
-      height: _item.imgHeight,
+      imgUrl: _provider.imgUrl ?? '',
+      width: _provider.imgWidth,
+      height: _provider.imgHeight,
       fit: _fit,
     );
 
     Widget getImageBlureFittedBox() {
       Widget imageBlureFittedBox = CoverImg(
-        imgUrl: _item.imgUrl ?? '',
+        imgUrl: _provider.imgUrl ?? '',
         width: coverImageWidth,
         fit: BoxFit.contain,
       );
@@ -369,7 +369,7 @@ class _CoverImage extends StatelessWidget {
                   : coverImageHeigth,
               child: image,
             ),
-            tag: '${_item.gid}_cover_$tabTag',
+            tag: '${_provider.gid}_cover_$tabTag',
           ),
         ),
       ],

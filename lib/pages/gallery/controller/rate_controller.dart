@@ -15,7 +15,7 @@ class RateController extends GetxController {
 
   late GalleryPageController pageController;
   GalleryPageState get _pageState => pageController.gState;
-  GalleryItem? get _item => _pageState.galleryItem;
+  GalleryProvider? get _item => _pageState.galleryProvider;
 
   @override
   void onInit() {

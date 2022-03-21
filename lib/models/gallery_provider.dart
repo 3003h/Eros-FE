@@ -6,9 +6,9 @@ import 'gallery_comment.dart';
 import 'gallery_image.dart';
 
 @immutable
-class GalleryItem {
+class GalleryProvider {
   
-  const GalleryItem({
+  const GalleryProvider({
     this.gid,
     this.token,
     this.showKey,
@@ -100,7 +100,7 @@ class GalleryItem {
   final int? lastViewTime;
   final int? pageOfList;
 
-  factory GalleryItem.fromJson(Map<String,dynamic> json) => GalleryItem(
+  factory GalleryProvider.fromJson(Map<String,dynamic> json) => GalleryProvider(
     gid: json['gid'] != null ? json['gid'] as String : null,
     token: json['token'] != null ? json['token'] as String : null,
     showKey: json['showKey'] != null ? json['showKey'] as String : null,
@@ -194,7 +194,7 @@ class GalleryItem {
     'pageOfList': pageOfList
   };
 
-  GalleryItem clone() => GalleryItem(
+  GalleryProvider clone() => GalleryProvider(
     gid: gid,
     token: token,
     showKey: showKey,
@@ -242,7 +242,7 @@ class GalleryItem {
   );
 
     
-  GalleryItem copyWith({
+  GalleryProvider copyWith({
     String? gid,
     String? token,
     String? showKey,
@@ -287,7 +287,7 @@ class GalleryItem {
     String? torrentLink,
     int? lastViewTime,
     int? pageOfList
-  }) => GalleryItem(
+  }) => GalleryProvider(
     gid: gid ?? this.gid,
     token: token ?? this.token,
     showKey: showKey ?? this.showKey,
@@ -336,7 +336,7 @@ class GalleryItem {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryItem && gid == other.gid && token == other.token && showKey == other.showKey && url == other.url && imgUrl == other.imgUrl && imgUrlL == other.imgUrlL && imgHeight == other.imgHeight && imgWidth == other.imgWidth && japaneseTitle == other.japaneseTitle && englishTitle == other.englishTitle && category == other.category && uploader == other.uploader && posted == other.posted && language == other.language && filecount == other.filecount && rating == other.rating && ratingCount == other.ratingCount && torrentcount == other.torrentcount && torrents == other.torrents && filesize == other.filesize && filesizeText == other.filesizeText && visible == other.visible && parent == other.parent && ratingFallBack == other.ratingFallBack && numberOfReviews == other.numberOfReviews && postTime == other.postTime && favoritedCount == other.favoritedCount && favTitle == other.favTitle && favcat == other.favcat && localFav == other.localFav && simpleTags == other.simpleTags && tagsFromApi == other.tagsFromApi && translated == other.translated && tagGroup == other.tagGroup && galleryComment == other.galleryComment && galleryImages == other.galleryImages && apikey == other.apikey && apiuid == other.apiuid && isRatinged == other.isRatinged && colorRating == other.colorRating && archiverLink == other.archiverLink && torrentLink == other.torrentLink && lastViewTime == other.lastViewTime && pageOfList == other.pageOfList;
+    || other is GalleryProvider && gid == other.gid && token == other.token && showKey == other.showKey && url == other.url && imgUrl == other.imgUrl && imgUrlL == other.imgUrlL && imgHeight == other.imgHeight && imgWidth == other.imgWidth && japaneseTitle == other.japaneseTitle && englishTitle == other.englishTitle && category == other.category && uploader == other.uploader && posted == other.posted && language == other.language && filecount == other.filecount && rating == other.rating && ratingCount == other.ratingCount && torrentcount == other.torrentcount && torrents == other.torrents && filesize == other.filesize && filesizeText == other.filesizeText && visible == other.visible && parent == other.parent && ratingFallBack == other.ratingFallBack && numberOfReviews == other.numberOfReviews && postTime == other.postTime && favoritedCount == other.favoritedCount && favTitle == other.favTitle && favcat == other.favcat && localFav == other.localFav && simpleTags == other.simpleTags && tagsFromApi == other.tagsFromApi && translated == other.translated && tagGroup == other.tagGroup && galleryComment == other.galleryComment && galleryImages == other.galleryImages && apikey == other.apikey && apiuid == other.apiuid && isRatinged == other.isRatinged && colorRating == other.colorRating && archiverLink == other.archiverLink && torrentLink == other.torrentLink && lastViewTime == other.lastViewTime && pageOfList == other.pageOfList;
 
   @override
   int get hashCode => gid.hashCode ^ token.hashCode ^ showKey.hashCode ^ url.hashCode ^ imgUrl.hashCode ^ imgUrlL.hashCode ^ imgHeight.hashCode ^ imgWidth.hashCode ^ japaneseTitle.hashCode ^ englishTitle.hashCode ^ category.hashCode ^ uploader.hashCode ^ posted.hashCode ^ language.hashCode ^ filecount.hashCode ^ rating.hashCode ^ ratingCount.hashCode ^ torrentcount.hashCode ^ torrents.hashCode ^ filesize.hashCode ^ filesizeText.hashCode ^ visible.hashCode ^ parent.hashCode ^ ratingFallBack.hashCode ^ numberOfReviews.hashCode ^ postTime.hashCode ^ favoritedCount.hashCode ^ favTitle.hashCode ^ favcat.hashCode ^ localFav.hashCode ^ simpleTags.hashCode ^ tagsFromApi.hashCode ^ translated.hashCode ^ tagGroup.hashCode ^ galleryComment.hashCode ^ galleryImages.hashCode ^ apikey.hashCode ^ apiuid.hashCode ^ isRatinged.hashCode ^ colorRating.hashCode ^ archiverLink.hashCode ^ torrentLink.hashCode ^ lastViewTime.hashCode ^ pageOfList.hashCode;

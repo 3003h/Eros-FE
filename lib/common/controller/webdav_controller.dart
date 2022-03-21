@@ -229,7 +229,7 @@ class WebdavController extends GetxController {
     return _mTime.millisecondsSinceEpoch;
   }
 
-  Future<void> uploadHistory(GalleryItem his) async {
+  Future<void> uploadHistory(GalleryProvider his) async {
     if (client == null) {
       return;
     }
@@ -265,7 +265,7 @@ class WebdavController extends GetxController {
     }
   }
 
-  Future<GalleryItem?> downloadHistory(String fileName) async {
+  Future<GalleryProvider?> downloadHistory(String fileName) async {
     if (client == null) {
       return null;
     }
@@ -286,8 +286,8 @@ class WebdavController extends GetxController {
         // jsonText = utf8.decode(base64Decode(_fileText));
         jsonText = _encrypter.decrypt64(_fileText, iv: _iv);
       }
-      final _image =
-          GalleryItem.fromJson(jsonDecode(jsonText) as Map<String, dynamic>);
+      final _image = GalleryProvider.fromJson(
+          jsonDecode(jsonText) as Map<String, dynamic>);
 
       return _image;
     } catch (err) {

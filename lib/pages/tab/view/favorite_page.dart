@@ -355,7 +355,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
 
   Widget _getGalleryList() {
     return controller.obx(
-        (List<GalleryItem>? state) {
+        (List<GalleryProvider>? state) {
           return getGallerySliverList(
             state,
             controller.heroTag,

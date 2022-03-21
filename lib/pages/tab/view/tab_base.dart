@@ -24,7 +24,7 @@ import '../../item/gallery_item_grid.dart';
 import '../../item/gallery_item_grid_placeholder.dart';
 
 SliverPadding buildWaterfallFlow(
-  List<GalleryItem> gallerItemBeans,
+  List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
   int? maxPage,
   required int curPage,
@@ -54,26 +54,29 @@ SliverPadding buildWaterfallFlow(
             ? EHConst.waterfallFlowLargeMainAxisSpacing
             : EHConst.waterfallFlowMainAxisSpacing,
         lastChildLayoutTypeBuilder: (int index) =>
-            index == gallerItemBeans.length
+            index == galleryProviders.length
                 ? LastChildLayoutType.foot
                 : LastChildLayoutType.none,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          if (gallerItemBeans.length - 1 < index) {
+          if (galleryProviders.length - 1 < index) {
             return const SizedBox.shrink();
           }
           if (maxPage != null) {
-            if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+            if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
               // 加载完成最后一项的回调
               lastComplete?.call();
             }
           }
 
-          final GalleryItem _item = gallerItemBeans[index];
-          // Get.lazyPut(() => _item, tag: _item.gid, fenix: true);
-          Get.lazyReplace(() => GalleryItemController()..galleryItem = _item,
-              tag: _item.gid, fenix: true);
+          final GalleryProvider _provider = galleryProviders[index];
+          Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+          Get.lazyReplace(
+              () => GalleryProviderController(
+                  galleryProvider: Get.find(tag: _provider.gid)),
+              tag: _provider.gid,
+              fenix: true);
 
           return large
               ? FrameSeparateWidget(
@@ -81,27 +84,27 @@ SliverPadding buildWaterfallFlow(
                   child: GalleryItemFlowLarge(
                     key: index == lastTopitemIndex
                         ? centerKey
-                        : ValueKey(_item.gid),
-                    galleryItem: _item,
+                        : ValueKey(_provider.gid),
+                    galleryProvider: _provider,
                     tabTag: tabTag,
                   ),
                 )
               : GalleryItemFlow(
                   key: index == lastTopitemIndex
                       ? centerKey
-                      : ValueKey(_item.gid),
-                  galleryItem: _item,
+                      : ValueKey(_provider.gid),
+                  galleryProvider: _provider,
                   tabTag: tabTag,
                 );
         },
-        childCount: gallerItemBeans.length,
+        childCount: galleryProviders.length,
       ),
     ),
   );
 }
 
 SliverPadding buildGrid(
-  List<GalleryItem> gallerItemBeans,
+  List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
   int? maxPage,
   required int curPage,
@@ -121,38 +124,44 @@ SliverPadding buildGrid(
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
-          if (gallerItemBeans.length - 1 < index) {
+          if (galleryProviders.length - 1 < index) {
             return const SizedBox.shrink();
           }
           if (maxPage != null) {
-            if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+            if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
               // 加载完成最后一项的回调
               lastComplete?.call();
             }
           }
 
-          final GalleryItem _item = gallerItemBeans[index];
-          Get.lazyReplace(() => GalleryItemController()..galleryItem = _item,
-              tag: _item.gid, fenix: true);
+          final GalleryProvider _provider = galleryProviders[index];
+          Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+          Get.lazyReplace(
+              () => GalleryProviderController(
+                  galleryProvider: Get.find(tag: _provider.gid)),
+              tag: _provider.gid,
+              fenix: true);
 
           return FrameSeparateWidget(
             index: index,
             placeHolder: const GalleryItemGridPlaceHolder(),
             child: GalleryItemGrid(
-              key: index == lastTopitemIndex ? centerKey : ValueKey(_item.gid),
-              galleryItem: _item,
+              key: index == lastTopitemIndex
+                  ? centerKey
+                  : ValueKey(_provider.gid),
+              galleryProvider: _provider,
               tabTag: tabTag,
             ),
           );
         },
-        childCount: gallerItemBeans.length,
+        childCount: galleryProviders.length,
       ),
     ),
   );
 }
 
 Widget _listItemWiget(
-  GalleryItem _item, {
+  GalleryProvider _provider, {
   dynamic tabTag,
   Key? centerKey,
   ListModeEnum? listMode,
@@ -160,14 +169,15 @@ Widget _listItemWiget(
   switch (listMode) {
     case ListModeEnum.list:
       return GalleryItemWidget(
-        key: centerKey ?? ValueKey('${_item.gid}_${_item.ratingFallBack}'),
-        galleryItem: _item,
+        key: centerKey ??
+            ValueKey('${_provider.gid}_${_provider.ratingFallBack}'),
+        galleryProvider: _provider,
         tabTag: tabTag,
       );
     case ListModeEnum.simpleList:
       return GalleryItemSimpleWidget(
-        key: centerKey ?? ValueKey(_item.gid),
-        galleryItem: _item,
+        key: centerKey ?? ValueKey(_provider.gid),
+        galleryProvider: _provider,
         tabTag: tabTag,
       );
     default:
@@ -210,7 +220,7 @@ Widget _buildDelSliverAnimatedListItem(
 }
 
 Widget buildGallerySliverListItem(
-  GalleryItem _item,
+  GalleryProvider _item,
   int index,
   Animation<double> _animation, {
   dynamic tabTag,
@@ -230,7 +240,7 @@ Widget buildGallerySliverListItem(
 }
 
 Widget buildDelGallerySliverListItem(
-  GalleryItem _item,
+  GalleryProvider _item,
   int index,
   Animation<double> _animation, {
   dynamic tabTag,
@@ -243,7 +253,7 @@ Widget buildDelGallerySliverListItem(
 }
 
 Widget buildGallerySliverListView(
-  List<GalleryItem> gallerItemBeans,
+  List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
   int? maxPage,
   int curPage = 0,
@@ -255,24 +265,25 @@ Widget buildGallerySliverListView(
   logger.v('buildGallerySliverListView');
   return SliverAnimatedList(
     key: key,
-    initialItemCount: gallerItemBeans.length,
+    initialItemCount: galleryProviders.length,
     itemBuilder:
         (BuildContext context, int index, Animation<double> animation) {
-      if (gallerItemBeans.length - 1 < index) {
+      if (galleryProviders.length - 1 < index) {
         return const SizedBox.shrink();
       }
 
       if (maxPage != null) {
-        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+        if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
           // 加载完成最后一项的回调
           lastComplete?.call();
         }
       }
 
-      final GalleryItem _itemInfo = gallerItemBeans[index];
-
+      final GalleryProvider _itemInfo = galleryProviders[index];
+      Get.lazyReplace(() => _itemInfo, tag: _itemInfo.gid, fenix: true);
       Get.lazyReplace(
-        () => GalleryItemController()..galleryItem = _itemInfo,
+        () => GalleryProviderController(
+            galleryProvider: Get.find(tag: _itemInfo.gid)),
         tag: _itemInfo.gid,
         fenix: true,
       );
@@ -306,7 +317,7 @@ Widget buildGallerySliverListView(
 }
 
 Widget buildGallerySliverListSimpleView(
-  List<GalleryItem> gallerItemBeans,
+  List<GalleryProvider> galleryProviders,
   tabTag, {
   int? maxPage,
   required int curPage,
@@ -319,31 +330,34 @@ Widget buildGallerySliverListSimpleView(
 
   return SliverAnimatedList(
     key: key,
-    initialItemCount: gallerItemBeans.length,
+    initialItemCount: galleryProviders.length,
     itemBuilder:
         (BuildContext context, int index, Animation<double> animation) {
-      if (gallerItemBeans.length - 1 < index) {
+      if (galleryProviders.length - 1 < index) {
         return const SizedBox.shrink();
       }
 
       if (maxPage != null) {
-        if (index == gallerItemBeans.length - 1 && curPage < maxPage - 1) {
+        if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
           // 加载完成最后一项的回调
           lastComplete?.call();
         }
       }
 
-      final GalleryItem _item = gallerItemBeans[index];
-      // Get.replace(GalleryItemController(_item), tag: _item.gid);
-      Get.lazyReplace(() => GalleryItemController()..galleryItem = _item,
-          tag: _item.gid, fenix: true);
+      final GalleryProvider _provider = galleryProviders[index];
+      Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+      Get.lazyReplace(
+          () => GalleryProviderController(
+              galleryProvider: Get.find(tag: _provider.gid)),
+          tag: _provider.gid,
+          fenix: true);
       // if (index < 5) {
       //   return const GalleryItemSimplePlaceHolder();
       // }
       return FrameSeparateWidget(
         placeHolder: const GalleryItemSimplePlaceHolder(),
         child: buildGallerySliverListItem(
-          _item,
+          _provider,
           index,
           animation,
           tabTag: tabTag,
@@ -357,7 +371,7 @@ Widget buildGallerySliverListSimpleView(
 }
 
 Widget getGallerySliverList(
-  List<GalleryItem>? gallerItemBeans,
+  List<GalleryProvider>? galleryProviders,
   tabTag, {
   int? maxPage,
   int? curPage,
@@ -368,7 +382,7 @@ Widget getGallerySliverList(
   Rx<ListModeEnum>? listMode,
 }) {
   final EhConfigService ehConfigService = Get.find();
-  final _key = key ?? ValueKey(gallerItemBeans.hashCode);
+  final _key = key ?? ValueKey(galleryProviders.hashCode);
   // logger.d('_key $_key');
 
   logger.v('lastTopitemIndex $lastTopitemIndex');
@@ -382,7 +396,7 @@ Widget getGallerySliverList(
     switch (mod) {
       case ListModeEnum.list:
         return buildGallerySliverListView(
-          gallerItemBeans ?? [],
+          galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
           curPage: curPage ?? 0,
@@ -393,7 +407,7 @@ Widget getGallerySliverList(
         );
       case ListModeEnum.waterfall:
         return buildWaterfallFlow(
-          gallerItemBeans ?? [],
+          galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
           curPage: curPage ?? 0,
@@ -404,7 +418,7 @@ Widget getGallerySliverList(
         );
       case ListModeEnum.waterfallLarge:
         return buildWaterfallFlow(
-          gallerItemBeans ?? [],
+          galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
           curPage: curPage ?? 0,
@@ -416,7 +430,7 @@ Widget getGallerySliverList(
         );
       case ListModeEnum.simpleList:
         return buildGallerySliverListSimpleView(
-          gallerItemBeans ?? [],
+          galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
           curPage: curPage ?? 0,
@@ -428,7 +442,7 @@ Widget getGallerySliverList(
 
       case ListModeEnum.grid:
         return buildGrid(
-          gallerItemBeans ?? [],
+          galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
           curPage: curPage ?? 0,

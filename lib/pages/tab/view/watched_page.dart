@@ -249,7 +249,7 @@ class _WatchedListTabState extends State<WatchedListTab> {
 
   Widget _getGalleryList() {
     return controller.obx(
-        (List<GalleryItem>? state) {
+        (List<GalleryProvider>? state) {
           return getGallerySliverList(
             state,
             controller.heroTag,

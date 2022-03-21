@@ -1,5 +1,5 @@
 {
-  "gallerys?": "$[]gallery_item",
+  "gallerys?": "$[]gallery_provider",
   "maxPage?": 50,
   "nextPage?": 3,
   "favList?": "$[]favcat"

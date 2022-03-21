@@ -90,7 +90,7 @@ class NavigatorUtil {
   static Future<void> goGalleryPage({
     String? url,
     dynamic tabTag,
-    GalleryItem? galleryItem,
+    GalleryProvider? galleryProvider,
     bool replace = false,
   }) async {
     final topSecondRoute =
@@ -170,9 +170,9 @@ class NavigatorUtil {
     } else {
       // item点击跳转方式
       logger.v('goGalleryPage fromItem tabTag=$tabTag');
-      _gid = galleryItem?.gid;
+      _gid = galleryProvider?.gid;
 
-      Get.replace(GalleryRepository(item: galleryItem, tabTag: tabTag));
+      Get.replace(GalleryRepository(item: galleryProvider, tabTag: tabTag));
 
       //命名路由
       if (isLayoutLarge) {

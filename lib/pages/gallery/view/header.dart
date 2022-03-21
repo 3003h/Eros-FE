@@ -18,11 +18,11 @@ import 'gallery_widget.dart';
 class GalleryHeader extends StatelessWidget {
   GalleryHeader({
     Key? key,
-    required this.initGalleryItem,
+    required this.initGalleryProvider,
     this.tabTag,
   }) : super(key: key);
 
-  final GalleryItem initGalleryItem;
+  final GalleryProvider initGalleryProvider;
   final Object? tabTag;
 
   final _controller = Get.find<GalleryPageController>(tag: pageCtrlTag);
@@ -48,8 +48,8 @@ class GalleryHeader extends StatelessWidget {
                   return HeroMode(
                     enabled: _pageState.hideNavigationBtn || isLayoutLarge,
                     child: CoverImage(
-                      imageUrl: initGalleryItem.imgUrl!,
-                      heroTag: '${initGalleryItem.gid}_cover_$tabTag',
+                      imageUrl: initGalleryProvider.imgUrl!,
+                      heroTag: '${initGalleryProvider.gid}_cover_$tabTag',
                     ),
                   );
                 }),
@@ -66,14 +66,15 @@ class GalleryHeader extends StatelessWidget {
                           builder: (logic) {
                             return GalleryUploader(
                                 uploader:
-                                    logic.gState.galleryItem?.uploader ?? '');
+                                    logic.gState.galleryProvider?.uploader ??
+                                        '');
                           }),
                       const Spacer(),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           // 阅读按钮
-                          ReadButton(gid: initGalleryItem.gid ?? ''),
+                          ReadButton(gid: initGalleryProvider.gid ?? ''),
                           const Spacer(),
                           // 收藏按钮
                           const GalleryFavButton(),
@@ -169,19 +170,21 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           children: <Widget>[
                             // 评分
                             GalleryRating(
-                              rating: _pageState.galleryItem?.rating ?? 0,
+                              rating: _pageState.galleryProvider?.rating ?? 0,
                               ratingFB:
-                                  _pageState.galleryItem?.ratingFallBack ?? 0,
-                              color: ThemeColors.colorRatingMap[
-                                  _pageState.galleryItem?.colorRating?.trim() ??
-                                      'ir'],
+                                  _pageState.galleryProvider?.ratingFallBack ??
+                                      0,
+                              color: ThemeColors.colorRatingMap[_pageState
+                                      .galleryProvider?.colorRating
+                                      ?.trim() ??
+                                  'ir'],
                             ),
                             // 评分人次
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4),
                               child: Text(
-                                  _pageState.galleryItem?.ratingCount ?? '',
+                                  _pageState.galleryProvider?.ratingCount ?? '',
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: CupertinoDynamicColor.resolve(
@@ -193,7 +196,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                             // 类型
                             GalleryCategory(
                                 category:
-                                    _pageState.galleryItem?.category ?? ''),
+                                    _pageState.galleryProvider?.category ?? ''),
                           ],
                         ),
                       ),
@@ -206,7 +209,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                             size: 13,
                           ).paddingOnly(right: 8),
                           Text(
-                            _pageState.galleryItem?.language ?? '',
+                            _pageState.galleryProvider?.language ?? '',
                             style: widget._hearTextStyle,
                           ),
                           const Spacer(),
@@ -218,12 +221,12 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            _pageState.galleryItem?.filecount ?? '',
+                            _pageState.galleryProvider?.filecount ?? '',
                             style: widget._hearTextStyle,
                           ),
                           const Spacer(),
                           Text(
-                            _pageState.galleryItem?.filesizeText ?? '',
+                            _pageState.galleryProvider?.filesizeText ?? '',
                             style: widget._hearTextStyle,
                           ),
                         ],
@@ -246,7 +249,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: Text(
-                                      controller.gState.galleryItem
+                                      controller.gState.galleryProvider
                                               ?.favoritedCount ??
                                           '',
                                       style: widget._hearTextStyle),
@@ -254,7 +257,7 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
                               }),
                           const Spacer(),
                           Text(
-                            _pageState.galleryItem?.postTime ?? '',
+                            _pageState.galleryProvider?.postTime ?? '',
                             style: widget._hearTextStyle,
                           ),
                         ],

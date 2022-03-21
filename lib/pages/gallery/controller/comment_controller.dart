@@ -33,7 +33,7 @@ class CommentController extends GetxController
 
   final TextEditingController commentTextController = TextEditingController();
 
-  GalleryItem? get _item => _pageState.galleryItem;
+  GalleryProvider? get _item => _pageState.galleryProvider;
   late String comment;
   late String oriComment;
   String? commentId;
@@ -72,7 +72,8 @@ class CommentController extends GetxController
 
   Future<void> _loadComment() async {
     // await Future.delayed(const Duration(milliseconds: 200));
-    change(_pageState.galleryItem?.galleryComment, status: RxStatus.success());
+    change(_pageState.galleryProvider?.galleryComment,
+        status: RxStatus.success());
   }
 
   @override
@@ -231,7 +232,7 @@ class CommentController extends GetxController
     logger.d('_postComment\n$comment');
     // final bool rult = await Api.postComment(
     //   gid: pageController.gid,
-    //   token: pageController.galleryItem?.token ?? '',
+    //   token: pageController.galleryProvider?.token ?? '',
     //   comment: comment,
     //   commentId: commentId,
     //   isEdit: isEdit,
@@ -242,7 +243,7 @@ class CommentController extends GetxController
     // }
     final rult = await postComment(
       gid: _pageState.gid,
-      token: _pageState.galleryItem?.token ?? '',
+      token: _pageState.galleryProvider?.token ?? '',
       comment: comment,
       commentId: commentId,
       isEdit: isEdit,

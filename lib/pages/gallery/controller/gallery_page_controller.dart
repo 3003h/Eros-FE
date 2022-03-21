@@ -28,7 +28,7 @@ import 'torrent_controller.dart';
 const double kHeaderHeightOffset = kHeaderHeight;
 
 class GalleryPageController extends GetxController
-    with StateMixin<GalleryItem> {
+    with StateMixin<GalleryProvider> {
   GalleryPageController();
 
   late final GalleryPageState gState;
@@ -69,8 +69,8 @@ class GalleryPageController extends GetxController
       )) {
         gState = GalleryPageState();
         gState.fromUrl = true;
-        gState.galleryItem =
-            GalleryItem(url: galleryRepository.url, gid: gid, token: token);
+        gState.galleryProvider =
+            GalleryProvider(url: galleryRepository.url, gid: gid, token: token);
       }
     } else {
       if (!_loadDataFromCache(
@@ -78,7 +78,7 @@ class GalleryPageController extends GetxController
         isStateFromCacheChange: (val) => isStateFromCache = val,
       )) {
         gState = GalleryPageState();
-        gState.galleryItem = galleryRepository.item!;
+        gState.galleryProvider = galleryRepository.item!;
       }
     }
 
@@ -91,7 +91,7 @@ class GalleryPageController extends GetxController
 
       // 初始
       _galleryCacheController
-          .getGalleryCache(gState.galleryItem?.gid ?? '')
+          .getGalleryCache(gState.galleryProvider?.gid ?? '')
           .then((_galleryCache) =>
               gState.lastIndex = _galleryCache?.lastIndex ?? 0);
     }
@@ -109,12 +109,12 @@ class GalleryPageController extends GetxController
     scrollController.dispose();
     logger.v('onClose GalleryPageController $pageCtrlTag');
     super.onClose();
-    _galleryCacheController.addGalleryPageState(gState);
+    // _galleryCacheController.addGalleryPageState(gState);
   }
 
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     try {
-      final GalleryItem? _fetchItem = await _fetchData(refresh: refresh);
+      final GalleryProvider? _fetchItem = await _fetchData(refresh: refresh);
       change(_fetchItem, status: RxStatus.success());
       time.showTime('change end');
 
@@ -128,10 +128,10 @@ class GalleryPageController extends GetxController
       analytics.logViewItem(
         items: [
           AnalyticsEventItem(
-            itemId: gState.galleryItem?.gid ?? '',
-            itemName: gState.galleryItem?.englishTitle ?? '',
-            itemCategory: gState.galleryItem?.category ?? '',
-            creativeName: gState.galleryItem?.japaneseTitle,
+            itemId: gState.galleryProvider?.gid ?? '',
+            itemName: gState.galleryProvider?.englishTitle ?? '',
+            itemCategory: gState.galleryProvider?.category ?? '',
+            creativeName: gState.galleryProvider?.japaneseTitle,
           )
         ],
       );
@@ -148,84 +148,87 @@ class GalleryPageController extends GetxController
   }
 
   /// 请求数据
-  Future<GalleryItem?> _fetchData({bool refresh = false}) async {
+  Future<GalleryProvider?> _fetchData({bool refresh = false}) async {
     await Future<void>.delayed(const Duration(milliseconds: 100));
     try {
       gState.hideNavigationBtn = true;
 
-      if (gState.galleryItem != null &&
-          (gState.galleryItem?.filecount == null ||
-              (gState.galleryItem?.filecount?.isEmpty ?? true))) {
-        gState.galleryItem = await Api.getMoreGalleryInfoOne(
-            gState.galleryItem!,
+      if (gState.galleryProvider != null &&
+          (gState.galleryProvider?.filecount == null ||
+              (gState.galleryProvider?.filecount?.isEmpty ?? true))) {
+        gState.galleryProvider = await Api.getMoreGalleryInfoOne(
+            gState.galleryProvider!,
             refresh: refresh);
       }
 
       // 检查画廊是否包含在本地收藏中
-      final bool _localFav = _isInLocalFav(gState.galleryItem?.gid ?? '0');
-      gState.galleryItem = gState.galleryItem?.copyWith(localFav: _localFav);
+      final bool _localFav = _isInLocalFav(gState.galleryProvider?.gid ?? '0');
+      gState.galleryProvider =
+          gState.galleryProvider?.copyWith(localFav: _localFav);
 
-      final String? _oriColorRating = gState.galleryItem?.colorRating;
-      final String? _oriRatingCount = gState.galleryItem?.ratingCount;
-      final double? _oriRatingFallBack = gState.galleryItem?.ratingFallBack;
-      final bool? _oriIsRatinged = gState.galleryItem?.isRatinged;
+      final String? _oriColorRating = gState.galleryProvider?.colorRating;
+      final String? _oriRatingCount = gState.galleryProvider?.ratingCount;
+      final double? _oriRatingFallBack = gState.galleryProvider?.ratingFallBack;
+      final bool? _oriIsRatinged = gState.galleryProvider?.isRatinged;
 
-      time.showTime('start get galleryItem');
-      final fetchedGalleryItem = await getGalleryDetail(
-        url: gState.galleryItem?.url ?? '',
+      time.showTime('start get galleryProvider');
+      final fetchedGalleryProvider = await getGalleryDetail(
+        url: gState.galleryProvider?.url ?? '',
         refresh: refresh,
       );
-      time.showTime('fetch galleryItem end');
+      time.showTime('fetch galleryProvider end');
 
-      if (fetchedGalleryItem != null) {
-        gState.galleryItem =
-            gState.galleryItem?.copyWithAll(fetchedGalleryItem);
+      if (fetchedGalleryProvider != null) {
+        gState.galleryProvider =
+            gState.galleryProvider?.copyWithAll(fetchedGalleryProvider);
       }
 
       gState.currentImagePage = 0;
-      setImageAfterRequest(gState.galleryItem?.galleryImages);
+      setImageAfterRequest(gState.galleryProvider?.galleryImages);
 
       try {
         // 页面内刷新时的处理
         if (refresh) {
           // 评论控制器状态数据更新
           Get.find<CommentController>(tag: pageCtrlTag)
-              .change(gState.galleryItem?.galleryComment);
+              .change(gState.galleryProvider?.galleryComment);
           // 评分状态更新
-          gState.isRatinged = gState.galleryItem?.isRatinged ?? false;
+          gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
         } else {
-          gState.galleryItem = gState.galleryItem?.copyWith(
+          gState.galleryProvider = gState.galleryProvider?.copyWith(
             ratingFallBack:
-                gState.galleryItem?.ratingFallBack ?? _oriRatingFallBack,
-            ratingCount: gState.galleryItem?.ratingCount ?? _oriRatingCount,
+                gState.galleryProvider?.ratingFallBack ?? _oriRatingFallBack,
+            ratingCount: gState.galleryProvider?.ratingCount ?? _oriRatingCount,
             colorRating: _oriColorRating,
             // isRatinged: _oriIsRatinged,
           );
 
           // 评分状态更新
-          gState.isRatinged = gState.galleryItem?.isRatinged ?? false;
+          gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
 
           // 收藏控制器状态更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlTag);
-          _favController.setFav(gState.galleryItem?.favcat ?? '',
-              gState.galleryItem?.favTitle ?? '');
+          _favController.setFav(gState.galleryProvider?.favcat ?? '',
+              gState.galleryProvider?.favTitle ?? '');
         }
       } catch (_) {}
 
-      gState.galleryItem = gState.galleryItem?.copyWith(
-          imgUrl: gState.galleryItem?.imgUrl ?? gState.galleryItem?.imgUrlL);
+      gState.galleryProvider = gState.galleryProvider?.copyWith(
+          imgUrl: gState.galleryProvider?.imgUrl ??
+              gState.galleryProvider?.imgUrlL);
 
       // 加入历史
-      if (gState.galleryItem != null && gState.galleryItem?.gid != null) {
+      if (gState.galleryProvider != null &&
+          gState.galleryProvider?.gid != null) {
         Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
-          _historyController.addHistory(gState.galleryItem!);
+          _historyController.addHistory(gState.galleryProvider!);
         });
       }
 
       update([GetIds.PAGE_VIEW_HEADER]);
       gState.itemController?.update([gState.gid]);
-      return gState.galleryItem;
+      return gState.galleryProvider;
     } on HttpException catch (e) {
       throw EhError(error: e.message);
     } on DioError catch (e) {
@@ -250,9 +253,9 @@ class GalleryPageController extends GetxController
     if (stateFromCache != null) {
       gState = stateFromCache;
       isStateFromCacheChange?.call(true);
-      change(gState.galleryItem, status: RxStatus.success());
+      change(gState.galleryProvider, status: RxStatus.success());
       Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
-        _historyController.addHistory(gState.galleryItem!);
+        _historyController.addHistory(gState.galleryProvider!);
       });
       return true;
     } else {
@@ -269,7 +272,7 @@ class GalleryPageController extends GetxController
   }) {
     gState.isRatinged = true;
 
-    gState.galleryItem = gState.galleryItem?.copyWith(
+    gState.galleryProvider = gState.galleryProvider?.copyWith(
       isRatinged: true,
       ratingFallBack: ratingUsr,
       rating: ratingAvg,
@@ -277,30 +280,32 @@ class GalleryPageController extends GetxController
       colorRating: colorRating,
     );
 
-    gState.itemController?.galleryItem = gState.galleryItem!;
+    // gState.itemController?.galleryProvider = gState.galleryProvider!;
 
     // logger.d('update GetIds.PAGE_VIEW_HEADER');
     update([GetIds.PAGE_VIEW_HEADER]);
-    gState.itemController?.ratingFB = gState.galleryItem?.ratingFallBack ?? 0.0;
+    gState.itemController?.ratingFB =
+        gState.galleryProvider?.ratingFallBack ?? 0.0;
 
     gState.itemController?.update();
   }
 
   void uptImageBySer({required int ser, required GalleryImage image}) {
-    final int? _index = gState.galleryItem?.galleryImages
+    final int? _index = gState.galleryProvider?.galleryImages
         ?.indexWhere((GalleryImage element) => element.ser == ser);
     if (_index != null && _index >= 0) {
-      gState.galleryItem?.galleryImages?[_index] = image;
+      gState.galleryProvider?.galleryImages?[_index] = image;
     }
   }
 
   void setImageAfterRequest(List<GalleryImage>? images) {
     if (images?.isNotEmpty ?? false) {
-      gState.galleryItem = gState.galleryItem?.copyWith(galleryImages: images);
+      gState.galleryProvider =
+          gState.galleryProvider?.copyWith(galleryImages: images);
     }
 
     gState.firstPageImage =
-        gState.galleryItem?.galleryImages?.sublist(0, images?.length) ?? [];
+        gState.galleryProvider?.galleryImages?.sublist(0, images?.length) ?? [];
   }
 
   /// 添加缩略图对象
@@ -368,7 +373,7 @@ class GalleryPageController extends GetxController
 
   Future<void> handOnRefreshAfterErr() async {
     change(null, status: RxStatus.loading());
-    _fetchData(refresh: true).then((GalleryItem? value) {
+    _fetchData(refresh: true).then((GalleryProvider? value) {
       gState.enableRead = true;
       change(value, status: RxStatus.success());
     });
@@ -378,7 +383,7 @@ class GalleryPageController extends GetxController
     // 检查是否包含在本地收藏中
     final int index = Get.find<LocalFavController>()
         .loacalFavs
-        .indexWhere((GalleryItem element) {
+        .indexWhere((GalleryProvider element) {
       return element.gid == gid;
     });
     return index >= 0;
@@ -430,10 +435,11 @@ class GalleryPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 0));
 
-    logger.v('获取更多预览 ${gState.galleryItem?.url} : ${gState.currentImagePage}');
+    logger.v(
+        '获取更多预览 ${gState.galleryProvider?.url} : ${gState.currentImagePage}');
 
     final List<GalleryImage> _moreGalleryImageList = await getGalleryImage(
-      gState.galleryItem?.url ?? '',
+      gState.galleryProvider?.url ?? '',
       page: gState.currentImagePage + 1,
       cancelToken: cancelToken,
       refresh: gState.isRefresh,
@@ -462,7 +468,7 @@ class GalleryPageController extends GetxController
     gState.mapLoadImagesForSer.putIfAbsent(
         page,
         () => getGalleryImage(
-              gState.galleryItem?.url ?? '',
+              gState.galleryProvider?.url ?? '',
               page: page,
               cancelToken: cancelToken,
               refresh: gState.isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
@@ -481,7 +487,7 @@ class GalleryPageController extends GetxController
   // 按顺序翻页加载缩略图对象
   Future<bool> loadPriviewUntilIndex(int index) async {
     final List<GalleryImage>? _galleryImageList =
-        gState.galleryItem?.galleryImages;
+        gState.galleryProvider?.galleryImages;
 
     if (_galleryImageList == null) {
       return true;
@@ -503,7 +509,8 @@ class GalleryPageController extends GetxController
   }) async {
     try {
       /// 当前缩略图对象
-      final GalleryImage? _curImages = gState.galleryItem?.imageMap[itemSer];
+      final GalleryImage? _curImages =
+          gState.galleryProvider?.imageMap[itemSer];
 
       if (_curImages == null) {
         return null;
@@ -516,24 +523,25 @@ class GalleryPageController extends GetxController
           _largeImageUrl.isNotEmpty &&
           _curImages.imageHeight != null &&
           _curImages.imageWidth != null) {
-        return gState.galleryItem?.imageMap[itemSer];
+        return gState.galleryProvider?.imageMap[itemSer];
       } else {
-        final String? _sourceId =
-            changeSource ? gState.galleryItem?.imageMap[itemSer]?.sourceId : '';
+        final String? _sourceId = changeSource
+            ? gState.galleryProvider?.imageMap[itemSer]?.sourceId
+            : '';
 
         logger.d(
-            'ser:$itemSer ,href: ${gState.galleryItem?.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
+            'ser:$itemSer ,href: ${gState.galleryProvider?.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
           if (changeSource) {
             // 删除旧缓存
             _cacheController.clearDioCache(
-                path: gState.galleryItem?.imageMap[itemSer]?.href ?? '');
+                path: gState.galleryProvider?.imageMap[itemSer]?.href ?? '');
           }
 
           // 加载当前页信息
           final GalleryImage? _image = await fetchImageInfo(
-            gState.galleryItem?.imageMap[itemSer]?.href ?? '',
+            gState.galleryProvider?.imageMap[itemSer]?.href ?? '',
             sourceId: _sourceId,
           );
 
@@ -611,14 +619,14 @@ class GalleryPageController extends GetxController
   void _downloadGallery({bool downloadOri = false}) {
     _downloadController.downloadGallery(
       gid: int.parse(gState.gid),
-      token: gState.galleryItem?.token,
-      url: gState.galleryItem?.url ?? '',
-      fileCount: int.parse(gState.galleryItem?.filecount ?? '0'),
+      token: gState.galleryProvider?.token,
+      url: gState.galleryProvider?.url ?? '',
+      fileCount: int.parse(gState.galleryProvider?.filecount ?? '0'),
       title: gState.title,
-      coverUrl: gState.galleryItem?.imgUrl,
-      rating: gState.galleryItem?.rating,
-      uploader: gState.galleryItem?.uploader,
-      category: gState.galleryItem?.category,
+      coverUrl: gState.galleryProvider?.imgUrl,
+      rating: gState.galleryProvider?.rating,
+      uploader: gState.galleryProvider?.uploader,
+      category: gState.galleryProvider?.category,
       downloadOri: downloadOri,
     );
   }

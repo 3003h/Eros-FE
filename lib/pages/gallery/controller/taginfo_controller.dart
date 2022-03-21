@@ -19,7 +19,7 @@ class TagInfoController extends GetxController {
   TagInfoController();
   late GalleryPageController pageController;
   GalleryPageState get _pageState => pageController.gState;
-  GalleryItem? get _item => _pageState.galleryItem;
+  GalleryProvider? get _item => _pageState.galleryProvider;
 
   final TextEditingController tagsTextController = TextEditingController();
   FocusNode focusNode = FocusNode();

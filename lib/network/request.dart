@@ -218,7 +218,7 @@ Future<String?> getCookieValue(String name) async {
   return _cookie?.value;
 }
 
-Future<GalleryItem?> getGalleryDetail({
+Future<GalleryProvider?> getGalleryDetail({
   required String url,
   bool refresh = false,
   CancelToken? cancelToken,
@@ -233,8 +233,8 @@ Future<GalleryItem?> getGalleryDetail({
     cancelToken: cancelToken,
   );
   logger.v('httpResponse.ok ${httpResponse.ok}');
-  if (httpResponse.ok && httpResponse.data is GalleryItem) {
-    return httpResponse.data as GalleryItem;
+  if (httpResponse.ok && httpResponse.data is GalleryProvider) {
+    return httpResponse.data as GalleryProvider;
   } else {
     // logger.e('${httpResponse.error}');
     if (httpResponse.error?.code == 404) {
@@ -775,7 +775,7 @@ Future<bool?> postComment({
   required String comment,
   String? commentId,
   bool isEdit = false,
-  GalleryItem? inGalleryItem,
+  GalleryProvider? inGalleryItem,
 }) async {
   if (utf8.encode(comment).length < 10) {
     showToast('Your comment is too short.');

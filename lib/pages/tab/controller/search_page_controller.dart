@@ -302,7 +302,7 @@ class SearchPageController extends DefaultTabViewController {
     } else {
       autofocus = true;
     }
-    change(<GalleryItem>[], status: RxStatus.empty());
+    change(<GalleryProvider>[], status: RxStatus.empty());
     canLoadMore = true;
   }
 

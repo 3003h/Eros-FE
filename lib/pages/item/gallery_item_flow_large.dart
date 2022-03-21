@@ -22,25 +22,25 @@ const double kCategoryHeight = 20.0;
 
 class GalleryItemFlowLarge extends StatelessWidget {
   const GalleryItemFlowLarge(
-      {Key? key, required this.tabTag, required this.galleryItem})
+      {Key? key, required this.tabTag, required this.galleryProvider})
       : super(key: key);
 
   final dynamic tabTag;
-  final GalleryItem galleryItem;
+  final GalleryProvider galleryProvider;
 
-  GalleryItemController get galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  GalleryProviderController get galleryProviderController =>
+      Get.find(tag: galleryProvider.gid);
 
   Widget _buildFavcatIcon() {
     return Obx(() {
-      // logger.d('${_galleryItemController.isFav}');
+      // logger.d('${_galleryProviderController.isFav}');
       return Container(
-        child: galleryItemController.isFav
+        child: galleryProviderController.isFav
             ? Icon(
                 FontAwesomeIcons.solidHeart,
                 size: 12,
                 color: ThemeColors
-                    .favColor[galleryItemController.galleryItem.favcat],
+                    .favColor[galleryProviderController.galleryProvider.favcat],
               )
             : Container(),
       );
@@ -54,10 +54,10 @@ class GalleryItemFlowLarge extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 14.0,
-            rate: galleryItem.ratingFallBack ?? 0,
+            rate: galleryProvider.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors
-                .colorRatingMap[galleryItem.colorRating?.trim() ?? 'ir'],
+                .colorRatingMap[galleryProvider.colorRating?.trim() ?? 'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context!),
           ),
@@ -68,7 +68,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
 
   Widget _buildCount({bool blur = false}) {
     final text = Text(
-      galleryItemController.galleryItem.filecount ?? '',
+      galleryProviderController.galleryProvider.filecount ?? '',
       style: const TextStyle(
         fontSize: 12,
         color: Color.fromARGB(255, 240, 240, 240),
@@ -106,7 +106,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
   /// 构建标题
   Widget _buildTitle() {
     return Obx(() => Text(
-          galleryItemController.title,
+          galleryProviderController.title,
           maxLines: kTitleMaxLines,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分
@@ -122,21 +122,22 @@ class GalleryItemFlowLarge extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget item = LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      final GalleryItem galleryItem = galleryItemController.galleryItem;
+      final GalleryProvider galleryProvider =
+          galleryProviderController.galleryProvider;
 
       final Color _colorCategory = CupertinoDynamicColor.resolve(
-          ThemeColors.catColor[galleryItem.category ?? 'default'] ??
+          ThemeColors.catColor[galleryProvider.category ?? 'default'] ??
               CupertinoColors.systemBackground,
           context);
 
       // 获取图片高度
       double? _getHeigth() {
-        if ((galleryItem.imgWidth ?? 0) >= constraints.maxWidth) {
-          return (galleryItem.imgHeight ?? 0) *
+        if ((galleryProvider.imgWidth ?? 0) >= constraints.maxWidth) {
+          return (galleryProvider.imgHeight ?? 0) *
               constraints.maxWidth /
-              (galleryItem.imgWidth ?? 0);
+              (galleryProvider.imgWidth ?? 0);
         } else {
-          return galleryItem.imgHeight;
+          return galleryProvider.imgHeight;
         }
       }
 
@@ -160,7 +161,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
           children: <Widget>[
             /// 画廊封面
             Hero(
-              tag: '${galleryItem.gid}_cover_$tabTag',
+              tag: '${galleryProvider.gid}_cover_$tabTag',
               child: Container(
                 decoration: BoxDecoration(
                     // boxShadow: [
@@ -183,9 +184,10 @@ class GalleryItemFlowLarge extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         alignment: Alignment.center,
-                        height:
-                            galleryItem.imgWidth != null ? _getHeigth() : null,
-                        child: CoverImg(imgUrl: galleryItem.imgUrl!),
+                        height: galleryProvider.imgWidth != null
+                            ? _getHeigth()
+                            : null,
+                        child: CoverImg(imgUrl: galleryProvider.imgUrl!),
                       ),
                       ClipPath(
                         clipper: CategoryClipper(
@@ -209,7 +211,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
                         width: (kCategoryWidth + kRadius * 0.8) / 2,
                         alignment: Alignment.center,
                         child: Text(
-                          galleryItem.translated ?? '',
+                          galleryProvider.translated ?? '',
                           style: const TextStyle(
                               fontSize: 8,
                               color: CupertinoColors.white,
@@ -240,7 +242,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
                 const SizedBox(height: 6),
                 // _buildSimpleTagsView(),
                 TagWaterfallFlowViewBox(
-                  simpleTags: galleryItem.simpleTags,
+                  simpleTags: galleryProvider.simpleTags,
                 ),
               ],
             ).paddingAll(8.0),
@@ -251,8 +253,8 @@ class GalleryItemFlowLarge extends StatelessWidget {
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: container,
-        onTap: () => galleryItemController.onTap(tabTag),
-        onLongPress: galleryItemController.onLongPress,
+        onTap: () => galleryProviderController.onTap(tabTag),
+        onLongPress: galleryProviderController.onLongPress,
       ).autoCompressKeyboard(context);
     });
 

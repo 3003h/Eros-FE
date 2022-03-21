@@ -83,7 +83,7 @@ class _SubListViewState<T extends CustomSubListController>
 
   Widget _getGallerySliverList() {
     return subController.obx(
-        (List<GalleryItem>? state) {
+        (List<GalleryProvider>? state) {
           if (state == null || state.isEmpty) {
             return SliverFillRemaining(
               child: Container(

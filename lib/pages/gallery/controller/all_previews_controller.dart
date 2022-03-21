@@ -18,7 +18,7 @@ class AllPreviewsPageController extends GetxController
 
   List<GalleryImage> get _images => _pageState.imagesFromMap;
 
-  String get filecount => _pageState.galleryItem?.filecount ?? '0';
+  String get filecount => _pageState.galleryProvider?.filecount ?? '0';
 
   String get gid => _pageState.gid;
 
@@ -114,7 +114,7 @@ class AllPreviewsPageController extends GetxController
       return;
     }
     //
-    logger.v('获取更多预览 ${_pageState.galleryItem?.url}');
+    logger.v('获取更多预览 ${_pageState.galleryProvider?.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
@@ -122,7 +122,7 @@ class AllPreviewsPageController extends GetxController
     update();
 
     final List<GalleryImage> _nextGalleryImageList = await getGalleryImage(
-      _pageState.galleryItem?.url ?? '',
+      _pageState.galleryProvider?.url ?? '',
       page: _pageState.currentImagePage + 1,
       cancelToken: moreGalleryImageCancelToken,
       refresh: _pageState.isRefresh,
@@ -144,7 +144,7 @@ class AllPreviewsPageController extends GetxController
     change(Tuple2([], _images), status: RxStatus.loading());
 
     final List<GalleryImage> _galleryImageList = await getGalleryImage(
-      _pageState.galleryItem?.url ?? '',
+      _pageState.galleryProvider?.url ?? '',
       page: fromPage - 1,
       cancelToken: moreGalleryImageCancelToken,
       refresh: _pageState.isRefresh,
@@ -164,7 +164,7 @@ class AllPreviewsPageController extends GetxController
       return;
     }
     //
-    logger.v('获取上一页预览 ${_pageState.galleryItem?.url}');
+    logger.v('获取上一页预览 ${_pageState.galleryProvider?.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
@@ -172,7 +172,7 @@ class AllPreviewsPageController extends GetxController
     // update();
 
     final List<GalleryImage> _previousGalleryImageList = await getGalleryImage(
-      _pageState.galleryItem?.url ?? '',
+      _pageState.galleryProvider?.url ?? '',
       page: _pageState.currentImagePage - 1,
       cancelToken: moreGalleryImageCancelToken,
       refresh: _pageState.isRefresh,

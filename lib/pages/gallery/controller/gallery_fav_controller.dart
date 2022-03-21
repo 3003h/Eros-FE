@@ -37,7 +37,7 @@ class GalleryFavController extends GetxController {
 
   final CacheController cacheController = Get.find();
 
-  GalleryItemController get _itemController =>
+  GalleryProviderController get _itemController =>
       Get.find(tag: _pageController.gState.gid);
 
   @override
@@ -48,19 +48,19 @@ class GalleryFavController extends GetxController {
     _localFav.value = _pageState.localFav;
 
     // _favTitle 初始化
-    if (_pageState.galleryItem != null &&
-        _pageState.galleryItem?.favTitle != null &&
-        _pageState.galleryItem!.favTitle!.isNotEmpty) {
-      _favTitle.value = _pageState.galleryItem?.favTitle ?? '';
+    if (_pageState.galleryProvider != null &&
+        _pageState.galleryProvider?.favTitle != null &&
+        _pageState.galleryProvider!.favTitle!.isNotEmpty) {
+      _favTitle.value = _pageState.galleryProvider?.favTitle ?? '';
     } else {
       _favTitle.value = localFav ? L10n.of(Get.context!).local_favorite : '';
     }
 
     // _favcat初始化
-    if (_pageState.galleryItem != null &&
-        _pageState.galleryItem?.favcat != null &&
-        _pageState.galleryItem!.favcat!.isNotEmpty) {
-      _favcat.value = _pageState.galleryItem?.favcat ?? '';
+    if (_pageState.galleryProvider != null &&
+        _pageState.galleryProvider?.favcat != null &&
+        _pageState.galleryProvider!.favcat!.isNotEmpty) {
+      _favcat.value = _pageState.galleryProvider?.favcat ?? '';
     } else {
       _favcat.value = localFav ? 'l' : '';
     }
@@ -82,7 +82,7 @@ class GalleryFavController extends GetxController {
     _favcat.value = favcat;
     try {
       _itemController.setFavTitleAndFavcat(favTitle: favTitle, favcat: favcat);
-      _pageState.galleryItem?.copyWith(favcat: favcat, favTitle: favtitle);
+      _pageState.galleryProvider?.copyWith(favcat: favcat, favTitle: favtitle);
     } catch (_) {}
   }
 
@@ -97,8 +97,8 @@ class GalleryFavController extends GetxController {
 
     try {
       await galleryAddfavorite(
-        _pageState.galleryItem?.gid ?? '0',
-        _pageState.galleryItem?.token ?? '',
+        _pageState.galleryProvider?.gid ?? '0',
+        _pageState.galleryProvider?.token ?? '',
         favcat: _lastFavcat,
         favnote: favnote,
       );
@@ -114,7 +114,7 @@ class GalleryFavController extends GetxController {
       isLoading = false;
       _favTitle.value = _favTitleFromProfile;
       _favcat.value = _lastFavcat;
-      _pageState.galleryItem
+      _pageState.galleryProvider
           ?.copyWith(favcat: favcat, favTitle: _favTitleFromProfile);
       if (!_pageState.fromUrl) {
         logger.d('upt item');
@@ -173,8 +173,8 @@ class GalleryFavController extends GetxController {
         if (_favcatFromRult != 'l') {
           // 网络收藏
           await galleryAddfavorite(
-            _pageState.galleryItem?.gid ?? '0',
-            _pageState.galleryItem?.token ?? '',
+            _pageState.galleryProvider?.gid ?? '0',
+            _pageState.galleryProvider?.token ?? '',
             favcat: _favcatFromRult,
             favnote: _favnoteFromRult,
           );
@@ -182,7 +182,7 @@ class GalleryFavController extends GetxController {
         } else {
           // 本地收藏
           _pageState.localFav = true;
-          _localFavController.addLocalFav(_pageState.galleryItem);
+          _localFavController.addLocalFav(_pageState.galleryProvider);
         }
         final _oriFavcat = _favcat.value;
         if (_oriFavcat.isNotEmpty) {
@@ -196,10 +196,10 @@ class GalleryFavController extends GetxController {
         _favTitle.value = _favTitleFromRult;
         _favcat.value = _favcatFromRult;
         logger.d(
-            '[${_pageState.galleryItem?.gid}] add fav ${_itemController.galleryItem.gid} to $favcat');
-        _pageState.galleryItem = _pageState.galleryItem
+            '[${_pageState.galleryProvider?.gid}] add fav ${_itemController.galleryProvider.gid} to $favcat');
+        _pageState.galleryProvider = _pageState.galleryProvider
             ?.copyWith(favcat: _favcatFromRult, favTitle: _favTitleFromRult);
-        logger.d('after _showAddFavDialog ${_pageState.galleryItem?.favcat}');
+        logger.d('after _showAddFavDialog ${_pageState.galleryProvider?.favcat}');
         if (!_pageState.fromUrl) {
           logger.d('upt item');
           _itemController.setFavTitleAndFavcat(
@@ -220,13 +220,13 @@ class GalleryFavController extends GetxController {
       if (favcat.isNotEmpty && favcat != 'l') {
         logger.v('删除网络收藏');
         await galleryAddfavorite(
-          _pageState.galleryItem?.gid ?? '0',
-          _pageState.galleryItem?.token ?? '',
+          _pageState.galleryProvider?.gid ?? '0',
+          _pageState.galleryProvider?.token ?? '',
         );
       } else {
         logger.v('取消本地收藏');
         _pageState.localFav = false;
-        _localFavController.removeFav(_pageState.galleryItem);
+        _localFavController.removeFav(_pageState.galleryProvider);
       }
       _favoriteSelectorController.decrease(favcat);
 
@@ -234,17 +234,17 @@ class GalleryFavController extends GetxController {
     } catch (e) {
       return true;
     } finally {
-      logger.d('delete fav ${_itemController.galleryItem.gid}');
+      logger.d('delete fav ${_itemController.galleryProvider.gid}');
       isLoading = false;
       _favTitle.value = '';
       _favcat.value = '';
-      _pageState.galleryItem =
-          _pageState.galleryItem?.copyWith(favcat: '', favTitle: '');
+      _pageState.galleryProvider =
+          _pageState.galleryProvider?.copyWith(favcat: '', favTitle: '');
       if (!_pageState.fromUrl) {
-        logger.d('del fav ${_itemController.galleryItem.gid} ,upt item');
+        logger.d('del fav ${_itemController.galleryProvider.gid} ,upt item');
         _itemController.setFavTitleAndFavcat(favTitle: '', favcat: '');
       }
-      logger.d('after delFav ${_pageState.galleryItem?.favcat}');
+      logger.d('after delFav ${_pageState.galleryProvider?.favcat}');
     }
     return false;
   }
@@ -257,7 +257,7 @@ class GalleryFavController extends GetxController {
   }
 
   void _removeGalleryCache() {
-    final url = _itemController.galleryItem.url;
+    final url = _itemController.galleryProvider.url;
     logger.d('delete cache $url');
     cacheController.clearDioCache(path: '${Api.getBaseUrl()}$url');
   }
