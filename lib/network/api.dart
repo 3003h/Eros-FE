@@ -186,7 +186,7 @@ class Api {
     final String reqJsonStr = jsonEncode(reqMap);
     logger.d('$reqJsonStr');
     final rult = await postEhApi(reqJsonStr);
-    logger.d('$rult');
+    // logger.d('$rult');
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
     return rultMap;

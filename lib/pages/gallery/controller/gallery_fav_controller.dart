@@ -32,7 +32,7 @@ class GalleryFavController extends GetxController {
   final FavDialogController _favDialogController = Get.find();
   final FavoriteSelectorController _favoriteSelectorController = Get.find();
 
-  GalleryPageController get _pageController => Get.find(tag: pageCtrlTag);
+  late GalleryPageController _pageController;
   GalleryPageState get _pageState => _pageController.gState;
 
   final CacheController cacheController = Get.find();
@@ -43,6 +43,7 @@ class GalleryFavController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _pageController = Get.find(tag: pageCtrlTag);
 
     _localFav.value = _pageState.localFav;
 
@@ -74,7 +75,6 @@ class GalleryFavController extends GetxController {
   String get favTitle => _favTitle.value;
 
   final RxString _favcat = ''.obs;
-
   String get favcat => _favcat.value;
 
   void setFav(String favcat, String favtitle) {
@@ -82,6 +82,7 @@ class GalleryFavController extends GetxController {
     _favcat.value = favcat;
     try {
       _itemController.setFavTitleAndFavcat(favTitle: favTitle, favcat: favcat);
+      _pageState.galleryItem?.copyWith(favcat: favcat, favTitle: favtitle);
     } catch (_) {}
   }
 
@@ -113,6 +114,8 @@ class GalleryFavController extends GetxController {
       isLoading = false;
       _favTitle.value = _favTitleFromProfile;
       _favcat.value = _lastFavcat;
+      _pageState.galleryItem
+          ?.copyWith(favcat: favcat, favTitle: _favTitleFromProfile);
       if (!_pageState.fromUrl) {
         logger.d('upt item');
         _itemController.setFavTitleAndFavcat(
@@ -123,13 +126,11 @@ class GalleryFavController extends GetxController {
   }
 
   /// 点击收藏按钮处理
-  Future<bool?> tapFav() async {
-    // logger.v('tapFav');
-
+  Future<void> tapFav() async {
     /// 网络收藏或者本地收藏
     if (favcat.isNotEmpty || _pageState.localFav) {
       logger.d(' del fav');
-      return delFav();
+      delFav();
     } else {
       logger.d(' add fav');
       final String _lastFavcat = _ehConfigService.lastFavcat.value;
@@ -137,11 +138,11 @@ class GalleryFavController extends GetxController {
       // 添加到上次收藏夹
       if ((_ehConfigService.isFavLongTap.value) && _lastFavcat.isNotEmpty) {
         logger.v('添加到上次收藏夹 $_lastFavcat');
-        return _addToLastFavcat(_lastFavcat);
+        _addToLastFavcat(_lastFavcat);
       } else {
         // 手选收藏夹
         logger.v('手选收藏夹');
-        return await _showAddFavDialog();
+        await _showAddFavDialog();
       }
     }
   }
@@ -158,7 +159,7 @@ class GalleryFavController extends GetxController {
 
     logger.v('$result  ${result.runtimeType}');
 
-    if (result != null && result is Favcat) {
+    if (result != null) {
       logger.v('add fav ${result.favId}');
 
       isLoading = true;
@@ -194,6 +195,11 @@ class GalleryFavController extends GetxController {
         isLoading = false;
         _favTitle.value = _favTitleFromRult;
         _favcat.value = _favcatFromRult;
+        logger.d(
+            '[${_pageState.galleryItem?.gid}] add fav ${_itemController.galleryItem.gid} to $favcat');
+        _pageState.galleryItem = _pageState.galleryItem
+            ?.copyWith(favcat: _favcatFromRult, favTitle: _favTitleFromRult);
+        logger.d('after _showAddFavDialog ${_pageState.galleryItem?.favcat}');
         if (!_pageState.fromUrl) {
           logger.d('upt item');
           _itemController.setFavTitleAndFavcat(
@@ -228,13 +234,17 @@ class GalleryFavController extends GetxController {
     } catch (e) {
       return true;
     } finally {
+      logger.d('delete fav ${_itemController.galleryItem.gid}');
       isLoading = false;
       _favTitle.value = '';
       _favcat.value = '';
+      _pageState.galleryItem =
+          _pageState.galleryItem?.copyWith(favcat: '', favTitle: '');
       if (!_pageState.fromUrl) {
         logger.d('del fav ${_itemController.galleryItem.gid} ,upt item');
         _itemController.setFavTitleAndFavcat(favTitle: '', favcat: '');
       }
+      logger.d('after delFav ${_pageState.galleryItem?.favcat}');
     }
     return false;
   }

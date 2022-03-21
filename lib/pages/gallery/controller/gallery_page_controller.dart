@@ -63,31 +63,20 @@ class GalleryPageController extends GetxController
       final String gid = urlRult?.group(3) ?? '';
       final String token = urlRult?.group(4) ?? '';
 
-      final stateFromCache = _galleryCacheController.getGalleryPageState(gid);
-      if (stateFromCache != null) {
-        gState = stateFromCache;
-        isStateFromCache = true;
-        change(gState.galleryItem, status: RxStatus.success());
-        Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
-          _historyController.addHistory(gState.galleryItem!);
-        });
-      } else {
+      if (!_loadDataFromCache(
+        galleryRepository.item!.gid ?? '',
+        isStateFromCacheChange: (val) => isStateFromCache = val,
+      )) {
         gState = GalleryPageState();
         gState.fromUrl = true;
         gState.galleryItem =
             GalleryItem(url: galleryRepository.url, gid: gid, token: token);
       }
     } else {
-      final stateFromCache = _galleryCacheController
-          .getGalleryPageState(galleryRepository.item!.gid ?? '');
-      if (stateFromCache != null) {
-        gState = stateFromCache;
-        isStateFromCache = true;
-        change(gState.galleryItem, status: RxStatus.success());
-        Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
-          _historyController.addHistory(gState.galleryItem!);
-        });
-      } else {
+      if (!_loadDataFromCache(
+        galleryRepository.item!.gid ?? '',
+        isStateFromCacheChange: (val) => isStateFromCache = val,
+      )) {
         gState = GalleryPageState();
         gState.galleryItem = galleryRepository.item!;
       }
@@ -96,7 +85,7 @@ class GalleryPageController extends GetxController
     gState.hideNavigationBtn = true;
 
     if (!isStateFromCache) {
-      logger.d('new load');
+      logger.d('state new load');
       gState.galleryRepository = galleryRepository;
       _loadData();
 
@@ -123,65 +112,44 @@ class GalleryPageController extends GetxController
     _galleryCacheController.addGalleryPageState(gState);
   }
 
-  // 评分后更新ui和数据
-  void ratinged({
-    required double ratingUsr,
-    required double ratingAvg,
-    required int ratingCnt,
-    required String colorRating,
-  }) {
-    gState.isRatinged = true;
+  Future<void> _loadData({bool refresh = false, bool showError = true}) async {
+    try {
+      final GalleryItem? _fetchItem = await _fetchData(refresh: refresh);
+      change(_fetchItem, status: RxStatus.success());
+      time.showTime('change end');
 
-    gState.galleryItem = gState.galleryItem?.copyWith(
-      isRatinged: true,
-      ratingFallBack: ratingUsr,
-      rating: ratingAvg,
-      ratingCount: ratingCnt.toString(),
-      colorRating: colorRating,
-    );
+      gState.enableRead = true;
 
-    logger.d('update GetIds.PAGE_VIEW_HEADER');
-    update([GetIds.PAGE_VIEW_HEADER]);
+      // 跳转提示dialog
+      if (gState.galleryRepository?.jumpSer != null) {
+        startReadDialog(gState.galleryRepository!.jumpSer!);
+      }
 
-    gState.itemController?.update();
-  }
-
-  void uptImageBySer({required int ser, required GalleryImage image}) {
-    final int? _index = gState.galleryItem?.galleryImages
-        ?.indexWhere((GalleryImage element) => element.ser == ser);
-    if (_index != null && _index >= 0) {
-      gState.galleryItem?.galleryImages?[_index] = image;
-    }
-  }
-
-  void setImageAfterRequest(List<GalleryImage>? images) {
-    if (images?.isNotEmpty ?? false) {
-      gState.galleryItem = gState.galleryItem?.copyWith(galleryImages: images);
-    }
-
-    gState.firstPageImage =
-        gState.galleryItem?.galleryImages?.sublist(0, images?.length) ?? [];
-  }
-
-  /// 添加缩略图对象
-  void addAllImages(List<GalleryImage> galleryImages) {
-    logger5.v(
-        'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
-
-    for (final GalleryImage _image in galleryImages) {
-      final int index =
-          gState.images.indexWhere((GalleryImage e) => e.ser == _image.ser);
-      if (index != -1) {
-        gState.images[index] = _image;
-      } else {
-        gState.images.add(_image);
+      analytics.logViewItem(
+        items: [
+          AnalyticsEventItem(
+            itemId: gState.galleryItem?.gid ?? '',
+            itemName: gState.galleryItem?.englishTitle ?? '',
+            itemCategory: gState.galleryItem?.category ?? '',
+            creativeName: gState.galleryItem?.japaneseTitle,
+          )
+        ],
+      );
+    } catch (err, stack) {
+      logger.e('$err\n$stack');
+      String errMsg = err.toString();
+      if (err is EhError) {
+        errMsg = err.message;
+      }
+      if (showError) {
+        change(null, status: RxStatus.error(errMsg));
       }
     }
   }
 
   /// 请求数据
   Future<GalleryItem?> _fetchData({bool refresh = false}) async {
-    await Future<void>.delayed(const Duration(milliseconds: 200));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     try {
       gState.hideNavigationBtn = true;
 
@@ -264,51 +232,89 @@ class GalleryPageController extends GetxController
       if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
         logger.e('data: ${e.response?.data}');
         final errMsg = parseErrGallery('${e.response?.data ?? ''}');
-        logger.d('errMsg: $errMsg');
-        // showToast('This gallery has been removed or is unavailable.');
-        // rethrow;
+        logger.e('errMsg: $errMsg');
         throw EhError(error: errMsg);
       }
       rethrow;
     } catch (e, stack) {
-      // showToast('Parsing data error');
       logger.e('解析数据异常\n' + e.toString() + '\n' + stack.toString());
-      // rethrow;
       throw EhError(error: 'Parsing data error');
     }
   }
 
-  Future<void> _loadData({bool refresh = false, bool showError = true}) async {
-    try {
-      final GalleryItem? _fetchItem = await _fetchData(refresh: refresh);
-      change(_fetchItem, status: RxStatus.success());
-      time.showTime('change end');
+  bool _loadDataFromCache(
+    String gid, {
+    ValueChanged<bool>? isStateFromCacheChange,
+  }) {
+    final stateFromCache = _galleryCacheController.getGalleryPageState(gid);
+    if (stateFromCache != null) {
+      gState = stateFromCache;
+      isStateFromCacheChange?.call(true);
+      change(gState.galleryItem, status: RxStatus.success());
+      Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
+        _historyController.addHistory(gState.galleryItem!);
+      });
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-      gState.enableRead = true;
+  // 评分后更新ui和数据
+  void ratinged({
+    required double ratingUsr,
+    required double ratingAvg,
+    required int ratingCnt,
+    required String colorRating,
+  }) {
+    gState.isRatinged = true;
 
-      // 跳转提示dialog
-      if (gState.galleryRepository?.jumpSer != null) {
-        startReadDialog(gState.galleryRepository!.jumpSer!);
-      }
+    gState.galleryItem = gState.galleryItem?.copyWith(
+      isRatinged: true,
+      ratingFallBack: ratingUsr,
+      rating: ratingAvg,
+      ratingCount: ratingCnt.toString(),
+      colorRating: colorRating,
+    );
 
-      analytics.logViewItem(
-        items: [
-          AnalyticsEventItem(
-            itemId: gState.galleryItem?.gid ?? '',
-            itemName: gState.galleryItem?.englishTitle ?? '',
-            itemCategory: gState.galleryItem?.category ?? '',
-            creativeName: gState.galleryItem?.japaneseTitle,
-          )
-        ],
-      );
-    } catch (err, stack) {
-      logger.e('$err\n$stack');
-      String errMsg = err.toString();
-      if (err is EhError) {
-        errMsg = err.message;
-      }
-      if (showError) {
-        change(null, status: RxStatus.error(errMsg));
+    gState.itemController?.galleryItem = gState.galleryItem!;
+
+    // logger.d('update GetIds.PAGE_VIEW_HEADER');
+    update([GetIds.PAGE_VIEW_HEADER]);
+    gState.itemController?.ratingFB = gState.galleryItem?.ratingFallBack ?? 0.0;
+
+    gState.itemController?.update();
+  }
+
+  void uptImageBySer({required int ser, required GalleryImage image}) {
+    final int? _index = gState.galleryItem?.galleryImages
+        ?.indexWhere((GalleryImage element) => element.ser == ser);
+    if (_index != null && _index >= 0) {
+      gState.galleryItem?.galleryImages?[_index] = image;
+    }
+  }
+
+  void setImageAfterRequest(List<GalleryImage>? images) {
+    if (images?.isNotEmpty ?? false) {
+      gState.galleryItem = gState.galleryItem?.copyWith(galleryImages: images);
+    }
+
+    gState.firstPageImage =
+        gState.galleryItem?.galleryImages?.sublist(0, images?.length) ?? [];
+  }
+
+  /// 添加缩略图对象
+  void addAllImages(List<GalleryImage> galleryImages) {
+    logger5.v(
+        'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
+
+    for (final GalleryImage _image in galleryImages) {
+      final int index =
+          gState.images.indexWhere((GalleryImage e) => e.ser == _image.ser);
+      if (index != -1) {
+        gState.images[index] = _image;
+      } else {
+        gState.images.add(_image);
       }
     }
   }

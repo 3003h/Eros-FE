@@ -213,17 +213,6 @@ class FavDialogController extends GetxController {
     final BuildContext context = Get.context!;
     final bool _isLogin = _userController.isLogin;
 
-    /// [{'favId': favId, 'favTitle': favTitle}]
-    // final List<Favcat> favList = _isLogin
-    //     ? await GalleryFavParser.getFavcat(
-    //         gid: gid,
-    //         token: token,
-    //       )
-    //     : <Favcat>[];
-    //
-    // // favList.add({'favId': 'l', 'favTitle': L10n.of(context).local_favorite});
-    // favList.add(Favcat(favId: 'l', favTitle: L10n.of(context).local_favorite));
-
     final List<Favcat> favList = _favoriteSelectorController.favcatList;
     logger.d(' ${favList.length}');
 

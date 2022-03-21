@@ -12,7 +12,7 @@ class ArchiverController extends GetxController
     with StateMixin<ArchiverProvider> {
   ArchiverController();
 
-  GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
+  late GalleryPageController pageController;
   GalleryPageState get _pageState => pageController.gState;
   late final ArchiverDownloadController _downloadController;
   late String _archiverLink;
@@ -20,6 +20,8 @@ class ArchiverController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    pageController = Get.find(tag: pageCtrlTag);
+
     if (GetPlatform.isMobile) {
       _downloadController = Get.find();
     }

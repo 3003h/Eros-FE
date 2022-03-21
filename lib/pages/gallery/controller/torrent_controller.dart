@@ -12,7 +12,7 @@ class TorrentController extends GetxController
     with StateMixin<TorrentProvider> {
   TorrentController();
 
-  GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
+  late GalleryPageController pageController;
   GalleryPageState get _pageState => pageController.gState;
   late String torrentTk;
   bool isRefresh = false;
@@ -20,6 +20,7 @@ class TorrentController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    pageController = Get.find(tag: pageCtrlTag);
     _loadData();
   }
 

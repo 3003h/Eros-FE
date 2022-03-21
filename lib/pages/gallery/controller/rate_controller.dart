@@ -13,13 +13,14 @@ class RateController extends GetxController {
 
   late double rate;
 
-  GalleryPageController get pageController => Get.find(tag: pageCtrlTag);
+  late GalleryPageController pageController;
   GalleryPageState get _pageState => pageController.gState;
   GalleryItem? get _item => _pageState.galleryItem;
 
   @override
   void onInit() {
     super.onInit();
+    pageController = Get.find(tag: pageCtrlTag);
     rate = _item?.rating ?? 0;
   }
 
@@ -28,9 +29,9 @@ class RateController extends GetxController {
       return;
     }
 
-    logger.d('rating $rate');
-    logger.d('${_item?.apiuid} ${_item?.apikey}');
-    logger.d('${(rate * 2).round()}');
+    logger.v('rating $rate');
+    logger.v('${_item?.apiuid} ${_item?.apikey}');
+    logger.v('${(rate * 2).round()}');
     final Map<String, dynamic> rultMap = await Api.setRating(
       apikey: _item!.apikey ?? '',
       apiuid: _item!.apiuid ?? '',

@@ -30,7 +30,7 @@ final EhConfigService _ehConfigService = Get.find();
 
 /// 画廊列表项
 /// 标题和tag需要随设置变化重构ui
-class GalleryItemWidget extends StatelessWidget {
+class GalleryItemWidget extends StatefulWidget {
   const GalleryItemWidget(
       {Key? key, required this.tabTag, required this.galleryItem})
       : super(key: key);
@@ -38,8 +38,28 @@ class GalleryItemWidget extends StatelessWidget {
   final GalleryItem galleryItem;
   final dynamic tabTag;
 
+  @override
+  State<GalleryItemWidget> createState() => _GalleryItemWidgetState();
+}
+
+class _GalleryItemWidgetState extends State<GalleryItemWidget> {
   GalleryItemController get galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+      Get.find(tag: widget.galleryItem.gid);
+
+  @override
+  void initState() {
+    super.initState();
+    logger.d('initState');
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    logger.d('didChangeDependencies');
+    galleryItemController.galleryItem.copyWith(
+      ratingFallBack: widget.galleryItem.ratingFallBack,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +72,7 @@ class GalleryItemWidget extends StatelessWidget {
               Positioned(
                 left: 4,
                 top: 4,
-                child: Text('${galleryItem.pageOfList ?? ''}',
+                child: Text('${widget.galleryItem.pageOfList ?? ''}',
                     style: const TextStyle(
                         fontSize: 20,
                         color: CupertinoColors.secondarySystemBackground,
@@ -68,7 +88,7 @@ class GalleryItemWidget extends StatelessWidget {
         ),
       ),
       behavior: HitTestBehavior.opaque,
-      onTap: () => galleryItemController.onTap(tabTag),
+      onTap: () => galleryItemController.onTap(widget.tabTag),
       onTapDown: galleryItemController.onTapDown,
       onTapUp: galleryItemController.onTapUp,
       onTapCancel: galleryItemController.onTapCancel,
@@ -108,7 +128,7 @@ class GalleryItemWidget extends StatelessWidget {
                     Expanded(
                       child: _CoverImage(
                         galleryItemController: galleryItemController,
-                        tabTag: tabTag,
+                        tabTag: widget.tabTag,
                         cardType: true,
                       ),
                     ),
@@ -131,7 +151,7 @@ class GalleryItemWidget extends StatelessWidget {
                         const SizedBox(height: 6),
                         // 上传者
                         Text(
-                          galleryItem.uploader ?? '',
+                          widget.galleryItem.uploader ?? '',
                           style: const TextStyle(
                               fontSize: 12, color: CupertinoColors.systemGrey),
                         ),
@@ -140,38 +160,47 @@ class GalleryItemWidget extends StatelessWidget {
                         // 标签
                         if (_ehConfigService.fixedHeightOfListItems)
                           TagWaterfallFlowViewBox(
-                            simpleTags: galleryItem.simpleTags,
+                            simpleTags: widget.galleryItem.simpleTags,
                             crossAxisCount: 3,
                           )
                         else
                           TagBox(
-                            simpleTags: galleryItem.simpleTags ?? [],
+                            simpleTags: widget.galleryItem.simpleTags ?? [],
                           ),
                         const SizedBox(height: 6),
                         const Spacer(),
                         // 评分行
-                        GetBuilder(
-                          init: galleryItemController,
-                          tag: galleryItem.gid,
-                          builder: (_) => Row(
+                        GetBuilder<GalleryItemController>(
+                          tag: widget.galleryItem.gid,
+                          builder: (logic) => Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               // 评分
                               Expanded(
-                                  child: _Rating(
-                                rating: galleryItem.rating,
-                                ratingFallBack: galleryItem.ratingFallBack,
-                                colorRating: galleryItem.colorRating,
-                              )),
+                                // child: _Rating(
+                                //   rating: galleryItem.rating,
+                                //   ratingFallBack: galleryItem.ratingFallBack,
+                                //   colorRating: galleryItem.colorRating,
+                                // ),
+                                child: _RatingObx(
+                                    galleryItemController:
+                                        galleryItemController),
+                              ),
+                              // _Rating(
+                              //   rating: logic.galleryItem.rating,
+                              //   ratingFallBack:
+                              //       logic.galleryItem.ratingFallBack,
+                              //   colorRating: logic.galleryItem.colorRating,
+                              // ),
                               // 收藏图标
                               _FavcatIcon(
-                                galleryItemController: galleryItemController,
+                                galleryItemController: logic,
                               ),
                               // 图片数量
                               _Filecont(
-                                translated: galleryItem.translated,
-                                filecount: galleryItem.filecount,
+                                translated: widget.galleryItem.translated,
+                                filecount: widget.galleryItem.filecount,
                               ),
                             ],
                           ),
@@ -185,13 +214,13 @@ class GalleryItemWidget extends StatelessWidget {
                           children: <Widget>[
                             // 类型
                             _Category(
-                              category: galleryItem.category,
+                              category: widget.galleryItem.category,
                             ),
 
                             // 上传时间
                             Expanded(
                                 child: _PostTime(
-                              postTime: galleryItem.postTime,
+                              postTime: widget.galleryItem.postTime,
                             )),
                           ],
                         ),
@@ -451,9 +480,32 @@ class _FavcatIcon extends StatelessWidget {
   }
 }
 
-class _Rating extends StatelessWidget {
-  const _Rating({Key? key, this.ratingFallBack, this.rating, this.colorRating})
+class _RatingObx extends StatelessWidget {
+  const _RatingObx({Key? key, required this.galleryItemController})
       : super(key: key);
+  final GalleryItemController galleryItemController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      // logger.d('_RatingObx ${galleryItemController.ratingFB}');
+      return Container(
+        child: _Rating(
+          ratingFallBack: galleryItemController.ratingFB,
+          colorRating: galleryItemController.galleryItem.colorRating,
+        ),
+      );
+    });
+  }
+}
+
+class _Rating extends StatelessWidget {
+  const _Rating({
+    Key? key,
+    this.ratingFallBack,
+    this.rating,
+    this.colorRating,
+  }) : super(key: key);
   final double? ratingFallBack;
   final double? rating;
   final String? colorRating;
