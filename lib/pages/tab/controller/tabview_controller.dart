@@ -87,7 +87,7 @@ class TabViewController extends GetxController
         refresh: true,
       );
 
-      logger.d('reloadData length ${rult?.gallerys?.length}');
+      logger.v('reloadData length ${rult?.gallerys?.length}');
 
       if (rult == null) {
         return;

@@ -14,7 +14,7 @@ class RateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RateController controller = Get.find(tag: pageCtrlTag);
-    logger.d('controller.rate ${controller.rate}  ');
+    // logger.d('controller.rate ${controller.rate}  ');
     return Container(
       height: 80,
       alignment: Alignment.center,

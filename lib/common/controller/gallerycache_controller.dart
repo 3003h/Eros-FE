@@ -104,7 +104,10 @@ class GalleryCacheController extends GetxController {
   final List<GalleryPageState> pageStateList = [];
 
   void addGalleryPageState(GalleryPageState state) {
-    logger.d('addGalleryPageState ${state.gid} ${state.title}');
+    if (state.firstPageImage.isEmpty) {
+      return;
+    }
+
     final index =
         pageStateList.indexWhere((element) => element.gid == state.gid);
     if (index > -1) {
@@ -115,7 +118,8 @@ class GalleryCacheController extends GetxController {
       }
       pageStateList.add(state);
     }
-    logger.d('pageStateList\n${pageStateList.map((e) => e.title).join('\n')}');
+    logger.v(
+        'pageStateList\n${pageStateList.map((e) => '${e.title} - ${e.galleryItem?.favcat}').join('\n')}');
   }
 
   GalleryPageState? getGalleryPageState(String gid) {

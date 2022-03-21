@@ -13,7 +13,7 @@ import 'gallery_page_state.dart';
 class AllPreviewsPageController extends GetxController
     with StateMixin<Tuple2<List<GalleryImage>, List<GalleryImage>>> {
   AllPreviewsPageController();
-  GalleryPageController get _pageController => Get.find(tag: pageCtrlTag);
+  late GalleryPageController _pageController;
   GalleryPageState get _pageState => _pageController.gState;
 
   List<GalleryImage> get _images => _pageState.imagesFromMap;
@@ -44,6 +44,8 @@ class AllPreviewsPageController extends GetxController
   @override
   void onInit() {
     super.onInit();
+
+    _pageController = Get.find(tag: pageCtrlTag);
 
     _pageState.currentImagePage = 0;
 
@@ -82,8 +84,7 @@ class AllPreviewsPageController extends GetxController
             kMinInteractiveDimensionCupertino) ~/
         size.height;
 
-    final int _toLine =
-        _pageState.firstPageImage.length ~/ itemCountCross + 1;
+    final int _toLine = _pageState.firstPageImage.length ~/ itemCountCross + 1;
 
     // 计算滚动距离
     final double _offset = (_toLine - itemCountCrossMain) * size.height;

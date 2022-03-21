@@ -39,14 +39,22 @@ class GalleryItemController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    logger.d(
+        'init GalleryItemController ${galleryItem.gid}  ${galleryItem.englishTitle}');
     if (galleryItem.favTitle != null && galleryItem.favTitle!.isNotEmpty) {
       isFav = true;
     }
+    ratingFB = galleryItem.ratingFallBack ?? 0.0;
+    logger.d('ratingFB=$ratingFB');
   }
 
   final RxBool _isFav = false.obs;
   bool get isFav => _isFav.value;
   set isFav(bool val) => _isFav.value = val;
+
+  final _ratingFB = 0.0.obs;
+  double get ratingFB => _ratingFB.value;
+  set ratingFB(double val) => _ratingFB.value = val;
 
   void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
     logger.v('setFavTitle ori isFav :$isFav');

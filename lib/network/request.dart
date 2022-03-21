@@ -835,12 +835,6 @@ Future<void> galleryAddfavorite(
     url,
     queryParameters: _params,
     data: formData,
-    // httpTransformer: HttpTransformerBuilder(
-    //   (response) {
-    //     logger.d('statusCode ${response.statusCode}');
-    //     return DioHttpResponse<bool>.success(response.statusCode == 302);
-    //   },
-    // ),
     options: getCacheOptions(forceRefresh: true),
   );
 }

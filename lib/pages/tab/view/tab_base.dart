@@ -71,6 +71,7 @@ SliverPadding buildWaterfallFlow(
           }
 
           final GalleryItem _item = gallerItemBeans[index];
+          // Get.lazyPut(() => _item, tag: _item.gid, fenix: true);
           Get.lazyReplace(() => GalleryItemController()..galleryItem = _item,
               tag: _item.gid, fenix: true);
 
@@ -159,7 +160,7 @@ Widget _listItemWiget(
   switch (listMode) {
     case ListModeEnum.list:
       return GalleryItemWidget(
-        key: centerKey ?? ValueKey(_item.gid),
+        key: centerKey ?? ValueKey('${_item.gid}_${_item.ratingFallBack}'),
         galleryItem: _item,
         tabTag: tabTag,
       );
