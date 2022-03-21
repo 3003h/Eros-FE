@@ -136,15 +136,15 @@ class GStore {
     ReadWriteValue('profile', '{}', _profileStore).val = jsonEncode(val);
   }
 
-  List<GalleryItem> get historys {
+  List<GalleryProvider> get historys {
     final String val = ReadWriteValue('galleryHistory', '[]', _hisStore).val;
-    final List<GalleryItem> _his = (jsonDecode(val) as List)
-        .map((e) => GalleryItem.fromJson(e as Map<String, dynamic>))
+    final List<GalleryProvider> _his = (jsonDecode(val) as List)
+        .map((e) => GalleryProvider.fromJson(e as Map<String, dynamic>))
         .toList();
     return _his;
   }
 
-  set historys(List<GalleryItem> val) {
+  set historys(List<GalleryProvider> val) {
     // logger.d('set his ${jsonEncode(val)}');
     ReadWriteValue('galleryHistory', '{}', _hisStore).val = jsonEncode(val);
   }

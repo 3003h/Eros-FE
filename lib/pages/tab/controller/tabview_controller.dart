@@ -10,7 +10,7 @@ import '../comm.dart';
 import 'enum.dart';
 
 class TabViewController extends GetxController
-    with StateMixin<List<GalleryItem>> {
+    with StateMixin<List<GalleryProvider>> {
   // 当前页码
   final _curPage = 0.obs;
   int get curPage => _curPage.value;
@@ -93,7 +93,7 @@ class TabViewController extends GetxController
         return;
       }
 
-      final List<GalleryItem>? rultList = rult.gallerys;
+      final List<GalleryProvider>? rultList = rult.gallerys;
 
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;
@@ -135,10 +135,11 @@ class TabViewController extends GetxController
         return;
       }
 
-      final List<GalleryItem> rultList = rult.gallerys ?? [];
+      final List<GalleryProvider> rultList = rult.gallerys ?? [];
 
       if (rultList.isNotEmpty &&
-          state?.indexWhere((GalleryItem e) => e.gid == rultList.first.gid) ==
+          state?.indexWhere(
+                  (GalleryProvider e) => e.gid == rultList.first.gid) ==
               -1) {
         maxPage = rult.maxPage ?? 0;
         nextPage = rult.nextPage ?? 1;

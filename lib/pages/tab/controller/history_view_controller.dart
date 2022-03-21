@@ -16,22 +16,22 @@ class HistoryViewController extends DefaultTabViewController {
     super.onInit();
     heroTag = EHRoutes.history;
 
-    loadData().then((List<GalleryItem> value) {
+    loadData().then((List<GalleryProvider> value) {
       change(value, status: RxStatus.success());
     }, onError: (err) {
       change(null, status: RxStatus.error(err.toString()));
     });
   }
 
-  Future<List<GalleryItem>> loadData() async {
+  Future<List<GalleryProvider>> loadData() async {
     logger.v('_loadData ');
-    final List<GalleryItem> historys = historyController.historys;
+    final List<GalleryProvider> historys = historyController.historys;
 
-    return Future<List<GalleryItem>>.value(historys);
+    return Future<List<GalleryProvider>>.value(historys);
   }
 
   Future<void> reloadData() async {
-    final List<GalleryItem> gallerItemBeans = await loadData();
+    final List<GalleryProvider> gallerItemBeans = await loadData();
     change(gallerItemBeans);
     update();
   }

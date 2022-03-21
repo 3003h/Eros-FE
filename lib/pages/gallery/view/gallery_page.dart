@@ -32,7 +32,7 @@ class GalleryRepository {
   });
 
   final dynamic tabTag;
-  final GalleryItem? item;
+  final GalleryProvider? item;
   final String? url;
   final int? jumpSer;
 }
@@ -72,7 +72,7 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
   @override
   Widget build(BuildContext context) {
     final dynamic tabTag = _pageState.galleryRepository?.tabTag;
-    final GalleryItem? _item = _pageState.galleryItem;
+    final GalleryProvider? _item = _pageState.galleryProvider;
 
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
@@ -126,7 +126,8 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                           tag: pageCtrlTag,
                           builder: (logic) {
                             return NavigationBarImage(
-                              imageUrl: logic.gState.galleryItem?.imgUrl ?? '',
+                              imageUrl:
+                                  logic.gState.galleryProvider?.imgUrl ?? '',
                               scrollController: logic.scrollController,
                             );
                           },

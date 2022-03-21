@@ -74,7 +74,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
 
   Widget _getGallerySliverList() {
     return _favoriteSubListController.obx(
-        (List<GalleryItem>? state) {
+        (List<GalleryProvider>? state) {
           if (state == null || state.isEmpty) {
             return SliverFillRemaining(
               child: Container(

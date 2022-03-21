@@ -254,11 +254,11 @@ Future<List<TagGroup>> parseGalleryTags(Document document) async {
 }
 
 /// 解析画廊详情数据
-Future<GalleryItem> parseGalleryDetail(String response) async {
+Future<GalleryProvider> parseGalleryDetail(String response) async {
   // 解析响应信息dom
   final Document document = parse(response);
 
-  // GalleryItem galleryItem = const GalleryItem();
+  // GalleryItem galleryProvider = const GalleryItem();
 
   // 封面图片
   final Element? imageElem = document.querySelector('#gd1 > div');
@@ -367,7 +367,7 @@ Future<GalleryItem> parseGalleryDetail(String response) async {
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
 
-  final galleryItem = GalleryItem(
+  final galleryProvider = GalleryProvider(
     imgUrl: _imageUrl,
     tagGroup: await parseGalleryTags(document),
     galleryComment: parseGalleryComment(document),
@@ -392,7 +392,7 @@ Future<GalleryItem> parseGalleryDetail(String response) async {
     uploader: _uploader,
   );
 
-  return galleryItem;
+  return galleryProvider;
 }
 
 List<GalleryImage> parseGalleryImageFromHtml(String response) {

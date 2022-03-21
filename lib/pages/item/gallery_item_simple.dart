@@ -21,22 +21,22 @@ const double kPaddingLeft = 8.0;
 class GalleryItemSimpleWidget extends StatelessWidget {
   const GalleryItemSimpleWidget({
     Key? key,
-    required this.galleryItem,
+    required this.galleryProvider,
     required this.tabTag,
     this.showTag = true,
   }) : super(key: key);
 
-  final GalleryItem galleryItem;
+  final GalleryProvider galleryProvider;
   final dynamic tabTag;
   final bool showTag;
 
-  GalleryItemController get galleryItemController =>
-      Get.find(tag: galleryItem.gid);
+  GalleryProviderController get galleryProviderController =>
+      Get.find(tag: galleryProvider.gid);
 
   @override
   Widget build(BuildContext context) {
     final Widget containerGallery = Container(
-      color: galleryItemController.colorTap.value,
+      color: galleryProviderController.colorTap.value,
       height: showTag ? kItemHeight + 10 : kItemHeight,
       padding: const EdgeInsets.fromLTRB(kPaddingLeft, 6, 6, 6),
       child: Row(children: <Widget>[
@@ -53,7 +53,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               const SizedBox(height: 4),
               // 上传者
               Text(
-                galleryItem.uploader ?? '',
+                galleryProvider.uploader ?? '',
                 style: const TextStyle(
                     fontSize: 12, color: CupertinoColors.systemGrey),
               ),
@@ -62,17 +62,17 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               if (showTag)
                 // TagListViewBox(
                 //   simpleTags:
-                //       galleryItemController.galleryItem.simpleTags ?? [],
+                //       galleryProviderController.galleryProvider.simpleTags ?? [],
                 // ),
                 TagWaterfallFlowViewBox(
-                  simpleTags: galleryItem.simpleTags ?? [],
+                  simpleTags: galleryProvider.simpleTags ?? [],
                   crossAxisCount: 1,
                 ),
               const Spacer(),
               // 评分行
               GetBuilder(
-                init: galleryItemController,
-                tag: galleryItemController.galleryItem.gid,
+                init: galleryProviderController,
+                tag: galleryProviderController.galleryProvider.gid,
                 builder: (_) => Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
@@ -121,18 +121,18 @@ class GalleryItemSimpleWidget extends StatelessWidget {
       ),
       // 不可见区域点击有效
       behavior: HitTestBehavior.opaque,
-      onTap: () => galleryItemController.onTap(tabTag),
-      onTapDown: galleryItemController.onTapDown,
-      onTapUp: galleryItemController.onTapUp,
-      onTapCancel: galleryItemController.onTapCancel,
-      onLongPress: galleryItemController.onLongPress,
+      onTap: () => galleryProviderController.onTap(tabTag),
+      onTapDown: galleryProviderController.onTapDown,
+      onTapUp: galleryProviderController.onTapUp,
+      onTapCancel: galleryProviderController.onTapCancel,
+      onLongPress: galleryProviderController.onLongPress,
     ).autoCompressKeyboard(context);
   }
 
   /// 构建标题
   Widget _buildTitle() {
     return Obx(() => Text(
-          galleryItemController.title,
+          galleryProviderController.title,
           maxLines: 2,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -145,7 +145,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   /// 构建封面图片
   Widget _buildCoverImage() {
-    final GalleryItem _item = galleryItemController.galleryItem;
+    final GalleryProvider _item = galleryProviderController.galleryProvider;
 
     return Container(
       width: kCoverImageWidth,
@@ -170,7 +170,8 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               child: CoverImg(
                   height: _item.imgHeight,
                   width: _item.imgWidth,
-                  imgUrl: galleryItemController.galleryItem.imgUrl ?? ''),
+                  imgUrl:
+                      galleryProviderController.galleryProvider.imgUrl ?? ''),
             ),
           ),
         ),
@@ -185,16 +186,17 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
             size: 16.0,
-            rate: galleryItemController.galleryItem.ratingFallBack ?? 0,
+            rate: galleryProviderController.galleryProvider.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
-                galleryItemController.galleryItem.colorRating?.trim() ?? 'ir'],
+                galleryProviderController.galleryProvider.colorRating?.trim() ??
+                    'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context!),
           ),
         ),
         Text(
-          galleryItemController.galleryItem.rating?.toString() ?? '',
+          galleryProviderController.galleryProvider.rating?.toString() ?? '',
           style: TextStyle(
             fontSize: 12,
             color: CupertinoDynamicColor.resolve(
@@ -211,7 +213,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 4),
           child: Text(
-            galleryItemController.galleryItem.translated ?? '',
+            galleryProviderController.galleryProvider.translated ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -224,7 +226,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(left: 2),
           child: Text(
-            galleryItemController.galleryItem.filecount ?? '',
+            galleryProviderController.galleryProvider.filecount ?? '',
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.systemGrey),
           ),
@@ -235,14 +237,15 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   Widget _buildFavcatIcon() {
     return Container(
-      child: galleryItemController.galleryItem.favTitle?.isNotEmpty ?? false
+      child: galleryProviderController.galleryProvider.favTitle?.isNotEmpty ??
+              false
           ? Container(
               padding: const EdgeInsets.only(bottom: 2.5, right: 8),
               child: Icon(
                 FontAwesomeIcons.solidHeart,
                 size: 12,
                 color: ThemeColors
-                    .favColor[galleryItemController.galleryItem.favcat],
+                    .favColor[galleryProviderController.galleryProvider.favcat],
               ),
             )
           : Container(),
@@ -251,7 +254,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   Widget _buildPostTime() {
     return Text(
-      galleryItemController.galleryItem.postTime ?? '',
+      galleryProviderController.galleryProvider.postTime ?? '',
       style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
     );
   }
@@ -259,7 +262,8 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   Widget _buildCategory() {
     final Color _colorCategory = CupertinoDynamicColor.resolve(
         ThemeColors.catColor[
-                galleryItemController.galleryItem.category ?? 'default'] ??
+                galleryProviderController.galleryProvider.category ??
+                    'default'] ??
             CupertinoColors.systemBackground,
         Get.context!);
 
@@ -269,7 +273,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
         color: _colorCategory,
         child: Text(
-          galleryItemController.galleryItem.category ?? '',
+          galleryProviderController.galleryProvider.category ?? '',
           style: const TextStyle(
             fontSize: 14,
             height: 1,

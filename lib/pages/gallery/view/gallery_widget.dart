@@ -269,7 +269,7 @@ class ReadButton extends StatelessWidget {
           color: CupertinoColors.activeBlue,
           onPressed: _pageState.enableRead
               ? () => _toViewPage(
-                  _pageState.galleryItem?.gid ?? '0', _pageState.lastIndex)
+                  _pageState.galleryProvider?.gid ?? '0', _pageState.lastIndex)
               : null),
     );
   }

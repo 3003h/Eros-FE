@@ -9,8 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class GalleryItemController extends GetxController {
-  GalleryItemController();
+class GalleryProviderController extends GetxController {
+  GalleryProviderController({required this.galleryProvider});
 
   final EhConfigService _ehConfigService = Get.find();
   final FavDialogController _favDialogController = Get.find();
@@ -18,12 +18,14 @@ class GalleryItemController extends GetxController {
   final HistoryController _historyController = Get.find();
 
   late List<GalleryImage> firstPageImage;
-  late GalleryItem galleryItem;
+  // late GalleryProvider galleryProvider;
+  final GalleryProvider galleryProvider;
 
   /// 点击item
   void onTap(dynamic tabTag) {
-    logger.v('${galleryItem.englishTitle} ');
-    NavigatorUtil.goGalleryPage(galleryItem: galleryItem, tabTag: tabTag);
+    logger.v('${galleryProvider.englishTitle} ');
+    NavigatorUtil.goGalleryPage(
+        galleryProvider: galleryProvider, tabTag: tabTag);
   }
 
   void onTapDown(_) => _updatePressedColor();
@@ -40,11 +42,12 @@ class GalleryItemController extends GetxController {
   void onInit() {
     super.onInit();
     logger.d(
-        'init GalleryItemController ${galleryItem.gid}  ${galleryItem.englishTitle}');
-    if (galleryItem.favTitle != null && galleryItem.favTitle!.isNotEmpty) {
+        'init GalleryProviderController ${galleryProvider.gid}  ${galleryProvider.englishTitle}');
+    if (galleryProvider.favTitle != null &&
+        galleryProvider.favTitle!.isNotEmpty) {
       isFav = true;
     }
-    ratingFB = galleryItem.ratingFallBack ?? 0.0;
+    ratingFB = galleryProvider.ratingFallBack ?? 0.0;
     logger.d('ratingFB=$ratingFB');
   }
 
@@ -58,23 +61,23 @@ class GalleryItemController extends GetxController {
 
   void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
     logger.v('setFavTitle ori isFav :$isFav');
-    galleryItem = galleryItem.copyWith(favTitle: favTitle);
+    galleryProvider.copyWith(favTitle: favTitle);
     isFav = favTitle.isNotEmpty;
     logger.v('setFavTitle cur isFav :$isFav');
     if (favcat != null || (favcat?.isNotEmpty ?? false)) {
-      galleryItem = galleryItem.copyWith(favcat: favcat);
+      galleryProvider.copyWith(favcat: favcat);
       logger.v('item set favcat $favcat');
     } else {
-      galleryItem = galleryItem.copyWith(favcat: '', favTitle: '');
+      galleryProvider.copyWith(favcat: '', favTitle: '');
     }
   }
 
   String get title {
     if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryItem.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem.japaneseTitle ?? '';
+        (galleryProvider.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryProvider.japaneseTitle ?? '';
     } else {
-      return galleryItem.englishTitle ?? '';
+      return galleryProvider.englishTitle ?? '';
     }
   }
 
@@ -91,19 +94,19 @@ class GalleryItemController extends GetxController {
   }
 
   set localFav(bool value) {
-    galleryItem = galleryItem.copyWith(localFav: localFav);
+    galleryProvider.copyWith(localFav: localFav);
     update();
   }
 
-  bool get localFav => galleryItem.localFav ?? false;
+  bool get localFav => galleryProvider.localFav ?? false;
 
   void firstPutImage(List<GalleryImage> galleryImage) {
     if (galleryImage.isNotEmpty) {
-      galleryItem = galleryItem.copyWith(galleryImages: galleryImage);
+      galleryProvider.copyWith(galleryImages: galleryImage);
     }
 
     firstPageImage =
-        galleryItem.galleryImages?.sublist(0, galleryImage.length) ?? [];
+        galleryProvider.galleryImages?.sublist(0, galleryImage.length) ?? [];
     // logger.d(' _firstPagePreview ${firstPagePreview.length}');
   }
 
@@ -132,16 +135,17 @@ class GalleryItemController extends GetxController {
                 },
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
-              if (galleryItem.favcat == null ||
-                  (galleryItem.favcat?.isEmpty ?? false))
+              if (galleryProvider.favcat == null ||
+                  (galleryProvider.favcat?.isEmpty ?? false))
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if (galleryItem.gid == null || galleryItem.token == null) {
+                    if (galleryProvider.gid == null ||
+                        galleryProvider.token == null) {
                       return;
                     }
                     Get.back();
                     _favDialogController
-                        .tapAddFav(galleryItem.gid!, galleryItem.token!)
+                        .tapAddFav(galleryProvider.gid!, galleryProvider.token!)
                         .then((Favcat? value) {
                       if (value != null) {
                         setFavTitleAndFavcat(
@@ -152,16 +156,17 @@ class GalleryItemController extends GetxController {
                   },
                   child: Text(L10n.of(context).add_to_favorites),
                 ),
-              if (galleryItem.favcat != null &&
-                  (galleryItem.favcat?.isNotEmpty ?? false))
+              if (galleryProvider.favcat != null &&
+                  (galleryProvider.favcat?.isNotEmpty ?? false))
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if (galleryItem.gid == null || galleryItem.token == null) {
+                    if (galleryProvider.gid == null ||
+                        galleryProvider.token == null) {
                       return;
                     }
                     _favDialogController
-                        .delFav(galleryItem.favcat!, galleryItem.gid!,
-                            galleryItem.token!)
+                        .delFav(galleryProvider.favcat!, galleryProvider.gid!,
+                            galleryProvider.token!)
                         .then((_) {
                       setFavTitleAndFavcat(favTitle: '', favcat: '');
                       showToast('successfully deleted');
@@ -170,17 +175,18 @@ class GalleryItemController extends GetxController {
                   },
                   child: Text(L10n.of(context).remove_from_favorites),
                 ),
-              if (galleryItem.favcat != null &&
-                  (galleryItem.favcat?.isNotEmpty ?? false))
+              if (galleryProvider.favcat != null &&
+                  (galleryProvider.favcat?.isNotEmpty ?? false))
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if (galleryItem.gid == null || galleryItem.token == null) {
+                    if (galleryProvider.gid == null ||
+                        galleryProvider.token == null) {
                       return;
                     }
                     Get.back();
                     _favDialogController
-                        .tapAddFav(galleryItem.gid!, galleryItem.token!,
-                            oriFavcat: galleryItem.favcat!)
+                        .tapAddFav(galleryProvider.gid!, galleryProvider.token!,
+                            oriFavcat: galleryProvider.favcat!)
                         .then((Favcat? value) {
                       if (value != null) {
                         setFavTitleAndFavcat(favTitle: '', favcat: '');
@@ -195,10 +201,10 @@ class GalleryItemController extends GetxController {
               if (isHistoryItem)
                 CupertinoActionSheetAction(
                   onPressed: () {
-                    if (galleryItem.gid == null) {
+                    if (galleryProvider.gid == null) {
                       return;
                     }
-                    _historyController.removeHistory(galleryItem.gid!);
+                    _historyController.removeHistory(galleryProvider.gid!);
 
                     Get.back();
                   },

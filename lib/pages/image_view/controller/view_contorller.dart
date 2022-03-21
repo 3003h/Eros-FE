@@ -421,7 +421,7 @@ class ViewExtController extends GetxController {
   /// 重载图片数据，重构部件
   Future<void> reloadImage(int itemSer, {bool changeSource = true}) async {
     final GalleryImage? _currentImage =
-        _galleryPageStat.galleryItem?.imageMap[itemSer];
+        _galleryPageStat.galleryProvider?.imageMap[itemSer];
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存

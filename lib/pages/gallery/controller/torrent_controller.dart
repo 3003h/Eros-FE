@@ -26,7 +26,7 @@ class TorrentController extends GetxController
 
   Future<TorrentProvider> _fetch() async {
     final _torrentLink = '${Api.getBaseUrl()}/gallerytorrents.php'
-        '?gid=${_pageState.gid}&t=${_pageState.galleryItem?.token}';
+        '?gid=${_pageState.gid}&t=${_pageState.galleryProvider?.token}';
     logger.d(_torrentLink);
     return await getTorrent(_torrentLink);
   }
@@ -48,7 +48,7 @@ class TorrentController extends GetxController
 
   Future<String> _fetchTk() async {
     return await getTorrentToken(
-        _pageState.gid, _pageState.galleryItem?.token ?? '',
+        _pageState.gid, _pageState.galleryProvider?.token ?? '',
         refresh: isRefresh);
   }
 }

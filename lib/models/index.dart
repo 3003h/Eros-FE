@@ -1,6 +1,7 @@
 export 'download_archiver_task_info.dart';
 export 'eh_mytag_set.dart';
 export 'local_fav.dart';
+export 'gallery_provider.dart';
 export 'eh_config.dart';
 export 'simple_tag.dart';
 export 'fav_config.dart';
@@ -8,7 +9,6 @@ export 'commit_vote_res.dart';
 export 'gallery_image.dart';
 export 'auto_lock.dart';
 export 'custom_tab_config.dart';
-export 'gallery_item.dart';
 export 'dns_config.dart';
 export 'gallery_cache.dart';
 export 'gallery_comment_span.dart';

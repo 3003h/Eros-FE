@@ -36,7 +36,7 @@ class FavoriteViewController extends DefaultTabViewController {
   //页码跳转的控制器
   final TextEditingController pageController = TextEditingController();
 
-  late Future<Tuple2<List<GalleryItem>, int>> futureBuilderFuture;
+  late Future<Tuple2<List<GalleryProvider>, int>> futureBuilderFuture;
   Widget? lastListWidget;
 
   final LocalFavController _localFavController = Get.find();
@@ -85,7 +85,7 @@ class FavoriteViewController extends DefaultTabViewController {
       // }
       // 本地收藏夹
       logger.v('本地收藏');
-      final List<GalleryItem> localFav = _localFavController.loacalFavs;
+      final List<GalleryProvider> localFav = _localFavController.loacalFavs;
 
       return Future<GalleryList>.value(
           GalleryList(gallerys: localFav, maxPage: 1));

@@ -72,10 +72,10 @@ class ViewExtState {
 
   void saveLastIndex({bool saveToStore = false}) {
     if (loadFrom == LoadFrom.gallery) {
-      if (pageState.galleryItem?.gid != null && conditionItemIndex) {
+      if (pageState.galleryProvider?.gid != null && conditionItemIndex) {
         pageState.lastIndex = currentItemIndex;
         _galleryCacheController.setIndex(
-            pageState.galleryItem?.gid ?? '0', currentItemIndex,
+            pageState.galleryProvider?.gid ?? '0', currentItemIndex,
             saveToStore: saveToStore);
       }
     } else {
@@ -130,7 +130,7 @@ class ViewExtState {
     if (loadFrom == LoadFrom.download) {
       return imagePathList.length;
     } else {
-      return int.parse(pageState.galleryItem?.filecount ?? '0');
+      return int.parse(pageState.galleryProvider?.filecount ?? '0');
     }
   }
 

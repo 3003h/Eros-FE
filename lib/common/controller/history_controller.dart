@@ -14,8 +14,8 @@ import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
 
 class HistoryController extends GetxController {
-  final List<GalleryItem> _historys = <GalleryItem>[];
-  List<GalleryItem> get historys {
+  final List<GalleryProvider> _historys = <GalleryProvider>[];
+  List<GalleryProvider> get historys {
     _historys
         .sort((a, b) => (b.lastViewTime ?? 0).compareTo(a.lastViewTime ?? 0));
     return _historys;
@@ -37,26 +37,26 @@ class HistoryController extends GetxController {
       _ehConfigService.listMode.value == ListModeEnum.simpleList;
 
   void addHistory(
-    GalleryItem galleryItem, {
+    GalleryProvider galleryProvider, {
     bool updateTime = true,
     bool sync = true,
   }) {
     final _hisViewController = Get.find<HistoryViewController>();
 
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
-    final _item = galleryItem.copyWith(
+    final _item = galleryProvider.copyWith(
       lastViewTime: updateTime ? nowTime : null,
       galleryImages: [],
       galleryComment: [],
     );
 
     final _eDelFlg =
-        _delHistorys.firstWhereOrNull((eDel) => eDel.g == galleryItem.gid);
+        _delHistorys.firstWhereOrNull((eDel) => eDel.g == galleryProvider.gid);
     if (nowTime > (_eDelFlg?.t ?? 0)) {
-      _removeHistoryDelFlg(galleryItem.gid ?? '');
+      _removeHistoryDelFlg(galleryProvider.gid ?? '');
     }
 
-    final int _curIndex = historys.indexWhere((GalleryItem element) {
+    final int _curIndex = historys.indexWhere((element) {
       return element.gid == _item.gid;
     });
 
@@ -89,7 +89,7 @@ class HistoryController extends GetxController {
       hiveHelper.addHistory(_item);
     }
 
-    logger.v('add ${galleryItem.gid} update1');
+    logger.v('add ${galleryProvider.gid} update1');
     update();
     // if (!isListView) {
     //   update();
@@ -110,7 +110,7 @@ class HistoryController extends GetxController {
     final _hisViewController = Get.find<HistoryViewController>();
 
     final _index = historys.indexWhere((element) => element.gid == gid);
-    final GalleryItem _item = historys[_index];
+    final _item = historys[_index];
     historys.removeAt(_index);
     if (isListView) {
       _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
@@ -268,7 +268,7 @@ class HistoryController extends GetxController {
   }) async {
     for (final his in localHisList) {
       executor.scheduleTask(() async {
-        final GalleryItem? _his =
+        final GalleryProvider? _his =
             historys.firstWhereOrNull((element) => element.gid == his?.g);
 
         final _oriRemote =

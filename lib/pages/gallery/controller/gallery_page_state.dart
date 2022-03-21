@@ -16,10 +16,10 @@ class GalleryPageState {
   late final GalleryRepository? galleryRepository;
 
   /// 画廊数据对象
-  GalleryItem? galleryItem;
+  GalleryProvider? galleryProvider;
 
   /// 画廊gid 唯一
-  String get gid => galleryItem?.gid ?? '0';
+  String get gid => galleryProvider?.gid ?? '0';
 
   bool isRefresh = false;
 
@@ -35,10 +35,10 @@ class GalleryPageState {
   int get lastIndex => _lastIndex.value;
   set lastIndex(int val) => _lastIndex.value = val;
 
-  List<GalleryImage> get images => galleryItem?.galleryImages ?? [];
-  Map<int, GalleryImage> get imageMap => galleryItem?.imageMap ?? {};
+  List<GalleryImage> get images => galleryProvider?.galleryImages ?? [];
+  Map<int, GalleryImage> get imageMap => galleryProvider?.imageMap ?? {};
   set imageMap(Map<int, GalleryImage> val) {}
-  int get filecount => int.parse(galleryItem?.filecount ?? '0');
+  int get filecount => int.parse(galleryProvider?.filecount ?? '0');
 
   // 阅读按钮开关
   final RxBool _enableRead = false.obs;
@@ -46,7 +46,8 @@ class GalleryPageState {
   set enableRead(bool val) => _enableRead.value = val;
 
   bool get hasMoreImage {
-    return int.parse(galleryItem?.filecount ?? '0') > (firstPageImage.length);
+    return int.parse(galleryProvider?.filecount ?? '0') >
+        (firstPageImage.length);
   }
 
   // 控制隐藏导航栏按钮和封面
@@ -60,7 +61,7 @@ class GalleryPageState {
   List<GalleryImage> get firstPageImage => _firstPageImage ?? [];
   set firstPageImage(List<GalleryImage>? val) => _firstPageImage = val;
 
-  String get showKey => galleryItem?.showKey ?? '';
+  String get showKey => galleryProvider?.showKey ?? '';
 
   /// 当前缩略图页码
   late int currentImagePage;
@@ -70,10 +71,10 @@ class GalleryPageState {
 
   /// 是否存在本地收藏中
   set localFav(bool value) {
-    galleryItem = galleryItem?.copyWith(localFav: value);
+    galleryProvider = galleryProvider?.copyWith(localFav: value);
   }
 
-  bool get localFav => galleryItem?.localFav ?? false;
+  bool get localFav => galleryProvider?.localFav ?? false;
 
   final _topTitle = ''.obs;
   // get topTitle => _topTitle.value;
@@ -92,27 +93,27 @@ class GalleryPageState {
 
   // 另一个语言的标题
   String get topTitle {
-    // logger.d('${galleryItem.japaneseTitle} ${galleryItem.englishTitle}');
+    // logger.d('${galleryProvider.japaneseTitle} ${galleryProvider.englishTitle}');
 
     if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem?.englishTitle ?? '';
+        (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryProvider?.englishTitle ?? '';
     } else {
-      return galleryItem?.japaneseTitle ?? '';
+      return galleryProvider?.japaneseTitle ?? '';
     }
   }
 
   // 根据设置的语言显示的标题
   String get title {
     if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryItem?.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryItem?.japaneseTitle ?? '';
+        (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryProvider?.japaneseTitle ?? '';
     } else {
-      return galleryItem?.englishTitle ?? '';
+      return galleryProvider?.englishTitle ?? '';
     }
   }
 
-  GalleryItemController? get itemController {
+  GalleryProviderController? get itemController {
     try {
       return Get.find(tag: gid);
     } catch (_) {

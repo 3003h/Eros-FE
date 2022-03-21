@@ -62,20 +62,20 @@ class Api {
   /// 画廊评分
   /// 日语标题
   /// 等等
-  static Future<List<GalleryItem>> getMoreGalleryInfo(
-    List<GalleryItem> galleryItems, {
+  static Future<List<GalleryProvider>> getMoreGalleryInfo(
+    List<GalleryProvider> galleryProviders, {
     bool refresh = false,
   }) async {
-    // logger.i('api qry items ${galleryItems.length}');
-    if (galleryItems.isEmpty) {
-      return galleryItems;
+    // logger.i('api qry items ${galleryProviders.length}');
+    if (galleryProviders.isEmpty) {
+      return galleryProviders;
     }
 
     // 通过api获取画廊详细信息
     final List<List<String>> _gidlist = <List<String>>[];
 
-    galleryItems.forEach((GalleryItem galleryItem) {
-      _gidlist.add([galleryItem.gid!, galleryItem.token!]);
+    galleryProviders.forEach((GalleryProvider galleryProvider) {
+      _gidlist.add([galleryProvider.gid!, galleryProvider.token!]);
     });
 
     // 25个一组分割
@@ -97,7 +97,7 @@ class Api {
 
     final HtmlUnescape unescape = HtmlUnescape();
 
-    for (int i = 0; i < galleryItems.length; i++) {
+    for (int i = 0; i < galleryProviders.length; i++) {
       // 标题
       final _englishTitle = unescape.convert(rultList[i]['title'] as String);
 
@@ -109,7 +109,7 @@ class Api {
       final rating = rultList[i]['rating'] as String?;
       final _rating = rating != null
           ? double.parse(rating)
-          : galleryItems[i].ratingFallBack;
+          : galleryProviders[i].ratingFallBack;
 
       // 封面图片
       final String thumb = rultList[i]['thumb'] as String;
@@ -148,7 +148,7 @@ class Api {
         _translated = EHUtils.getLangeage(tags[0] as String);
       }
 
-      galleryItems[i] = galleryItems[i].copyWith(
+      galleryProviders[i] = galleryProviders[i].copyWith(
         englishTitle: _englishTitle,
         japaneseTitle: _japaneseTitle,
         rating: _rating,
@@ -164,7 +164,7 @@ class Api {
       );
     }
 
-    return galleryItems;
+    return galleryProviders;
   }
 
   /// 画廊评分
@@ -355,23 +355,25 @@ class Api {
     }
   }
 
-  static Future<GalleryItem> getMoreGalleryInfoOne(
-    GalleryItem galleryItem, {
+  static Future<GalleryProvider> getMoreGalleryInfoOne(
+    GalleryProvider galleryProvider, {
     bool refresh = false,
   }) async {
     final RegExp urlRex =
         RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
-    // logger.v(galleryItem.url);
-    final RegExpMatch? urlRult = urlRex.firstMatch(galleryItem.url ?? '');
+    // logger.v(galleryProvider.url);
+    final RegExpMatch? urlRult = urlRex.firstMatch(galleryProvider.url ?? '');
     // logger.v(urlRult.groupCount);
 
     final String gid = urlRult?.group(3) ?? '';
     final String token = urlRult?.group(4) ?? '';
 
-    final GalleryItem tempGalleryItem =
-        galleryItem.copyWith(gid: gid, token: token);
+    final GalleryProvider tempProvider =
+        galleryProvider.copyWith(gid: gid, token: token);
 
-    final List<GalleryItem> reqGalleryItems = <GalleryItem>[tempGalleryItem];
+    final List<GalleryProvider> reqGalleryItems = <GalleryProvider>[
+      tempProvider
+    ];
 
     return (await getMoreGalleryInfo(reqGalleryItems, refresh: refresh)).first;
   }

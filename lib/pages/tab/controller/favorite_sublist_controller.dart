@@ -40,7 +40,7 @@ class FavoriteSubListController extends TabViewController {
     } else {
       // 本地收藏夹
       logger.v('本地收藏');
-      final List<GalleryItem> localFav = _localFavController.loacalFavs;
+      final List<GalleryProvider> localFav = _localFavController.loacalFavs;
 
       return Future<GalleryList>.value(
           GalleryList(gallerys: localFav, maxPage: 1));

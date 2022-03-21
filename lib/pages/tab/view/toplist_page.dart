@@ -161,7 +161,7 @@ class _ToplistTabState extends State<ToplistTab> {
 
   Widget _getTopList() {
     return controller.obx(
-      (List<GalleryItem>? state) => getGallerySliverList(
+      (List<GalleryProvider>? state) => getGallerySliverList(
         state,
         controller.heroTag,
         maxPage: controller.maxPage,

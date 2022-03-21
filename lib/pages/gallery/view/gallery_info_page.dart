@@ -33,32 +33,32 @@ class GalleryInfoPage extends StatelessWidget {
               id: GetIds.PAGE_VIEW_HEADER,
               builder: (GalleryPageController controller) {
                 final pageState = controller.gState;
-                if (pageState.galleryItem == null) {
+                if (pageState.galleryProvider == null) {
                   return const SizedBox.shrink();
                 }
 
                 final _infoMap = {
-                  'Gid': pageState.galleryItem!.gid,
-                  'Token': pageState.galleryItem!.token,
+                  'Gid': pageState.galleryProvider!.gid,
+                  'Token': pageState.galleryProvider!.token,
                   'Url':
-                      '${pageState.galleryItem!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${pageState.galleryItem!.url}',
-                  'Title': pageState.galleryItem!.englishTitle,
-                  'Jpn Title': pageState.galleryItem!.japaneseTitle,
-                  'Thumb': pageState.galleryItem!.imgUrl,
-                  'Category': pageState.galleryItem!.category,
-                  'Uploader': pageState.galleryItem!.uploader,
-                  'Posted': pageState.galleryItem!.postTime,
-                  'Language': pageState.galleryItem!.language,
-                  'Pages': pageState.galleryItem!.filecount,
-                  'Size': pageState.galleryItem!.filesizeText,
-                  'Favorite count': pageState.galleryItem!.favoritedCount,
+                      '${pageState.galleryProvider!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${pageState.galleryProvider!.url}',
+                  'Title': pageState.galleryProvider!.englishTitle,
+                  'Jpn Title': pageState.galleryProvider!.japaneseTitle,
+                  'Thumb': pageState.galleryProvider!.imgUrl,
+                  'Category': pageState.galleryProvider!.category,
+                  'Uploader': pageState.galleryProvider!.uploader,
+                  'Posted': pageState.galleryProvider!.postTime,
+                  'Language': pageState.galleryProvider!.language,
+                  'Pages': pageState.galleryProvider!.filecount,
+                  'Size': pageState.galleryProvider!.filesizeText,
+                  'Favorite count': pageState.galleryProvider!.favoritedCount,
                   'Favorited':
-                      '${pageState.galleryItem!.favcat?.isNotEmpty ?? false}',
-                  'Favorite': pageState.galleryItem!.favTitle ?? '',
-                  'Rating count': pageState.galleryItem!.ratingCount,
-                  'Rating': '${pageState.galleryItem!.rating}',
-                  'Torrents': pageState.galleryItem!.torrentcount,
-                  // 'Torrents Url': controller.galleryItem.torrentcount,
+                      '${pageState.galleryProvider!.favcat?.isNotEmpty ?? false}',
+                  'Favorite': pageState.galleryProvider!.favTitle ?? '',
+                  'Rating count': pageState.galleryProvider!.ratingCount,
+                  'Rating': '${pageState.galleryProvider!.rating}',
+                  'Torrents': pageState.galleryProvider!.torrentcount,
+                  // 'Torrents Url': controller.galleryProvider.torrentcount,
                 };
 
                 return CupertinoFormSection.insetGrouped(

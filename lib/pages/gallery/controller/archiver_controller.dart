@@ -30,9 +30,9 @@ class ArchiverController extends GetxController
 
   Future<ArchiverProvider> _fetch() async {
     _archiverLink =
-        '${Api.getBaseUrl()}/archiver.php?gid=${_pageState.galleryItem?.gid}'
-        '&token=${_pageState.galleryItem?.token}'
-        '&or=${_pageState.galleryItem?.archiverLink}';
+        '${Api.getBaseUrl()}/archiver.php?gid=${_pageState.galleryProvider?.gid}'
+        '&token=${_pageState.galleryProvider?.token}'
+        '&or=${_pageState.galleryProvider?.archiverLink}';
     logger.d(_archiverLink);
     return await getArchiver(_archiverLink);
   }
@@ -71,12 +71,12 @@ class ArchiverController extends GetxController
     Get.back();
     logger.d('archiver downloadLoacal $_url');
     _downloadController.downloadArchiverFile(
-      gid: _pageState.galleryItem?.gid ?? '0',
+      gid: _pageState.galleryProvider?.gid ?? '0',
       title: _pageState.title,
       dlType: dltype,
       url: _url,
-      imgUrl: _pageState.galleryItem?.imgUrl,
-      galleryUrl: _pageState.galleryItem?.url,
+      imgUrl: _pageState.galleryProvider?.imgUrl,
+      galleryUrl: _pageState.galleryProvider?.url,
     );
   }
 }

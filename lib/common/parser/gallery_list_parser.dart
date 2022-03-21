@@ -98,7 +98,7 @@ GalleryList parseGalleryList(
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
 
-  final List<GalleryItem> _gallaryItems = [];
+  final List<GalleryProvider> _gallaryProviders = [];
   for (final dom.Element tr in gallerys) {
     final String? category =
         tr.querySelector('td.gl1c.glcat > div')?.text.trim();
@@ -251,7 +251,7 @@ GalleryList parseGalleryList(
     }
 
     void _addIiem() {
-      _gallaryItems.add(GalleryItem(
+      _gallaryProviders.add(GalleryProvider(
         gid: gid,
         token: token,
         englishTitle: title,
@@ -285,9 +285,9 @@ GalleryList parseGalleryList(
 //     }
   }
 
-  // return Tuple2(_gallaryItems, _maxPage);
+  // return Tuple2(_gallaryProviders, _maxPage);
   return GalleryList(
-    gallerys: _gallaryItems,
+    gallerys: _gallaryProviders,
     maxPage: _maxPage,
     favList: favcatList,
     nextPage: _nextPage,

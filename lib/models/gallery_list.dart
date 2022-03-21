@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'gallery_item.dart';
+import 'gallery_provider.dart';
 import 'favcat.dart';
 
 @immutable
@@ -12,13 +12,13 @@ class GalleryList {
     this.favList,
   });
 
-  final List<GalleryItem>? gallerys;
+  final List<GalleryProvider>? gallerys;
   final int? maxPage;
   final int? nextPage;
   final List<Favcat>? favList;
 
   factory GalleryList.fromJson(Map<String,dynamic> json) => GalleryList(
-    gallerys: json['gallerys'] != null ? (json['gallerys'] as List? ?? []).map((e) => GalleryItem.fromJson(e as Map<String, dynamic>)).toList() : null,
+    gallerys: json['gallerys'] != null ? (json['gallerys'] as List? ?? []).map((e) => GalleryProvider.fromJson(e as Map<String, dynamic>)).toList() : null,
     maxPage: json['maxPage'] != null ? json['maxPage'] as int : null,
     nextPage: json['nextPage'] != null ? json['nextPage'] as int : null,
     favList: json['favList'] != null ? (json['favList'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList() : null
@@ -40,7 +40,7 @@ class GalleryList {
 
     
   GalleryList copyWith({
-    List<GalleryItem>? gallerys,
+    List<GalleryProvider>? gallerys,
     int? maxPage,
     int? nextPage,
     List<Favcat>? favList

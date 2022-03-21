@@ -72,11 +72,11 @@ extension ExtCommentSpan on GalleryCommentSpan {
       copyWith(type: EnumToString.convertToString(val));
 }
 
-extension ExtItem on GalleryItem {
+extension ExtGalleryProvider on GalleryProvider {
   Map<int, GalleryImage> get imageMap =>
       {for (GalleryImage v in galleryImages ?? []) v.ser: v};
 
-  GalleryItem copyWithAll(GalleryItem item) {
+  GalleryProvider copyWithAll(GalleryProvider item) {
     return copyWith(
         token: item.token,
         showKey: item.showKey,

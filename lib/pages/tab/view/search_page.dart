@@ -641,7 +641,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   Widget _getGallerySliverList() {
     return controller.obx(
-      (List<GalleryItem>? state) {
+      (List<GalleryProvider>? state) {
         if (state == null || state.isEmpty) {
           return SliverFillRemaining(
             child: Container(

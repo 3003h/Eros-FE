@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'gallery_item.dart';
+import 'gallery_provider.dart';
 
 @immutable
 class LocalFav {
@@ -8,10 +8,10 @@ class LocalFav {
     this.gallerys,
   });
 
-  final List<GalleryItem>? gallerys;
+  final List<GalleryProvider>? gallerys;
 
   factory LocalFav.fromJson(Map<String,dynamic> json) => LocalFav(
-    gallerys: json['gallerys'] != null ? (json['gallerys'] as List? ?? []).map((e) => GalleryItem.fromJson(e as Map<String, dynamic>)).toList() : null
+    gallerys: json['gallerys'] != null ? (json['gallerys'] as List? ?? []).map((e) => GalleryProvider.fromJson(e as Map<String, dynamic>)).toList() : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -24,7 +24,7 @@ class LocalFav {
 
     
   LocalFav copyWith({
-    List<GalleryItem>? gallerys
+    List<GalleryProvider>? gallerys
   }) => LocalFav(
     gallerys: gallerys ?? this.gallerys,
   );  

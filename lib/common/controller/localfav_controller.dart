@@ -6,18 +6,17 @@ import 'package:get/get.dart';
 import 'base_controller.dart';
 
 class LocalFavController extends ProfileController {
-  RxList<GalleryItem> loacalFavs = <GalleryItem>[].obs;
+  RxList<GalleryProvider> loacalFavs = <GalleryProvider>[].obs;
 
-  void addLocalFav(GalleryItem? galleryItem) {
-    if (galleryItem == null) {
+  void addLocalFav(GalleryProvider? galleryProvider) {
+    if (galleryProvider == null) {
       return;
     }
-    if (loacalFavs.indexWhere(
-            (GalleryItem element) => element.gid == galleryItem.gid) ==
+    if (loacalFavs.indexWhere((element) => element.gid == galleryProvider.gid) ==
         -1) {
       loacalFavs.insert(
         0,
-        galleryItem.copyWith(
+        galleryProvider.copyWith(
           galleryImages: null,
           galleryComment: null,
         ),
@@ -27,25 +26,24 @@ class LocalFavController extends ProfileController {
     }
   }
 
-  void removeFav(GalleryItem? galleryItem) {
-    if (galleryItem == null) {
+  void removeFav(GalleryProvider? galleryProvider) {
+    if (galleryProvider == null) {
       return;
     }
-    loacalFavs
-        .removeWhere((GalleryItem element) => element.gid == galleryItem.gid);
+    loacalFavs.removeWhere((element) => element.gid == galleryProvider.gid);
   }
 
   void removeFavByGid(String gid) {
-    loacalFavs.removeWhere((GalleryItem element) => element.gid == gid);
+    loacalFavs.removeWhere((element) => element.gid == gid);
   }
 
   @override
   void onInit() {
     super.onInit();
     loacalFavs(Global.profile.localFav.gallerys);
-    everProfile<List<GalleryItem>>(
+    everProfile<List<GalleryProvider>>(
       loacalFavs,
-      (List<GalleryItem> value) {
+      (List<GalleryProvider> value) {
         Global.profile = Global.profile.copyWith(
           localFav: Global.profile.localFav.copyWith(gallerys: value),
         );

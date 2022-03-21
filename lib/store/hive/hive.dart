@@ -45,25 +45,26 @@ class HiveHelper {
     await Hive.openBox<String>(configBox);
   }
 
-  List<GalleryItem> getAllHistory() {
-    final _historys = <GalleryItem>[];
+  List<GalleryProvider> getAllHistory() {
+    final _historys = <GalleryProvider>[];
     for (final val in _historyBox.values) {
-      _historys
-          .add(GalleryItem.fromJson(jsonDecode(val) as Map<String, dynamic>));
+      _historys.add(
+          GalleryProvider.fromJson(jsonDecode(val) as Map<String, dynamic>));
     }
     _historys
         .sort((a, b) => (a.lastViewTime ?? 0).compareTo(b.lastViewTime ?? 0));
     return _historys;
   }
 
-  GalleryItem getHistory(String gid) {
+  GalleryProvider getHistory(String gid) {
     final itemText = _historyBox.get(gid) ?? '{}';
-    return GalleryItem.fromJson(jsonDecode(itemText) as Map<String, dynamic>);
+    return GalleryProvider.fromJson(
+        jsonDecode(itemText) as Map<String, dynamic>);
   }
 
-  Future<void> addHistory(GalleryItem galleryItem) async {
-    final gid = galleryItem.gid;
-    await _historyBox.put(gid, jsonEncode(galleryItem));
+  Future<void> addHistory(GalleryProvider galleryProvider) async {
+    final gid = galleryProvider.gid;
+    await _historyBox.put(gid, jsonEncode(galleryProvider));
 
     logger.v('${_historyBox.keys}');
     // _historyBox.compact();

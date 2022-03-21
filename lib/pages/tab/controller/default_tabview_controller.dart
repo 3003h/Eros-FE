@@ -58,7 +58,7 @@ class DefaultTabViewController extends TabViewController {
 
   int lastTopitemIndex = 0;
 
-  final previousList = <GalleryItem>[].obs;
+  final previousList = <GalleryProvider>[].obs;
 
   bool lastItemBuildComplete = false;
 
@@ -203,7 +203,7 @@ class DefaultTabViewController extends TabViewController {
         return;
       }
 
-      final List<GalleryItem> _itemList = rult.gallerys ?? [];
+      final List<GalleryProvider> _itemList = rult.gallerys ?? [];
 
       if (_itemList.isNotEmpty) {
         state?.insertAll(0, _itemList);
