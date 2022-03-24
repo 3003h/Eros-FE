@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 class SplashController extends GetxController {
+  late StreamSubscription _intentDataStreamSubscription;
   late String? sharedText = '';
   final AutoLockController _autoLockController = Get.find();
 
@@ -22,18 +23,32 @@ class SplashController extends GetxController {
       });
     } else {
       // For sharing or opening urls/text coming from outside the app while the app is in the memory
+      _intentDataStreamSubscription =
+          ReceiveSharingIntent.getTextStream().listen((String value) {
+        sharedText = value;
+        logger.d('getTextStream Shared: $sharedText');
+        _startHome(sharedText ?? '', replace: false);
+      }, onError: (err) {
+        logger.e('getTextStream error: $err');
+      });
 
       // For sharing or opening urls/text coming from outside the app while the app is closed
       ReceiveSharingIntent.getInitialText().then((String? value) {
         // logger.i('value(closed): $value');
         sharedText = value ?? '';
-        logger.v('Shared: $sharedText');
+        logger.d('Shared: $sharedText');
         _startHome(sharedText ?? '');
       });
     }
   }
 
-  Future<void> _startHome(String url) async {
+  @override
+  void dispose() {
+    super.dispose();
+    _intentDataStreamSubscription.cancel();
+  }
+
+  Future<void> _startHome(String url, {bool replace = true}) async {
     await _autoLockController.resumed(forceLock: true);
 
     final RegExp regGalleryUrl =
@@ -51,7 +66,10 @@ class SplashController extends GetxController {
         const Duration(milliseconds: 100),
         () {
           if (regGalleryUrl.hasMatch(url) || regGalleryPageUrl.hasMatch(url)) {
-            NavigatorUtil.goGalleryPage(url: url, replace: true);
+            NavigatorUtil.goGalleryPage(
+              url: url,
+              replace: replace,
+            );
           } else {
             late final String? searchText;
             if (regTagUrl.hasMatch(url)) {
@@ -59,7 +77,7 @@ class SplashController extends GetxController {
               if (sharedText != null) {
                 NavigatorUtil.goSearchPageWithText(
                   simpleSearch: searchText!,
-                  replace: true,
+                  replace: replace,
                 );
               }
             } else if (regUploaderUrl.hasMatch(url)) {
@@ -67,7 +85,7 @@ class SplashController extends GetxController {
               if (sharedText != null) {
                 NavigatorUtil.goSearchPageWithText(
                   simpleSearch: 'uploader:${searchText!}',
-                  replace: true,
+                  replace: replace,
                 );
               }
             }
