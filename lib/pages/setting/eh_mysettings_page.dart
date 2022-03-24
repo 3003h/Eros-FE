@@ -290,11 +290,11 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         // title: 'Gallery Page Numbering',
         child: _buildShowPageNumbers(context, hideLine: true),
       ),
-      GroupItem(
-        title: L10n.of(context).uc_hath_local_host,
-        child: _buildHatHLocalNetworkHost(context),
-        desc: L10n.of(context).uc_hath_local_host_desc,
-      ),
+      // GroupItem(
+      //   title: L10n.of(context).uc_hath_local_host,
+      //   child: _buildHatHLocalNetworkHost(context),
+      //   desc: L10n.of(context).uc_hath_local_host_desc,
+      // ),
       GroupItem(
         // title: 'Original Images',
         desc: L10n.of(context).uc_ori_image_desc,

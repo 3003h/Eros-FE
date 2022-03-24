@@ -31,12 +31,14 @@ Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
     '0': L10n.of(context).uc_uh_0,
     '1': L10n.of(context).uc_uh_1,
     '2': L10n.of(context).uc_uh_2,
+    '3': L10n.of(context).uc_uh_3,
   };
 
   final Map<String, String> simpleActionMap = <String, String>{
     '0': L10n.of(context).uc_uh_0_s,
     '1': L10n.of(context).uc_uh_1_s,
     '2': L10n.of(context).uc_uh_2_s,
+    '3': L10n.of(context).uc_uh_3_s,
   };
   return Obx(() {
     return SelectorItem<String>(
@@ -508,7 +510,7 @@ Widget _buildExcludedUploaders(BuildContext context) {
       hideLine: true,
       maxLines: _controller.ehSetting.xuQuotaMax,
       selector:
-          '${_controller.ehSetting.excludedUploaders?.trim().split('\n').length ?? 0}'
+          '${_controller.ehSetting.excludedUploaders?.trim().split('\n').where((element) => element.trim().isNotEmpty).length ?? 0}'
           '/${_controller.ehSetting.xuQuotaMax}',
       initValue: _controller.ehSetting.excludedUploaders ?? '',
       onChanged: (val) => _controller.ehSetting =

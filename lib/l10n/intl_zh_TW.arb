@@ -274,11 +274,14 @@
   "uc_Other": "Other",
   "uc_uh_0": "Any client (Recommended)",
   "uc_uh_1": "Default port clients only (Can be slower. Enable if behind firewall/proxy that blocks outgoing non-standard ports.)",
-  "uc_uh_2": "No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)",
+  "uc_uh_2": "No [Modern/HTTPS] (Donator only. You will not be able to browse as many pages. Recommended only if having severe problems.)",
+  "uc_uh_3": "No [Legacy/HTTP] (Donator only. May not work by default in modern browsers. Recommended for legacy/outdated browsers only.)",
+
 
   "uc_uh_0_s": "Any client",
   "uc_uh_1_s": "Default port clients only",
-  "uc_uh_2_s": "No",
+  "uc_uh_2_s": "No [Modern/HTTPS]",
+  "uc_uh_3_s": "No [Legacy/HTTP]",
 
   "uc_auto": "Auto",
   "uc_tl_0": "Default Title",
