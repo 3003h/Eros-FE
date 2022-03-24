@@ -3,5 +3,7 @@
     "type" : "",
     "tagTranslat" :"",
     "intro?": "",
-    "vote?": 0
+    "vote?": 0,
+    "color?": "",
+    "backgrondColor?": ""
 }

@@ -1,7 +1,4 @@
-import 'package:collection/collection.dart';
-import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
