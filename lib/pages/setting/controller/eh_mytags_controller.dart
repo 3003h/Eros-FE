@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -18,6 +19,7 @@ class EhMyTagsController extends GetxController
   static String idUsertagList = 'idUsertagList';
 
   final trController = Get.find<TagTransController>();
+  final tagController = Get.find<TagController>();
 
   final _isLoading = false.obs;
 
@@ -168,6 +170,8 @@ class EhMyTagsController extends GetxController
       if (mytags != null) {
         ehMyTags = mytags;
         canDelete = mytags.canDelete ?? false;
+
+        tagController.addAllTags(ehMyTags.usertags);
         return mytags;
       }
     } catch (e) {

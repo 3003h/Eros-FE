@@ -476,14 +476,16 @@ class TagGroupItem extends StatelessWidget {
       List<GalleryTag> galleryTags, BuildContext context) {
     final EhConfigService ehConfigService = Get.find();
     final List<Widget> _tagBtnList = <Widget>[];
-    galleryTags.forEach((GalleryTag tag) {
+    for (var tag in galleryTags) {
+      tag = tag.setColor();
       _tagBtnList.add(
         Obx(() => TagButton(
               text: ehConfigService.isTagTranslat ? tag.tagTranslat : tag.title,
+              color: ColorsUtil.hexStringToColor(tag.backgrondColor),
               textColor: () {
                 switch (tag.vote) {
                   case 0:
-                    return null;
+                    return ColorsUtil.hexStringToColor(tag.color);
                   case 1:
                     return CupertinoDynamicColor.resolve(
                         ThemeColors.tagUpColor, context);
@@ -509,7 +511,7 @@ class TagGroupItem extends StatelessWidget {
               },
             )),
       );
-    });
+    }
     return _tagBtnList;
   }
 

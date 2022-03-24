@@ -109,6 +109,13 @@ class DefaultTabViewController extends TabViewController {
 
       pageState = PageState.None;
 
+      final _list = rult?.gallerys
+              ?.map((e) => e.simpleTags ?? [])
+              .expand((List<SimpleTag> element) => element)
+              .toList() ??
+          [];
+
+      tagController.addAllSimpleTag(_list);
       return rult;
     } on EhError catch (eherror) {
       logger.e('type:${eherror.type}\n${eherror.message}');
