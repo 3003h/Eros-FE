@@ -54,7 +54,6 @@ class GalleryPageController extends GetxController
 
     if (galleryRepository.url != null && galleryRepository.url!.isNotEmpty) {
       // url跳转
-
       // 解析gid等信息
       final RegExp urlRex =
           RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
@@ -64,7 +63,7 @@ class GalleryPageController extends GetxController
       final String token = urlRult?.group(4) ?? '';
 
       if (!_loadDataFromCache(
-        galleryRepository.item!.gid ?? '',
+        gid,
         isStateFromCacheChange: (val) => isStateFromCache = val,
       )) {
         gState = GalleryPageState();
@@ -74,7 +73,7 @@ class GalleryPageController extends GetxController
       }
     } else {
       if (!_loadDataFromCache(
-        galleryRepository.item!.gid ?? '',
+        galleryRepository.item?.gid ?? '',
         isStateFromCacheChange: (val) => isStateFromCache = val,
       )) {
         gState = GalleryPageState();
