@@ -424,8 +424,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "仅使用默认端口的客户端（可能稍慢。当防火墙或代理阻止非标准接口的流量时启用此项。）"),
         "uc_uh_1_s": MessageLookupByLibrary.simpleMessage("仅使用默认端口的客户端"),
         "uc_uh_2": MessageLookupByLibrary.simpleMessage(
-            "否（仅限赞助者。配额消耗会加快，只有出现问题时才启用。）"),
-        "uc_uh_2_s": MessageLookupByLibrary.simpleMessage("否"),
+            "否 [现代/HTTPS]（仅限赞助者。配额消耗会加快，只有出现严重的问题时才启用。）"),
+        "uc_uh_2_s": MessageLookupByLibrary.simpleMessage("否 [传统/HTTP]"),
+        "uc_uh_3": MessageLookupByLibrary.simpleMessage(
+            "否 [传统/HTTP]（仅限赞助者。可能无法在现代浏览器中使用，只推荐在过时的浏览器中启用。）"),
+        "uc_uh_3_s": MessageLookupByLibrary.simpleMessage("否 [传统/HTTP]"),
         "uc_viewport_or": MessageLookupByLibrary.simpleMessage("移动端虚拟宽度"),
         "uc_viewport_or_desc": MessageLookupByLibrary.simpleMessage(
             "允许你覆盖移动设备的虚拟宽度，默认是根据 DPI 自动计算的，100% 缩略图比例下的合理值在 640 到 1400 之间。"),

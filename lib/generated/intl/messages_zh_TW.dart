@@ -482,8 +482,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_uh_1_s":
             MessageLookupByLibrary.simpleMessage("Default port clients only"),
         "uc_uh_2": MessageLookupByLibrary.simpleMessage(
-            "No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)"),
-        "uc_uh_2_s": MessageLookupByLibrary.simpleMessage("No"),
+            "No [Modern/HTTPS] (Donator only. You will not be able to browse as many pages. Recommended only if having severe problems.)"),
+        "uc_uh_2_s": MessageLookupByLibrary.simpleMessage("No [Modern/HTTPS]"),
+        "uc_uh_3": MessageLookupByLibrary.simpleMessage(
+            "No [Legacy/HTTP] (Donator only. May not work by default in modern browsers. Recommended for legacy/outdated browsers only.)"),
+        "uc_uh_3_s": MessageLookupByLibrary.simpleMessage("No [Legacy/HTTP]"),
         "uc_viewport_or":
             MessageLookupByLibrary.simpleMessage("Viewport Override"),
         "uc_viewport_or_desc": MessageLookupByLibrary.simpleMessage(

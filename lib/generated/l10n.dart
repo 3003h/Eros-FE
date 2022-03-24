@@ -2800,11 +2800,21 @@ class L10n {
     );
   }
 
-  /// `No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)`
+  /// `No [Modern/HTTPS] (Donator only. You will not be able to browse as many pages. Recommended only if having severe problems.)`
   String get uc_uh_2 {
     return Intl.message(
-      'No (Donator only. You will not be able to browse as many pages, enable only if having severe problems.)',
+      'No [Modern/HTTPS] (Donator only. You will not be able to browse as many pages. Recommended only if having severe problems.)',
       name: 'uc_uh_2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No [Legacy/HTTP] (Donator only. May not work by default in modern browsers. Recommended for legacy/outdated browsers only.)`
+  String get uc_uh_3 {
+    return Intl.message(
+      'No [Legacy/HTTP] (Donator only. May not work by default in modern browsers. Recommended for legacy/outdated browsers only.)',
+      name: 'uc_uh_3',
       desc: '',
       args: [],
     );
@@ -2830,11 +2840,21 @@ class L10n {
     );
   }
 
-  /// `No`
+  /// `No [Modern/HTTPS]`
   String get uc_uh_2_s {
     return Intl.message(
-      'No',
+      'No [Modern/HTTPS]',
       name: 'uc_uh_2_s',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No [Legacy/HTTP]`
+  String get uc_uh_3_s {
+    return Intl.message(
+      'No [Legacy/HTTP]',
+      name: 'uc_uh_3_s',
       desc: '',
       args: [],
     );
