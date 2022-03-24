@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/pdio.dart';
@@ -15,6 +16,8 @@ class TabViewController extends GetxController
   final _curPage = 0.obs;
   int get curPage => _curPage.value;
   set curPage(int val) => _curPage.value = val;
+
+  TagController tagController = Get.find();
 
   // 最小页码
   int minPage = 1;

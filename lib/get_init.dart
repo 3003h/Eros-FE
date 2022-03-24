@@ -13,6 +13,7 @@ import 'common/controller/gallerycache_controller.dart';
 import 'common/controller/history_controller.dart';
 import 'common/controller/localfav_controller.dart';
 import 'common/controller/quicksearch_controller.dart';
+import 'common/controller/tag_controller.dart';
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/user_controller.dart';
 import 'common/controller/webdav_controller.dart';
@@ -84,4 +85,5 @@ void getinit() {
   Get.lazyPut(() => SplashController());
   Get.lazyPut(() => EhMySettingsController(), fenix: true);
   Get.lazyPut(() => EhMyTagsController(), fenix: true);
+  Get.lazyPut(() => TagController(), fenix: true);
 }

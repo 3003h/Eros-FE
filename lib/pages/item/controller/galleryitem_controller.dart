@@ -41,14 +41,14 @@ class GalleryProviderController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.d(
+    logger.v(
         'init GalleryProviderController ${galleryProvider.gid}  ${galleryProvider.englishTitle}');
     if (galleryProvider.favTitle != null &&
         galleryProvider.favTitle!.isNotEmpty) {
       isFav = true;
     }
     ratingFB = galleryProvider.ratingFallBack ?? 0.0;
-    logger.d('ratingFB=$ratingFB');
+    logger.v('ratingFB=$ratingFB');
   }
 
   final RxBool _isFav = false.obs;

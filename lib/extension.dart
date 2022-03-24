@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
@@ -537,5 +538,11 @@ extension EhIterableExtension<T> on Iterable<T> {
       }
     }
     return rult;
+  }
+}
+
+extension ExtGalleryTag on GalleryTag {
+  GalleryTag setColor() {
+    return Get.find<TagController>().getColorCode(this);
   }
 }
