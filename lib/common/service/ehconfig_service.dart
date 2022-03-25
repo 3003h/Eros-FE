@@ -6,6 +6,7 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
+import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -560,8 +561,15 @@ class EhConfigService extends ProfileService {
       EHRoutes.galleryPage,
     ];
 
+    final List<String> viewPageNames = <String>[
+      '/${const ViewPage().runtimeType.toString()}',
+      EHRoutes.galleryViewExt,
+    ];
+
     logger.d('pageNames $pageNames');
-    final bool _curGalleryPage = pageNames.contains(currentRoute);
+    final bool _currentRouteIsGalleryPage = pageNames.contains(currentRoute);
+
+    final bool _replace = viewPageNames.contains(currentRoute);
 
     final String _text =
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
@@ -574,7 +582,7 @@ class EhConfigService extends ProfileService {
       return;
     }
 
-    if (_curGalleryPage && _lastClipboardLink == _mach?.group(0)) {
+    if (_currentRouteIsGalleryPage && _lastClipboardLink == _mach?.group(0)) {
       logger.v('剪贴板链接为当前展示的画廊 返回');
       return;
     }
@@ -582,11 +590,17 @@ class EhConfigService extends ProfileService {
     logger.d('${_mach?.group(0)} ');
     _lastClipboardLink = _mach?.group(0) ?? '';
     if (_lastClipboardLink.isNotEmpty) {
-      _showClipboardLinkDialog(_lastClipboardLink);
+      _showClipboardLinkDialog(
+        _lastClipboardLink,
+        replace: _replace,
+      );
     }
   }
 
-  Future<void> _showClipboardLinkDialog(String url) async {
+  Future<void> _showClipboardLinkDialog(
+    String url, {
+    bool replace = false,
+  }) async {
     showCupertinoDialog(
         context: Get.overlayContext!,
         builder: (BuildContext context) {
@@ -604,7 +618,7 @@ class EhConfigService extends ProfileService {
                 child: Text(L10n.of(context).ok),
                 onPressed: () {
                   Get.back();
-                  NavigatorUtil.goGalleryPage(url: url);
+                  NavigatorUtil.goGalleryPage(url: url, forceReplace: replace);
                 },
               ),
             ],

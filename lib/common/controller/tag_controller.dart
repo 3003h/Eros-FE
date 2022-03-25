@@ -16,7 +16,6 @@ class TagController extends GetxController {
   }
 
   void addAllSimpleTag(List<SimpleTag> simpleTag) {
-    logger.d('${simpleTag.length}');
     for (final sTag in simpleTag) {
       if (sTag.backgrondColor == null ||
           (sTag.backgrondColor?.isEmpty ?? true)) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
+import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -65,10 +66,19 @@ class SplashController extends GetxController {
       await Future<void>.delayed(
         const Duration(milliseconds: 100),
         () {
+          final String currentRoute = Get.currentRoute;
           if (regGalleryUrl.hasMatch(url) || regGalleryPageUrl.hasMatch(url)) {
+            final List<String> viewPageNames = <String>[
+              '/${const ViewPage().runtimeType.toString()}',
+              EHRoutes.galleryViewExt,
+            ];
+
+            final bool _replace = viewPageNames.contains(currentRoute);
+
             NavigatorUtil.goGalleryPage(
               url: url,
               replace: replace,
+              forceReplace: _replace,
             );
           } else {
             late final String? searchText;

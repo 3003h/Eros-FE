@@ -30,7 +30,6 @@ class ViewImage extends StatefulWidget {
   final double initialScale;
   final bool enableDoubleTap;
   final ExtendedImageMode mode;
-  // final bool
 
   @override
   _ViewImageState createState() => _ViewImageState();
