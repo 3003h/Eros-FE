@@ -92,6 +92,7 @@ class NavigatorUtil {
     dynamic tabTag,
     GalleryProvider? galleryProvider,
     bool replace = false,
+    bool forceReplace = false,
   }) async {
     final topSecondRoute =
         SecondNavigatorObserver().history.lastOrNull?.settings.name;
@@ -139,7 +140,7 @@ class NavigatorUtil {
       //   replace = replace && sdkInt < 31;
       // }
 
-      if (replace && topMainRoute == EHRoutes.root) {
+      if (forceReplace || (replace && topMainRoute == EHRoutes.root)) {
         Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
         await Get.offNamed(
           EHRoutes.galleryPage,
