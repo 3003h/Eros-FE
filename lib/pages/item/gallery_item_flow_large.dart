@@ -28,7 +28,7 @@ class GalleryItemFlowLarge extends StatelessWidget {
   final dynamic tabTag;
   final GalleryProvider galleryProvider;
 
-  GalleryProviderController get galleryProviderController =>
+  GalleryItemController get galleryProviderController =>
       Get.find(tag: galleryProvider.gid);
 
   Widget _buildFavcatIcon() {

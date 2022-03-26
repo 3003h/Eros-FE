@@ -244,7 +244,7 @@ class FavDialogController extends GetxController {
           // _localFavController.addLocalFav(_pageController.galleryProvider);
           // todo
           _localFavController.addLocalFav(
-              Get.find<GalleryProviderController>(tag: gid).galleryProvider);
+              Get.find<GalleryItemController>(tag: gid).galleryProvider);
           logger.d('addLocalFav');
         }
       } catch (e) {

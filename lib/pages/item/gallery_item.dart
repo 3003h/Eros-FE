@@ -38,7 +38,7 @@ class GalleryItemWidget extends StatelessWidget {
   final GalleryProvider galleryProvider;
   final dynamic tabTag;
 
-  GalleryProviderController get galleryProviderController =>
+  GalleryItemController get galleryProviderController =>
       Get.find(tag: galleryProvider.gid);
 
   @override
@@ -150,7 +150,7 @@ class GalleryItemWidget extends StatelessWidget {
                         const SizedBox(height: 6),
                         const Spacer(),
                         // 评分行
-                        GetBuilder<GalleryProviderController>(
+                        GetBuilder<GalleryItemController>(
                           tag: galleryProvider.gid,
                           builder: (logic) => Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -225,7 +225,7 @@ class _CoverImage extends StatelessWidget {
     this.tabTag,
     this.cardType = false,
   }) : super(key: key);
-  final GalleryProviderController galleryProviderController;
+  final GalleryItemController galleryProviderController;
   final dynamic tabTag;
   final bool cardType;
 
@@ -378,7 +378,7 @@ class _CoverImage extends StatelessWidget {
 class _Title extends StatelessWidget {
   const _Title({Key? key, required this.galleryProviderController})
       : super(key: key);
-  final GalleryProviderController galleryProviderController;
+  final GalleryItemController galleryProviderController;
 
   @override
   Widget build(BuildContext context) {
@@ -435,7 +435,7 @@ class _Filecont extends StatelessWidget {
 class _FavcatIcon extends StatelessWidget {
   const _FavcatIcon({Key? key, required this.galleryProviderController})
       : super(key: key);
-  final GalleryProviderController galleryProviderController;
+  final GalleryItemController galleryProviderController;
 
   @override
   Widget build(BuildContext context) {
@@ -464,7 +464,7 @@ class _FavcatIcon extends StatelessWidget {
 class _RatingObx extends StatelessWidget {
   const _RatingObx({Key? key, required this.galleryProviderController})
       : super(key: key);
-  final GalleryProviderController galleryProviderController;
+  final GalleryItemController galleryProviderController;
 
   @override
   Widget build(BuildContext context) {

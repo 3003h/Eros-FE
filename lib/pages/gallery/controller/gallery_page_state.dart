@@ -113,7 +113,7 @@ class GalleryPageState {
     }
   }
 
-  GalleryProviderController? get itemController {
+  GalleryItemController? get itemController {
     try {
       return Get.find(tag: gid);
     } catch (_) {
