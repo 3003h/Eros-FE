@@ -30,7 +30,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   final dynamic tabTag;
   final bool showTag;
 
-  GalleryProviderController get galleryProviderController =>
+  GalleryItemController get galleryProviderController =>
       Get.find(tag: galleryProvider.gid);
 
   @override

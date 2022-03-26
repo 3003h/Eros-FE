@@ -31,7 +31,7 @@ class GalleryItemGrid extends StatelessWidget {
   final dynamic tabTag;
   final GalleryProvider galleryProvider;
 
-  GalleryProviderController get galleryProviderController =>
+  GalleryItemController get galleryProviderController =>
       Get.find(tag: galleryProvider.gid);
 
   @override
@@ -83,7 +83,8 @@ class GalleryItemGrid extends StatelessWidget {
                           children: [
                             Expanded(
                               child: _CoverImage(
-                                galleryProviderController: galleryProviderController,
+                                galleryProviderController:
+                                    galleryProviderController,
                                 tabTag: tabTag,
                                 coverImageHeigth: coverHeight,
                                 coverImageWidth: constraints.maxWidth,
@@ -145,7 +146,8 @@ class GalleryItemGrid extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     _PostTime(
-                      postTime: galleryProviderController.galleryProvider.postTime,
+                      postTime:
+                          galleryProviderController.galleryProvider.postTime,
                     )
                   ],
                 ).paddingSymmetric(horizontal: 4, vertical: 2),
@@ -169,7 +171,8 @@ class GalleryItemGrid extends StatelessWidget {
       Widget icon = Icon(
         FontAwesomeIcons.solidHeart,
         size: 12,
-        color: ThemeColors.favColor[galleryProviderController.galleryProvider.favcat],
+        color: ThemeColors
+            .favColor[galleryProviderController.galleryProvider.favcat],
       );
 
       if (blur) {
@@ -208,7 +211,8 @@ class GalleryItemGrid extends StatelessWidget {
             rate: galleryProviderController.galleryProvider.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
-                galleryProviderController.galleryProvider.colorRating?.trim() ?? 'ir'],
+                galleryProviderController.galleryProvider.colorRating?.trim() ??
+                    'ir'],
             colorDark: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey3, Get.context!),
           ),
@@ -292,7 +296,7 @@ class _CoverImage extends StatelessWidget {
     required this.coverImageWidth,
     required this.coverImageHeigth,
   }) : super(key: key);
-  final GalleryProviderController galleryProviderController;
+  final GalleryItemController galleryProviderController;
   final dynamic tabTag;
   final double coverImageWidth;
   final double coverImageHeigth;

@@ -23,7 +23,7 @@ class GalleryItemFlow extends StatelessWidget {
   final dynamic tabTag;
   final GalleryProvider galleryProvider;
 
-  GalleryProviderController get galleryProviderController =>
+  GalleryItemController get galleryProviderController =>
       Get.find(tag: galleryProvider.gid);
 
   Widget _buildFavcatIcon() {
@@ -35,8 +35,8 @@ class GalleryItemFlow extends StatelessWidget {
                 child: Icon(
                   FontAwesomeIcons.solidHeart,
                   size: 12,
-                  color: ThemeColors
-                      .favColor[galleryProviderController.galleryProvider.favcat],
+                  color: ThemeColors.favColor[
+                      galleryProviderController.galleryProvider.favcat],
                 ),
               )
             : Container(),
@@ -48,7 +48,8 @@ class GalleryItemFlow extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget item = LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      final GalleryProvider galleryProvider = galleryProviderController.galleryProvider;
+      final GalleryProvider galleryProvider =
+          galleryProviderController.galleryProvider;
 
       final Color _colorCategory = CupertinoDynamicColor.resolve(
           ThemeColors.catColor[galleryProvider.category ?? 'default'] ??
@@ -91,8 +92,9 @@ class GalleryItemFlow extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         alignment: Alignment.center,
-                        height:
-                            galleryProvider.imgWidth != null ? _getHeigth() : null,
+                        height: galleryProvider.imgWidth != null
+                            ? _getHeigth()
+                            : null,
                         child: CoverImg(imgUrl: galleryProvider.imgUrl!),
                       ),
                       ClipPath(

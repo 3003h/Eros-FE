@@ -37,8 +37,11 @@ class GalleryFavController extends GetxController {
 
   final CacheController cacheController = Get.find();
 
-  GalleryProviderController get _itemController =>
+  GalleryItemController get _itemController =>
       Get.find(tag: _pageController.gState.gid);
+
+  bool get isRegItemController =>
+      Get.isRegistered<GalleryItemController>(tag: _pageController.gState.gid);
 
   @override
   void onInit() {
@@ -81,7 +84,10 @@ class GalleryFavController extends GetxController {
     _favTitle.value = favtitle;
     _favcat.value = favcat;
     try {
-      _itemController.setFavTitleAndFavcat(favTitle: favTitle, favcat: favcat);
+      if (isRegItemController) {
+        _itemController.setFavTitleAndFavcat(
+            favTitle: favTitle, favcat: favcat);
+      }
       _pageState.galleryProvider?.copyWith(favcat: favcat, favTitle: favtitle);
     } catch (_) {}
   }
@@ -116,8 +122,7 @@ class GalleryFavController extends GetxController {
       _favcat.value = _lastFavcat;
       _pageState.galleryProvider
           ?.copyWith(favcat: favcat, favTitle: _favTitleFromProfile);
-      if (!_pageState.fromUrl) {
-        logger.d('upt item');
+      if (isRegItemController) {
         _itemController.setFavTitleAndFavcat(
             favTitle: favTitle, favcat: favcat);
       }
@@ -195,12 +200,12 @@ class GalleryFavController extends GetxController {
         isLoading = false;
         _favTitle.value = _favTitleFromRult;
         _favcat.value = _favcatFromRult;
-        logger.d(
-            '[${_pageState.galleryProvider?.gid}] add fav ${_itemController.galleryProvider.gid} to $favcat');
+
         _pageState.galleryProvider = _pageState.galleryProvider
             ?.copyWith(favcat: _favcatFromRult, favTitle: _favTitleFromRult);
-        logger.d('after _showAddFavDialog ${_pageState.galleryProvider?.favcat}');
-        if (!_pageState.fromUrl) {
+        logger
+            .d('after _showAddFavDialog ${_pageState.galleryProvider?.favcat}');
+        if (isRegItemController) {
           logger.d('upt item');
           _itemController.setFavTitleAndFavcat(
               favTitle: favTitle, favcat: favcat);
@@ -234,13 +239,12 @@ class GalleryFavController extends GetxController {
     } catch (e) {
       return true;
     } finally {
-      logger.d('delete fav ${_itemController.galleryProvider.gid}');
       isLoading = false;
       _favTitle.value = '';
       _favcat.value = '';
       _pageState.galleryProvider =
           _pageState.galleryProvider?.copyWith(favcat: '', favTitle: '');
-      if (!_pageState.fromUrl) {
+      if (isRegItemController) {
         logger.d('del fav ${_itemController.galleryProvider.gid} ,upt item');
         _itemController.setFavTitleAndFavcat(favTitle: '', favcat: '');
       }
@@ -257,6 +261,9 @@ class GalleryFavController extends GetxController {
   }
 
   void _removeGalleryCache() {
+    if (!isRegItemController) {
+      return;
+    }
     final url = _itemController.galleryProvider.url;
     logger.d('delete cache $url');
     cacheController.clearDioCache(path: '${Api.getBaseUrl()}$url');

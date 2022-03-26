@@ -9,8 +9,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class GalleryProviderController extends GetxController {
-  GalleryProviderController({required this.galleryProvider});
+class GalleryItemController extends GetxController {
+  GalleryItemController({required this.galleryProvider});
 
   final EhConfigService _ehConfigService = Get.find();
   final FavDialogController _favDialogController = Get.find();

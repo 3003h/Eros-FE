@@ -73,7 +73,7 @@ SliverPadding buildWaterfallFlow(
           final GalleryProvider _provider = galleryProviders[index];
           Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
           Get.lazyReplace(
-              () => GalleryProviderController(
+              () => GalleryItemController(
                   galleryProvider: Get.find(tag: _provider.gid)),
               tag: _provider.gid,
               fenix: true);
@@ -137,7 +137,7 @@ SliverPadding buildGrid(
           final GalleryProvider _provider = galleryProviders[index];
           Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
           Get.lazyReplace(
-              () => GalleryProviderController(
+              () => GalleryItemController(
                   galleryProvider: Get.find(tag: _provider.gid)),
               tag: _provider.gid,
               fenix: true);
@@ -282,7 +282,7 @@ Widget buildGallerySliverListView(
       final GalleryProvider _itemInfo = galleryProviders[index];
       Get.lazyReplace(() => _itemInfo, tag: _itemInfo.gid, fenix: true);
       Get.lazyReplace(
-        () => GalleryProviderController(
+        () => GalleryItemController(
             galleryProvider: Get.find(tag: _itemInfo.gid)),
         tag: _itemInfo.gid,
         fenix: true,
@@ -347,7 +347,7 @@ Widget buildGallerySliverListSimpleView(
       final GalleryProvider _provider = galleryProviders[index];
       Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
       Get.lazyReplace(
-          () => GalleryProviderController(
+          () => GalleryItemController(
               galleryProvider: Get.find(tag: _provider.gid)),
           tag: _provider.gid,
           fenix: true);
