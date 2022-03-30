@@ -5,8 +5,9 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+
+const kFilenameFormat = 'yyyy-MM-dd_HHmmss';
 
 enum ListModeEnum {
   list,

@@ -5,11 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
-import '../../utils/logger.dart';
+import '../../const/const.dart';
 import '../global.dart';
 
 const _kMaxTime = Duration(days: 7);
-const _kFilenameFormat = 'yyyy-MM-dd HH:mm:ss';
 const _kSuffix = '.log';
 
 class LogService extends GetxController {
@@ -38,7 +37,7 @@ class LogService extends GetxController {
     }
 
     final DateTime _now = DateTime.now();
-    final DateFormat formatter = DateFormat(_kFilenameFormat);
+    final DateFormat formatter = DateFormat(kFilenameFormat);
     final String _fileName = formatter.format(_now);
     curFileName = '$_fileName$_kSuffix';
   }
@@ -59,7 +58,7 @@ class LogService extends GetxController {
           // logger.v('log file time $_timeString');
 
           final DateTime _nowTime = DateTime.now();
-          final DateFormat formatter = DateFormat(_kFilenameFormat);
+          final DateFormat formatter = DateFormat(kFilenameFormat);
 
           final _fileTime = formatter.parse(_timeString);
           // final _fileTime = DateTime.parse(_timeString);

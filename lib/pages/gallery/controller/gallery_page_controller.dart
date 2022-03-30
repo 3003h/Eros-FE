@@ -124,16 +124,18 @@ class GalleryPageController extends GetxController
         startReadDialog(gState.galleryRepository!.jumpSer!);
       }
 
-      analytics.logViewItem(
-        items: [
-          AnalyticsEventItem(
-            itemId: gState.galleryProvider?.gid ?? '',
-            itemName: gState.galleryProvider?.englishTitle ?? '',
-            itemCategory: gState.galleryProvider?.category ?? '',
-            creativeName: gState.galleryProvider?.japaneseTitle,
-          )
-        ],
-      );
+      if (!GetPlatform.isWindows) {
+        analytics.logViewItem(
+          items: [
+            AnalyticsEventItem(
+              itemId: gState.galleryProvider?.gid ?? '',
+              itemName: gState.galleryProvider?.englishTitle ?? '',
+              itemCategory: gState.galleryProvider?.category ?? '',
+              creativeName: gState.galleryProvider?.japaneseTitle,
+            )
+          ],
+        );
+      }
     } catch (err, stack) {
       logger.e('$err\n$stack');
       String errMsg = err.toString();
