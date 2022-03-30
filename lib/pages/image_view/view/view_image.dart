@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/component/exception/error.dart';
