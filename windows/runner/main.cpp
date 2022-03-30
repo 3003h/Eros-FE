@@ -1,3 +1,6 @@
+//#include <bitsdojo_window_windows/bitsdojo_window_plugin.h>
+//auto bdw = bitsdojo_window_configure(BDW_CUSTOM_FRAME | BDW_HIDE_ON_STARTUP);
+
 #include <flutter/dart_project.h>
 #include <flutter/flutter_view_controller.h>
 #include <windows.h>
@@ -25,8 +28,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   project.set_dart_entrypoint_arguments(std::move(command_line_arguments));
 
   FlutterWindow window(project);
-  Win32Window::Point origin(10, 10);
-  Win32Window::Size size(1280, 720);
+  Win32Window::Point origin(50, 50);
+  Win32Window::Size size(1280, 960);
   if (!window.CreateAndShow(L"fehviewer", origin, size)) {
     return EXIT_FAILURE;
   }

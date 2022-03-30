@@ -58,7 +58,7 @@ Size getTextSize(
 }) {
   TextPainter painter = TextPainter(
     ///AUTO：华为手机如果不指定locale的时候，该方法算出来的文字高度是比系统计算偏小的。
-    locale: WidgetsBinding.instance!.window.locale,
+    locale: WidgetsBinding.instance.window.locale,
     text: TextSpan(text: text, style: style),
     textDirection: textDirection,
     maxLines: maxLines,

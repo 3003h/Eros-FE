@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
@@ -12,12 +13,10 @@ import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -71,6 +70,15 @@ Future<void> main() async {
             isToolbarVisible: true,
             builder: (context) => MyApp(),
           ));
+
+    // doWhenWindowReady(() {
+    //   const initialSize = Size(800, 600);
+    //   appWindow.minSize = initialSize;
+    //   appWindow.size = initialSize;
+    //   appWindow.alignment = Alignment.center;
+    //   appWindow.title = L10n.current.app_title;
+    //   appWindow.show();
+    // });
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
@@ -123,20 +131,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _autoLockController.resumed();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
   void didChangePlatformBrightness() {
     themeService.platformBrightness.value =
-        WidgetsBinding.instance?.window.platformBrightness;
+        WidgetsBinding.instance.window.platformBrightness;
   }
 
   @override

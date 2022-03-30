@@ -9,7 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
-const kFilenameFormat = 'yyyy-MM-dd HH:mm:ss';
+import '../const/const.dart';
+
 const kSuffix = '.log';
 
 String? logDirectory;
