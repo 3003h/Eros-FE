@@ -28,6 +28,7 @@ class HomePage extends GetView<TabHomeController> {
               logger.v('${constraints.maxWidth}');
               if (context.width > 700 && context.isTablet && tabletLayout) {
                 layoutServices.layoutMode = LayoutMode.large;
+                // layoutServices.layoutMode = LayoutMode.small;
               } else {
                 layoutServices.layoutMode = LayoutMode.small;
               }
@@ -37,6 +38,7 @@ class HomePage extends GetView<TabHomeController> {
               }
 
               if (context.width > 700) {
+                // return const TabHomeSmall();
                 return TabHomeLarge(
                   sideProportion: vOffset,
                 );

@@ -200,7 +200,7 @@ class Global {
 
   /// profile初始化
   static Future<void> _profileInit() async {
-    await _checkReset();
+    _checkReset();
 
     _initProfile();
     Get.lazyPut(() => profile.webdav ?? const WebdavProfile(url: ''),
@@ -219,13 +219,13 @@ class Global {
   }
 
   // 持久化Profile信息
-  static Future<void>? saveProfile() {
+  static void saveProfile() {
     // logger.d(profile.customTabConfig?.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }
 
-  static Future<void> _checkReset() async {
+  static void _checkReset() {
     final String cleanVer = StorageUtil().getString(CLEAN_VER) ?? '0';
 
     if (double.parse(cleanVer) < EHConst.cleanDataVer) {

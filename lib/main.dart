@@ -55,7 +55,7 @@ Future<void> main() async {
       await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
     }
 
-    if (Get.find<EhConfigService>().debugMode) {
+    if (Get.find<EhConfigService>().debugMode || kDebugMode) {
       Logger.level = Level.debug;
       logger.v('Level.debug');
     } else {
@@ -63,14 +63,14 @@ Future<void> main() async {
     }
     resetLogLevel();
 
-    runApp(!kReleaseMode
-        ? DevicePreview(
+    runApp(kReleaseMode || GetPlatform.isDesktop
+        ? MyApp()
+        : DevicePreview(
             // enabled: !kReleaseMode,
             enabled: false,
             isToolbarVisible: true,
             builder: (context) => MyApp(),
-          )
-        : MyApp());
+          ));
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
@@ -93,8 +93,8 @@ Future<void> _initializeFlutterFire() async {
     return;
   }
   final firebaseApp = await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   analytics = FirebaseAnalytics.instanceFor(app: firebaseApp);
 
@@ -166,10 +166,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
-          if (GetPlatform.isMobile)
-            FirebaseAnalyticsObserver(analytics: analytics),
-          SentryNavigatorObserver(),
-          FlutterSmartDialog.observer,
+          // if (GetPlatform.isMobile)
+          //   FirebaseAnalyticsObserver(analytics: analytics),
+          // SentryNavigatorObserver(),
+          // FlutterSmartDialog.observer,
           MainNavigatorObserver(),
         ],
         builder: FlutterSmartDialog.init(

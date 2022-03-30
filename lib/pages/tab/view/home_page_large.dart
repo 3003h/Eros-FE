@@ -68,7 +68,8 @@ class TabHomeLarge extends GetView<TabHomeController> {
 
   @override
   Widget build(BuildContext context) {
-    // logger.d('width:${context.width} ${getSideWidth(context)}');
+    logger.d('width:${context.width} ${getSideWidth(context)}');
+    final mainNavigatorObserver = MainNavigatorObserver();
     return Row(
       children: [
         AnimatedContainer(
@@ -78,7 +79,9 @@ class TabHomeLarge extends GetView<TabHomeController> {
           child: ClipRect(
             child: Navigator(
                 key: Get.nestedKey(1),
-                observers: [MainNavigatorObserver()],
+                observers: mainNavigatorObserver.navigator != null
+                    ? []
+                    : [mainNavigatorObserver],
                 onGenerateRoute: (settings) {
                   final GetPage? _route = AppPages.routes
                       .firstWhereOrNull((GetPage e) => e.name == settings.name);
