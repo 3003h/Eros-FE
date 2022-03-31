@@ -247,7 +247,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     // _indicatorPositionedLeft = widget.itemPadding.horizontal / 2;
 
     // 初始计算
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 0)).then((value) {
         setState(() {});
       });

@@ -18,7 +18,7 @@ class _UnLockPageState extends State<UnLockPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance?.addPostFrameCallback(
         (_) => controller.unlockAndback(context: context));
   }
 

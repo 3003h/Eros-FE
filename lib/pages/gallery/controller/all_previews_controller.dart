@@ -51,7 +51,7 @@ class AllPreviewsPageController extends GetxController
 
     change(Tuple2([], _images), status: RxStatus.success());
 
-    WidgetsBinding.instance.addPostFrameCallback((Duration callback) {
+    WidgetsBinding.instance?.addPostFrameCallback((Duration callback) {
       logger.v('addPostFrameCallback be invoke');
       _autoJumpTo();
     });
