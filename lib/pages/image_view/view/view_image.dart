@@ -63,7 +63,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       );
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       controller.vState.fade = true;
       controller.vState.needRebuild = false;
     });

@@ -477,7 +477,7 @@ class DefaultTabViewController extends TabViewController {
   }
 
   void initStateAddPostFrameCallback(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       final _scrollController = PrimaryScrollController.of(context);
       _scrollController?.addListener(() async {
         if (_scrollController.position.pixels >
