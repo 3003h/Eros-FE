@@ -9,11 +9,11 @@ import flutter_downloader
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         
-        if #available(iOS 15.0, *) {
-            let displayLink = CADisplayLink(target: self, selector: #selector(step))
-            displayLink.preferredFrameRateRange = CAFrameRateRange(minimum:80, maximum:120, preferred:120)
-            displayLink.add(to: .current, forMode: .default)
-        }
+//         if #available(iOS 15.0, *) {
+//             let displayLink = CADisplayLink(target: self, selector: #selector(step))
+//             displayLink.preferredFrameRateRange = CAFrameRateRange(minimum:80, maximum:120, preferred:120)
+//             displayLink.add(to: .current, forMode: .default)
+//         }
         
         GeneratedPluginRegistrant.register(with: self)
         FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)

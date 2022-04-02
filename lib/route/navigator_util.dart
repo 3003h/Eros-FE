@@ -19,6 +19,7 @@ import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
+import '../pages/image_view/controller/view_contorller.dart';
 import 'main_observer.dart';
 
 class NavigatorUtil {
@@ -232,6 +233,7 @@ class NavigatorUtil {
           loadType: LoadFrom.gallery,
           gid: gid,
         ));
+    Get.delete<ViewExtController>();
   }
 
   static Future<void> goGalleryViewPageFile(
@@ -244,5 +246,6 @@ class NavigatorUtil {
           loadType: LoadFrom.download,
           gid: gid,
         ));
+    Get.delete<ViewExtController>();
   }
 }
