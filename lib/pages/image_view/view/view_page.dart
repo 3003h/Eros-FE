@@ -44,6 +44,19 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   ViewExtState get vState => controller.vState;
 
   @override
+  void initState() {
+    super.initState();
+    logger.d('initState initState initState');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    logger.d('disposedisposedisposedispose');
+    Get.delete<ViewExtController>();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return const CupertinoTheme(
       data: CupertinoThemeData(

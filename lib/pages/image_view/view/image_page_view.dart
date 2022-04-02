@@ -49,6 +49,32 @@ class ImagePageView extends GetView<ViewExtController> {
                   );
                 });
           } else {
+            final isPhotoView = true;
+            if (isPhotoView) {
+              return PhotoViewGallery.builder(
+                  backgroundDecoration:
+                      const BoxDecoration(color: Colors.transparent),
+                  pageController: logic.pageController,
+                  itemCount: logic.vState.pageCount,
+                  onPageChanged: (pageIndex) =>
+                      controller.handOnPageChanged(pageIndex),
+                  scrollDirection: Axis.horizontal,
+                  customSize: context.mediaQuery.size,
+                  scrollPhysics: const CustomScrollPhysics(),
+                  reverse: reverse,
+                  builder: (BuildContext context, int pageIndex) {
+                    return PhotoViewGalleryPageOptions.customChild(
+                      initialScale: PhotoViewComputedScale.contained,
+                      minScale: PhotoViewComputedScale.contained,
+                      maxScale: PhotoViewComputedScale.covered * 5,
+                      controller: logic.photoViewController,
+                      child: ViewImage(
+                        imageSer: pageIndex + 1,
+                      ),
+                    );
+                  });
+            }
+
             return ExtendedImageGesturePageView.builder(
               controller: logic.extendedPageController,
               itemCount: logic.vState.pageCount,
@@ -63,6 +89,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 /// 单页
                 return ViewImage(
                   imageSer: index + 1,
+                  // enableDoubleTap: false,
                   // initialScale: logic.vState.showPageInterval ? (1 / 1.1) : 1.0,
                 );
               },
