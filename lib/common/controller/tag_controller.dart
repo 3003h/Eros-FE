@@ -8,8 +8,8 @@ class TagController extends GetxController {
     GalleryTag? _tag;
     _tag = galleryTags.firstWhereOrNull(
         (element) => element.title == '${tag.type}:${tag.title}');
-    _tag ??=
-        galleryTags.firstWhereOrNull((element) => element.title == tag.title);
+    _tag ??= galleryTags.firstWhereOrNull(
+        (element) => element.title.trim() == tag.title.trim());
 
     return tag.copyWith(
         color: _tag?.color, backgrondColor: _tag?.backgrondColor);
@@ -39,7 +39,7 @@ class TagController extends GetxController {
         final String _tag = rult?.group(2) ?? '';
 
         _gTags = GalleryTag(
-          title: _tag,
+          title: _tag.trim(),
           color: sTag.color,
           backgrondColor: sTag.backgrondColor,
           type: _nameSpase,
@@ -47,13 +47,15 @@ class TagController extends GetxController {
         );
       } else {
         _gTags = GalleryTag(
-          title: sTag.text ?? '',
+          title: sTag.text?.trim() ?? '',
           color: sTag.color,
           backgrondColor: sTag.backgrondColor,
           type: '',
           tagTranslat: '',
         );
       }
+
+      // logger.d('${_gTags.toJson()}');
       _addGalleryTag(_gTags);
     }
   }
