@@ -1030,7 +1030,8 @@ class ViewExtController extends GetxController {
 
   void pageControllerCallBack(
       Function onPageController, Function onExtendedPageController) {
-    if (vState.columnMode != ViewColumnMode.single) {
+    // 暂时停用ExtendedPageController
+    if (vState.columnMode != ViewColumnMode.single || true) {
       onPageController.call();
     } else {
       onExtendedPageController.call();
