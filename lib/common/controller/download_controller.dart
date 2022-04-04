@@ -274,9 +274,6 @@ class DownloadController extends GetxController {
     required int gid,
     bool shouldDeleteContent = true,
   }) async {
-    GalleryTaskDao _galleryTaskDao;
-    ImageTaskDao _imageTaskDao;
-
     // 删除文件
     final GalleryTask? _task = dState.galleryTaskMap[gid];
     if (_task == null) {
@@ -326,6 +323,7 @@ class DownloadController extends GetxController {
     }
   }
 
+  // 添加任务队列
   void _addGalleryTask(
     GalleryTask galleryTask, {
     int? fCount,
@@ -389,19 +387,19 @@ class DownloadController extends GetxController {
   }
 
   /// 下载图片流程控制
-  Future<void> _downloadImage(
+  Future<void> _downloadImageFlow(
     GalleryImage image,
     GalleryImageTask? imageTask,
     int gid,
     String downloadPath,
     int maxSer, {
     bool downloadOrigImage = false, // 下载原图
-    bool redownload = false,
+    bool reDownload = false,
     CancelToken? cancelToken,
     ValueChanged<String>? onDownloadComplete,
   }) async {
     loggerSimple.v('${image.ser} start');
-    if (redownload) logger.v('${image.ser} redownload ');
+    if (reDownload) logger.v('${image.ser} redownload ');
 
     late String _targetImageUrl;
     late GalleryImage _uptImage;
@@ -413,8 +411,9 @@ class DownloadController extends GetxController {
         (imageTask.imageUrl?.isNotEmpty ?? false);
 
     final String? imageUrlFromTask = imageTask?.imageUrl;
-    if (useOldUrl && !redownload && imageUrlFromTask != null) {
-      loggerSimple.v('${image.ser} DL $imageUrlFromTask');
+    // 使用原有url下载
+    if (useOldUrl && !reDownload && imageUrlFromTask != null) {
+      logger.d('使用原有url下载 ${image.ser} DL $imageUrlFromTask');
 
       _targetImageUrl = imageUrlFromTask;
       _uptImage = image;
@@ -424,8 +423,10 @@ class DownloadController extends GetxController {
         _fileName = _generatFileName(image, maxSer);
       }
     } else if (image.href != null) {
-      logger.v('get new image url');
-      if (redownload) {
+      logger.v('获取新的图片url');
+      if (reDownload) {
+        logger.d(
+            '重下载 ${image.ser}, 清除缓存 ${image.href} , sourceId:${imageTask?.sourceId}');
         cacheController.clearDioCache(path: image.href ?? '');
       }
 
@@ -436,7 +437,8 @@ class DownloadController extends GetxController {
         image: image,
         gid: gid,
         cancelToken: cancelToken,
-        changeSource: redownload,
+        changeSource: reDownload,
+        sourceId: imageTask?.sourceId,
       );
 
       if (imageFetched.imageUrl == null) {
@@ -449,7 +451,7 @@ class DownloadController extends GetxController {
           : imageFetched.imageUrl!;
       _uptImage = imageFetched;
 
-      logger.d(
+      logger.v(
           'downloadOrigImage:$downloadOrigImage\nDownload _targetImageUrl:$_targetImageUrl');
 
       _fileName = _generatFileName(imageFetched, maxSer);
@@ -457,7 +459,7 @@ class DownloadController extends GetxController {
       _addAllImages(gid, [imageFetched]);
       await _updateImageTask(gid, imageFetched, fileName: _fileName);
 
-      if (redownload) {
+      if (reDownload) {
         logger.v('${imageFetched.href}\n${imageFetched.imageUrl} ');
       }
     } else {
@@ -472,7 +474,7 @@ class DownloadController extends GetxController {
 
     try {
       // 下载图片
-      await _download(
+      await _downloadToPath(
         _targetImageUrl,
         path.join(downloadPath, _fileName),
         cancelToken: cancelToken,
@@ -496,7 +498,7 @@ class DownloadController extends GetxController {
             ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
             : imageFetched.imageUrl!;
 
-        logger.d('reDownload _targetImageUrl:$_targetImageUrl');
+        logger.d('重下载 _targetImageUrl:$_targetImageUrl');
 
         _addAllImages(gid, [imageFetched]);
         await _updateImageTask(gid, imageFetched, fileName: _fileName);
@@ -507,14 +509,13 @@ class DownloadController extends GetxController {
           onDownloadComplete: () => onDownloadComplete?.call(_fileName),
           progressCallback: _progressCallback,
           savePath: path.join(downloadPath, _fileName),
-          deleteOnError: true,
         );
       }
     }
   }
 
   // 下载文件到指定路径
-  Future _download(
+  Future _downloadToPath(
     String url,
     String path, {
     CancelToken? cancelToken,
@@ -567,14 +568,16 @@ class DownloadController extends GetxController {
     String? sourceId,
     CancelToken? cancelToken,
   }) async {
+    final String? _sourceId = changeSource ? sourceId : '';
+
     final GalleryImage? _image = await fetchImageInfo(
       href,
       refresh: changeSource,
-      sourceId: sourceId,
+      sourceId: _sourceId,
       cancelToken: cancelToken,
     );
 
-    logger.d('_image from fetch ${_image?.toJson()}');
+    logger.v('_image from fetch ${_image?.toJson()}');
 
     if (_image == null) {
       return image;
@@ -792,7 +795,7 @@ class DownloadController extends GetxController {
           final int maxSer = galleryTask.fileCount + 1;
 
           try {
-            await _downloadImage(
+            await _downloadImageFlow(
               tImage,
               _oriImageTask,
               galleryTask.gid,
@@ -800,7 +803,7 @@ class DownloadController extends GetxController {
               maxSer,
               downloadOrigImage: galleryTask.downloadOrigImage ?? false,
               cancelToken: _cancelToken,
-              redownload: itemSer < _maxCompletSer,
+              reDownload: itemSer < _maxCompletSer,
               onDownloadComplete: (String fileName) =>
                   _onDownloadComplete(fileName, galleryTask.gid, itemSer),
             );
