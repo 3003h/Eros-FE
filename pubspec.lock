@@ -238,21 +238,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.10"
+    version: "3.1.11"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.5.1"
+    version: "5.5.2"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.6.10"
+    version: "2.6.11"
   code_builder:
     dependency: transitive
     description:
@@ -392,7 +392,7 @@ packages:
       name: dio
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.5"
+    version: "4.0.6"
   dio_cookie_manager:
     dependency: "direct main"
     description:
@@ -483,7 +483,7 @@ packages:
       name: extended_image_library
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.2"
+    version: "3.1.4"
   extended_list_library:
     dependency: transitive
     description:
@@ -546,28 +546,28 @@ packages:
       name: firebase_analytics
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "9.1.2"
+    version: "9.1.3"
   firebase_analytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_analytics_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.1"
+    version: "3.1.2"
   firebase_analytics_web:
     dependency: transitive
     description:
       name: firebase_analytics_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.0+8"
+    version: "0.4.0+9"
   firebase_core:
     dependency: transitive
     description:
       name: firebase_core
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.13.1"
+    version: "1.14.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -588,35 +588,35 @@ packages:
       name: firebase_crashlytics
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.5.3"
+    version: "2.6.0"
   firebase_crashlytics_platform_interface:
     dependency: transitive
     description:
       name: firebase_crashlytics_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.2"
   firebase_performance:
     dependency: "direct main"
     description:
       name: firebase_performance
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.8.0+7"
+    version: "0.8.0+8"
   firebase_performance_platform_interface:
     dependency: transitive
     description:
       name: firebase_performance_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.1+1"
+    version: "0.1.1+2"
   firebase_performance_web:
     dependency: transitive
     description:
       name: firebase_performance_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.1.0+7"
+    version: "0.1.0+8"
   fixnum:
     dependency: transitive
     description:
@@ -728,7 +728,7 @@ packages:
       name: flutter_lints
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.4"
+    version: "2.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -1018,7 +1018,7 @@ packages:
       name: lints
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   liquid_progress_indicator_ns:
     dependency: "direct main"
     description:
@@ -1300,7 +1300,7 @@ packages:
       name: permission_handler_apple
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "9.0.3"
+    version: "9.0.4"
   permission_handler_platform_interface:
     dependency: transitive
     description:
@@ -1627,7 +1627,7 @@ packages:
       name: sqlite3
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.5.1"
+    version: "1.6.1"
   stack_trace:
     dependency: transitive
     description:
@@ -1937,5 +1937,5 @@ packages:
     source: hosted
     version: "0.2.1"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
+  dart: ">=2.17.0-206.0.dev <3.0.0"
   flutter: ">=2.10.0"
