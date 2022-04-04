@@ -279,7 +279,8 @@ Future<GalleryImage?> fetchImageInfo(
   if (httpResponse.ok && httpResponse.data is GalleryImage) {
     return (httpResponse.data as GalleryImage).copyWith(href: href);
   } else {
-    logger.d('error.runtimeType: ${httpResponse.error.runtimeType}');
+    // logger.d('error.runtimeType: ${httpResponse.error.runtimeType}');
+    throw httpResponse.error ?? EhError(error: 'fetchImageInfo error');
   }
 }
 
