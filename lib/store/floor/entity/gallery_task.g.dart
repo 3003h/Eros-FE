@@ -231,3 +231,48 @@ extension $GalleryTaskCopyWith on GalleryTask {
   /// Returns a callable class that can be used as follows: `instanceOfclass GalleryTask.name.copyWith(...)` or like so:`instanceOfclass GalleryTask.name.copyWith.fieldName(...)`.
   _$GalleryTaskCWProxy get copyWith => _$GalleryTaskCWProxyImpl(this);
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+GalleryTask _$GalleryTaskFromJson(Map<String, dynamic> json) => GalleryTask(
+      gid: json['gid'] as int,
+      token: json['token'] as String,
+      url: json['url'] as String?,
+      title: json['title'] as String,
+      dirPath: json['dirPath'] as String?,
+      fileCount: json['fileCount'] as int,
+      completCount: json['completCount'] as int?,
+      status: json['status'] as int?,
+      coverImage: json['coverImage'] as String?,
+      addTime: json['addTime'] as int?,
+      coverUrl: json['coverUrl'] as String?,
+      rating: (json['rating'] as num?)?.toDouble(),
+      category: json['category'] as String?,
+      uploader: json['uploader'] as String?,
+      jsonString: json['jsonString'] as String?,
+      tag: json['tag'] as String?,
+      downloadOrigImage: json['downloadOrigImage'] as bool?,
+    );
+
+Map<String, dynamic> _$GalleryTaskToJson(GalleryTask instance) =>
+    <String, dynamic>{
+      'gid': instance.gid,
+      'token': instance.token,
+      'url': instance.url,
+      'title': instance.title,
+      'dirPath': instance.dirPath,
+      'fileCount': instance.fileCount,
+      'completCount': instance.completCount,
+      'status': instance.status,
+      'coverImage': instance.coverImage,
+      'addTime': instance.addTime,
+      'coverUrl': instance.coverUrl,
+      'rating': instance.rating,
+      'category': instance.category,
+      'uploader': instance.uploader,
+      'jsonString': instance.jsonString,
+      'tag': instance.tag,
+      'downloadOrigImage': instance.downloadOrigImage,
+    };

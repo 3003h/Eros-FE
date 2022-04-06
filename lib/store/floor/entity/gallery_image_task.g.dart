@@ -130,3 +130,31 @@ extension $GalleryImageTaskCopyWith on GalleryImageTask {
   /// Returns a callable class that can be used as follows: `instanceOfclass GalleryImageTask.name.copyWith(...)` or like so:`instanceOfclass GalleryImageTask.name.copyWith.fieldName(...)`.
   _$GalleryImageTaskCWProxy get copyWith => _$GalleryImageTaskCWProxyImpl(this);
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+GalleryImageTask _$GalleryImageTaskFromJson(Map<String, dynamic> json) =>
+    GalleryImageTask(
+      gid: json['gid'] as int,
+      token: json['token'] as String,
+      href: json['href'] as String?,
+      sourceId: json['sourceId'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+      ser: json['ser'] as int,
+      filePath: json['filePath'] as String?,
+      status: json['status'] as int?,
+    );
+
+Map<String, dynamic> _$GalleryImageTaskToJson(GalleryImageTask instance) =>
+    <String, dynamic>{
+      'gid': instance.gid,
+      'ser': instance.ser,
+      'token': instance.token,
+      'href': instance.href,
+      'sourceId': instance.sourceId,
+      'imageUrl': instance.imageUrl,
+      'filePath': instance.filePath,
+      'status': instance.status,
+    };
