@@ -4,7 +4,6 @@ source ./para.sh
 echo $apk_build_path
 echo $apk_build_path_universal
 
-exit
 
 #flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi
 flutter build apk
