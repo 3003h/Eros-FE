@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -183,7 +184,35 @@ class DownloadController extends GetxController {
     if (!((dState.taskCanceltokens[gid]?.isCancelled) ?? true)) {
       dState.taskCanceltokens[gid]?.cancel();
     }
-    return galleryTaskUpdateStatus(gid, TaskStatus.complete);
+
+    final galleryTask = await galleryTaskUpdateStatus(gid, TaskStatus.complete);
+
+    // 写入一个任务信息文件 帮助恢复任务用
+    _writeTaskInfoFile(galleryTask);
+
+    return galleryTask;
+  }
+
+  Future<void> _writeTaskInfoFile(GalleryTask? galleryTask) async {
+    if (galleryTask == null) {
+      return;
+    }
+
+    String jsonGalleryTask = jsonEncode(galleryTask);
+
+    final imageTaskList = (await imageTaskDao.findAllTaskByGid(galleryTask.gid))
+        .map((e) => e.copyWith(imageUrl: ''))
+        .toList();
+
+    String jsonImageTaskList = jsonEncode(imageTaskList);
+
+    logger.d('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
+    final dirPath = galleryTask.realDirPath;
+    if (dirPath == null || dirPath.isEmpty) {
+      return;
+    }
+    final File _infoFile = File(path.join(dirPath, '.info'));
+    _infoFile.writeAsString('$jsonGalleryTask\n$jsonImageTaskList');
   }
 
   /// 暂停任务
@@ -803,7 +832,7 @@ class DownloadController extends GetxController {
               maxSer,
               downloadOrigImage: galleryTask.downloadOrigImage ?? false,
               cancelToken: _cancelToken,
-              reDownload: itemSer < _maxCompletSer,
+              reDownload: itemSer < _maxCompletSer + 2,
               onDownloadComplete: (String fileName) =>
                   _onDownloadComplete(fileName, galleryTask.gid, itemSer),
             );

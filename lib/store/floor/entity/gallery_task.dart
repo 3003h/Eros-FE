@@ -2,6 +2,7 @@ import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:floor/floor.dart';
 import 'package:get/get.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path;
 
 part 'gallery_task.g.dart';
@@ -16,6 +17,7 @@ part 'gallery_task.g.dart';
 /// 9to10 update entity with new 'downloadOrigImage' field
 @CopyWith()
 @Entity(tableName: 'GalleryTask')
+@JsonSerializable()
 class GalleryTask {
   GalleryTask({
     required this.gid,
@@ -36,6 +38,11 @@ class GalleryTask {
     this.tag,
     this.downloadOrigImage,
   });
+
+  factory GalleryTask.fromJson(Map<String, dynamic> json) =>
+      _$GalleryTaskFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GalleryTaskToJson(this);
 
   @primaryKey
   final int gid;
