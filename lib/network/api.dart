@@ -305,10 +305,11 @@ class Api {
     const int kRetry = 3;
     for (int i = 0; i < kRetry; i++) {
       final bool? rult = await _selEhProfile();
+      // 创建或者选择完成
       if (rult != null && rult) {
-        Future.delayed(const Duration(milliseconds: 500));
         break;
       }
+      await Future.delayed(const Duration(milliseconds: 2000));
     }
     return null;
   }
@@ -327,12 +328,14 @@ class Api {
     }
 
     final fepIndex =
-        ehProfiles.indexWhere((element) => element.name == kProfileName);
+        ehProfiles.indexWhere((element) => element.name.trim() == kProfileName);
     final bool existFEhProfile = fepIndex > -1;
 
-    logger.d('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
+    if (ehProfiles.isNotEmpty)
+      logger.d('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
 
     if (existFEhProfile) {
+      // 存在名称为 FEhViewer 的配置
       final selectedSP =
           ehProfiles.firstWhereOrNull((element) => element.selected);
       if (selectedSP?.name == kProfileName) {
@@ -353,6 +356,7 @@ class Api {
       showCookie();
       return true;
     }
+    return null;
   }
 
   static Future<GalleryProvider> getMoreGalleryInfoOne(

@@ -33,8 +33,8 @@ EhSettings parseEhSettings(String html) {
         defaultProfile = value;
       }
 
-      profileSet.add(
-          EhProfile(name: name, selected: isSelected, value: int.parse(value)));
+      profileSet.add(EhProfile(
+          name: name.trim(), selected: isSelected, value: int.parse(value)));
     }
   }
 
