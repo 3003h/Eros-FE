@@ -189,11 +189,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "read_from_clipboard": MessageLookupByLibrary.simpleMessage("从剪贴板读取"),
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
+        "rebuild_tasks_data": MessageLookupByLibrary.simpleMessage("重建下载任务数据"),
         "redownload": MessageLookupByLibrary.simpleMessage("重新下载"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),
         "resample_image": MessageLookupByLibrary.simpleMessage("重采样图片"),
+        "restore_tasks_data": MessageLookupByLibrary.simpleMessage("恢复下载任务数据"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("从右到左"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("高级选项"),
         "s_Between": MessageLookupByLibrary.simpleMessage("从"),

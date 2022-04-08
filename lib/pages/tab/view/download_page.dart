@@ -84,15 +84,15 @@ class _DownloadTabState extends State<DownloadTab> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                LineIcons.alternateArrowsHorizontal,
-                size: 24,
-              ),
-              onPressed: _showExportDialog,
-            ),
+            // CupertinoButton(
+            //   minSize: 40,
+            //   padding: const EdgeInsets.all(0),
+            //   child: const Icon(
+            //     LineIcons.alternateArrowsHorizontal,
+            //     size: 24,
+            //   ),
+            //   onPressed: _showExportDialog,
+            // ),
             // CupertinoButton(
             //   minSize: 40,
             //   padding: const EdgeInsets.all(0),
@@ -237,19 +237,22 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    controller.animatedGalleryListKey = GlobalKey<AnimatedListState>();
-    return CupertinoScrollbar(
-      controller: PrimaryScrollController.of(context),
-      child: AnimatedList(
-        key: controller.animatedGalleryListKey,
-        padding: EdgeInsets.only(
-          top: context.mediaQueryPadding.top,
-          bottom: context.mediaQueryPadding.bottom,
+    return Obx(() {
+      // controller.galleryTasks更新时，生成新的animatedGalleryListKey，确保列表能刷新
+      controller.animatedGalleryListKey = GlobalKey<AnimatedListState>();
+      return CupertinoScrollbar(
+        controller: PrimaryScrollController.of(context),
+        child: AnimatedList(
+          key: controller.animatedGalleryListKey,
+          padding: EdgeInsets.only(
+            top: context.mediaQueryPadding.top,
+            bottom: context.mediaQueryPadding.bottom,
+          ),
+          initialItemCount: controller.galleryTasks.length,
+          itemBuilder: downloadItemBuilder,
         ),
-        initialItemCount: controller.galleryTasks.length,
-        itemBuilder: downloadItemBuilder,
-      ),
-    );
+      );
+    });
   }
 
   @override

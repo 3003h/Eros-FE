@@ -3623,6 +3623,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Restore tasks data`
+  String get restore_tasks_data {
+    return Intl.message(
+      'Restore tasks data',
+      name: 'restore_tasks_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rebuild tasks data`
+  String get rebuild_tasks_data {
+    return Intl.message(
+      'Rebuild tasks data',
+      name: 'rebuild_tasks_data',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

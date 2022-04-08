@@ -1,13 +1,9 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/component/setting_base.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../fehviewer.dart';
@@ -106,15 +102,23 @@ class ListViewDownloadSetting extends StatelessWidget {
         ),
       _buildPreloadImageItem(context),
       _buildMultiDownloadItem(context),
-      // 下载原图 旧
-      // TextSwitchItem(
-      //   L10n.of(context).download_ori_image,
-      //   desc: L10n.of(context).download_ori_image_summary,
-      //   intValue: ehConfigService.downloadOrigImage,
-      //   onChanged: (val) => ehConfigService.downloadOrigImage = val,
-      //   hideLine: true,
-      // ),
-      _buildDownloadOrigImageItem(context, hideDivider: true),
+      _buildDownloadOrigImageItem(context),
+      // 恢复下载任务数据
+      SelectorSettingItem(
+        title: L10n.of(context).restore_tasks_data,
+        onTap: () async {
+          await Get.find<DownloadController>().restoreGalleryTasks();
+        },
+        hideLine: true,
+      ),
+      // 重建下载任务数据
+      SelectorSettingItem(
+        title: L10n.of(context).rebuild_tasks_data,
+        onTap: () async {
+          await Get.find<DownloadController>().rebuildGalleryTasks();
+        },
+        hideLine: true,
+      ),
     ];
     return ListView.builder(
       itemCount: _list.length,

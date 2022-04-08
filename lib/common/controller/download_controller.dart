@@ -134,7 +134,8 @@ class DownloadController extends GetxController {
 
     final String _downloadPath = path.join(
         '$gid - ${path.split(title).join('_').replaceAll(RegExp(r'[/:*"<>|,?]'), '_')}');
-    final String _dirPath = await _getGalleryDownloadPath(_downloadPath);
+    final String _dirPath =
+        await _getGalleryDownloadPath(custpath: _downloadPath);
 
     // 登记主任务表
     final GalleryTask galleryTask = GalleryTask(
@@ -198,20 +199,21 @@ class DownloadController extends GetxController {
       return;
     }
 
-    String jsonGalleryTask = jsonEncode(galleryTask);
-
     final imageTaskList = (await imageTaskDao.findAllTaskByGid(galleryTask.gid))
         .map((e) => e.copyWith(imageUrl: ''))
         .toList();
 
     String jsonImageTaskList = jsonEncode(imageTaskList);
 
-    logger.d('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
     final dirPath = galleryTask.realDirPath;
     if (dirPath == null || dirPath.isEmpty) {
       return;
     }
     final File _infoFile = File(path.join(dirPath, '.info'));
+
+    String jsonGalleryTask = jsonEncode(galleryTask.copyWith(dirPath: ''));
+    logger.d('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
+
     _infoFile.writeAsString('$jsonGalleryTask\n$jsonImageTaskList');
   }
 
@@ -666,7 +668,7 @@ class DownloadController extends GetxController {
   }
 
   /// 获取下载路径
-  Future<String> _getGalleryDownloadPath(String custpath) async {
+  Future<String> _getGalleryDownloadPath({String custpath = ''}) async {
     late final String _dirPath;
     late final Directory savedDir;
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
@@ -746,6 +748,58 @@ class DownloadController extends GetxController {
         _addGalleryTask(task);
       }
     }
+  }
+
+  // 从当前下载目录恢复下载列表数据
+  Future<void> restoreGalleryTasks() async {
+    final String _currentDownloadPath = await _getGalleryDownloadPath();
+    logger.d('_currentDownloadPath: $_currentDownloadPath');
+    final directory = Directory(_currentDownloadPath);
+    await for (final fs in directory.list()) {
+      final infoFile = File(path.join(fs.path, '.info'));
+      if (fs is Directory && infoFile.existsSync()) {
+        logger.d('infoFile: ${infoFile.path}');
+        final info = infoFile.readAsStringSync();
+        final infoList = info
+            .split('\n')
+            .where((element) => element.trim().isNotEmpty)
+            .toList();
+        if (infoList.length < 2) {
+          continue;
+        }
+
+        final taskJsonString = infoList[0];
+        final imageJsonString = infoList[1];
+
+        try {
+          final galleryTask = GalleryTask.fromJson(
+                  jsonDecode(taskJsonString) as Map<String, dynamic>)
+              .copyWith(dirPath: fs.path);
+          final galleryImageTaskList = <GalleryImageTask>[];
+
+          final imageList = jsonDecode(imageJsonString) as List<dynamic>;
+          for (final img in imageList) {
+            final galleryImageTask =
+                GalleryImageTask.fromJson(img as Map<String, dynamic>);
+            galleryImageTaskList.add(galleryImageTask);
+          }
+
+          await imageTaskDao.insertOrReplaceImageTasks(galleryImageTaskList);
+          await galleryTaskDao.insertOrReplaceTask(galleryTask);
+        } catch (e, stack) {
+          logger.e('$e\n$stack');
+          continue;
+        }
+      }
+    }
+
+    onInit();
+  }
+
+  Future<void> rebuildGalleryTasks() async {
+    final _tasks = await galleryTaskDao.findAllGalleryTasks();
+
+    _tasks.forEach((task) => _writeTaskInfoFile(task));
   }
 
   /// 开始下载
@@ -952,7 +1006,7 @@ class DownloadController extends GetxController {
     _updateDownloadView(['DownloadGalleryItem_$gid']);
   }
 
-  void _updateDownloadView(List<Object>? ids) {
+  void _updateDownloadView([List<Object>? ids]) {
     if (Get.isRegistered<DownloadViewController>()) {
       Get.find<DownloadViewController>().update(ids);
     }
