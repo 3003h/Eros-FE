@@ -362,5 +362,8 @@
   "tag_dialog_TagColor": "标签颜色",
   "tag_dialog_Default_color": "默认颜色",
   "color_picker_primary": "基本",
-  "color_picker_wheel": "色盘"
+  "color_picker_wheel": "色盘",
+
+  "restore_tasks_data": "恢复下载任务数据",
+  "rebuild_tasks_data": "重建下载任务数据"
 }

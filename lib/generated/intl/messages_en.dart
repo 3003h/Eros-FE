@@ -226,11 +226,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "read_setting": MessageLookupByLibrary.simpleMessage("Read setting"),
         "reading_direction":
             MessageLookupByLibrary.simpleMessage("Reading direction"),
+        "rebuild_tasks_data":
+            MessageLookupByLibrary.simpleMessage("Rebuild tasks data"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("Reload image"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Remove from favorites"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "restore_tasks_data":
+            MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("Right to left"),
         "s_Advanced_Options":
             MessageLookupByLibrary.simpleMessage("Advanced Options"),

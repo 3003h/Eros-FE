@@ -209,10 +209,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
+        "rebuild_tasks_data":
+            MessageLookupByLibrary.simpleMessage("Rebuild tasks data"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites": MessageLookupByLibrary.simpleMessage("从收藏中删除"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "restore_tasks_data":
+            MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("从右到左"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("高级选项"),
         "s_Between": MessageLookupByLibrary.simpleMessage("从"),

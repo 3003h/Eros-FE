@@ -279,6 +279,12 @@ class _$GalleryTaskDao extends GalleryTaskDao {
   }
 
   @override
+  Future<void> insertOrReplaceTask(GalleryTask galleryTask) async {
+    await _galleryTaskInsertionAdapter.insert(
+        galleryTask, OnConflictStrategy.replace);
+  }
+
+  @override
   Future<void> insertTasks(List<GalleryTask> galleryTasks) async {
     await _galleryTaskInsertionAdapter.insertList(
         galleryTasks, OnConflictStrategy.abort);

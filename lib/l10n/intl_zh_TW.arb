@@ -362,6 +362,8 @@
   "tag_dialog_TagColor": "Color",
   "tag_dialog_Default_color": "Default color",
   "color_picker_primary": "primary",
-  "color_picker_wheel": "wheel"
+  "color_picker_wheel": "wheel",
 
+  "restore_tasks_data": "Restore tasks data",
+  "rebuild_tasks_data": "Rebuild tasks data"
 }

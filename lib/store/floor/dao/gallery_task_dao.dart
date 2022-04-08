@@ -16,6 +16,9 @@ abstract class GalleryTaskDao {
   @insert
   Future<void> insertTask(GalleryTask galleryTask);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertOrReplaceTask(GalleryTask galleryTask);
+
   @insert
   Future<void> insertTasks(List<GalleryTask> galleryTasks);
 

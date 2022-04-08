@@ -202,11 +202,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("읽기 설정"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("읽기 방향"),
+        "rebuild_tasks_data":
+            MessageLookupByLibrary.simpleMessage("Rebuild tasks data"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "restore_tasks_data":
+            MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("고급 설정"),
         "s_Between": MessageLookupByLibrary.simpleMessage("사이"),
