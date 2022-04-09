@@ -754,7 +754,9 @@ class DownloadController extends GetxController {
   Future<void> restoreGalleryTasks() async {
     final String _currentDownloadPath = await _getGalleryDownloadPath();
     logger.d('_currentDownloadPath: $_currentDownloadPath');
-    final directory = Directory(_currentDownloadPath);
+    final directory = Directory(GetPlatform.isIOS
+        ? path.join(Global.appDocPath, _currentDownloadPath)
+        : _currentDownloadPath);
     await for (final fs in directory.list()) {
       final infoFile = File(path.join(fs.path, '.info'));
       if (fs is Directory && infoFile.existsSync()) {

@@ -109,7 +109,6 @@ class ListViewDownloadSetting extends StatelessWidget {
         onTap: () async {
           await Get.find<DownloadController>().restoreGalleryTasks();
         },
-        hideLine: true,
       ),
       // 重建下载任务数据
       SelectorSettingItem(
