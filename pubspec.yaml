@@ -23,7 +23,7 @@ dependencies:
   line_icons: ^2.0.1
 
   # 网络请求
-  dio: ^4.0.5-beta1
+  dio: ^4.0.6
 #  dio_http_cache:
 #    git:
 #      url: https://github.com/vrtdev/dio-http-cache.git
@@ -187,7 +187,7 @@ dev_dependencies:
 
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^1.0.0
 
 dependency_overrides:
 #  async: ^2.8.2
