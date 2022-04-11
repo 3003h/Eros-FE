@@ -751,8 +751,10 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                 FontAwesomeIcons.image,
                 size: 22,
               ),
-              onPressed: () {
-                // controller.addToQuickSearch();
+              onPressed: () async {
+                await Get.toNamed(
+                  EHRoutes.searchImage,
+                );
               },
             ),
             // 筛选
