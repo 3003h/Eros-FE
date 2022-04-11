@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
 import '../../const/const.dart';
+import '../../fehviewer.dart';
 import '../global.dart';
 
 const _kMaxTime = Duration(days: 7);
@@ -40,9 +41,12 @@ class LogService extends GetxController {
     final DateFormat formatter = DateFormat(kFilenameFormat);
     final String _fileName = formatter.format(_now);
     curFileName = '$_fileName$_kSuffix';
+
+    loadFiles();
   }
 
-  Future<List<File>?> loadFiles() async {
+  Future<void> loadFiles() async {
+    logger.d('loadFiles log');
     List<File> _files = [];
     final Directory appDocDir = Directory(logPath);
     final Stream<FileSystemEntity> entityList =
@@ -54,8 +58,9 @@ class LogService extends GetxController {
         try {
           // 超过最大时间的文件删除
           final _fileName = path.basename(_logFile.path);
+
           final _timeString = _fileName.replaceAll(_kSuffix, '');
-          // logger.v('log file time $_timeString');
+          logger.d('log file time $_timeString');
 
           final DateTime _nowTime = DateTime.now();
           final DateFormat formatter = DateFormat(kFilenameFormat);
@@ -63,12 +68,13 @@ class LogService extends GetxController {
           final _fileTime = formatter.parse(_timeString);
           // final _fileTime = DateTime.parse(_timeString);
           final _diff = _nowTime.difference(_fileTime);
+          logger.d('diff $_diff');
           if (_diff.compareTo(_kMaxTime) > 0) {
             // logger.v('delete $_fileName');
             _logFile.delete();
           }
           // update();
-        } catch (_) {}
+        } catch (e, stack) {}
 
         _files.add(_logFile);
       }
@@ -84,8 +90,6 @@ class LogService extends GetxController {
         logFiles.remove(_logfile);
       }
     }
-
-    return null;
   }
 
   void removeLogAt(int index) {

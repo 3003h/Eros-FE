@@ -69,7 +69,7 @@ class LogViewPage extends StatelessWidget {
                   child: Text(
                     _log,
                     softWrap: false,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       height: 1.1,
                       fontFamilyFallback: EHConst.monoFontFamilyFallback,

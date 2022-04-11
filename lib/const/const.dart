@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-const kFilenameFormat = 'yyyy-MM-dd_HHmmss';
+final kFilenameFormat =
+    GetPlatform.isWindows ? 'yyyy-MM-dd HH_mm_ss' : 'yyyy-MM-dd HH:mm:ss';
 
 enum ListModeEnum {
   list,

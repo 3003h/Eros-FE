@@ -50,9 +50,6 @@ dependencies:
   photo_view: ^0.13.0
   cached_network_image: ^3.0.0
   extended_image: ^6.0.1
-#  extended_image:
-#    git:
-#      url: git://github.com/mdddj/extended_image.git
   liquid_progress_indicator_ns: ^1.0.0
   logger: ^1.0.0
   waterfall_flow: ^3.0.1
