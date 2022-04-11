@@ -9,8 +9,8 @@ import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showTagInfoDialog(String text,
@@ -26,7 +26,7 @@ Future<void> showTagInfoDialog(String text,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(LineIcons.thumbsUp).paddingOnly(right: 8),
+              const Icon(FontAwesomeIcons.thumbsUp).paddingOnly(right: 8),
               Text(L10n.of(Get.context!).tag_vote_up),
             ],
           ),
@@ -39,7 +39,7 @@ Future<void> showTagInfoDialog(String text,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(LineIcons.thumbsDown).paddingOnly(right: 8),
+                const Icon(FontAwesomeIcons.thumbsDown).paddingOnly(right: 8),
                 Text(L10n.of(Get.context!).tag_vote_down),
               ],
             ),
@@ -54,7 +54,7 @@ Future<void> showTagInfoDialog(String text,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(LineIcons.undo).paddingOnly(right: 8),
+              const Icon(FontAwesomeIcons.undo).paddingOnly(right: 8),
               Text(L10n.of(Get.context!).tag_withdraw_vote),
             ],
           ),
@@ -70,7 +70,7 @@ Future<void> showTagInfoDialog(String text,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(LineIcons.undo).paddingOnly(right: 8),
+              const Icon(FontAwesomeIcons.undo).paddingOnly(right: 8),
               Text(L10n.of(Get.context!).tag_vote_down),
             ],
           ),
@@ -131,7 +131,7 @@ Future<void> showTagInfoDialog(String text,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(LineIcons.tags).paddingOnly(right: 8),
+                  const Icon(FontAwesomeIcons.tags).paddingOnly(right: 8),
                   Text(L10n.of(Get.context!).tag_add_to_mytag),
                 ],
               ),

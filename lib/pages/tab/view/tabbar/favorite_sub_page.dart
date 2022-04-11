@@ -3,8 +3,8 @@ import 'package:fehviewer/pages/tab/controller/favorite_sublist_controller.dart'
 import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
@@ -83,7 +83,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      LineIcons.hippo,
+                      FontAwesomeIcons.hippo,
                       size: 100,
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.systemGrey, context),

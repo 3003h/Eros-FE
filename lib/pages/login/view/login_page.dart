@@ -2,8 +2,8 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../controller/login_controller.dart';
 
@@ -35,7 +35,7 @@ class LoginPage extends GetView<LoginController> {
                 children: [
                   const SizedBox(height: 50),
                   const Icon(
-                    LineIcons.userCircle,
+                    FontAwesomeIcons.userCircle,
                     size: 120,
                     color: CupertinoColors.activeBlue,
                   ),
@@ -50,7 +50,8 @@ class LoginPage extends GetView<LoginController> {
                         placeholderStyle: _placeholderStyle,
                         prefix: Row(
                           children: [
-                            const Icon(LineIcons.user).paddingOnly(right: 4.0),
+                            const Icon(FontAwesomeIcons.user)
+                                .paddingOnly(right: 4.0),
                             Text(L10n.of(context).user_name),
                           ],
                         ),
@@ -71,8 +72,8 @@ class LoginPage extends GetView<LoginController> {
                               children: [
                                 GestureDetector(
                                   child: Icon(logic.obscurePasswd
-                                          ? LineIcons.eyeSlash
-                                          : LineIcons.eye)
+                                          ? FontAwesomeIcons.eyeSlash
+                                          : FontAwesomeIcons.eye)
                                       .paddingOnly(right: 4.0),
                                   onTap: logic.switchObscure,
                                 ),
@@ -115,7 +116,7 @@ class LoginPage extends GetView<LoginController> {
                           child: Column(
                             children: const [
                               Icon(
-                                LineIcons.globeWithAmericasShown,
+                                FontAwesomeIcons.earthAmericas,
                                 size: 30,
                               ),
                               Text('Web', textScaleFactor: 0.8),
@@ -130,7 +131,7 @@ class LoginPage extends GetView<LoginController> {
                         child: Column(
                           children: const [
                             Icon(
-                              LineIcons.cookieBite,
+                              FontAwesomeIcons.cookieBite,
                               size: 30,
                             ),
                             Text('Cookie', textScaleFactor: 0.8),

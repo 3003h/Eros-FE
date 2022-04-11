@@ -1,9 +1,8 @@
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../controller/splash_controller.dart';
 
@@ -23,7 +22,7 @@ class SplashPage extends GetView<SplashController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Icon(
-                    LineIcons.cat,
+                    FontAwesomeIcons.cat,
                     // FontAwesomeIcons.heading,
                     size: 150.0,
                     color: Colors.grey,
@@ -35,7 +34,7 @@ class SplashPage extends GetView<SplashController> {
                   Text(
                     L10n.of(context).app_title,
                     style: const TextStyle(color: Colors.grey),
-                  )
+                  ).paddingSymmetric(vertical: 20),
                 ],
               ),
             ),

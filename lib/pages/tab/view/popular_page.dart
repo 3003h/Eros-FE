@@ -10,9 +10,9 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
 
@@ -85,8 +85,8 @@ class _PopularListTabState extends State<PopularListTab> {
           minSize: 40,
           padding: const EdgeInsets.all(0),
           child: const Icon(
-            LineIcons.search,
-            size: 26,
+            FontAwesomeIcons.search,
+            size: 22,
           ),
           onPressed: () {
             NavigatorUtil.goSearchPage();

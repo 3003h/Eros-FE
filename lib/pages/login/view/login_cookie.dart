@@ -2,8 +2,8 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../controller/login_controller.dart';
 
@@ -34,7 +34,7 @@ class LoginCookie extends GetView<LoginController> {
                 children: [
                   const SizedBox(height: 50),
                   const Icon(
-                    LineIcons.cookieBite,
+                    FontAwesomeIcons.cookieBite,
                     size: 120,
                     color: CupertinoColors.activeBlue,
                   ),
@@ -91,7 +91,7 @@ class LoginCookie extends GetView<LoginController> {
                     child: Column(
                       children: [
                         const Icon(
-                          LineIcons.clipboardAlt,
+                          FontAwesomeIcons.clipboard,
                           size: 30,
                         ),
                         Text(L10n.of(context).read_from_clipboard,

@@ -13,7 +13,7 @@ import 'enum.dart';
 class TabViewController extends GetxController
     with StateMixin<List<GalleryProvider>> {
   // 当前页码
-  final _curPage = 0.obs;
+  final _curPage = (-1).obs;
   int get curPage => _curPage.value;
   set curPage(int val) => _curPage.value = val;
 

@@ -20,7 +20,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
@@ -59,7 +58,7 @@ class ViewErr509 extends StatelessWidget {
                 ),
                 Expanded(
                   child: Icon(
-                    LineIcons.fill,
+                    FontAwesomeIcons.fill,
                     size: 77,
                     color: CupertinoColors.systemPink.darkColor,
                   ),
@@ -522,9 +521,9 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                       child: Column(
                         children: [
                           const Icon(
-                            LineIcons.shareSquare,
+                            FontAwesomeIcons.shareSquare,
                             color: CupertinoColors.systemGrey6,
-                            size: 26,
+                            size: 22,
                           ),
                           const Spacer(),
                           Text(
@@ -556,8 +555,8 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                           child: Column(
                             children: [
                               Icon(
-                                LineIcons.hourglassHalf,
-                                size: 26,
+                                FontAwesomeIcons.hourglassHalf,
+                                size: 22,
                                 color: () {
                                   // if (logic.vState.viewMode ==
                                   //     ViewMode.topToBottom) {
@@ -602,8 +601,8 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                             id: idShowThumbListIcon,
                             builder: (logic) {
                               return Icon(
-                                LineIcons.images,
-                                size: 26,
+                                FontAwesomeIcons.images,
+                                size: 22,
                                 color: logic.vState.showThumbList
                                     ? CupertinoColors.activeBlue
                                     : CupertinoColors.systemGrey6,
@@ -639,8 +638,8 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                             id: idViewColumnModeIcon,
                             builder: (logic) {
                               return Icon(
-                                LineIcons.bookOpen,
-                                size: 26,
+                                FontAwesomeIcons.bookOpen,
+                                size: 22,
                                 color: () {
                                   if (logic.vState.viewMode ==
                                       ViewMode.topToBottom) {
@@ -772,7 +771,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                   ),
                   alignment: Alignment.center,
                   child: Icon(
-                    LineIcons.lock,
+                    FontAwesomeIcons.lock,
                     size: 20,
                     color: logic.vState.syncThumbList
                         ? CupertinoColors.activeOrange
@@ -889,7 +888,7 @@ class _FutureThumblState extends State<FutureThumbl> {
         _future = logic.fetchThumb(widget.itemSer);
         setState(() {});
       },
-      child: const Icon(LineIcons.alternateRedo,
+      child: const Icon(FontAwesomeIcons.redoAlt,
           color: CupertinoColors.destructiveRed),
     );
   }

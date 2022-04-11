@@ -8,9 +8,8 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modal;
 
 import 'donwload_labels_page.dart';
 
@@ -143,7 +142,7 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(LineIcons.shareSquareAlt).paddingOnly(right: 8),
+                  const Icon(FontAwesomeIcons.share).paddingOnly(right: 8),
                   const Text('Share '),
                 ],
               ),
@@ -156,7 +155,7 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(LineIcons.fileExport).paddingOnly(right: 8),
+                  const Icon(FontAwesomeIcons.fileExport).paddingOnly(right: 8),
                   const Text('Export'),
                 ],
               ),
@@ -169,7 +168,7 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(LineIcons.fileImport).paddingOnly(right: 8),
+                  const Icon(FontAwesomeIcons.fileImport).paddingOnly(right: 8),
                   const Text('Import'),
                 ],
               ),

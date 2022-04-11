@@ -7,9 +7,9 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
 import 'constants.dart';
@@ -73,8 +73,8 @@ class _ToplistTabState extends State<ToplistTab> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Icon(
-                    LineIcons.sortAmountDown,
-                    size: 26,
+                    FontAwesomeIcons.sortAmountDown,
+                    size: 22,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -100,7 +100,7 @@ class _ToplistTabState extends State<ToplistTab> {
                   border: Border.all(
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.activeBlue, context),
-                    width: 1.5,
+                    width: 2.5,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),

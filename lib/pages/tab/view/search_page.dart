@@ -16,9 +16,9 @@ import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icons.dart';
 
 import 'constants.dart';
 
@@ -82,7 +82,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   CupertinoNavigationBar getNavigationBar(BuildContext context) {
     return CupertinoNavigationBar(
-      padding: const EdgeInsetsDirectional.only(start: 0),
+      padding: const EdgeInsetsDirectional.only(end: 10),
       border: null,
       middle: Obx(() {
         return Text(controller.placeholderText);
@@ -185,11 +185,11 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          LineIcons.search,
+                          FontAwesomeIcons.magnifyingGlass,
                           size: 20,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.inactiveGray, context),
-                        ).paddingOnly(right: 4),
+                        ).paddingOnly(right: 8),
                         Expanded(
                           child: Text(
                             '${L10n.of(context).search} ${controller.searchText}',
@@ -199,7 +199,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                           ),
                         ),
                       ],
-                    ).paddingSymmetric(vertical: 4, horizontal: 12),
+                    ).paddingSymmetric(vertical: 10, horizontal: 16),
                   ).autoCompressKeyboard(context),
                 ),
               );
@@ -364,11 +364,11 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(LineIcons.search,
-                size: 24,
+        Icon(FontAwesomeIcons.magnifyingGlass,
+                size: 20,
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.inactiveGray, Get.context!))
-            .paddingOnly(right: 4, top: 4),
+            .paddingOnly(right: 10, top: 4),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -391,7 +391,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           ),
         ),
       ],
-    ).paddingSymmetric(vertical: 8, horizontal: 12);
+    ).paddingSymmetric(vertical: 12, horizontal: 16);
   }
 
   /// tag匹配view
@@ -650,7 +650,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    LineIcons.hippo,
+                    FontAwesomeIcons.hippo,
                     size: 100,
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.systemGrey, context),
@@ -705,58 +705,88 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            CupertinoButton(
-              minSize: 36,
-              padding: const EdgeInsets.all(0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.activeBlue, context),
-                    width: 1.5,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Obx(() => Text(
-                      '${controller.curPage + 1}',
-                      style: TextStyle(
+            // 页码
+            Obx(() {
+              if (controller.curPage > -1) {
+                return Container(
+                  margin: const EdgeInsets.only(left: 8, right: 4),
+                  child: CupertinoButton(
+                    minSize: 36,
+                    padding: const EdgeInsets.all(0),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 0),
+                      constraints: const BoxConstraints(minWidth: 24),
+                      decoration: BoxDecoration(
+                        border: Border.all(
                           color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.activeBlue, context)),
-                    )),
-              ),
-              onPressed: () {
-                controller.showJumpToPage();
-              },
-            ),
+                              CupertinoColors.activeBlue, context),
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Obx(() => Text(
+                            '${controller.curPage + 1}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.activeBlue, context),
+                              height: 1.25,
+                            ),
+                          )),
+                    ),
+                    onPressed: () {
+                      controller.showJumpToPage();
+                    },
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
             CupertinoButton(
               minSize: 36,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.filter,
-                size: 26,
+                FontAwesomeIcons.image,
+                size: 22,
+              ),
+              onPressed: () {
+                // controller.addToQuickSearch();
+              },
+            ),
+            // 筛选
+            CupertinoButton(
+              minSize: 36,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.filter,
+                size: 22,
               ),
               onPressed: () {
                 showFilterSetting();
               },
             ),
+
+            // 添加到快捷搜索
+            // CupertinoButton(
+            //   minSize: 36,
+            //   padding: const EdgeInsets.all(0),
+            //   child: const Icon(
+            //     LineIcons.plusCircle,
+            //     size: 26,
+            //   ),
+            //   onPressed: () {
+            //     controller.addToQuickSearch();
+            //   },
+            // ),
+            // 打开快捷搜索
             CupertinoButton(
               minSize: 36,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.plusCircle,
-                size: 26,
-              ),
-              onPressed: () {
-                controller.addToQuickSearch();
-              },
-            ),
-            CupertinoButton(
-              minSize: 36,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                LineIcons.listUl,
-                size: 26,
+                FontAwesomeIcons.listUl,
+                size: 22,
               ),
               onPressed: () {
                 controller.quickSearchList();
@@ -803,7 +833,8 @@ class SearchTextFieldIn extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4),
           minSize: 0,
           child: Icon(
-            LineIcons.search,
+            FontAwesomeIcons.magnifyingGlass,
+            size: 20.0,
             color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
           ),
           onPressed: () {},
@@ -819,19 +850,30 @@ class SearchTextFieldIn extends StatelessWidget {
                   GestureDetector(
                     onTap: controller.jumpToGallery,
                     child: Icon(
-                      LineIcons.arrowCircleRight,
-                      size: 24.0,
+                      FontAwesomeIcons.circleArrowRight,
+                      size: 20.0,
                       color: CupertinoDynamicColor.resolve(
                               _kClearButtonColor, Get.context!)
                           .withOpacity(iconOpacity),
                     ).paddingSymmetric(horizontal: 6),
                   ),
+                if (controller.textIsNotEmpty && !controller.textIsGalleryUrl)
+                  GestureDetector(
+                    onTap: controller.addToQuickSearch,
+                    child: Icon(
+                      FontAwesomeIcons.circlePlus,
+                      size: 20.0,
+                      color: CupertinoDynamicColor.resolve(
+                              _kClearButtonColor, Get.context!)
+                          .withOpacity(iconOpacity),
+                    ).paddingSymmetric(horizontal: 4),
+                  ),
                 if (controller.textIsNotEmpty)
                   GestureDetector(
                     onTap: controller.clearText,
                     child: Icon(
-                      LineIcons.timesCircle,
-                      size: 24.0,
+                      FontAwesomeIcons.circleXmark,
+                      size: 20.0,
                       color: CupertinoDynamicColor.resolve(
                               _kClearButtonColor, Get.context!)
                           .withOpacity(iconOpacity),

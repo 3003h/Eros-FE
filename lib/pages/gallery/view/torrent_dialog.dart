@@ -10,7 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -96,10 +95,10 @@ class TorrentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final LinkedHashMap<IconData, String?> trMap = LinkedHashMap.from(
       {
-        LineIcons.arrowCircleUp: torrent.seeds,
-        LineIcons.arrowCircleDown: torrent.peerd,
-        LineIcons.checkCircle: torrent.downloads,
-        LineIcons.ggCurrencyCircle: torrent.sizeText,
+        FontAwesomeIcons.circleArrowUp: torrent.seeds,
+        FontAwesomeIcons.circleArrowDown: torrent.peerd,
+        FontAwesomeIcons.solidCircleCheck: torrent.downloads,
+        FontAwesomeIcons.solidCircleDot: torrent.sizeText,
       },
     );
 

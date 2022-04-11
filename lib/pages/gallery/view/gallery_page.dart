@@ -11,8 +11,8 @@ import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:share/share.dart';
 
 import '../comm.dart';
@@ -141,8 +141,8 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                             padding: const EdgeInsets.all(0),
                             minSize: 38,
                             child: const Icon(
-                              LineIcons.tags,
-                              size: 26,
+                              FontAwesomeIcons.tags,
+                              size: 22,
                             ),
                             onPressed: () {
                               _controller.addTag();
@@ -152,8 +152,8 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                             padding: const EdgeInsets.all(0),
                             minSize: 38,
                             child: const Icon(
-                              LineIcons.share,
-                              size: 26,
+                              FontAwesomeIcons.share,
+                              size: 22,
                             ),
                             onPressed: () {
                               if (_item == null) {

@@ -2,8 +2,8 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../../component/setting_base.dart';
 
@@ -20,7 +20,7 @@ class FavoritesRenameItem extends GetView<EhMySettingsController> {
           return TextInputItem(
             // title: '$e',
             icon: Icon(
-              LineIcons.heartAlt,
+              FontAwesomeIcons.solidHeart,
               color: ThemeColors.favColor['$e'],
             ).paddingOnly(left: 4, right: 8),
             textAlign: TextAlign.left,

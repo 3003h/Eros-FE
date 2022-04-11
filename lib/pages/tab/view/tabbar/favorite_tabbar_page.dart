@@ -10,8 +10,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icon.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
@@ -102,8 +100,8 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                             minSize: 40,
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: const Icon(
-                              LineIcons.bars,
-                              size: 24,
+                              FontAwesomeIcons.bars,
+                              size: 22,
                             ),
                             onPressed: () async {
                               // 跳转收藏夹选择页
@@ -171,8 +169,8 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               minSize: 40,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.search,
-                size: 26,
+                FontAwesomeIcons.magnifyingGlass,
+                size: 22,
               ),
               onPressed: () {
                 final bool fromTabItem = Get.find<TabHomeController>()
@@ -184,13 +182,13 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
             ),
             CupertinoButton(
               padding: const EdgeInsets.all(0.0),
-              minSize: 36,
+              minSize: 38,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Icon(
-                    LineIcons.sortAmountDown,
-                    size: 26,
+                    FontAwesomeIcons.arrowDownWideShort,
+                    size: 22,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -201,7 +199,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               onPressed: () => controller.setOrder(context),
@@ -211,15 +209,17 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               minSize: 36,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                constraints: const BoxConstraints(minWidth: 24),
                 decoration: BoxDecoration(
                     border: Border.all(
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.activeBlue, context),
-                      width: 1.5,
+                      width: 2.0,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(8))),
                 child: Obx(() => Text(
                       '${controller.curPage + 1}',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.activeBlue, context)),

@@ -1,8 +1,8 @@
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:oktoast/oktoast.dart' as oktoast;
 import 'package:oktoast/oktoast.dart';
 
@@ -73,7 +73,7 @@ void show509Toast() {
             children: [
               const Icon(
                 // LineIcons.toriiGate,
-                LineIcons.fill,
+                FontAwesomeIcons.fill,
                 size: 80,
                 color: CupertinoColors.systemPink,
               ),

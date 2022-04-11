@@ -16,9 +16,9 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
 import 'constants.dart';
@@ -95,8 +95,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.search,
-              size: 26,
+              FontAwesomeIcons.search,
+              size: 22,
             ),
             onPressed: () {
               final bool fromTabItem =
@@ -113,8 +113,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 const Icon(
-                  LineIcons.sortAmountDown,
-                  size: 26,
+                  FontAwesomeIcons.sortAmountDown,
+                  size: 22,
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -194,8 +194,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
               minSize: 40,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.search,
-                size: 26,
+                FontAwesomeIcons.magnifyingGlass,
+                size: 22,
               ),
               onPressed: () {
                 final bool fromTabItem =
@@ -212,8 +212,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Icon(
-                    LineIcons.sortAmountDown,
-                    size: 26,
+                    FontAwesomeIcons.arrowDownWideShort,
+                    size: 22,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -224,7 +224,7 @@ class _FavoriteTabState extends State<FavoriteTab> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               onPressed: () => controller.setOrder(context),
@@ -396,8 +396,8 @@ class _FavoriteTabState extends State<FavoriteTab> {
       minSize: 40,
       padding: const EdgeInsets.only(right: 8),
       child: const Icon(
-        LineIcons.star,
-        size: 26,
+        FontAwesomeIcons.star,
+        size: 22,
       ),
       onPressed: () async {
         // 跳转收藏夹选择页

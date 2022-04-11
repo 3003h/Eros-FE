@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import 'eh_webview.dart';
 
@@ -39,7 +38,7 @@ class InWebMyTags extends StatelessWidget {
             CupertinoButton(
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.alternateRedo,
+                FontAwesomeIcons.redoAlt,
                 size: 22,
               ),
               onPressed: () async {

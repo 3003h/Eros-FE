@@ -10,9 +10,9 @@ import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
 import 'constants.dart';
@@ -74,8 +74,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
               minSize: 40,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.search,
-                size: 26,
+                FontAwesomeIcons.search,
+                size: 22,
               ),
               onPressed: () {
                 NavigatorUtil.goSearchPage();
@@ -86,8 +86,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
               minSize: 40,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                LineIcons.filter,
-                size: 26,
+                FontAwesomeIcons.filter,
+                size: 22,
               ),
               onPressed: () {
                 // logger.v('${EHUtils.convNumToCatMap(1)}');
@@ -165,8 +165,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.search,
-              size: 26,
+              FontAwesomeIcons.search,
+              size: 22,
             ),
             onPressed: () {
               NavigatorUtil.goSearchPage();
@@ -177,8 +177,8 @@ class _GalleryListTabState extends State<GalleryListTab> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.filter,
-              size: 26,
+              FontAwesomeIcons.filter,
+              size: 22,
             ),
             onPressed: () {
               // logger.v('${EHUtils.convNumToCatMap(1)}');

@@ -991,13 +991,6 @@ packages:
       url: "https://github.com/honjow/learning.git"
     source: git
     version: "0.0.3+2"
-  line_icons:
-    dependency: "direct main"
-    description:
-      name: line_icons
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.1"
   linked_scroll_controller:
     dependency: "direct main"
     description:
