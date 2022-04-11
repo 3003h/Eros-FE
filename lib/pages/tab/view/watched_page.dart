@@ -11,9 +11,9 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../comm.dart';
 import 'constants.dart';
@@ -70,8 +70,8 @@ class _WatchedListTabState extends State<WatchedListTab> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.search,
-              size: 26,
+              FontAwesomeIcons.magnifyingGlass,
+              size: 22,
             ),
             onPressed: () {
               final bool fromTabItem =
@@ -86,8 +86,8 @@ class _WatchedListTabState extends State<WatchedListTab> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.filter,
-              size: 26,
+              FontAwesomeIcons.filter,
+              size: 22,
             ),
             onPressed: () {
               // logger.v('${EHUtils.convNumToCatMap(1)}');
@@ -153,8 +153,8 @@ class _WatchedListTabState extends State<WatchedListTab> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.search,
-              size: 26,
+              FontAwesomeIcons.search,
+              size: 22,
             ),
             onPressed: () {
               final bool fromTabItem =
@@ -169,8 +169,8 @@ class _WatchedListTabState extends State<WatchedListTab> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.filter,
-              size: 26,
+              FontAwesomeIcons.filter,
+              size: 22,
             ),
             onPressed: () {
               // logger.v('${EHUtils.convNumToCatMap(1)}');

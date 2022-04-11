@@ -18,9 +18,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:path/path.dart' as path;
 import 'package:share/share.dart';
 
@@ -161,7 +161,7 @@ class QuickSearchListPage extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(LineIcons.shareSquareAlt).paddingOnly(right: 4),
+                    const Icon(FontAwesomeIcons.share).paddingOnly(right: 4),
                     const Text('Share'),
                   ],
                 ),
@@ -191,7 +191,8 @@ class QuickSearchListPage extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(LineIcons.fileExport).paddingOnly(right: 4),
+                    const Icon(FontAwesomeIcons.fileExport)
+                        .paddingOnly(right: 4),
                     const Text('Export'),
                   ],
                 ),
@@ -219,7 +220,8 @@ class QuickSearchListPage extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(LineIcons.fileImport).paddingOnly(right: 4),
+                    const Icon(FontAwesomeIcons.fileImport)
+                        .paddingOnly(right: 4),
                     const Text('Import'),
                   ],
                 ),
@@ -246,8 +248,8 @@ class QuickSearchListPage extends StatelessWidget {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.alternateTrash,
-              size: 26,
+              FontAwesomeIcons.solidTrashCan,
+              size: 22,
             ),
             onPressed: () {
               _removeAll();
@@ -257,8 +259,8 @@ class QuickSearchListPage extends StatelessWidget {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.alternateFile,
-              size: 26,
+              FontAwesomeIcons.solidFileLines,
+              size: 22,
             ),
             onPressed: _showFile,
           ),
@@ -266,8 +268,8 @@ class QuickSearchListPage extends StatelessWidget {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.cloud,
-              size: 26,
+              FontAwesomeIcons.cloud,
+              size: 20,
             ),
             onPressed: _showCloud,
           ),

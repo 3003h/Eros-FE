@@ -6,8 +6,8 @@ import 'package:fehviewer/pages/setting/setting_items/favorites_rename_item.dart
 import 'package:fehviewer/pages/setting/setting_items/multi_selector.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../component/setting_base.dart';
 import 'const.dart';
@@ -38,8 +38,8 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                     padding: const EdgeInsets.all(0),
                     minSize: 40,
                     child: const Icon(
-                      LineIcons.globeWithAmericasShown,
-                      size: 24,
+                      FontAwesomeIcons.earthAmericas,
+                      size: 22,
                     ),
                     onPressed: () async {
                       Get.to(() => InWebMySetting());
@@ -49,8 +49,8 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                     padding: const EdgeInsets.all(0),
                     minSize: 40,
                     child: const Icon(
-                      LineIcons.checkCircle,
-                      size: 24,
+                      FontAwesomeIcons.circleCheck,
+                      size: 22,
                     ),
                     onPressed: () async {
                       // 保存配置

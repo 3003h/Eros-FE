@@ -1,11 +1,9 @@
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
-import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../../controller/tabbar/custom_tabbar_controller.dart';
@@ -92,7 +90,7 @@ class _SubListViewState<T extends CustomSubListController>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      LineIcons.hippo,
+                      FontAwesomeIcons.hippo,
                       size: 100,
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.systemGrey, context),

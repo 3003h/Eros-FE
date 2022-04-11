@@ -1,17 +1,13 @@
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/network/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../component/setting_base.dart';
 import '../../fehviewer.dart';
-import 'const.dart';
 import 'controller/eh_mytags_controller.dart';
-import 'setting_items/selector_Item.dart';
 import 'webview/eh_tagset_edit_dialog.dart';
 import 'webview/mytags_in.dart';
 
@@ -35,8 +31,8 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
                   child: const Icon(
-                    LineIcons.globeWithAmericasShown,
-                    size: 24,
+                    FontAwesomeIcons.earthAmericas,
+                    size: 22,
                   ),
                   onPressed: () async {
                     Get.to(() => InWebMyTags());
@@ -46,8 +42,8 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
                   child: const Icon(
-                    LineIcons.plus,
-                    size: 24,
+                    FontAwesomeIcons.plus,
+                    size: 22,
                   ),
                   onPressed: () async {
                     final newName = await showCupertinoDialog<String>(
@@ -137,8 +133,8 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
                   child: const Icon(
-                    LineIcons.globeWithAmericasShown,
-                    size: 24,
+                    FontAwesomeIcons.earthAmericas,
+                    size: 22,
                   ),
                   onPressed: () async {
                     Get.to(() => InWebMyTags());
@@ -148,8 +144,8 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
                   child: const Icon(
-                    LineIcons.plus,
-                    size: 24,
+                    FontAwesomeIcons.plus,
+                    size: 22,
                   ),
                   onPressed: () async {
                     // Get.to(() => InWebMyTags());

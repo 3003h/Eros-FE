@@ -1,7 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/size_cache_widget.dart';
-import 'package:line_icons/line_icons.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
@@ -204,8 +202,8 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                         minSize: 40,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: const Icon(
-                          LineIcons.bars,
-                          size: 24,
+                          FontAwesomeIcons.bars,
+                          size: 20,
                         ),
                         onPressed: controller.pressedBar,
                       ),
@@ -259,8 +257,8 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.search,
-              size: 26,
+              FontAwesomeIcons.magnifyingGlass,
+              size: 22,
             ),
             onPressed: () {
               NavigatorUtil.goSearchPage();
@@ -268,20 +266,22 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           ),
           // 页码跳转按钮
           CupertinoButton(
-            minSize: 40,
+            minSize: 36,
             padding: const EdgeInsets.only(right: 6),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              constraints: const BoxConstraints(minWidth: 24),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: CupertinoDynamicColor.resolve(
                       CupertinoColors.activeBlue, context),
-                  width: 1.5,
+                  width: 2.0,
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Obx(() => Text(
                     '${controller.curPage + 1}',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: CupertinoDynamicColor.resolve(
                             CupertinoColors.activeBlue, context)),

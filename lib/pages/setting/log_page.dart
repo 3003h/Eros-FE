@@ -8,8 +8,8 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:path/path.dart' as path;
 
 import '../../fehviewer.dart';
@@ -33,8 +33,8 @@ class LogPage extends StatelessWidget {
           trailing: CupertinoButton(
             // 清除按钮
             child: const Icon(
-              LineIcons.alternateTrash,
-              size: 26,
+              FontAwesomeIcons.trashCan,
+              size: 22,
             ),
             onPressed: logService.removeAll,
           ),

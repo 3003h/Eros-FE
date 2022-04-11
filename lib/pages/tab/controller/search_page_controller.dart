@@ -4,7 +4,6 @@ import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -51,6 +50,7 @@ class SearchPageController extends DefaultTabViewController {
   // 搜索输入框的控制器
   late final TextEditingController searchTextController =
       TextEditingController();
+
   bool get textIsNotEmpty => searchTextController.text.isNotEmpty;
 
   String get placeholderText {
@@ -81,7 +81,9 @@ class SearchPageController extends DefaultTabViewController {
   late DateTime _lastInputCompleteAt; //上次输入完成时间
 
   final _lastSearchText = ''.obs;
+
   String get lastSearchText => _lastSearchText.value;
+
   set lastSearchText(String val) => _lastSearchText.value = val;
 
   /// 自动获取焦点
@@ -105,7 +107,7 @@ class SearchPageController extends DefaultTabViewController {
 
   /// 执行搜索
   Future<void> _startSearch({bool clear = true}) async {
-    curPage = 0;
+    curPage = -1;
     searchText = searchTextController.text.trim();
 
     if (searchText.isNotEmpty) {
@@ -125,7 +127,10 @@ class SearchPageController extends DefaultTabViewController {
           change(null, status: RxStatus.loading());
           return;
         }
+
         maxPage = rult.maxPage ?? 0;
+        curPage = maxPage >= 0 ? 0 : -1;
+
         nextPage = rult.nextPage ?? 1;
         change(rult.gallerys ?? [], status: RxStatus.success());
       } catch (err) {
@@ -391,7 +396,7 @@ class SearchPageController extends DefaultTabViewController {
   void clearText() {
     vibrateUtil.light();
     searchTextController.clear();
-    curPage = 0;
+    curPage = -1;
   }
 
   void jumpToGallery() {

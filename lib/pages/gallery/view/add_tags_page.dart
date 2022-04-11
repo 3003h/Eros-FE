@@ -7,9 +7,8 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 const CupertinoDynamicColor _kClearButtonColor =
     CupertinoDynamicColor.withBrightness(
@@ -81,8 +80,8 @@ class _AddTagPageState extends State<AddTagPage> {
                         ? GestureDetector(
                             onTap: controller.clear,
                             child: Icon(
-                              LineIcons.timesCircle,
-                              size: 18.0,
+                              FontAwesomeIcons.timesCircle,
+                              size: 16.0,
                               color: CupertinoDynamicColor.resolve(
                                   _kClearButtonColor, context),
                             ).paddingSymmetric(horizontal: 9),

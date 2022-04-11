@@ -5,8 +5,8 @@ import 'package:fehviewer/network/request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 import 'comp/user_tag_item.dart';
 import 'const.dart';
@@ -42,8 +42,8 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
             padding: const EdgeInsets.all(0),
             minSize: 40,
             child: const Icon(
-              LineIcons.trash,
-              size: 24,
+              FontAwesomeIcons.trash,
+              size: 22,
             ),
             onPressed: () async {
               showSimpleEhDiglog(
@@ -61,8 +61,8 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            LineIcons.search,
-            size: 24,
+            FontAwesomeIcons.search,
+            size: 22,
           ),
           onPressed: () => controller.isSearchUser = true,
         ),
@@ -70,8 +70,8 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            LineIcons.edit,
-            size: 24,
+            FontAwesomeIcons.edit,
+            size: 22,
           ),
           onPressed: () async {
             final currName = controller.curTagSet?.name ?? '';

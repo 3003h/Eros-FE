@@ -2,8 +2,8 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 class UserTagItem extends StatefulWidget {
   const UserTagItem({
@@ -76,8 +76,7 @@ class _UserTagItemState extends State<UserTagItem> {
                     child: Column(
                       children: [
                         Icon(
-                          // LineIcons.eye,
-                          LineIcons.checkCircle,
+                          FontAwesomeIcons.circleCheck,
                           size: 16,
                           color: widget.watch
                               ? CupertinoDynamicColor.resolve(
@@ -87,7 +86,7 @@ class _UserTagItemState extends State<UserTagItem> {
                         ),
                         Icon(
                           // LineIcons.eyeSlash,
-                          LineIcons.checkCircle,
+                          FontAwesomeIcons.circleCheck,
                           size: 16,
                           color: widget.hide
                               ? CupertinoDynamicColor.resolve(
@@ -125,7 +124,7 @@ class _UserTagItemState extends State<UserTagItem> {
                   ),
                 if (widget.addItem)
                   Container(
-                    child: Icon(LineIcons.tag).paddingOnly(right: 12),
+                    child: Icon(FontAwesomeIcons.tag).paddingOnly(right: 12),
                   ),
                 Expanded(
                   child: Column(

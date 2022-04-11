@@ -3,8 +3,8 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 const TextStyle kTextStyle = TextStyle(
   fontSize: 18,
@@ -40,7 +40,7 @@ class LoginWebDAV extends GetView<WebdavController> {
                   children: [
                     const SizedBox(height: 50),
                     const Icon(
-                      LineIcons.mixcloud,
+                      FontAwesomeIcons.mixcloud,
                       size: 120,
                       color: CupertinoColors.activeBlue,
                     ),
@@ -91,8 +91,8 @@ class LoginWebDAV extends GetView<WebdavController> {
                             const Spacer(),
                             GestureDetector(
                               child: Icon(controller.obscurePasswd
-                                      ? LineIcons.eyeSlash
-                                      : LineIcons.eye)
+                                      ? FontAwesomeIcons.eyeSlash
+                                      : FontAwesomeIcons.eye)
                                   .paddingOnly(bottom: 30, right: 28),
                               onTap: controller.switchObscure,
                             ),

@@ -12,8 +12,8 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 const double _kHeight = 260.0;
 const double _kAdvanceHeight = 480.0;
@@ -184,7 +184,7 @@ class GalleryFilterView extends StatelessWidget {
                       //   L10n.of(context).clear_filter,
                       //   style: const TextStyle(height: 1, fontSize: 14),
                       // ),
-                      child: Icon(LineIcons.alternateUndo),
+                      child: Icon(FontAwesomeIcons.undoAlt),
                       onPressed: () {
                         advanceSearchController.reset();
                       }),

@@ -9,9 +9,8 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/widget/cat_progress_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:line_icons/line_icons.dart';
 
 class WebDavSetting extends GetView<WebdavController> {
   const WebDavSetting({Key? key}) : super(key: key);
@@ -48,7 +47,7 @@ class WebDavSetting extends GetView<WebdavController> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              LineIcons.alternateSignIn,
+              FontAwesomeIcons.signInAlt,
               size: 28,
             ),
             onPressed: () async {
