@@ -46,6 +46,7 @@ class EHRoutes {
   static const String customProfileSetting = '/customProfiles/setting';
 
   static const String search = '/search';
+  static const String searchImage = '/searchImage';
 
   static const String galleryComment = '/galleryPage/comment';
   static const String galleryAllPreviews = '/galleryPage/allPreviews';

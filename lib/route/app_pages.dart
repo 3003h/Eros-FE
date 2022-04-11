@@ -30,13 +30,8 @@ import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
-import 'package:fehviewer/pages/tab/view/gallery_list_page.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_page.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/custom_profiles_page.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/empty.dart';
-import 'package:fehviewer/pages/tab/view/favorite_page.dart';
 import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/home_page.dart';
@@ -44,13 +39,16 @@ import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_profiles_page.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart' as modal;
 
+import '../pages/tab/view/search_image_page.dart';
 import 'routes.dart';
 
 const Duration kUnLockPageTransitionDuration = Duration(milliseconds: 200);
@@ -254,5 +252,9 @@ class AppPages {
       name: EHRoutes.customProfileSetting,
       page: () => const CustomProfileSettingPage(),
     ),
+    GetPage(
+      name: EHRoutes.searchImage,
+      page: () => SearchImagePage(),
+    )
   ];
 }
