@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:path/path.dart' as path;
 
+import '../../fehviewer.dart';
 import 'log_view_page.dart';
 
 class LogPage extends StatelessWidget {
@@ -20,9 +21,7 @@ class LogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logService.loadFiles();
-
-    final String _title = 'Log';
+    const String _title = 'Log';
     return Obx(() {
       return CupertinoPageScaffold(
         backgroundColor: !ehTheme.isDarkMode
@@ -59,37 +58,40 @@ class CustomHostsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logService.loadFiles();
-    return Obx(() => ListView.builder(
-          key: ValueKey(logService.logFiles),
-          controller: _controller,
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (_, int index) {
-            final File _file = logService.logFiles[index];
-            return Slidable(
-              endActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                extentRatio: 0.25,
-                children: [
-                  SlidableAction(
-                    onPressed: (_) => logService.removeLogAt(index),
-                    backgroundColor: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemRed, context),
-                    foregroundColor: Colors.white,
-                    icon: Icons.delete,
-                    label: L10n.of(context).delete,
-                  ),
-                ],
-              ),
-              child: LogFileItem(
-                index: index,
-                fileName: path.basename(_file.path),
-              ),
-            );
-          },
-          itemCount: logService.logFiles.length,
-        ));
+    return Obx(() {
+      final listKey = ValueKey(logService.logFiles.length);
+      // logger.d('logService.logFiles: ${logService.logFiles.length}');
+      return ListView.builder(
+        key: listKey,
+        controller: _controller,
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (_, int index) {
+          final File _file = logService.logFiles[index];
+          return Slidable(
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              extentRatio: 0.25,
+              children: [
+                SlidableAction(
+                  onPressed: (_) => logService.removeLogAt(index),
+                  backgroundColor: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemRed, context),
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: L10n.of(context).delete,
+                ),
+              ],
+            ),
+            child: LogFileItem(
+              index: index,
+              fileName: path.basename(_file.path),
+            ),
+          );
+        },
+        itemCount: logService.logFiles.length,
+      );
+    });
   }
 }
 
