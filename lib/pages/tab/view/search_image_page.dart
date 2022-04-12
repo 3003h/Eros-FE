@@ -1,5 +1,7 @@
+import 'package:blur/blur.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../../fehviewer.dart';
@@ -19,13 +21,10 @@ class SearchImagePage extends StatelessWidget {
       child: Container(
         child: CustomScrollView(
           slivers: [
-            SliverPadding(
-              padding: EdgeInsets.only(top: 0),
-              sliver: SliverPersistentHeader(
-                delegate: UnitPersistentHeaderDelegate(),
-                // pinned: true,
-                floating: true,
-              ),
+            SliverPersistentHeader(
+              delegate: ImagePersistentHeaderDelegate(),
+              // pinned: true,
+              floating: true,
             ),
             EhCupertinoSliverRefreshControl(
               onRefresh: () async {
@@ -67,37 +66,96 @@ class SearchImagePage extends StatelessWidget {
       "#${color.value.toRadixString(16).padLeft(8, '0').toUpperCase()}";
 }
 
-class UnitPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+class ImagePersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print(
-        '=====shrinkOffset:$shrinkOffset======overlapsContent:$overlapsContent====');
+    // print(
+    //     '=====shrinkOffset:$shrinkOffset======overlapsContent:$overlapsContent====');
     final String info = 'shrinkOffset:${shrinkOffset.toStringAsFixed(1)}'
         '\noverlapsContent:$overlapsContent';
 
     final paddingTop = context.mediaQueryPadding.top;
 
     return Container(
-      alignment: Alignment.center,
-      color: Colors.orangeAccent,
-      margin: EdgeInsets.only(top: paddingTop),
+      // alignment: Alignment.center,
+      // color: Colors.transparent,
+      padding: EdgeInsets.only(top: paddingTop),
       child: Row(
         children: [
           // CupertinoNavigationBar(
           //   middle: Text('Search image'),
           // ),
-          Text(
-            info,
-            style: TextStyle(fontSize: 20, color: Colors.white),
+          Expanded(
+            child: CupertinoButton(
+              padding: const EdgeInsets.all(0.0),
+              onPressed: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  color: CupertinoColors.systemGrey3,
+                ),
+                margin: const EdgeInsets.all(8.0),
+                // color: CupertinoColors.systemGrey3,
+                child: Center(
+                  child: Icon(
+                    FontAwesomeIcons.circlePlus,
+                    // color: CupertinoColors.systemGrey2,
+                    color: CupertinoTheme.of(context).barBackgroundColor,
+                    size: 40,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Container(
+          //   width: 80,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(8.0),
+          //     color: CupertinoColors.activeBlue,
+          //   ),
+          //   margin: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+          //   // color: CupertinoColors.systemGrey3,
+          //   child: Center(
+          //     child: Icon(
+          //       FontAwesomeIcons.magnifyingGlass,
+          //       color: CupertinoTheme.of(context).barBackgroundColor,
+          //       size: 40,
+          //     ),
+          //   ),
+          // ),
+          CupertinoButton(
+            padding: const EdgeInsets.all(0.0),
+            child: Container(
+              width: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.0),
+                color: CupertinoColors.activeBlue,
+              ),
+              margin: const EdgeInsets.fromLTRB(0, 8, 8, 8),
+              // color: CupertinoColors.systemGrey3,
+              child: Center(
+                child: Icon(
+                  FontAwesomeIcons.magnifyingGlass,
+                  color: CupertinoTheme.of(context).barBackgroundColor,
+                  size: 40,
+                ),
+              ),
+            ),
+            onPressed: () {},
           ),
         ],
+      ).frosted(
+        blur: 8,
+        frostColor:
+            CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
+        frostOpacity: 0.55,
       ),
     );
   }
 
   @override
-  double get maxExtent => 200;
+  double get maxExtent => 300;
 
   @override
   double get minExtent => 200;

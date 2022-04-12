@@ -101,7 +101,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: const Icon(
                               FontAwesomeIcons.bars,
-                              size: 22,
+                              size: 20,
                             ),
                             onPressed: () async {
                               // 跳转收藏夹选择页
@@ -214,13 +214,15 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                     border: Border.all(
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.activeBlue, context),
-                      width: 2.0,
+                      width: 2.3,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(8))),
                 child: Obx(() => Text(
                       '${controller.curPage + 1}',
                       textAlign: TextAlign.center,
+                      textScaleFactor: 0.9,
                       style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.activeBlue, context)),
                     )),

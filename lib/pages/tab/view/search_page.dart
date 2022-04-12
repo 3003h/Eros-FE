@@ -728,11 +728,19 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                       child: Obx(() => Text(
                             '${controller.curPage + 1}',
                             textAlign: TextAlign.center,
+                            textScaleFactor: 0.85,
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               color: CupertinoDynamicColor.resolve(
                                   CupertinoColors.activeBlue, context),
-                              height: 1.25,
+                              // height: 1.2,
+                              // textBaseline: TextBaseline.ideographic,
                             ),
+                            // strutStyle: const StrutStyle(
+                            //   leading: 0.2,
+                            //   height: 1.2,
+                            //   forceStrutHeight: true,
+                            // ),
                           )),
                     ),
                     onPressed: () {
