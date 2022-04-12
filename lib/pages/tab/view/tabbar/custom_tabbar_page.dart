@@ -275,14 +275,16 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                 border: Border.all(
                   color: CupertinoDynamicColor.resolve(
                       CupertinoColors.activeBlue, context),
-                  width: 2.0,
+                  width: 2.3,
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Obx(() => Text(
                     '${controller.curPage + 1}',
                     textAlign: TextAlign.center,
+                    textScaleFactor: 0.9,
                     style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         color: CupertinoDynamicColor.resolve(
                             CupertinoColors.activeBlue, context)),
                   )),

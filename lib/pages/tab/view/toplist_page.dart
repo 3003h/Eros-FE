@@ -96,17 +96,21 @@ class _ToplistTabState extends State<ToplistTab> {
               padding: const EdgeInsets.only(right: 6),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                constraints: const BoxConstraints(minWidth: 24),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.activeBlue, context),
-                    width: 2.5,
+                    width: 2.2,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Obx(() => Text(
                       '${controller.curPage + 1}',
+                      textScaleFactor: 0.9,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
+                          fontWeight: FontWeight.bold,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.activeBlue, context)),
                     )),
