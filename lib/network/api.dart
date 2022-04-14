@@ -433,33 +433,10 @@ class Api {
   }) async {
     /// 跳转权限设置
     Future<bool?> _jumpToAppSettings(BuildContext context) async {
-      return showCupertinoDialog<bool>(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            content: Container(
-              child: const Text(
-                  'You have disabled the necessary permissions for the application:'
-                  '\nRead and write phone storage, is it allowed in the settings?'),
-            ),
-            actions: <Widget>[
-              CupertinoDialogAction(
-                child: Text(L10n.of(context).cancel),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
-              CupertinoDialogAction(
-                child: Text(L10n.of(context).ok),
-                onPressed: () {
-                  // 跳转
-                  openAppSettings();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      return await jumpToAppSettings(
+          context,
+          'You have disabled the necessary permissions for the application:'
+          '\nRead and write phone storage, is it allowed in the settings?');
     }
 
     if (io.Platform.isIOS) {
@@ -476,13 +453,14 @@ class Api {
         _jumpToAppSettings(context);
         return false;
       } else {
-        final requestAddOnly = await Permission.photosAddOnly.request();
-        final requestAll = await Permission.photos.request();
+        final requestAddOnly =
+            () async => await Permission.photosAddOnly.request();
+        final requestAll = () async => await Permission.photos.request();
 
-        if (requestAddOnly.isGranted ||
-            requestAddOnly.isLimited ||
-            requestAll.isGranted ||
-            requestAll.isLimited) {
+        if (await requestAddOnly().isGranted ||
+            await requestAddOnly().isLimited ||
+            await requestAll().isGranted ||
+            await requestAll().isLimited) {
           // return _saveImage(imageUrl);
           return _saveImageExtended(imageUrl: imageUrl, filePath: filePath);
           // Either the permission was already granted before or the user just granted it.
@@ -493,7 +471,7 @@ class Api {
     } else {
       final PermissionStatus status = await Permission.storage.status;
       logger.v(status);
-      if (await Permission.storage.status.isPermanentlyDenied) {
+      if (status.isPermanentlyDenied) {
         if (await Permission.storage.request().isGranted) {
           // _saveImage(imageUrl);
           return _saveImageExtended(imageUrl: imageUrl, filePath: filePath);

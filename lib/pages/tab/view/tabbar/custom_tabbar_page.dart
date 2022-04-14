@@ -258,7 +258,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             padding: const EdgeInsets.all(0),
             child: const Icon(
               FontAwesomeIcons.magnifyingGlass,
-              size: 22,
+              size: 20,
             ),
             onPressed: () {
               NavigatorUtil.goSearchPage();

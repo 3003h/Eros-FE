@@ -179,12 +179,15 @@ class GalleryFilterView extends StatelessWidget {
                   offstage: !advanceSearchController.enableAdvance,
                   child: CupertinoButton(
                       padding: const EdgeInsets.only(right: 4),
-                      minSize: 20,
+                      minSize: 40,
                       // child: Text(
                       //   L10n.of(context).clear_filter,
                       //   style: const TextStyle(height: 1, fontSize: 14),
                       // ),
-                      child: Icon(FontAwesomeIcons.undoAlt),
+                      child: const Icon(
+                        FontAwesomeIcons.rotateLeft,
+                        size: 20,
+                      ),
                       onPressed: () {
                         advanceSearchController.reset();
                       }),

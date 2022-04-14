@@ -1,12 +1,28 @@
+import 'dart:io';
+
 import 'package:blur/blur.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../../fehviewer.dart';
+import '../controller/search_image_controller.dart';
+import '../controller/search_page_controller.dart';
+import 'gallery_base.dart';
 
-class SearchImagePage extends StatelessWidget {
+const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
+const Border _kDefaultNavBarBorder = Border(
+  bottom: BorderSide(
+    color: _kDefaultNavBarBorderColor,
+    width: 0.0, // One physical pixel.
+    style: BorderStyle.solid,
+  ),
+);
+
+class SearchImagePage extends GetView<SearchImageController> {
   SearchImagePage({Key? key}) : super(key: key);
 
   // 色彩数据
@@ -28,14 +44,86 @@ class SearchImagePage extends StatelessWidget {
             ),
             EhCupertinoSliverRefreshControl(
               onRefresh: () async {
-                await 1.seconds.delay();
+                await controller.reloadData();
               },
             ),
-            _buildSliverList(),
+            // _buildSliverList(),
+            Obx(() {
+              // logger.d('listType ${controller.listType}');
+              if (controller.listType == ListType.gallery) {
+                return _getGallerySliverList(context);
+              }
+
+              return _getInitView();
+            }),
+            // _getGallerySliverList(context),
           ],
         ),
       ),
     );
+  }
+
+  Widget _getGallerySliverList(BuildContext context) {
+    return controller.obx(
+      (List<GalleryProvider>? state) {
+        if (state == null || state.isEmpty) {
+          return SliverFillRemaining(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.hippo,
+                    size: 100,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey, context),
+                  ),
+                  Text(''),
+                ],
+              ),
+            ).autoCompressKeyboard(Get.context!),
+          );
+        }
+        return getGallerySliverList(
+          state,
+          controller.tabIndex,
+          maxPage: controller.maxPage,
+          curPage: controller.curPage,
+          lastComplete: controller.lastComplete,
+          // centerKey: centerKey,
+          key: controller.sliverAnimatedListKey,
+          lastTopitemIndex: controller.lastTopitemIndex,
+        );
+      },
+      onLoading: SliverFillRemaining(
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(bottom: 50),
+          child: const CupertinoActivityIndicator(
+            radius: 14.0,
+          ),
+        ).autoCompressKeyboard(Get.context!),
+      ),
+      onError: (err) {
+        logger.e(' $err');
+        return SliverFillRemaining(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 50),
+            child: GalleryErrorPage(
+              onTap: () => controller.startSearch(),
+            ),
+          ).autoCompressKeyboard(Get.context!),
+        );
+      },
+      onEmpty: SliverFillRemaining(
+        child: Container().autoCompressKeyboard(Get.context!),
+      ),
+    );
+  }
+
+  Widget _getInitView() {
+    return SliverToBoxAdapter(child: Container());
   }
 
   // 构建颜色列表
@@ -67,6 +155,8 @@ class SearchImagePage extends StatelessWidget {
 }
 
 class ImagePersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final SearchImageController searchImageController = Get.find();
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -78,71 +168,73 @@ class ImagePersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     final paddingTop = context.mediaQueryPadding.top;
 
     return Container(
-      // alignment: Alignment.center,
-      // color: Colors.transparent,
+      decoration: BoxDecoration(
+        border: _kDefaultNavBarBorder,
+      ),
       padding: EdgeInsets.only(top: paddingTop),
       child: Row(
         children: [
-          // CupertinoNavigationBar(
-          //   middle: Text('Search image'),
-          // ),
           Expanded(
             child: CupertinoButton(
               padding: const EdgeInsets.all(0.0),
-              onPressed: () {},
+              onPressed: () {
+                logger.d('onPressed selImage');
+                searchImageController.selectSearchImage(context);
+              },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   color: CupertinoColors.systemGrey3,
                 ),
-                margin: const EdgeInsets.all(8.0),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                // color: CupertinoColors.systemGrey3,
+                child: Obx(() {
+                  return searchImageController.imagePath.isEmpty
+                      ? Center(
+                          child: Icon(
+                            FontAwesomeIcons.circlePlus,
+                            // color: CupertinoColors.systemGrey2,
+                            color:
+                                CupertinoTheme.of(context).barBackgroundColor,
+                            size: 40,
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: ExtendedImage.file(
+                            File(searchImageController.imagePath),
+                          ),
+                        );
+                }),
+              ),
+            ),
+          ),
+          Container(
+            constraints: BoxConstraints(maxHeight: 80),
+            child: CupertinoButton(
+              padding: const EdgeInsets.all(0.0),
+              child: Container(
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24.0),
+                  color: CupertinoColors.activeBlue,
+                ),
+                margin: const EdgeInsets.only(right: 12),
                 // color: CupertinoColors.systemGrey3,
                 child: Center(
                   child: Icon(
-                    FontAwesomeIcons.circlePlus,
-                    // color: CupertinoColors.systemGrey2,
+                    FontAwesomeIcons.magnifyingGlass,
                     color: CupertinoTheme.of(context).barBackgroundColor,
                     size: 40,
                   ),
                 ),
               ),
+              onPressed: () {
+                logger.d('onPressSearch');
+                searchImageController.startSearch();
+              },
             ),
-          ),
-          // Container(
-          //   width: 80,
-          //   decoration: BoxDecoration(
-          //     borderRadius: BorderRadius.circular(8.0),
-          //     color: CupertinoColors.activeBlue,
-          //   ),
-          //   margin: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-          //   // color: CupertinoColors.systemGrey3,
-          //   child: Center(
-          //     child: Icon(
-          //       FontAwesomeIcons.magnifyingGlass,
-          //       color: CupertinoTheme.of(context).barBackgroundColor,
-          //       size: 40,
-          //     ),
-          //   ),
-          // ),
-          CupertinoButton(
-            padding: const EdgeInsets.all(0.0),
-            child: Container(
-              width: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: CupertinoColors.activeBlue,
-              ),
-              margin: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-              // color: CupertinoColors.systemGrey3,
-              child: Center(
-                child: Icon(
-                  FontAwesomeIcons.magnifyingGlass,
-                  color: CupertinoTheme.of(context).barBackgroundColor,
-                  size: 40,
-                ),
-              ),
-            ),
-            onPressed: () {},
           ),
         ],
       ).frosted(

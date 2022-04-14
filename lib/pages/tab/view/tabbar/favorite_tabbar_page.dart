@@ -170,7 +170,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               padding: const EdgeInsets.all(0),
               child: const Icon(
                 FontAwesomeIcons.magnifyingGlass,
-                size: 22,
+                size: 20,
               ),
               onPressed: () {
                 final bool fromTabItem = Get.find<TabHomeController>()
@@ -188,7 +188,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                 children: <Widget>[
                   const Icon(
                     FontAwesomeIcons.arrowDownWideShort,
-                    size: 22,
+                    size: 20,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,

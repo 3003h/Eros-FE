@@ -757,7 +757,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
               padding: const EdgeInsets.all(0),
               child: const Icon(
                 FontAwesomeIcons.image,
-                size: 22,
+                size: 20,
               ),
               onPressed: () async {
                 await Get.toNamed(
@@ -771,7 +771,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
               padding: const EdgeInsets.all(0),
               child: const Icon(
                 FontAwesomeIcons.filter,
-                size: 22,
+                size: 20,
               ),
               onPressed: () {
                 showFilterSetting();
@@ -796,7 +796,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
               padding: const EdgeInsets.all(0),
               child: const Icon(
                 FontAwesomeIcons.listUl,
-                size: 22,
+                size: 20,
               ),
               onPressed: () {
                 controller.quickSearchList();

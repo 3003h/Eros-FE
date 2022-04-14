@@ -25,7 +25,7 @@ class AppDio with DioMixin implements Dio {
   AppDio({BaseOptions? options, DioHttpConfig? dioConfig}) {
     options ??= BaseOptions(
       baseUrl: dioConfig?.baseUrl ?? '',
-      contentType: Headers.formUrlEncodedContentType,
+      contentType: dioConfig?.contentType ?? Headers.formUrlEncodedContentType,
       connectTimeout: dioConfig?.connectTimeout,
       sendTimeout: dioConfig?.sendTimeout,
       receiveTimeout: dioConfig?.receiveTimeout,
