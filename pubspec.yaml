@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.28+388
+version: 1.2.29+389
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -162,6 +162,7 @@ dependencies:
       url: https://github.com/honjow/open_by_default.git
   flex_color_picker: ^2.3.0
   bitsdojo_window: ^0.1.1+1
+  image_picker: ^0.8.5
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

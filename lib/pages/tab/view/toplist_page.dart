@@ -73,8 +73,8 @@ class _ToplistTabState extends State<ToplistTab> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const Icon(
-                    FontAwesomeIcons.sortAmountDown,
-                    size: 22,
+                    FontAwesomeIcons.arrowDownWideShort,
+                    size: 20,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,

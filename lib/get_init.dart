@@ -1,4 +1,5 @@
 import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/search_image_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -86,4 +87,5 @@ void getinit() {
   Get.lazyPut(() => EhMySettingsController(), fenix: true);
   Get.lazyPut(() => EhMyTagsController(), fenix: true);
   Get.lazyPut(() => TagController(), fenix: true);
+  Get.lazyPut(() => SearchImageController(), fenix: true);
 }

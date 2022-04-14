@@ -85,7 +85,7 @@ class _HistoryTabState extends State<HistoryTab> {
               padding: const EdgeInsets.all(0),
               child: const Icon(
                 FontAwesomeIcons.solidTrashCan,
-                size: 22,
+                size: 20,
               ),
               onPressed: () {
                 controller.clearHistory();

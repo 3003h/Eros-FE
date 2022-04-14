@@ -249,7 +249,7 @@ class QuickSearchListPage extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             child: const Icon(
               FontAwesomeIcons.solidTrashCan,
-              size: 22,
+              size: 20,
             ),
             onPressed: () {
               _removeAll();
@@ -260,7 +260,7 @@ class QuickSearchListPage extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             child: const Icon(
               FontAwesomeIcons.solidFileLines,
-              size: 22,
+              size: 20,
             ),
             onPressed: _showFile,
           ),

@@ -14,15 +14,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
+
+import '../fehviewer.dart';
 
 const _uuid = Uuid();
 String generateUuidv4() {
   return _uuid.v4();
 }
 
+// 请求完全读写权限
 Future<void> requestManageExternalStoragePermission() async {
   if (!GetPlatform.isAndroid) {
     return;
@@ -45,6 +49,35 @@ Future<void> requestManageExternalStoragePermission() async {
       throw 'Unable to download, please authorize first~';
     }
   }
+}
+
+/// 跳转权限设置
+Future<bool?> jumpToAppSettings(BuildContext context, String content) async {
+  return showCupertinoDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        content: Container(
+          child: Text(content),
+        ),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: Text(L10n.of(context).cancel),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text(L10n.of(context).ok),
+            onPressed: () {
+              // 跳转
+              openAppSettings();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 /// 计算文本 Size
@@ -338,7 +371,7 @@ class EHUtils {
 
   static int convCatMapToNum(Map<String, bool> catMap) {
     int totCatNum = 0;
-    final Map<String, int> catsNumMaps = EHConst.cats;
+    const Map<String, int> catsNumMaps = EHConst.cats;
     catMap.forEach((String key, bool value) {
       if (!value) {
         totCatNum += catsNumMaps[key] ?? 0;

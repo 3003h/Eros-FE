@@ -14,7 +14,8 @@ import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get.dart' hide FormData, Response;
+import 'package:get/get.dart' hide FormData, Response, MultipartFile;
+import 'package:http_parser/http_parser.dart' as http_parser;
 
 import 'api.dart';
 import 'app_dio/pdio.dart';
@@ -958,5 +959,67 @@ Future<String> postEhApi(
     return httpResponse.data as String;
   } else {
     throw httpResponse.error ?? HttpException('postEhApi error');
+  }
+}
+
+Future<GalleryList?> searchImage(
+  String imageFilepath, {
+  bool? similar,
+  bool? covers,
+  bool? exp,
+  CancelToken? cancelToken,
+}) async {
+  final String url = 'https://upld.${Api.getBaseHost()}/image_lookup.php';
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  final FormData formData = FormData.fromMap({
+    'sfile': await MultipartFile.fromFile(imageFilepath,
+        contentType: http_parser.MediaType('image', 'jpeg'), filename: 'a.jpg'),
+    if (similar ?? true) 'fs_similar': MultipartFile.fromString('on'), // 相似搜索
+    if (covers ?? false) 'fs_covers': MultipartFile.fromString('on'), // 仅封面
+    if (exp ?? false) 'fs_exp': MultipartFile.fromString('on'), // 搜索被删除
+    'f_sfile': MultipartFile.fromString('File Search'),
+  });
+
+  DioHttpResponse httpResponse = await dioHttpClient.post(
+    url,
+    data: formData,
+    cancelToken: cancelToken,
+    httpTransformer: HttpTransformerBuilder(
+      (response) {
+        logger.d('statusCode ${response.statusCode}');
+        logger.d('location ${response.headers['location']}');
+        return DioHttpResponse<String>.success(
+            response.headers['location']?.first ?? '');
+      },
+    ),
+    options: getCacheOptions(
+      forceRefresh: true,
+      options: Options(
+        followRedirects: false,
+        validateStatus: (status) => (status ?? 0) < 500,
+      ),
+    ),
+  );
+
+  late String location;
+  if (httpResponse.ok && httpResponse.data is String) {
+    location = httpResponse.data as String;
+  } else {
+    throw httpResponse.error ?? HttpException('searchImage error');
+  }
+
+  httpResponse = await dioHttpClient.get(
+    location,
+    httpTransformer: GalleryListHttpTransformer(),
+    options: getCacheOptions(forceRefresh: true),
+    cancelToken: cancelToken,
+  );
+
+  if (httpResponse.ok && httpResponse.data is GalleryList) {
+    return httpResponse.data as GalleryList;
+  } else {
+    logger.e('${httpResponse.error.runtimeType}');
+    throw httpResponse.error ?? EhError(error: 'searchImage error');
   }
 }

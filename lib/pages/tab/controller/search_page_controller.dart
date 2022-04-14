@@ -68,9 +68,7 @@ class SearchPageController extends DefaultTabViewController {
   }
 
   final Rx<ListType> _listType = ListType.init.obs;
-
   ListType get listType => _listType.value;
-
   set listType(ListType val) => _listType.value = val;
 
   final RxList<TagTranslat> qryTags = <TagTranslat>[].obs;
