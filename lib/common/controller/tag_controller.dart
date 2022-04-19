@@ -1,8 +1,29 @@
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
 import 'package:get/get.dart';
 
 class TagController extends GetxController {
   List<GalleryTag> galleryTags = [];
+
+  EhMyTagsController get ehMyTagsController => Get.find();
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    initTags();
+  }
+
+  Future<void> initTags() async {
+    logger.d('initTags 初始化 请求mytag页面 全量更新tag');
+
+    await 5.seconds.delay();
+    // 初始化 请求mytag页面 全量更新tag一次
+    ehMyTagsController.loadData();
+  }
 
   GalleryTag getColorCode(GalleryTag tag) {
     GalleryTag? _tag;
