@@ -80,7 +80,7 @@ class _AddTagPageState extends State<AddTagPage> {
                         ? GestureDetector(
                             onTap: controller.clear,
                             child: Icon(
-                              FontAwesomeIcons.timesCircle,
+                              FontAwesomeIcons.circleXmark,
                               size: 16.0,
                               color: CupertinoDynamicColor.resolve(
                                   _kClearButtonColor, context),
@@ -129,9 +129,9 @@ class QryTagSliverList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(
+    final textStyle = TextStyle(
       fontSize: 16,
-      color: CupertinoColors.label,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
 
     final translateStyle = TextStyle(
