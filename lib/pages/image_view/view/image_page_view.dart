@@ -49,8 +49,7 @@ class ImagePageView extends GetView<ViewExtController> {
                   );
                 });
           } else {
-            const isPhotoView = true;
-            if (isPhotoView) {
+            if (controller.isPhotoView) {
               return PhotoViewGallery.builder(
                   backgroundDecoration:
                       const BoxDecoration(color: Colors.transparent),

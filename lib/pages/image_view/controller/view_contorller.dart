@@ -47,6 +47,9 @@ class ViewExtController extends GetxController {
   /// 状态
   final ViewExtState vState = ViewExtState();
 
+  // 使用 PhotoView
+  final isPhotoView = false;
+
   late PageController pageController;
   late ExtendedPageController extendedPageController;
 
@@ -1029,7 +1032,7 @@ class ViewExtController extends GetxController {
   void pageControllerCallBack(
       Function onPageController, Function onExtendedPageController) {
     // 暂时停用ExtendedPageController
-    if (vState.columnMode != ViewColumnMode.single || true) {
+    if (vState.columnMode != ViewColumnMode.single || isPhotoView) {
       onPageController.call();
     } else {
       onExtendedPageController.call();
