@@ -3,7 +3,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:keframe/frame_separate_widget.dart';
+import 'package:keframe/keframe.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 import 'gallery_item.dart';

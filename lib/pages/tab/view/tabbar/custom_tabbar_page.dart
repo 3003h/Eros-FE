@@ -8,7 +8,7 @@ import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.d
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:keframe/size_cache_widget.dart';
+import 'package:keframe/keframe.dart';
 
 import '../../comm.dart';
 import '../constants.dart';
