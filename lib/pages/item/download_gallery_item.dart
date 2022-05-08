@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
-import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
