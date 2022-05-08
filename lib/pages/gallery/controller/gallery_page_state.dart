@@ -1,5 +1,4 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
-import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:get/get.dart';
 

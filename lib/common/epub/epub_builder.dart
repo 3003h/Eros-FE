@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:image/image.dart' as pImage;
+import 'package:image/image.dart' as pimage;
 import 'package:jinja/jinja.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart' as path;
@@ -71,12 +71,20 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
 
   // 画廊图片
   final _galleryDir = Directory(task.realDirPath!);
-  final _fileList = _galleryDir.listSync().whereType<File>().toList()
+  final _fileList = _galleryDir
+      .listSync()
+      .whereType<File>()
+      .where((element) => !path.basename(element.path).startsWith('.'))
+      .toList()
     ..sort((a, b) => a.path.compareTo(b.path));
 
   // 封面处理
   final imageData = _fileList.first.readAsBytesSync();
-  final image = pImage.decodeImage(imageData)!;
+
+  final image = pimage.decodeImage(imageData);
+  if (image == null) {
+    throw EhError(error: 'read image error');
+  }
   // final trimRect = findTrim(image, mode: TrimMode.transparent);
   // logger.d('trimRect $trimRect');
 
@@ -89,12 +97,12 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   final dColor = paletteGenerator.darkMutedColor?.color ?? Colors.black;
 
   final backgroundImage =
-      pImage.Image(image.width, (image.width * 4 / 3).round()).fill(
-    pImage.Color.fromRgba(dColor.red, dColor.green, dColor.blue, dColor.alpha),
+      pimage.Image(image.width, (image.width * 4 / 3).round()).fill(
+    pimage.Color.fromRgba(dColor.red, dColor.green, dColor.blue, dColor.alpha),
   );
 
-  final cover = pImage.copyResize(
-      pImage.copyInto(backgroundImage, image, center: true),
+  final cover = pimage.copyResize(
+      pimage.copyInto(backgroundImage, image, center: true),
       width: 1200);
 
   logger.d('${cover.width} ${cover.height}');
@@ -102,8 +110,8 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   final coverName = '#cover${path.extension(_fileList.first.path)}';
   final name = _fileList.first.path.toLowerCase();
   final coverImage = name.endsWith('.jpg') || name.endsWith('.jpeg')
-      ? pImage.encodeJpg(cover, quality: 80)
-      : pImage.encodeNamedImage(cover, name)!;
+      ? pimage.encodeJpg(cover, quality: 80)
+      : pimage.encodeNamedImage(cover, name)!;
   File(path.join(resourcesPath, coverName)).writeAsBytesSync(coverImage);
 
   // 图片复制到 resourcesPath

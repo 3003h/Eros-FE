@@ -7,7 +7,6 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:executor/executor.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -39,6 +38,38 @@ Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
     : path.join(Global.appDocPath, 'Download');
 
+class TaskStatus {
+  const TaskStatus(this.value);
+  final int value;
+
+  static TaskStatus from(int value) => TaskStatus(value);
+
+  static const undefined = TaskStatus(0);
+  static const enqueued = TaskStatus(1);
+  static const running = TaskStatus(2);
+  static const complete = TaskStatus(3);
+  static const failed = TaskStatus(4);
+  static const canceled = TaskStatus(5);
+  static const paused = TaskStatus(6);
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) {
+      return true;
+    }
+
+    return o is TaskStatus && o.value == value;
+  }
+
+  @override
+  int get hashCode => value.hashCode;
+
+  @override
+  String toString() {
+    return 'TaskStatus{value: $value}';
+  }
+}
+
 class DownloadController extends GetxController {
   final DownloadState dState = DownloadState();
 
@@ -60,7 +91,6 @@ class DownloadController extends GetxController {
 
   @override
   void onClose() {
-    downloadManagerIsolate.close();
     _cancelDownloadStateChkTimer();
     super.onClose();
   }

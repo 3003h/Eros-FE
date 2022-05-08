@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/isolate_download/download_manager.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -18,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../../common/controller/download_controller.dart';
 import '../controller/gallery_page_state.dart';
 import 'const.dart';
 import 'header.dart';
