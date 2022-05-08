@@ -37,7 +37,7 @@ class EhMyTagsController extends GetxController
   RxList<EhUsertag> searchTags = <EhUsertag>[].obs;
 
   List<EhUsertag> get usertags {
-    if (!isSearchUser) {
+    if (!isSearchUserTags) {
       return ehMyTags.usertags ?? <EhUsertag>[];
     } else {
       // 搜索状态
@@ -58,8 +58,8 @@ class EhMyTagsController extends GetxController
   String currSelected = '';
 
   final _isSearchUser = false.obs;
-  bool get isSearchUser => _isSearchUser.value;
-  set isSearchUser(bool val) => _isSearchUser.value = val;
+  bool get isSearchUserTags => _isSearchUser.value;
+  set isSearchUserTags(bool val) => _isSearchUser.value = val;
 
   bool get isTagTranslat =>
       ehConfigService.isTagTranslat && localeService.isLanguageCodeZh;

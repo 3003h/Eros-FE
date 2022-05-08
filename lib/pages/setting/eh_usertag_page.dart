@@ -28,7 +28,7 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
   @override
   void initState() {
     super.initState();
-    controller.isSearchUser = false;
+    controller.isSearchUserTags = false;
     controller.searchTags.clear();
     controller.searchNewTags.clear();
   }
@@ -61,10 +61,10 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            FontAwesomeIcons.search,
+            FontAwesomeIcons.magnifyingGlass,
             size: 22,
           ),
-          onPressed: () => controller.isSearchUser = true,
+          onPressed: () => controller.isSearchUserTags = true,
         ),
         CupertinoButton(
           padding: const EdgeInsets.all(0),
@@ -112,7 +112,7 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
       children: [
         GestureDetector(
           onTap: () {
-            controller.isSearchUser = false;
+            controller.isSearchUserTags = false;
             controller.searchTags.clear();
             controller.searchNewTags.clear();
           },
@@ -127,14 +127,14 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
 
   Widget _trailing(BuildContext context) {
     return Obx(() {
-      return controller.isSearchUser
+      return controller.isSearchUserTags
           ? _searchTrailing(context)
           : _normalTrailing(context);
 
       return AnimatedCrossFade(
         firstChild: _normalTrailing(context),
         secondChild: _searchTrailing(context),
-        crossFadeState: controller.isSearchUser
+        crossFadeState: controller.isSearchUserTags
             ? CrossFadeState.showSecond
             : CrossFadeState.showFirst,
         duration: 300.milliseconds,
@@ -158,14 +158,14 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
 
   Widget _middle(BuildContext context) {
     return Obx(() {
-      return controller.isSearchUser
+      return controller.isSearchUserTags
           ? _searchMiddle(context)
           : _normalMiddle(context);
 
       return AnimatedCrossFade(
         firstChild: _normalMiddle(context),
         secondChild: _searchMiddle(context),
-        crossFadeState: controller.isSearchUser
+        crossFadeState: controller.isSearchUserTags
             ? CrossFadeState.showSecond
             : CrossFadeState.showFirst,
         duration: 200.milliseconds,
@@ -393,7 +393,7 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
         ),
         SliverSafeArea(
           top: false,
-          bottom: !controller.isSearchUser,
+          bottom: !controller.isSearchUserTags,
           sliver: FutureBuilder<EhMytags?>(
               future: future,
               initialData: controller.ehMyTags,
@@ -426,39 +426,50 @@ class _ListViewEhMytagsState extends State<ListViewEhMytags> {
                 }
               }),
         ),
-        if (controller.isSearchUser)
-          SliverToBoxAdapter(
-            child: Obx(() {
-              return Container(
-                height: 20,
-                color: !ehTheme.isDarkMode
-                    ? CupertinoColors.secondarySystemBackground
-                    : null,
-              );
-            }),
-          ),
-        if (controller.isSearchUser)
-          SliverSafeArea(
-            top: false,
-            sliver: Obx(() {
-              final usertags = controller.searchNewTags;
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final usertag = usertags[index];
-                    return _buildNewAddUserTagItem(
-                      usertag,
-                      index,
-                      isTagTranslat: controller.isTagTranslat,
-                      deleteUserTag: (i) => controller.deleteUsertag(i),
-                      showLine: index < usertags.length - 1,
-                    );
-                  },
-                  childCount: usertags.length,
-                ),
-              );
-            }),
-          ),
+        Obx(() {
+          if (controller.isSearchUserTags) {
+            return SliverToBoxAdapter(
+              child: Obx(() {
+                return Container(
+                  height: 20,
+                  color: !ehTheme.isDarkMode
+                      ? CupertinoColors.secondarySystemBackground
+                      : null,
+                );
+              }),
+            );
+          } else {
+            return const SliverToBoxAdapter();
+          }
+        }),
+        Obx(() {
+          if (controller.isSearchUserTags) {
+            return SliverSafeArea(
+              top: false,
+              sliver: Obx(() {
+                final usertags = controller.searchNewTags;
+                return SliverList(
+                  key: ValueKey(usertags),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final usertag = usertags[index];
+                      return _buildNewAddUserTagItem(
+                        usertag,
+                        index,
+                        isTagTranslat: controller.isTagTranslat,
+                        deleteUserTag: (i) => controller.deleteUsertag(i),
+                        showLine: index < usertags.length - 1,
+                      );
+                    },
+                    childCount: usertags.length,
+                  ),
+                );
+              }),
+            );
+          } else {
+            return const SliverToBoxAdapter();
+          }
+        }),
       ],
     );
   }
