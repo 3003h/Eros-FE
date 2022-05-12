@@ -8,5 +8,6 @@
   "enableAdvance?": false,
   "advSearchTypeValue?": "",
   "advSearch?": "$advance_search",
-  "listModeValue?": "list"
+  "listModeValue?": "list",
+  "hideTab?": false
 }

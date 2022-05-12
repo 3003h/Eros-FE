@@ -6,7 +6,6 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
-import 'package:fehviewer/pages/filter/gallery_filter_view.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
@@ -17,7 +16,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:reorderables/reorderables.dart';
 
 import '../../../../common/service/layout_service.dart';
 import '../../fetch_list.dart';
@@ -45,6 +43,8 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
   bool enableAdvance = false;
 
+  bool hideTab = false;
+
   bool searchGalleryName = true;
   bool searchGalleryTags = true;
   bool searchGalleryDesc = false;
@@ -62,13 +62,14 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   bool disableDFUploader = false;
   bool disableDFTags = false;
 
-  List<String> searchText = <String>[];
+  List<String> searchTextList = <String>[];
 
   final textController = TextEditingController();
   String lastText = '';
   final ProfileEditController profileEditController =
       Get.put(ProfileEditController());
 
+  // 保存配置
   void _saveProfile() {
     if (customProfile.name.trim().isEmpty) {
       showToast('Name is empty');
@@ -79,8 +80,9 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
     customProfile = customProfile.copyWith(
       enableAdvance: enableAdvance,
-      searchText: searchText,
+      searchText: searchTextList,
       listModeValue: listMode.name,
+      hideTab: hideTab,
       advSearch: customProfile.advSearch?.copyWith(
             searchGalleryName: searchGalleryName,
             searchGalleryTags: searchGalleryTags,
@@ -122,7 +124,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           ),
     );
 
-    logger.d('${jsonEncode(customProfile)}');
+    logger.d(' ${jsonEncode(customProfile)}');
 
     if (oriIndex >= 0) {
       controller.profiles[oriIndex] = customProfile;
@@ -131,11 +133,11 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       controller.profiles.add(customProfile);
     }
     Get.lazyPut(
-        () => CustomSubListController(profileUuid: customProfile.uuid)
-          // ..profileUuid = customProfile.uuid
-          ..heroTag = customProfile.uuid,
-        tag: customProfile.uuid,
-        fenix: true);
+      () => CustomSubListController(profileUuid: customProfile.uuid)
+        ..heroTag = customProfile.uuid,
+      tag: customProfile.uuid,
+      fenix: true,
+    );
 
     subController = Get.find(tag: customProfile.uuid);
     subController.listMode = listMode;
@@ -150,10 +152,12 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     oriIndex = controller.profiles
         .indexWhere((element) => element.uuid == customProfile.uuid);
 
-    searchText.addAll(customProfile.searchText?.map((e) => '$e') ?? []);
+    searchTextList.addAll(customProfile.searchText?.map((e) => '$e') ?? []);
 
     _listType = customProfile.listType;
     enableAdvance = customProfile.enableAdvance ?? enableAdvance;
+
+    hideTab = customProfile.hideTab ?? hideTab;
 
     listMode = customProfile.listMode;
 
@@ -354,10 +358,10 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           child: SafeArea(
             child: Column(
               children: [
+                // 分组名称编辑
                 GroupItem(
                   title: L10n.of(context).groupName,
                   child: TextInputItem(
-                    // title: '分组名称',
                     textFieldPadding: const EdgeInsets.fromLTRB(0, 6, 6, 6),
                     initValue: customProfile.name,
                     maxLines: null,
@@ -372,8 +376,22 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                   ),
                 ),
                 GroupItem(
+                  child: TextSwitchItem(
+                    'Hide Tab',
+                    intValue: hideTab,
+                    onChanged: (val) {
+                      setState(() {
+                        hideTab = val;
+                      });
+                    },
+                    hideLine: true,
+                  ),
+                ),
+                // 列表样式设置
+                GroupItem(
                   child: _buildListModeItem(context, hideLine: true),
                 ),
+                // 列表类型设置：热门，画廊，关注，聚合
                 GroupItem(
                   title: L10n.of(context).groupType,
                   child: Container(
@@ -410,6 +428,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     ),
                   ),
                 ),
+                // 搜索选项：关键词 类型 高级搜索，popular时隐藏
                 AnimatedCrossFade(
                   firstChild: const SizedBox(width: double.infinity),
                   secondChild: buildSearchOption(context),
@@ -454,52 +473,56 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   Widget buildSearchOption(BuildContext context) {
     return Column(
       children: [
+        // 设置搜索关键词
         GroupItem(
           title: L10n.of(context).searchTexts,
           child: Column(
             children: [
+              // 关键词列表
               ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: searchText.length,
-                  itemBuilder: (context, index) {
-                    final element = searchText[index];
-                    return Slidable(
-                        child: profileEditController.isTagTranslat
-                            ? FutureBuilder<String?>(
-                                future: _getTextTranslate(element),
-                                initialData: element,
-                                builder: (context, snapshot) {
-                                  return BarsItem(
-                                    title: element,
-                                    maxLines: 3,
-                                    titleSize: 16,
-                                    desc: snapshot.data,
-                                    key: ValueKey(index),
-                                  );
-                                })
-                            : BarsItem(
-                                title: element,
-                                key: ValueKey(index),
-                              ),
-                        endActionPane: ActionPane(
-                          extentRatio: 0.25,
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (_) {
-                                setState(() {
-                                  searchText.removeAt(index);
-                                });
-                              },
-                              backgroundColor: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.systemRed, context),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: searchTextList.length,
+                itemBuilder: (context, index) {
+                  final element = searchTextList[index];
+                  return Slidable(
+                      child: profileEditController.isTagTranslat
+                          ? FutureBuilder<String?>(
+                              future: _getTextTranslate(element),
+                              initialData: element,
+                              builder: (context, snapshot) {
+                                return BarsItem(
+                                  title: element,
+                                  maxLines: 3,
+                                  titleSize: 16,
+                                  desc: snapshot.data,
+                                  key: ValueKey(index),
+                                );
+                              })
+                          : BarsItem(
+                              title: element,
+                              key: ValueKey(index),
                             ),
-                          ],
-                        ));
-                  }),
+                      endActionPane: ActionPane(
+                        extentRatio: 0.25,
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (_) {
+                              setState(() {
+                                searchTextList.removeAt(index);
+                              });
+                            },
+                            backgroundColor: CupertinoDynamicColor.resolve(
+                                CupertinoColors.systemRed, context),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                          ),
+                        ],
+                      ));
+                },
+              ),
+              // 新关键词编辑栏
               Container(
                 color: CupertinoDynamicColor.resolve(
                     ehTheme.itemBackgroundColor!, Get.context!),
@@ -532,6 +555,28 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                           },
                         ),
                       ),
+                      // 添加为新的条件组
+                      // CupertinoTheme(
+                      //   data: const CupertinoThemeData(
+                      //     primaryColor: CupertinoColors.activeGreen,
+                      //   ),
+                      //   child: CupertinoButton(
+                      //     padding: const EdgeInsets.symmetric(
+                      //         horizontal: 4, vertical: 8),
+                      //     minSize: 0,
+                      //     child: const Icon(
+                      //       CupertinoIcons.rectangle_stack_fill_badge_plus,
+                      //       size: 30,
+                      //     ),
+                      //     onPressed: () {
+                      //       // setState(() {
+                      //       //   searchText.add(textController.text.trim());
+                      //       //   textController.clear();
+                      //       // });
+                      //     },
+                      //   ),
+                      // ),
+                      // 添加到当前条件组
                       CupertinoTheme(
                         data: const CupertinoThemeData(
                           primaryColor: CupertinoColors.activeGreen,
@@ -541,12 +586,12 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                               horizontal: 4, vertical: 8),
                           minSize: 0,
                           child: const Icon(
-                            FontAwesomeIcons.plusCircle,
+                            FontAwesomeIcons.circlePlus,
                             size: 30,
                           ),
                           onPressed: () {
                             setState(() {
-                              searchText.add(textController.text.trim());
+                              searchTextList.add(textController.text.trim());
                               textController.clear();
                             });
                           },
@@ -560,6 +605,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           ),
         ),
 
+        // 类型筛选器
         GroupItem(
           child: Container(
             color: CupertinoDynamicColor.resolve(
@@ -576,18 +622,12 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     customProfile = customProfile.copyWith(cats: value);
                   },
                 ),
-                // Divider(
-                //   indent: 20,
-                //   height: 0.6,
-                //   color: CupertinoDynamicColor.resolve(
-                //       CupertinoColors.systemGrey4, context),
-                // ),
               ],
             ),
           ),
         ),
 
-        // 高级搜索
+        // 高级搜索选项开关
         GroupItem(
           child: TextSwitchItem(
             L10n.of(context).s_Advanced_Options,
@@ -601,6 +641,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           ),
         ),
 
+        // 高级搜索选项
         AnimatedCrossFade(
           firstChild: const SizedBox(width: double.infinity),
           secondChild: buildAdvancedOptions(context),

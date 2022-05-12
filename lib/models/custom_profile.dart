@@ -15,6 +15,7 @@ class CustomProfile {
     this.advSearchTypeValue,
     this.advSearch,
     this.listModeValue,
+    this.hideTab,
   });
 
   final String uuid;
@@ -27,6 +28,7 @@ class CustomProfile {
   final String? advSearchTypeValue;
   final AdvanceSearch? advSearch;
   final String? listModeValue;
+  final bool? hideTab;
 
   factory CustomProfile.fromJson(Map<String,dynamic> json) => CustomProfile(
     uuid: json['uuid'] as String,
@@ -38,7 +40,8 @@ class CustomProfile {
     enableAdvance: json['enableAdvance'] != null ? json['enableAdvance'] as bool : null,
     advSearchTypeValue: json['advSearchTypeValue'] != null ? json['advSearchTypeValue'] as String : null,
     advSearch: json['advSearch'] != null ? AdvanceSearch.fromJson(json['advSearch'] as Map<String, dynamic>) : null,
-    listModeValue: json['listModeValue'] != null ? json['listModeValue'] as String : null
+    listModeValue: json['listModeValue'] != null ? json['listModeValue'] as String : null,
+    hideTab: json['hideTab'] != null ? json['hideTab'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -51,7 +54,8 @@ class CustomProfile {
     'enableAdvance': enableAdvance,
     'advSearchTypeValue': advSearchTypeValue,
     'advSearch': advSearch?.toJson(),
-    'listModeValue': listModeValue
+    'listModeValue': listModeValue,
+    'hideTab': hideTab
   };
 
   CustomProfile clone() => CustomProfile(
@@ -64,7 +68,8 @@ class CustomProfile {
     enableAdvance: enableAdvance,
     advSearchTypeValue: advSearchTypeValue,
     advSearch: advSearch?.clone(),
-    listModeValue: listModeValue
+    listModeValue: listModeValue,
+    hideTab: hideTab
   );
 
     
@@ -78,7 +83,8 @@ class CustomProfile {
     bool? enableAdvance,
     String? advSearchTypeValue,
     AdvanceSearch? advSearch,
-    String? listModeValue
+    String? listModeValue,
+    bool? hideTab
   }) => CustomProfile(
     uuid: uuid ?? this.uuid,
     name: name ?? this.name,
@@ -90,12 +96,13 @@ class CustomProfile {
     advSearchTypeValue: advSearchTypeValue ?? this.advSearchTypeValue,
     advSearch: advSearch ?? this.advSearch,
     listModeValue: listModeValue ?? this.listModeValue,
+    hideTab: hideTab ?? this.hideTab,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && listTypeValue == other.listTypeValue && catsTypeValue == other.catsTypeValue && cats == other.cats && enableAdvance == other.enableAdvance && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch && listModeValue == other.listModeValue;
+    || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && listTypeValue == other.listTypeValue && catsTypeValue == other.catsTypeValue && cats == other.cats && enableAdvance == other.enableAdvance && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch && listModeValue == other.listModeValue && hideTab == other.hideTab;
 
   @override
-  int get hashCode => uuid.hashCode ^ name.hashCode ^ searchText.hashCode ^ listTypeValue.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ enableAdvance.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode ^ listModeValue.hashCode;
+  int get hashCode => uuid.hashCode ^ name.hashCode ^ searchText.hashCode ^ listTypeValue.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ enableAdvance.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode ^ listModeValue.hashCode ^ hideTab.hashCode;
 }
