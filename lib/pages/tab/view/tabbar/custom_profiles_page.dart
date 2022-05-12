@@ -23,6 +23,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
         children: controller.profiles
             .map((element) => SelectorSettingItem(
                   title: element.name,
+                  selector: (element.hideTab ?? false) ? 'Hide' : '',
                   maxLines: 2,
                   onTap: () {
                     controller.toEditPage(uuid: element.uuid);

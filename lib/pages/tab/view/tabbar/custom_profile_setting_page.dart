@@ -399,21 +399,29 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     color: CupertinoDynamicColor.resolve(
                         ehTheme.itemBackgroundColor!, Get.context!),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
                       constraints: const BoxConstraints(
                         minHeight: kItemHeight,
                       ),
                       child: CupertinoSlidingSegmentedControl<GalleryListType>(
                         children: <GalleryListType, Widget>{
-                          GalleryListType.popular:
-                              Text(L10n.of(context).tab_popular)
-                                  .marginSymmetric(horizontal: 8),
-                          GalleryListType.gallery:
-                              Text(L10n.of(context).tab_gallery)
-                                  .marginSymmetric(horizontal: 8),
-                          GalleryListType.watched:
-                              Text(L10n.of(context).tab_watched)
-                                  .marginSymmetric(horizontal: 8),
+                          GalleryListType.popular: Container(
+                            child: Text(L10n.of(context).tab_popular),
+                            // constraints: BoxConstraints(minWidth: 10),
+                          ),
+                          GalleryListType.gallery: Container(
+                            child: Text(L10n.of(context).tab_gallery),
+                            // constraints: BoxConstraints(minWidth: 10),
+                          ),
+                          GalleryListType.watched: Container(
+                            child: Text(L10n.of(context).tab_watched),
+                            // constraints: BoxConstraints(minWidth: 10),
+                          ),
+                          GalleryListType.aggregate: Container(
+                            child: Text('Aggregate'),
+                            // constraints: BoxConstraints(minWidth: 10),
+                          ),
                         },
                         groupValue: _listType,
                         onValueChanged: (GalleryListType? value) {
@@ -428,10 +436,18 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     ),
                   ),
                 ),
-                // 搜索选项：关键词 类型 高级搜索，popular时隐藏
+                // 搜索选项：关键词 类型 高级搜索，popular时隐藏, 聚合时显示聚合选项
                 AnimatedCrossFade(
                   firstChild: const SizedBox(width: double.infinity),
-                  secondChild: buildSearchOption(context),
+                  // secondChild: buildSearchOption(context),
+                  secondChild: AnimatedCrossFade(
+                    firstChild: buildAggregateOption(context),
+                    secondChild: buildSearchOption(context),
+                    crossFadeState: _listType != GalleryListType.aggregate
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: 300.milliseconds,
+                  ),
                   crossFadeState: _listType != GalleryListType.popular
                       ? CrossFadeState.showSecond
                       : CrossFadeState.showFirst,
@@ -440,6 +456,29 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildAggregateOption(BuildContext context) {
+    // return SizedBox(width: double.infinity);
+    List<CustomProfile> profiles = controller.profiles
+        .where((p) =>
+            p.listType != GalleryListType.aggregate &&
+            p.uuid != customProfile.uuid)
+        .toList();
+    return GroupItem(
+      title: 'Aggregate Groups',
+      child: Container(
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            final profile = profiles[index];
+            // return Text('${profile.name} ');
+            return TextSwitchItem(profile.name, intValue: false);
+          },
+          itemCount: profiles.length,
         ),
       ),
     );
