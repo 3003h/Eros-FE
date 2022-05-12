@@ -35,7 +35,7 @@ class LoginPage extends GetView<LoginController> {
                 children: [
                   const SizedBox(height: 50),
                   const Icon(
-                    FontAwesomeIcons.userCircle,
+                    FontAwesomeIcons.circleUser,
                     size: 120,
                     color: CupertinoColors.activeBlue,
                   ),
@@ -50,8 +50,10 @@ class LoginPage extends GetView<LoginController> {
                         placeholderStyle: _placeholderStyle,
                         prefix: Row(
                           children: [
-                            const Icon(FontAwesomeIcons.user)
-                                .paddingOnly(right: 4.0),
+                            const Icon(
+                              FontAwesomeIcons.user,
+                              size: 20,
+                            ).paddingOnly(right: 12.0),
                             Text(L10n.of(context).user_name),
                           ],
                         ),
@@ -71,10 +73,12 @@ class LoginPage extends GetView<LoginController> {
                             prefix: Row(
                               children: [
                                 GestureDetector(
-                                  child: Icon(logic.obscurePasswd
-                                          ? FontAwesomeIcons.eyeSlash
-                                          : FontAwesomeIcons.eye)
-                                      .paddingOnly(right: 4.0),
+                                  child: Icon(
+                                    logic.obscurePasswd
+                                        ? FontAwesomeIcons.eyeSlash
+                                        : FontAwesomeIcons.eye,
+                                    size: 20,
+                                  ).paddingOnly(right: 12.0),
                                   onTap: logic.switchObscure,
                                 ),
                                 Text(L10n.of(context).passwd),
