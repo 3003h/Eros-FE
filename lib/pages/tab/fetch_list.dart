@@ -13,6 +13,7 @@ enum GalleryListType {
   toplist,
   favorite,
   popular,
+  aggregate,
 }
 
 abstract class FetchListClient {
