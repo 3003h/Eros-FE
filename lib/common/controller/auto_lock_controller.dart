@@ -4,7 +4,10 @@ import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
-import 'package:local_auth/auth_strings.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
 
 import '../global.dart';
 
@@ -50,10 +53,11 @@ class AutoLockController extends GetxController {
 
   Future<bool> checkBiometrics({String? localizedReason}) async {
     final bool didAuthenticate = await localAuth.authenticate(
-      localizedReason: localizedReason ?? '验证以解锁应用',
-      iOSAuthStrings: AutoLockController.iosStrings,
-      androidAuthStrings: AutoLockController.androidStrings,
-    );
+        localizedReason: localizedReason ?? '验证以解锁应用',
+        authMessages: [
+          AutoLockController.iosStrings,
+          AutoLockController.androidStrings,
+        ]);
     return didAuthenticate;
   }
 

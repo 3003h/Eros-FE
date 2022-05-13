@@ -581,54 +581,50 @@ Future showItemAttach({
   EdgeInsetsGeometry? margin,
   AlignmentGeometry? alignmentTemp,
 }) async {
-  final boxObj = targetContext.findRenderObject();
-  Offset? offset = (boxObj as RenderBox?)?.localToGlobal(Offset.zero);
-  // logger.d('size: ${targetContext.size}  Offset:$offset');
-
   await SmartDialog.showAttach(
-    highlight: Positioned(
-      left: offset?.dx ?? 0.0,
-      top: (offset?.dy ?? 0.0) + 2,
-      child: Container(
-        height: (targetContext.size?.height ?? 0) - 4,
-        width: targetContext.size?.width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
+    highlightBuilder: (Offset targetOffset, Size targetSize) {
+      return Positioned(
+        left: targetOffset.dx,
+        top: targetOffset.dy + 2,
+        child: Container(
+          height: targetSize.height - 4,
+          width: targetSize.width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+          ),
         ),
-      ),
-    ),
+      );
+    },
     tag: tag,
     keepSingle: true,
     targetContext: targetContext,
-    isPenetrateTemp: false,
-    // maskColorTemp: Colors.black.withOpacity(0.1),
-    alignmentTemp: alignmentTemp,
-    clickBgDismissTemp: true,
     onDismiss: onDismiss,
-    widget: SafeArea(
-      top: false,
-      bottom: false,
-      child: Container(
-        width: width,
-        margin: margin,
-        // constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(16),
-        //   boxShadow: [
-        //     BoxShadow(
-        //       color: Colors.black.withOpacity(0.2),
-        //       offset: const Offset(0, 0),
-        //       blurRadius: 10, //阴影模糊程度
-        //       spreadRadius: 1, //阴影扩散程度
-        //     ),
-        //   ],
-        // ),
-        // color: CupertinoColors.systemGrey5,
-        child: CupertinoPopupSurface(
-          child: child,
+    builder: (BuildContext context) {
+      return SafeArea(
+        top: false,
+        bottom: false,
+        child: Container(
+          width: width,
+          margin: margin,
+          // constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
+          // decoration: BoxDecoration(
+          //   borderRadius: BorderRadius.circular(16),
+          //   boxShadow: [
+          //     BoxShadow(
+          //       color: Colors.black.withOpacity(0.2),
+          //       offset: const Offset(0, 0),
+          //       blurRadius: 10, //阴影模糊程度
+          //       spreadRadius: 1, //阴影扩散程度
+          //     ),
+          //   ],
+          // ),
+          // color: CupertinoColors.systemGrey5,
+          child: CupertinoPopupSurface(
+            child: child,
+          ),
         ),
-      ),
-    ),
+      );
+    },
   );
 }
