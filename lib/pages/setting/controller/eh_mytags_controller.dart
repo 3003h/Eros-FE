@@ -147,7 +147,7 @@ class EhMyTagsController extends GetxController
   }
 
   Future<void> firstLoad() async {
-    logger.d('firstLoad');
+    // logger.d('firstLoad');
     change(null, status: RxStatus.loading());
     final sets = await loadData();
     if (sets == null || sets.tagsets.isEmpty) {

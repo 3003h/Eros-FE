@@ -276,13 +276,10 @@
   "uc_uh_1": "Default port clients only (Can be slower. Enable if behind firewall/proxy that blocks outgoing non-standard ports.)",
   "uc_uh_2": "No [Modern/HTTPS] (Donator only. You will not be able to browse as many pages. Recommended only if having severe problems.)",
   "uc_uh_3": "No [Legacy/HTTP] (Donator only. May not work by default in modern browsers. Recommended for legacy/outdated browsers only.)",
-
-
   "uc_uh_0_s": "Any client",
   "uc_uh_1_s": "Default port clients only",
   "uc_uh_2_s": "No [Modern/HTTPS]",
   "uc_uh_3_s": "No [Legacy/HTTP]",
-
   "uc_auto": "Auto",
   "uc_tl_0": "Default Title",
   "uc_tl_1": " Japanese Title (if available)",
@@ -321,21 +318,16 @@
   "uc_ms_2": "Align center;\nAlways scale images to fit browser width",
   "uc_mt_0": "Show",
   "uc_mt_1": "Hide",
-
   "auto_select_profile": "Auto select profile",
   "tap_to_turn_page_anima": "Tap to turn page animations",
   "download_ori_image": "Download original image",
   "download_ori_image_summary": "it is dangerous! You may get 509 error",
   "redownload": "Redownload",
   "open_with_other_apps": "Open with other apps",
-
   "tagNamespace": "{tagNamespace, select, reclass{reclass} language{language} parody{parody} character{character} group{group} artist{artist} male{male} female{female} mixed{mixed} cosplayer{cosplayer} other{other} temp{}}",
-
   "link_redirect": "Link redirect",
   "link_redirect_summary": "Redirecting gallery links to selected sites",
-
   "fixed_height_of_list_items": "Fixed height of list items",
-
   "edit_comment": "Edit comment",
   "new_comment": "New comment",
   "group": "Group",
@@ -353,8 +345,6 @@
   "no": "No",
   "ask_me": "Ask for me",
   "always": "Always",
-
-
   "tag_add_to_mytag": "添加到我的标签",
   "tag_dialog_Watch": "Watch",
   "tag_dialog_Hide": "Hide",
@@ -363,7 +353,9 @@
   "tag_dialog_Default_color": "Default color",
   "color_picker_primary": "primary",
   "color_picker_wheel": "wheel",
-
   "restore_tasks_data": "Restore tasks data",
-  "rebuild_tasks_data": "Rebuild tasks data"
+  "rebuild_tasks_data": "Rebuild tasks data",
+  "aggregate": "Aggregate",
+  "aggregate_groups": "Aggregate groups",
+  "hide": "Hide"
 }

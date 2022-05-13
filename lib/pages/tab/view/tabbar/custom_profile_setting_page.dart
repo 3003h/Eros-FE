@@ -127,11 +127,14 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     logger.d(' ${jsonEncode(customProfile)}');
 
     if (oriIndex >= 0) {
+      // 修改profile
       controller.profiles[oriIndex] = customProfile;
     } else {
+      // 新增profile
       logger.d('new profile ${customProfile.name}');
       controller.profiles.add(customProfile);
     }
+
     Get.lazyPut(
       () => CustomSubListController(profileUuid: customProfile.uuid)
         ..heroTag = customProfile.uuid,
@@ -149,6 +152,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
     customProfile = Get.find();
 
+    // profile 下标
     oriIndex = controller.profiles
         .indexWhere((element) => element.uuid == customProfile.uuid);
 
@@ -371,9 +375,10 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     placeholder: L10n.of(context).groupName,
                   ),
                 ),
+                // 隐藏分组
                 GroupItem(
                   child: TextSwitchItem(
-                    'Hide Tab',
+                    L10n.of(context).hide,
                     intValue: hideTab,
                     onChanged: (val) {
                       setState(() {
@@ -415,7 +420,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                             // constraints: BoxConstraints(minWidth: 10),
                           ),
                           GalleryListType.aggregate: Container(
-                            child: Text('Aggregate'),
+                            child: Text(L10n.of(context).aggregate),
                             // constraints: BoxConstraints(minWidth: 10),
                           ),
                         },
@@ -465,7 +470,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             p.uuid != customProfile.uuid)
         .toList();
     return GroupItem(
-      title: 'Aggregate Groups',
+      title: L10n.of(context).aggregate_groups,
       child: Container(
         child: ListView.builder(
           shrinkWrap: true,
