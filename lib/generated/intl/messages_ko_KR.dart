@@ -49,6 +49,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_tags": MessageLookupByLibrary.simpleMessage("태그 추가"),
         "add_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨찾기에 추가"),
         "advanced": MessageLookupByLibrary.simpleMessage("고급"),
+        "aggregate": MessageLookupByLibrary.simpleMessage("Aggregate"),
+        "aggregate_groups":
+            MessageLookupByLibrary.simpleMessage("Aggregate groups"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("전체 즐겨찾기"),
         "all_comment": MessageLookupByLibrary.simpleMessage("모든 댓글"),
         "all_preview": MessageLookupByLibrary.simpleMessage("모든 미리 보기"),
@@ -124,6 +127,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "group": MessageLookupByLibrary.simpleMessage("Group"),
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
+        "hide": MessageLookupByLibrary.simpleMessage("Hide"),
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),

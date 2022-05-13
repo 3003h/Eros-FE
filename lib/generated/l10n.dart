@@ -3643,6 +3643,36 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Aggregate`
+  String get aggregate {
+    return Intl.message(
+      'Aggregate',
+      name: 'aggregate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aggregate groups`
+  String get aggregate_groups {
+    return Intl.message(
+      'Aggregate groups',
+      name: 'aggregate_groups',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide`
+  String get hide {
+    return Intl.message(
+      'Hide',
+      name: 'hide',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

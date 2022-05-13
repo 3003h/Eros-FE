@@ -276,12 +276,10 @@
   "uc_uh_1": "仅使用默认端口的客户端（可能稍慢。当防火墙或代理阻止非标准接口的流量时启用此项。）",
   "uc_uh_2": "否 [现代/HTTPS]（仅限赞助者。配额消耗会加快，只有出现严重的问题时才启用。）",
   "uc_uh_3": "否 [传统/HTTP]（仅限赞助者。可能无法在现代浏览器中使用，只推荐在过时的浏览器中启用。）",
-
   "uc_uh_0_s": "所有客户端",
   "uc_uh_1_s": "仅使用默认端口的客户端",
   "uc_uh_2_s": "否 [传统/HTTP]",
   "uc_uh_3_s": "否 [传统/HTTP]",
-
   "uc_auto": "自动",
   "uc_tl_0": "默认标题",
   "uc_tl_1": "日文标题（如果有）",
@@ -300,10 +298,8 @@
   "uc_fs_1": "按收藏时间排序",
   "uc_lt_0": "鼠标悬停时 (页面加载快，缩略图加载有延迟)",
   "uc_lt_1": "页面加载时 (页面加载时间更长，但是显示的时候无需等待)",
-
   "uc_lt_0_s": "鼠标悬停时",
   "uc_lt_1_s": "页面加载时",
-
   "uc_ts_0": "普通",
   "uc_ts_1": "大图",
   "uc_cs_0": "最早的评论",
@@ -324,19 +320,16 @@
   "uc_ms_2": "居中对齐\n始终缩放图像以适应浏览器宽度",
   "uc_mt_0": "显示",
   "uc_mt_1": "隐藏",
-
   "auto_select_profile": "自动选择配置",
   "tap_to_turn_page_anima": "点击翻页动画",
   "download_ori_image": "下载原图",
   "download_ori_image_summary": "危险! 会导致下载配额迅速流失, 出现 509 错误",
   "redownload": "重新下载",
   "open_with_other_apps": "其他应用打开",
-
   "tagNamespace": "{tagNamespace, select, reclass{重新分类} language{语言} parody{原作} character{角色} group{社团} artist{艺术家} male{男性} female{女性} mixed{混杂} cosplayer{扮演者} other{其它} temp{临时}}",
   "link_redirect": "链接重定向",
   "link_redirect_summary": "将画廊链接重定向到选定的站点",
   "fixed_height_of_list_items": "固定列表项高度",
-
   "edit_comment": "编辑评论",
   "new_comment": "发布新评论",
   "group": "分组",
@@ -354,7 +347,6 @@
   "no": "不",
   "ask_me": "询问",
   "always": "始终",
-
   "tag_add_to_mytag": "添加到我的标签",
   "tag_dialog_Watch": "关注",
   "tag_dialog_Hide": "隐藏",
@@ -363,7 +355,9 @@
   "tag_dialog_Default_color": "默认颜色",
   "color_picker_primary": "基本",
   "color_picker_wheel": "色盘",
-
   "restore_tasks_data": "恢复下载任务数据",
-  "rebuild_tasks_data": "重建下载任务数据"
+  "rebuild_tasks_data": "重建下载任务数据",
+  "aggregate": "聚合",
+  "aggregate_groups": "聚合分组",
+  "hide": "隐藏"
 }

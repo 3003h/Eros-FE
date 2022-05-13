@@ -49,6 +49,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_tags": MessageLookupByLibrary.simpleMessage("Add tags"),
         "add_to_favorites": MessageLookupByLibrary.simpleMessage("添加收藏"),
         "advanced": MessageLookupByLibrary.simpleMessage("高級"),
+        "aggregate": MessageLookupByLibrary.simpleMessage("Aggregate"),
+        "aggregate_groups":
+            MessageLookupByLibrary.simpleMessage("Aggregate groups"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("所有收藏"),
         "all_comment": MessageLookupByLibrary.simpleMessage("所有评论"),
         "all_preview": MessageLookupByLibrary.simpleMessage("所有预览"),
@@ -127,6 +130,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "group": MessageLookupByLibrary.simpleMessage("Group"),
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
+        "hide": MessageLookupByLibrary.simpleMessage("Hide"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),

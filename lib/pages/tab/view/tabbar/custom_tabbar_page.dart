@@ -70,18 +70,25 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           },
           child: Obx(() {
             return PageView(
-              key: ValueKey(controller.profiles.hashCode),
+              key: ValueKey(
+                  controller.profiles.map((e) => '${e.uuid}${e.name}').join()),
               // key: UniqueKey(),
               controller: controller.pageController,
               children: controller.profiles.isNotEmpty
                   ? [
                       // 画廊列表
-                      ...controller.profiles
+                      ...controller.profilesShow
                           .map((e) => SubListView<CustomSubListController>(
                                 profileUuid: e.uuid,
                                 key: ValueKey(e.uuid),
                               ))
                           .toList(),
+                      // ...controller.profiles
+                      //     .map((e) => Container(
+                      //           child: Text(e.uuid),
+                      //           alignment: Alignment.center,
+                      //         ))
+                      //     .toList(),
                     ]
                   : [
                       const Center(
@@ -167,7 +174,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                                         LinkTabItem(title: e.name, actinos: [
                                           LinkTabItemAction(
                                             actinoText: '编辑分组',
-                                            icon: FontAwesomeIcons.edit,
+                                            icon: FontAwesomeIcons.penToSquare,
                                             onTap: () {
                                               controller.toEditPage(
                                                   uuid: e.uuid);
@@ -175,7 +182,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                                           ),
                                           LinkTabItemAction(
                                             actinoText: '删除分组',
-                                            icon: FontAwesomeIcons.trashAlt,
+                                            icon: FontAwesomeIcons.trashCan,
                                             color:
                                                 CupertinoDynamicColor.resolve(
                                                     CupertinoColors

@@ -51,6 +51,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Add to favorites"),
         "advanced": MessageLookupByLibrary.simpleMessage("Advanced"),
+        "aggregate": MessageLookupByLibrary.simpleMessage("Aggregate"),
+        "aggregate_groups":
+            MessageLookupByLibrary.simpleMessage("Aggregate groups"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("All Favorites"),
         "all_comment": MessageLookupByLibrary.simpleMessage("All Comment"),
         "all_preview": MessageLookupByLibrary.simpleMessage("All Preview"),
@@ -137,6 +140,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "group": MessageLookupByLibrary.simpleMessage("Group"),
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
+        "hide": MessageLookupByLibrary.simpleMessage("Hide"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),

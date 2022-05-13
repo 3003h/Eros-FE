@@ -27,6 +27,10 @@ class CustomTabbarController extends DefaultTabViewController {
     return _map;
   }
 
+  // 显示的分组
+  List<CustomProfile> get profilesShow =>
+      profiles.whereNot((element) => element.hideTab ?? false).toList();
+
   final _currProfileUuid = ''.obs;
   String get currProfileUuid => _currProfileUuid.value;
   set currProfileUuid(String val) => _currProfileUuid.value = val;
@@ -61,8 +65,11 @@ class CustomTabbarController extends DefaultTabViewController {
   void onInit() {
     super.onInit();
 
+    logger.d('CustomProfile onInit');
+
     heroTag = EHRoutes.gallery;
 
+    // 初始化分组
     profiles.value = customTabConfig?.profiles ??
         [
           CustomProfile(
@@ -153,11 +160,13 @@ class CustomTabbarController extends DefaultTabViewController {
     );
   }
 
+  // 编辑分组（新增或者修改现有）
   Future<void> toEditPage({String? uuid}) async {
     final topRoute =
         SecondNavigatorObserver().history.lastOrNull?.settings.name;
     logger.d('topRoute $topRoute');
 
+    // 依赖注入
     Get.replace<CustomProfile>(
         profileMap[uuid] ?? CustomProfile(name: '', uuid: generateUuidv4()));
 
@@ -176,6 +185,7 @@ class CustomTabbarController extends DefaultTabViewController {
     }
   }
 
+  // 交换位置
   void onReorder(int oldIndex, int newIndex) {
     final _profileUuid = currProfileUuid;
     final _profile = profiles.removeAt(oldIndex);
@@ -186,6 +196,7 @@ class CustomTabbarController extends DefaultTabViewController {
     });
   }
 
+  // 删除分组配置
   void deleteProfile({required String uuid}) {
     final _profileUuid = currProfileUuid;
 
