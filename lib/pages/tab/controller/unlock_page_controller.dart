@@ -5,8 +5,9 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/error_codes.dart' as auth_error;
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
 
 class UnlockPageController extends GetxController {
   final _infoText = ''.obs;
@@ -30,8 +31,10 @@ class UnlockPageController extends GetxController {
     try {
       final bool didAuthenticate = await localAuth.authenticate(
         localizedReason: '验证以解锁应用',
-        iOSAuthStrings: iosStrings,
-        androidAuthStrings: androidStrings,
+        authMessages: const <AuthMessages>[
+          IOSAuthMessages(),
+          AndroidAuthMessages(),
+        ],
       );
       return didAuthenticate;
     } on PlatformException catch (e, stack) {

@@ -218,116 +218,112 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
     await SmartDialog.showAttach(
       tag: kAttachTagSearch,
-      keepSingle: true,
       targetContext: targetContext,
-      isPenetrateTemp: false,
-      maskColorTemp: Colors.transparent,
-      // isLoadingTemp: true,
-      alignmentTemp: Alignment.bottomCenter,
-      clickBgDismissTemp: true,
       onDismiss: () {
         lastText = '';
       },
-      widget: SafeArea(
-        top: false,
-        bottom: false,
-        child: Container(
-          width: size?.width,
-          margin: const EdgeInsets.only(
-              left: _marginLR - 10, right: _marginLR, top: 10, bottom: 40),
-          constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.darkBackgroundGray, Get.context!)
-                    .withOpacity(0.16),
-                offset: const Offset(0, 16),
-                blurRadius: 20, //阴影模糊程度
-                spreadRadius: 2, //阴影扩散程度
-              ),
-            ],
-          ),
-          // color: CupertinoColors.systemGrey5,
-          child: CupertinoPopupSurface(
-            child: CupertinoScrollbar(
-              // isAlwaysShown: true,
-              child: Container(
-                // child: SizedBox(),
-                child: Obx(() {
-                  final _rultlist = profileEditController.rultlist;
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(0),
-                    itemBuilder: (context, index) {
-                      final _trans = _rultlist[index];
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Container(
+            width: size?.width,
+            margin: const EdgeInsets.only(
+                left: _marginLR - 10, right: _marginLR, top: 10, bottom: 40),
+            constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.darkBackgroundGray, Get.context!)
+                      .withOpacity(0.16),
+                  offset: const Offset(0, 16),
+                  blurRadius: 20, //阴影模糊程度
+                  spreadRadius: 2, //阴影扩散程度
+                ),
+              ],
+            ),
+            // color: CupertinoColors.systemGrey5,
+            child: CupertinoPopupSurface(
+              child: CupertinoScrollbar(
+                // isAlwaysShown: true,
+                child: Container(
+                  // child: SizedBox(),
+                  child: Obx(() {
+                    final _rultlist = profileEditController.rultlist;
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(0),
+                      itemBuilder: (context, index) {
+                        final _trans = _rultlist[index];
 
-                      final input = profileEditController.searchText;
-                      final text = _trans.fullTagText;
-                      final translate = _trans.fullTagTranslate;
+                        final input = profileEditController.searchText;
+                        final text = _trans.fullTagText;
+                        final translate = _trans.fullTagTranslate;
 
-                      final textSpans = text
-                          ?.split(input)
-                          .map((e) => TextSpan(
-                                text: e,
-                                style: textStyle,
-                              ))
-                          .separat(
-                              separator: TextSpan(
-                            text: input,
-                            style: highLightTextStyle,
-                          ));
+                        final textSpans = text
+                            ?.split(input)
+                            .map((e) => TextSpan(
+                                  text: e,
+                                  style: textStyle,
+                                ))
+                            .separat(
+                                separator: TextSpan(
+                              text: input,
+                              style: highLightTextStyle,
+                            ));
 
-                      final translateTextSpans = translate
-                          ?.split(input)
-                          .map((e) => TextSpan(
-                                text: e,
-                                style: translateStyle,
-                              ))
-                          .separat(
-                              separator: TextSpan(
-                            text: input,
-                            style: highLightTranslateStyle,
-                          ));
+                        final translateTextSpans = translate
+                            ?.split(input)
+                            .map((e) => TextSpan(
+                                  text: e,
+                                  style: translateStyle,
+                                ))
+                            .separat(
+                                separator: TextSpan(
+                              text: input,
+                              style: highLightTranslateStyle,
+                            ));
 
-                      return GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () => profileEditController.selectItem(
-                          index,
-                          searchTextController: textController,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                children: textSpans,
-                              ),
-                            ),
-                            if (translate != null) const SizedBox(height: 6),
-                            if (translate != null &&
-                                profileEditController.isTagTranslat)
+                        return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => profileEditController.selectItem(
+                            index,
+                            searchTextController: textController,
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               RichText(
                                 text: TextSpan(
-                                  children: translateTextSpans,
+                                  children: textSpans,
                                 ),
                               ),
-                          ],
-                        ).paddingSymmetric(vertical: 8),
-                      );
-                    },
-                    itemCount: _rultlist.length,
-                  );
-                }),
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                              if (translate != null) const SizedBox(height: 6),
+                              if (translate != null &&
+                                  profileEditController.isTagTranslat)
+                                RichText(
+                                  text: TextSpan(
+                                    children: translateTextSpans,
+                                  ),
+                                ),
+                            ],
+                          ).paddingSymmetric(vertical: 8),
+                        );
+                      },
+                      itemCount: _rultlist.length,
+                    );
+                  }),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
