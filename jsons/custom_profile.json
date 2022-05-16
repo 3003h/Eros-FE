@@ -9,5 +9,6 @@
   "advSearchTypeValue?": "",
   "advSearch?": "$advance_search",
   "listModeValue?": "list",
-  "hideTab?": false
+  "hideTab?": false,
+  "aggregateGroups?": ["", ""]
 }

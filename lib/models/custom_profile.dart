@@ -16,6 +16,7 @@ class CustomProfile {
     this.advSearch,
     this.listModeValue,
     this.hideTab,
+    this.aggregateGroups,
   });
 
   final String uuid;
@@ -29,6 +30,7 @@ class CustomProfile {
   final AdvanceSearch? advSearch;
   final String? listModeValue;
   final bool? hideTab;
+  final List<String>? aggregateGroups;
 
   factory CustomProfile.fromJson(Map<String,dynamic> json) => CustomProfile(
     uuid: json['uuid'] as String,
@@ -41,7 +43,8 @@ class CustomProfile {
     advSearchTypeValue: json['advSearchTypeValue'] != null ? json['advSearchTypeValue'] as String : null,
     advSearch: json['advSearch'] != null ? AdvanceSearch.fromJson(json['advSearch'] as Map<String, dynamic>) : null,
     listModeValue: json['listModeValue'] != null ? json['listModeValue'] as String : null,
-    hideTab: json['hideTab'] != null ? json['hideTab'] as bool : null
+    hideTab: json['hideTab'] != null ? json['hideTab'] as bool : null,
+    aggregateGroups: json['aggregateGroups'] != null ? (json['aggregateGroups'] as List? ?? []).map((e) => e as String).toList() : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -55,7 +58,8 @@ class CustomProfile {
     'advSearchTypeValue': advSearchTypeValue,
     'advSearch': advSearch?.toJson(),
     'listModeValue': listModeValue,
-    'hideTab': hideTab
+    'hideTab': hideTab,
+    'aggregateGroups': aggregateGroups?.map((e) => e.toString()).toList()
   };
 
   CustomProfile clone() => CustomProfile(
@@ -69,7 +73,8 @@ class CustomProfile {
     advSearchTypeValue: advSearchTypeValue,
     advSearch: advSearch?.clone(),
     listModeValue: listModeValue,
-    hideTab: hideTab
+    hideTab: hideTab,
+    aggregateGroups: aggregateGroups?.toList()
   );
 
     
@@ -84,7 +89,8 @@ class CustomProfile {
     String? advSearchTypeValue,
     AdvanceSearch? advSearch,
     String? listModeValue,
-    bool? hideTab
+    bool? hideTab,
+    List<String>? aggregateGroups
   }) => CustomProfile(
     uuid: uuid ?? this.uuid,
     name: name ?? this.name,
@@ -97,12 +103,13 @@ class CustomProfile {
     advSearch: advSearch ?? this.advSearch,
     listModeValue: listModeValue ?? this.listModeValue,
     hideTab: hideTab ?? this.hideTab,
+    aggregateGroups: aggregateGroups ?? this.aggregateGroups,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && listTypeValue == other.listTypeValue && catsTypeValue == other.catsTypeValue && cats == other.cats && enableAdvance == other.enableAdvance && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch && listModeValue == other.listModeValue && hideTab == other.hideTab;
+    || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && listTypeValue == other.listTypeValue && catsTypeValue == other.catsTypeValue && cats == other.cats && enableAdvance == other.enableAdvance && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch && listModeValue == other.listModeValue && hideTab == other.hideTab && aggregateGroups == other.aggregateGroups;
 
   @override
-  int get hashCode => uuid.hashCode ^ name.hashCode ^ searchText.hashCode ^ listTypeValue.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ enableAdvance.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode ^ listModeValue.hashCode ^ hideTab.hashCode;
+  int get hashCode => uuid.hashCode ^ name.hashCode ^ searchText.hashCode ^ listTypeValue.hashCode ^ catsTypeValue.hashCode ^ cats.hashCode ^ enableAdvance.hashCode ^ advSearchTypeValue.hashCode ^ advSearch.hashCode ^ listModeValue.hashCode ^ hideTab.hashCode ^ aggregateGroups.hashCode;
 }

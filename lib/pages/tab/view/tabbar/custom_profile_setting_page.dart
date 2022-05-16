@@ -63,6 +63,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   bool disableDFTags = false;
 
   List<String> searchTextList = <String>[];
+  // List<String> aggGroupList = <String>[];
 
   final textController = TextEditingController();
   String lastText = '';
@@ -83,6 +84,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       searchText: searchTextList,
       listModeValue: listMode.name,
       hideTab: hideTab,
+      // aggregateGroups: aggGroupList,
       advSearch: customProfile.advSearch?.copyWith(
             searchGalleryName: searchGalleryName,
             searchGalleryTags: searchGalleryTags,
@@ -157,6 +159,8 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
         .indexWhere((element) => element.uuid == customProfile.uuid);
 
     searchTextList.addAll(customProfile.searchText?.map((e) => '$e') ?? []);
+
+    // aggGroupList.addAll(customProfile.aggregateGroups ?? []);
 
     _listType = customProfile.listType;
     enableAdvance = customProfile.enableAdvance ?? enableAdvance;
@@ -462,6 +466,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     );
   }
 
+  // 聚合搜索设置
   Widget buildAggregateOption(BuildContext context) {
     // return SizedBox(width: double.infinity);
     List<CustomProfile> profiles = controller.profiles
@@ -476,8 +481,20 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             final profile = profiles[index];
-            // return Text('${profile.name} ');
-            return TextSwitchItem(profile.name, intValue: false);
+            return TextSwitchItem(
+              profile.name,
+              intValue: customProfile.aggregateGroups
+                  ?.any((element) => element.trim() == profile.uuid),
+              onChanged: (val) {
+                logger.d('${profile.uuid} $val');
+                if (val) {
+                  customProfile.aggregateGroups?.add(profile.uuid);
+                } else {
+                  customProfile.aggregateGroups?.removeWhere(
+                      (element) => element.trim() == profile.uuid);
+                }
+              },
+            );
           },
           itemCount: profiles.length,
         ),
