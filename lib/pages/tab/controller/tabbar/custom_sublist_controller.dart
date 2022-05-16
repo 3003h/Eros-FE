@@ -13,17 +13,23 @@ import '../enum.dart';
 /// 控制单个自定义列表
 class CustomSubListController extends TabViewController {
   CustomSubListController({required this.profileUuid});
+
   final CustomTabbarController _customTabbarController = Get.find();
 
   final RxBool _isBackgroundRefresh = false.obs;
+
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+
   set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   final listModeObs = ListModeEnum.list.obs;
+
   ListModeEnum get listMode => listModeObs.value;
+
   set listMode(ListModeEnum val) => listModeObs.value = val;
 
   final String profileUuid;
+
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 
   FetchListClient getFetchListClient(FetchParams fetchParams) {
@@ -51,6 +57,59 @@ class CustomSubListController extends TabViewController {
     cancelToken = CancelToken();
 
     logger.v(' ${jsonEncode(profile)}');
+
+    // 聚合搜索
+    if (profile?.listTypeValue == GalleryListType.aggregate.name) {
+      final fetchListClientList = profile?.aggregateGroups
+          ?.map((e) => _customTabbarController.profileMap[e])
+          .where((element) =>
+              element?.listTypeValue != GalleryListType.aggregate.name)
+          .map((p) => getFetchListClient(FetchParams(
+                cats: p?.cats,
+                refresh: refresh,
+                cancelToken: cancelToken,
+                searchText: p?.searchText?.join(' '),
+                advanceSearchParam: (p?.enableAdvance ?? false)
+                    ? p?.advSearch?.param ?? {}
+                    : {},
+                galleryListType: p?.listType ?? GalleryListType.gallery,
+              )))
+          .toList();
+      if (fetchListClientList == null) {
+        showToast('request error');
+        return null;
+      }
+
+      pageState = PageState.Loading;
+
+      try {
+        for (FetchListClient? fetchListClient in fetchListClientList) {
+          if (fetchListClient == null) {
+            continue;
+          }
+
+          final GalleryList? rult = await fetchListClient.fetch();
+          final _list = rult?.gallerys
+                  ?.map((e) => e.simpleTags ?? [])
+                  .expand((List<SimpleTag> element) => element)
+                  .toList() ??
+              [];
+
+          tagController.addAllSimpleTag(_list);
+
+          // 测试
+          return rult;
+        }
+      } on EhError catch (eherror) {
+        logger.e('type:${eherror.type}\n${eherror.message}');
+        showToast(eherror.message);
+        pageState = PageState.LoadingError;
+        rethrow;
+      } on Exception catch (e) {
+        pageState = PageState.LoadingError;
+        rethrow;
+      }
+    }
 
     final fetchConfig = FetchParams(
       cats: profile?.cats,
