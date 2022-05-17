@@ -83,15 +83,16 @@ class _DownloadTabState extends State<DownloadTab> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            // CupertinoButton(
-            //   minSize: 40,
-            //   padding: const EdgeInsets.all(0),
-            //   child: const Icon(
-            //     LineIcons.alternateArrowsHorizontal,
-            //     size: 24,
-            //   ),
-            //   onPressed: _showExportDialog,
-            // ),
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                CupertinoIcons.arrow_up_arrow_down_square_fill,
+                // FontAwesomeIcons.arrowsUpDownLeftRight,
+                size: 28,
+              ),
+              onPressed: _showExportDialog,
+            ),
             // CupertinoButton(
             //   minSize: 40,
             //   padding: const EdgeInsets.all(0),
@@ -142,7 +143,8 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(FontAwesomeIcons.share).paddingOnly(right: 8),
+                  const Icon(FontAwesomeIcons.squareShareNodes)
+                      .paddingOnly(right: 8),
                   const Text('Share '),
                 ],
               ),
@@ -155,7 +157,8 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(FontAwesomeIcons.fileExport).paddingOnly(right: 8),
+                  const Icon(FontAwesomeIcons.fileArrowUp)
+                      .paddingOnly(right: 8),
                   const Text('Export'),
                 ],
               ),
@@ -168,7 +171,8 @@ class _DownloadTabState extends State<DownloadTab> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(FontAwesomeIcons.fileImport).paddingOnly(right: 8),
+                  const Icon(FontAwesomeIcons.fileArrowDown)
+                      .paddingOnly(right: 8),
                   const Text('Import'),
                 ],
               ),
@@ -238,7 +242,8 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
     super.build(context);
     return Obx(() {
       // controller.galleryTasks更新时，生成新的animatedGalleryListKey，确保列表能刷新
-      controller.animatedGalleryListKey = GlobalKey<AnimatedListState>();
+      // TODO: 会导致任务状态变化时， 列表重新回到顶部
+      // controller.animatedGalleryListKey = GlobalKey<AnimatedListState>();
       return CupertinoScrollbar(
         controller: PrimaryScrollController.of(context),
         child: AnimatedList(

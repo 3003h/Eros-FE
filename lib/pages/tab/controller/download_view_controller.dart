@@ -645,6 +645,9 @@ class DownloadViewController extends GetxController {
       _downloadController.initGalleryTasks();
       update([idDownloadGalleryView]);
       // await _showRestartAppDialog();
+
+      // 更新 animatedGalleryListKey
+      animatedGalleryListKey = GlobalKey<AnimatedListState>();
     }
   }
 }
