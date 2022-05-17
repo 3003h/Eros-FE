@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/profile_edit_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -423,10 +424,11 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                             child: Text(L10n.of(context).tab_watched),
                             // constraints: BoxConstraints(minWidth: 10),
                           ),
-                          GalleryListType.aggregate: Container(
-                            child: Text(L10n.of(context).aggregate),
-                            // constraints: BoxConstraints(minWidth: 10),
-                          ),
+                          if (!kReleaseMode)
+                            GalleryListType.aggregate: Container(
+                              child: Text(L10n.of(context).aggregate),
+                              // constraints: BoxConstraints(minWidth: 10),
+                            ),
                         },
                         groupValue: _listType,
                         onValueChanged: (GalleryListType? value) {
