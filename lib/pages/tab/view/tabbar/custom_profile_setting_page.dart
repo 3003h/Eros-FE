@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
@@ -515,6 +516,8 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
       ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
       ListModeEnum.grid: L10n.of(context).listmode_grid,
+      if (kDebugMode || Get.find<EhConfigService>().debugMode)
+        ListModeEnum.debugSimple: 'debugSimple',
     };
     return SelectorItem<ListModeEnum>(
       title: _title,

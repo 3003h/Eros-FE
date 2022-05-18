@@ -10,6 +10,7 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:open_by_default/open_by_default.dart';
 
@@ -341,6 +342,8 @@ Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
     ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
     ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
     ListModeEnum.grid: L10n.of(context).listmode_grid,
+    if (kDebugMode || ehConfigService.debugMode)
+      ListModeEnum.debugSimple: 'debugSimple',
   };
   return Obx(() {
     return SelectorItem<ListModeEnum>(
@@ -351,83 +354,4 @@ Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
       onValueChanged: (val) => ehConfigService.listMode.value = val,
     );
   });
-}
-
-/// 标签介绍图片切换
-Widget _buildTagIntroImgLvItem(BuildContext context, {bool hideLine = false}) {
-  const String _title = '标签介绍图片';
-  final EhConfigService ehConfigService = Get.find();
-
-  final Map<TagIntroImgLv, String> descMap = <TagIntroImgLv, String>{
-    TagIntroImgLv.disable: '禁用',
-    TagIntroImgLv.nonh: '隐藏H图片',
-    TagIntroImgLv.r18: '隐藏引起不适的图片',
-    TagIntroImgLv.r18g: '全部显示',
-  };
-
-  return Obx(() {
-    return SelectorItem<TagIntroImgLv>(
-      title: _title,
-      hideDivider: hideLine,
-      actionMap: descMap,
-      initVal: ehConfigService.tagIntroImgLv.value,
-      onValueChanged: (val) => ehConfigService.tagIntroImgLv.value = val,
-    );
-  });
-}
-
-/// 标签介绍图片切换
-Widget _buildTagIntroImgLvItem_Old(BuildContext context) {
-  const String _title = '标签介绍图片';
-  final EhConfigService ehConfigService = Get.find();
-
-  final Map<TagIntroImgLv, String> descMap = <TagIntroImgLv, String>{
-    TagIntroImgLv.disable: '禁用',
-    TagIntroImgLv.nonh: '隐藏H图片',
-    TagIntroImgLv.r18: '隐藏引起不适的图片',
-    TagIntroImgLv.r18g: '全部显示',
-  };
-
-  List<Widget> _getModeList(BuildContext context) {
-    return List<Widget>.from(descMap.keys.map((TagIntroImgLv element) {
-      return CupertinoActionSheetAction(
-          onPressed: () {
-            Get.back(result: element);
-          },
-          child: Text(descMap[element] ?? ''));
-    }).toList());
-  }
-
-  Future<TagIntroImgLv?> _showDialog(BuildContext context) {
-    return showCupertinoModalPopup<TagIntroImgLv>(
-        context: context,
-        builder: (BuildContext context) {
-          final CupertinoActionSheet dialog = CupertinoActionSheet(
-            title: Text(_title),
-            cancelButton: CupertinoActionSheetAction(
-                onPressed: () {
-                  Get.back();
-                },
-                child: Text(L10n.of(context).cancel)),
-            actions: <Widget>[
-              ..._getModeList(context),
-            ],
-          );
-          return dialog;
-        });
-  }
-
-  return Obx(() => SelectorSettingItem(
-        title: _title,
-        selector: descMap[ehConfigService.tagIntroImgLv.value] ?? '',
-        onTap: () async {
-          logger.v('tap TagIntroImgLvItem');
-          final TagIntroImgLv? _result = await _showDialog(context);
-          if (_result != null) {
-            // ignore: unnecessary_string_interpolations
-            logger.v('${EnumToString.convertToString(_result)}');
-            ehConfigService.tagIntroImgLv.value = _result;
-          }
-        },
-      ));
 }

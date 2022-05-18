@@ -5,6 +5,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
+import 'package:fehviewer/pages/item/gallery_item_debug_simple.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow.dart';
 import 'package:fehviewer/pages/item/gallery_item_flow_large.dart';
 import 'package:fehviewer/pages/item/gallery_item_placeholder.dart';
@@ -153,6 +154,67 @@ SliverPadding buildGrid(
               tabTag: tabTag,
             ),
           );
+        },
+        childCount: galleryProviders.length,
+      ),
+    ),
+  );
+}
+
+// debug测试用的简单布局
+SliverPadding buildDebugSimple(
+  List<GalleryProvider> galleryProviders,
+  dynamic tabTag, {
+  int? maxPage,
+  required int curPage,
+  VoidCallback? lastComplete,
+  Key? key,
+  Key? centerKey,
+  int? lastTopitemIndex,
+}) {
+  return SliverPadding(
+    padding: const EdgeInsets.all(EHConst.gridCrossAxisSpacing),
+    sliver: SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          if (galleryProviders.length - 1 < index) {
+            return const SizedBox.shrink();
+          }
+          if (maxPage != null) {
+            if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+              // 加载完成最后一项的回调
+              lastComplete?.call();
+            }
+          }
+
+          final GalleryProvider _provider = galleryProviders[index];
+          Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+          Get.lazyReplace(
+              () => GalleryItemController(
+                  galleryProvider: Get.find(tag: _provider.gid)),
+              tag: _provider.gid,
+              fenix: true);
+
+          return GalleryItemDebugSimple(
+            key:
+                index == lastTopitemIndex ? centerKey : ValueKey(_provider.gid),
+            galleryProvider: _provider,
+            tabTag: tabTag,
+          );
+
+          // return FrameSeparateWidget(
+          //   index: index,
+          //   placeHolder: Container(
+          //     width: 60,
+          //   ),
+          //   child: GalleryItemDebugSimple(
+          //     key: index == lastTopitemIndex
+          //         ? centerKey
+          //         : ValueKey(_provider.gid),
+          //     galleryProvider: _provider,
+          //     tabTag: tabTag,
+          //   ),
+          // );
         },
         childCount: galleryProviders.length,
       ),
@@ -442,6 +504,17 @@ Widget getGallerySliverList(
 
       case ListModeEnum.grid:
         return buildGrid(
+          galleryProviders ?? [],
+          tabTag,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
+          lastComplete: lastComplete,
+          key: _key,
+          centerKey: centerKey,
+          lastTopitemIndex: lastTopitemIndex,
+        );
+      case ListModeEnum.debugSimple:
+        return buildDebugSimple(
           galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
