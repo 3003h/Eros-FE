@@ -161,6 +161,12 @@ class EhConfigService extends ProfileService {
   bool get fixedHeightOfListItems => _fixedHeightOfListItems.value;
   set fixedHeightOfListItems(bool val) => _fixedHeightOfListItems.value = val;
 
+  final _tagTranslateDataUpdateMode = TagTranslateDataUpdateMode.manual.obs;
+  TagTranslateDataUpdateMode get tagTranslateDataUpdateMode =>
+      _tagTranslateDataUpdateMode.value;
+  set tagTranslateDataUpdateMode(TagTranslateDataUpdateMode val) =>
+      _tagTranslateDataUpdateMode.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -429,6 +435,16 @@ class EhConfigService extends ProfileService {
     everProfile<bool>(_fixedHeightOfListItems, (value) {
       ehConfig = ehConfig.copyWith(fixedHeightOfListItems: value);
     });
+
+    // tagTranslateDataUpdateMode
+    tagTranslateDataUpdateMode = EnumToString.fromString(
+            TagTranslateDataUpdateMode.values,
+            ehConfig.tagTranslateDataUpdateMode ?? '') ??
+        TagTranslateDataUpdateMode.manual;
+    everFromEunm(
+        _tagTranslateDataUpdateMode,
+        (String value) =>
+            ehConfig = ehConfig.copyWith(tagTranslateDataUpdateMode: value));
   }
 
   /// 收藏排序 dialog

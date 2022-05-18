@@ -22,6 +22,7 @@ import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
+import 'package:fehviewer/pages/setting/tag_translat_page.dart';
 import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
@@ -178,6 +179,11 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => WebDavSetting(),
+                            );
+                          case EHRoutes.tagTranslat:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => TagTranslatePage(),
                             );
                           case EHRoutes.logfile:
                             return GetPageRoute(

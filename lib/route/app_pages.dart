@@ -26,6 +26,7 @@ import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
+import 'package:fehviewer/pages/setting/tag_translat_page.dart';
 import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
@@ -219,6 +220,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.webDavSetting,
       page: () => const WebDavSetting(),
+    ),
+    GetPage(
+      name: EHRoutes.tagTranslat,
+      page: () => const TagTranslatePage(),
     ),
     GetPage(
       name: EHRoutes.logfile,

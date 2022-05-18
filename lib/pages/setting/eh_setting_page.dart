@@ -71,23 +71,23 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isJpnTitle(newValue);
     }
 
-    Future<void> _handleTagTranslatChanged(bool newValue) async {
-      _ehConfigService.isTagTranslat = newValue;
-      if (newValue) {
-        try {
-          if (await transController.checkUpdate()) {
-            showToast('更新开始');
-            await transController.updateDB();
-            showToast('更新完成');
-          } else {
-            logger.v('do not need update');
-          }
-        } catch (e) {
-          logger.e('更新翻译异常 $e');
-          rethrow;
-        }
-      }
-    }
+    // Future<void> _handleTagTranslatChanged(bool newValue) async {
+    //   _ehConfigService.isTagTranslat = newValue;
+    //   if (newValue) {
+    //     try {
+    //       if (await transController.checkUpdate()) {
+    //         showToast('更新开始');
+    //         await transController.updateDB();
+    //         showToast('更新完成');
+    //       } else {
+    //         logger.v('do not need update');
+    //       }
+    //     } catch (e) {
+    //       logger.e('更新翻译异常 $e');
+    //       rethrow;
+    //     }
+    //   }
+    // }
 
     void _handleTagTranslatCDNChanged(bool newValue) {
       _ehConfigService.enableTagTranslateCDN = newValue;
@@ -105,13 +105,13 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isClipboardLink.value = val;
     }
 
-    Future<void> _forceUpdateTranslate() async {
-      if (await transController.checkUpdate(force: true)) {
-        showToast('手动更新开始');
-        await transController.updateDB();
-        showToast('更新完成');
-      }
-    }
+    // Future<void> _forceUpdateTranslate() async {
+    //   if (await transController.checkUpdate(force: true)) {
+    //     showToast('手动更新开始');
+    //     await transController.updateDB();
+    //     showToast('更新完成');
+    //   }
+    // }
 
     final List<Widget> _list = <Widget>[
       if (_isLogin)
@@ -211,37 +211,51 @@ class ListViewEhSetting extends StatelessWidget {
         }),
       const ItemSpace(),
       if (localeService.isLanguageCodeZh)
-        TextSwitchItem(
-          '启用CDN',
-          intValue: _ehConfigService.enableTagTranslateCDN,
-          onChanged: _handleTagTranslatCDNChanged,
-          desc: '加速下载翻译数据',
-        ),
-      if (localeService.isLanguageCodeZh)
-        Obx(() => TextSwitchItem(
-              '显示标签中文翻译',
-              intValue: _tagTranslat,
-              onChanged: _handleTagTranslatChanged,
-              desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
-              suffix: CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                child: const Icon(CupertinoIcons.refresh),
-                onPressed: _forceUpdateTranslate,
-              ),
-            )),
-      Obx(() {
-        return AnimatedCrossFade(
-          alignment: Alignment.center,
-          crossFadeState: _ehConfigService.isTagTranslat
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-          firstCurve: Curves.easeIn,
-          secondCurve: Curves.easeOut,
-          duration: const Duration(milliseconds: 200),
-          firstChild: const SizedBox(),
-          secondChild: _buildTagIntroImgLvItem(context),
-        );
-      }),
+        Obx(() {
+          return SelectorSettingItem(
+            title: '标签翻译',
+            onTap: () {
+              Get.toNamed(
+                EHRoutes.tagTranslat,
+                id: isLayoutLarge ? 2 : null,
+              );
+            },
+            selector: _tagTranslat ? L10n.of(context).on : L10n.of(context).off,
+            desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
+          );
+        }),
+      // if (localeService.isLanguageCodeZh)
+      //   TextSwitchItem(
+      //     '启用CDN',
+      //     intValue: _ehConfigService.enableTagTranslateCDN,
+      //     onChanged: _handleTagTranslatCDNChanged,
+      //     desc: '加速下载翻译数据',
+      //   ),
+      // if (localeService.isLanguageCodeZh)
+      //   Obx(() => TextSwitchItem(
+      //         '显示标签中文翻译',
+      //         intValue: _tagTranslat,
+      //         onChanged: _handleTagTranslatChanged,
+      //         desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
+      //         suffix: CupertinoButton(
+      //           padding: const EdgeInsets.all(0),
+      //           child: const Icon(CupertinoIcons.refresh),
+      //           onPressed: _forceUpdateTranslate,
+      //         ),
+      //       )),
+      // Obx(() {
+      //   return AnimatedCrossFade(
+      //     alignment: Alignment.center,
+      //     crossFadeState: _ehConfigService.isTagTranslat
+      //         ? CrossFadeState.showSecond
+      //         : CrossFadeState.showFirst,
+      //     firstCurve: Curves.easeIn,
+      //     secondCurve: Curves.easeOut,
+      //     duration: const Duration(milliseconds: 200),
+      //     firstChild: const SizedBox(),
+      //     secondChild: _buildTagIntroImgLvItem(context),
+      //   );
+      // }),
       TextSwitchItem(
         L10n.of(context).show_jpn_title,
         intValue: _jpnTitle,
