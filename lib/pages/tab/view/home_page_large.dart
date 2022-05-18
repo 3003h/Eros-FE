@@ -69,7 +69,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('width:${context.width} ${getSideWidth(context)}');
+    // logger.d('width:${context.width} ${getSideWidth(context)}');
     final mainNavigatorObserver = MainNavigatorObserver();
     return Row(
       children: [

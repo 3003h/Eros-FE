@@ -17,6 +17,7 @@ enum ListModeEnum {
   waterfallLarge,
   grid,
   global,
+  debugSimple,
 }
 
 enum TagTranslateDataUpdateMode {
