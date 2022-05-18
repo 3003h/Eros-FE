@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -61,6 +62,8 @@ Future<void> main() async {
       Logger.level = Level.error;
     }
     resetLogLevel();
+
+    updateTagTranslate();
 
     runApp(kReleaseMode || GetPlatform.isDesktop
         ? MyApp()
@@ -223,5 +226,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             locale: localeService.locale,
           )),
     );
+  }
+}
+
+Future<void> updateTagTranslate() async {
+  await 10.seconds.delay();
+  final EhConfigService ehConfigService = Get.find();
+  final TagTransController tagTransController = Get.find();
+
+  if (ehConfigService.tagTranslateDataUpdateMode ==
+      TagTranslateDataUpdateMode.everyStartApp) {
+    logger.d('updateTagTranslate everyStartApp');
+    if (await tagTransController.checkUpdate()) {
+      await tagTransController.updateDB();
+    }
   }
 }

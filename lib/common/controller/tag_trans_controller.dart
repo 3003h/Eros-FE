@@ -78,7 +78,8 @@ class TagTransController extends GetxController {
   }
 
   /// 获取数据
-  Future<List> _fetch() async {
+  Future<List> _fetchData({bool silence = false}) async {
+    logger.d('_fetchData start');
     if (ehConfigService.enableTagTranslateCDN) {
       _dbUrl = kCDNurl;
     }
@@ -105,10 +106,10 @@ class TagTransController extends GetxController {
   }
 
   /// 更新数据库数据
-  Future<void> updateDB() async {
+  Future<void> updateDB({bool silence = false}) async {
     final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
 
-    List listData = await _fetch();
+    List listData = await _fetchData();
     if (listData.isEmpty) {
       return;
     }
@@ -134,7 +135,7 @@ class TagTransController extends GetxController {
       });
     }
 
-    loggerNoStack.v('tag中文翻译数量 ${tagTranslats.length}');
+    loggerNoStack.d('tag中文翻译数量 ${tagTranslats.length}');
 
     tagTranslatDao.insertAllTagTranslats(tagTranslats);
 

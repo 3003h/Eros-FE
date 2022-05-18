@@ -24,6 +24,7 @@ class EHRoutes {
   static const String mySettings = '/mySettings';
   static const String myTags = '/myTags';
   static const String userTags = '/userTags';
+  static const String tagTranslat = '/tagTranslat';
 
   static const String login = '/login';
   static const String webLogin = '/webLogin';

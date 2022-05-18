@@ -19,6 +19,11 @@ enum ListModeEnum {
   global,
 }
 
+enum TagTranslateDataUpdateMode {
+  manual,
+  everyStartApp,
+}
+
 enum TagIntroImgLv {
   disable,
   nonh,
