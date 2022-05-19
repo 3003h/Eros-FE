@@ -10,7 +10,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:zoom_widget/zoom_widget.dart';
 
-import '../controller/view_contorller.dart';
+import '../controller/view_controller.dart';
 import 'view_image.dart';
 
 class ImageListView extends GetView<ViewExtController> {

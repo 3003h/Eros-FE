@@ -19,7 +19,7 @@ import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 
-import '../pages/image_view/controller/view_contorller.dart';
+import '../pages/image_view/controller/view_controller.dart';
 import 'main_observer.dart';
 
 class NavigatorUtil {
