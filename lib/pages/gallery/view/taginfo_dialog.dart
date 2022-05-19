@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
@@ -54,7 +55,8 @@ Future<void> showTagInfoDialog(String text,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(FontAwesomeIcons.undo).paddingOnly(right: 8),
+              const Icon(FontAwesomeIcons.arrowRotateLeft)
+                  .paddingOnly(right: 8),
               Text(L10n.of(Get.context!).tag_withdraw_vote),
             ],
           ),
@@ -70,8 +72,9 @@ Future<void> showTagInfoDialog(String text,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(FontAwesomeIcons.undo).paddingOnly(right: 8),
-              Text(L10n.of(Get.context!).tag_vote_down),
+              const Icon(FontAwesomeIcons.arrowRotateLeft)
+                  .paddingOnly(right: 8),
+              Text(L10n.of(Get.context!).tag_withdraw_vote),
             ],
           ),
           onPressed: () {
@@ -90,7 +93,7 @@ Future<void> showTagInfoDialog(String text,
       barrierDismissible: true,
       builder: (_) {
         Widget _title() {
-          if (translate != text) {
+          if (translate != text && Get.find<LocaleService>().isLanguageCodeZh) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -114,7 +117,7 @@ Future<void> showTagInfoDialog(String text,
               children: [
                 Text('$type:$text'),
                 const Text(
-                  '未提供翻译',
+                  '',
                   style: TextStyle(fontSize: 12),
                 ),
               ],
@@ -124,7 +127,9 @@ Future<void> showTagInfoDialog(String text,
 
         return CupertinoAlertDialog(
           title: _title(),
-          content: TagDialogView(text: text, type: type),
+          content: Get.find<LocaleService>().isLanguageCodeZh
+              ? TagDialogView(text: text, type: type)
+              : const SizedBox.shrink(),
           actions: [
             ..._getActions(),
             CupertinoDialogAction(
