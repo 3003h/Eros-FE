@@ -154,7 +154,8 @@ class ImageExt extends GetView<ViewExtController> {
     this.onLoadCompleted,
     required this.initGestureConfigHandler,
     required this.onDoubleTap,
-    this.mode = ExtendedImageMode.gesture,
+    this.mode = ExtendedImageMode.none,
+    this.enableSlideOutPage = false,
   }) : super(key: key);
 
   final String url;
@@ -168,6 +169,7 @@ class ImageExt extends GetView<ViewExtController> {
   final InitGestureConfigHandler initGestureConfigHandler;
   final DoubleTap? onDoubleTap;
   final ExtendedImageMode mode;
+  final bool enableSlideOutPage;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +180,7 @@ class ImageExt extends GetView<ViewExtController> {
       fit: BoxFit.contain,
       handleLoadingProgress: true,
       clearMemoryCacheIfFailed: true,
-      enableSlideOutPage: true,
+      enableSlideOutPage: enableSlideOutPage,
       mode: mode,
       timeLimit: const Duration(seconds: 10),
       initGestureConfigHandler: initGestureConfigHandler,

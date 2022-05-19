@@ -26,12 +26,14 @@ class ViewImage extends StatefulWidget {
     this.initialScale = 1.0,
     this.enableDoubleTap = true,
     this.mode = ExtendedImageMode.gesture,
+    this.enableSlideOutPage = true,
   }) : super(key: key);
 
   final int imageSer;
   final double initialScale;
   final bool enableDoubleTap;
   final ExtendedImageMode mode;
+  final bool enableSlideOutPage;
 
   @override
   _ViewImageState createState() => _ViewImageState();
@@ -102,17 +104,21 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             initialScale != null ? initialScale * 2 : vState.doubleTapScales[1];
       }
       return GestureConfig(
-          inPageView: true,
-          initialScale: initialScale ?? 1.0,
-          maxScale: 10.0,
-          // animationMaxScale: max(initialScale, 5.0),
-          animationMaxScale: 10.0,
-          initialAlignment: InitialAlignment.center,
-          //you can cache gesture state even though page view page change.
-          //remember call clearGestureDetailsCache() method at the right time.(for example,this page dispose)
-          cacheGesture: false);
+        inPageView: true,
+        initialScale: initialScale ?? 1.0,
+        maxScale: 10.0,
+        // animationMaxScale: max(initialScale, 5.0),
+        animationMaxScale: 10.0,
+        initialAlignment: InitialAlignment.center,
+        //you can cache gesture state even though page view page change.
+        //remember call clearGestureDetailsCache() method at the right time.(for example,this page dispose)
+        cacheGesture: false,
+        hitTestBehavior: HitTestBehavior.opaque,
+      );
     };
 
+    ///
+    /// 双击事件
     final DoubleTap onDoubleTap = (ExtendedImageGestureState state) {
       ///you can use define pointerDownPosition as you can,
       ///default value is double tap pointer down postion.
@@ -156,67 +162,74 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       _doubleClickAnimationController.forward();
     };
 
-    final fileImage = (String path) => ExtendedImage.file(
-          File(path),
-          fit: BoxFit.contain,
-          enableSlideOutPage: true,
-          mode: widget.mode,
-          initGestureConfigHandler: _initGestureConfigHandler,
-          onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
-          loadStateChanged: (ExtendedImageState state) {
-            final ImageInfo? imageInfo = state.extendedImageInfo;
-            if (state.extendedImageLoadState == LoadState.completed ||
-                imageInfo != null) {
-              controller.setScale100(imageInfo!, size);
+    /// 由图片文件构建 Widget
+    ///
+    Widget fileImage(String path) {
+      // return ExtendedImage.file(
+      //   File(path),
+      //   fit: BoxFit.contain,
+      //   onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
+      //   enableSlideOutPage: true,
+      //   // mode: widget.mode,
+      // );
 
-              if (vState.imageSizeMap[widget.imageSer] == null) {
-                vState.imageSizeMap[widget.imageSer] = Size(
-                    imageInfo.image.width.toDouble(),
-                    imageInfo.image.height.toDouble());
-                Future.delayed(const Duration(milliseconds: 100)).then(
-                    (value) => controller
-                        .update(['$idImageListView${widget.imageSer}']));
-              }
+      return ExtendedImage.file(
+        File(path),
+        fit: BoxFit.contain,
+        enableSlideOutPage: widget.enableSlideOutPage,
+        mode: widget.mode,
+        initGestureConfigHandler: _initGestureConfigHandler,
+        onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
+        loadStateChanged: (ExtendedImageState state) {
+          final ImageInfo? imageInfo = state.extendedImageInfo;
+          if (state.extendedImageLoadState == LoadState.completed ||
+              imageInfo != null) {
+            controller.setScale100(imageInfo!, size);
 
-              controller.onLoadCompleted(widget.imageSer);
-              return controller.vState.viewMode != ViewMode.topToBottom
-                  ? Hero(
-                      tag: '${widget.imageSer}',
-                      child: state.completedWidget,
-                      createRectTween: (Rect? begin, Rect? end) {
-                        final tween =
-                            MaterialRectCenterArcTween(begin: begin, end: end);
-                        return tween;
-                      },
-                    )
-                  : state.completedWidget;
-            } else if (state.extendedImageLoadState == LoadState.loading) {
-              final ImageChunkEvent? loadingProgress = state.loadingProgress;
-              final double? progress =
-                  loadingProgress?.expectedTotalBytes != null
-                      ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
-                          (loadingProgress?.expectedTotalBytes ?? 1)
-                      : null;
-              return ViewLoading(
-                ser: widget.imageSer,
-                progress: progress,
-                duration: vState.viewMode != ViewMode.topToBottom
-                    ? const Duration(milliseconds: 50)
-                    : null,
-              );
+            if (vState.imageSizeMap[widget.imageSer] == null) {
+              vState.imageSizeMap[widget.imageSer] = Size(
+                  imageInfo.image.width.toDouble(),
+                  imageInfo.image.height.toDouble());
+              Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+                  controller.update(['$idImageListView${widget.imageSer}']));
             }
-          },
-        );
 
-    if (vState.loadFrom == LoadFrom.download) {
-      /// 从已下载查看
-      final path = vState.imagePathList[widget.imageSer - 1];
-      final Widget image = fileImage(path);
+            controller.onLoadCompleted(widget.imageSer);
 
-      return image;
-    } else {
-      /// 从画廊页查看
-      final Widget viewImage = GetBuilder<ViewExtController>(
+            return controller.vState.viewMode != ViewMode.topToBottom
+                ? Hero(
+                    tag: '${widget.imageSer}',
+                    child: state.completedWidget,
+                    createRectTween: (Rect? begin, Rect? end) {
+                      final tween =
+                          MaterialRectCenterArcTween(begin: begin, end: end);
+                      return tween;
+                    },
+                  )
+                : state.completedWidget;
+          } else if (state.extendedImageLoadState == LoadState.loading) {
+            final ImageChunkEvent? loadingProgress = state.loadingProgress;
+            final double? progress = loadingProgress?.expectedTotalBytes != null
+                ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
+                    (loadingProgress?.expectedTotalBytes ?? 1)
+                : null;
+
+            return ViewLoading(
+              ser: widget.imageSer,
+              progress: progress,
+              duration: vState.viewMode != ViewMode.topToBottom
+                  ? const Duration(milliseconds: 50)
+                  : null,
+            );
+          }
+        },
+      );
+    }
+
+    ///
+    /// 从画廊页查看
+    Widget getViewImage() {
+      return GetBuilder<ViewExtController>(
         builder: (ViewExtController controller) {
           // loggerSimple.d('build viewImage online');
           final ViewExtState vState = controller.vState;
@@ -312,11 +325,13 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                     }
 
                     // 图片未下载 调用网络图片组件加载
+                    logger.d('图片未下载 调用网络图片组件加载');
                     Widget image = ImageExt(
                       url: _image?.imageUrl ?? '',
                       onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
                       ser: widget.imageSer,
                       mode: widget.mode,
+                      enableSlideOutPage: widget.enableSlideOutPage,
                       reloadImage: () => controller.reloadImage(widget.imageSer,
                           changeSource: true),
                       fadeAnimationController: _fadeAnimationController,
@@ -362,8 +377,17 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           );
         },
       );
+    }
 
-      return viewImage;
+    if (vState.loadFrom == LoadFrom.download) {
+      /// 从已下载查看
+      final path = vState.imagePathList[widget.imageSer - 1];
+      final Widget image = fileImage(path);
+
+      return image;
+    } else {
+      /// 从画廊页查看
+      return getViewImage();
     }
   }
 }

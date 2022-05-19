@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.33+393
+version: 1.2.34+394
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -111,7 +111,7 @@ dependencies:
   blur: ^3.0.0
 #  extended_text: ^7.0.0
   sprintf: ^6.0.0
-  keframe: ^2.0.1
+  keframe: ^3.0.0
 #   fps_monitor: ^2.0.0
   executor: ^2.2.2
   synchronized: ^3.0.0
@@ -120,7 +120,7 @@ dependencies:
   collection: ^1.15.0
   zoom_widget: ^0.2.1
   english_words: ^4.0.0
-  scroll_to_index: ^2.0.0
+  scroll_to_index: ^3.0.1
   throttling: ^1.0.0
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
