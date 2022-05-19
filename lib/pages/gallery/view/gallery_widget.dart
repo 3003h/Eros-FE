@@ -500,14 +500,20 @@ class TagGroupItem extends StatelessWidget {
                     simpleSearch: '${tag.type}:${tag.title.trim()}');
               },
               onLongPress: () {
-                if (ehConfigService.isTagTranslat) {
-                  showTagInfoDialog(
-                    tag.title,
-                    translate: tag.tagTranslat,
-                    type: tag.type,
-                    vote: tag.vote ?? 0,
-                  );
-                }
+                // if (ehConfigService.isTagTranslat) {
+                //   showTagInfoDialog(
+                //     tag.title,
+                //     translate: tag.tagTranslat,
+                //     type: tag.type,
+                //     vote: tag.vote ?? 0,
+                //   );
+                // }
+                showTagInfoDialog(
+                  tag.title,
+                  translate: tag.tagTranslat,
+                  type: tag.type,
+                  vote: tag.vote ?? 0,
+                );
               },
             )),
       );
