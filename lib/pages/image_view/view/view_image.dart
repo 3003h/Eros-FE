@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../common.dart';
-import '../controller/view_contorller.dart';
+import '../controller/view_controller.dart';
 import 'view_widget.dart';
 
 typedef DoubleClickAnimationListener = void Function();
