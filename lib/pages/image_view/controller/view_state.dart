@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 import '../common.dart';
 import '../view/view_page.dart';
-import 'view_contorller.dart';
+import 'view_controller.dart';
 
 class ViewExtState {
   /// 初始化操作

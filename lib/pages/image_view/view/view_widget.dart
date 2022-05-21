@@ -24,7 +24,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../common.dart';
-import '../controller/view_contorller.dart';
+import '../controller/view_controller.dart';
 
 const double kPageViewPadding = 4.0;
 
