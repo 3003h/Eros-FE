@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
@@ -16,7 +14,7 @@ import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/http_override.dart';
 import 'package:fehviewer/utils/storage.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,9 +31,9 @@ import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
 
-late final bool enableFirebase;
-late final FirebaseAnalytics? analytics;
-late final FirebaseFirestore? firestore;
+// late final bool enableFirebase;
+// late final FirebaseAnalytics? analytics;
+// late final FirebaseFirestore? firestore;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 

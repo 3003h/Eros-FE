@@ -5,7 +5,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
@@ -64,10 +63,6 @@ class AppDio with DioMixin implements Dio {
     //       request: true,
     //       requestBody: true));
     // }
-
-    if (GetPlatform.isMobile && enableFirebase) {
-      interceptors.add(DioFirebasePerformanceInterceptor());
-    }
 
     interceptors.add(PrettyDioLogger(
       requestHeader: true,
