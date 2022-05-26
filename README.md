@@ -97,4 +97,4 @@ Translation
 ## About compiling
 
 flutter version is the latest release version \
-Because the project introduces firebase, you need to place your own google-services.json file
+rename `/lib/config/config.dart.sample` to `/lib/config/config.dart`

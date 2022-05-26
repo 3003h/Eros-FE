@@ -99,5 +99,5 @@ ehentai译文数据库
 ## 编译相关
 
 flutter版本为最新release版本 \
-因项目引入 firebase, 需要放置自己的google-services.json文件等 \
-或者直接去掉 firebase 相关功能
+`/lib/config/config.dart` 文件为存放敏感信息数据的文件，github里看到是加密处理的 \
+如果需要自行编译的话，复制 `/lib/config.dart.sample` 为 `/lib/config/config.dart` 进行操作
