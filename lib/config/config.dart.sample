@@ -1,5 +1,5 @@
-class Config {
-  static const openLApiKey = '';
+class FeConfig {
+  static const openLapikey = '';
 
   static const sentryDsn = '';
 }
