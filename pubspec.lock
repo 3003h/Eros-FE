@@ -168,14 +168,14 @@ packages:
       name: built_value
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "8.3.0"
+    version: "8.3.2"
   buttons_tabbar:
     dependency: "direct main"
     description:
       name: buttons_tabbar
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.3.4"
+    version: "1.3.5"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -308,21 +308,21 @@ packages:
       name: copy_with_extension
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.2"
   copy_with_extension_gen:
     dependency: "direct dev"
     description:
       name: copy_with_extension_gen
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   cross_file:
     dependency: transitive
     description:
       name: cross_file
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.3"
+    version: "0.3.3+1"
   crypto:
     dependency: transitive
     description:
@@ -371,7 +371,7 @@ packages:
       name: device_frame
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   device_info:
     dependency: "direct main"
     description:
@@ -392,7 +392,7 @@ packages:
       name: device_preview
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   dio:
     dependency: "direct main"
     description:
@@ -747,7 +747,7 @@ packages:
       name: flutter_markdown
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.10"
+    version: "0.6.10+1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -768,7 +768,7 @@ packages:
       name: flutter_slidable
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.1"
+    version: "1.3.0"
   flutter_smart_dialog:
     dependency: "direct main"
     description:
@@ -806,7 +806,7 @@ packages:
       name: freezed_annotation
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.0"
+    version: "2.0.3"
   frontend_server_client:
     dependency: transitive
     description:
@@ -820,7 +820,7 @@ packages:
       name: get
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.6.3"
+    version: "4.6.5"
   get_storage:
     dependency: "direct main"
     description:
@@ -953,7 +953,7 @@ packages:
       name: image_picker_ios
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.8.5+4"
+    version: "0.8.5+5"
   image_picker_platform_interface:
     dependency: transitive
     description:
@@ -1074,7 +1074,7 @@ packages:
       name: local_auth
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.2"
+    version: "2.1.0"
   local_auth_android:
     dependency: transitive
     description:
@@ -1096,6 +1096,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.3"
+  local_auth_windows:
+    dependency: transitive
+    description:
+      name: local_auth_windows
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.0"
   logger:
     dependency: "direct main"
     description:
@@ -1447,7 +1454,7 @@ packages:
       name: provider
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
   pub_semver:
     dependency: transitive
     description:
@@ -1809,7 +1816,7 @@ packages:
       name: url_launcher_ios
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.16"
+    version: "6.0.17"
   url_launcher_linux:
     dependency: transitive
     description:
