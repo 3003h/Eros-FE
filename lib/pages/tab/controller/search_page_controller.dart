@@ -110,7 +110,7 @@ class SearchPageController extends DefaultTabViewController {
 
     if (searchText.isNotEmpty) {
       if (!GetPlatform.isWindows) {
-        analytics.logSearch(searchTerm: searchText);
+        analytics?.logSearch(searchTerm: searchText);
       }
 
       _addHistory();

@@ -15,7 +15,7 @@ class QuickSearchController extends ProfileController {
 
   void addText(String text, {bool silent = false}) {
     if (_trimList.contains(text.trim())) {
-      logger.e('搜索词已存在');
+      // logger.e('搜索词已存在');
       // if (!silent) showToast('搜索词已存在');
     } else {
       searchTextList.add(text.trim());

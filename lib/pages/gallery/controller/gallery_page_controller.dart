@@ -125,7 +125,7 @@ class GalleryPageController extends GetxController
       }
 
       if (!GetPlatform.isWindows) {
-        analytics.logViewItem(
+        analytics?.logViewItem(
           items: [
             AnalyticsEventItem(
               itemId: gState.galleryProvider?.gid ?? '',

@@ -33,8 +33,9 @@ import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
 
-late final FirebaseAnalytics analytics;
-FirebaseFirestore firestore = FirebaseFirestore.instance;
+late final bool enableFirebase;
+late final FirebaseAnalytics? analytics;
+late final FirebaseFirestore? firestore;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
