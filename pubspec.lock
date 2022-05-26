@@ -512,55 +512,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.5.1"
-  firebase:
-    dependency: transitive
-    description:
-      name: firebase
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "9.0.3"
-  firebase_core:
-    dependency: transitive
-    description:
-      name: firebase_core
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.17.0"
-  firebase_core_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_core_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.4.0"
-  firebase_core_web:
-    dependency: transitive
-    description:
-      name: firebase_core_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.6.4"
-  firebase_performance:
-    dependency: "direct overridden"
-    description:
-      name: firebase_performance
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.8.0+12"
-  firebase_performance_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_performance_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.1+6"
-  firebase_performance_web:
-    dependency: transitive
-    description:
-      name: firebase_performance_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.1.0+12"
   fixnum:
     dependency: transitive
     description:

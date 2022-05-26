@@ -177,18 +177,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
 
 dependency_overrides:
-#  intl_utils: ^2.6.1
-#  async: ^2.8.2
   json_serializable: ^6.0.1
-  firebase_performance: ^0.8.0+5
-  #args: ^2.1.0
-  #expressions: ^0.2.2
-  #logging: ^1.0.1
-
-  # google_ml_kit pod 依赖冲突 降低firebase版本处理
-#  firebase_core: 1.1.0
-#  firebase_crashlytics: 2.0.0
-#  cloud_firestore: 2.0.0
 
 flutter_intl:
   enabled: true
