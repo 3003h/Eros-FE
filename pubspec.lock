@@ -232,27 +232,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0"
-  cloud_firestore:
-    dependency: "direct main"
-    description:
-      name: cloud_firestore
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.1.16"
-  cloud_firestore_platform_interface:
-    dependency: transitive
-    description:
-      name: cloud_firestore_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.5.6"
-  cloud_firestore_web:
-    dependency: transitive
-    description:
-      name: cloud_firestore_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.6.15"
   code_builder:
     dependency: transitive
     description:
@@ -407,13 +386,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
-  dio_firebase_performance:
-    dependency: "direct main"
-    description:
-      name: dio_firebase_performance
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.1-dev.3"
   dio_http_cache:
     dependency: "direct main"
     description:
@@ -547,27 +519,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "9.0.3"
-  firebase_analytics:
-    dependency: "direct main"
-    description:
-      name: firebase_analytics
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "9.1.8"
-  firebase_analytics_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_analytics_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.1.6"
-  firebase_analytics_web:
-    dependency: transitive
-    description:
-      name: firebase_analytics_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.4.0+13"
   firebase_core:
     dependency: transitive
     description:
@@ -589,22 +540,8 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.6.4"
-  firebase_crashlytics:
-    dependency: "direct main"
-    description:
-      name: firebase_crashlytics
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.8.0"
-  firebase_crashlytics_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_crashlytics_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.2.6"
   firebase_performance:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       name: firebase_performance
       url: "https://pub.flutter-io.cn"

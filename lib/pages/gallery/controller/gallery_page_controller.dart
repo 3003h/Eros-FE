@@ -14,7 +14,6 @@ import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -122,19 +121,6 @@ class GalleryPageController extends GetxController
       // 跳转提示dialog
       if (gState.galleryRepository?.jumpSer != null) {
         startReadDialog(gState.galleryRepository!.jumpSer!);
-      }
-
-      if (!GetPlatform.isWindows) {
-        analytics?.logViewItem(
-          items: [
-            AnalyticsEventItem(
-              itemId: gState.galleryProvider?.gid ?? '',
-              itemName: gState.galleryProvider?.englishTitle ?? '',
-              itemCategory: gState.galleryProvider?.category ?? '',
-              creativeName: gState.galleryProvider?.japaneseTitle,
-            )
-          ],
-        );
       }
     } catch (err, stack) {
       logger.e('$err\n$stack');

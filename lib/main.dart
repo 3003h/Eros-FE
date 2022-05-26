@@ -26,8 +26,6 @@ import 'get_init.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  enableFirebase = false;
   runZonedGuarded<Future<void>>(() async {
     final dsn = await getSentryDsn();
     if (dsn != null && dsn.isNotEmpty) {
