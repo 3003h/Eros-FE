@@ -1,21 +1,21 @@
 import 'dart:async';
-import 'dart:convert';
 
+import 'package:fehviewer/config/config.dart';
 import 'package:fehviewer/models/openl_translation.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/openl/openl_translator.dart';
-import 'package:flutter/services.dart';
 import 'package:translator/translator.dart';
 
 import 'language.dart';
 
 class TranslatorHelper {
   static Future<String?> getOpenLApikey() async {
-    try {
-      final String openl = await rootBundle.loadString('assets/openl.json');
-      final openlJson = json.decode(openl);
-      return openlJson['apikey'] as String?;
-    } catch (_) {}
+    // try {
+    //   final String openl = await rootBundle.loadString('assets/openl.json');
+    //   final openlJson = json.decode(openl);
+    //   return openlJson['apikey'] as String?;
+    // } catch (_) {}
+    return FeConfig.openLapikey;
   }
 
   static GoogleTranslator googleTranslator = GoogleTranslator();
@@ -27,7 +27,7 @@ class TranslatorHelper {
     String service = 'deepl',
   }) async {
     final String? apikey = await getOpenLApikey();
-    if (apikey == null) {
+    if (apikey == null || apikey.isEmpty) {
       return null;
     }
 
@@ -42,7 +42,7 @@ class TranslatorHelper {
 
   static Future<String?> getfallbackService() async {
     final String? apikey = await getOpenLApikey();
-    if (apikey == null) {
+    if (apikey == null || apikey.isEmpty) {
       return null;
     }
     final OpenLTranslator openLTranslator = OpenLTranslator(apikey: apikey);

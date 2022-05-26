@@ -1,0 +1,5 @@
+class Config {
+  static const openLApiKey = '';
+
+  static const sentryDsn = '';
+}

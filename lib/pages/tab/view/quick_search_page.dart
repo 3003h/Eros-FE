@@ -42,11 +42,15 @@ class QuickSearchListPage extends StatelessWidget {
   }
 
   Future _upload() async {
+    if (firestore == null) {
+      return;
+    }
+
     final List<String> _searchTextList = quickSearchController.searchTextList;
     final String _searchText = _searchTextList.join('\n');
     logger.v(_searchText);
 
-    final CollectionReference qSearchs = firestore.collection('fehviewer');
+    final CollectionReference qSearchs = firestore!.collection('fehviewer');
 
     final DateTime _now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
@@ -63,7 +67,11 @@ class QuickSearchListPage extends StatelessWidget {
   }
 
   Future _download() async {
-    final CollectionReference qSearchs = firestore.collection('fehviewer');
+    if (firestore == null) {
+      return;
+    }
+
+    final CollectionReference qSearchs = firestore!.collection('fehviewer');
 
     final DocumentSnapshot<Object?> docById = await qSearchs
         .doc(await _getUniqueId())
@@ -264,15 +272,16 @@ class QuickSearchListPage extends StatelessWidget {
             ),
             onPressed: _showFile,
           ),
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              FontAwesomeIcons.cloud,
-              size: 20,
+          if (enableFirebase)
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.cloud,
+                size: 20,
+              ),
+              onPressed: _showCloud,
             ),
-            onPressed: _showCloud,
-          ),
         ],
       ),
     );

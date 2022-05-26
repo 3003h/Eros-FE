@@ -3,7 +3,6 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/user_item.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingTab extends GetView<SettingViewController> {
