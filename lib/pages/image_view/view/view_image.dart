@@ -325,7 +325,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                     }
 
                     // 图片未下载 调用网络图片组件加载
-                    logger.d('图片未下载 调用网络图片组件加载');
+                    // logger.d('图片未下载 调用网络图片组件加载');
                     Widget image = ImageExt(
                       url: _image?.imageUrl ?? '',
                       onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
