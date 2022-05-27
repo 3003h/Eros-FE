@@ -589,7 +589,9 @@ class EhConfigService extends ProfileService {
 
     final String _text =
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
-    logger.d('Clipboard: ' + _text);
+    if (_text.isNotEmpty) {
+      logger.d('Clipboard: ' + _text);
+    }
     final RegExp _reg =
         RegExp(r'https?://e[-|x]hentai.org/g/\d+/[0-9a-f]{10}/?');
     final RegExpMatch? _mach = _reg.firstMatch(_text);
