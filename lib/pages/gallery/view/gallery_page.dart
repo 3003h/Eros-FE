@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -140,9 +141,11 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                           CupertinoButton(
                             padding: const EdgeInsets.all(0),
                             minSize: 38,
-                            child: const Icon(
-                              FontAwesomeIcons.tags,
-                              size: 22,
+                            child: const MouseRegionClick(
+                              child: Icon(
+                                FontAwesomeIcons.tags,
+                                size: 22,
+                              ),
                             ),
                             onPressed: () {
                               _controller.addTag();
@@ -151,9 +154,11 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
                           CupertinoButton(
                             padding: const EdgeInsets.all(0),
                             minSize: 38,
-                            child: const Icon(
-                              FontAwesomeIcons.share,
-                              size: 22,
+                            child: const MouseRegionClick(
+                              child: Icon(
+                                FontAwesomeIcons.share,
+                                size: 22,
+                              ),
                             ),
                             onPressed: () {
                               if (_item == null) {

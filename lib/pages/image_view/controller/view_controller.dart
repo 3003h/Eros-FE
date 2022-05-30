@@ -208,6 +208,9 @@ class ViewExtController extends GetxController {
   }
 
   void resetPageController() {
+    pageController.dispose();
+    extendedPageController.dispose();
+
     pageController = PageController(
       initialPage: pageController.positions.isNotEmpty
           ? pageController.page?.round() ?? vState.currentItemIndex
@@ -295,6 +298,8 @@ class ViewExtController extends GetxController {
     logger.d('_toIndex $_toIndex  ');
     update([idViewColumnModeIcon, idSlidePage]);
     await Future.delayed(const Duration(milliseconds: 50));
+
+    // resetPageController();
 
     // pageController.jumpToPage(_toIndex);
     // extendedPageController.jumpToPage(_toIndex);
@@ -537,9 +542,8 @@ class ViewExtController extends GetxController {
         itemScrollController.isAttached &&
         !vState.isScrolling &&
         vState.pageIndex > 0) {
-      logger.d('${vState.minImageIndex}');
+      logger.v('${vState.minImageIndex}');
       itemScrollController.scrollTo(
-        // index: vState.pageIndex - 1,
         index: vState.minImageIndex - 1,
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
@@ -652,11 +656,11 @@ class ViewExtController extends GetxController {
     }
   }
 
-  Future tapAutoRead(BuildContext context) async {
+  Future tapAutoRead(BuildContext context, {bool setInv = true}) async {
     // logger.d('tap autoRead');
 
     if (!vState.autoRead) {
-      await _setAutoReadInv(context);
+      await _setAutoReadInv(context, setInv: setInv);
       update([idAutoReadIcon]);
       _startAutoRead();
     } else {
@@ -669,19 +673,21 @@ class ViewExtController extends GetxController {
     _startAutoRead();
   }
 
-  Future<void> _setAutoReadInv(BuildContext context) async {
-    // logger.d('_ehConfigService.turnPageInv ${_ehConfigService.turnPageInv}');
-
+  Future<void> _setAutoReadInv(
+    BuildContext context, {
+    bool setInv = true,
+  }) async {
     final initIndex = EHConst.invList
         .indexWhere((int element) => element == _ehConfigService.turnPageInv);
-    final int? inv = await _showAutoReadInvPicker(
-      context,
-      EHConst.invList,
-      initIndex: initIndex,
-    );
+    final int? inv = setInv
+        ? await _showAutoReadInvPicker(
+            context,
+            EHConst.invList,
+            initIndex: initIndex,
+          )
+        : _ehConfigService.turnPageInv;
 
     if (inv != null) {
-      // logger.d('set inv $inv');
       _ehConfigService.turnPageInv = inv;
       vState.autoRead = !vState.autoRead;
     }
@@ -1038,4 +1044,10 @@ class ViewExtController extends GetxController {
       onExtendedPageController.call();
     }
   }
+
+  void scaleUp() {}
+
+  void scaleDown() {}
+
+  void scaleReset() {}
 }

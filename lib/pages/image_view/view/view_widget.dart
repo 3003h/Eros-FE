@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/gallery_image.dart';
 import 'package:fehviewer/network/api.dart';
@@ -370,18 +371,20 @@ class ViewTopBar extends GetView<ViewExtController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    width: 40,
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.chevronLeft,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
+                MouseRegionClick(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Container(
+                      width: 40,
+                      height: kBottomBarHeight,
+                      child: const Icon(
+                        FontAwesomeIcons.chevronLeft,
+                        color: CupertinoColors.systemGrey6,
+                        // size: 24,
+                      ),
                     ),
                   ),
                 ),
@@ -400,19 +403,21 @@ class ViewTopBar extends GetView<ViewExtController> {
                     );
                   },
                 ),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Get.toNamed(EHRoutes.readSeting);
-                  },
-                  child: Container(
-                    width: 40,
-                    margin: const EdgeInsets.only(right: 8.0),
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.ellipsisH,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
+                MouseRegionClick(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Get.toNamed(EHRoutes.readSeting);
+                    },
+                    child: Container(
+                      width: 40,
+                      margin: const EdgeInsets.only(right: 8.0),
+                      height: kBottomBarHeight,
+                      child: const Icon(
+                        FontAwesomeIcons.ellipsisH,
+                        color: CupertinoColors.systemGrey6,
+                        // size: 24,
+                      ),
                     ),
                   ),
                 ),
@@ -453,12 +458,14 @@ class ViewBottomBar extends GetView<ViewExtController> {
           curve: Curves.easeOut,
           child: Column(
             children: [
+              // 缩略图栏
               AnimatedContainer(
                 height: logic.vState.showThumbList ? kThumbListViewHeight : 0,
                 child: const ThumbnailListView(),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOut,
               ),
+              // 控制按钮栏
               const BottomBarControlWidget(),
             ],
           ).frosted(
@@ -512,164 +519,185 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   // 分享按钮
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      controller.tapShare(context);
-                    },
-                    child: Container(
-                      width: 40,
-                      height: kBottomBarHeight,
-                      child: Column(
-                        children: [
-                          const Icon(
-                            FontAwesomeIcons.shareSquare,
-                            color: CupertinoColors.systemGrey6,
-                            size: 22,
-                          ),
-                          const Spacer(),
-                          Text(
-                            L10n.of(context).share,
-                            style: _kBottomTextStyle,
-                          ),
-                        ],
+                  MouseRegionClick(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.tapShare(context);
+                      },
+                      child: Container(
+                        width: 40,
+                        height: kBottomBarHeight,
+                        child: Column(
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.shareFromSquare,
+                              color: CupertinoColors.systemGrey6,
+                              size: 22,
+                            ),
+                            // const Spacer(),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  L10n.of(context).share,
+                                  style: _kBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
 
                   // 自动阅读按钮
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      // if (logic.vState.viewMode != ViewMode.topToBottom)
-                      controller.tapAutoRead(context);
-                    },
-                    onLongPress: () {
-                      // if (logic.vState.viewMode != ViewMode.topToBottom)
-                      controller.longTapAutoRead(context);
-                    },
-                    child: GetBuilder<ViewExtController>(
-                      id: idAutoReadIcon,
-                      builder: (logic) {
-                        return Container(
-                          width: 40,
-                          height: kBottomBarHeight,
-                          child: Column(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.hourglassHalf,
-                                size: 22,
-                                color: () {
-                                  // if (logic.vState.viewMode ==
-                                  //     ViewMode.topToBottom) {
-                                  //   return CupertinoColors.systemGrey;
-                                  // }
-
-                                  return logic.vState.autoRead
-                                      ? CupertinoColors.activeBlue
-                                      : CupertinoColors.systemGrey6;
-                                }(),
-                              ),
-                              const Spacer(),
-                              const Text(
-                                'Auto',
-                                style: _kBottomTextStyle,
-                              ),
-                            ],
-                          ),
-                        );
+                  MouseRegionClick(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.tapAutoRead(context);
                       },
+                      onLongPress: () {
+                        controller.longTapAutoRead(context);
+                      },
+                      child: GetBuilder<ViewExtController>(
+                        id: idAutoReadIcon,
+                        builder: (logic) {
+                          return Container(
+                            width: 40,
+                            height: kBottomBarHeight,
+                            child: Column(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.hourglassHalf,
+                                  size: 22,
+                                  color: () {
+                                    // if (logic.vState.viewMode ==
+                                    //     ViewMode.topToBottom) {
+                                    //   return CupertinoColors.systemGrey;
+                                    // }
+
+                                    return logic.vState.autoRead
+                                        ? CupertinoColors.activeBlue
+                                        : CupertinoColors.systemGrey6;
+                                  }(),
+                                ),
+                                const Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'Auto',
+                                      style: _kBottomTextStyle,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   // else
                   //   const SizedBox(width: 40),
 
                   // 缩略图预览按钮
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      controller.switchShowThumbList();
-                    },
-                    onLongPress: () {
-                      vibrateUtil.light();
-                      controller.thumbScrollTo();
-                    },
-                    child: Container(
-                      width: 40,
-                      height: kBottomBarHeight,
-                      child: Column(
-                        children: [
-                          GetBuilder<ViewExtController>(
-                            id: idShowThumbListIcon,
-                            builder: (logic) {
-                              return Icon(
-                                FontAwesomeIcons.images,
-                                size: 22,
-                                color: logic.vState.showThumbList
-                                    ? CupertinoColors.activeBlue
-                                    : CupertinoColors.systemGrey6,
-                                // color: CupertinoColors.systemGrey6,
-                              );
-                            },
-                          ),
-                          const Spacer(),
-                          const Text(
-                            'Thumb',
-                            style: _kBottomTextStyle,
-                          ),
-                        ],
+                  MouseRegionClick(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.switchShowThumbList();
+                      },
+                      onLongPress: () {
+                        vibrateUtil.light();
+                        controller.thumbScrollTo();
+                      },
+                      child: Container(
+                        width: 40,
+                        height: kBottomBarHeight,
+                        child: Column(
+                          children: [
+                            GetBuilder<ViewExtController>(
+                              id: idShowThumbListIcon,
+                              builder: (logic) {
+                                return Icon(
+                                  FontAwesomeIcons.images,
+                                  size: 22,
+                                  color: logic.vState.showThumbList
+                                      ? CupertinoColors.activeBlue
+                                      : CupertinoColors.systemGrey6,
+                                  // color: CupertinoColors.systemGrey6,
+                                );
+                              },
+                            ),
+                            const Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Thumb',
+                                  style: _kBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
 
                   // 双页切换按钮
                   // if (logic.vState.viewMode != ViewMode.topToBottom)
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      if (logic.vState.viewMode != ViewMode.topToBottom)
-                        controller.switchColumnMode();
-                    },
-                    child: Container(
-                      width: 40,
-                      // margin: const EdgeInsets.only(right: 10.0),
-                      height: kBottomBarHeight,
-                      child: Column(
-                        children: [
-                          GetBuilder<ViewExtController>(
-                            id: idViewColumnModeIcon,
-                            builder: (logic) {
-                              return Icon(
-                                FontAwesomeIcons.bookOpen,
-                                size: 22,
-                                color: () {
-                                  if (logic.vState.viewMode ==
-                                      ViewMode.topToBottom) {
-                                    return CupertinoColors.systemGrey;
-                                  }
+                  MouseRegionClick(
+                    disable: logic.vState.viewMode == ViewMode.topToBottom,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        if (logic.vState.viewMode != ViewMode.topToBottom) {
+                          controller.switchColumnMode();
+                        }
+                      },
+                      child: Container(
+                        width: 40,
+                        // margin: const EdgeInsets.only(right: 10.0),
+                        height: kBottomBarHeight,
+                        child: Column(
+                          children: [
+                            GetBuilder<ViewExtController>(
+                              id: idViewColumnModeIcon,
+                              builder: (logic) {
+                                return Icon(
+                                  FontAwesomeIcons.bookOpen,
+                                  size: 22,
+                                  color: () {
+                                    if (logic.vState.viewMode ==
+                                        ViewMode.topToBottom) {
+                                      return CupertinoColors.systemGrey;
+                                    }
 
-                                  switch (logic.vState.columnMode) {
-                                    case ViewColumnMode.single:
-                                      return CupertinoColors.systemGrey6;
-                                    case ViewColumnMode.oddLeft:
-                                      return CupertinoColors.activeBlue;
-                                    case ViewColumnMode.evenLeft:
-                                      return CupertinoColors.activeOrange;
-                                  }
-                                }(),
-                              );
-                            },
-                          ),
-                          const Spacer(),
-                          Text(
-                            'Double',
-                            style: _kBottomTextStyle.copyWith(
-                                color: logic.vState.viewMode ==
-                                        ViewMode.topToBottom
-                                    ? CupertinoColors.systemGrey
-                                    : null),
-                          ),
-                        ],
+                                    switch (logic.vState.columnMode) {
+                                      case ViewColumnMode.single:
+                                        return CupertinoColors.systemGrey6;
+                                      case ViewColumnMode.oddLeft:
+                                        return CupertinoColors.activeBlue;
+                                      case ViewColumnMode.evenLeft:
+                                        return CupertinoColors.activeOrange;
+                                    }
+                                  }(),
+                                );
+                              },
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Double',
+                                  style: _kBottomTextStyle.copyWith(
+                                      color: logic.vState.viewMode ==
+                                              ViewMode.topToBottom
+                                          ? CupertinoColors.systemGrey
+                                          : null),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -734,7 +762,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(4),
                                 child: Container(
-                                  child: thumb,
+                                  child: MouseRegionClick(child: thumb),
                                 ),
                               ),
                             ),

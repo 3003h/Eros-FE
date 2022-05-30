@@ -27,5 +27,6 @@ export 'widget/eh_dark_cupertino_theme.dart';
 export 'widget/eh_network_image.dart';
 export 'widget/link_scroll_bar.dart';
 export 'widget/link_scroll_bar_controller.dart';
+export 'widget/mouse.dart';
 export 'widget/network_extended_image.dart';
 export 'widget/refresh.dart';

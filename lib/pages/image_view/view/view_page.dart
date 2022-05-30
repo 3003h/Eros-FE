@@ -57,95 +57,8 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      focusNode: FocusNode(),
-      onKey: (RawKeyEvent event) {
-        if (event is! RawKeyDownEvent) {
-          return;
-        }
-
-        if (event.data is RawKeyEventDataAndroid) {
-          RawKeyEventDataAndroid rawKeyEventDataAndroid =
-              event.data as RawKeyEventDataAndroid;
-          logger.d('keyCode: ${rawKeyEventDataAndroid.keyCode}');
-          switch (rawKeyEventDataAndroid.keyCode) {
-            case 19: //KEY_UP
-              controller.tapLeft();
-              break;
-            case 20: //KEY_DOWN
-              controller.tapRight();
-              break;
-            case 21: //KEY_LEFT
-              controller.tapLeft();
-              break;
-            case 22: //KEY_RIGHT
-              controller.tapRight();
-              break;
-            case 23: //KEY_CENTER
-              break;
-            case 66: //KEY_ENTER
-              break;
-            default:
-              break;
-          }
-        }
-        if (event.data is RawKeyEventDataIos) {
-          RawKeyEventDataIos rawKeyEventDataIos =
-              event.data as RawKeyEventDataIos;
-          logger.d('keyCode: ${rawKeyEventDataIos.keyCode}');
-          switch (rawKeyEventDataIos.keyCode) {
-            case 82: //KEY_UP
-              controller.tapLeft();
-              break;
-            case 81: //KEY_DOWN
-              controller.tapRight();
-              break;
-            case 80: //KEY_LEFT
-              controller.tapLeft();
-              break;
-            case 79: //KEY_RIGHT
-              controller.tapRight();
-              break;
-            case 158: //KEY_ENTER
-              controller.handOnTapCent();
-              break;
-            case 41: //KEY_ESC
-              Get.back();
-              break;
-            default:
-              break;
-          }
-        }
-
-        if (event.data is RawKeyEventDataMacOs) {
-          RawKeyEventDataMacOs rawKeyEventDataMacOs =
-              event.data as RawKeyEventDataMacOs;
-          logger.d('keyCode: ${rawKeyEventDataMacOs.keyCode}');
-          switch (rawKeyEventDataMacOs.keyCode) {
-            case 126: //KEY_UP
-              controller.tapLeft();
-              break;
-            case 125: //KEY_DOWN
-              controller.tapRight();
-              break;
-            case 123: //KEY_LEFT
-              controller.tapLeft();
-              break;
-            case 124: //KEY_RIGHT
-              controller.tapRight();
-              break;
-            case 36: //KEY_ENTER
-              controller.handOnTapCent();
-              break;
-            case 53: //KEY_ESC
-              Get.back();
-              break;
-            default:
-              break;
-          }
-        }
-      },
-      child: const CupertinoTheme(
+    return const ViewKeyboardListener(
+      child: CupertinoTheme(
         data: CupertinoThemeData(
           brightness: Brightness.dark,
         ),
@@ -158,6 +71,48 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ViewKeyboardListener extends GetView<ViewExtController> {
+  const ViewKeyboardListener({required this.child, Key? key}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyboardListener(
+      autofocus: true,
+      focusNode: FocusNode(),
+      onKeyEvent: (KeyEvent event) async {
+        if (event is! KeyDownEvent) {
+          return;
+        }
+
+        // 按键对应的事件
+        Map<LogicalKeyboardKey, Function> actionMap = {
+          LogicalKeyboardKey.arrowLeft: controller.tapLeft,
+          LogicalKeyboardKey.arrowUp: controller.tapLeft,
+          LogicalKeyboardKey.arrowRight: controller.tapRight,
+          LogicalKeyboardKey.arrowDown: controller.tapRight,
+          LogicalKeyboardKey.space: controller.handOnTapCent,
+          LogicalKeyboardKey.enter: controller.handOnTapCent,
+          LogicalKeyboardKey.escape: Get.back,
+          LogicalKeyboardKey.backspace: Get.back,
+          LogicalKeyboardKey.equal: controller.scaleUp,
+          LogicalKeyboardKey.minus: controller.scaleDown,
+          LogicalKeyboardKey.digit0: controller.scaleReset,
+          LogicalKeyboardKey.keyP: controller.switchColumnMode,
+          LogicalKeyboardKey.keyT: controller.switchShowThumbList,
+          LogicalKeyboardKey.keyA: () =>
+              controller.tapAutoRead(context, setInv: false),
+        };
+
+        logger.d('logicalKey: ${event.logicalKey}');
+        actionMap[event.logicalKey]?.call();
+      },
+      child: child,
     );
   }
 }
