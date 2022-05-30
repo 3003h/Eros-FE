@@ -256,21 +256,23 @@ class ReadButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => CupertinoButton(
-          child: Text(
-            (_pageState.lastIndex > 0)
-                ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
-                : L10n.of(context).read.toUpperCase(),
-            style: const TextStyle(fontSize: 15, height: 1.2),
-          ),
-          minSize: 20,
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-          borderRadius: BorderRadius.circular(20),
-          color: CupertinoColors.activeBlue,
-          onPressed: _pageState.enableRead
-              ? () => _toViewPage(
-                  _pageState.galleryProvider?.gid ?? '0', _pageState.lastIndex)
-              : null),
+      () => MouseRegionClick(
+        child: CupertinoButton(
+            child: Text(
+              (_pageState.lastIndex > 0)
+                  ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
+                  : L10n.of(context).read.toUpperCase(),
+              style: const TextStyle(fontSize: 15, height: 1.2),
+            ),
+            minSize: 20,
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+            borderRadius: BorderRadius.circular(20),
+            color: CupertinoColors.activeBlue,
+            onPressed: _pageState.enableRead
+                ? () => _toViewPage(_pageState.galleryProvider?.gid ?? '0',
+                    _pageState.lastIndex)
+                : null),
+      ),
     );
   }
 
@@ -665,15 +667,18 @@ class TextBtn extends StatelessWidget {
           // padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              CupertinoButton(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                // color: CupertinoColors.activeBlue,
-                child: Icon(
-                  iconData,
-                  size: iconSize ?? 28,
-                  // color: CupertinoColors.systemGrey3,
+              MouseRegionClick(
+                disable: onTap == null && onLongPress == null,
+                child: CupertinoButton(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  // color: CupertinoColors.activeBlue,
+                  child: Icon(
+                    iconData,
+                    size: iconSize ?? 28,
+                    // color: CupertinoColors.systemGrey3,
+                  ),
+                  onPressed: onTap,
                 ),
-                onPressed: onTap,
               ),
               Text(
                 title ?? '',

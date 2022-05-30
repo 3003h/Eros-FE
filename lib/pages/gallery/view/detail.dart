@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
