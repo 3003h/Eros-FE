@@ -154,9 +154,9 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       children: [
         Text(
           widget.title,
-          maxLines: widget.maxLines,
-          overflow: TextOverflow.ellipsis,
-          // softWrap: true,
+          // maxLines: widget.maxLines,
+          // overflow: TextOverflow.ellipsis,
+          softWrap: true,
           style: TextStyle(
             height: 1.2,
             color: widget.titleColor,
@@ -168,21 +168,6 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
             maxLines: null,
             style: _kDescStyle,
           ).paddingOnly(top: 2.0),
-        // ExtendedText(
-        //   widget.desc ?? '',
-        //   maxLines: 4,
-        //   softWrap: true,
-        //   // overflow: TextOverflow.ellipsis,
-        //   overflowWidget: const TextOverflowWidget(
-        //     position: TextOverflowPosition.start,
-        //     child: Text(
-        //       '\u2026 ',
-        //       style: _kDescStyle,
-        //     ),
-        //   ),
-        //   // joinZeroWidthSpace: true,
-        //   style: _kDescStyle,
-        // ).paddingOnly(top: 2.0),
       ],
     );
 
@@ -212,8 +197,14 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
             child: Row(
               children: <Widget>[
-                Expanded(flex: widget.titleFlex, child: titleWidget),
-                Expanded(flex: widget.valueFlex, child: selectedWidget),
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(flex: widget.titleFlex, child: titleWidget),
+                      Expanded(flex: widget.valueFlex, child: selectedWidget),
+                    ],
+                  ),
+                ),
                 if (widget.suffix != null) widget.suffix!,
                 const Icon(
                   CupertinoIcons.forward,
@@ -318,31 +309,36 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
       child: Column(
         children: <Widget>[
           Container(
-            height: kItemHeight,
+            // height: kItemHeight,
+            constraints: const BoxConstraints(
+              minHeight: kItemHeight,
+            ),
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: <Widget>[
                 if (widget.icon != null) widget.icon!,
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        widget.title,
-                        style: const TextStyle(
-                          height: 1.0,
-                        ),
-                      ),
-                      if (_desc != null || widget.desc != null)
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
                         Text(
-                          _desc ?? widget.desc ?? '',
+                          widget.title,
                           style: const TextStyle(
-                              fontSize: 12.5,
-                              color: CupertinoColors.systemGrey),
-                        ).paddingOnly(top: 2.0),
-                    ]),
-                const Spacer(),
+                            height: 1.15,
+                          ),
+                        ),
+                        if (_desc != null || widget.desc != null)
+                          Text(
+                            _desc ?? widget.desc ?? '',
+                            style: const TextStyle(
+                                fontSize: 12.5,
+                                color: CupertinoColors.systemGrey),
+                          ).paddingOnly(top: 2.0),
+                      ]),
+                ),
+                // const Spacer(),
                 if (widget.suffix != null) widget.suffix!,
                 // if (widget.onChanged != null)
                 CupertinoSwitch(
@@ -380,7 +376,6 @@ class TextItem extends StatefulWidget {
     this.desc,
     this.onTap,
     Key? key,
-    // this.height = kItemHeight,
     this.hideLine = false,
     this.cupertinoFormRow = false,
     this.textColor,
@@ -390,7 +385,6 @@ class TextItem extends StatefulWidget {
   final String? desc;
   final VoidCallback? onTap;
 
-  // final double height;
   final bool hideLine;
   final bool cupertinoFormRow;
   final Color? textColor;
@@ -501,7 +495,7 @@ class _TextItemState extends State<TextItem> {
 
 /// 文本输入框类型
 class TextInputItem extends StatefulWidget {
-  TextInputItem({
+  const TextInputItem({
     this.title,
     Key? key,
     this.hideLine = false,
