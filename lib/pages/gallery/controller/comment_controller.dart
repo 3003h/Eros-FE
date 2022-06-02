@@ -18,6 +18,7 @@ import 'gallery_page_state.dart';
 enum EditState {
   newComment,
   editComment,
+  reptyComment,
 }
 
 class CommentController extends GetxController
@@ -40,6 +41,9 @@ class CommentController extends GetxController
   FocusNode focusNode = FocusNode();
   ScrollController scrollController = ScrollController();
 
+  late String reptyCommentText;
+  late String reptyUser;
+
   final WidgetsBinding? _widgetsBinding = WidgetsBinding.instance;
   double _preBottomInset = 0;
   double _bottomInset = 0;
@@ -52,9 +56,7 @@ class CommentController extends GetxController
   set editState(EditState val) => _editState.value = val;
 
   bool get isEditStat => _editState.value == EditState.editComment;
-
-  // final LanguageIdentifier languageIdentifier =
-  //     GoogleMlKit.nlp.languageIdentifier(confidenceThreshold: 0.34);
+  bool get isReptyStat => _editState.value == EditState.reptyComment;
 
   final LanguageIdentifier identifier = LanguageIdentifier();
 
@@ -106,6 +108,32 @@ class CommentController extends GetxController
 
   double _mediaQueryBottomInset() {
     return MediaQueryData.fromWindow(_widgetsBinding!.window).viewInsets.bottom;
+  }
+
+  GalleryComment? parserCommentRepty(GalleryComment comment) {
+    GalleryComment? repty;
+
+    final reg = RegExp(r'\s*@(\S+)(\s+)?(#(\d+)#)?');
+    final match = reg.firstMatch(comment.text);
+    if (match == null || match.groupCount == 0) {
+      return null;
+    }
+
+    final reptyUserName = match.group(1);
+    final reptyId = match.group(4);
+
+    if (reptyId != null) {
+      repty = state?.firstWhereOrNull(
+          (element) => element.id == reptyId && element.name == reptyUserName);
+    }
+
+    if (repty == null && reptyUserName != null) {
+      final curIndex = state?.indexWhere((element) => element.id == comment.id);
+      final fill = state?.getRange(curIndex!, state?.length ?? 0).toList();
+      return fill?.firstWhereOrNull((element) => element.name == reptyUserName);
+    }
+
+    return repty;
   }
 
   Future<void> commitTranslate(String _id) async {
@@ -329,6 +357,28 @@ class CommentController extends GetxController
           affinity: TextAffinity.downstream, offset: comment.length)),
     );
     editState = EditState.editComment;
+    FocusScope.of(Get.context!).requestFocus(focusNode);
+    // _scrollToBottom();
+  }
+
+  // 回复评论
+  void reptyComment({required String reptyCommentId}) {
+    final repty =
+        state?.firstWhereOrNull((element) => element.id == reptyCommentId);
+
+    reptyCommentText = repty?.text ?? '';
+    reptyUser = repty?.name ?? '';
+
+    if (repty != null) {
+      comment = '@${repty.name} #${repty.id}#\n';
+    }
+
+    commentTextController.value = TextEditingValue(
+      text: comment,
+      selection: TextSelection.fromPosition(TextPosition(
+          affinity: TextAffinity.downstream, offset: comment.length)),
+    );
+    editState = EditState.reptyComment;
     FocusScope.of(Get.context!).requestFocus(focusNode);
     // _scrollToBottom();
   }

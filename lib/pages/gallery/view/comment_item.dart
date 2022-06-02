@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -8,19 +7,18 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
-// import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart' as clif;
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_linkify/flutter_linkify.dart' as clif;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 const int kMaxline = 4;
 const double kSizeVote = 15.0;
@@ -194,9 +192,10 @@ class CommentItem extends StatelessWidget {
 
     /// 分段实现混排
     /// 合并文字
-    Widget _fullTextCustMergeText(List<GalleryCommentSpan> span,
-        {bool showTranslate = false}) {
-      // logger.d('showTranslate $showTranslate');
+    Widget _fullTextCustMergeText(
+      List<GalleryCommentSpan> span, {
+      bool showTranslate = false,
+    }) {
       // 首先进行分组
       final List<List<GalleryCommentSpan>> _groups = [];
 
@@ -330,6 +329,7 @@ class CommentItem extends StatelessWidget {
       );
     }
 
+    /// 简单布局 可展开 带链接文字
     ExpandableLinkify _simpleExpTextLinkify(
         {bool showTranslate = false, TextStyle? style}) {
       return ExpandableLinkify(
@@ -358,6 +358,10 @@ class CommentItem extends StatelessWidget {
       );
     }
 
+    /// 解析回复的评论
+    final reptyComment = controller.parserCommentRepty(galleryComment);
+
+    /// 评论item
     return GetBuilder<CommentController>(
         init: CommentController(),
         tag: pageCtrlTag,
@@ -372,140 +376,14 @@ class CommentItem extends StatelessWidget {
                 // 圆角
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
-                  color: _ehConfigService.isPureDarkTheme.value
-                      ? CupertinoDynamicColor.resolve(
-                          ThemeColors.commitBackground, context)
-                      : CupertinoDynamicColor.resolve(
-                          ThemeColors.commitBackgroundGray, context),
+                  color: ehTheme.commentBackgroundColor,
                   padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          _buildUsername(context),
-                          const Spacer(),
-                          CupertinoTheme(
-                            data: const CupertinoThemeData(
-                                primaryColor: ThemeColors.commitText),
-                            child: Row(
-                              children: <Widget>[
-                                // 翻译
-                                if (_ehConfigService.commentTrans.value)
-                                  CupertinoTheme(
-                                    data: ehTheme.themeData!,
-                                    child: TranslateButton(
-                                      galleryComment: galleryComment,
-                                      commentController: _commentController,
-                                    ),
-                                  ),
-                                // 点赞
-                                if (galleryComment.canVote ?? false)
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    minSize: 0,
-                                    child: Icon(
-                                      galleryComment.vote! > 0
-                                          ? FontAwesomeIcons.solidThumbsUp
-                                          : FontAwesomeIcons.thumbsUp,
-                                      size: galleryComment.vote! > 0
-                                          ? kSizeVote
-                                          : kSizeNotVote,
-                                      color: CupertinoDynamicColor.resolve(
-                                        ThemeColors.commitText,
-                                        context,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      vibrateUtil.light();
-                                      logger.i('vote up ${galleryComment.id}');
-                                      _commentController
-                                          .commitVoteUp(galleryComment.id!);
-                                    },
-                                  ),
-                                // 点踩
-                                if (galleryComment.canVote ?? false)
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    minSize: 0,
-                                    child: Icon(
-                                      galleryComment.vote! < 0
-                                          ? FontAwesomeIcons.solidThumbsDown
-                                          : FontAwesomeIcons.thumbsDown,
-                                      size: galleryComment.vote! < 0
-                                          ? kSizeVote
-                                          : kSizeNotVote,
-                                      color: CupertinoDynamicColor.resolve(
-                                        ThemeColors.commitText,
-                                        context,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      vibrateUtil.light();
-                                      logger
-                                          .i('vote down ${galleryComment.id}');
-                                      _commentController
-                                          .commitVoteDown(galleryComment.id!);
-                                    },
-                                  ),
-                                // 编辑回复
-                                if ((galleryComment.canEdit ?? false) &&
-                                    !simple)
-                                  CupertinoButton(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12),
-                                    minSize: 0,
-                                    child: Icon(
-                                      FontAwesomeIcons.edit,
-                                      size: kSizeNotVote,
-                                      color: CupertinoDynamicColor.resolve(
-                                        ThemeColors.commitText,
-                                        context,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      vibrateUtil.light();
-                                      logger.i('edit ${galleryComment.id}');
-                                      _commentController.editComment(
-                                        id: galleryComment.id!,
-                                        oriComment: galleryComment.text,
-                                      );
-                                    },
-                                  ),
-                              ],
-                            ),
-                          ),
-                          // 分值
-                          if (galleryComment.score.isNotEmpty)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8.0, right: 4),
-                              child: Icon(
-                                FontAwesomeIcons.adjust,
-                                size: kSizeNotVote - 1,
-                                color: CupertinoDynamicColor.resolve(
-                                  ThemeColors.commitText,
-                                  context,
-                                ),
-                              ),
-                            ),
-                          Text(
-                            galleryComment.score.startsWith('+')
-                                ? '+${galleryComment.score.substring(1)}'
-                                : galleryComment.score.startsWith('-')
-                                    ? galleryComment.score
-                                    : '+${galleryComment.score}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: CupertinoDynamicColor.resolve(
-                                  ThemeColors.commitText, context),
-                            ),
-                          ),
-                        ],
-                      ),
+                      buildHeader(context, _commentController),
+                      if (galleryComment.id != '0' && reptyComment != null)
+                        buildReply(context, reptyComment: reptyComment),
                       Container(
                         padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
                         child: simple
@@ -516,14 +394,10 @@ class CommentItem extends StatelessWidget {
                                 showTranslate:
                                     galleryComment.showTranslate ?? false),
                       ),
-                      Text(
-                        galleryComment.time,
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: CupertinoDynamicColor.resolve(
-                              ThemeColors.commitText, context),
-                        ),
+                      buildTail(
+                        context,
+                        _commentController,
+                        showRepty: galleryComment.id != '0' && !simple,
                       ),
                     ],
                   ),
@@ -534,25 +408,223 @@ class CommentItem extends StatelessWidget {
         });
   }
 
-  Widget _buildUsername(BuildContext context) {
+  Widget buildReply(BuildContext context,
+      {required GalleryComment reptyComment}) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: ehTheme.commentReplyBackgroundColor,
+      ),
+      padding: const EdgeInsets.all(6),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _buildUsername(
+                name: reptyComment.name,
+                fontSize: 12,
+              ).paddingOnly(bottom: 6),
+            ],
+          ),
+          Text(
+            reptyComment.text,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 12,
+              height: 1.3,
+              color: CupertinoDynamicColor.resolve(
+                  ThemeColors.commitText, context),
+              fontFamilyFallback: EHConst.fontFamilyFallback,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTail(
+    BuildContext context,
+    CommentController commentController, {
+    bool showRepty = false,
+  }) {
+    return Row(
+      children: [
+        Text(
+          galleryComment.time,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color:
+                CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
+          ),
+        ),
+        const Spacer(),
+        if (showRepty)
+          CupertinoButton(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            minSize: 0,
+            child: Icon(
+              FontAwesomeIcons.reply,
+              size: 15,
+              color: CupertinoDynamicColor.resolve(
+                ThemeColors.commitText,
+                context,
+              ),
+            ),
+            onPressed: () {
+              vibrateUtil.light();
+              logger.i('rep ${galleryComment.id}');
+              commentController.reptyComment(
+                  reptyCommentId: galleryComment.id!);
+            },
+          ),
+      ],
+    );
+  }
+
+  Widget buildHeader(
+    BuildContext context,
+    CommentController commentController,
+  ) {
+    final EhConfigService _ehConfigService = Get.find();
+
+    return Row(
+      children: <Widget>[
+        _buildUsername(),
+        const Spacer(),
+        CupertinoTheme(
+          data: const CupertinoThemeData(primaryColor: ThemeColors.commitText),
+          child: Row(
+            children: <Widget>[
+              // 翻译
+              if (_ehConfigService.commentTrans.value)
+                CupertinoTheme(
+                  data: ehTheme.themeData!,
+                  child: TranslateButton(
+                    galleryComment: galleryComment,
+                    commentController: commentController,
+                  ),
+                ),
+              // 点赞
+              if (galleryComment.canVote ?? false)
+                CupertinoButton(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  minSize: 0,
+                  child: Icon(
+                    galleryComment.vote! > 0
+                        ? FontAwesomeIcons.solidThumbsUp
+                        : FontAwesomeIcons.thumbsUp,
+                    size: galleryComment.vote! > 0 ? kSizeVote : kSizeNotVote,
+                    color: CupertinoDynamicColor.resolve(
+                      ThemeColors.commitText,
+                      context,
+                    ),
+                  ),
+                  onPressed: () {
+                    vibrateUtil.light();
+                    logger.i('vote up ${galleryComment.id}');
+                    commentController.commitVoteUp(galleryComment.id!);
+                  },
+                ),
+              // 点踩
+              if (galleryComment.canVote ?? false)
+                CupertinoButton(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  minSize: 0,
+                  child: Icon(
+                    galleryComment.vote! < 0
+                        ? FontAwesomeIcons.solidThumbsDown
+                        : FontAwesomeIcons.thumbsDown,
+                    size: galleryComment.vote! < 0 ? kSizeVote : kSizeNotVote,
+                    color: CupertinoDynamicColor.resolve(
+                      ThemeColors.commitText,
+                      context,
+                    ),
+                  ),
+                  onPressed: () {
+                    vibrateUtil.light();
+                    logger.i('vote down ${galleryComment.id}');
+                    commentController.commitVoteDown(galleryComment.id!);
+                  },
+                ),
+              // 编辑回复
+              if ((galleryComment.canEdit ?? false) && !simple)
+                CupertinoButton(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  minSize: 0,
+                  child: Icon(
+                    FontAwesomeIcons.edit,
+                    size: kSizeNotVote,
+                    color: CupertinoDynamicColor.resolve(
+                      ThemeColors.commitText,
+                      context,
+                    ),
+                  ),
+                  onPressed: () {
+                    vibrateUtil.light();
+                    logger.i('edit ${galleryComment.id}');
+                    commentController.editComment(
+                      id: galleryComment.id!,
+                      oriComment: galleryComment.text,
+                    );
+                  },
+                ),
+            ],
+          ),
+        ),
+        // 分值
+        if (galleryComment.score.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 4),
+            child: Icon(
+              FontAwesomeIcons.adjust,
+              size: kSizeNotVote - 1,
+              color: CupertinoDynamicColor.resolve(
+                ThemeColors.commitText,
+                context,
+              ),
+            ),
+          ),
+        Text(
+          galleryComment.score.startsWith('+')
+              ? '+${galleryComment.score.substring(1)}'
+              : galleryComment.score.startsWith('-')
+                  ? galleryComment.score
+                  : '+${galleryComment.score}',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.normal,
+            color:
+                CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUsername({String? name, double? fontSize = 13}) {
+    final _name = name ?? galleryComment.name;
     return GestureDetector(
       child: Text(
-        galleryComment.name,
-        style: const TextStyle(
-          fontSize: 13,
+        name ?? galleryComment.name,
+        style: TextStyle(
+          fontSize: fontSize,
           fontWeight: FontWeight.bold,
           color: CupertinoColors.activeBlue,
         ),
       ),
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        logger.v('search uploader:${galleryComment.name}');
-        NavigatorUtil.goSearchPageWithText(
-            simpleSearch: 'uploader:${galleryComment.name}');
+        logger.v('search uploader:$_name');
+        NavigatorUtil.goSearchPageWithText(simpleSearch: 'uploader:$_name');
       },
     );
   }
 
+  /// 打开文本中的url
   Future<void> _onOpen(BuildContext context,
       {LinkableElement? link, String? url}) async {
     vibrateUtil.light();
@@ -562,7 +634,7 @@ class CommentItem extends StatelessWidget {
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
     final RegExp regGalleryPageUrl =
         RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
-    if (await canLaunch(_openUrl!)) {
+    if (await canLaunchUrlString(_openUrl!)) {
       if (regGalleryUrl.hasMatch(_openUrl) ||
           regGalleryPageUrl.hasMatch(_openUrl)) {
         final String? _realUrl = regGalleryUrl.firstMatch(_openUrl)?.group(0) ??
@@ -572,13 +644,14 @@ class CommentItem extends StatelessWidget {
           url: _realUrl,
         );
       } else {
-        await launch(_openUrl);
+        await launchUrlString(_openUrl);
       }
     } else {
       throw 'Could not launch $_openUrl';
     }
   }
 
+  /// 显示评分详情
   void _showScoreDeatil(List<String>? scoreDeatils, BuildContext context) {
     if (scoreDeatils == null || scoreDeatils.isEmpty) {
       return;

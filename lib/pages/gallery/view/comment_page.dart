@@ -48,7 +48,7 @@ class CommentPage extends StatelessWidget {
     Widget _buildOriText() {
       return Obx(
         () {
-          if (controller.editState == EditState.editComment) {
+          if (controller.editState != EditState.newComment) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -59,7 +59,9 @@ class CommentPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          L10n.of(context).edit_comment,
+                          controller.editState == EditState.editComment
+                              ? L10n.of(context).edit_comment
+                              : 'Repty:  ${controller.reptyUser}',
                           style: const TextStyle(
                             color: CupertinoColors.activeBlue,
                             fontWeight: FontWeight.w500,
@@ -68,7 +70,9 @@ class CommentPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          controller.oriComment,
+                          controller.editState == EditState.editComment
+                              ? controller.oriComment
+                              : controller.reptyCommentText,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -97,7 +101,7 @@ class CommentPage extends StatelessWidget {
               ],
             );
           } else {
-            return Container();
+            return const SizedBox.shrink();
           }
         },
       );
@@ -129,13 +133,12 @@ class CommentPage extends StatelessWidget {
                   color: CupertinoDynamicColor.resolve(
                           ehTheme.themeData!.barBackgroundColor, context)
                       .withOpacity(1),
-                  // color: Colors.transparent,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // 编辑原消息时的显示
+                    // 编辑原消息 或者回复消息 时的显示
                     _buildOriText(),
                     // 输入框
                     Row(
@@ -178,14 +181,15 @@ class CommentPage extends StatelessWidget {
                                     //     scale: animation, child: child),
                                     FadeTransition(
                                         child: child, opacity: animation),
-                                child: controller.isEditStat
+                                child: controller.isEditStat ||
+                                        controller.isReptyStat
                                     ? Icon(
-                                        FontAwesomeIcons.solidCheckCircle,
+                                        FontAwesomeIcons.solidCircleCheck,
                                         key: UniqueKey(),
                                         size: 32,
                                       )
                                     : Icon(
-                                        FontAwesomeIcons.arrowCircleUp,
+                                        FontAwesomeIcons.circleArrowUp,
                                         key: UniqueKey(),
                                         size: 32,
                                       ),

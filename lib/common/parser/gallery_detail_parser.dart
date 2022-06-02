@@ -45,7 +45,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
       final Element? scoreElem = comment.querySelector('div.c2 > div.c5.nosel');
       String score = '';
       if (scoreElem != null) {
-        score = RegExp(r'((\+|-)(\d+))')
+        score = RegExp(r'(([+-])(\d+))')
                 .firstMatch(scoreElem.text.trim())
                 ?.group(1) ??
             '';
@@ -63,11 +63,9 @@ List<GalleryComment> parseGalleryComment(Document document) {
       if (_c4 != null) {
         final Element _hand = _c4.children.first;
         final String _handText = _hand.attributes['onclick'] ?? '';
-        if (_handText != null) {
-          _id = RegExp(r'\((\d+)\)').firstMatch(_handText)?.group(1) ?? '';
-          _canEdit = _handText.contains('edit_');
-          _canVote = _handText.contains('vote_');
-        }
+        // _id = RegExp(r'\((\d+)\)').firstMatch(_handText)?.group(1) ?? '';
+        _canEdit = _handText.contains('edit_');
+        _canVote = _handText.contains('vote_');
 
         if (_c4.children.length > 1) {
           final Element _vUp = _c4.children.elementAt(0);
@@ -82,6 +80,10 @@ List<GalleryComment> parseGalleryComment(Document document) {
           }
         }
       }
+
+      final Element? _c6 = comment.querySelector('div.c6');
+      final String _attriId = _c6?.attributes['id'] ?? '';
+      _id = RegExp(r'_(\d+)').firstMatch(_attriId)?.group(1) ?? '';
 
       // 解析评论内容
       final Element? contextElem = comment.querySelector('div.c6');
