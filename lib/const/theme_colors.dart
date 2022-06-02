@@ -32,6 +32,18 @@ class EhDynamicColors {
     darkGrayColor: Color.fromARGB(255, 47, 47, 47),
   );
 
+  static const EhDynamicColor commentReplyBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 253, 253, 253),
+    darkColor: Color.fromARGB(255, 0, 0, 0),
+    darkGrayColor: Color.fromARGB(255, 28, 28, 28),
+  );
+
+  static const EhDynamicColor commentBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 242, 242, 247),
+    darkColor: Color.fromARGB(255, 20, 20, 20),
+    darkGrayColor: Color.fromARGB(255, 40, 40, 40),
+  );
+
   static const EhDynamicColor favnoteTextFieldBackground = EhDynamicColor(
     color: Color.fromARGB(255, 250, 250, 250),
     darkColor: Color.fromARGB(255, 28, 28, 31),
