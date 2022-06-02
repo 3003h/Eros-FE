@@ -84,8 +84,9 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
       title: widget.title,
       hideLine: widget.hideDivider,
       selector: selector,
-      titleFlex: 0,
-      valueFlex: 1,
+      // titleFlex: 1,
+      // valueFlex: 0,
+      // maxLines: 3,
       onTap: () async {
         // 显示dialog 选择选项
         final T? _result = await _showDialog(context);
