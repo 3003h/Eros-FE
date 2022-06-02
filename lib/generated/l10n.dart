@@ -3673,6 +3673,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Double page model`
+  String get double_page_model {
+    return Intl.message(
+      'Double page model',
+      name: 'double_page_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Model {modelName}`
+  String model(Object modelName) {
+    return Intl.message(
+      'Model $modelName',
+      name: 'model',
+      desc: '',
+      args: [modelName],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

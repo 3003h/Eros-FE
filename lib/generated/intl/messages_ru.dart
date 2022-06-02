@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "Текущий ${site}";
 
-  static String m1(rating) => "${rating} ⭐";
+  static String m1(modelName) => "Model ${modelName}";
 
-  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+  static String m2(rating) => "${rating} ⭐";
+
+  static String m3(tagNamespace) => "${Intl.select(tagNamespace, {
             'reclass': 'reclass',
             'language': 'language',
             'parody': 'parody',
@@ -109,6 +111,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "done": MessageLookupByLibrary.simpleMessage("Готово"),
         "double_click_back": MessageLookupByLibrary.simpleMessage(
             "Нажмите еще раз, чтобы выйти"),
+        "double_page_model":
+            MessageLookupByLibrary.simpleMessage("Double page model"),
         "download": MessageLookupByLibrary.simpleMessage("Загрузки"),
         "download_location":
             MessageLookupByLibrary.simpleMessage("Каталог загрузок"),
@@ -186,6 +190,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Вручную выбирать группу избранного"),
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
         "min": MessageLookupByLibrary.simpleMessage("минут"),
+        "model": m1,
         "morePreviews": MessageLookupByLibrary.simpleMessage("Показать ещё"),
         "multi_download":
             MessageLookupByLibrary.simpleMessage("Многопоточная загрузка"),
@@ -285,7 +290,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Показывать скрытые галереи"),
         "s_and": MessageLookupByLibrary.simpleMessage("и"),
         "s_pages": MessageLookupByLibrary.simpleMessage("страницы"),
-        "s_stars": m1,
+        "s_stars": m2,
         "save_into_album":
             MessageLookupByLibrary.simpleMessage("Сохранить в галлерею"),
         "saved_successfully":
@@ -333,7 +338,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tabbar_setting":
             MessageLookupByLibrary.simpleMessage("Настройки нижней панели"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
-        "tagNamespace": m2,
+        "tagNamespace": m3,
         "tag_add_to_mytag":
             MessageLookupByLibrary.simpleMessage("Добавить в мои теги"),
         "tag_dialog_Default_color":

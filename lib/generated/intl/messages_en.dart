@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "Current ${site}";
 
-  static String m1(rating) => "${rating} ⭐";
+  static String m1(modelName) => "Model ${modelName}";
 
-  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+  static String m2(rating) => "${rating} ⭐";
+
+  static String m3(tagNamespace) => "${Intl.select(tagNamespace, {
             'reclass': 'reclass',
             'language': 'language',
             'parody': 'parody',
@@ -104,6 +106,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "double_click_back":
             MessageLookupByLibrary.simpleMessage("Press again to exit"),
+        "double_page_model":
+            MessageLookupByLibrary.simpleMessage("Double page model"),
         "download": MessageLookupByLibrary.simpleMessage("Download"),
         "download_location":
             MessageLookupByLibrary.simpleMessage("Download Location"),
@@ -175,6 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Manually select favorites"),
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
         "min": MessageLookupByLibrary.simpleMessage("min"),
+        "model": m1,
         "morePreviews": MessageLookupByLibrary.simpleMessage("More previews"),
         "multi_download":
             MessageLookupByLibrary.simpleMessage("multi Download"),
@@ -272,7 +277,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Show Expunged Galleries"),
         "s_and": MessageLookupByLibrary.simpleMessage("and"),
         "s_pages": MessageLookupByLibrary.simpleMessage("pages"),
-        "s_stars": m1,
+        "s_stars": m2,
         "save_into_album":
             MessageLookupByLibrary.simpleMessage("Save into the album"),
         "saved_successfully":
@@ -317,7 +322,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tabbar_setting":
             MessageLookupByLibrary.simpleMessage("Tabbar setting"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
-        "tagNamespace": m2,
+        "tagNamespace": m3,
         "tag_add_to_mytag":
             MessageLookupByLibrary.simpleMessage("Add to mytags"),
         "tag_dialog_Default_color":

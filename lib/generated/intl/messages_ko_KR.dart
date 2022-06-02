@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "현재 ${site}";
 
-  static String m1(rating) => "${rating} ⭐";
+  static String m1(modelName) => "Model ${modelName}";
 
-  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+  static String m2(rating) => "${rating} ⭐";
+
+  static String m3(tagNamespace) => "${Intl.select(tagNamespace, {
             'reclass': 'reclass',
             'language': 'language',
             'parody': 'parody',
@@ -95,6 +97,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "done": MessageLookupByLibrary.simpleMessage("완료"),
         "double_click_back":
             MessageLookupByLibrary.simpleMessage("한번 더 누르면 종료됩니다."),
+        "double_page_model":
+            MessageLookupByLibrary.simpleMessage("Double page model"),
         "download": MessageLookupByLibrary.simpleMessage("다운로드"),
         "download_location": MessageLookupByLibrary.simpleMessage("다운로드 경로"),
         "download_ori_image":
@@ -160,6 +164,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("수동으로 즐겨찾기 선택"),
         "max_history": MessageLookupByLibrary.simpleMessage("최대 방문 기록"),
         "min": MessageLookupByLibrary.simpleMessage("분"),
+        "model": m1,
         "morePreviews": MessageLookupByLibrary.simpleMessage("미리 보기 더 보기"),
         "multi_download": MessageLookupByLibrary.simpleMessage("다중 다운로드"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("사이트에서 설정하기"),
@@ -242,7 +247,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Expunged 갤러리 표시"),
         "s_and": MessageLookupByLibrary.simpleMessage("그리고"),
         "s_pages": MessageLookupByLibrary.simpleMessage("페이지"),
-        "s_stars": m1,
+        "s_stars": m2,
         "save_into_album": MessageLookupByLibrary.simpleMessage("앨범에 저장"),
         "saved_successfully": MessageLookupByLibrary.simpleMessage("저장 완료"),
         "screen_orientation": MessageLookupByLibrary.simpleMessage("화면 방향"),
@@ -279,7 +284,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_watched": MessageLookupByLibrary.simpleMessage("Watched"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("탭바 설정"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
-        "tagNamespace": m2,
+        "tagNamespace": m3,
         "tag_add_to_mytag":
             MessageLookupByLibrary.simpleMessage("Add to mytags"),
         "tag_dialog_Default_color":
