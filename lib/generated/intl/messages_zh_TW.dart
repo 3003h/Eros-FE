@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "当前 ${site}";
 
-  static String m1(rating) => "${rating} ⭐";
+  static String m1(modelName) => "模式 ${modelName}";
 
-  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+  static String m2(rating) => "${rating} ⭐";
+
+  static String m3(tagNamespace) => "${Intl.select(tagNamespace, {
             'reclass': 'reclass',
             'language': 'language',
             'parody': 'parody',
@@ -97,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域名前置"),
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "double_click_back": MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
+        "double_page_model": MessageLookupByLibrary.simpleMessage("双页模式"),
         "download": MessageLookupByLibrary.simpleMessage("下載"),
         "download_location":
             MessageLookupByLibrary.simpleMessage("Download Locatino"),
@@ -163,6 +166,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Manually select favorites"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大历史记录"),
         "min": MessageLookupByLibrary.simpleMessage("分钟"),
+        "model": m1,
         "morePreviews": MessageLookupByLibrary.simpleMessage("更多预览"),
         "multi_download":
             MessageLookupByLibrary.simpleMessage("multi Download"),
@@ -246,7 +250,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("搜索被删除的画廊"),
         "s_and": MessageLookupByLibrary.simpleMessage("到"),
         "s_pages": MessageLookupByLibrary.simpleMessage("页数"),
-        "s_stars": m1,
+        "s_stars": m2,
         "save_into_album": MessageLookupByLibrary.simpleMessage("保存到相册"),
         "saved_successfully": MessageLookupByLibrary.simpleMessage("保存成功"),
         "screen_orientation":
@@ -284,7 +288,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_watched": MessageLookupByLibrary.simpleMessage("關注"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("主页标签设置"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
-        "tagNamespace": m2,
+        "tagNamespace": m3,
         "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("添加到我的标签"),
         "tag_dialog_Default_color":
             MessageLookupByLibrary.simpleMessage("Default color"),

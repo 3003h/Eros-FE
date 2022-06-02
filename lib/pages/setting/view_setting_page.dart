@@ -208,13 +208,13 @@ class ReadOrientationItem extends StatelessWidget {
 
 /// 双页设置切换
 Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
-  const String _title = '双页设置';
+  final String _title = L10n.of(context).double_page_model;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ViewColumnMode, String> actionMap = <ViewColumnMode, String>{
-    ViewColumnMode.single: '关',
-    ViewColumnMode.oddLeft: '模式A',
-    ViewColumnMode.evenLeft: '模式B',
+    ViewColumnMode.single: L10n.of(context).off,
+    ViewColumnMode.oddLeft: L10n.of(context).model('A'),
+    ViewColumnMode.evenLeft: L10n.of(context).model('B'),
   };
 
   Widget _getTempPage(String ser) {
@@ -270,11 +270,11 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
   ];
 
   final Map<ViewColumnMode, Widget> actionWidgetMap = <ViewColumnMode, Widget>{
-    ViewColumnMode.single: Text('关'),
+    ViewColumnMode.single: Text(L10n.of(context).off),
     ViewColumnMode.oddLeft: Column(
       children: [
         Text(
-          '模式A',
+          L10n.of(context).model('A'),
           textScaleFactor: 0.8,
         ),
         Container(
@@ -293,7 +293,7 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
     ViewColumnMode.evenLeft: Column(
       children: [
         Text(
-          '模式B',
+          L10n.of(context).model('B'),
           textScaleFactor: 0.8,
         ),
         Container(

@@ -359,5 +359,7 @@
   "rebuild_tasks_data": "重建下载任务数据",
   "aggregate": "聚合",
   "aggregate_groups": "聚合分组",
-  "hide": "隐藏"
+  "hide": "隐藏",
+  "double_page_model": "双页模式",
+  "model": "Model {modelName}"
 }

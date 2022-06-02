@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "当前 ${site}";
 
-  static String m1(rating) => "${rating} ⭐";
+  static String m1(modelName) => "Model ${modelName}";
 
-  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+  static String m2(rating) => "${rating} ⭐";
+
+  static String m3(tagNamespace) => "${Intl.select(tagNamespace, {
             'reclass': '重新分类',
             'language': '语言',
             'parody': '原作',
@@ -89,6 +91,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域名前置"),
         "done": MessageLookupByLibrary.simpleMessage("完成"),
         "double_click_back": MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
+        "double_page_model": MessageLookupByLibrary.simpleMessage("双页模式"),
         "download": MessageLookupByLibrary.simpleMessage("下载"),
         "download_location": MessageLookupByLibrary.simpleMessage("下载路径"),
         "download_ori_image": MessageLookupByLibrary.simpleMessage("下载原图"),
@@ -149,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "manually_sel_favorites": MessageLookupByLibrary.simpleMessage("手动选择"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大历史记录"),
         "min": MessageLookupByLibrary.simpleMessage("分钟"),
+        "model": m1,
         "morePreviews": MessageLookupByLibrary.simpleMessage("更多预览"),
         "multi_download": MessageLookupByLibrary.simpleMessage("同时下载图片数量"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("网页上的标签设置"),
@@ -224,7 +228,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("搜索被删除的画廊"),
         "s_and": MessageLookupByLibrary.simpleMessage("到"),
         "s_pages": MessageLookupByLibrary.simpleMessage("页数"),
-        "s_stars": m1,
+        "s_stars": m2,
         "save_into_album": MessageLookupByLibrary.simpleMessage("保存到相册"),
         "saved_successfully": MessageLookupByLibrary.simpleMessage("保存成功"),
         "screen_orientation": MessageLookupByLibrary.simpleMessage("屏幕方向"),
@@ -258,7 +262,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_watched": MessageLookupByLibrary.simpleMessage("关注"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("主页标签设置"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("平板布局"),
-        "tagNamespace": m2,
+        "tagNamespace": m3,
         "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("添加到我的标签"),
         "tag_dialog_Default_color":
             MessageLookupByLibrary.simpleMessage("默认颜色"),
