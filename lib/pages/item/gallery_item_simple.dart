@@ -185,7 +185,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
-            size: 14.0,
+            size: 12.0,
             rate: galleryProviderController.galleryProvider.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
@@ -270,13 +270,13 @@ class GalleryItemSimpleWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 6),
+        padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 4),
         color: _colorCategory,
         child: Text(
           galleryProviderController.galleryProvider.category ?? '',
           style: const TextStyle(
-            fontSize: 11,
-            height: 1.2,
+            fontSize: 10,
+            height: 1.1,
             color: CupertinoColors.white,
           ),
         ),

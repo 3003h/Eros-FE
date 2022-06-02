@@ -3210,30 +3210,30 @@ class L10n {
     );
   }
 
-  /// `Align left;\nOnly scale if image is larger than browser width`
+  /// `Align left;\n Only scale if image is larger than browser width`
   String get uc_ms_0 {
     return Intl.message(
-      'Align left;\nOnly scale if image is larger than browser width',
+      'Align left;\n Only scale if image is larger than browser width',
       name: 'uc_ms_0',
       desc: '',
       args: [],
     );
   }
 
-  /// `Align center;\nOnly scale if image is larger than browser width`
+  /// `Align center;\n Only scale if image is larger than browser width`
   String get uc_ms_1 {
     return Intl.message(
-      'Align center;\nOnly scale if image is larger than browser width',
+      'Align center;\n Only scale if image is larger than browser width',
       name: 'uc_ms_1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Align center;\nAlways scale images to fit browser width`
+  /// `Align center;\n Always scale images to fit browser width`
   String get uc_ms_2 {
     return Intl.message(
-      'Align center;\nAlways scale images to fit browser width',
+      'Align center;\n Always scale images to fit browser width',
       name: 'uc_ms_2',
       desc: '',
       args: [],
