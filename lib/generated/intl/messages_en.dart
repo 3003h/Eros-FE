@@ -472,7 +472,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_qb_1": MessageLookupByLibrary.simpleMessage("Yup"),
         "uc_rating": MessageLookupByLibrary.simpleMessage("Ratings Colors"),
         "uc_rating_desc": MessageLookupByLibrary.simpleMessage(
-            "By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\nEach letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works."),
+            "By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works."),
         "uc_reclass": MessageLookupByLibrary.simpleMessage("reclass"),
         "uc_rename": MessageLookupByLibrary.simpleMessage("Rename"),
         "uc_res_res":

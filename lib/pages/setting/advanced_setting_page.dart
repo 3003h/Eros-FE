@@ -8,6 +8,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/const/locale.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -229,10 +230,9 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     final Map<String, String> localeMap = <String, String>{
       '': L10n.of(context).follow_system,
-      'en_US': 'English',
-      'zh_CN': '简体中文',
-      'ko_KR': '한국어',
     };
+
+    localeMap.addAll(languageMenu);
 
     List<Widget> _getLocaleList(BuildContext context) {
       return List<Widget>.from(localeMap.keys.map((String element) {
