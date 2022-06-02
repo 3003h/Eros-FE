@@ -15,7 +15,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-const double _kHeight = 260.0;
+const double _kHeight = 280.0;
 const double _kAdvanceHeight = 480.0;
 
 /// 高级搜索
@@ -40,6 +40,7 @@ class GalleryFilterView extends StatelessWidget {
       logger.v('searchPageCtrlDepth $searchPageCtrlTag');
       return Get.find<SearchPageController>(tag: searchPageCtrlTag);
     }
+    return null;
   }
 
   Widget _getColumnNormal(BuildContext context) {
@@ -82,7 +83,7 @@ class GalleryFilterView extends StatelessWidget {
             Container(
               child: Row(
                 children: <Widget>[
-                  Text(L10n.of(context).s_Advanced_Options),
+                  Expanded(child: Text(L10n.of(context).s_Advanced_Options)),
                   Transform.scale(
                     scale: 0.8,
                     child: CupertinoSwitch(
@@ -161,20 +162,14 @@ class GalleryFilterView extends StatelessWidget {
         if (_searchPageController?.searchType != SearchType.favorite)
           Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(L10n.of(context).s_Advanced_Options),
-                Transform.scale(
-                  scale: 0.8,
-                  child: CupertinoSwitch(
-                    value: advanceSearchController.enableAdvance,
-                    onChanged: (bool value) {
-                      // logger.d(' onChanged to $value');
-                      advanceSearchController.enableAdvance = value;
-                    },
-                  ),
-                ),
-                // const Spacer(),
+                Expanded(
+                    child: Text(
+                  L10n.of(context).s_Advanced_Options,
+                  textAlign: TextAlign.start,
+                )),
+                // Text(L10n.of(context).s_Advanced_Options),
                 Offstage(
                   offstage: !advanceSearchController.enableAdvance,
                   child: CupertinoButton(
@@ -192,6 +187,17 @@ class GalleryFilterView extends StatelessWidget {
                         advanceSearchController.reset();
                       }),
                 ),
+                Transform.scale(
+                  scale: 0.8,
+                  child: CupertinoSwitch(
+                    value: advanceSearchController.enableAdvance,
+                    onChanged: (bool value) {
+                      // logger.d(' onChanged to $value');
+                      advanceSearchController.enableAdvance = value;
+                    },
+                  ),
+                ),
+                // const Spacer(),
               ],
             ),
           ),
@@ -435,72 +441,21 @@ class GalleryFilterView extends StatelessWidget {
         _listDft.addAll(_listFav);
       }
 
-      // return Container(
-      //   height: 400,
-      //   child: SingleChildScrollView(
-      //     child: Column(
-      //       children: [
-      //         ..._listDft,
-      //         if (advanceSearchController.enableAdvance &&
-      //             _searchPageController?.searchType != SearchType.favorite)
-      //           ..._listAdv
-      //         else if (_searchPageController?.searchType == SearchType.favorite)
-      //           ..._listFav
-      //       ],
-      //     ),
-      //   ),
-      // );
-
-      // return AnimatedContainer(
-      //   height: advanceSearchController.enableAdvance &&
-      //           _searchPageController?.searchType != SearchType.favorite
-      //       ? _kAdvanceHeight
-      //       : _kHeight,
-      //   duration: const Duration(milliseconds: 300),
-      //   curve: Curves.ease,
-      //   child: SingleChildScrollView(
-      //     child: Column(
-      //       mainAxisSize: MainAxisSize.min,
-      //       children: [
-      //         ..._listDft,
-      //         if (advanceSearchController.enableAdvance &&
-      //             _searchPageController?.searchType != SearchType.favorite)
-      //           ..._listAdv
-      //         else if (_searchPageController?.searchType == SearchType.favorite)
-      //           ..._listFav
-      //       ],
-      //     ),
-      //   ),
-      // );
-
-      // return AnimatedContainer(
-      //   height: advanceSearchController.enableAdvance &&
-      //           _searchPageController?.searchType != SearchType.favorite
-      //       ? _kAdvanceHeight
-      //       : _kHeight,
-      //   duration: const Duration(milliseconds: 300),
-      //   curve: Curves.ease,
-      //   child: SingleChildScrollView(
-      //     child: Column(
-      //       mainAxisSize: MainAxisSize.min,
-      //       children: [
-      //         ..._listDft,
-      //       ],
-      //     ),
-      //   ),
-      // );
+      final expand = advanceSearchController.enableAdvance &&
+          _searchPageController?.searchType != SearchType.favorite;
 
       return AnimatedContainer(
-        height: min(
-            context.height / 2,
-            advanceSearchController.enableAdvance &&
-                    _searchPageController?.searchType != SearchType.favorite
-                ? _kAdvanceHeight
-                : _kHeight),
+        height: min(context.height / 2, expand ? _kAdvanceHeight : _kHeight),
         // height: context.height / 2,
         duration: const Duration(milliseconds: 300),
         curve: Curves.ease,
+        // child: SingleChildScrollView(
+        //   child: Column(
+        //     children: _listDft,
+        //   ),
+        // ),
         child: ListView.builder(
+          physics: expand ? null : const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(0),
           itemBuilder: (_, index) {
             return _listDft[index];

@@ -352,6 +352,9 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       color: CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
     );
 
+    const segmentedPadding = EdgeInsets.symmetric(horizontal: 6, vertical: 4);
+    const segmentedTextStyle = TextStyle(height: 1.1);
+
     return CupertinoPageScaffold(
       backgroundColor: !ehTheme.isDarkMode
           ? CupertinoColors.secondarySystemBackground
@@ -414,22 +417,34 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                       child: CupertinoSlidingSegmentedControl<GalleryListType>(
                         children: <GalleryListType, Widget>{
                           GalleryListType.popular: Container(
-                            child: Text(L10n.of(context).tab_popular),
+                            child: Text(
+                              L10n.of(context).tab_popular,
+                              style: segmentedTextStyle,
+                            ),
+                            padding: segmentedPadding,
                             // constraints: BoxConstraints(minWidth: 10),
                           ),
                           GalleryListType.gallery: Container(
-                            child: Text(L10n.of(context).tab_gallery),
+                            child: Text(
+                              L10n.of(context).tab_gallery,
+                              style: segmentedTextStyle,
+                            ),
+                            padding: segmentedPadding,
                             // constraints: BoxConstraints(minWidth: 10),
                           ),
                           GalleryListType.watched: Container(
-                            child: Text(L10n.of(context).tab_watched),
+                            child: Text(
+                              L10n.of(context).tab_watched,
+                              style: segmentedTextStyle,
+                            ),
+                            padding: segmentedPadding,
                             // constraints: BoxConstraints(minWidth: 10),
                           ),
-                          if (!kReleaseMode)
-                            GalleryListType.aggregate: Container(
-                              child: Text(L10n.of(context).aggregate),
-                              // constraints: BoxConstraints(minWidth: 10),
-                            ),
+                          // if (!kReleaseMode)
+                          //   GalleryListType.aggregate: Container(
+                          //     child: Text(L10n.of(context).aggregate),
+                          //     // constraints: BoxConstraints(minWidth: 10),
+                          //   ),
                         },
                         groupValue: _listType,
                         onValueChanged: (GalleryListType? value) {
