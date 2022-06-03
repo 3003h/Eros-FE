@@ -83,7 +83,7 @@ class GalleryPageController extends GetxController
     gState.hideNavigationBtn = true;
 
     if (!isStateFromCache) {
-      logger.d('state new load');
+      logger.v('state new load');
       gState.galleryRepository = galleryRepository;
       _loadData();
 

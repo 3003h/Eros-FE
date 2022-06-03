@@ -428,12 +428,10 @@ class TagBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> listGroupWidget = <Widget>[];
-    for (final TagGroup tagGroupData in listTagGroup) {
-      listGroupWidget.add(TagGroupItem(tagGroupData: tagGroupData));
-    }
-
-    return Column(children: listGroupWidget);
+    return Column(
+        children: listTagGroup
+            .map((tagGroupData) => TagGroupItem(tagGroupData: tagGroupData))
+            .toList());
   }
 }
 
@@ -502,14 +500,6 @@ class TagGroupItem extends StatelessWidget {
                     simpleSearch: '${tag.type}:${tag.title.trim()}');
               },
               onLongPress: () {
-                // if (ehConfigService.isTagTranslat) {
-                //   showTagInfoDialog(
-                //     tag.title,
-                //     translate: tag.tagTranslat,
-                //     type: tag.type,
-                //     vote: tag.vote ?? 0,
-                //   );
-                // }
                 showTagInfoDialog(
                   tag.title,
                   translate: tag.tagTranslat,

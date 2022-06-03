@@ -84,7 +84,7 @@ class ThemeColors {
   static const CupertinoDynamicColor commitText =
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'commitText',
-    color: Colors.black87,
+    color: CupertinoColors.label,
     darkColor: CupertinoColors.systemGrey4,
   );
 

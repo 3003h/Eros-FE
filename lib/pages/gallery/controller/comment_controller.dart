@@ -122,11 +122,15 @@ class CommentController extends GetxController
 
     // 评论按id排序
     final commentsSortByTime = List<GalleryComment>.from(state ?? []);
+
     // 按时间由 id 排序 id越大代表越新
     commentsSortByTime.sort(
-        (a, b) => int.parse(b.id ?? '0').compareTo(int.parse(a.id ?? '0')));
+        (a, b) => int.parse(b.id ?? '1').compareTo(int.parse(a.id ?? '1')));
     final curIndex =
         commentsSortByTime.indexWhere((element) => element.id == comment.id);
+    if (curIndex < 0) {
+      return null;
+    }
     final fill = commentsSortByTime
         .getRange(curIndex, commentsSortByTime.length)
         .toList();
@@ -166,7 +170,7 @@ class CommentController extends GetxController
       final arr = text.split(RegExp(r'\s+'));
       for (int i = arr.length; i > 0; i--) {
         final _name = arr.getRange(0, i).join(' ');
-        logger.d('name ($_name)');
+        // logger.d('name ($_name)');
 
         repty = fill.firstWhereOrNull(
             (element) => element.name.replaceAll(RegExp(r'\s+'), ' ') == _name);
@@ -241,7 +245,7 @@ class CommentController extends GetxController
       return;
     }
 
-    logger.d('commit up id $_id');
+    logger.v('commit up id $_id');
     // state?.firstWhere((element) => element.id == _id.toString()).vote = 1;
     final int? _commentIndex =
         state?.indexWhere((element) => element.id == _id.toString());
@@ -264,7 +268,7 @@ class CommentController extends GetxController
 
   // 点踩
   Future<void> commitVoteDown(String _id) async {
-    logger.d('commit down id $_id');
+    logger.v('commit down id $_id');
     // state.firstWhere((element) => element.id == _id.toString()).vote = -1;
     final int? _commentIndex =
         state?.indexWhere((element) => element.id == _id.toString());
@@ -286,7 +290,7 @@ class CommentController extends GetxController
 
   // 点赞和踩的响应处理
   void _paraRes(CommitVoteRes rult) {
-    logger.d('${rult.toJson()}');
+    logger.v('${rult.toJson()}');
 
     final int? _commentIndex = state?.indexWhere(
         (GalleryComment element) => element.id == rult.commentId.toString());
