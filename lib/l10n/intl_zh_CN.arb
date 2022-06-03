@@ -361,5 +361,6 @@
   "aggregate_groups": "聚合分组",
   "hide": "隐藏",
   "double_page_model": "双页模式",
-  "model": "Model {modelName}"
+  "model": "模式 {modelName}",
+  "reply_to_comment": "回复"
 }

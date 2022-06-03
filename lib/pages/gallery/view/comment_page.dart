@@ -58,19 +58,40 @@ class CommentPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          controller.editState == EditState.editComment
-                              ? L10n.of(context).edit_comment
-                              : 'Repty:  ${controller.reptyUser}',
-                          style: const TextStyle(
-                            color: CupertinoColors.activeBlue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
+                        if (controller.isEditStat)
+                          Text(
+                            L10n.of(context).edit_comment,
+                            style: const TextStyle(
+                              color: CupertinoColors.activeBlue,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          )
+                        else
+                          Row(
+                            children: [
+                              Text(
+                                L10n.of(context).reply_to_comment,
+                                style: const TextStyle(
+                                  color: CupertinoColors.activeOrange,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                '${controller.reptyUser}:',
+                                style: const TextStyle(
+                                  color: CupertinoColors.activeBlue,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
                         const SizedBox(height: 8),
                         Text(
-                          controller.editState == EditState.editComment
+                          controller.isEditStat
                               ? controller.oriComment
                               : controller.reptyCommentText,
                           maxLines: 3,

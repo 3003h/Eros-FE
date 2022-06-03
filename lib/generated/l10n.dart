@@ -3693,6 +3693,16 @@ class L10n {
       args: [modelName],
     );
   }
+
+  /// `Reply`
+  String get reply_to_comment {
+    return Intl.message(
+      'Reply',
+      name: 'reply_to_comment',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

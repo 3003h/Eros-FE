@@ -10,6 +10,7 @@ import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'common/controller/tag_trans_controller.dart';
 import 'common/enum.dart';
@@ -61,6 +62,8 @@ extension ExtComment on GalleryComment {
         }
         return e.translate ?? '';
       }).join();
+
+  DateTime get dateTime => DateFormat('yyyy-MM-dd HH:mm').parse(time);
 }
 
 extension ExtCommentSpan on GalleryCommentSpan {

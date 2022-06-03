@@ -359,5 +359,6 @@
   "aggregate_groups": "Aggregate groups",
   "hide": "Скрыть",
   "double_page_model": "Double page model",
-  "model": "Model {modelName}"
+  "model": "Model {modelName}",
+  "reply_to_comment": "Reply"
 }

@@ -430,7 +430,7 @@ class CommentItem extends StatelessWidget {
           ),
           Text(
             reptyComment.text,
-            maxLines: 3,
+            maxLines: 5,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 12,
