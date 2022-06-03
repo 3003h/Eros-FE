@@ -113,38 +113,67 @@ class CommentController extends GetxController
   GalleryComment? parserCommentRepty(GalleryComment comment) {
     GalleryComment? repty;
 
-    final reg = RegExp(r'\s*@(\S+)(\s+)?(#(\d+)#)?');
+    // 用户名无空格
+    final reg = RegExp(r'\s*@(\S+)((?!#\d+#).)+(#(\d+)#)?');
     final match = reg.firstMatch(comment.text);
     if (match == null || match.groupCount == 0) {
       return null;
     }
+
+    // 评论按id排序
+    final commentsSortByTime = List<GalleryComment>.from(state ?? []);
+    // 按时间由 id 排序 id越大代表越新
+    commentsSortByTime.sort(
+        (a, b) => int.parse(b.id ?? '0').compareTo(int.parse(a.id ?? '0')));
+    final curIndex =
+        commentsSortByTime.indexWhere((element) => element.id == comment.id);
+    final fill = commentsSortByTime
+        .getRange(curIndex, commentsSortByTime.length)
+        .toList();
+    // logger.d('${commentsSortByTime.map((e) => e.id).join('\n')} ');
+
+    // for (int i = 0; i < match.groupCount + 1; i++) {
+    //   logger.d('($i)  ${match.group(i)}');
+    // }
 
     final reptyUserName = match.group(1);
     final reptyId = match.group(4);
 
     // 有明确的评论id的
     if (reptyId != null) {
-      repty = state?.firstWhereOrNull(
-          (element) => element.id == reptyId && element.name == reptyUserName);
+      repty = state?.firstWhereOrNull((element) => element.id == reptyId);
     }
 
     // 没有明确的评论id 或id和所 @用户名 对应不上的
     if (repty == null && reptyUserName != null) {
-      final commentsSortByTime = List<GalleryComment>.from(state ?? []);
-      // 按时间由 id 排序 id越大代表越新
-      commentsSortByTime.sort(
-          (a, b) => int.parse(b.id ?? '0').compareTo(int.parse(a.id ?? '0')));
-
-      // logger.d('${commentsSortByTime.map((e) => e.id).join('\n')} ');
-
-      //
-      final curIndex =
-          commentsSortByTime.indexWhere((element) => element.id == comment.id);
-      final fill = commentsSortByTime
-          .getRange(curIndex, commentsSortByTime.length)
-          .toList();
       // reptyUserName发表的离当前评论最进的评论
-      return fill.firstWhereOrNull((element) => element.name == reptyUserName);
+      repty = fill.firstWhereOrNull((element) => element.name == reptyUserName);
+    }
+
+    if (repty == null) {
+      // 如果还是匹配不上 考虑用户名中带空格的可能性 但是需要换行结束
+      final regSpace = RegExp(r'\s*@(.+)\n');
+      final matchSpace = regSpace.firstMatch(comment.text);
+      if (matchSpace == null || matchSpace.groupCount == 0) {
+        return null;
+      }
+
+      // for (int i = 1; i < matchSpace.groupCount + 1; i++) {
+      //   logger.d('space ($i)  ${matchSpace.group(i)}');
+      // }
+
+      final text = matchSpace.group(1) ?? '';
+      final arr = text.split(RegExp(r'\s+'));
+      for (int i = arr.length; i > 0; i--) {
+        final _name = arr.getRange(0, i).join(' ');
+        logger.d('name ($_name)');
+
+        repty = fill.firstWhereOrNull(
+            (element) => element.name.replaceAll(RegExp(r'\s+'), ' ') == _name);
+        if (repty != null) {
+          return repty;
+        }
+      }
     }
 
     return repty;
