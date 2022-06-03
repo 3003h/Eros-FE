@@ -222,6 +222,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites": MessageLookupByLibrary.simpleMessage("从收藏中删除"),
+        "reply_to_comment":
+            MessageLookupByLibrary.simpleMessage("Reply to comment"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Restore tasks data"),

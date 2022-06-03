@@ -388,7 +388,7 @@ Widget buildGallerySliverListSimpleView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
-  logger.d('buildGallerySliverListSimpleView');
+  logger.v('buildGallerySliverListSimpleView');
 
   return SliverAnimatedList(
     key: key,

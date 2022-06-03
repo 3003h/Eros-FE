@@ -122,15 +122,29 @@ class CommentController extends GetxController
     final reptyUserName = match.group(1);
     final reptyId = match.group(4);
 
+    // 有明确的评论id的
     if (reptyId != null) {
       repty = state?.firstWhereOrNull(
           (element) => element.id == reptyId && element.name == reptyUserName);
     }
 
+    // 没有明确的评论id 或id和所 @用户名 对应不上的
     if (repty == null && reptyUserName != null) {
-      final curIndex = state?.indexWhere((element) => element.id == comment.id);
-      final fill = state?.getRange(curIndex!, state?.length ?? 0).toList();
-      return fill?.firstWhereOrNull((element) => element.name == reptyUserName);
+      final commentsSortByTime = List<GalleryComment>.from(state ?? []);
+      // 按时间由 id 排序 id越大代表越新
+      commentsSortByTime.sort(
+          (a, b) => int.parse(b.id ?? '0').compareTo(int.parse(a.id ?? '0')));
+
+      // logger.d('${commentsSortByTime.map((e) => e.id).join('\n')} ');
+
+      //
+      final curIndex =
+          commentsSortByTime.indexWhere((element) => element.id == comment.id);
+      final fill = commentsSortByTime
+          .getRange(curIndex, commentsSortByTime.length)
+          .toList();
+      // reptyUserName发表的离当前评论最进的评论
+      return fill.firstWhereOrNull((element) => element.name == reptyUserName);
     }
 
     return repty;
@@ -366,7 +380,7 @@ class CommentController extends GetxController
     final repty =
         state?.firstWhereOrNull((element) => element.id == reptyCommentId);
 
-    reptyCommentText = repty?.text ?? '';
+    reptyCommentText = repty?.text.replaceAll('\n', '    ') ?? '';
     reptyUser = repty?.name ?? '';
 
     if (repty != null) {

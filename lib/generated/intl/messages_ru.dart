@@ -254,6 +254,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Загрузить заново"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Удалить из избранного"),
+        "reply_to_comment": MessageLookupByLibrary.simpleMessage("Reply"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Сжатое"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Возобновить задания"),

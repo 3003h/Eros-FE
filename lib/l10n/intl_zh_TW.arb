@@ -359,5 +359,6 @@
   "aggregate_groups": "Aggregate groups",
   "hide": "Hide",
   "double_page_model": "双页模式",
-  "model": "模式 {modelName}"
+  "model": "模式 {modelName}",
+  "reply_to_comment": "Reply to comment"
 }

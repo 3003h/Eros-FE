@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "当前 ${site}";
 
-  static String m1(modelName) => "Model ${modelName}";
+  static String m1(modelName) => "模式 ${modelName}";
 
   static String m2(rating) => "${rating} ⭐";
 
@@ -201,6 +201,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),
+        "reply_to_comment": MessageLookupByLibrary.simpleMessage("回复"),
         "resample_image": MessageLookupByLibrary.simpleMessage("重采样图片"),
         "restore_tasks_data": MessageLookupByLibrary.simpleMessage("恢复下载任务数据"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("从右到左"),
