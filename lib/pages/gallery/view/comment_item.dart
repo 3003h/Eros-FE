@@ -368,8 +368,8 @@ class CommentItem extends StatelessWidget {
         id: galleryComment.id ?? 'None',
         builder: (CommentController _commentController) {
           return GestureDetector(
-            onLongPress: () =>
-                _showScoreDeatil(galleryComment.scoreDetails, context),
+            // onLongPress: () =>
+            //     _showScoreDeatil(galleryComment.scoreDetails, context),
             child: Container(
               margin: const EdgeInsets.only(top: 8),
               child: ClipRRect(
@@ -575,32 +575,40 @@ class CommentItem extends StatelessWidget {
             ],
           ),
         ),
-        // 分值
-        if (galleryComment.score.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 4),
-            child: Icon(
-              FontAwesomeIcons.adjust,
-              size: kSizeNotVote - 1,
-              color: CupertinoDynamicColor.resolve(
-                ThemeColors.commitText,
-                context,
-              ),
+        if (galleryComment.id != '0')
+          GestureDetector(
+            onTap: () => _showScoreDeatil(galleryComment.scoreDetails, context),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 分值
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 4),
+                  child: Icon(
+                    FontAwesomeIcons.circleHalfStroke,
+                    size: kSizeNotVote - 1,
+                    color: CupertinoDynamicColor.resolve(
+                      ThemeColors.commitText,
+                      context,
+                    ),
+                  ),
+                ),
+                Text(
+                  galleryComment.score.startsWith('+')
+                      ? '+${galleryComment.score.substring(1)}'
+                      : galleryComment.score.startsWith('-')
+                          ? galleryComment.score
+                          : '+${galleryComment.score}',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.normal,
+                    color: CupertinoDynamicColor.resolve(
+                        ThemeColors.commitText, context),
+                  ),
+                ),
+              ],
             ),
-          ),
-        Text(
-          galleryComment.score.startsWith('+')
-              ? '+${galleryComment.score.substring(1)}'
-              : galleryComment.score.startsWith('-')
-                  ? galleryComment.score
-                  : '+${galleryComment.score}',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-            color:
-                CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-          ),
-        ),
+          )
       ],
     );
   }
@@ -653,6 +661,7 @@ class CommentItem extends StatelessWidget {
 
   /// 显示评分详情
   void _showScoreDeatil(List<String>? scoreDeatils, BuildContext context) {
+    // logger.d('scoreDeatils ${scoreDeatils} ');
     if (scoreDeatils == null || scoreDeatils.isEmpty) {
       return;
     }
