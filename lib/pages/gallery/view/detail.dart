@@ -58,7 +58,7 @@ class _DetailFromUrl extends StatelessWidget {
                   tabTag: '',
                 ),
               if (state != null)
-                _DetailWidget(
+                DetailWidget(
                   galleryProvider: state,
                   pageController: _controller,
                 ),
@@ -91,8 +91,8 @@ class _DetailFromUrl extends StatelessWidget {
   }
 }
 
-class _DetailWidget extends StatelessWidget {
-  const _DetailWidget({
+class DetailWidget extends StatelessWidget {
+  const DetailWidget({
     Key? key,
     required this.galleryProvider,
     required this.pageController,
@@ -126,7 +126,7 @@ class _DetailWidget extends StatelessWidget {
       Expanded(
         child: Obx(() {
           final defIcon = TextBtn(
-            FontAwesomeIcons.solidArrowAltCircleDown,
+            FontAwesomeIcons.solidCircleDown,
             title: L10n.of(context).p_Download,
             onTap: () => pageController.downloadGallery(context),
           );
@@ -136,19 +136,19 @@ class _DetailWidget extends StatelessWidget {
 
           final Map<TaskStatus, Widget> iconMap = {
             TaskStatus.complete: TextBtn(
-              FontAwesomeIcons.solidCheckCircle,
+              FontAwesomeIcons.solidCircleCheck,
               title: L10n.of(context).downloaded,
               onTap: toDownloadPage,
               onLongPress: toDownloadPage,
             ),
             TaskStatus.running: TextBtn(
-              FontAwesomeIcons.solidPlayCircle,
+              FontAwesomeIcons.solidCirclePlay,
               title: L10n.of(context).downloading,
               onTap: toDownloadPage,
               onLongPress: toDownloadPage,
             ),
             TaskStatus.paused: TextBtn(
-              FontAwesomeIcons.solidPauseCircle,
+              FontAwesomeIcons.solidCirclePause,
               title: L10n.of(context).paused,
               onTap: toDownloadPage,
               onLongPress: toDownloadPage,
@@ -175,7 +175,7 @@ class _DetailWidget extends StatelessWidget {
       // archiver
       Expanded(
         child: TextBtn(
-          FontAwesomeIcons.solidFileArchive,
+          FontAwesomeIcons.solidFileZipper,
           title: L10n.of(Get.context!).p_Archiver,
           onTap: () async {
             showArchiverDialog();
@@ -238,8 +238,10 @@ class _DetailWidget extends StatelessWidget {
         const SizedBox(height: 10),
         // 标签
         Row(children: [_getminiTitle(L10n.of(context).tags)]),
-        TagBox(listTagGroup: galleryProvider.tagGroup ?? [])
-            .paddingSymmetric(vertical: 4),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: TagBox(listTagGroup: galleryProvider.tagGroup ?? []),
+        ),
         const SizedBox(height: 20),
         Row(
           children: [
@@ -314,7 +316,7 @@ class _DetailFromItem extends StatelessWidget {
           controller.obx(
             (GalleryProvider? state) {
               return state != null
-                  ? _DetailWidget(
+                  ? DetailWidget(
                       galleryProvider: state,
                       pageController: controller,
                     )
@@ -342,7 +344,7 @@ class _DetailFromItem extends StatelessWidget {
                 ),
               );
             },
-          )
+          ),
         ],
       ),
     );

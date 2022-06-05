@@ -13,6 +13,8 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/pages/gallery/gallery_repository.dart';
+import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';

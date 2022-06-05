@@ -20,23 +20,7 @@ import '../comm.dart';
 import '../controller/gallery_page_state.dart';
 import 'detail.dart';
 
-const double kHeaderHeight = 200.0 + 52;
-const double kPadding = 12.0;
-const double kHeaderPaddingTop = 12.0;
-
-class GalleryRepository {
-  GalleryRepository({
-    this.tabTag,
-    this.item,
-    this.url,
-    this.jumpSer,
-  });
-
-  final dynamic tabTag;
-  final GalleryProvider? item;
-  final String? url;
-  final int? jumpSer;
-}
+// const double kHeaderHeight = 200.0 + 52;
 
 class GalleryMainPage extends StatefulWidget {
   @override
@@ -189,37 +173,6 @@ class _GalleryMainPageState extends State<GalleryMainPage> {
           ),
         ),
       ),
-    );
-  }
-}
-
-// 导航栏封面小图
-class NavigationBarImage extends StatelessWidget {
-  const NavigationBarImage({
-    Key? key,
-    this.imageUrl,
-    this.scrollController,
-  }) : super(key: key);
-
-  final String? imageUrl;
-  final ScrollController? scrollController;
-
-  @override
-  Widget build(BuildContext context) {
-    final double _statusBarHeight = MediaQuery.of(Get.context!).padding.top;
-    return GestureDetector(
-      onTap: () {
-        scrollController?.animateTo(0,
-            duration: const Duration(milliseconds: 500), curve: Curves.ease);
-      },
-      child: imageUrl == null || (imageUrl?.isEmpty ?? true)
-          ? const SizedBox.expand()
-          : Container(
-              child: CoveTinyImage(
-                imgUrl: imageUrl!,
-                statusBarHeight: _statusBarHeight,
-              ),
-            ),
     );
   }
 }
