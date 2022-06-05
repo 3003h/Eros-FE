@@ -70,7 +70,7 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            FontAwesomeIcons.edit,
+            FontAwesomeIcons.penToSquare,
             size: 22,
           ),
           onPressed: () async {
@@ -89,15 +89,6 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
             }
           },
         ),
-        // CupertinoButton(
-        //   padding: const EdgeInsets.all(0),
-        //   minSize: 40,
-        //   child: const Icon(
-        //     LineIcons.plus,
-        //     size: 24,
-        //   ),
-        //   onPressed: () async {},
-        // ),
       ],
     );
   }
@@ -131,14 +122,14 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           ? _searchTrailing(context)
           : _normalTrailing(context);
 
-      return AnimatedCrossFade(
-        firstChild: _normalTrailing(context),
-        secondChild: _searchTrailing(context),
-        crossFadeState: controller.isSearchUserTags
-            ? CrossFadeState.showSecond
-            : CrossFadeState.showFirst,
-        duration: 300.milliseconds,
-      );
+      // return AnimatedCrossFade(
+      //   firstChild: _normalTrailing(context),
+      //   secondChild: _searchTrailing(context),
+      //   crossFadeState: controller.isSearchUserTags
+      //       ? CrossFadeState.showSecond
+      //       : CrossFadeState.showFirst,
+      //   duration: 300.milliseconds,
+      // );
     });
   }
 
@@ -162,14 +153,14 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           ? _searchMiddle(context)
           : _normalMiddle(context);
 
-      return AnimatedCrossFade(
-        firstChild: _normalMiddle(context),
-        secondChild: _searchMiddle(context),
-        crossFadeState: controller.isSearchUserTags
-            ? CrossFadeState.showSecond
-            : CrossFadeState.showFirst,
-        duration: 200.milliseconds,
-      );
+      // return AnimatedCrossFade(
+      //   firstChild: _normalMiddle(context),
+      //   secondChild: _searchMiddle(context),
+      //   crossFadeState: controller.isSearchUserTags
+      //       ? CrossFadeState.showSecond
+      //       : CrossFadeState.showFirst,
+      //   duration: 200.milliseconds,
+      // );
     });
   }
 

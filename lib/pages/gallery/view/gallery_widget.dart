@@ -546,7 +546,7 @@ class TagGroupItem extends StatelessWidget {
     logger.v('tagType $_tagType');
 
     final Container container = Container(
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -567,12 +567,10 @@ class TagGroupItem extends StatelessWidget {
                 : const SizedBox.shrink()),
           ),
           Expanded(
-            child: Container(
-              child: Wrap(
-                spacing: 4, //主轴上子控件的间距
-                runSpacing: 4, //交叉轴上子控件之间的间距
-                children: _tagBtnList, //要显示的子控件集合
-              ),
+            child: Wrap(
+              spacing: 4, //主轴上子控件的间距
+              runSpacing: 4, //交叉轴上子控件之间的间距
+              children: _tagBtnList, //要显示的子控件集合
             ),
           )
         ],

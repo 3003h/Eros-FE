@@ -41,9 +41,10 @@ class CommentPage extends StatelessWidget {
           padding:
               EdgeInsets.only(bottom: 60 + context.mediaQueryPadding.bottom),
           itemBuilder: (context, index) {
-            if (controller.comments != null) {
+            final comment = controller.comments?[index];
+            if (comment != null) {
               return CommentItem(
-                galleryComment: controller.comments![index],
+                galleryComment: comment,
               ).autoCompressKeyboard(context);
             } else {
               return const SizedBox();

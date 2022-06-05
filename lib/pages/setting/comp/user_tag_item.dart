@@ -77,17 +77,18 @@ class _UserTagItemState extends State<UserTagItem> {
                       children: [
                         Icon(
                           FontAwesomeIcons.circleCheck,
-                          size: 16,
+                          size: 14,
                           color: widget.watch
                               ? CupertinoDynamicColor.resolve(
                                   CupertinoColors.activeGreen, context)
                               : CupertinoDynamicColor.resolve(
                                   CupertinoColors.systemGrey4, context),
                         ),
+                        const SizedBox(height: 4),
                         Icon(
                           // LineIcons.eyeSlash,
                           FontAwesomeIcons.circleCheck,
-                          size: 16,
+                          size: 14,
                           color: widget.hide
                               ? CupertinoDynamicColor.resolve(
                                   CupertinoColors.destructiveRed, context)

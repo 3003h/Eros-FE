@@ -57,11 +57,11 @@ class GalleryPageController extends GetxController
       // url跳转
       // 解析gid等信息
       final RegExp urlRex =
-          RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
+          RegExp(r'(http?s://e[-x]hentai.org)?/g/(\d+)/(\w+)/?$');
       final RegExpMatch? urlRult =
           urlRex.firstMatch(galleryRepository.url ?? '');
-      final String gid = urlRult?.group(3) ?? '';
-      final String token = urlRult?.group(4) ?? '';
+      final String gid = urlRult?.group(2) ?? '';
+      final String token = urlRult?.group(3) ?? '';
 
       if (!_loadDataFromCache(
         gid,
@@ -175,15 +175,12 @@ class GalleryPageController extends GetxController
       gState.currentImagePage = 0;
       setImageAfterRequest(gState.galleryProvider?.galleryImages);
 
+      // 评论
       gState.comments(gState.galleryProvider?.galleryComment);
 
       try {
         // 页面内刷新时的处理
         if (refresh) {
-          // 评论控制器状态数据更新
-          // Get.find<CommentController>(tag: pageCtrlTag)
-          //     .change(gState.galleryProvider?.galleryComment);
-          // gState.comments(gState.galleryProvider?.galleryComment);
           // 评分状态更新
           gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
         } else {
