@@ -22,6 +22,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../header.dart';
 
@@ -140,7 +141,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 ),
                 pageController: _controller,
               ),
-              // 最上面的部分评论
+              // 最上面的部分评论 小标题
               SliverToBoxAdapter(
                 child: Row(
                   children: [
@@ -149,6 +150,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                   ],
                 ),
               ),
+              // 最上面的部分评论 评论内容
               GalleryObxSliver(
                 (state) {
                   return SliverPadding(
@@ -173,6 +175,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 },
                 pageController: _controller,
               ),
+              // 缩略图
               GalleryObxSliver(
                 (state) => SliverPadding(
                   padding: const EdgeInsets.only(

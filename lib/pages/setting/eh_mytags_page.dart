@@ -91,6 +91,7 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                                 id: isLayoutLarge ? 2 : null,
                               );
                             },
+                            hideLine: index == state.length - 1,
                           );
                           // return _list[index];
                         },
@@ -114,113 +115,6 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
               ],
             ),
           ),
-        ),
-      );
-    });
-
-    return Obx(() {
-      return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-            padding: const EdgeInsetsDirectional.only(end: 8),
-            middle: Text(L10n.of(context).ehentai_my_tags),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  child: const Icon(
-                    FontAwesomeIcons.earthAmericas,
-                    size: 22,
-                  ),
-                  onPressed: () async {
-                    Get.to(() => InWebMyTags());
-                  },
-                ),
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  child: const Icon(
-                    FontAwesomeIcons.plus,
-                    size: 22,
-                  ),
-                  onPressed: () async {
-                    // Get.to(() => InWebMyTags());
-                  },
-                ),
-              ],
-            )),
-        child: CustomScrollView(
-          slivers: [
-            // EhCupertinoSliverRefreshControl(
-            //   onRefresh: controller.reloadData,
-            // ),
-            // SliverList(
-            //   delegate: SliverChildBuilderDelegate(
-            //     (context, index) {
-            //       final e = _ehMyTagsController.ehMyTags.tagsets[index];
-            //
-            //       return SelectorSettingItem(
-            //         title: e.name,
-            //         onTap: () async {
-            //           if (controller.currSelected != e.value) {
-            //             controller.currSelected = e.value ?? '';
-            //             // await controller.reloadData();
-            //           }
-            //           Get.toNamed(
-            //             EHRoutes.userTags,
-            //             id: isLayoutLarge ? 2 : null,
-            //           );
-            //         },
-            //       );
-            //       // return _list[index];
-            //     },
-            //     childCount: _ehMyTagsController.ehMyTags.tagsets.length,
-            //   ),
-            // ),
-            controller.obx(
-              (List<EhMytagSet>? state) {
-                return Text('AAA');
-              },
-            )
-            // controller.obx(
-            //   (List<EhMytagSet>? state) {
-            //     if (state == null) {
-            //       return const SliverToBoxAdapter(
-            //           child: SizedBox.shrink());
-            //     }
-            //     return SliverList(
-            //       delegate: SliverChildBuilderDelegate(
-            //         (context, index) {
-            //           final e = state[index];
-            //
-            //           return SelectorSettingItem(
-            //             title: e.name,
-            //             onTap: () async {
-            //               if (controller.currSelected != e.value) {
-            //                 controller.currSelected = e.value ?? '';
-            //                 // await controller.reloadData();
-            //               }
-            //               Get.toNamed(
-            //                 EHRoutes.userTags,
-            //                 id: isLayoutLarge ? 2 : null,
-            //               );
-            //             },
-            //           );
-            //           // return _list[index];
-            //         },
-            //         childCount: state.length,
-            //       ),
-            //     );
-            //   },
-            //   onEmpty: const SliverToBoxAdapter(
-            //     child: CupertinoActivityIndicator(),
-            //   ),
-            // ),
-          ],
         ),
       );
     });
