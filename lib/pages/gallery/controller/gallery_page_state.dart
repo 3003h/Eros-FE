@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:get/get.dart';
 
 import '../../../fehviewer.dart';

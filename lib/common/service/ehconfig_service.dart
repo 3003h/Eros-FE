@@ -5,6 +5,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
+import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
@@ -572,8 +573,13 @@ class EhConfigService extends ProfileService {
     final String currentRoute = Get.currentRoute;
     logger.d('currentRoute $currentRoute');
 
+    // final List<String> pageNames = <String>[
+    //   '/${GalleryMainPage().runtimeType.toString()}',
+    //   EHRoutes.galleryPage,
+    // ];
+
     final List<String> pageNames = <String>[
-      '/${GalleryMainPage().runtimeType.toString()}',
+      '/${GallerySliverPage().runtimeType.toString()}',
       EHRoutes.galleryPage,
     ];
 
