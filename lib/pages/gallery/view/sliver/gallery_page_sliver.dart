@@ -5,6 +5,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
+import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
@@ -149,20 +150,27 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 ),
               ),
               GalleryObxSliver(
-                (state) => SliverPadding(
-                  padding: const EdgeInsets.only(
-                      left: kPadding, right: kPadding, bottom: 20),
-                  sliver: SliverToBoxAdapter(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.deferToChild,
-                      onTap: () => Get.toNamed(
-                        EHRoutes.galleryComment,
-                        id: isLayoutLarge ? 2 : null,
+                (state) {
+                  return SliverPadding(
+                    padding: const EdgeInsets.only(
+                        left: kPadding, right: kPadding, bottom: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.deferToChild,
+                        onTap: () => Get.toNamed(
+                          EHRoutes.galleryComment,
+                          id: isLayoutLarge ? 2 : null,
+                        ),
+                        // child: const TopComment(showBtn: false),
+                        child: TopCommentEx(
+                          key: ValueKey(
+                              state.galleryComment?.map((e) => e.id).join('')),
+                          comments: state.galleryComment,
+                        ),
                       ),
-                      child: const TopComment(showBtn: false),
                     ),
-                  ),
-                ),
+                  );
+                },
                 pageController: _controller,
               ),
               GalleryObxSliver(

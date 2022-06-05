@@ -358,11 +358,9 @@ class GalleryRating extends StatelessWidget {
   }
 }
 
-class TopComment extends StatelessWidget {
-  const TopComment({Key? key, this.showBtn = true}) : super(key: key);
-
-  // final List<GalleryComment> comment;
-  final bool showBtn;
+class TopCommentEx extends StatelessWidget {
+  const TopCommentEx({Key? key, this.comments}) : super(key: key);
+  final List<GalleryComment>? comments;
 
   @override
   Widget build(BuildContext context) {
@@ -378,47 +376,71 @@ class TopComment extends StatelessWidget {
     }
 
     return Column(
-      children: <Widget>[
-        // 评论
-        GetBuilder<CommentController>(
-          init: CommentController(),
-          tag: pageCtrlTag,
-          id: GetIds.PAGE_VIEW_TOP_COMMENT,
-          builder: (CommentController _commentController) {
-            return _commentController.obx(
-                (List<GalleryComment>? state) => Column(
-                      children: <Widget>[
-                        ..._topComment(state, max: 2),
-                      ],
-                    ),
-                onLoading: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: const CupertinoActivityIndicator(
-                    radius: 10,
-                  ),
-                ));
-          },
-        ),
-        // 评论按钮
-        if (showBtn)
-          CupertinoButton(
-            minSize: 0,
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            child: Text(
-              L10n.of(Get.context!).all_comment,
-              style: const TextStyle(fontSize: 16),
-            ),
-            onPressed: () {
-              Get.toNamed(
-                EHRoutes.galleryComment,
-                id: isLayoutLarge ? 2 : null,
-              );
-            },
-          ),
-      ],
+      children: _topComment(comments, max: 2),
     );
   }
 }
+
+// class TopComment extends StatelessWidget {
+//   const TopComment({Key? key, this.showBtn = true}) : super(key: key);
+//
+//   // final List<GalleryComment> comment;
+//   final bool showBtn;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // 显示最前面两条
+//     List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
+//       return (comments?.take(max) ?? [])
+//           .map((GalleryComment comment) => CommentItem(
+//                 galleryComment: comment,
+//                 simple: true,
+//               ))
+//           .toList();
+//     }
+//
+//     return Column(
+//       children: <Widget>[
+//         // 评论
+//         GetBuilder<CommentController>(
+//           init: CommentController(),
+//           tag: pageCtrlTag,
+//           id: GetIds.PAGE_VIEW_TOP_COMMENT,
+//           builder: (CommentController _commentController) {
+//             return _commentController.obx(
+//                 (List<GalleryComment>? state) => Column(
+//                       children: <Widget>[
+//                         ..._topComment(state, max: 2),
+//                       ],
+//                     ),
+//                 onLoading: Container(
+//                   padding: const EdgeInsets.all(8),
+//                   child: const CupertinoActivityIndicator(
+//                     radius: 10,
+//                   ),
+//                 ));
+//           },
+//         ),
+//         // 评论按钮
+//         if (showBtn)
+//           CupertinoButton(
+//             minSize: 0,
+//             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+//             child: Text(
+//               L10n.of(Get.context!).all_comment,
+//               style: const TextStyle(fontSize: 16),
+//             ),
+//             onPressed: () {
+//               Get.toNamed(
+//                 EHRoutes.galleryComment,
+//                 id: isLayoutLarge ? 2 : null,
+//               );
+//             },
+//           ),
+//       ],
+//     );
+//   }
+// }
 
 /// 包含多个 TagGroup
 class TagBox extends StatelessWidget {

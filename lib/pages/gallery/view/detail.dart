@@ -234,14 +234,14 @@ class DetailWidget extends StatelessWidget {
             ).marginOnly(right: 4),
           ],
         ),
-        GestureDetector(
-          behavior: HitTestBehavior.deferToChild,
-          onTap: () => Get.toNamed(
-            EHRoutes.galleryComment,
-            id: isLayoutLarge ? 2 : null,
-          ),
-          child: const TopComment(showBtn: false),
-        ),
+        // GestureDetector(
+        //   behavior: HitTestBehavior.deferToChild,
+        //   onTap: () => Get.toNamed(
+        //     EHRoutes.galleryComment,
+        //     id: isLayoutLarge ? 2 : null,
+        //   ),
+        //   child: const TopComment(showBtn: false),
+        // ),
         const SizedBox(height: 20),
         // 缩略图
         PreviewGrid(

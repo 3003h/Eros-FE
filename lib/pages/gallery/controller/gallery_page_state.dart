@@ -91,6 +91,8 @@ class GalleryPageState {
 
   final Map<int, Future<List<GalleryImage>>> mapLoadImagesForSer = {};
 
+  final RxList<GalleryComment> comments = <GalleryComment>[].obs;
+
   // 另一个语言的标题
   String get topTitle {
     // logger.d('${galleryProvider.japaneseTitle} ${galleryProvider.englishTitle}');
