@@ -156,7 +156,7 @@ class CommentController extends GetxController
 
     if (repty == null) {
       // 如果还是匹配不上 考虑用户名中带空格的可能性 但是需要换行结束
-      final regSpace = RegExp(r'\s*@(.+)\n');
+      final regSpace = RegExp(r'\s*@(.+)(\n)?');
       final matchSpace = regSpace.firstMatch(comment.text);
       if (matchSpace == null || matchSpace.groupCount == 0) {
         return null;
@@ -166,14 +166,15 @@ class CommentController extends GetxController
       //   logger.d('space ($i)  ${matchSpace.group(i)}');
       // }
 
+      final _splitRegexp = RegExp(r'[\s+,.，。]');
       final text = matchSpace.group(1) ?? '';
-      final arr = text.split(RegExp(r'\s+'));
+      final arr = text.split(_splitRegexp);
       for (int i = arr.length; i > 0; i--) {
         final _name = arr.getRange(0, i).join(' ');
         // logger.d('name ($_name)');
 
         repty = fill.firstWhereOrNull(
-            (element) => element.name.replaceAll(RegExp(r'\s+'), ' ') == _name);
+            (element) => element.name.replaceAll(_splitRegexp, ' ') == _name);
         if (repty != null) {
           return repty;
         }
