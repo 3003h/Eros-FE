@@ -200,34 +200,6 @@ class DetailWidget extends StatelessWidget {
         ),
       ),
     ];
-    final Widget columnWhithDivider = Column(
-      children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: _btns,
-        ),
-        Divider(
-          height: 0.5,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, context),
-        ),
-        // 标签
-        TagBox(listTagGroup: galleryProvider.tagGroup ?? []),
-        const TopComment(),
-        Container(
-          margin: const EdgeInsets.only(top: 4),
-          height: 0.5,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, context),
-        ),
-        // 缩略图
-        PreviewGrid(
-          images: pageStat.firstPageImage,
-          gid: galleryProvider.gid ?? '',
-        ),
-        MorePreviewButton(hasMorePreview: pageStat.hasMoreImage),
-      ],
-    );
 
     final Widget columnWhithSpacer = Column(
       children: <Widget>[

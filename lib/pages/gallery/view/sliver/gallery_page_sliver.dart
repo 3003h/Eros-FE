@@ -35,7 +35,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
   late final GalleryPageController _controller;
   final _tag = pageCtrlTag;
 
-  GalleryPageState get _pageState => _controller.gState;
+  GalleryPageState get pageState => _controller.gState;
 
   @override
   void initState() {
@@ -60,8 +60,8 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
 
   @override
   Widget build(BuildContext context) {
-    final dynamic tabTag = _pageState.galleryRepository?.tabTag;
-    final GalleryProvider? galleryProvider = _pageState.galleryProvider;
+    final dynamic tabTag = pageState.galleryRepository?.tabTag;
+    final GalleryProvider? galleryProvider = pageState.galleryProvider;
 
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
@@ -70,7 +70,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
           enableControlFinishRefresh: false,
           enableControlFinishLoad: false,
           onLoad: () async {
-            if (_pageState.images.isNotEmpty) {
+            if (pageState.images.isNotEmpty) {
               Get.toNamed(
                 EHRoutes.galleryAllPreviews,
                 id: isLayoutLarge ? 2 : null,
@@ -91,13 +91,24 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 onRefresh: _controller.handOnRefresh,
               ),
               // 头部
-              if (galleryProvider != null)
+              if (pageState.fromUrl)
+                GalleryObxSliver(
+                  (state) => SliverToBoxAdapter(
+                    child: GalleryHeader(
+                      initGalleryProvider: state,
+                      tabTag: tabTag,
+                    ),
+                  ),
+                  pageController: _controller,
+                )
+              else if (galleryProvider != null)
                 SliverToBoxAdapter(
                   child: GalleryHeader(
                     initGalleryProvider: galleryProvider,
                     tabTag: tabTag,
                   ),
                 ),
+
               GalleryObxSliver(
                 (state) => SliverToBoxAdapter(
                   child: GalleryAtions(
@@ -108,10 +119,14 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 pageController: _controller,
                 showLoading: true,
               ),
-              MiniTitle(title: L10n.of(context).tags),
+              // tag 标题
+              SliverToBoxAdapter(
+                  child: MiniTitle(title: L10n.of(context).tags)),
+              // tag
               GalleryObxSliver(
                 (state) => SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: kPadding),
+                  padding: const EdgeInsets.only(
+                      left: kPadding, right: kPadding, bottom: 20),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -120,6 +135,56 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                       },
                       childCount: (state.tagGroup ?? []).length,
                     ),
+                  ),
+                ),
+                pageController: _controller,
+              ),
+              // 最上面的部分评论
+              SliverToBoxAdapter(
+                child: Row(
+                  children: [
+                    MiniTitle(title: L10n.of(context).gallery_comments),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+              GalleryObxSliver(
+                (state) => SliverPadding(
+                  padding: const EdgeInsets.only(
+                      left: kPadding, right: kPadding, bottom: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.deferToChild,
+                      onTap: () => Get.toNamed(
+                        EHRoutes.galleryComment,
+                        id: isLayoutLarge ? 2 : null,
+                      ),
+                      child: const TopComment(showBtn: false),
+                    ),
+                  ),
+                ),
+                pageController: _controller,
+              ),
+              GalleryObxSliver(
+                (state) => SliverPadding(
+                  padding: const EdgeInsets.only(
+                    bottom: 20,
+                    left: kPadding,
+                    right: kPadding,
+                  ),
+                  sliver: PreviewSliverGrid(
+                    images: pageState.firstPageImage,
+                    gid: state.gid ?? '',
+                  ),
+                ),
+                pageController: _controller,
+              ),
+              GalleryObxSliver(
+                (state) => SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: MorePreviewButton(
+                        hasMorePreview: pageState.hasMoreImage),
                   ),
                 ),
                 pageController: _controller,
@@ -156,7 +221,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
         },
       ),
       middle: Obx(
-        () => _pageState.hideNavigationBtn
+        () => pageState.hideNavigationBtn
             ? const SizedBox()
             : GetBuilder<GalleryPageController>(
                 id: GetIds.PAGE_VIEW_HEADER,
@@ -169,7 +234,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 },
               ),
       ),
-      trailing: Obx(() => _pageState.hideNavigationBtn
+      trailing: Obx(() => pageState.hideNavigationBtn
           ? Row(
               mainAxisSize: MainAxisSize.min,
               children: [

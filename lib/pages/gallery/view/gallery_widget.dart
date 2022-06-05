@@ -369,12 +369,12 @@ class TopComment extends StatelessWidget {
     // 显示最前面两条
     List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
       final Iterable<GalleryComment> _comments = comments?.take(max) ?? [];
-      return List<Widget>.from(_comments
+      return _comments
           .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
                 simple: true,
               ))
-          .toList());
+          .toList();
     }
 
     return Column(
