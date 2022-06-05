@@ -4,6 +4,7 @@ import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -31,22 +32,27 @@ class CommentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 评论列表
-    Widget commentListView = controller.obx(
-      (List<GalleryComment>? state) => ListView.builder(
-        controller: controller.scrollController,
-        padding: EdgeInsets.only(bottom: 60 + context.mediaQueryPadding.bottom),
-        itemBuilder: (context, index) {
-          if (state != null) {
-            return CommentItem(
-              galleryComment: state[index],
-            ).autoCompressKeyboard(context);
-          } else {
-            return const SizedBox();
-          }
-        },
-        itemCount: state?.length ?? 0,
-      ).paddingSymmetric(horizontal: 12),
-    );
+
+    Widget commentListView = Obx(() {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
+        child: ListView.builder(
+          controller: controller.scrollController,
+          padding:
+              EdgeInsets.only(bottom: 60 + context.mediaQueryPadding.bottom),
+          itemBuilder: (context, index) {
+            if (controller.comments != null) {
+              return CommentItem(
+                galleryComment: controller.comments![index],
+              ).autoCompressKeyboard(context);
+            } else {
+              return const SizedBox();
+            }
+          },
+          itemCount: controller.comments?.length ?? 0,
+        ),
+      );
+    });
 
     // 原始消息
     Widget _buildOriText() {

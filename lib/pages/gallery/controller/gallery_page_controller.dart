@@ -175,12 +175,15 @@ class GalleryPageController extends GetxController
       gState.currentImagePage = 0;
       setImageAfterRequest(gState.galleryProvider?.galleryImages);
 
+      gState.comments(gState.galleryProvider?.galleryComment);
+
       try {
         // 页面内刷新时的处理
         if (refresh) {
           // 评论控制器状态数据更新
-          Get.find<CommentController>(tag: pageCtrlTag)
-              .change(gState.galleryProvider?.galleryComment);
+          // Get.find<CommentController>(tag: pageCtrlTag)
+          //     .change(gState.galleryProvider?.galleryComment);
+          // gState.comments(gState.galleryProvider?.galleryComment);
           // 评分状态更新
           gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
         } else {

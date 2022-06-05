@@ -21,8 +21,7 @@ enum EditState {
   reptyComment,
 }
 
-class CommentController extends GetxController
-    with StateMixin<List<GalleryComment>>, WidgetsBindingObserver {
+class CommentController extends GetxController with WidgetsBindingObserver {
   CommentController();
 
   GalleryPageController get pageController {
@@ -31,6 +30,7 @@ class CommentController extends GetxController
   }
 
   GalleryPageState get _pageState => pageController.gState;
+  List<GalleryComment>? get comments => _pageState.comments;
 
   final TextEditingController commentTextController = TextEditingController();
 
@@ -65,18 +65,18 @@ class CommentController extends GetxController
     super.onInit();
     logger.v('CommentController onInit');
 
-    _loadComment();
+    // _loadComment();
 
     _bottomInset = _mediaQueryBottomInset();
     _preBottomInset = _bottomInset;
     _widgetsBinding?.addObserver(this);
   }
 
-  Future<void> _loadComment() async {
-    // await Future.delayed(const Duration(milliseconds: 200));
-    change(_pageState.galleryProvider?.galleryComment,
-        status: RxStatus.success());
-  }
+  // Future<void> _loadComment() async {
+  //   // await Future.delayed(const Duration(milliseconds: 200));
+  //   change(_pageState.galleryProvider?.galleryComment,
+  //       status: RxStatus.success());
+  // }
 
   @override
   void didChangeMetrics() {
@@ -121,7 +121,7 @@ class CommentController extends GetxController
     }
 
     // 评论按id排序
-    final commentsSortByTime = List<GalleryComment>.from(state ?? []);
+    final commentsSortByTime = List<GalleryComment>.from(comments ?? []);
 
     // 按时间由 id 排序 id越大代表越新
     commentsSortByTime.sort(
@@ -145,7 +145,7 @@ class CommentController extends GetxController
 
     // 有明确的评论id的
     if (reptyId != null) {
-      repty = state?.firstWhereOrNull((element) => element.id == reptyId);
+      repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
     }
 
     // 没有明确的评论id 或id和所 @用户名 对应不上的
@@ -187,8 +187,8 @@ class CommentController extends GetxController
   Future<void> commitTranslate(String _id) async {
     logger.v('commitTranslate');
     final int? _commentIndex =
-        state?.indexWhere((element) => element.id == _id.toString());
-    final List<GalleryCommentSpan>? spans = state?[_commentIndex!].span;
+        comments?.indexWhere((element) => element.id == _id.toString());
+    final List<GalleryCommentSpan>? spans = comments?[_commentIndex!].span;
 
     if (spans != null) {
       for (int i = 0; i < spans.length; i++) {
@@ -197,24 +197,8 @@ class CommentController extends GetxController
           if (spans[i].text?.isEmpty ?? true) {
             return;
           }
-          // final List<IdentifiedLanguage> possibleLanguages =
-          //     await identifier.idenfityPossibleLanguages(spans[i].text ?? '');
-          //
-          // final String languages = possibleLanguages
-          //     .map((item) => item.language)
-          //     .toList()
-          //     .join(', ');
-          //
-          // logger.d('Possible Languages: $languages');
-          //
-          // if (possibleLanguages.first.language == 'zh') {
-          //   return;
-          // }
 
           final language = await identifier.identify(spans[i].text ?? '');
-
-          // final language =
-          //     await languageIdentifier.identifyLanguage(spans[i].text!);
 
           logger.d('language $language');
 
@@ -233,8 +217,8 @@ class CommentController extends GetxController
       }
     }
 
-    state![_commentIndex!] = state![_commentIndex].copyWith(
-      showTranslate: !(state![_commentIndex].showTranslate ?? false),
+    comments![_commentIndex!] = comments![_commentIndex].copyWith(
+      showTranslate: !(comments![_commentIndex].showTranslate ?? false),
     );
     // update([_id]);
     update();
@@ -242,15 +226,14 @@ class CommentController extends GetxController
 
   // 点赞
   Future<void> commitVoteUp(String _id) async {
-    if (state == null) {
+    if (comments == null) {
       return;
     }
 
     logger.v('commit up id $_id');
-    // state?.firstWhere((element) => element.id == _id.toString()).vote = 1;
     final int? _commentIndex =
-        state?.indexWhere((element) => element.id == _id.toString());
-    state![_commentIndex!] = state![_commentIndex].copyWith(vote: 1);
+        comments?.indexWhere((element) => element.id == _id.toString());
+    comments![_commentIndex!] = comments![_commentIndex].copyWith(vote: 1);
 
     update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
@@ -270,10 +253,9 @@ class CommentController extends GetxController
   // 点踩
   Future<void> commitVoteDown(String _id) async {
     logger.v('commit down id $_id');
-    // state.firstWhere((element) => element.id == _id.toString()).vote = -1;
     final int? _commentIndex =
-        state?.indexWhere((element) => element.id == _id.toString());
-    state![_commentIndex!] = state![_commentIndex].copyWith(vote: -1);
+        comments?.indexWhere((element) => element.id == _id.toString());
+    comments![_commentIndex!] = comments![_commentIndex].copyWith(vote: -1);
     update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
       apikey: _item?.apikey ?? '',
@@ -293,9 +275,9 @@ class CommentController extends GetxController
   void _paraRes(CommitVoteRes rult) {
     logger.v('${rult.toJson()}');
 
-    final int? _commentIndex = state?.indexWhere(
+    final int? _commentIndex = comments?.indexWhere(
         (GalleryComment element) => element.id == rult.commentId.toString());
-    state![_commentIndex!] = state![_commentIndex]
+    comments![_commentIndex!] = comments![_commentIndex]
         .copyWith(vote: rult.commentVote, score: '${rult.commentScore}');
 
     update();
@@ -412,7 +394,7 @@ class CommentController extends GetxController
   // 回复评论
   void reptyComment({required String reptyCommentId}) {
     final repty =
-        state?.firstWhereOrNull((element) => element.id == reptyCommentId);
+        comments?.firstWhereOrNull((element) => element.id == reptyCommentId);
 
     reptyCommentText = repty?.text.replaceAll('\n', '    ') ?? '';
     reptyUser = repty?.name ?? '';
