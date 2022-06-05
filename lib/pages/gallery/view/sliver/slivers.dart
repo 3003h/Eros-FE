@@ -5,6 +5,7 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/gallery/view/archiver_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
+import 'package:fehviewer/pages/gallery/view/preview.dart';
 import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
@@ -136,19 +137,13 @@ class MiniTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Row(
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ).paddingSymmetric(horizontal: 2 + kPadding),
-        ],
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
       ),
-    );
+    ).paddingSymmetric(horizontal: 2 + kPadding);
   }
 }
 
@@ -200,6 +195,50 @@ class GalleryObxSliver extends StatelessWidget {
               );
             }
           : (_) => const SliverToBoxAdapter(),
+    );
+  }
+}
+
+class PreviewSliverGrid extends StatelessWidget {
+  const PreviewSliverGrid({Key? key, required this.images, required this.gid})
+      : super(key: key);
+  final List<GalleryImage> images;
+  final String gid;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: kMaxCrossAxisExtent,
+          mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
+          crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
+          childAspectRatio: kChildAspectRatio //显示区域宽高
+          ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          return Center(
+            child: PreviewContainer(
+              galleryImageList: images,
+              index: index,
+              gid: gid,
+              onLoadComplet: () {
+                final thumbUrl = images[index].thumbUrl ?? '';
+                // Future.delayed(const Duration(milliseconds: 50)).then(
+                //       (_) {
+                //     if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
+                //       logger.v('onLoadComplet $thumbUrl');
+                //       setState(() {
+                //         _loadComplets[thumbUrl] = true;
+                //       });
+                //     }
+                //   },
+                // );
+              },
+            ),
+          );
+        },
+        childCount: images.length,
+      ),
     );
   }
 }
