@@ -207,14 +207,14 @@ class LoginController extends GetxController {
 
   Future<void> readCookieFromClipboard() async {
     final kMatchMenberId = RegExp(r'^\d+$');
-    final kMatchPassHash = RegExp(r'^[0-9a-f]{32}$');
-    final kMatchIgneous = RegExp(r'^[0-9a-f]+$');
+    final kMatchPassHash = RegExp(r'^[\da-f]{32}$');
+    final kMatchIgneous = RegExp(r'^[\da-f]+$');
 
     final String _clipText =
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
     // logger.d('Clipboard:\n' + _clipText);
     if (!_clipText.contains('{')) {
-      final textArray = _clipText.split(RegExp(r'\s|:;&='));
+      final textArray = _clipText.split(RegExp(r'[\s:;&=]'));
       logger.d('textArray:$textArray');
       for (final _text in textArray) {
         if (kMatchMenberId.hasMatch(_text)) {
