@@ -17,7 +17,7 @@ class TabViewController extends GetxController
   int get curPage => _curPage.value;
   set curPage(int val) => _curPage.value = val;
 
-  TagController tagController = Get.find();
+  final TagController tagController = Get.find();
 
   // 最小页码
   int minPage = 1;
