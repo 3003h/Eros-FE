@@ -69,9 +69,8 @@ class CustomSubListController extends TabViewController {
                 refresh: refresh,
                 cancelToken: cancelToken,
                 searchText: p?.searchText?.join(' '),
-                advanceSearchParam: (p?.enableAdvance ?? false)
-                    ? p?.advSearch?.param ?? {}
-                    : {},
+                advanceSearch:
+                    (p?.enableAdvance ?? false) ? p?.advSearch : null,
                 galleryListType: p?.listType ?? GalleryListType.gallery,
               )))
           .toList();
@@ -117,9 +116,8 @@ class CustomSubListController extends TabViewController {
       refresh: refresh,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: (profile?.enableAdvance ?? false)
-          ? profile?.advSearch?.param ?? {}
-          : {},
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
 
@@ -163,9 +161,8 @@ class CustomSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: (profile?.enableAdvance ?? false)
-          ? profile?.advSearch?.param ?? {}
-          : {},
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
@@ -185,9 +182,8 @@ class CustomSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: (profile?.enableAdvance ?? false)
-          ? profile?.advSearch?.param ?? {}
-          : {},
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
 

@@ -812,6 +812,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     );
   }
 
+  /// 设置最低评分
   Widget buildSearchWithminRating(BuildContext context) {
     return Column(
       children: [
@@ -898,6 +899,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     );
   }
 
+  /// 页码范围
   Widget buildSearchBetweenpage(BuildContext context) {
     return Container(
       color: CupertinoDynamicColor.resolve(
@@ -915,26 +917,38 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
               },
             ),
           ),
+          // 最小页码
           Container(
             margin: const EdgeInsets.only(right: 4),
             width: 70,
             height: kItemHeight - 18,
             child: CupertinoTextField(
-              decoration: BoxDecoration(
-                color: ehTheme.textFieldBackgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              ),
-              keyboardType: TextInputType.number,
-              // cursorHeight: 14,
-              enabled: searchBetweenpage,
-              style: const TextStyle(
-                height: 1.2,
-                textBaseline: TextBaseline.alphabetic,
-              ),
-              onChanged: (val) => startPage = val,
-            ),
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                keyboardType: TextInputType.number,
+                // cursorHeight: 14,
+                enabled: searchBetweenpage,
+                style: const TextStyle(
+                  height: 1.2,
+                  textBaseline: TextBaseline.alphabetic,
+                ),
+                onChanged: (val) => startPage = val,
+                // controller: TextEditingController(text: startPage),
+                controller: TextEditingController()
+                  ..value = TextEditingValue(
+                    text: startPage ?? '',
+                    selection: TextSelection.fromPosition(
+                      TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: (startPage ?? '').length,
+                      ),
+                    ),
+                  )),
           ),
           Text(L10n.of(context).s_and),
+          // 最大页码
           Container(
             margin: const EdgeInsets.only(left: 4, right: 20),
             width: 70,
@@ -952,6 +966,16 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                 textBaseline: TextBaseline.alphabetic,
               ),
               onChanged: (val) => endPage = val,
+              controller: TextEditingController()
+                ..value = TextEditingValue(
+                  text: endPage ?? '',
+                  selection: TextSelection.fromPosition(
+                    TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: (endPage ?? '').length,
+                    ),
+                  ),
+                ),
             ),
           ),
         ],
