@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.36+396
+version: 1.2.37+397
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -120,7 +120,7 @@ dependencies:
   restart_app: ^1.1.0
   image: ^3.0.8
   palette_generator: ^0.3.2
-  getwidget: ^2.0.4
+  getwidget: ^3.0.1
   open_file: ^3.2.1
   flustars: ^2.0.1
   dio_smart_retry: ^1.0.3
