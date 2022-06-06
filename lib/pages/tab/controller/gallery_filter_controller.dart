@@ -15,8 +15,29 @@ class GalleryFilterController extends GetxController {
   void onInit() {
     super.onInit();
 
-    statrPageCtrl.text = _advanceSearchController.advanceSearch.value.startPage;
-    endPageCtrl.text = _advanceSearchController.advanceSearch.value.endPage;
+    // statrPageCtrl.text = _advanceSearchController.advanceSearch.value.startPage;
+    // endPageCtrl.text = _advanceSearchController.advanceSearch.value.endPage;
+    final startPage = _advanceSearchController.advanceSearch.value.startPage;
+    final endPage = _advanceSearchController.advanceSearch.value.endPage;
+    statrPageCtrl.value = TextEditingValue(
+      text: startPage,
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.downstream,
+          offset: startPage.length,
+        ),
+      ),
+    );
+
+    endPageCtrl.value = TextEditingValue(
+      text: endPage,
+      selection: TextSelection.fromPosition(
+        TextPosition(
+          affinity: TextAffinity.downstream,
+          offset: endPage.length,
+        ),
+      ),
+    );
 
     statrPageCtrl.addListener(() {
       _advanceSearchController.advanceSearch(_advanceSearchController

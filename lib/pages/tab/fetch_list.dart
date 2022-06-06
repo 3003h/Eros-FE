@@ -39,7 +39,7 @@ class DefaultFetchListClient extends FetchListClient {
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
-      advanceSearchParam: fetchParams.advanceSearchParam,
+      advanceSearch: fetchParams.advanceSearch,
     );
   }
 }
@@ -61,11 +61,12 @@ class SearchFetchListClient extends FetchListClient {
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
       galleryListType: fetchParams.galleryListType,
-      advanceSearchParam: fetchParams.advanceSearchParam,
+      advanceSearch: fetchParams.advanceSearch,
     );
 
     // hide tag filter 20220606
-    if (fetchParams.galleryListType == GalleryListType.gallery ||
+    if ((fetchParams.galleryListType == GalleryListType.gallery &&
+            !(fetchParams.advanceSearch?.disableDFTags ?? false)) ||
         fetchParams.galleryListType == GalleryListType.popular) {
       final gidList = rult?.gallerys
           ?.where((element) => tagController.needHide(element.simpleTags ?? []))
@@ -139,8 +140,6 @@ class ToplistFetchListClient extends FetchListClient {
       toplist: fetchParams.toplist,
     );
 
-    logger.d('aaa');
-
     final gidList = rult?.gallerys
         ?.where((element) => tagController.needHide(element.simpleTags ?? []))
         .map((e) => e.gid);
@@ -179,7 +178,7 @@ class FetchParams {
     this.favcat,
     this.toplist,
     this.galleryListType = GalleryListType.gallery,
-    this.advanceSearchParam,
+    this.advanceSearch,
   });
   int? page;
   String? fromGid;
@@ -191,5 +190,5 @@ class FetchParams {
   String? favcat;
   String? toplist;
   GalleryListType? galleryListType;
-  Map<String, dynamic>? advanceSearchParam;
+  AdvanceSearch? advanceSearch;
 }
