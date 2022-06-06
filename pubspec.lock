@@ -322,7 +322,7 @@ packages:
       name: cupertino_icons
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.4"
+    version: "1.0.5"
   custom_pop_up_menu:
     dependency: "direct main"
     description:
@@ -663,7 +663,7 @@ packages:
       name: flutter_smart_dialog
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.3.2+1"
+    version: "4.3.5"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -722,7 +722,7 @@ packages:
       name: getwidget
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.1"
+    version: "3.0.1"
   git_hooks:
     dependency: "direct dev"
     description:
@@ -827,7 +827,7 @@ packages:
       name: image_picker_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.8.4+13"
+    version: "0.8.5"
   image_picker_for_web:
     dependency: transitive
     description:
