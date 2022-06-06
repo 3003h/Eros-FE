@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:get/get.dart';
 
 import '../../utils/logger.dart';
 import 'controller/search_page_controller.dart';
@@ -47,9 +49,11 @@ class SearchFetchListClient extends FetchListClient {
     required FetchParams fetchParams,
   }) : super(fetchParams: fetchParams);
 
+  final TagController tagController = Get.find();
+
   @override
   Future<GalleryList?> fetch() async {
-    return await getGallery(
+    final rult = await getGallery(
       page: fetchParams.page,
       fromGid: fetchParams.fromGid,
       serach: fetchParams.searchText,
@@ -59,6 +63,20 @@ class SearchFetchListClient extends FetchListClient {
       galleryListType: fetchParams.galleryListType,
       advanceSearchParam: fetchParams.advanceSearchParam,
     );
+
+    // hide tag filter 20220606
+    if (fetchParams.galleryListType == GalleryListType.gallery ||
+        fetchParams.galleryListType == GalleryListType.popular) {
+      final gidList = rult?.gallerys
+          ?.where((element) => tagController.needHide(element.simpleTags ?? []))
+          .map((e) => e.gid);
+      if (gidList != null && gidList.isNotEmpty) {
+        logger.e('${fetchParams.galleryListType} remove gallery $gidList');
+        rult?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
+      }
+    }
+
+    return rult;
   }
 }
 
@@ -106,9 +124,11 @@ class ToplistFetchListClient extends FetchListClient {
     required FetchParams fetchParams,
   }) : super(fetchParams: fetchParams);
 
+  final TagController tagController = Get.find();
+
   @override
   Future<GalleryList?> fetch() async {
-    return await getGallery(
+    final rult = await getGallery(
       page: fetchParams.page,
       fromGid: fetchParams.fromGid,
       serach: fetchParams.searchText,
@@ -118,6 +138,18 @@ class ToplistFetchListClient extends FetchListClient {
       galleryListType: GalleryListType.toplist,
       toplist: fetchParams.toplist,
     );
+
+    logger.d('aaa');
+
+    final gidList = rult?.gallerys
+        ?.where((element) => tagController.needHide(element.simpleTags ?? []))
+        .map((e) => e.gid);
+    if (gidList != null && gidList.isNotEmpty) {
+      logger.e('${fetchParams.galleryListType} remove gallery $gidList');
+      rult?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
+    }
+
+    return rult;
   }
 }
 

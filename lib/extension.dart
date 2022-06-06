@@ -548,4 +548,8 @@ extension ExtGalleryTag on GalleryTag {
   GalleryTag setColor() {
     return Get.find<TagController>().getColorCode(this);
   }
+
+  bool get needHide {
+    return Get.find<TagController>().hideTags.contains(this);
+  }
 }

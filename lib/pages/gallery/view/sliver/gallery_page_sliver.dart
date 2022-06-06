@@ -164,11 +164,14 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                           id: isLayoutLarge ? 2 : null,
                         ),
                         // child: const TopComment(showBtn: false),
-                        child: TopCommentEx(
-                          key: ValueKey(
-                              state.galleryComment?.map((e) => e.id).join('')),
-                          comments: state.galleryComment,
-                        ),
+                        child: Obx(() {
+                          return TopCommentEx(
+                            key: ValueKey(_controller.gState.comments
+                                .map((e) => e.id)
+                                .join('')),
+                            comments: _controller.gState.comments,
+                          );
+                        }),
                       ),
                     ),
                   );
