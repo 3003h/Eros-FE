@@ -996,7 +996,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           );
         },
         child: Text(
-          '保存',
+          L10n.of(context).done,
           style: _style,
         ),
       ),

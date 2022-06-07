@@ -198,6 +198,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "on": MessageLookupByLibrary.simpleMessage("On"),
         "open_supported_links":
             MessageLookupByLibrary.simpleMessage("Open supported links"),
+        "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(
+            "Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here"),
         "open_with_other_apps":
             MessageLookupByLibrary.simpleMessage("Open with other apps"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("Auto"),

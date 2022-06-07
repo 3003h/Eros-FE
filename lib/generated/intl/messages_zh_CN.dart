@@ -167,6 +167,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "ok": MessageLookupByLibrary.simpleMessage("确定"),
         "on": MessageLookupByLibrary.simpleMessage("打开"),
         "open_supported_links": MessageLookupByLibrary.simpleMessage("打开支持的链接"),
+        "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(
+            "从 Android 12 开始, 应用只有在获得批准的情况下，才能作为网络链接的处理应用。否则会使用默认浏览器处理。您可以在此手动批准"),
         "open_with_other_apps": MessageLookupByLibrary.simpleMessage("其他应用打开"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("自动旋转"),
         "orientation_landscapeLeft":

@@ -341,6 +341,7 @@
   "newText": "New Text",
   "global_setting": "Global Setting",
   "open_supported_links": "Open supported links",
+  "open_supported_links_summary": "Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here",
   "image_download_type": "Download type",
   "resample_image": "Resample",
   "original_image": "Original",
