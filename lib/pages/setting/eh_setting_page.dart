@@ -199,8 +199,7 @@ class ListViewEhSetting extends StatelessWidget {
                 const ItemSpace(),
                 SelectorSettingItem(
                   title: L10n.of(context).open_supported_links,
-                  desc:
-                      '从 Android 12 开始, 应用只有在获得批准的情况下，才能作为网络链接的处理应用。否则会使用默认浏览器处理。您可以在此手动批准',
+                  desc: L10n.of(context).open_supported_links_summary,
                   onTap: OpenByDefault.open,
                   hideLine: true,
                 ),
