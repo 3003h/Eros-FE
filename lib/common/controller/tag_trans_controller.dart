@@ -23,7 +23,7 @@ const int kConnectTimeout = 20000;
 const int kReceiveTimeout = 30000;
 
 class TagTransController extends GetxController {
-  final EhConfigService ehConfigService= Get.find();
+  final EhConfigService ehConfigService = Get.find();
 
   String? _dbUrl;
   String? _remoteVer;
