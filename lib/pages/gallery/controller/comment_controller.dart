@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/utils/morse_code_translator.dart';
 import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -29,8 +32,15 @@ class CommentController extends GetxController with WidgetsBindingObserver {
     return Get.find(tag: pageCtrlTag);
   }
 
+  MorseCode get morseCode => MorseCode(di: '·', dah: '-');
+
   GalleryPageState get _pageState => pageController.gState;
   List<GalleryComment>? get comments => _pageState.comments;
+
+  // id降序排序
+  List<GalleryComment> get commentsSorted => List<GalleryComment>.from(
+      comments ?? [])
+    ..sort((a, b) => int.parse(b.id ?? '0').compareTo(int.parse(a.id ?? '0')));
 
   final TextEditingController commentTextController = TextEditingController();
 
@@ -113,28 +123,25 @@ class CommentController extends GetxController with WidgetsBindingObserver {
   GalleryComment? parserCommentRepty(GalleryComment comment) {
     GalleryComment? repty;
 
-    // 用户名无空格
-    final reg = RegExp(r'\s*@(\S+)((?!#\d+#).)+(#(\d+)#)?');
+    // 用户名无空格 id为 #1234# 形式
+    final reg = RegExp(r'\s*@(\S+)((?!#\d+#).)+(#(\d+)#|\n([ ·-]+))?');
     final match = reg.firstMatch(comment.text);
     if (match == null || match.groupCount == 0) {
       return null;
     }
 
-    // 评论按id排序
-    final commentsSortByTime = List<GalleryComment>.from(comments ?? []);
-
-    // 按时间由 id 排序 id越大代表越新
-    commentsSortByTime.sort(
-        (a, b) => int.parse(b.id ?? '1').compareTo(int.parse(a.id ?? '1')));
     final curIndex =
-        commentsSortByTime.indexWhere((element) => element.id == comment.id);
+        commentsSorted.indexWhere((element) => element.id == comment.id);
     if (curIndex < 0) {
       return null;
     }
-    final fill = commentsSortByTime
-        .getRange(curIndex, commentsSortByTime.length)
-        .toList();
-    // logger.d('${commentsSortByTime.map((e) => e.id).join('\n')} ');
+    final fill =
+        commentsSorted.getRange(curIndex, commentsSorted.length).toList();
+
+    // logger.d('${commentsSorted.map((e) {
+    //   final id = e.id ?? '';
+    //   return '$id  ${id.substring(min(id.length, 4))}  ${morseCode.enCode(id)} ';
+    // }).join('\n')} ');
 
     // for (int i = 0; i < match.groupCount + 1; i++) {
     //   logger.d('($i)  ${match.group(i)}');
@@ -142,9 +149,16 @@ class CommentController extends GetxController with WidgetsBindingObserver {
 
     final reptyUserName = match.group(1);
     final reptyId = match.group(4);
+    final reptyIdMorse = match.group(5);
 
     // 有明确的评论id的
     if (reptyId != null) {
+      repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
+    }
+
+    if (reptyIdMorse != null && reptyIdMorse.isNotEmpty) {
+      final reptyId = morseCode.deCode(reptyIdMorse);
+      logger.d('reptyId: [$reptyIdMorse]  => $reptyId');
       repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
     }
 
@@ -184,6 +198,7 @@ class CommentController extends GetxController with WidgetsBindingObserver {
     return repty;
   }
 
+  // 翻译评论内容
   Future<void> commitTranslate(String _id) async {
     logger.v('commitTranslate');
     final int? _commentIndex =
@@ -400,7 +415,9 @@ class CommentController extends GetxController with WidgetsBindingObserver {
     reptyUser = repty?.name ?? '';
 
     if (repty != null) {
-      comment = '@${repty.name} #${repty.id}#\n';
+      // comment = '@${repty.name} #${repty.id}#\n';
+      // MorseCode(dah: '_').enCode(id)
+      comment = '@${repty.name}\n${morseCode.enCode(repty.id ?? '')}\n';
     }
 
     commentTextController.value = TextEditingValue(
