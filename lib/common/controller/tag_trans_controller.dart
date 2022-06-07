@@ -18,12 +18,12 @@ import '../global.dart';
 const String kUrl =
     'https://api.github.com/repos/EhTagTranslation/Database/releases/latest';
 const String kCDNurl =
-    'https://cdn.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
-const int kConnectTimeout = 10000;
+    'https://fastly.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
+const int kConnectTimeout = 20000;
 const int kReceiveTimeout = 30000;
 
 class TagTransController extends GetxController {
-  final EhConfigService ehConfigService = Get.find();
+  final EhConfigService ehConfigService= Get.find();
 
   String? _dbUrl;
   String? _remoteVer;
