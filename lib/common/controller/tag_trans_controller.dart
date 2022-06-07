@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
@@ -18,7 +17,7 @@ import '../global.dart';
 const String kUrl =
     'https://api.github.com/repos/EhTagTranslation/Database/releases/latest';
 const String kCDNurl =
-    'https://cdn.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
+    'https://fastly.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
 const int kConnectTimeout = 10000;
 const int kReceiveTimeout = 30000;
 
