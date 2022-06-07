@@ -18,7 +18,7 @@ const String kUrl =
     'https://api.github.com/repos/EhTagTranslation/Database/releases/latest';
 const String kCDNurl =
     'https://fastly.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
-const int kConnectTimeout = 10000;
+const int kConnectTimeout = 20000;
 const int kReceiveTimeout = 30000;
 
 class TagTransController extends GetxController {
