@@ -521,6 +521,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "webdav_Account":
             MessageLookupByLibrary.simpleMessage("WebDAV 帳號"),
         "welcome_text":
-            MessageLookupByLibrary.simpleMessage("自慰並非壞事~上癮並非好事~過度縱慾者腎虧~~")
+            MessageLookupByLibrary.simpleMessage("尻槍並非壞事~上癮並非好事~過度縱慾者腎虧~~")
       };
 }
