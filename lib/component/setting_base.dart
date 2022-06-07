@@ -176,8 +176,9 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
       padding: const EdgeInsets.only(left: 8),
       child: Text(
         widget.selector ?? '',
-        textAlign: TextAlign.right,
-        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+        // overflow: TextOverflow.ellipsis,
+        // softWrap: true,
         style: const TextStyle(
           color: CupertinoColors.systemGrey2,
         ),

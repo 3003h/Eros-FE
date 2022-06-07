@@ -16,6 +16,8 @@ class SelectorItem<T> extends StatefulWidget {
     required this.initVal,
     this.onValueChanged,
     this.actionWidgetMap,
+    this.titleFlex = 1,
+    this.valueFlex = 0,
   }) : super(key: key);
   final String title;
   final String? actionTitle;
@@ -25,6 +27,8 @@ class SelectorItem<T> extends StatefulWidget {
   final T initVal;
   final ValueChanged<T>? onValueChanged;
   final Map<T, Widget>? actionWidgetMap;
+  final int titleFlex;
+  final int valueFlex;
 
   @override
   _SelectorItemState<T> createState() => _SelectorItemState<T>();
@@ -84,8 +88,8 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
       title: widget.title,
       hideLine: widget.hideDivider,
       selector: selector,
-      // titleFlex: 1,
-      // valueFlex: 0,
+      titleFlex: widget.titleFlex,
+      valueFlex: widget.valueFlex,
       // maxLines: 3,
       onTap: () async {
         // 显示dialog 选择选项
