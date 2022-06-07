@@ -26,7 +26,7 @@ import 'gallery_page_state.dart';
 import 'taginfo_controller.dart';
 import 'torrent_controller.dart';
 
-const double kHeaderHeightOffset = kHeaderHeight;
+const double kHeaderHeightOffset = kHeaderHeight + 52.0;
 
 class GalleryPageController extends GetxController
     with StateMixin<GalleryProvider> {
