@@ -353,12 +353,12 @@
   "tag_dialog_Default_color": "Default color",
   "color_picker_primary": "primary",
   "color_picker_wheel": "wheel",
-  "restore_tasks_data": "Restore tasks data",
-  "rebuild_tasks_data": "Rebuild tasks data",
+  "restore_tasks_data": "恢復數據",
+  "rebuild_tasks_data": "重建數據",
   "aggregate": "Aggregate",
   "aggregate_groups": "Aggregate groups",
   "hide": "Hide",
   "double_page_model": "雙頁模式",
   "model": "模式 {modelName}",
-  "reply_to_comment": "Reply to comment"
+  "reply_to_comment": "回復評論"
 }
