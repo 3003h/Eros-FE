@@ -33,9 +33,9 @@ class CommentController extends GetxController with WidgetsBindingObserver {
     return Get.find(tag: pageCtrlTag);
   }
 
-  MorseCode get morseCode => MorseCode(di: '·', dah: '-');
+  // MorseCode get morseCode => MorseCode(di: '·', dah: '-');
 
-  // BCDCode get bcdCode => BCDCode(code0: '·', code1: '∙');
+  BCDCode get bcdCode => BCDCode(code0: '·', code1: '-');
 
   GalleryPageState get _pageState => pageController.gState;
   List<GalleryComment>? get comments => _pageState.comments;
@@ -159,9 +159,9 @@ class CommentController extends GetxController with WidgetsBindingObserver {
       repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
     }
 
-    // 摩尔斯密码形式的id
+    // id
     if (reptyIdMorse != null && reptyIdMorse.isNotEmpty) {
-      final reptyId = morseCode.deCode(reptyIdMorse);
+      final reptyId = bcdCode.deCode(reptyIdMorse);
       logger.d('reptyId: [$reptyIdMorse]  => $reptyId');
       repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
     }
@@ -421,7 +421,7 @@ class CommentController extends GetxController with WidgetsBindingObserver {
     if (repty != null) {
       // comment = '@${repty.name} #${repty.id}#\n';
       // MorseCode(dah: '_').enCode(id)
-      comment = '@${repty.name}\n${morseCode.enCode(repty.id ?? '')}\n';
+      comment = '@${repty.name}\n${bcdCode.enCode(repty.id ?? '')}\n';
     }
 
     commentTextController.value = TextEditingValue(
