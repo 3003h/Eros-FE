@@ -341,6 +341,7 @@
   "newText": "新关键词",
   "global_setting": "全局设置",
   "open_supported_links": "打开支持的链接",
+  "open_supported_links_summary": "从 Android 12 开始, 应用只有在获得批准的情况下，才能作为网络链接的处理应用。否则会使用默认浏览器处理。您可以在此手动批准",
   "image_download_type": "下载类型",
   "resample_image": "重采样图片",
   "original_image": "原图",

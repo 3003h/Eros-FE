@@ -339,6 +339,7 @@
   "newText": "Новый тег",
   "global_setting": "Как в настройках",
   "open_supported_links": "Открывать поддерживаемые ссылки",
+  "open_supported_links_summary": "Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here",
   "image_download_type": "Тип загрузки",
   "resample_image": "Сжатое",
   "original_image": "Оригинальное",

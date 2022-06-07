@@ -3484,6 +3484,16 @@ class L10n {
     );
   }
 
+  /// `Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here`
+  String get open_supported_links_summary {
+    return Intl.message(
+      'Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here',
+      name: 'open_supported_links_summary',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Download type`
   String get image_download_type {
     return Intl.message(
