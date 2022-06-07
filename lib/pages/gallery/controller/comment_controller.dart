@@ -123,7 +123,7 @@ class CommentController extends GetxController with WidgetsBindingObserver {
   GalleryComment? parserCommentRepty(GalleryComment comment) {
     GalleryComment? repty;
 
-    // 用户名无空格 id为 #1234# 形式
+    // 用户名无空格 id为 #1234# 或者摩尔斯密码形式
     final reg = RegExp(r'\s*@(\S+)((?!#\d+#).)+(#(\d+)#|\n([ ·-]+))?');
     final match = reg.firstMatch(comment.text);
     if (match == null || match.groupCount == 0) {
@@ -156,6 +156,7 @@ class CommentController extends GetxController with WidgetsBindingObserver {
       repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
     }
 
+    // 摩尔斯密码形式的id
     if (reptyIdMorse != null && reptyIdMorse.isNotEmpty) {
       final reptyId = morseCode.deCode(reptyIdMorse);
       logger.d('reptyId: [$reptyIdMorse]  => $reptyId');
