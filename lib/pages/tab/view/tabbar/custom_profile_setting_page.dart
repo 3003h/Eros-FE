@@ -385,18 +385,18 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                   ),
                 ),
                 // 隐藏分组
-                GroupItem(
-                  child: TextSwitchItem(
-                    L10n.of(context).hide,
-                    intValue: hideTab,
-                    onChanged: (val) {
-                      setState(() {
-                        hideTab = val;
-                      });
-                    },
-                    hideLine: true,
-                  ),
-                ),
+                //GroupItem(
+                //  child: TextSwitchItem(
+                //    L10n.of(context).hide,
+                //    intValue: hideTab,
+                //    onChanged: (val) {
+                //      setState(() {
+                //        hideTab = val;
+                //      });
+                //    },
+                //    hideLine: true,
+                //  ),
+                //),
                 // 列表样式设置
                 GroupItem(
                   child: _buildListModeItem(context, hideLine: true),
