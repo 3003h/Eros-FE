@@ -15,6 +15,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:learning_language/learning_language.dart';
 
+import '../../../utils/bcd_code.dart';
 import 'gallery_page_controller.dart';
 import 'gallery_page_state.dart';
 
@@ -33,6 +34,8 @@ class CommentController extends GetxController with WidgetsBindingObserver {
   }
 
   MorseCode get morseCode => MorseCode(di: '·', dah: '-');
+
+  // BCDCode get bcdCode => BCDCode(code0: '·', code1: '∙');
 
   GalleryPageState get _pageState => pageController.gState;
   List<GalleryComment>? get comments => _pageState.comments;
