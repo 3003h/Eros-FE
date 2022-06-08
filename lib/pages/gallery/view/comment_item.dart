@@ -143,7 +143,7 @@ class CommentItem extends StatelessWidget {
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 13,
               height: 1.3,
               color: CupertinoDynamicColor.resolve(
                   ThemeColors.commitText, context),
@@ -167,10 +167,7 @@ class CommentItem extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: CupertinoDynamicColor.resolve(
-              ThemeColors.commitText,
-              context,
-            ),
+            color: ehTheme.commitIconColor,
           ),
         ),
         const Spacer(),
@@ -181,10 +178,7 @@ class CommentItem extends StatelessWidget {
             child: Icon(
               FontAwesomeIcons.reply,
               size: 15,
-              color: CupertinoDynamicColor.resolve(
-                ThemeColors.commitText,
-                context,
-              ),
+              color: ehTheme.commitIconColor,
             ),
             onPressed: () {
               vibrateUtil.light();
@@ -230,10 +224,7 @@ class CommentItem extends StatelessWidget {
                         ? FontAwesomeIcons.solidThumbsUp
                         : FontAwesomeIcons.thumbsUp,
                     size: galleryComment.vote! > 0 ? kSizeVote : kSizeNotVote,
-                    color: CupertinoDynamicColor.resolve(
-                      ThemeColors.commitText,
-                      context,
-                    ),
+                    color: ehTheme.commitIconColor,
                   ),
                   onPressed: () {
                     vibrateUtil.light();
@@ -251,10 +242,7 @@ class CommentItem extends StatelessWidget {
                         ? FontAwesomeIcons.solidThumbsDown
                         : FontAwesomeIcons.thumbsDown,
                     size: galleryComment.vote! < 0 ? kSizeVote : kSizeNotVote,
-                    color: CupertinoDynamicColor.resolve(
-                      ThemeColors.commitText,
-                      context,
-                    ),
+                    color: ehTheme.commitIconColor,
                   ),
                   onPressed: () {
                     vibrateUtil.light();
@@ -270,10 +258,7 @@ class CommentItem extends StatelessWidget {
                   child: Icon(
                     FontAwesomeIcons.edit,
                     size: kSizeNotVote,
-                    color: CupertinoDynamicColor.resolve(
-                      ThemeColors.commitText,
-                      context,
-                    ),
+                    color: ehTheme.commitIconColor,
                   ),
                   onPressed: () {
                     vibrateUtil.light();
@@ -299,10 +284,7 @@ class CommentItem extends StatelessWidget {
                   child: Icon(
                     FontAwesomeIcons.circleHalfStroke,
                     size: kSizeNotVote - 1,
-                    color: CupertinoDynamicColor.resolve(
-                      ThemeColors.commitText,
-                      context,
-                    ),
+                    color: ehTheme.commitIconColor,
                   ),
                 ),
                 Text(
@@ -314,8 +296,7 @@ class CommentItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.normal,
-                    color: CupertinoDynamicColor.resolve(
-                        ThemeColors.commitText, context),
+                    color: ehTheme.commitIconColor,
                   ),
                 ),
               ],
@@ -583,10 +564,7 @@ class _TranslateButtonState extends State<TranslateButton> {
               CupertinoColors.activeBlue,
               context,
             )
-          : CupertinoDynamicColor.resolve(
-              ThemeColors.commitText,
-              context,
-            ),
+          : ehTheme.commitIconColor,
     );
 
     const _w = CupertinoActivityIndicator(radius: kSizeVote / 2);
