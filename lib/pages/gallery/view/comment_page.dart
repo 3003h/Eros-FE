@@ -192,6 +192,7 @@ class CommentPage extends StatelessWidget {
                               controller: controller.commentTextController,
                               focusNode: controller.focusNode,
                               placeholder: L10n.of(context).new_comment,
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ),
                         ),

@@ -104,6 +104,8 @@ class EHTheme {
   Color? get itemBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.itemBackground);
 
+  Color? get commitIconColor => _getColorWithTheme(EhDynamicColors.commitIcon);
+
   bool get _isSeldark => _themeService.themeModel == ThemesModeEnum.darkMode;
   bool get _isSelLigth => _themeService.themeModel == ThemesModeEnum.ligthMode;
 
