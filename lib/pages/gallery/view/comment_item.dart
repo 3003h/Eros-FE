@@ -665,7 +665,7 @@ class FullTextCustMergeText extends StatelessWidget {
     }
 
     final TextStyle _commentTextStyle = TextStyle(
-      fontSize: 14,
+      fontSize: 13,
       height: 1.2,
       color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
       fontFamilyFallback: EHConst.fontFamilyFallback,
