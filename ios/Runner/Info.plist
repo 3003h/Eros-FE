@@ -41,6 +41,8 @@
 	<string>All files have been downloaded</string>
 	<key>FDMaximumConcurrentTasks</key>
 	<integer>5</integer>
+	<key>FLTEnableImpeller</key>
+	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -88,7 +90,5 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
-	<key>FLTEnableImpeller</key>
-    <false/>
 </dict>
 </plist>
