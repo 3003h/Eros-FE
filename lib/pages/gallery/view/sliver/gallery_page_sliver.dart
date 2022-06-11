@@ -5,14 +5,11 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
-import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/slivers.dart';
-import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
@@ -22,7 +19,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share/share.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 import '../header.dart';
 

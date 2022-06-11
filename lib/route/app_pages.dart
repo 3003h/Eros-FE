@@ -7,7 +7,6 @@ import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';

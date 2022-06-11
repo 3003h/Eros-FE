@@ -6,7 +6,6 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/foundation.dart';
 
 import '../request.dart';

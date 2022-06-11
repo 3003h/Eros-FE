@@ -5,9 +5,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
-import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
@@ -44,8 +42,6 @@ Future<GalleryList?> getGallery({
 }) async {
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
-
-  await checkCookie();
 
   late final String _url;
   switch (galleryListType) {
@@ -147,44 +143,6 @@ Future<GalleryList?> getGallery({
   }
 }
 
-Future checkCookie() async {
-  final PersistCookieJar cookieJar = await Api.cookieJar;
-  final List<Cookie> cookies =
-      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
-  cookies.add(Cookie('nw', '1'));
-
-  final UserController userController = Get.find();
-  final EhConfigService ehConfigService = Get.find();
-
-  if (userController.isLogin) {
-    logger.v('Global.profile.user.cookie: ${Global.profile.user.cookie}');
-
-    final List<String> _c = Global.profile.user.cookie.split(';');
-
-    final List<Cookie> _cookies =
-        _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
-
-    cookies.addAll(_cookies);
-
-    cookieJar.saveFromResponse(Uri.parse(Api.getBaseUrl()), cookies);
-
-    final sp = cookies.firstWhereOrNull((element) => element.name == 'sp');
-    if (ehConfigService.selectProfile.isNotEmpty &&
-        (sp == null || sp.value.isEmpty)) {
-      cookies.add(Cookie('sp', ehConfigService.selectProfile));
-    }
-
-    // logger.d('cookies:${cookies.join('\n')}');
-  }
-}
-
-Future<void> showCookie() async {
-  final PersistCookieJar cookieJar = await Api.cookieJar;
-  final List<Cookie> cookies =
-      await cookieJar.loadForRequest(Uri.parse(Api.getBaseUrl()));
-  // logger.d('showCookie: \n${cookies.join('\n')}');
-}
-
 Future<void> cleanCookie(String name) async {
   final PersistCookieJar cookieJar = await Api.cookieJar;
   final List<Cookie> cookies =
@@ -224,8 +182,6 @@ Future<GalleryProvider?> getGalleryDetail({
   bool refresh = false,
   CancelToken? cancelToken,
 }) async {
-  await checkCookie();
-
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
@@ -381,10 +337,6 @@ Future<String> postArchiverLocalDownload(
 
 Future<EhSettings?> getEhSettings(
     {bool refresh = false, String? selectProfile}) async {
-  await checkCookie();
-
-  await showCookie();
-
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   final String url = '${Api.getBaseUrl()}/uconfig.php';
 
@@ -411,14 +363,11 @@ Future<EhSettings?> getEhSettings(
   if (httpResponse.ok && httpResponse.data is EhSettings) {
     return httpResponse.data as EhSettings;
   }
+  return null;
 }
 
 Future<EhMytags?> getMyTags(
     {bool refresh = false, String? selectTagset}) async {
-  await checkCookie();
-
-  await showCookie();
-
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   final String url = '${Api.getBaseUrl()}/mytags';
 
@@ -528,7 +477,6 @@ Future<bool> actionMytags({
   required Map<String, Object> dataMap,
   Map<String, dynamic>? queryParameters,
 }) async {
-  await checkCookie();
   const url = '/mytags';
 
   final formData = FormData.fromMap(dataMap);
@@ -559,7 +507,6 @@ Future<EhSettings?> postEhProfile({
   Map<String, dynamic>? paramMap,
   bool refresh = true,
 }) async {
-  await checkCookie();
   final dataMap = {
     if (action != null) 'profile_action': action,
     if (name != null) 'profile_name': name,
@@ -644,7 +591,6 @@ Future<T?> getEhApi<T>({
   HttpTransformer? httpTransformer,
 }) async {
   const String url = '/api.php';
-  await checkCookie();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
 
   DioHttpResponse httpResponse = await dioHttpClient.post(
@@ -657,6 +603,7 @@ Future<T?> getEhApi<T>({
   if (httpResponse.ok && httpResponse.data is T) {
     return httpResponse.data as T;
   }
+  return null;
 }
 
 Future<GalleryImage?> mpvLoadImageDispatch({
@@ -691,8 +638,6 @@ Future<void> ehDownload({
   VoidCallback? onDownloadComplete,
   ProgressCallback? progressCallback,
 }) async {
-  await checkCookie();
-
   late final String downloadUrl;
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   if (!url.startsWith(RegExp(r'https?://'))) {

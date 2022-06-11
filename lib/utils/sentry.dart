@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-
 import '../config/config.dart';
 
 Future<String?> getSentryDsn() async {

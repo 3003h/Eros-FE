@@ -11,8 +11,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import 'donwload_labels_page.dart';
-
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
 
 const Border _kDefaultNavBarBorder = Border(

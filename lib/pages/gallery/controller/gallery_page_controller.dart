@@ -10,17 +10,15 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'all_previews_controller.dart';
-import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
 import 'gallery_page_state.dart';
 import 'taginfo_controller.dart';
@@ -179,11 +177,8 @@ class GalleryPageController extends GetxController
       gState.comments(gState.galleryProvider?.galleryComment);
 
       try {
-        // 页面内刷新时的处理
-        if (refresh) {
-          // 评分状态更新
-          gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
-        } else {
+        if (!refresh) {
+          // 如果不是refresh情况。 收藏状态 评分状态从Provider中继承
           gState.galleryProvider = gState.galleryProvider?.copyWith(
             ratingFallBack:
                 gState.galleryProvider?.ratingFallBack ?? _oriRatingFallBack,
@@ -192,9 +187,6 @@ class GalleryPageController extends GetxController
             // isRatinged: _oriIsRatinged,
           );
 
-          // 评分状态更新
-          gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
-
           // 收藏控制器状态更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlTag);
@@ -202,6 +194,9 @@ class GalleryPageController extends GetxController
               gState.galleryProvider?.favTitle ?? '');
         }
       } catch (_) {}
+
+      // 评分状态更新
+      gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
 
       gState.galleryProvider = gState.galleryProvider?.copyWith(
           imgUrl: gState.galleryProvider?.imgUrl ??
@@ -273,8 +268,13 @@ class GalleryPageController extends GetxController
 
     // logger.d('update GetIds.PAGE_VIEW_HEADER');
     update([GetIds.PAGE_VIEW_HEADER]);
-    gState.itemController?.ratingFB =
+    gState.itemController?.ratingFallBack =
         gState.galleryProvider?.ratingFallBack ?? 0.0;
+
+    gState.itemController?.rating = gState.galleryProvider?.rating ?? 0.0;
+
+    gState.itemController?.colorRating =
+        gState.galleryProvider?.colorRating ?? '';
 
     gState.itemController?.update();
   }

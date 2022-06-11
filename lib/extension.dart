@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/tag_controller.dart';
@@ -135,31 +133,31 @@ extension ExtUser on User {
         'igneous=${igneous ?? ''}';
   }
 
-  List<String> get _cookieStrList => cookie.split(';');
+  // List<String> get _cookieStrList => cookie.split(';');
 
-  List<Cookie> get _cookiesFromStr =>
-      _cookieStrList.map((e) => Cookie.fromSetCookieValue(e)).toList();
+  // List<Cookie> get _cookiesFromStr =>
+  //     _cookieStrList.map((e) => Cookie.fromSetCookieValue(e)).toList();
 
-  String get memberIdFromCookieStr => _cookiesFromStr
-      .where((Cookie element) => element.name == 'ipb_member_id')
-      .first
-      .value;
+  // String get memberIdFromCookieStr => _cookiesFromStr
+  //     .where((Cookie element) => element.name == 'ipb_member_id')
+  //     .first
+  //     .value;
+  //
+  // String get passHashFromCookieStr => _cookiesFromStr
+  //     .where((Cookie element) => element.name == 'ipb_pass_hash')
+  //     .first
+  //     .value;
+  //
+  // String get igneousFromCookie => _cookiesFromStr
+  //     .where((Cookie element) => element.name == 'igneous')
+  //     .first
+  //     .value;
 
-  String get passHashFromCookieStr => _cookiesFromStr
-      .where((Cookie element) => element.name == 'ipb_pass_hash')
-      .first
-      .value;
-
-  String get igneousFromCookie => _cookiesFromStr
-      .where((Cookie element) => element.name == 'igneous')
-      .first
-      .value;
-
-  String get memberIdFB => memberId ?? memberIdFromCookieStr;
-
-  String get passHashFB => passHash ?? passHashFromCookieStr;
-
-  String get igneousFB => igneous ?? igneousFromCookie;
+  // String get memberIdFB => memberId ?? memberIdFromCookieStr;
+  //
+  // String get passHashFB => passHash ?? passHashFromCookieStr;
+  //
+  // String get igneousFB => igneous ?? igneousFromCookie;
 }
 
 extension ExtTagTranlat on TagTranslat {

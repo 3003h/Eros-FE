@@ -347,13 +347,11 @@ class Api {
       await cleanCookie('sp');
       // await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
       await changeEhProfile('${fEhProfile.value}');
-      showCookie();
       return true;
     } else if (ehProfiles.isNotEmpty) {
       // create 完成后会自动set_cookie sp为新建的sp
       logger.d('create new profile');
       await createEhProfile(kProfileName);
-      showCookie();
       return true;
     }
     return null;
