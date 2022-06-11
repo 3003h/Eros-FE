@@ -310,7 +310,7 @@ class QuickSearchListPage extends StatelessWidget {
     final User _user = _userController.user.value;
     logger.v(_user.cookie);
 
-    final String memberId = _user.memberIdFB;
+    final String memberId = _user.memberId ?? '';
     if (memberId.isNotEmpty) {
       logger.v('memberId $memberId');
       return memberId;

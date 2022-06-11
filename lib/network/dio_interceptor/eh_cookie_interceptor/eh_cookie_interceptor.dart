@@ -9,16 +9,17 @@ class EhCookieInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     try {
-      final cookies =
+      final cookiesString =
           options.headers[HttpHeaders.cookieHeader] as String? ?? '';
-      logger.v('cookies:$cookies');
-      final _cookies = cookies
+      logger.v('cookiesString:$cookiesString');
+      final _cookies = cookiesString
           .split(';')
           .map((str) => Cookie.fromSetCookieValue(str))
           .toList();
       logger.v('_cookies:$_cookies');
 
       checkCookies(_cookies);
+      logger.v('checkCookies cookies:$_cookies');
     } catch (_) {}
 
     super.onRequest(options, handler);
@@ -42,7 +43,7 @@ class EhCookieInterceptor extends Interceptor {
     var cookies = response.headers[HttpHeaders.setCookieHeader];
 
     if (cookies != null) {
-      logger.v('set-cookie:$cookies');
+      logger.d('set-cookie:$cookies');
       final _cookies =
           cookies.map((str) => Cookie.fromSetCookieValue(str)).toList();
       logger.v('_set cookies $_cookies');
@@ -59,6 +60,8 @@ class EhCookieInterceptor extends Interceptor {
         sk: _newSk.isNotEmpty ? _newSk : null,
       ));
 
+      logger.d('new sk $_newSk');
+
       logger.v('${userController.user.value.toJson()}');
     }
   }
@@ -74,6 +77,13 @@ class EhCookieInterceptor extends Interceptor {
   void checkCookies(List<Cookie> cookies) {
     final UserController userController = Get.find();
 
+    final _nw = cookies.firstWhereOrNull((element) => element.name == 'nw');
+    if (_nw != null) {
+      _nw.value = '1';
+    } else {
+      cookies.add(Cookie('nw', '1'));
+    }
+
     final memberId = userController.user.value.memberId;
     if (memberId != null && memberId.isNotEmpty) {
       final _c = cookies
@@ -81,7 +91,7 @@ class EhCookieInterceptor extends Interceptor {
       if (_c != null) {
         _c.value = memberId;
       } else {
-        Cookie('ipb_member_id', memberId);
+        cookies.add(Cookie('ipb_member_id', memberId));
       }
     }
 
@@ -92,7 +102,7 @@ class EhCookieInterceptor extends Interceptor {
       if (_c != null) {
         _c.value = passHash;
       } else {
-        Cookie('ipb_pass_hash', passHash);
+        cookies.add(Cookie('ipb_pass_hash', passHash));
       }
     }
 
@@ -103,7 +113,7 @@ class EhCookieInterceptor extends Interceptor {
       if (_c != null) {
         _c.value = igneous;
       } else {
-        Cookie('igneous', igneous);
+        cookies.add(Cookie('igneous', igneous));
       }
     }
 
@@ -114,17 +124,18 @@ class EhCookieInterceptor extends Interceptor {
       if (_c != null) {
         _c.value = hathPerks;
       } else {
-        Cookie('hath_perks', hathPerks);
+        cookies.add(Cookie('hath_perks', hathPerks));
       }
     }
 
     final sk = userController.user.value.sk;
+    // logger.d('save sk $sk');
     if (sk != null && sk.isNotEmpty) {
       final _c = cookies.firstWhereOrNull((element) => element.name == 'sk');
       if (_c != null) {
         _c.value = sk;
       } else {
-        Cookie('sk', sk);
+        cookies.add(Cookie('sk', sk));
       }
     }
   }

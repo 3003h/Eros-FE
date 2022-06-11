@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';

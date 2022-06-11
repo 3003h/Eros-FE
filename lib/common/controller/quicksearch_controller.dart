@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/profile.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
 

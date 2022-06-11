@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import '../../../fehviewer.dart';
 import '../../item/controller/galleryitem_controller.dart';
-import '../view/gallery_page.dart';
 
 class GalleryPageState {
   GalleryPageState() {}
@@ -116,11 +115,10 @@ class GalleryPageState {
   }
 
   GalleryItemController? get itemController {
-    try {
-      return Get.find(tag: gid);
-    } catch (_) {
-      return null;
+    if (Get.isRegistered<GalleryItemController>(tag: gid)) {
+      return Get.find<GalleryItemController>(tag: gid);
     }
+    return null;
   }
 
   TaskStatus get downloadState => TaskStatus(

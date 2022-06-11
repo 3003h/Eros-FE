@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/parser/gallery_fav_parser.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';

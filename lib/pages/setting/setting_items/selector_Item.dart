@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../component/setting_base.dart';
-import '../../../utils/logger.dart';
 
 class SelectorItem<T> extends StatefulWidget {
   const SelectorItem({

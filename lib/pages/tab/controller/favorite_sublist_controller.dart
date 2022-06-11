@@ -3,11 +3,9 @@ import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
-import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../comm.dart';
 import '../fetch_list.dart';
 import 'enum.dart';
 import 'tabview_controller.dart';

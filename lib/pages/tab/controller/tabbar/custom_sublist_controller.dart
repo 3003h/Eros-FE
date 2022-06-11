@@ -7,8 +7,8 @@ import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:get/get.dart';
 
 import '../../fetch_list.dart';
-import 'custom_tabbar_controller.dart';
 import '../enum.dart';
+import 'custom_tabbar_controller.dart';
 
 /// 控制单个自定义列表
 class CustomSubListController extends TabViewController {

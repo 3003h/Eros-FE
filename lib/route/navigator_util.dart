@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -10,7 +9,6 @@ import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/gallery_repository.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -181,7 +179,7 @@ class NavigatorUtil {
       if (isLayoutLarge) {
         Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
 
-        logger.d('topSecondRoute: $topSecondRoute');
+        logger.v('topSecondRoute: $topSecondRoute');
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
           final curTag = (int.parse(pageCtrlTag) - 1).toString();
