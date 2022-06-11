@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 const double kItemHeight = 50.0;
 const double kCupertinoItemHeight = 36.0;
 
+const double kDividerHeight = 1.0;
+
 class BarsItem extends StatelessWidget {
   const BarsItem({
     Key? key,
@@ -78,7 +80,7 @@ class BarsItem extends StatelessWidget {
         ),
         Divider(
           indent: 20,
-          height: 0.6,
+          height: kDividerHeight,
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey4, context),
         ),
@@ -217,7 +219,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
           if (!widget.hideLine)
             Divider(
               indent: 20,
-              height: 0.6,
+              height: kDividerHeight,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
             )
@@ -360,7 +362,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
           if (!widget.hideLine)
             Divider(
               indent: 20 + widget.iconIndent,
-              height: 0.6,
+              height: kDividerHeight,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
             ),
@@ -451,7 +453,7 @@ class _TextItemState extends State<TextItem> {
           if (!(widget.hideLine || widget.cupertinoFormRow))
             Divider(
               indent: 20,
-              height: 0.6,
+              height: kDividerHeight,
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemGrey4, context),
             ),
@@ -595,7 +597,7 @@ class _TextInputItemState extends State<TextInputItem> {
             if (!widget.hideLine)
               Divider(
                 indent: 20,
-                height: 0.6,
+                height: kDividerHeight,
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey4, context),
               ),
