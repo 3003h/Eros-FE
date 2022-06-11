@@ -96,12 +96,7 @@ class CoverImage extends StatelessWidget {
                 },
                 imageUrl: (imageUrl ?? '').dfUrl,
                 fit: BoxFit.cover,
-                // httpHeaders: _httpHeaders,
               ),
-              // child: NetworkExtendedImage(
-              //   url: imageUrl ?? '',
-              //   fit: BoxFit.cover,
-              // ),
             ),
           ),
         );
@@ -145,12 +140,15 @@ class CoverImage extends StatelessWidget {
 }
 
 class GalleryTitle extends StatelessWidget {
-  GalleryTitle({
+  const GalleryTitle({
     Key? key,
+    required this.title,
   }) : super(key: key);
 
-  final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
-  GalleryPageState get _pageState => _pageController.gState;
+  // final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
+  // GalleryPageState get _pageState => _pageController.gState;
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +165,7 @@ class GalleryTitle extends StatelessWidget {
 
     return GestureDetector(
       child: SelectableText(
-        _pageState.title,
+        title,
         maxLines: 6,
         minLines: 1,
         textAlign: TextAlign.left,
@@ -184,25 +182,6 @@ class GalleryTitle extends StatelessWidget {
           forceStrutHeight: true,
         ),
       ),
-      // child: ExtendedText(
-      //   _pageController.title,
-      //   selectionEnabled: true,
-      //   textAlign: TextAlign.left,
-      //   // 对齐方式
-      //   overflow: TextOverflow.ellipsis, // 超出部分省略号
-      //   maxLines: 6,
-      //   // selectionControls: EHTextSelectionControls(),
-      //   style: const TextStyle(
-      //     textBaseline: TextBaseline.alphabetic,
-      //     // height: 1.2,
-      //     fontSize: 16,
-      //     fontWeight: FontWeight.w500,
-      //   ),
-      //   strutStyle: const StrutStyle(
-      //     height: 1.2,
-      //     forceStrutHeight: true,
-      //   ),
-      // ),
     );
   }
 }
