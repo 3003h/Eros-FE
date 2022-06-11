@@ -2,6 +2,7 @@ import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_favcat.dart';
@@ -25,6 +26,7 @@ class GalleryHeader extends StatelessWidget {
   final Object? tabTag;
 
   final _controller = Get.find<GalleryPageController>(tag: pageCtrlTag);
+
   GalleryPageState get _pageState => _controller.gState;
 
   @override
@@ -50,38 +52,44 @@ class GalleryHeader extends StatelessWidget {
                       imageUrl: initGalleryProvider.imgUrl!,
                       heroTag: '${initGalleryProvider.gid}_cover_$tabTag',
                     ),
+                    // child: EhCachedNetworkImage(
+                    //     imageUrl: initGalleryProvider.imgUrl!),
                   );
                 }),
+                // EhCachedNetworkImage(imageUrl: initGalleryProvider.imgUrl!),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // 标题
-                      GalleryTitle(),
-                      // 上传用户
-                      GetBuilder<GalleryPageController>(
-                          id: GetIds.PAGE_VIEW_HEADER,
-                          tag: pageCtrlTag,
-                          builder: (logic) {
-                            return GalleryUploader(
-                                uploader:
-                                    logic.gState.galleryProvider?.uploader ??
-                                        '');
-                          }),
-                      const Spacer(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                  child: GetBuilder<GalleryPageController>(
+                    assignId: true,
+                    id: GetIds.PAGE_VIEW_HEADER,
+                    tag: pageCtrlTag,
+                    builder: (logic) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          // 阅读按钮
-                          ReadButton(gid: initGalleryProvider.gid ?? ''),
+                          // 标题
+                          GalleryTitle(
+                            title: logic.gState.title,
+                          ),
+                          // 上传用户
+                          GalleryUploader(
+                              uploader:
+                                  logic.gState.galleryProvider?.uploader ?? ''),
                           const Spacer(),
-                          // 收藏按钮
-                          const GalleryFavButton(),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              // 阅读按钮
+                              ReadButton(gid: initGalleryProvider.gid ?? ''),
+                              const Spacer(),
+                              // 收藏按钮
+                              const GalleryFavButton(),
+                            ],
+                          )
                         ],
-                      )
-                    ],
+                      );
+                    },
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -124,7 +132,6 @@ class _GalleryInfoBarState extends State<GalleryInfoBar> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GalleryPageController>(
-        // init: GalleryPageController(),
         tag: pageCtrlTag,
         id: GetIds.PAGE_VIEW_HEADER,
         builder: (GalleryPageController controller) {

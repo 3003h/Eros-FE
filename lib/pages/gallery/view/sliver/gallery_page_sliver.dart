@@ -146,7 +146,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                   ],
                 ),
               ),
-              // 最上面的部分评论 评论内容
+              // 最上面的部分评论 评论内容 (一点点性能问题)
               GalleryObxSliver(
                 (state) {
                   return SliverPadding(
