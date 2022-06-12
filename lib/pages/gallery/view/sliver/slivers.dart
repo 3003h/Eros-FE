@@ -12,6 +12,7 @@ import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:keframe/keframe.dart';
 
 import '../const.dart';
 
@@ -216,24 +217,39 @@ class PreviewSliverGrid extends StatelessWidget {
           ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return Center(
-            child: PreviewContainer(
-              galleryImageList: images,
-              index: index,
-              gid: gid,
-              onLoadComplet: () {
-                final thumbUrl = images[index].thumbUrl ?? '';
-                // Future.delayed(const Duration(milliseconds: 50)).then(
-                //       (_) {
-                //     if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
-                //       logger.v('onLoadComplet $thumbUrl');
-                //       setState(() {
-                //         _loadComplets[thumbUrl] = true;
-                //       });
-                //     }
-                //   },
-                // );
-              },
+          return PreviewContainer(
+            galleryImageList: images,
+            index: index,
+            gid: gid,
+            onLoadComplet: () {
+              final thumbUrl = images[index].thumbUrl ?? '';
+            },
+          );
+
+          return FrameSeparateWidget(
+            index: index,
+            placeHolder: Container(
+              color: CupertinoColors.systemGrey4,
+            ),
+            child: Center(
+              child: PreviewContainer(
+                galleryImageList: images,
+                index: index,
+                gid: gid,
+                onLoadComplet: () {
+                  final thumbUrl = images[index].thumbUrl ?? '';
+                  // Future.delayed(const Duration(milliseconds: 50)).then(
+                  //       (_) {
+                  //     if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
+                  //       logger.v('onLoadComplet $thumbUrl');
+                  //       setState(() {
+                  //         _loadComplets[thumbUrl] = true;
+                  //       });
+                  //     }
+                  //   },
+                  // );
+                },
+              ),
             ),
           );
         },

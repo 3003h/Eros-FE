@@ -40,6 +40,10 @@ class CommentPage extends StatelessWidget {
           padding:
               EdgeInsets.only(bottom: 60 + context.mediaQueryPadding.bottom),
           itemBuilder: (context, index) {
+            if (controller.comments == null || controller.comments!.isEmpty) {
+              return const SizedBox();
+            }
+
             final comment = controller.comments?[index];
             if (comment != null) {
               return CommentItem(

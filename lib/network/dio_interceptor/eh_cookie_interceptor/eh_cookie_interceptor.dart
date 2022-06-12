@@ -19,7 +19,8 @@ class EhCookieInterceptor extends Interceptor {
       logger.v('_cookies:$_cookies');
 
       checkCookies(_cookies);
-      logger.v('checkCookies cookies:$_cookies');
+      // logger.d('checkCookies cookies:$_cookies');
+      options.headers[HttpHeaders.cookieHeader] = getCookies(_cookies);
     } catch (_) {}
 
     super.onRequest(options, handler);
