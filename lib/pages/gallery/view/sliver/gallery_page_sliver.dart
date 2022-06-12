@@ -18,9 +18,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:keframe/keframe.dart';
 import 'package:share/share.dart';
 
 import '../header.dart';
+import 'header_sliver.dart';
 
 const double kHeaderHeight = 200.0 + 52;
 
@@ -64,142 +66,164 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
     return CupertinoPageScaffold(
       child: CupertinoScrollbar(
         controller: PrimaryScrollController.of(context),
-        child: EasyRefresh(
-          enableControlFinishRefresh: false,
-          enableControlFinishLoad: false,
-          onLoad: () async {
-            if (pageState.images.isNotEmpty) {
-              Get.toNamed(
-                EHRoutes.galleryAllPreviews,
-                id: isLayoutLarge ? 2 : null,
-              );
-            }
-          },
-          footer: BezierBounceFooter(
-            backgroundColor: Colors.transparent,
-            color: CupertinoColors.inactiveGray,
-          ),
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: <Widget>[
-              // 导航栏
-              buildCupertinoSliverNavigationBar(context, galleryProvider),
-              // 下拉刷新
-              EhCupertinoSliverRefreshControl(
-                onRefresh: _controller.handOnRefresh,
-              ),
-              // 头部
-              if (pageState.fromUrl)
-                GalleryObxSliver(
-                  (state) => SliverToBoxAdapter(
-                    child: GalleryHeader(
+        child: SizeCacheWidget(
+          child: EasyRefresh(
+            enableControlFinishRefresh: false,
+            enableControlFinishLoad: false,
+            onLoad: () async {
+              if (pageState.images.isNotEmpty) {
+                Get.toNamed(
+                  EHRoutes.galleryAllPreviews,
+                  id: isLayoutLarge ? 2 : null,
+                );
+              }
+            },
+            footer: BezierBounceFooter(
+              backgroundColor: Colors.transparent,
+              color: CupertinoColors.inactiveGray,
+            ),
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: <Widget>[
+                // 导航栏
+                buildCupertinoSliverNavigationBar(context, galleryProvider),
+                // 下拉刷新
+                EhCupertinoSliverRefreshControl(
+                  onRefresh: _controller.handOnRefresh,
+                ),
+                // 头部
+                if (pageState.fromUrl)
+                  // GalleryObxSliver(
+                  //   (state) => SliverToBoxAdapter(
+                  //     child: GalleryHeader(
+                  //       initGalleryProvider: state,
+                  //       tabTag: tabTag,
+                  //     ),
+                  //   ),
+                  //   pageController: _controller,
+                  // )
+                  GalleryObxSliver(
+                    (state) => GalleryHeaderSliver(
                       initGalleryProvider: state,
                       tabTag: tabTag,
                     ),
-                  ),
-                  pageController: _controller,
-                )
-              else if (galleryProvider != null)
-                SliverToBoxAdapter(
-                  child: GalleryHeader(
+                    pageController: _controller,
+                  )
+                else if (galleryProvider != null)
+                  // SliverToBoxAdapter(
+                  //   child: GalleryHeader(
+                  //     initGalleryProvider: galleryProvider,
+                  //     tabTag: tabTag,
+                  //   ),
+                  // ),
+                  GalleryHeaderSliver(
                     initGalleryProvider: galleryProvider,
                     tabTag: tabTag,
                   ),
-                ),
 
-              GalleryObxSliver(
-                (state) => SliverToBoxAdapter(
-                  child: GalleryAtions(
-                    galleryProvider: state,
-                    pageController: _controller,
-                  ),
-                ),
-                pageController: _controller,
-                showLoading: true,
-              ),
-              // tag 标题
-              SliverToBoxAdapter(
-                  child: MiniTitle(title: L10n.of(context).tags)),
-              // tag
-              GalleryObxSliver(
-                (state) => SliverPadding(
-                  padding: const EdgeInsets.only(
-                      left: kPadding, right: kPadding, bottom: 20),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return TagGroupItem(
-                            tagGroupData: (state.tagGroup ?? [])[index]);
-                      },
-                      childCount: (state.tagGroup ?? []).length,
-                    ),
-                  ),
-                ),
-                pageController: _controller,
-              ),
-              // 最上面的部分评论 小标题
-              SliverToBoxAdapter(
-                child: Row(
-                  children: [
-                    MiniTitle(title: L10n.of(context).gallery_comments),
-                    const Spacer(),
-                  ],
-                ),
-              ),
-              // 最上面的部分评论 评论内容 (一点点性能问题)
-              GalleryObxSliver(
-                (state) {
-                  return SliverPadding(
+                // GalleryObxSliver(
+                //   (state) => SliverToBoxAdapter(
+                //     child: FrameSeparateWidget(
+                //       child: GalleryAtions(
+                //         galleryProvider: state,
+                //         pageController: _controller,
+                //       ),
+                //     ),
+                //   ),
+                //   pageController: _controller,
+                //   showLoading: true,
+                // ),
+                // tag 标题
+                SliverToBoxAdapter(
+                    child: MiniTitle(title: L10n.of(context).tags)),
+                // tag
+                GalleryObxSliver(
+                  (state) => SliverPadding(
                     padding: const EdgeInsets.only(
                         left: kPadding, right: kPadding, bottom: 20),
-                    sliver: SliverToBoxAdapter(
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.deferToChild,
-                        onTap: () => Get.toNamed(
-                          EHRoutes.galleryComment,
-                          id: isLayoutLarge ? 2 : null,
-                        ),
-                        // child: const TopComment(showBtn: false),
-                        child: Obx(() {
-                          return TopCommentEx(
-                            key: ValueKey(_controller.gState.comments
-                                .map((e) => e.id)
-                                .join('')),
-                            comments: _controller.gState.comments,
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return TagGroupItem(
+                              tagGroupData: (state.tagGroup ?? [])[index]);
+                          return FrameSeparateWidget(
+                            index: index,
+                            placeHolder: const TagGroupPpaceHolder(),
+                            child: TagGroupItem(
+                                tagGroupData: (state.tagGroup ?? [])[index]),
+                            // child: TagGroupPpaceHolder(),
                           );
-                        }),
+                        },
+                        childCount: (state.tagGroup ?? []).length,
                       ),
                     ),
-                  );
-                },
-                pageController: _controller,
-              ),
-              // 缩略图
-              GalleryObxSliver(
-                (state) => SliverPadding(
-                  padding: const EdgeInsets.only(
-                    bottom: 20,
-                    left: kPadding,
-                    right: kPadding,
                   ),
-                  sliver: PreviewSliverGrid(
-                    images: pageState.firstPageImage,
-                    gid: state.gid ?? '',
+                  pageController: _controller,
+                ),
+                // 最上面的部分评论 小标题
+                SliverToBoxAdapter(
+                  child: Row(
+                    children: [
+                      MiniTitle(title: L10n.of(context).gallery_comments),
+                      const Spacer(),
+                    ],
                   ),
                 ),
-                pageController: _controller,
-              ),
-              GalleryObxSliver(
-                (state) => SliverPadding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  sliver: SliverToBoxAdapter(
-                    child: MorePreviewButton(
-                        hasMorePreview: pageState.hasMoreImage),
-                  ),
+                // 最上面的部分评论 评论内容 (一点点性能问题)
+                GalleryObxSliver(
+                  (state) {
+                    return SliverPadding(
+                      padding: const EdgeInsets.only(
+                          left: kPadding, right: kPadding, bottom: 20),
+                      sliver: SliverToBoxAdapter(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.deferToChild,
+                          onTap: () => Get.toNamed(
+                            EHRoutes.galleryComment,
+                            id: isLayoutLarge ? 2 : null,
+                          ),
+                          // child: const TopComment(showBtn: false),
+                          child: Obx(() {
+                            return TopCommentEx(
+                              key: ValueKey(_controller.gState.comments
+                                  .map((e) => e.id)
+                                  .join('')),
+                              comments: _controller.gState.comments,
+                            );
+                          }),
+                        ),
+                      ),
+                    );
+                  },
+                  pageController: _controller,
                 ),
-                pageController: _controller,
-              ),
-            ],
+                // 缩略图
+                GalleryObxSliver(
+                  (state) => SliverPadding(
+                    padding: const EdgeInsets.only(
+                      bottom: 20,
+                      left: kPadding,
+                      right: kPadding,
+                    ),
+                    sliver: PreviewSliverGrid(
+                      images: pageState.firstPageImage,
+                      gid: state.gid ?? '',
+                    ),
+                  ),
+                  pageController: _controller,
+                ),
+                GalleryObxSliver(
+                  (state) => SliverPadding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: MorePreviewButton(
+                          hasMorePreview: pageState.hasMoreImage),
+                    ),
+                  ),
+                  pageController: _controller,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -276,13 +300,29 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                     }
                     final String _url =
                         '${Api.getBaseUrl()}/g/${provider.gid}/${provider.token}';
-                    logger.v('share $_url');
+                    logger.d('share $_url');
                     Share.share(_url);
                   },
                 ),
               ],
             )
           : ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4)),
+    );
+  }
+}
+
+class TagGroupPpaceHolder extends StatelessWidget {
+  const TagGroupPpaceHolder({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const TagGroupItem(
+      tagGroupData: TagGroup(tagType: '　　', galleryTags: [
+        GalleryTag(type: '　　', tagTranslat: '　　　', title: '　　　'),
+        GalleryTag(type: '　　', tagTranslat: '　　　', title: '　　　'),
+        GalleryTag(type: '　　', tagTranslat: '　　　', title: '　　　'),
+        GalleryTag(type: '　　', tagTranslat: '　　　', title: '　　　'),
+      ]),
     );
   }
 }
