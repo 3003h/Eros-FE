@@ -61,7 +61,7 @@ class EhCookieInterceptor extends Interceptor {
         sk: _newSk.isNotEmpty ? _newSk : null,
       ));
 
-      logger.d('new sk $_newSk');
+      logger.v('new sk $_newSk');
 
       logger.v('${userController.user.value.toJson()}');
     }

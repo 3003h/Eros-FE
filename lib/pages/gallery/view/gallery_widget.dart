@@ -474,44 +474,43 @@ class TagGroupItem extends StatelessWidget {
   final TagGroup tagGroupData;
 
   List<Widget> _initTagBtnList(
-      List<GalleryTag> galleryTags, BuildContext context) {
+    List<GalleryTag> galleryTags,
+    BuildContext context,
+  ) {
     final EhConfigService ehConfigService = Get.find();
-    final List<Widget> _tagBtnList = <Widget>[];
-    for (var tag in galleryTags) {
-      tag = tag.setColor();
-      _tagBtnList.add(
-        Obx(() => TagButton(
-              text: ehConfigService.isTagTranslat ? tag.tagTranslat : tag.title,
-              color: ColorsUtil.hexStringToColor(tag.backgrondColor),
-              textColor: () {
-                switch (tag.vote) {
-                  case 0:
-                    return ColorsUtil.hexStringToColor(tag.color);
-                  case 1:
-                    return CupertinoDynamicColor.resolve(
-                        ThemeColors.tagUpColor, context);
-                  case -1:
-                    return CupertinoDynamicColor.resolve(
-                        ThemeColors.tagDownColor, context);
-                }
-              }(),
-              onPressed: () {
-                logger.v('search type[${tag.type}] tag[${tag.title}]');
-                NavigatorUtil.goSearchPageWithText(
-                    simpleSearch: '${tag.type}:${tag.title.trim()}');
-              },
-              onLongPress: () {
-                showTagInfoDialog(
-                  tag.title,
-                  translate: tag.tagTranslat,
-                  type: tag.type,
-                  vote: tag.vote ?? 0,
-                );
-              },
-            )),
-      );
-    }
-    return _tagBtnList;
+
+    return galleryTags.map((e) {
+      final tag = e.setColor();
+      return Obx(() => TagButton(
+            text: ehConfigService.isTagTranslat ? tag.tagTranslat : tag.title,
+            color: ColorsUtil.hexStringToColor(tag.backgrondColor),
+            textColor: () {
+              switch (tag.vote) {
+                case 0:
+                  return ColorsUtil.hexStringToColor(tag.color);
+                case 1:
+                  return CupertinoDynamicColor.resolve(
+                      ThemeColors.tagUpColor, context);
+                case -1:
+                  return CupertinoDynamicColor.resolve(
+                      ThemeColors.tagDownColor, context);
+              }
+            }(),
+            onPressed: () {
+              logger.v('search type[${tag.type}] tag[${tag.title}]');
+              NavigatorUtil.goSearchPageWithText(
+                  simpleSearch: '${tag.type}:${tag.title.trim()}');
+            },
+            onLongPress: () {
+              showTagInfoDialog(
+                tag.title,
+                translate: tag.tagTranslat,
+                type: tag.type,
+                vote: tag.vote ?? 0,
+              );
+            },
+          ));
+    }).toList();
   }
 
   @override
@@ -566,6 +565,58 @@ class TagButton extends StatelessWidget {
   const TagButton({
     Key? key,
     required this.text,
+    this.textColor,
+    this.color,
+    this.onPressed,
+    this.padding,
+    this.onLongPress,
+  }) : super(key: key);
+
+  final String text;
+  final Color? textColor;
+  final Color? color;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
+  final EdgeInsets? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      onLongPress: onLongPress,
+      child: ClipRRect(
+        // key: key,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
+          color: color ??
+              CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
+          child: Column(
+            children: [
+              Text(
+                text,
+                style: TextStyle(
+                  color: textColor ??
+                      CupertinoDynamicColor.resolve(
+                          ThemeColors.tagText, context),
+                  fontSize: 13,
+                  fontWeight: textColor != null ? FontWeight.w500 : null,
+                  height: 1.3,
+                ),
+                strutStyle: const StrutStyle(height: 1),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SearchHisTagButton extends StatelessWidget {
+  const SearchHisTagButton({
+    Key? key,
+    required this.text,
     this.desc,
     this.textColor,
     this.color,
@@ -606,7 +657,6 @@ class TagButton extends StatelessWidget {
                     fontSize: 13,
                     fontWeight: textColor != null ? FontWeight.w500 : null,
                     height: 1.3,
-//              fontWeight: FontWeight.w500,
                   ),
                   strutStyle: const StrutStyle(height: 1),
                 ),

@@ -182,7 +182,9 @@ class NavigatorUtil {
         logger.v('topSecondRoute: $topSecondRoute');
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
-          final curTag = (int.parse(pageCtrlTag) - 1).toString();
+          final curTag = pageCtrlTag;
+          logger.v(
+              'curTag $curTag  isReg:${Get.isRegistered<GalleryPageController>(tag: curTag)}');
           if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
               Get.find<GalleryPageController>(tag: curTag).gState.gid == _gid) {
             logger.d('same gallery');
