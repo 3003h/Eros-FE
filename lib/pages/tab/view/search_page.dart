@@ -432,7 +432,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
   }
 
   Widget _searchHistoryBtn(String text, VoidCallback removeHistory) {
-    return TagButton(
+    return SearchHisTagButton(
       text: text,
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
       onPressed: () {
@@ -488,7 +488,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       initialData: '',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         String? tranText = snapshot.data as String?;
-        return TagButton(
+        return SearchHisTagButton(
           text: text,
           desc: tranText,
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),

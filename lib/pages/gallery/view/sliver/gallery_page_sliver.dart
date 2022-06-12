@@ -121,18 +121,16 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                     tabTag: tabTag,
                   ),
 
-                // GalleryObxSliver(
-                //   (state) => SliverToBoxAdapter(
-                //     child: FrameSeparateWidget(
-                //       child: GalleryAtions(
-                //         galleryProvider: state,
-                //         pageController: _controller,
-                //       ),
-                //     ),
-                //   ),
-                //   pageController: _controller,
-                //   showLoading: true,
-                // ),
+                GalleryObxSliver(
+                  (state) => SliverToBoxAdapter(
+                    child: GalleryAtions(
+                      galleryProvider: state,
+                      pageController: _controller,
+                    ),
+                  ),
+                  pageController: _controller,
+                  showLoading: true,
+                ),
                 // tag 标题
                 SliverToBoxAdapter(
                     child: MiniTitle(title: L10n.of(context).tags)),
@@ -146,13 +144,13 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                         (context, index) {
                           return TagGroupItem(
                               tagGroupData: (state.tagGroup ?? [])[index]);
-                          return FrameSeparateWidget(
-                            index: index,
-                            placeHolder: const TagGroupPpaceHolder(),
-                            child: TagGroupItem(
-                                tagGroupData: (state.tagGroup ?? [])[index]),
-                            // child: TagGroupPpaceHolder(),
-                          );
+                          // return FrameSeparateWidget(
+                          //   index: index,
+                          //   placeHolder: const TagGroupPpaceHolder(),
+                          //   child: TagGroupItem(
+                          //       tagGroupData: (state.tagGroup ?? [])[index]),
+                          //   // child: TagGroupPpaceHolder(),
+                          // );
                         },
                         childCount: (state.tagGroup ?? []).length,
                       ),
