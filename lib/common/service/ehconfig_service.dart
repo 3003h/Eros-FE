@@ -167,6 +167,10 @@ class EhConfigService extends ProfileService {
   set tagTranslateDataUpdateMode(TagTranslateDataUpdateMode val) =>
       _tagTranslateDataUpdateMode.value = val;
 
+  final _tabletLayoutType = TabletLayout.automatic.obs;
+  TabletLayout get tabletLayoutType => _tabletLayoutType.value;
+  set tabletLayoutType(TabletLayout val) => _tabletLayoutType.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -445,6 +449,15 @@ class EhConfigService extends ProfileService {
         _tagTranslateDataUpdateMode,
         (String value) =>
             ehConfig = ehConfig.copyWith(tagTranslateDataUpdateMode: value));
+
+    // tabletLayoutType
+    tabletLayoutType = EnumToString.fromString(
+            TabletLayout.values, ehConfig.tabletLayoutValue ?? '') ??
+        (tabletLayout ? TabletLayout.automatic : TabletLayout.never);
+    everFromEunm(
+        _tabletLayoutType,
+        (String value) =>
+            ehConfig = ehConfig.copyWith(tabletLayoutValue: value));
   }
 
   /// 收藏排序 dialog
