@@ -9,3 +9,10 @@ enum DownloadOrigImageType {
   askMe,
   no,
 }
+
+enum TabletLayout {
+  automatic,
+  // always,
+  landscape,
+  never,
+}
