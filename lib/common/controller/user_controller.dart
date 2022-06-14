@@ -12,7 +12,12 @@ import 'package:get/get.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class UserController extends ProfileController {
-  bool get isLogin => user.value.username?.isNotEmpty ?? false;
+  bool get isLogin =>
+      (user.value.memberId?.isNotEmpty ?? false) &&
+      (user.value.passHash?.isNotEmpty ?? false);
+
+  // bool get isLogin => user.value.username?.isNotEmpty ?? false;
+
   Rx<User> user = kDefUser.obs;
 
   final EhConfigService _ehConfigService = Get.find();

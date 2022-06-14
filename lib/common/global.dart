@@ -124,10 +124,10 @@ class Global {
     }
 
     if (GetPlatform.isMobile) {
-      // the proxy value likes:  {port: 8899, host: 127.0.0.1}
-      Map<String, String>? proxy = await SystemProxy.getProxySettings();
-      if (proxy != null) {
-        print('proxy $proxy');
+      // the systemProxy value likes:  {port: 8899, host: 127.0.0.1}
+      Map<String, String>? systemProxy = await SystemProxy.getProxySettings();
+      if (systemProxy != null) {
+        print('systemProxy $systemProxy');
       }
     }
 

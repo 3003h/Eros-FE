@@ -19,6 +19,7 @@ class FavoriteSubListController extends TabViewController {
     if (Get.isRegistered<FavoriteSelectorController>()) {
       return Get.find<FavoriteSelectorController>();
     }
+    return null;
   }
 
   @override

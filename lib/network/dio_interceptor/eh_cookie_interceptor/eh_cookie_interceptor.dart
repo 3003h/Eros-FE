@@ -11,15 +11,15 @@ class EhCookieInterceptor extends Interceptor {
     try {
       final cookiesString =
           options.headers[HttpHeaders.cookieHeader] as String? ?? '';
-      logger.v('cookiesString:$cookiesString');
+      logger.d('${options.uri} befor checkCookies:$cookiesString');
       final _cookies = cookiesString
           .split(';')
           .map((str) => Cookie.fromSetCookieValue(str))
           .toList();
-      logger.v('_cookies:$_cookies');
+      // logger.v('_cookies:$_cookies');
 
       checkCookies(_cookies);
-      // logger.d('checkCookies cookies:$_cookies');
+      logger.d('after checkCookies:$_cookies');
       options.headers[HttpHeaders.cookieHeader] = getCookies(_cookies);
     } catch (_) {}
 
@@ -41,7 +41,7 @@ class EhCookieInterceptor extends Interceptor {
   Future<void> _saveCookies(Response response) async {
     final UserController userController = Get.find();
 
-    var cookies = response.headers[HttpHeaders.setCookieHeader];
+    final cookies = response.headers[HttpHeaders.setCookieHeader];
 
     if (cookies != null) {
       logger.d('set-cookie:$cookies');
@@ -83,6 +83,10 @@ class EhCookieInterceptor extends Interceptor {
       _nw.value = '1';
     } else {
       cookies.add(Cookie('nw', '1'));
+    }
+
+    if (!userController.isLogin) {
+      return;
     }
 
     final memberId = userController.user.value.memberId;
