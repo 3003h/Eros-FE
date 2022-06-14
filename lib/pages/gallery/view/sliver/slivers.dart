@@ -47,39 +47,9 @@ class GalleryAtions extends StatelessWidget {
       ),
       // 画廊下载
       Expanded(
-        child: Obx(() {
-          final defIcon = TextBtn(
-            FontAwesomeIcons.solidCircleDown,
-            title: L10n.of(context).p_Download,
-            onTap: () => pageController.downloadGallery(context),
-          );
-
-          final toDownloadPage = () =>
-              Get.toNamed(EHRoutes.download, id: isLayoutLarge ? 2 : null);
-
-          final Map<TaskStatus, Widget> iconMap = {
-            TaskStatus.complete: TextBtn(
-              FontAwesomeIcons.solidCircleCheck,
-              title: L10n.of(context).downloaded,
-              onTap: toDownloadPage,
-              onLongPress: toDownloadPage,
-            ),
-            TaskStatus.running: TextBtn(
-              FontAwesomeIcons.solidCirclePlay,
-              title: L10n.of(context).downloading,
-              onTap: toDownloadPage,
-              onLongPress: toDownloadPage,
-            ),
-            TaskStatus.paused: TextBtn(
-              FontAwesomeIcons.solidCirclePause,
-              title: L10n.of(context).paused,
-              onTap: toDownloadPage,
-              onLongPress: toDownloadPage,
-            ),
-          };
-
-          return iconMap[pageStat.downloadState] ?? defIcon;
-        }),
+        child: DownloadGalleryButton(
+          pageController: pageController,
+        ),
       ),
       // 种子下载
       Expanded(
@@ -129,6 +99,57 @@ class GalleryAtions extends StatelessWidget {
         children: _btns,
       ),
     );
+  }
+}
+
+class DownloadGalleryButton extends StatelessWidget {
+  const DownloadGalleryButton({
+    Key? key,
+    required this.pageController,
+  }) : super(key: key);
+
+  final GalleryPageController pageController;
+
+  GalleryPageState get pageStat => pageController.gState;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final defIcon = TextBtn(
+        FontAwesomeIcons.solidCircleDown,
+        title: L10n.of(context).p_Download,
+        onTap: () => pageController.downloadGallery(context),
+      );
+
+      final toDownloadPage =
+          () => Get.toNamed(EHRoutes.download, id: isLayoutLarge ? 1 : null);
+
+      final Map<TaskStatus, Widget> iconMap = {
+        // 下载完成
+        TaskStatus.complete: TextBtn(
+          FontAwesomeIcons.solidCircleCheck,
+          title: L10n.of(context).downloaded,
+          onTap: toDownloadPage,
+          onLongPress: toDownloadPage,
+        ),
+        // 下载中
+        TaskStatus.running: TextBtn(
+          FontAwesomeIcons.solidCirclePlay,
+          title: L10n.of(context).downloading,
+          onTap: toDownloadPage,
+          onLongPress: toDownloadPage,
+        ),
+        // 下载暂停
+        TaskStatus.paused: TextBtn(
+          FontAwesomeIcons.solidCirclePause,
+          title: L10n.of(context).paused,
+          onTap: toDownloadPage,
+          onLongPress: toDownloadPage,
+        ),
+      };
+
+      return iconMap[pageStat.downloadState] ?? defIcon;
+    });
   }
 }
 

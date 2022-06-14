@@ -11,6 +11,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/locale.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -84,7 +85,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     final List<Widget> _list = <Widget>[
-      _buildLanguageItem(context),
+      _buildLanguageItem(context, hideLine: true),
       const ItemSpace(),
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
@@ -224,7 +225,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
   }
 
   /// 语言设置部件
-  Widget _buildLanguageItem(BuildContext context) {
+  Widget _buildLanguageItem(BuildContext context, {bool hideLine = false}) {
     final LocaleService localeService = Get.find();
     final String _title = L10n.of(context).language;
 
@@ -234,51 +235,19 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     localeMap.addAll(languageMenu);
 
-    List<Widget> _getLocaleList(BuildContext context) {
-      return List<Widget>.from(localeMap.keys.map((String element) {
-        return CupertinoActionSheetAction(
-            onPressed: () {
-              Get.back(result: element);
-            },
-            child: Text(localeMap[element] ?? ''));
-      }).toList());
-    }
-
-    Future<String?> _showDialog(BuildContext context) {
-      return showCupertinoModalPopup<String>(
-          context: context,
-          builder: (BuildContext context) {
-            final CupertinoActionSheet dialog = CupertinoActionSheet(
-              cancelButton: CupertinoActionSheetAction(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(L10n.of(context).cancel)),
-              actions: <Widget>[
-                ..._getLocaleList(context),
-              ],
-            );
-            return dialog;
-          });
-    }
-
-    return Obx(() => SelectorSettingItem(
-          title: _title,
-          selector: localeMap[localeService.localCode.value] ?? '',
-          hideLine: true,
-          onTap: () async {
-            logger.v('tap LanguageItem');
-            final String? _result = await _showDialog(context);
-            if (_result is String) {
-              localeService.localCode.value = _result;
-            }
-            // logger.v('$_result');
-          },
-        ));
+    return Obx(() {
+      return SelectorItem<String>(
+        title: _title,
+        hideDivider: hideLine,
+        actionMap: localeMap,
+        initVal: localeService.localCode.value,
+        onValueChanged: (val) => localeService.localCode.value = val,
+      );
+    });
   }
 
   /// 主题设置部件
-  Widget _buildThemeItem(BuildContext context) {
+  Widget _buildThemeItem(BuildContext context, {bool hideLine = false}) {
     final String _title = L10n.of(context).theme;
     final ThemeService themeService = Get.find();
 
@@ -288,44 +257,14 @@ class ListViewAdvancedSetting extends StatelessWidget {
       ThemesModeEnum.darkMode: L10n.of(context).dark,
     };
 
-    List<Widget> _getThemeList(BuildContext context) {
-      return List<Widget>.from(themeMap.keys.map((ThemesModeEnum themesMode) {
-        return CupertinoActionSheetAction(
-            onPressed: () {
-              Get.back(result: themesMode);
-            },
-            child: Text(themeMap[themesMode] ?? ''));
-      }).toList());
-    }
-
-    Future<ThemesModeEnum?> _showDialog(BuildContext context) {
-      return showCupertinoModalPopup<ThemesModeEnum>(
-          context: context,
-          builder: (BuildContext context) {
-            final CupertinoActionSheet dialog = CupertinoActionSheet(
-              cancelButton: CupertinoActionSheetAction(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(L10n.of(context).cancel)),
-              actions: <Widget>[
-                ..._getThemeList(context),
-              ],
-            );
-            return dialog;
-          });
-    }
-
-    return SelectorSettingItem(
-      title: _title,
-      selector: themeMap[themeService.themeModel] ?? '',
-      onTap: () async {
-        logger.v('tap ThemeItem');
-        final ThemesModeEnum? _result = await _showDialog(context);
-        if (_result is ThemesModeEnum) {
-          themeService.themeModel = _result;
-        }
-      },
-    );
+    return Obx(() {
+      return SelectorItem<ThemesModeEnum>(
+        title: _title,
+        hideDivider: hideLine,
+        actionMap: themeMap,
+        initVal: themeService.themeModel,
+        onValueChanged: (val) => themeService.themeModel = val,
+      );
+    });
   }
 }

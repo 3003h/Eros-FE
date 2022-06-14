@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+
 // import 'package:extended_text/extended_text.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
@@ -306,69 +307,70 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color:
-          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context),
-      child: Column(
-        children: <Widget>[
-          Container(
-            // height: kItemHeight,
-            constraints: const BoxConstraints(
-              minHeight: kItemHeight,
-            ),
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              children: <Widget>[
-                if (widget.icon != null) widget.icon!,
-                Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            height: 1.15,
-                          ),
-                        ),
-                        if (_desc != null || widget.desc != null)
+    return Obx(() {
+      return Container(
+        color: ehTheme.itemBackgroundColor,
+        child: Column(
+          children: <Widget>[
+            Container(
+              // height: kItemHeight,
+              constraints: const BoxConstraints(
+                minHeight: kItemHeight,
+              ),
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: <Widget>[
+                  if (widget.icon != null) widget.icon!,
+                  Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
                           Text(
-                            _desc ?? widget.desc ?? '',
+                            widget.title,
                             style: const TextStyle(
-                                fontSize: 12.5,
-                                color: CupertinoColors.systemGrey),
-                          ).paddingOnly(top: 2.0),
-                      ]),
-                ),
-                // const Spacer(),
-                if (widget.suffix != null) widget.suffix!,
-                // if (widget.onChanged != null)
-                CupertinoSwitch(
-                  onChanged: widget.onChanged != null
-                      ? (bool value) {
-                          setState(() {
-                            _switchValue = value;
-                            _desc = value ? widget.descOn : widget.desc;
-                            widget.onChanged?.call(_switchValue);
-                          });
-                        }
-                      : null,
-                  value: _switchValue,
-                ),
-              ],
+                              height: 1.15,
+                            ),
+                          ),
+                          if (_desc != null || widget.desc != null)
+                            Text(
+                              _desc ?? widget.desc ?? '',
+                              style: const TextStyle(
+                                  fontSize: 12.5,
+                                  color: CupertinoColors.systemGrey),
+                            ).paddingOnly(top: 2.0),
+                        ]),
+                  ),
+                  // const Spacer(),
+                  if (widget.suffix != null) widget.suffix!,
+                  // if (widget.onChanged != null)
+                  CupertinoSwitch(
+                    onChanged: widget.onChanged != null
+                        ? (bool value) {
+                            setState(() {
+                              _switchValue = value;
+                              _desc = value ? widget.descOn : widget.desc;
+                              widget.onChanged?.call(_switchValue);
+                            });
+                          }
+                        : null,
+                    value: _switchValue,
+                  ),
+                ],
+              ),
             ),
-          ),
-          if (!widget.hideLine)
-            Divider(
-              indent: 20 + widget.iconIndent,
-              height: kDividerHeight,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, context),
-            ),
-        ],
-      ),
-    );
+            if (!widget.hideLine)
+              Divider(
+                indent: 20 + widget.iconIndent,
+                height: kDividerHeight,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context),
+              ),
+          ],
+        ),
+      );
+    });
   }
 }
 
