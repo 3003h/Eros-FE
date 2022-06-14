@@ -100,7 +100,7 @@ EhSettings parseEhSettings(String html) {
   final wt = _parseUconfigInput('wt', _inputElms);
 
   final xu = document.querySelector('#xu')?.text.trim();
-  print('xu:$xu');
+  // print('xu:$xu');
 
   final xuQuota = document
       .querySelector('#xu')
@@ -146,7 +146,7 @@ EhSettings parseEhSettings(String html) {
 
   // 总是使用多页查看器 qb
   final qb = _parseUconfigChecked('qb', 1, document);
-  print('mpv qb $qb');
+  // print('mpv qb $qb');
 
   // 显示样式 ms
   final ms = _parseUconfigChecked('ms', 2, document);

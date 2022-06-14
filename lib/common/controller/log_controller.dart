@@ -5,9 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
-import '../../const/const.dart';
 import '../../fehviewer.dart';
-import '../global.dart';
 
 const _kMaxTime = Duration(days: 7);
 const _kSuffix = '.log';
@@ -46,7 +44,7 @@ class LogService extends GetxController {
   }
 
   Future<void> loadFiles() async {
-    logger.d('loadFiles log');
+    print('loadFiles log');
     List<File> _files = [];
     final Directory appDocDir = Directory(logPath);
     final Stream<FileSystemEntity> entityList =
@@ -60,7 +58,7 @@ class LogService extends GetxController {
           final _fileName = path.basename(_logFile.path);
 
           final _timeString = _fileName.replaceAll(_kSuffix, '');
-          logger.d('log file time $_timeString');
+          // print('log file time $_timeString');
 
           final DateTime _nowTime = DateTime.now();
           final DateFormat formatter = DateFormat(kFilenameFormat);
@@ -68,7 +66,7 @@ class LogService extends GetxController {
           final _fileTime = formatter.parse(_timeString);
           // final _fileTime = DateTime.parse(_timeString);
           final _diff = _nowTime.difference(_fileTime);
-          logger.d('diff $_diff');
+          // print('diff $_diff');
           if (_diff.compareTo(_kMaxTime) > 0) {
             // logger.v('delete $_fileName');
             _logFile.delete();
