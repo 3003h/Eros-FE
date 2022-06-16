@@ -6,6 +6,8 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
+import '../../utils/logger.dart';
+
 String parseErrGallery(String response) {
   final Document document = parse(response);
   const String msgSelect = 'div > p';
@@ -22,8 +24,17 @@ List<GalleryComment> parseGalleryComment(Document document) {
   for (final Element comment in commentList) {
     try {
       // 评论人
-      final Element? postElem = comment.querySelector('div.c2 > div.c3 > a');
+      final Element? postElem =
+          comment.querySelector('div.c2 > div.c3 > a:nth-child(1)');
       final String postName = postElem?.text.trim() ?? '';
+
+      final Element? userIndexElm =
+          comment.querySelector('div.c2 > div.c3 > a:nth-child(3)');
+      final String userIndex = userIndexElm?.attributes['href']?.trim() ?? '';
+      final String userId = RegExp(r'.+index\.php\?showuser=(\d+)')
+              .firstMatch(userIndex)
+              ?.group(1) ??
+          '';
 
       // 解析时间
       final Element? timeElem = comment.querySelector('div.c2 > div.c3');
@@ -200,6 +211,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
         time: postTimeLocal,
         score: score,
         scoreDetails: _scoreDetails,
+        menberId: userId,
       ));
     } catch (e, stack) {
       // logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
