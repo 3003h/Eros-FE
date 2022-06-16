@@ -3,8 +3,10 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -34,7 +36,7 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final EhConfigService _ehConfigService = Get.find();
+    final EhConfigService _ehConfigService = Get.find();
 
     /// 解析回复的评论
     final reptyComment = controller.parserCommentRepty(galleryComment);
@@ -132,9 +134,10 @@ class CommentItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              _buildUsername(
+              _buildUserWidget(
                 name: reptyComment.name,
-                fontSize: 12,
+                userId: reptyComment.menberId,
+                // fontSize: 12,
               ).paddingOnly(bottom: 6),
             ],
           ),
@@ -199,7 +202,7 @@ class CommentItem extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        _buildUsername(),
+        _buildUserWidget(),
         const Spacer(),
         CupertinoTheme(
           data: const CupertinoThemeData(primaryColor: ThemeColors.commitText),
@@ -306,17 +309,76 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  Widget _buildUsername({String? name, double? fontSize = 13}) {
+  Widget _buildUserWidget({
+    String? name,
+    String? userId,
+    double? fontSize = 13,
+    double? avatarSize = 28,
+  }) {
+    final EhConfigService _ehConfigService = Get.find();
     final _name = name ?? galleryComment.name;
+    final _userId = userId ?? galleryComment.menberId ?? '';
+    final _future = getUserInfo(_userId, forceRefresh: false);
+
+    final _placeHold = Builder(
+        builder: (context) => Container(
+              color: CupertinoDynamicColor.resolve(
+                  radomList<Color>(ThemeColors.catColorList), context),
+              child: Center(
+                child: Text(
+                  _name.substring(0, 1).toUpperCase(),
+                  style: TextStyle(
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.secondarySystemBackground, context),
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ));
+
     return GestureDetector(
-      child: Text(
-        name ?? galleryComment.name,
-        style: TextStyle(
-          fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: CupertinoColors.activeBlue,
-        ),
-      ),
+      child: Obx(() {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (_ehConfigService.showCommentAvatar)
+              Container(
+                width: avatarSize,
+                height: avatarSize,
+                margin: const EdgeInsets.only(right: 8),
+                child: ClipOval(
+                  child: FutureBuilder<User?>(
+                      future: _future,
+                      builder: (context, snapshot) {
+                        late final String? avatarUrl;
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          avatarUrl = snapshot.data?.avatarUrl;
+                          if (avatarUrl != null && avatarUrl.isNotEmpty) {
+                            return EhNetworkImage(
+                              imageUrl: avatarUrl,
+                              fit: BoxFit.cover,
+                            );
+                          } else {
+                            return _placeHold;
+                          }
+                        } else {
+                          return _placeHold;
+                        }
+                      }),
+                ),
+              ),
+            Text(
+              name ?? galleryComment.name,
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: CupertinoColors.activeBlue,
+              ),
+            ),
+          ],
+        );
+      }),
       behavior: HitTestBehavior.opaque,
       onTap: () {
         logger.v('search uploader:$_name');

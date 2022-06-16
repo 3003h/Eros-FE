@@ -44,7 +44,7 @@ class EhCookieInterceptor extends Interceptor {
     final cookies = response.headers[HttpHeaders.setCookieHeader];
 
     if (cookies != null) {
-      logger.d('set-cookie:$cookies');
+      logger.v('set-cookie:$cookies');
       final _cookies =
           cookies.map((str) => Cookie.fromSetCookieValue(str)).toList();
       logger.v('_set cookies $_cookies');

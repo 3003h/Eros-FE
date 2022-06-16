@@ -38,5 +38,6 @@
   "linkRedirect?": false,
   "viewColumnMode?": "",
   "fixedHeightOfListItems?": true,
-  "tagTranslateDataUpdateMode?": ""
+  "tagTranslateDataUpdateMode?": "",
+  "showCommentAvatar?": false
 }

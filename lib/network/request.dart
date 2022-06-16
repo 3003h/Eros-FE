@@ -696,7 +696,7 @@ Future<User?> userLogin(String username, String passwd) async {
   }
 }
 
-Future<User?> getUserInfo(String userId) async {
+Future<User?> getUserInfo(String userId, {bool forceRefresh = true}) async {
   const String url = 'https://forums.e-hentai.org/index.php';
 
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
@@ -705,7 +705,7 @@ Future<User?> getUserInfo(String userId) async {
     url,
     queryParameters: {'showuser': userId},
     httpTransformer: UserInfoPageTransformer(),
-    options: getCacheOptions(forceRefresh: true)
+    options: getCacheOptions(forceRefresh: forceRefresh)
       ..headers?['referer'] = 'https://forums.e-hentai.org/index.php',
   );
 

@@ -266,6 +266,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("사이트에서 설정하기"),
         "share": MessageLookupByLibrary.simpleMessage("공유"),
         "share_image": MessageLookupByLibrary.simpleMessage("이미지 공유"),
+        "show_comment_avatar":
+            MessageLookupByLibrary.simpleMessage("Show comment avatar"),
         "show_filter": MessageLookupByLibrary.simpleMessage("필터 표시"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("일본어 제목 표시"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("페이지 간격 표시"),

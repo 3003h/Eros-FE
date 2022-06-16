@@ -361,5 +361,6 @@
   "hide": "Hide",
   "double_page_model": "雙頁模式",
   "model": "模式 {modelName}",
-  "reply_to_comment": "回復評論"
+  "reply_to_comment": "回復評論",
+  "show_comment_avatar": "Show comment avatar"
 }

@@ -223,38 +223,6 @@ class ListViewEhSetting extends StatelessWidget {
             desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
           );
         }),
-      // if (localeService.isLanguageCodeZh)
-      //   TextSwitchItem(
-      //     '启用CDN',
-      //     intValue: _ehConfigService.enableTagTranslateCDN,
-      //     onChanged: _handleTagTranslatCDNChanged,
-      //     desc: '加速下载翻译数据',
-      //   ),
-      // if (localeService.isLanguageCodeZh)
-      //   Obx(() => TextSwitchItem(
-      //         '显示标签中文翻译',
-      //         intValue: _tagTranslat,
-      //         onChanged: _handleTagTranslatChanged,
-      //         desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
-      //         suffix: CupertinoButton(
-      //           padding: const EdgeInsets.all(0),
-      //           child: const Icon(CupertinoIcons.refresh),
-      //           onPressed: _forceUpdateTranslate,
-      //         ),
-      //       )),
-      // Obx(() {
-      //   return AnimatedCrossFade(
-      //     alignment: Alignment.center,
-      //     crossFadeState: _ehConfigService.isTagTranslat
-      //         ? CrossFadeState.showSecond
-      //         : CrossFadeState.showFirst,
-      //     firstCurve: Curves.easeIn,
-      //     secondCurve: Curves.easeOut,
-      //     duration: const Duration(milliseconds: 200),
-      //     firstChild: const SizedBox(),
-      //     secondChild: _buildTagIntroImgLvItem(context),
-      //   );
-      // }),
       TextSwitchItem(
         L10n.of(context).show_jpn_title,
         intValue: _jpnTitle,
@@ -300,6 +268,11 @@ class ListViewEhSetting extends StatelessWidget {
         onChanged: _handleFavLongTapChanged,
         desc: L10n.of(context).manually_sel_favorites,
         descOn: L10n.of(context).last_favorites,
+      ),
+      TextSwitchItem(
+        L10n.of(context).show_comment_avatar,
+        intValue: _ehConfigService.showCommentAvatar,
+        onChanged: (val) => _ehConfigService.showCommentAvatar = val,
       ),
       TextSwitchItem(
         L10n.of(context).clipboard_detection,

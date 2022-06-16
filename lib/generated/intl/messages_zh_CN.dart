@@ -246,6 +246,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting_on_website": MessageLookupByLibrary.simpleMessage("网页上的设置"),
         "share": MessageLookupByLibrary.simpleMessage("分享"),
         "share_image": MessageLookupByLibrary.simpleMessage("分享图片"),
+        "show_comment_avatar": MessageLookupByLibrary.simpleMessage("显示评论头像"),
         "show_filter": MessageLookupByLibrary.simpleMessage("显示筛选"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("显示日文标题"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("显示页面间隔"),

@@ -371,7 +371,7 @@ class UserInfoPageTransformer extends HttpTransformer {
     final html = response.data as String;
     final User user = await compute(parseUserProfile, html);
 
-    logger.d('UserInfoPageTransformer user ${user.toJson()}');
+    logger.v('UserInfoPageTransformer user ${user.toJson()}');
 
     return DioHttpResponse<User>.success(user);
   }

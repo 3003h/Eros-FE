@@ -120,6 +120,8 @@ class ThemeColors {
     darkColor: Color(0xBF1E1E1E),
   );
 
+  static List<Color> get tagColorList => tagColorTagType.values.toList();
+
   /// 标签总分类颜色
   static const Map<String, Color> tagColorTagType = <String, Color>{
     'artist': CupertinoDynamicColor.withBrightness(
@@ -204,6 +206,11 @@ class ThemeColors {
     barBackgroundColor: navigationBarBackgroundGray,
     textTheme: ehTextTheme,
   );
+
+  static List<Color> get catColorList => catColor.entries
+      .where((e) => e.key != 'default')
+      .map((e) => e.value)
+      .toList();
 
   // 画廊类型主题色
   static const Map<String, Color> catColor = <String, Color>{
