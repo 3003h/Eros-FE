@@ -3713,6 +3713,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Show comment avatar`
+  String get show_comment_avatar {
+    return Intl.message(
+      'Show comment avatar',
+      name: 'show_comment_avatar',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

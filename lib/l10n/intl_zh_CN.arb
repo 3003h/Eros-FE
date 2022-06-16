@@ -363,5 +363,6 @@
   "hide": "隐藏",
   "double_page_model": "双页模式",
   "model": "模式 {modelName}",
-  "reply_to_comment": "回复"
+  "reply_to_comment": "回复",
+  "show_comment_avatar": "显示评论头像"
 }

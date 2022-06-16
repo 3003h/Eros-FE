@@ -171,6 +171,10 @@ class EhConfigService extends ProfileService {
   TabletLayout get tabletLayoutType => _tabletLayoutType.value;
   set tabletLayoutType(TabletLayout val) => _tabletLayoutType.value = val;
 
+  final _showCommentAvatar = false.obs;
+  bool get showCommentAvatar => _showCommentAvatar.value;
+  set showCommentAvatar(bool val) => _showCommentAvatar.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -458,6 +462,12 @@ class EhConfigService extends ProfileService {
         _tabletLayoutType,
         (String value) =>
             ehConfig = ehConfig.copyWith(tabletLayoutValue: value));
+
+    // _showCommentAvatar
+    showCommentAvatar = ehConfig.showCommentAvatar ?? false;
+    everProfile<bool>(_showCommentAvatar, (value) {
+      ehConfig = ehConfig.copyWith(showCommentAvatar: value);
+    });
   }
 
   /// 收藏排序 dialog

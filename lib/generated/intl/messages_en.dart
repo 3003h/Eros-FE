@@ -300,6 +300,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Setting on website"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "share_image": MessageLookupByLibrary.simpleMessage("Share image"),
+        "show_comment_avatar":
+            MessageLookupByLibrary.simpleMessage("Show comment avatar"),
         "show_filter": MessageLookupByLibrary.simpleMessage("Show filter"),
         "show_jpn_title":
             MessageLookupByLibrary.simpleMessage("Show japanese title"),
