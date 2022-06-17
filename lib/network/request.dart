@@ -138,7 +138,7 @@ Future<GalleryList?> getGallery({
   if (httpResponse.ok && httpResponse.data is GalleryList) {
     return httpResponse.data as GalleryList;
   } else {
-    logger.e('${httpResponse.error.runtimeType}');
+    logger.v('${httpResponse.error.runtimeType}');
     throw httpResponse.error ?? EhError(error: 'getGallery error');
   }
 }
@@ -337,8 +337,9 @@ Future<String> postArchiverLocalDownload(
 
 Future<EhSettings?> getEhSettings(
     {bool refresh = false, String? selectProfile}) async {
+  logger.d('getEhSettings ${ehDioConfig.baseUrl}');
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
-  final String url = '${Api.getBaseUrl()}/uconfig.php';
+  const String url = '/uconfig.php';
 
   late DioHttpResponse httpResponse;
   for (int i = 0; i < 3; i++) {

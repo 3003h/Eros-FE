@@ -240,16 +240,10 @@ class EhConfigService extends ProfileService {
     everProfile(isSiteEx, (value) {
       logger.d('everProfile isSiteEx');
       ehConfig = ehConfig.copyWith(siteEx: value as bool);
-      // ehDioConfig
-      //   ..baseUrl = value ? EHConst.EX_BASE_URL : EHConst.EH_BASE_URL
-      //   ..maxConnectionsPerHost = value ? 2 : null;
       if (value) {
-        // Global.initImageHttpClient(maxConnectionsPerHost: 2);
         ehDioConfig.baseUrl = EHConst.EX_BASE_URL;
-        // ..maxConnectionsPerHost = 2;
       } else {
         ehDioConfig.baseUrl = EHConst.EH_BASE_URL;
-        // ..maxConnectionsPerHost = null;
       }
     });
 
