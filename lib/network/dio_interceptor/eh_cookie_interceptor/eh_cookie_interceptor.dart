@@ -10,18 +10,20 @@ class EhCookieInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     try {
       final cookiesString =
-          options.headers[HttpHeaders.cookieHeader] as String? ?? '';
-      logger.v('${options.uri} befor checkCookies:$cookiesString');
+          options.headers[HttpHeaders.cookieHeader] as String? ?? 'nw=1';
+      logger.d('${options.uri} befor checkCookies:$cookiesString');
       final _cookies = cookiesString
           .split(';')
           .map((str) => Cookie.fromSetCookieValue(str))
           .toList();
-      // logger.v('_cookies:$_cookies');
+      logger.d('_cookies:$_cookies');
 
       checkCookies(_cookies);
-      logger.v('after checkCookies:$_cookies');
+      logger.d('after checkCookies:$_cookies');
       options.headers[HttpHeaders.cookieHeader] = getCookies(_cookies);
-    } catch (_) {}
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+    }
 
     super.onRequest(options, handler);
   }

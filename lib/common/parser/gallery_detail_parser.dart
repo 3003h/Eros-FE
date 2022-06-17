@@ -23,13 +23,18 @@ List<GalleryComment> parseGalleryComment(Document document) {
   final List<Element> commentList = document.querySelectorAll(commentSelect);
   for (final Element comment in commentList) {
     try {
+      final userElm = comment.querySelector('div.c2 > div.c3');
+      final childrenElms = userElm?.children;
+
       // 评论人
-      final Element? postElem =
-          comment.querySelector('div.c2 > div.c3 > a:nth-child(1)');
+      final Element? postElem = childrenElms?[0];
       final String postName = postElem?.text.trim() ?? '';
 
       final Element? userIndexElm =
           comment.querySelector('div.c2 > div.c3 > a:nth-child(3)');
+
+      // print('userIndexElm ${userIndexElm?.innerHtml}');
+
       final String userIndex = userIndexElm?.attributes['href']?.trim() ?? '';
       final String userId = RegExp(r'.+index\.php\?showuser=(\d+)')
               .firstMatch(userIndex)

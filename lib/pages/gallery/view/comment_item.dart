@@ -136,8 +136,7 @@ class CommentItem extends StatelessWidget {
           Row(
             children: [
               _buildUserWidget(
-                name: reptyComment.name,
-                userId: reptyComment.menberId,
+                comment: reptyComment,
                 // fontSize: 12,
               ).paddingOnly(bottom: 6),
             ],
@@ -311,25 +310,24 @@ class CommentItem extends StatelessWidget {
   }
 
   Widget _buildUserWidget({
-    String? name,
-    String? userId,
+    GalleryComment? comment,
     double? fontSize = 13,
     double? avatarSize = 28,
   }) {
     final EhConfigService _ehConfigService = Get.find();
     final AvatarController avatarController = Get.find();
 
-    final _name = name ?? galleryComment.name;
-    final _userId = userId ?? galleryComment.menberId ?? '';
+    final _name = comment?.name ?? galleryComment.name;
+    final _userId = comment?.menberId ?? galleryComment.menberId ?? '0';
+    final _commentId = comment?.id ?? galleryComment.id ?? '0';
     final _future = avatarController.getUser(_userId);
 
     final _placeHold = Builder(
         builder: (context) => Container(
-              // color: CupertinoDynamicColor.resolve(
-              //     radomList<Color>(ThemeColors.catColorList), context),
               color: CupertinoDynamicColor.resolve(
-                  ThemeColors.catColorList[
-                      int.parse(_userId.substring(_userId.length - 1))],
+                  ThemeColors.catColorList[_userId.isNotEmpty
+                      ? int.parse(_userId.substring(_userId.length - 1))
+                      : int.parse(_commentId.substring(_commentId.length - 1))],
                   context),
               child: Center(
                 child: Text(
@@ -387,7 +385,7 @@ class CommentItem extends StatelessWidget {
                 ),
               ),
             Text(
-              name ?? galleryComment.name,
+              _name,
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: FontWeight.bold,

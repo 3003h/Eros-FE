@@ -72,13 +72,13 @@ class TagTransController extends GetxController {
     }
     _dbUrl = assMap['db.raw.json.gz'] ?? '';
 
-    logger.i(_dbUrl);
+    logger.v(_dbUrl);
     return true;
   }
 
   /// 获取数据
   Future<List> _fetchData({bool silence = false}) async {
-    logger.d('_fetchData start');
+    logger.v('_fetchData start');
     if (ehConfigService.enableTagTranslateCDN) {
       _dbUrl = kCDNurl;
     }
@@ -99,7 +99,7 @@ class TagTransController extends GetxController {
     final head = dbdataMap['head'] as Map;
     final committer = head['committer'] as Map;
     _remoteVer = committer['when'] as String;
-    logger.d('_remoteVer $_remoteVer');
+    logger.v('_remoteVer $_remoteVer');
 
     return listData;
   }
@@ -134,7 +134,7 @@ class TagTransController extends GetxController {
       });
     }
 
-    loggerNoStack.d('tag中文翻译数量 ${tagTranslats.length}');
+    // loggerNoStack.d('tag中文翻译数量 ${tagTranslats.length}');
 
     tagTranslatDao.insertAllTagTranslats(tagTranslats);
 
