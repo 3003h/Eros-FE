@@ -129,22 +129,25 @@ class DownloadGalleryButton extends StatelessWidget {
         TaskStatus.complete: TextBtn(
           FontAwesomeIcons.solidCircleCheck,
           title: L10n.of(context).downloaded,
-          onTap: toDownloadPage,
-          onLongPress: toDownloadPage,
+          onTap: () {},
+          // onTap: toDownloadPage,
+          // onLongPress: toDownloadPage,
         ),
         // 下载中
         TaskStatus.running: TextBtn(
           FontAwesomeIcons.solidCirclePlay,
           title: L10n.of(context).downloading,
-          onTap: toDownloadPage,
-          onLongPress: toDownloadPage,
+          onTap: () {},
+          // onTap: toDownloadPage,
+          // onLongPress: toDownloadPage,
         ),
         // 下载暂停
         TaskStatus.paused: TextBtn(
           FontAwesomeIcons.solidCirclePause,
           title: L10n.of(context).paused,
-          onTap: toDownloadPage,
-          onLongPress: toDownloadPage,
+          onTap: () {},
+          // onTap: toDownloadPage,
+          // onLongPress: toDownloadPage,
         ),
       };
 
