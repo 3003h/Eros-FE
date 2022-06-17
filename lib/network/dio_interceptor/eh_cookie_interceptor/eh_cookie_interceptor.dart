@@ -11,15 +11,15 @@ class EhCookieInterceptor extends Interceptor {
     try {
       final cookiesString =
           options.headers[HttpHeaders.cookieHeader] as String? ?? 'nw=1';
-      logger.d('${options.uri} befor checkCookies:$cookiesString');
+      logger.v('${options.uri} befor checkCookies:$cookiesString');
       final _cookies = cookiesString
           .split(';')
           .map((str) => Cookie.fromSetCookieValue(str))
           .toList();
-      logger.d('_cookies:$_cookies');
+      logger.v('_cookies:$_cookies');
 
       checkCookies(_cookies);
-      logger.d('after checkCookies:$_cookies');
+      logger.v('after checkCookies:$_cookies');
       options.headers[HttpHeaders.cookieHeader] = getCookies(_cookies);
     } catch (e, stack) {
       logger.e('$e\n$stack');

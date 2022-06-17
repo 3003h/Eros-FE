@@ -140,6 +140,9 @@ dependencies:
   bitsdojo_window: ^0.1.1+1
   image_picker: ^0.8.5
   sliver_tools: ^0.2.6
+  flutter_boring_avatars:
+    git:
+      url: https://github.com/xioxin/flutter_boring_avatars.git
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
