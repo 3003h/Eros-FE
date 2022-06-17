@@ -16,6 +16,7 @@ import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
+import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
 import 'package:flutter_linkify/flutter_linkify.dart' as clif;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -311,8 +312,8 @@ class CommentItem extends StatelessWidget {
 
   Widget _buildUserWidget({
     GalleryComment? comment,
-    double? fontSize = 13,
-    double? avatarSize = 28,
+    double fontSize = 13,
+    double avatarSize = 28,
   }) {
     final EhConfigService _ehConfigService = Get.find();
     final AvatarController avatarController = Get.find();
@@ -322,7 +323,7 @@ class CommentItem extends StatelessWidget {
     final _commentId = comment?.id ?? galleryComment.id ?? '0';
     final _future = avatarController.getUser(_userId);
 
-    final _placeHold = Builder(
+    final _placeHoldOld = Builder(
         builder: (context) => Container(
               color: CupertinoDynamicColor.resolve(
                   ThemeColors.catColorList[_userId.isNotEmpty
@@ -342,6 +343,14 @@ class CommentItem extends StatelessWidget {
               ),
             ));
 
+    final _placeHold = BoringAvatars(
+      name: _name,
+      // colors: ThemeColors.tagColorList,
+      colors: ThemeColors.catColorList,
+      type: BoringAvatarsType.beam,
+      square: true,
+    );
+
     return GestureDetector(
       child: Obx(() {
         final avatarUrl = avatarController.getAvatarUrl(_userId);
@@ -353,7 +362,8 @@ class CommentItem extends StatelessWidget {
                 width: avatarSize,
                 height: avatarSize,
                 margin: const EdgeInsets.only(right: 8),
-                child: ClipOval(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(avatarSize / 2),
                   child: (avatarUrl != null && avatarUrl.isNotEmpty)
                       ? EhNetworkImage(
                           imageUrl: avatarUrl,
