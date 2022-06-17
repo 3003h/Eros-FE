@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/avatar_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -316,21 +317,27 @@ class CommentItem extends StatelessWidget {
     double? avatarSize = 28,
   }) {
     final EhConfigService _ehConfigService = Get.find();
+    final AvatarController avatarController = Get.find();
+
     final _name = name ?? galleryComment.name;
     final _userId = userId ?? galleryComment.menberId ?? '';
-    final _future = getUserInfo(_userId, forceRefresh: false);
+    final _future = avatarController.getUser(_userId);
 
     final _placeHold = Builder(
         builder: (context) => Container(
+              // color: CupertinoDynamicColor.resolve(
+              //     radomList<Color>(ThemeColors.catColorList), context),
               color: CupertinoDynamicColor.resolve(
-                  radomList<Color>(ThemeColors.catColorList), context),
+                  ThemeColors.catColorList[
+                      int.parse(_userId.substring(_userId.length - 1))],
+                  context),
               child: Center(
                 child: Text(
                   _name.substring(0, 1).toUpperCase(),
                   style: TextStyle(
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.secondarySystemBackground, context),
-                    fontSize: 13,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -339,6 +346,7 @@ class CommentItem extends StatelessWidget {
 
     return GestureDetector(
       child: Obx(() {
+        final avatarUrl = avatarController.getAvatarUrl(_userId);
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -348,24 +356,34 @@ class CommentItem extends StatelessWidget {
                 height: avatarSize,
                 margin: const EdgeInsets.only(right: 8),
                 child: ClipOval(
-                  child: FutureBuilder<User?>(
-                      future: _future,
-                      builder: (context, snapshot) {
-                        late final String? avatarUrl;
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          avatarUrl = snapshot.data?.avatarUrl;
-                          if (avatarUrl != null && avatarUrl.isNotEmpty) {
-                            return EhNetworkImage(
-                              imageUrl: avatarUrl,
-                              fit: BoxFit.cover,
-                            );
-                          } else {
-                            return _placeHold;
-                          }
-                        } else {
-                          return _placeHold;
-                        }
-                      }),
+                  child: (avatarUrl != null && avatarUrl.isNotEmpty)
+                      ? EhNetworkImage(
+                          imageUrl: avatarUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (_, __) => _placeHold,
+                          errorWidget: (_, __, ___) => _placeHold,
+                        )
+                      : FutureBuilder<User?>(
+                          future: _future,
+                          builder: (context, snapshot) {
+                            late final String? avatarUrl;
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              avatarUrl = snapshot.data?.avatarUrl;
+                              if (avatarUrl != null && avatarUrl.isNotEmpty) {
+                                return EhNetworkImage(
+                                  imageUrl: avatarUrl,
+                                  fit: BoxFit.cover,
+                                  placeholder: (_, __) => _placeHold,
+                                  errorWidget: (_, __, ___) => _placeHold,
+                                );
+                              } else {
+                                return _placeHold;
+                              }
+                            } else {
+                              return _placeHold;
+                            }
+                          }),
                 ),
               ),
             Text(

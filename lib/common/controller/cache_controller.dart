@@ -1,6 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:fehviewer/common/controller/avatar_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -13,6 +14,7 @@ import '../service/dns_service.dart';
 
 class CacheController extends GetxController with StateMixin<String> {
   final DnsService _dnsConfigController = Get.find<DnsService>();
+  final AvatarController _avatarController = Get.find();
 
   @override
   void onInit() {
@@ -26,6 +28,8 @@ class CacheController extends GetxController with StateMixin<String> {
         .clearAll();
     DefaultCacheManager().emptyCache();
     _dnsConfigController.dohCache.clear();
+
+    _avatarController.clear();
 
     await _clearCache();
 

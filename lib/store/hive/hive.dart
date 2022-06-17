@@ -12,6 +12,7 @@ const String configBox = 'config_box';
 
 const String searchHistoryKey = 'search_history';
 const String layoutConfigKey = 'config_layout';
+const String usersKey = 'users_info';
 
 class HiveHelper {
   HiveHelper();
@@ -119,5 +120,19 @@ class HiveHelper {
   EhLayout getEhLayout() {
     final val = _configBox.get(layoutConfigKey, defaultValue: '{}');
     return EhLayout.fromJson(jsonDecode(val ?? '{}') as Map<String, dynamic>);
+  }
+
+  Future<void> setUsersInfo(List<User> users) async {
+    await _configBox.put(usersKey, jsonEncode(users));
+  }
+
+  List<User> getUsersInfo() {
+    final all = _configBox.get(usersKey, defaultValue: '[]');
+
+    final _users = <User>[];
+    for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
+      _users.add(User.fromJson(val as Map<String, dynamic>));
+    }
+    return _users;
   }
 }
