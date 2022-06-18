@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -12,12 +13,14 @@ class EhCachedNetworkImage extends StatelessWidget {
     this.placeholder,
     this.errorWidget,
     this.progressIndicatorBuilder,
+    this.httpHeaders,
   }) : super(key: key);
 
   final String imageUrl;
   final double? height;
   final double? width;
   final BoxFit? fit;
+  final Map<String, String>? httpHeaders;
 
   final PlaceholderWidgetBuilder? placeholder;
   final LoadingErrorWidgetBuilder? errorWidget;
@@ -27,8 +30,13 @@ class EhCachedNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _httpHeaders = {
       'Cookie': Global.profile.user.cookie,
-      'host': Uri.parse(imageUrl).host,
+      'Host': Uri.parse(imageUrl).host,
+      'User-Agent': EHConst.CHROME_USER_AGENT,
+      'Accept-Encoding': 'gzip, deflate, br'
     };
+    if (httpHeaders != null) {
+      _httpHeaders.addAll(httpHeaders!);
+    }
 
     return CachedNetworkImage(
       httpHeaders: _httpHeaders,

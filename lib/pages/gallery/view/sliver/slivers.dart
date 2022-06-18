@@ -225,10 +225,15 @@ class GalleryObxSliver extends StatelessWidget {
 }
 
 class PreviewSliverGrid extends StatelessWidget {
-  const PreviewSliverGrid({Key? key, required this.images, required this.gid})
-      : super(key: key);
+  const PreviewSliverGrid({
+    Key? key,
+    required this.images,
+    required this.gid,
+    this.referer,
+  }) : super(key: key);
   final List<GalleryImage> images;
   final String gid;
+  final String? referer;
 
   @override
   Widget build(BuildContext context) {
@@ -248,33 +253,7 @@ class PreviewSliverGrid extends StatelessWidget {
             onLoadComplet: () {
               final thumbUrl = images[index].thumbUrl ?? '';
             },
-          );
-
-          return FrameSeparateWidget(
-            index: index,
-            placeHolder: Container(
-              color: CupertinoColors.systemGrey4,
-            ),
-            child: Center(
-              child: PreviewContainer(
-                galleryImageList: images,
-                index: index,
-                gid: gid,
-                onLoadComplet: () {
-                  final thumbUrl = images[index].thumbUrl ?? '';
-                  // Future.delayed(const Duration(milliseconds: 50)).then(
-                  //       (_) {
-                  //     if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
-                  //       logger.v('onLoadComplet $thumbUrl');
-                  //       setState(() {
-                  //         _loadComplets[thumbUrl] = true;
-                  //       });
-                  //     }
-                  //   },
-                  // );
-                },
-              ),
-            ),
+            referer: referer,
           );
         },
         childCount: images.length,

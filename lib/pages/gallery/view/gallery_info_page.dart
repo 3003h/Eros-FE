@@ -40,8 +40,7 @@ class GalleryInfoPage extends StatelessWidget {
                 final _infoMap = {
                   'Gid': pageState.galleryProvider!.gid,
                   'Token': pageState.galleryProvider!.token,
-                  'Url':
-                      '${pageState.galleryProvider!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${pageState.galleryProvider!.url}',
+                  'Url': pageState.url,
                   'Title': pageState.galleryProvider!.englishTitle,
                   'Jpn Title': pageState.galleryProvider!.japaneseTitle,
                   'Thumb': pageState.galleryProvider!.imgUrl,

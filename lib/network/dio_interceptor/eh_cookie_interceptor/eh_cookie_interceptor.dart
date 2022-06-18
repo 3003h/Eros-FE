@@ -52,7 +52,6 @@ class EhCookieInterceptor extends Interceptor {
       logger.v('_set cookies $_cookies');
 
       final igneous = getCookiesValue(_cookies, 'igneous');
-
       final _newSk = getCookiesValue(_cookies, 'sk') ?? '';
 
       userController.user(userController.user.value.copyWith(
@@ -61,9 +60,11 @@ class EhCookieInterceptor extends Interceptor {
         igneous: igneous != 'mystery' && igneous != '' ? igneous : null,
         hathPerks: getCookiesValue(_cookies, 'hath_perks'),
         sk: _newSk.isNotEmpty ? _newSk : null,
+        star: getCookiesValue(_cookies, 'star'),
+        yay: getCookiesValue(_cookies, 'yay'),
       ));
 
-      logger.v('new sk $_newSk');
+      // logger.v('new sk $_newSk');
 
       logger.v('${userController.user.value.toJson()}');
     }
@@ -136,13 +137,32 @@ class EhCookieInterceptor extends Interceptor {
     }
 
     final sk = userController.user.value.sk;
-    // logger.d('save sk $sk');
     if (sk != null && sk.isNotEmpty) {
       final _c = cookies.firstWhereOrNull((element) => element.name == 'sk');
       if (_c != null) {
         _c.value = sk;
       } else {
         cookies.add(Cookie('sk', sk));
+      }
+    }
+
+    final star = userController.user.value.star;
+    if (star != null && star.isNotEmpty) {
+      final _c = cookies.firstWhereOrNull((element) => element.name == 'star');
+      if (_c != null) {
+        _c.value = star;
+      } else {
+        cookies.add(Cookie('star', star));
+      }
+    }
+
+    final yay = userController.user.value.yay;
+    if (yay != null && yay.isNotEmpty) {
+      final _c = cookies.firstWhereOrNull((element) => element.name == 'yay');
+      if (_c != null) {
+        _c.value = yay;
+      } else {
+        cookies.add(Cookie('star', yay));
       }
     }
   }

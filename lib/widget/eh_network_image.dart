@@ -12,12 +12,15 @@ class EhNetworkImage extends StatelessWidget {
     this.placeholder,
     this.errorWidget,
     this.progressIndicatorBuilder,
+    this.httpHeaders,
   }) : super(key: key);
 
   final String imageUrl;
   final double? height;
   final double? width;
   final BoxFit? fit;
+
+  final Map<String, String>? httpHeaders;
 
   final PlaceholderWidgetBuilder? placeholder;
   final LoadingErrorWidgetBuilder? errorWidget;
@@ -40,6 +43,7 @@ class EhNetworkImage extends StatelessWidget {
       height: height,
       fit: fit,
       imageUrl: imageUrl.dfUrl,
+      httpHeaders: httpHeaders,
       placeholder: placeholder,
       errorWidget: errorWidget,
       progressIndicatorBuilder: progressIndicatorBuilder,
