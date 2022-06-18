@@ -64,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("자동 잠금"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("뒤로"),
         "cancel": MessageLookupByLibrary.simpleMessage("취소"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨찾기 변경"),
@@ -85,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom_hosts": MessageLookupByLibrary.simpleMessage("사용자 지정 hosts"),
         "dark": MessageLookupByLibrary.simpleMessage("어둡게"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("다크 모드 효과"),
+        "default_avatar_style":
+            MessageLookupByLibrary.simpleMessage("Default avatar style"),
         "default_favorites": MessageLookupByLibrary.simpleMessage("기본 즐겨찾기"),
         "delete": MessageLookupByLibrary.simpleMessage("지우기"),
         "delete_task": MessageLookupByLibrary.simpleMessage("Delete Task"),

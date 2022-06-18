@@ -325,7 +325,7 @@ Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
 
   return TextSwitchItem(
     L10n.of(context).uc_show_page_num,
-    hideLine: hideLine,
+    hideDivider: hideLine,
     intValue: _controller.ehSetting.showGalleryPageNumbers == '0',
     onChanged: (val) => _controller.ehSetting =
         _controller.ehSetting.copyWith(showGalleryPageNumbers: val ? '0' : '1'),
@@ -354,7 +354,7 @@ Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
     () {
       return TextSwitchItem(
         L10n.of(context).uc_ori_image,
-        hideLine: true,
+        hideDivider: true,
         intValue: _controller.ehSetting.originalImages == '1',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),

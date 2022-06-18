@@ -118,7 +118,7 @@ class WebDavSettingView extends GetView<WebdavController> {
         ),
         TextSwitchItem(
           L10n.of(context).sync_read_progress,
-          hideLine: true,
+          hideDivider: true,
           intValue: controller.syncReadProgress,
           onChanged: (val) {
             controller.syncReadProgress = val;

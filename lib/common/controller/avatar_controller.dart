@@ -32,7 +32,7 @@ class AvatarController extends GetxController {
       return userFromCache;
     }
 
-    logger.d('fetch new UserInfo $userId');
+    logger.v('fetch new UserInfo $userId');
     final user = await getUserInfo(userId, forceRefresh: true);
     if (user != null) {
       _addUser(user.copyWith(

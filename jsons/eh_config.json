@@ -39,5 +39,7 @@
   "viewColumnMode?": "",
   "fixedHeightOfListItems?": true,
   "tagTranslateDataUpdateMode?": "",
-  "showCommentAvatar?": false
+  "showCommentAvatar?": false,
+  "boringAvatarsType?": "",
+  "avatarBorderRadiusType?": ""
 }

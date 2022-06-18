@@ -16,6 +16,7 @@ class EHRoutes {
   static const String securitySetting = '/setting/securitySetting';
   static const String readSeting = '/setting/readSetting';
   static const String about = '/setting/about';
+  static const String avatarSetting = '/setting/avatarSetting';
 
   static const String quickSearch = '/quickSearch';
   static const String customHosts = '/customHosts';

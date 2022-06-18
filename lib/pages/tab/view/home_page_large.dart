@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
+import 'package:fehviewer/pages/setting/avatar_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
@@ -184,6 +185,11 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => TagTranslatePage(),
+                            );
+                          case EHRoutes.avatarSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => AvatarSettingPage(),
                             );
                           case EHRoutes.logfile:
                             return GetPageRoute(

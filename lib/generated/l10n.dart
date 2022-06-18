@@ -3723,6 +3723,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Avatar`
+  String get avatar {
+    return Intl.message(
+      'Avatar',
+      name: 'avatar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default avatar style`
+  String get default_avatar_style {
+    return Intl.message(
+      'Default avatar style',
+      name: 'default_avatar_style',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

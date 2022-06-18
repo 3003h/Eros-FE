@@ -67,7 +67,7 @@ class ViewSettingList extends StatelessWidget {
         onChanged: (bool val) {
           ehConfigService.tapToTurnPageAnimations = val;
         },
-        hideLine: true,
+        hideDivider: true,
       ),
     ];
     return ListView.builder(

@@ -69,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Автоматическая блокировка"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Автоопределение профиля"),
+        "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("Назад"),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "change_to_favorites":
@@ -96,6 +97,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark": MessageLookupByLibrary.simpleMessage("Тёмная"),
         "dark_mode_effect":
             MessageLookupByLibrary.simpleMessage("Вид тёмной темы"),
+        "default_avatar_style":
+            MessageLookupByLibrary.simpleMessage("Default avatar style"),
         "default_favorites":
             MessageLookupByLibrary.simpleMessage("Избранное по умолчанию"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),

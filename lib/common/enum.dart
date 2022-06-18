@@ -16,3 +16,8 @@ enum TabletLayout {
   landscape,
   never,
 }
+
+enum AvatarBorderRadiusType {
+  circle,
+  roundedRect,
+}

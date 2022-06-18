@@ -714,7 +714,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                 enableAdvance = val;
               });
             },
-            hideLine: true,
+            hideDivider: true,
           ),
         ),
 

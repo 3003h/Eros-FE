@@ -15,6 +15,7 @@ import 'package:fehviewer/pages/login/view/login_page.dart';
 import 'package:fehviewer/pages/login/view/web_login_in.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
+import 'package:fehviewer/pages/setting/avatar_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
@@ -221,6 +222,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.webDavSetting,
       page: () => const WebDavSetting(),
+    ),
+    GetPage(
+      name: EHRoutes.avatarSetting,
+      page: () => const AvatarSettingPage(),
     ),
     GetPage(
       name: EHRoutes.tagTranslat,

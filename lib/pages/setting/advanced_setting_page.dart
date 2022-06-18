@@ -196,7 +196,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         L10n.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
-        hideLine: true,
+        hideDivider: true,
       ),
       const ItemSpace(),
       SelectorSettingItem(
@@ -212,7 +212,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         'Log debugMode',
         intValue: _ehConfigService.debugMode,
         onChanged: (bool val) => _ehConfigService.debugMode = val,
-        hideLine: true,
+        hideDivider: true,
       ),
     ];
 

@@ -16,6 +16,7 @@ import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -175,9 +176,36 @@ class EhConfigService extends ProfileService {
   bool get showCommentAvatar => _showCommentAvatar.value;
   set showCommentAvatar(bool val) => _showCommentAvatar.value = val;
 
+  final _boringAvatarsType = BoringAvatarsType.beam.obs;
+  BoringAvatarsType get boringAvatarsType => _boringAvatarsType.value;
+  set boringAvatarsType(BoringAvatarsType val) =>
+      _boringAvatarsType.value = val;
+
+  final _avatarBorderRadiusType = AvatarBorderRadiusType.circle.obs;
+  AvatarBorderRadiusType get avatarBorderRadiusType =>
+      _avatarBorderRadiusType.value;
+  set avatarBorderRadiusType(AvatarBorderRadiusType val) =>
+      _avatarBorderRadiusType.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    // _boringAvatarsType
+    boringAvatarsType = EnumToString.fromString(
+            BoringAvatarsType.values, ehConfig.boringAvatarsType ?? '') ??
+        BoringAvatarsType.beam;
+    everFromEunm(_boringAvatarsType, (String value) {
+      ehConfig = ehConfig.copyWith(boringAvatarsType: value);
+    });
+
+    // _avatarBorderRadiusType
+    avatarBorderRadiusType = EnumToString.fromString(
+            AvatarBorderRadiusType.values, ehConfig.boringAvatarsType ?? '') ??
+        AvatarBorderRadiusType.circle;
+    everFromEunm(_avatarBorderRadiusType, (String value) {
+      ehConfig = ehConfig.copyWith(avatarBorderRadiusType: value);
+    });
 
     /// 预载图片数量
     preloadImage.value = downloadConfig.preloadImage ?? 5;
