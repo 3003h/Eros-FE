@@ -140,7 +140,7 @@ class ListViewEhSetting extends StatelessWidget {
       TextSwitchItem(
         L10n.of(context).auto_select_profile,
         intValue: _autoSelectProfile,
-        hideLine: !_isLogin,
+        hideDivider: !_isLogin,
         onChanged: (val) => _ehConfigService.autoSelectProfile = val,
       ),
       if (_isLogin)
@@ -234,7 +234,7 @@ class ListViewEhSetting extends StatelessWidget {
           '画廊封面模糊',
           intValue: _galleryImgBlur,
           onChanged: _handleGalleryListImgBlurChanged,
-          hideLine: true,
+          hideDivider: true,
           // desc: '画廊列表封面模糊效果',
         ),
       const ItemSpace(),
@@ -269,17 +269,31 @@ class ListViewEhSetting extends StatelessWidget {
         desc: L10n.of(context).manually_sel_favorites,
         descOn: L10n.of(context).last_favorites,
       ),
-      TextSwitchItem(
-        L10n.of(context).show_comment_avatar,
-        intValue: _ehConfigService.showCommentAvatar,
-        onChanged: (val) => _ehConfigService.showCommentAvatar = val,
-      ),
+      // TextSwitchItem(
+      //   L10n.of(context).show_comment_avatar,
+      //   intValue: _ehConfigService.showCommentAvatar,
+      //   onChanged: (val) => _ehConfigService.showCommentAvatar = val,
+      // ),
+      Obx(() {
+        return SelectorSettingItem(
+          title: L10n.of(context).avatar,
+          onTap: () {
+            Get.toNamed(
+              EHRoutes.avatarSetting,
+              id: isLayoutLarge ? 2 : null,
+            );
+          },
+          selector: _ehConfigService.showCommentAvatar
+              ? L10n.of(context).on
+              : L10n.of(context).off,
+        );
+      }),
       TextSwitchItem(
         L10n.of(context).clipboard_detection,
         intValue: _isClipboar,
         onChanged: _handleClipboarLinkTapChange,
         desc: L10n.of(context).clipboard_detection_desc,
-        hideLine: !localeService.isLanguageCodeZh,
+        hideDivider: !localeService.isLanguageCodeZh,
       ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
@@ -289,7 +303,7 @@ class ListViewEhSetting extends StatelessWidget {
               _ehConfigService.commentTrans.value = newValue,
           desc: '关闭',
           descOn: '用机器翻译将评论翻译为简体中文',
-          hideLine: true,
+          hideDivider: true,
         ),
     ];
 

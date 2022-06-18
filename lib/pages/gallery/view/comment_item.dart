@@ -136,10 +136,12 @@ class CommentItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              _buildUserWidget(
-                comment: reptyComment,
-                // fontSize: 12,
-              ).paddingOnly(bottom: 6),
+              Expanded(
+                child: _buildUserWidget(
+                  comment: reptyComment,
+                  // fontSize: 12,
+                ).paddingOnly(bottom: 6),
+              ),
             ],
           ),
           Text(
@@ -203,8 +205,7 @@ class CommentItem extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        _buildUserWidget(),
-        const Spacer(),
+        Expanded(child: _buildUserWidget()),
         CupertinoTheme(
           data: const CupertinoThemeData(primaryColor: ThemeColors.commitText),
           child: Row(
@@ -343,13 +344,15 @@ class CommentItem extends StatelessWidget {
               ),
             ));
 
-    final _placeHold = BoringAvatars(
-      name: _name,
-      // colors: ThemeColors.tagColorList,
-      colors: ThemeColors.catColorList,
-      type: BoringAvatarsType.beam,
-      square: true,
-    );
+    final _placeHold = Obx(() {
+      return BoringAvatars(
+        name: _name,
+        // colors: ThemeColors.tagColorList,
+        colors: [...ThemeColors.catColorList],
+        type: _ehConfigService.boringAvatarsType,
+        square: true,
+      );
+    });
 
     return GestureDetector(
       child: Obx(() {
@@ -363,7 +366,11 @@ class CommentItem extends StatelessWidget {
                 height: avatarSize,
                 margin: const EdgeInsets.only(right: 8),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(avatarSize / 2),
+                  borderRadius: BorderRadius.circular(
+                      _ehConfigService.avatarBorderRadiusType ==
+                              AvatarBorderRadiusType.roundedRect
+                          ? 8
+                          : avatarSize / 2),
                   child: (avatarUrl != null && avatarUrl.isNotEmpty)
                       ? EhNetworkImage(
                           imageUrl: avatarUrl,
@@ -394,12 +401,14 @@ class CommentItem extends StatelessWidget {
                           }),
                 ),
               ),
-            Text(
-              _name,
-              style: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
-                color: CupertinoColors.activeBlue,
+            Expanded(
+              child: Text(
+                _name,
+                style: TextStyle(
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoColors.activeBlue,
+                ),
               ),
             ),
           ],

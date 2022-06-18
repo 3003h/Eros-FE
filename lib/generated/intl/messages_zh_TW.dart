@@ -64,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("自動上鎖"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("退回"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("更改為收藏夾"),
@@ -83,6 +84,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom_hosts": MessageLookupByLibrary.simpleMessage("自定hosts文件"),
         "dark": MessageLookupByLibrary.simpleMessage("深色模式"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("深色模式效果"),
+        "default_avatar_style":
+            MessageLookupByLibrary.simpleMessage("Default avatar style"),
         "default_favorites": MessageLookupByLibrary.simpleMessage("預設收藏夾"),
         "delete": MessageLookupByLibrary.simpleMessage("刪除"),
         "delete_task": MessageLookupByLibrary.simpleMessage("刪除工作"),

@@ -67,6 +67,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "change_to_favorites":
@@ -92,6 +93,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "dark_mode_effect":
             MessageLookupByLibrary.simpleMessage("Dark mode effect"),
+        "default_avatar_style":
+            MessageLookupByLibrary.simpleMessage("Default avatar style"),
         "default_favorites":
             MessageLookupByLibrary.simpleMessage("Default Favorites"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),

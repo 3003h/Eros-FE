@@ -364,5 +364,7 @@
   "double_page_model": "Double page model",
   "model": "Model {modelName}",
   "reply_to_comment": "Reply",
-  "show_comment_avatar": "Show comment avatar"
+  "show_comment_avatar": "Show comment avatar",
+  "avatar": "Avatar",
+  "default_avatar_style": "Default avatar style"
 }

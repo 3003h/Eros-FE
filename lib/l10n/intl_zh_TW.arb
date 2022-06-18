@@ -362,5 +362,7 @@
   "double_page_model": "雙頁模式",
   "model": "模式 {modelName}",
   "reply_to_comment": "回復評論",
-  "show_comment_avatar": "Show comment avatar"
+  "show_comment_avatar": "Show comment avatar",
+  "avatar": "Avatar",
+  "default_avatar_style": "Default avatar style"
 }

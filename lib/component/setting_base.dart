@@ -274,7 +274,7 @@ class TextSwitchItem extends StatefulWidget {
     this.desc,
     this.descOn,
     Key? key,
-    this.hideLine = false,
+    this.hideDivider = false,
     this.icon,
     this.iconIndent = 0.0,
     this.suffix,
@@ -285,7 +285,7 @@ class TextSwitchItem extends StatefulWidget {
   final String title;
   final String? desc;
   final String? descOn;
-  final bool hideLine;
+  final bool hideDivider;
   final Widget? icon;
   final double iconIndent;
   final Widget? suffix;
@@ -360,7 +360,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                 ],
               ),
             ),
-            if (!widget.hideLine)
+            if (!widget.hideDivider)
               Divider(
                 indent: 20 + widget.iconIndent,
                 height: kDividerHeight,
