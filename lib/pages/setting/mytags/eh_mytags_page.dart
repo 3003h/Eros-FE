@@ -1,15 +1,14 @@
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../component/setting_base.dart';
-import '../../fehviewer.dart';
-import 'controller/eh_mytags_controller.dart';
-import 'webview/eh_tagset_edit_dialog.dart';
-import 'webview/mytags_in.dart';
+import '../../../component/setting_base.dart';
+import '../../../fehviewer.dart';
+import '../controller/eh_mytags_controller.dart';
+import '../webview/eh_tagset_edit_dialog.dart';
+import '../webview/mytags_in.dart';
 
 class EhMyTagsPage extends GetView<EhMyTagsController> {
   const EhMyTagsPage({Key? key}) : super(key: key);

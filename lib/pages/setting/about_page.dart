@@ -8,7 +8,6 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/utils/cust_lib/flutter_egg.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';

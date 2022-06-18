@@ -8,11 +8,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import 'comp/user_tag_item.dart';
-import 'const.dart';
-import 'controller/eh_mytags_controller.dart';
+import '../const.dart';
+import '../controller/eh_mytags_controller.dart';
+import '../webview/eh_tagset_edit_dialog.dart';
 import 'eh_usertag_edit_dialog.dart';
-import 'webview/eh_tagset_edit_dialog.dart';
+import 'user_tag_item.dart';
 
 class EhUserTagsPage extends StatefulWidget {
   const EhUserTagsPage({Key? key}) : super(key: key);
@@ -61,16 +61,7 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            FontAwesomeIcons.magnifyingGlass,
-            size: 22,
-          ),
-          onPressed: () => controller.isSearchUserTags = true,
-        ),
-        CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          minSize: 40,
-          child: const Icon(
-            FontAwesomeIcons.penToSquare,
+            FontAwesomeIcons.penRuler,
             size: 22,
           ),
           onPressed: () async {
@@ -88,6 +79,15 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
               controller.renameTagset(newName: newName);
             }
           },
+        ),
+        CupertinoButton(
+          padding: const EdgeInsets.all(0),
+          minSize: 40,
+          child: const Icon(
+            FontAwesomeIcons.magnifyingGlass,
+            size: 22,
+          ),
+          onPressed: () => controller.isSearchUserTags = true,
         ),
       ],
     );
