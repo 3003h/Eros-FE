@@ -413,13 +413,19 @@ Future<bool> actionDeleteUserTag({
 
 Future<bool> actionRenameTagSet({
   required String tagsetname,
+  String? tagset,
 }) async {
   final dataMap = {
     'tagset_action': 'rename',
     'tagset_name': tagsetname,
   };
 
-  return await actionMytags(dataMap: dataMap);
+  return await actionMytags(
+    dataMap: dataMap,
+    queryParameters: {
+      'tagset': tagset ?? '',
+    },
+  );
 }
 
 Future<bool> actionCreatTagSet({

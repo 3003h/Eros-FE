@@ -258,6 +258,7 @@ class ListViewEhSetting extends StatelessWidget {
             L10n.of(context).fixed_height_of_list_items,
             intValue: _ehConfigService.fixedHeightOfListItems,
             onChanged: (val) => _ehConfigService.fixedHeightOfListItems = val,
+            hideDivider: true,
           ),
         );
       }),
@@ -269,11 +270,6 @@ class ListViewEhSetting extends StatelessWidget {
         desc: L10n.of(context).manually_sel_favorites,
         descOn: L10n.of(context).last_favorites,
       ),
-      // TextSwitchItem(
-      //   L10n.of(context).show_comment_avatar,
-      //   intValue: _ehConfigService.showCommentAvatar,
-      //   onChanged: (val) => _ehConfigService.showCommentAvatar = val,
-      // ),
       Obx(() {
         return SelectorSettingItem(
           title: L10n.of(context).avatar,

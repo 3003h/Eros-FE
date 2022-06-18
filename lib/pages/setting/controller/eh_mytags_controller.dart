@@ -2,15 +2,14 @@ import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/pages/setting/mytags/eh_usertag_edit_dialog.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-import '../../../fehviewer.dart';
-import '../eh_usertag_edit_dialog.dart';
 
 const kEhMyTags = EhMytags(tagsets: []);
 
@@ -216,7 +215,10 @@ class EhMyTagsController extends GetxController
   }
 
   Future<void> renameTagset({required String newName}) async {
-    final rult = await actionRenameTagSet(tagsetname: newName);
+    final rult = await actionRenameTagSet(
+      tagsetname: newName,
+      tagset: currSelected,
+    );
     if (rult) {
       isStackLoading = true;
       await reloadData();
