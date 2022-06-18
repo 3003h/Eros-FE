@@ -5,62 +5,6 @@ import 'package:keframe/keframe.dart';
 
 import 'const.dart';
 
-class PreviewGrid extends StatefulWidget {
-  const PreviewGrid({Key? key, required this.images, required this.gid})
-      : super(key: key);
-  final List<GalleryImage> images;
-  final String gid;
-
-  @override
-  _PreviewGridState createState() => _PreviewGridState();
-}
-
-class _PreviewGridState extends State<PreviewGrid> {
-  final Map<String, bool> _loadComplets = {};
-
-  @override
-  Widget build(BuildContext context) {
-    return SizeCacheWidget(
-      estimateCount: widget.images.length,
-      child: GridView.builder(
-          padding: const EdgeInsets.only(top: 0),
-          shrinkWrap: true,
-          //解决无限高度问题
-          physics: const NeverScrollableScrollPhysics(),
-          //禁用滑动事件
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: kMaxCrossAxisExtent,
-              mainAxisSpacing: kMainAxisSpacing, //主轴方向的间距
-              crossAxisSpacing: kCrossAxisSpacing, //交叉轴方向子元素的间距
-              childAspectRatio: kChildAspectRatio //显示区域宽高
-              ),
-          itemCount: widget.images.length,
-          itemBuilder: (context, index) {
-            return Center(
-              child: PreviewContainer(
-                galleryImageList: widget.images,
-                index: index,
-                gid: widget.gid,
-                onLoadComplet: () {
-                  final thumbUrl = widget.images[index].thumbUrl ?? '';
-                  Future.delayed(const Duration(milliseconds: 50)).then(
-                    (_) {
-                      if (!(_loadComplets[thumbUrl] ?? false) && mounted) {
-                        logger.v('onLoadComplet $thumbUrl');
-                        setState(() {
-                          _loadComplets[thumbUrl] = true;
-                        });
-                      }
-                    },
-                  );
-                },
-              ),
-            );
-          }),
-    );
-  }
-}
-
 class PreviewContainer extends StatelessWidget {
   PreviewContainer({
     Key? key,
@@ -68,6 +12,7 @@ class PreviewContainer extends StatelessWidget {
     required this.galleryImageList,
     required this.gid,
     this.onLoadComplet,
+    this.referer,
   })  : galleryImage = galleryImageList[index],
         hrefs = List<String>.from(
             galleryImageList.map((GalleryImage e) => e.href).toList()),
@@ -79,6 +24,7 @@ class PreviewContainer extends StatelessWidget {
   final List<String> hrefs;
   final GalleryImage galleryImage;
   final VoidCallback? onLoadComplet;
+  final String? referer;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +32,7 @@ class PreviewContainer extends StatelessWidget {
       if (galleryImage.largeThumb ?? false) {
         // 缩略大图
         return EhNetworkImage(
+          httpHeaders: {if (referer != null) 'Referer': referer!},
           imageUrl: galleryImage.thumbUrl ?? '',
           progressIndicatorBuilder: (_, __, ___) {
             return const CupertinoActivityIndicator();

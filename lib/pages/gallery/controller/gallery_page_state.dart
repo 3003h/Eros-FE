@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +17,9 @@ class GalleryPageState {
 
   /// 画廊数据对象
   GalleryProvider? galleryProvider;
+
+  String get url =>
+      '${galleryProvider!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${galleryProvider!.url}';
 
   /// 画廊gid 唯一
   String get gid => galleryProvider?.gid ?? '0';

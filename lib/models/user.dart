@@ -12,6 +12,8 @@ class User {
     this.igneous,
     this.hathPerks,
     this.sk,
+    this.yay,
+    this.star,
     this.avatarUrl,
     this.favcat,
     this.lastUptTime,
@@ -24,6 +26,8 @@ class User {
   final String? igneous;
   final String? hathPerks;
   final String? sk;
+  final String? yay;
+  final String? star;
   final String? avatarUrl;
   final List<Favcat>? favcat;
   final int? lastUptTime;
@@ -36,6 +40,8 @@ class User {
     igneous: json['igneous'] != null ? json['igneous'] as String : null,
     hathPerks: json['hathPerks'] != null ? json['hathPerks'] as String : null,
     sk: json['sk'] != null ? json['sk'] as String : null,
+    yay: json['yay'] != null ? json['yay'] as String : null,
+    star: json['star'] != null ? json['star'] as String : null,
     avatarUrl: json['avatarUrl'] != null ? json['avatarUrl'] as String : null,
     favcat: json['favcat'] != null ? (json['favcat'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList() : null,
     lastUptTime: json['lastUptTime'] != null ? json['lastUptTime'] as int : null
@@ -49,6 +55,8 @@ class User {
     'igneous': igneous,
     'hathPerks': hathPerks,
     'sk': sk,
+    'yay': yay,
+    'star': star,
     'avatarUrl': avatarUrl,
     'favcat': favcat?.map((e) => e.toJson()).toList(),
     'lastUptTime': lastUptTime
@@ -62,6 +70,8 @@ class User {
     igneous: igneous,
     hathPerks: hathPerks,
     sk: sk,
+    yay: yay,
+    star: star,
     avatarUrl: avatarUrl,
     favcat: favcat?.map((e) => e.clone()).toList(),
     lastUptTime: lastUptTime
@@ -76,6 +86,8 @@ class User {
     String? igneous,
     String? hathPerks,
     String? sk,
+    String? yay,
+    String? star,
     String? avatarUrl,
     List<Favcat>? favcat,
     int? lastUptTime
@@ -87,6 +99,8 @@ class User {
     igneous: igneous ?? this.igneous,
     hathPerks: hathPerks ?? this.hathPerks,
     sk: sk ?? this.sk,
+    yay: yay ?? this.yay,
+    star: star ?? this.star,
     avatarUrl: avatarUrl ?? this.avatarUrl,
     favcat: favcat ?? this.favcat,
     lastUptTime: lastUptTime ?? this.lastUptTime,
@@ -94,8 +108,8 @@ class User {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && hathPerks == other.hathPerks && sk == other.sk && avatarUrl == other.avatarUrl && favcat == other.favcat && lastUptTime == other.lastUptTime;
+    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && hathPerks == other.hathPerks && sk == other.sk && yay == other.yay && star == other.star && avatarUrl == other.avatarUrl && favcat == other.favcat && lastUptTime == other.lastUptTime;
 
   @override
-  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ hathPerks.hashCode ^ sk.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode ^ lastUptTime.hashCode;
+  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ hathPerks.hashCode ^ sk.hashCode ^ yay.hashCode ^ star.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode ^ lastUptTime.hashCode;
 }

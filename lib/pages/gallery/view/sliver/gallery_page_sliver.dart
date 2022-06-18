@@ -206,6 +206,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                     sliver: PreviewSliverGrid(
                       images: pageState.firstPageImage,
                       gid: state.gid ?? '',
+                      referer: _controller.gState.url,
                     ),
                   ),
                   pageController: _controller,
