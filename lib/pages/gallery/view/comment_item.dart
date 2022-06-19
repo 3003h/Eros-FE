@@ -2,17 +2,9 @@ import 'package:fehviewer/common/controller/avatar_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/widget/eh_network_image.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
@@ -354,10 +346,16 @@ class CommentItem extends StatelessWidget {
       );
     });
 
-    return GestureDetector(
-      child: Obx(() {
-        final avatarUrl = avatarController.getAvatarUrl(_userId);
-        return Row(
+    void tapName() {
+      logger.v('search uploader:$_name');
+      NavigatorUtil.goSearchPageWithText(simpleSearch: 'uploader:$_name');
+    }
+
+    return Obx(() {
+      final avatarUrl = avatarController.getAvatarUrl(_userId);
+      return GestureDetector(
+        onTap: tapName,
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (_ehConfigService.showCommentAvatar)
@@ -401,25 +399,21 @@ class CommentItem extends StatelessWidget {
                           }),
                 ),
               ),
-            Expanded(
-              child: Text(
-                _name,
-                style: TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.bold,
-                  color: CupertinoColors.activeBlue,
-                ),
+            Text(
+              _name,
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: CupertinoColors.activeBlue,
               ),
             ),
           ],
-        );
-      }),
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        logger.v('search uploader:$_name');
-        NavigatorUtil.goSearchPageWithText(simpleSearch: 'uploader:$_name');
-      },
-    );
+        ),
+      );
+    });
   }
 
   /// 显示评分详情
