@@ -55,7 +55,7 @@ DioHttpConfig exDioConfig = DioHttpConfig(
   connectTimeout: 10000,
   sendTimeout: 8000,
   receiveTimeout: 10000,
-  // maxConnectionsPerHost: 2,
+  maxConnectionsPerHost: 5,
 );
 
 // 全局配置

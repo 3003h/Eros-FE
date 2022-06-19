@@ -237,11 +237,13 @@ class EhMyTagsController extends GetxController
     }
   }
 
+  // 添加新的用户tag
   Future<void> showAddNewTagDialog(
     BuildContext context, {
     required EhUsertag userTag,
   }) async {
-    final saveToset = await showCupertinoDialog<String>(
+    // 选择需要保存到的tagset
+    final saveToSet = await showCupertinoDialog<String>(
         context: context,
         barrierDismissible: true,
         builder: (context) {
@@ -256,6 +258,7 @@ class EhMyTagsController extends GetxController
                   }
 
                   if (state.length == 1) {
+                    // 如果只有一个tagset 自动选择并返回
                     Get.back(result: state.first.value);
                     return const SizedBox.shrink();
                   }
@@ -280,9 +283,10 @@ class EhMyTagsController extends GetxController
           );
         });
 
-    logger.d('saveToset $saveToset');
+    logger.d('saveToSet $saveToSet');
 
-    currSelected = saveToset ?? '1';
+    // 不选择的话默认 set 1
+    currSelected = saveToSet ?? '1';
     firstLoad();
 
     await showNewOrChangeUserTagDialog(context, userTag: userTag);
@@ -292,6 +296,7 @@ class EhMyTagsController extends GetxController
     BuildContext context, {
     required EhUsertag userTag,
   }) async {
+    // 新tag标志
     bool _newUsertag = true;
     final _userTag = await showCupertinoDialog<EhUsertag>(
         context: context,
@@ -300,12 +305,14 @@ class EhMyTagsController extends GetxController
           return obx(
             (state) {
               if (usertags.map((e) => e.title).contains(userTag.title)) {
+                // 如果该tagset中已经存在了，查询并显示编辑对话框
                 _newUsertag = false;
                 final _oriUserTag = usertags
                     .firstWhere((element) => element.title == userTag.title);
                 logger.d('edit tag ${userTag.title}');
                 return EhUserTagEditDialog(usertag: _oriUserTag);
               } else {
+                // 正常新增
                 logger.d('new tag ${userTag.title}');
                 return EhUserTagEditDialog(usertag: userTag);
               }
