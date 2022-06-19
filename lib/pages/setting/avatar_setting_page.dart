@@ -50,15 +50,17 @@ class _ListView extends StatelessWidget {
     final _username = name ?? _word;
     final _borderRadiusType =
         borderRadiusType ?? _ehConfigService.avatarBorderRadiusType;
+    final borderRadius = BorderRadius.circular(
+        _borderRadiusType == AvatarBorderRadiusType.roundedRect
+            ? 8
+            : avatarSize / 2);
+
     return Container(
       width: avatarSize,
       height: avatarSize,
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: AnimatedClipRRect(
-        borderRadius: BorderRadius.circular(
-            _borderRadiusType == AvatarBorderRadiusType.roundedRect
-                ? 8
-                : avatarSize / 2),
+        borderRadius: borderRadius,
         duration: const Duration(milliseconds: 300),
         child: AnimatedBoringAvatars(
           duration: const Duration(milliseconds: 300),
