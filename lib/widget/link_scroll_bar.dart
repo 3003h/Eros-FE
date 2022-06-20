@@ -245,7 +245,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
     // _indicatorPositionedLeft = widget.itemPadding.horizontal / 2;
 
     // 初始计算
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
       Future.delayed(const Duration(milliseconds: 0)).then((value) {
         setState(() {});
       });
@@ -579,50 +579,39 @@ Future showItemAttach({
   EdgeInsetsGeometry? margin,
   AlignmentGeometry? alignmentTemp,
 }) async {
+  final boxObj = targetContext.findRenderObject();
+  Offset? offset = (boxObj as RenderBox?)?.localToGlobal(Offset.zero);
+
   await SmartDialog.showAttach(
-    highlightBuilder: (Offset targetOffset, Size targetSize) {
-      return Positioned(
-        left: targetOffset.dx,
-        top: targetOffset.dy + 2,
-        child: Container(
-          height: targetSize.height - 4,
-          width: targetSize.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.white,
-          ),
+    highlight: Positioned(
+      left: offset?.dx ?? 0.0,
+      top: (offset?.dy ?? 0.0) + 2,
+      child: Container(
+        height: (targetContext.size?.height ?? 0) - 4,
+        width: targetContext.size?.width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
         ),
-      );
-    },
+      ),
+    ),
     tag: tag,
     keepSingle: true,
     targetContext: targetContext,
+    isPenetrateTemp: false,
+    alignmentTemp: alignmentTemp,
+    clickBgDismissTemp: true,
     onDismiss: onDismiss,
-    builder: (BuildContext context) {
-      return SafeArea(
-        top: false,
-        bottom: false,
-        child: Container(
-          width: width,
-          margin: margin,
-          // constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
-          // decoration: BoxDecoration(
-          //   borderRadius: BorderRadius.circular(16),
-          //   boxShadow: [
-          //     BoxShadow(
-          //       color: Colors.black.withOpacity(0.2),
-          //       offset: const Offset(0, 0),
-          //       blurRadius: 10, //阴影模糊程度
-          //       spreadRadius: 1, //阴影扩散程度
-          //     ),
-          //   ],
-          // ),
-          // color: CupertinoColors.systemGrey5,
-          child: CupertinoPopupSurface(
-            child: child,
-          ),
+    widget: SafeArea(
+      top: false,
+      bottom: false,
+      child: Container(
+        width: width,
+        margin: margin,
+        child: CupertinoPopupSurface(
+          child: child,
         ),
-      );
-    },
+      ),
+    ),
   );
 }

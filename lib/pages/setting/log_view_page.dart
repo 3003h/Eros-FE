@@ -25,7 +25,7 @@ class LogViewPage extends StatelessWidget {
     final _logByte = logService.logFiles[index].readAsBytesSync();
     final _log = const Utf8Decoder(allowMalformed: true).convert(_logByte);
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
       // build完成后的回调
       logger.v('to end');
       _scrollController.animateTo(

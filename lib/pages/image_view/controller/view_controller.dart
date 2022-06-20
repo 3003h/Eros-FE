@@ -15,7 +15,7 @@ import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
 import 'package:photo_view/photo_view.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
+// import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:throttling/throttling.dart';
 import 'package:wakelock/wakelock.dart';
@@ -68,7 +68,7 @@ class ViewExtController extends GetxController {
   final ItemPositionsListener thumbPositionsListener =
       ItemPositionsListener.create();
 
-  final AutoScrollController autoScrollController = AutoScrollController();
+  // final AutoScrollController autoScrollController = AutoScrollController();
   final photoViewScaleStateController = PhotoViewScaleStateController();
 
   final PhotoViewController photoViewController = PhotoViewController();
