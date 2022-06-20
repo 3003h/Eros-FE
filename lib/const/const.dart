@@ -254,6 +254,8 @@ class EHConst {
 
   static const String DB_NAME = 'feh.db';
 
+  static const int exMaxConnectionsPerHost = 5;
+
   static String getBaseSite([bool isEx = false]) =>
       isEx ? EX_BASE_URL : EH_BASE_URL;
 
