@@ -53,7 +53,7 @@ app.*.map.json
 #/lib/models/*.dart
 /web/
 /linux/
-.fvm
+.fvm/flutter_sdk
 /assets/openl.json
 /assets/sentry.json
 
