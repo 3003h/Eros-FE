@@ -55,7 +55,7 @@ DioHttpConfig exDioConfig = DioHttpConfig(
   connectTimeout: 10000,
   sendTimeout: 8000,
   receiveTimeout: 10000,
-  maxConnectionsPerHost: 5,
+  maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost,
 );
 
 // 全局配置
