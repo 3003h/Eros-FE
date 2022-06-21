@@ -3,7 +3,7 @@ library fehviewer;
 export 'common/enum.dart';
 export 'common/exts.dart';
 export 'common/global.dart';
-export 'component/widget/animated.dart';
+export 'widget/animated.dart';
 export 'const/const.dart';
 export 'extension.dart';
 export 'generated/l10n.dart';
