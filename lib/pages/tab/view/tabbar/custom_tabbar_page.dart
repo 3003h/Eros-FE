@@ -3,6 +3,7 @@ import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart' hide CupertinoTabBar;
@@ -70,6 +71,8 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           },
           child: Obx(() {
             return PageView(
+              // CustomScrollPhysics对于改善滑动问题没有帮助
+              // physics: const CustomScrollPhysics(),
               key: ValueKey(
                   controller.profiles.map((e) => '${e.uuid}${e.name}').join()),
               // key: UniqueKey(),

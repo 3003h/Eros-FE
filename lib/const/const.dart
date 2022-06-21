@@ -292,10 +292,6 @@ class EHConst {
     3,
     5,
     7,
-    9,
-    11,
-    13,
-    17,
   ];
 
   static List<int> multiDownload = <int>[

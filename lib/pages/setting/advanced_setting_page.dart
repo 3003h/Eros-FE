@@ -74,7 +74,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       if (!newValue) {
         HttpOverrides.global = null;
       } else {
-        HttpOverrides.global = Global.dfHttpOverrides;
+        HttpOverrides.global = ehHttpOverrides..skipCertificateCheck = true;
         final HttpClient eClient =
             ExtendedNetworkImageProvider.httpClient as HttpClient;
         eClient.badCertificateCallback =

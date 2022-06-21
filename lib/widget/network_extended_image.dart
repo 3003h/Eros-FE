@@ -15,16 +15,20 @@ class NetworkExtendedImage extends StatefulWidget {
     this.placeholder,
     this.errorWidget,
     this.progressIndicatorBuilder,
+    this.httpHeaders,
+    this.cancelToken,
   }) : super(key: key);
   final String url;
   final double? height;
   final double? width;
   final BoxFit? fit;
   final int retries;
+  final Map<String, String>? httpHeaders;
 
   final PlaceholderWidgetBuilder? placeholder;
   final LoadingErrorWidgetBuilder? errorWidget;
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
+  final CancellationToken? cancelToken;
 
   @override
   _NetworkExtendedImageState createState() => _NetworkExtendedImageState();
@@ -41,7 +45,13 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
     _httpHeaders = {
       'Cookie': Global.profile.user.cookie,
       'host': Uri.parse(widget.url).host,
+      'User-Agent': EHConst.CHROME_USER_AGENT,
+      'Accept-Encoding': 'gzip, deflate, br'
     };
+
+    if (widget.httpHeaders != null) {
+      _httpHeaders.addAll(widget.httpHeaders!);
+    }
 
     animationController = AnimationController(
       vsync: this,
@@ -63,8 +73,11 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
       height: widget.height,
       headers: _httpHeaders,
       retries: widget.retries,
+      timeLimit: const Duration(seconds: 6),
+      timeRetry: const Duration(milliseconds: 300),
+      cancelToken: widget.cancelToken,
       fit: widget.fit,
-      // enableLoadState: false,
+      enableLoadState: false,
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
@@ -75,8 +88,15 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
                   child: const CupertinoActivityIndicator(),
                 );
           case LoadState.completed:
+            // return state.completedWidget;
+            // return controller.vState.viewMode != ViewMode.topToBottom
+            //     ? state.completedWidget
+            //     : FadeTransition(
+            //         opacity: animationController,
+            //         child: state.completedWidget,
+            //       );
             animationController.forward();
-
+            //
             return FadeTransition(
               opacity: animationController,
               child: state.completedWidget,
@@ -119,6 +139,7 @@ class ExtendedImageRect extends StatefulWidget {
     this.width,
     this.fit,
     this.onLoadComplet,
+    this.httpHeaders,
   }) : super(key: key);
   final String url;
   final Rect? sourceRect;
@@ -126,6 +147,7 @@ class ExtendedImageRect extends StatefulWidget {
   final double? width;
   final BoxFit? fit;
   final VoidCallback? onLoadComplet;
+  final Map<String, String>? httpHeaders;
 
   @override
   _ExtendedImageRectState createState() => _ExtendedImageRectState();
@@ -142,7 +164,13 @@ class _ExtendedImageRectState extends State<ExtendedImageRect>
     _httpHeaders = {
       'Cookie': Global.profile.user.cookie,
       'host': Uri.parse(widget.url).host,
+      'User-Agent': EHConst.CHROME_USER_AGENT,
+      'Accept-Encoding': 'gzip, deflate, br'
     };
+
+    if (widget.httpHeaders != null) {
+      _httpHeaders.addAll(widget.httpHeaders!);
+    }
 
     animationController = AnimationController(
       vsync: this,
