@@ -61,3 +61,4 @@ GoogleService-Info.plist
 google-service.json
 /lib/firebase_options.dart
 
+/pubspec.lock

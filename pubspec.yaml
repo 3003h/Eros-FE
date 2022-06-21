@@ -107,7 +107,6 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
   persistent_bottom_nav_bar: ^4.0.2
-  device_preview: ^1.0.0
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
   learning_language:
