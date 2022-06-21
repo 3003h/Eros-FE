@@ -72,7 +72,7 @@ class EhConfigService extends ProfileService {
   }
 
   /// 预载图片数量
-  RxInt preloadImage = 5.obs;
+  RxInt preloadImage = 3.obs;
 
   /// 下载线程数
   final RxInt _multiDownload = 3.obs;
@@ -263,16 +263,20 @@ class EhConfigService extends ProfileService {
         (value) => ehConfig = ehConfig.copyWith(galleryImgBlur: value as bool));
 
     isSiteEx.value = ehConfig.siteEx ?? false;
+    // 初始化
     ehDioConfig = isSiteEx.value ? exDioConfig : ehDioConfig;
     everProfile(isSiteEx, (value) {
       logger.d('everProfile isSiteEx');
       ehConfig = ehConfig.copyWith(siteEx: value as bool);
       if (value) {
+        // 切换ex后
         Global.initImageHttpClient(
             maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost);
         ehDioConfig
-          ..baseUrl = EHConst.EX_BASE_URL
-          ..maxConnectionsPerHost = EHConst.exMaxConnectionsPerHost;
+          ..baseUrl = exDioConfig.baseUrl
+          ..receiveTimeout = exDioConfig.receiveTimeout
+          ..connectTimeout = exDioConfig.connectTimeout
+          ..maxConnectionsPerHost = exDioConfig.maxConnectionsPerHost;
       } else {
         ehDioConfig
           ..baseUrl = EHConst.EH_BASE_URL

@@ -52,11 +52,13 @@ DioHttpConfig ehDioConfig = DioHttpConfig(
 DioHttpConfig exDioConfig = DioHttpConfig(
   baseUrl: EHConst.EX_BASE_URL,
   cookiesPath: Global.appSupportPath,
-  connectTimeout: 10000,
+  connectTimeout: 15000,
   sendTimeout: 8000,
-  receiveTimeout: 10000,
+  receiveTimeout: 15000,
   maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost,
 );
+
+final EhHttpOverrides ehHttpOverrides = EhHttpOverrides();
 
 // 全局配置
 // ignore: avoid_classes_with_only_static_members
@@ -79,7 +81,7 @@ class Global {
   static late PersistCookieJar cookieJar;
 
   // static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
-  static DFHttpOverrides dfHttpOverrides = DFHttpOverrides();
+  // static DFHttpOverrides dfHttpOverrides = DFHttpOverrides();
 
   static String appSupportPath = '';
   static String appDocPath = '';
@@ -209,7 +211,7 @@ class Global {
 
     if (profile.dnsConfig.enableDomainFronting ?? false) {
       logger.d('enableDomainFronting');
-      HttpOverrides.global = dfHttpOverrides;
+      HttpOverrides.global = ehHttpOverrides..skipCertificateCheck = true;
     }
   }
 

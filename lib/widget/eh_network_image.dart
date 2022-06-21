@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class EhNetworkImage extends StatelessWidget {
   const EhNetworkImage({
@@ -28,15 +31,16 @@ class EhNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return NetworkExtendedImage(
-    //   url: imageUrl.dfUrl,
-    //   width: width,
-    //   height: height,
-    //   fit: fit,
-    //   placeholder: placeholder,
-    //   errorWidget: errorWidget,
-    //   progressIndicatorBuilder: progressIndicatorBuilder,
-    // );
+    if (Get.find<EhConfigService>().isSiteEx.value)
+      return NetworkExtendedImage(
+        url: imageUrl.dfUrl,
+        width: width,
+        height: height,
+        fit: fit,
+        placeholder: placeholder,
+        errorWidget: errorWidget,
+        progressIndicatorBuilder: progressIndicatorBuilder,
+      );
 
     return EhCachedNetworkImage(
       width: width,
