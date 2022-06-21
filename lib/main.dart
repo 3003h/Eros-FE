@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:device_preview/device_preview.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
@@ -59,14 +58,7 @@ Future<void> main() async {
 
     updateTagTranslate();
 
-    runApp(kReleaseMode || GetPlatform.isDesktop
-        ? MyApp()
-        : DevicePreview(
-            // enabled: !kReleaseMode,
-            enabled: false,
-            isToolbarVisible: true,
-            builder: (context) => MyApp(),
-          ));
+    runApp(MyApp());
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
@@ -165,7 +157,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           GlobalWidgetsLocalizations.delegate,
         ],
         localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
-          final Locale _locale = DevicePreview.locale(context) ?? window.locale;
+          final Locale _locale = window.locale;
           logger.d(
               'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
           // logger.d('${_locale} ${supportedLocales}');

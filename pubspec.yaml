@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.2.42+402
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.13.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -107,7 +107,6 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
   persistent_bottom_nav_bar: ^4.0.2
-  device_preview: ^1.0.0
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
   learning_language:
@@ -120,7 +119,7 @@ dependencies:
   restart_app: ^1.1.0
   image: ^3.0.8
   palette_generator: ^0.3.2
-  getwidget: ^3.0.1
+  getwidget: ^2.1.1
   open_file: ^3.2.1
   flustars: ^2.0.1
   dio_smart_retry: ^1.0.3
