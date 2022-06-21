@@ -57,7 +57,7 @@ class EhDynamicColors {
   );
 
   static const EhDynamicColor commitIcon = EhDynamicColor(
-    color: Color.fromARGB(255, 100, 100, 102),
+    color: Color.fromARGB(255, 120, 120, 122),
     darkColor: Color.fromARGB(255, 142, 142, 147),
     darkGrayColor: Color.fromARGB(255, 142, 142, 147),
   );

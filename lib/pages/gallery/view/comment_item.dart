@@ -169,12 +169,50 @@ class CommentItem extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        if (showRepty)
+        // 点赞
+        if (galleryComment.canVote ?? false)
           CupertinoButton(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             minSize: 0,
             child: Icon(
-              FontAwesomeIcons.reply,
+              galleryComment.vote! > 0
+                  ? FontAwesomeIcons.solidThumbsUp
+                  : FontAwesomeIcons.thumbsUp,
+              size: galleryComment.vote! > 0 ? kSizeVote : kSizeNotVote,
+              color: ehTheme.commitIconColor,
+            ),
+            onPressed: () {
+              vibrateUtil.light();
+              logger.i('vote up ${galleryComment.id}');
+              commentController.commitVoteUp(galleryComment.id!);
+            },
+          ),
+        // 点踩
+        if (galleryComment.canVote ?? false)
+          CupertinoButton(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            minSize: 0,
+            child: Icon(
+              galleryComment.vote! < 0
+                  ? FontAwesomeIcons.solidThumbsDown
+                  : FontAwesomeIcons.thumbsDown,
+              size: galleryComment.vote! < 0 ? kSizeVote : kSizeNotVote,
+              color: ehTheme.commitIconColor,
+            ),
+            onPressed: () {
+              vibrateUtil.light();
+              logger.i('vote down ${galleryComment.id}');
+              commentController.commitVoteDown(galleryComment.id!);
+            },
+          ),
+        if (showRepty)
+          CupertinoButton(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            minSize: 0,
+            child: Icon(
+              // FontAwesomeIcons.reply,
+              // FontAwesomeIcons.at,
+              FontAwesomeIcons.message,
               size: 15,
               color: ehTheme.commitIconColor,
             ),
@@ -193,8 +231,6 @@ class CommentItem extends StatelessWidget {
     BuildContext context,
     CommentController commentController,
   ) {
-    final EhConfigService _ehConfigService = Get.find();
-
     return Row(
       children: <Widget>[
         Expanded(child: _buildUserWidget()),
@@ -203,50 +239,14 @@ class CommentItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               // 翻译
-              if (_ehConfigService.commentTrans.value)
+              if (Get.find<EhConfigService>().commentTrans.value)
                 CupertinoTheme(
                   data: ehTheme.themeData!,
                   child: TranslateButton(
                     galleryComment: galleryComment,
                     commentController: commentController,
                   ),
-                ),
-              // 点赞
-              if (galleryComment.canVote ?? false)
-                CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  minSize: 0,
-                  child: Icon(
-                    galleryComment.vote! > 0
-                        ? FontAwesomeIcons.solidThumbsUp
-                        : FontAwesomeIcons.thumbsUp,
-                    size: galleryComment.vote! > 0 ? kSizeVote : kSizeNotVote,
-                    color: ehTheme.commitIconColor,
-                  ),
-                  onPressed: () {
-                    vibrateUtil.light();
-                    logger.i('vote up ${galleryComment.id}');
-                    commentController.commitVoteUp(galleryComment.id!);
-                  },
-                ),
-              // 点踩
-              if (galleryComment.canVote ?? false)
-                CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  minSize: 0,
-                  child: Icon(
-                    galleryComment.vote! < 0
-                        ? FontAwesomeIcons.solidThumbsDown
-                        : FontAwesomeIcons.thumbsDown,
-                    size: galleryComment.vote! < 0 ? kSizeVote : kSizeNotVote,
-                    color: ehTheme.commitIconColor,
-                  ),
-                  onPressed: () {
-                    vibrateUtil.light();
-                    logger.i('vote down ${galleryComment.id}');
-                    commentController.commitVoteDown(galleryComment.id!);
-                  },
-                ),
+                ).paddingSymmetric(horizontal: 12),
               // 编辑回复
               if ((galleryComment.canEdit ?? false) && !simple)
                 CupertinoButton(
@@ -276,24 +276,37 @@ class CommentItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // 分值
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 4),
-                  child: Icon(
-                    FontAwesomeIcons.circleHalfStroke,
-                    size: kSizeNotVote - 1,
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8.0, right: 4),
+                //   child: Icon(
+                //     FontAwesomeIcons.circleHalfStroke,
+                //     size: kSizeNotVote - 1,
+                //     color: ehTheme.commitIconColor,
+                //   ),
+                // ),
+                Container(
+                  decoration: BoxDecoration(
                     color: ehTheme.commitIconColor,
+                    // border:
+                    //     Border.all(color: ehTheme.commitIconColor!, width: 1.4),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                ),
-                Text(
-                  galleryComment.score.startsWith('+')
-                      ? '+${galleryComment.score.substring(1)}'
-                      : galleryComment.score.startsWith('-')
-                          ? galleryComment.score
-                          : '+${galleryComment.score}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.normal,
-                    color: ehTheme.commitIconColor,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2.5, horizontal: 6),
+                  margin: const EdgeInsets.only(right: 6),
+                  child: Text(
+                    galleryComment.score.startsWith('+')
+                        ? '+${galleryComment.score.substring(1)}'
+                        : galleryComment.score.startsWith('-')
+                            ? galleryComment.score
+                            : '+${galleryComment.score}',
+                    style: TextStyle(
+                      fontSize: 10,
+                      height: 1.25,
+                      fontWeight: FontWeight.bold,
+                      // color: ehTheme.commitIconColor,
+                      color: ehTheme.commentBackgroundColor,
+                    ),
                   ),
                 ),
               ],
@@ -569,9 +582,6 @@ class CommentItem extends StatelessWidget {
                     imageUrl: e.imageUrl!,
                     placeholder: (_, __) => const CupertinoActivityIndicator(),
                   ),
-                  // child: NetworkExtendedImage(
-                  //   url: e.imageUrl ?? '',
-                  // ),
                 ),
               );
             } else {

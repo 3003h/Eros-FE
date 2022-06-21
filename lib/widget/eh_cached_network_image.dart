@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/retry.dart' as retry;
 
 class EhCachedNetworkImage extends StatelessWidget {
   const EhCachedNetworkImage({
@@ -39,6 +41,7 @@ class EhCachedNetworkImage extends StatelessWidget {
     }
 
     return CachedNetworkImage(
+      cacheManager: cacheManager,
       httpHeaders: _httpHeaders,
       width: width,
       height: height,
@@ -50,3 +53,16 @@ class EhCachedNetworkImage extends StatelessWidget {
     );
   }
 }
+
+final client = retry.RetryClient(
+  http.Client(),
+);
+
+final cacheManager = CacheManager(
+  Config(
+    'cacheKey',
+    fileService: HttpFileService(
+      httpClient: client,
+    ),
+  ),
+);
