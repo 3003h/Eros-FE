@@ -7,6 +7,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
@@ -50,7 +51,7 @@ class SplashController extends GetxController {
   }
 
   Future<void> _startHome(String url, {bool replace = true}) async {
-    await _autoLockController.resumed(forceLock: true);
+    await _autoLockController.resumed(forceLock: true && !kDebugMode);
 
     final RegExp regGalleryUrl =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');

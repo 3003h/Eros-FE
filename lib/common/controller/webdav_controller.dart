@@ -25,6 +25,7 @@ const String kLocalReadDirPath = 'read';
 
 const String kGroupDirPath = '/fehviewer/group';
 const String kLocalGroupDirPath = 'group';
+const String kGroupSeparator = '_';
 
 const String idActionLogin = 'action_login';
 
@@ -418,7 +419,7 @@ class WebdavController extends GetxController {
 
     try {
       await client!.writeFromFile(_path,
-          '$kGroupDirPath/${profile.name}_${profile.lastEditTime ?? '0'}.json');
+          '$kGroupDirPath/${profile.name}$kGroupSeparator${profile.lastEditTime ?? '0'}.json');
     } on DioError catch (err) {
       logger.d('${err.response?.statusCode}');
       if (err.response?.statusCode == 404) {
@@ -437,7 +438,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return null;
     }
-    logger.v('download group');
+    logger.d('download group $fileName');
     chkTempDir(kLocalGroupDirPath);
     final _path = path.join(Global.tempPath, kLocalGroupDirPath, fileName);
     try {
@@ -471,8 +472,9 @@ class WebdavController extends GetxController {
     final list = await client!.readDir(kGroupDirPath);
     final profileObjs = list.map((e) {
       final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
-      final profileName = name?.split('_')[0] ?? '';
-      final time = int.parse(name?.split('_')[1] ?? '0');
+      final arr = name?.split(kGroupSeparator);
+      final profileName = arr?.take(arr.length - 1).join(kGroupSeparator) ?? '';
+      final time = int.parse(arr?[arr.length - 1] ?? '0');
       if (profileName.isNotEmpty) {
         return CustomProfile(name: profileName, uuid: '', lastEditTime: time);
       }
