@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
+import 'package:executor/executor.dart';
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -14,6 +18,10 @@ final CustomProfile profileChinese = CustomProfile(
 
 /// 控制所有自定义列表
 class CustomTabbarController extends DefaultTabViewController {
+  final WebdavController webdavController = Get.find();
+
+  final executor = Executor(concurrency: 1);
+
   CustomTabConfig? get customTabConfig => Global.profile.customTabConfig;
   set customTabConfig(CustomTabConfig? val) =>
       Global.profile = Global.profile.copyWith(customTabConfig: val);
@@ -212,6 +220,7 @@ class CustomTabbarController extends DefaultTabViewController {
 
   void pressSubmitText() {}
 
+  // 删除对话框
   void showDeleteGroupModalBottomSheet(String uuid, BuildContext context) {
     showCupertinoModalPopup(
         context: context,
@@ -235,5 +244,134 @@ class CustomTabbarController extends DefaultTabViewController {
                   },
                   child: Text(L10n.of(context).cancel)));
         });
+  }
+
+  void addProfile(CustomProfile profile) {
+    logger.d(' ${jsonEncode(profile)}');
+
+    final oriIndex =
+        profiles.indexWhere((element) => element.name == profile.name);
+
+    late final CustomSubListController subController;
+
+    if (oriIndex >= 0) {
+      // 修改profile
+      profiles[oriIndex] = profile;
+    } else {
+      // 新增profile
+      logger.d('new profile ${profile.name}');
+      profiles.add(profile);
+    }
+
+    Get.lazyPut(
+      () => CustomSubListController(profileUuid: profile.uuid)
+        ..heroTag = profile.uuid,
+      tag: profile.uuid,
+      fenix: true,
+    );
+
+    subController = Get.find(tag: profile.uuid);
+    subController.listMode = profile.listMode;
+    subController.onInit();
+  }
+
+  Future<void> syncProfiles() async {
+    final listLocal = List<CustomProfile>.from(profiles);
+    logger.v('listLocal ${listLocal.length} \n${listLocal.map((e) => e.uuid)}');
+    logger.v('${jsonEncode(listLocal)} ');
+
+    // 下载远程列表
+    final listRemote = await webdavController.getRemotGroupList();
+    // 远程列表为空 直接上传本地所有分组
+    if (listRemote.isEmpty) {
+      await _uploadProfiles(listLocal);
+      return;
+    }
+
+    logger.v('listRemote size ${listRemote.length}');
+
+    // 比较远程和本地的差异
+    final allProfile = <CustomProfile?>{...listRemote, ...listLocal};
+    final diff = allProfile
+        .where((element) =>
+            !listRemote.contains(element) || !listLocal.contains(element))
+        .toList()
+        .toSet();
+    logger.v('diff ${diff.map((e) => e?.toJson())}');
+
+    // 本地分组中 编辑时间更靠后的
+    final localNewer = listLocal.where(
+      (eLocal) {
+        if (eLocal == null) {
+          return false;
+        }
+        final _eRemote = listRemote
+            .firstWhereOrNull((eRemote) => eRemote.name == eLocal.name);
+        if (_eRemote == null) {
+          return true;
+        }
+
+        return (eLocal.lastEditTime ?? 0) > (_eRemote.lastEditTime ?? 0);
+      },
+    );
+    logger.v('localNewer count ${localNewer.length}');
+
+    // 远程 编辑时间更靠后的
+    final remoteNewer = listRemote.where(
+      (eRemote) {
+        final _eLocal = listLocal
+            .firstWhereOrNull((eLocal) => (eLocal.name) == eRemote.name);
+
+        if (_eLocal == null) {
+          return true;
+        }
+
+        return (eRemote.lastEditTime ?? 0) > (_eLocal.lastEditTime ?? 0);
+      },
+    );
+    logger.v('remoteNewer ${remoteNewer.map((e) => e.name).toList()}');
+
+    await _downloadProfiles(remoteNewer.toSet().toList());
+
+    await _uploadProfiles(localNewer.toList(), listRemote: listRemote);
+  }
+
+  Future _downloadProfiles(List<CustomProfile> remoteList) async {
+    for (final remote in remoteList) {
+      executor.scheduleTask(() async {
+        final _remote = await webdavController
+            .downloadGroupProfile('${remote.name}_${remote.lastEditTime}');
+        if (_remote != null) {
+          final ori = profiles
+              .firstWhereOrNull((element) => element.name == _remote.name);
+          if (ori != null &&
+              (remote.lastEditTime ?? 0) <= (ori.lastEditTime ?? 0)) {
+            return;
+          }
+          addProfile(_remote);
+        }
+      });
+    }
+
+    await executor.join(withWaiting: true);
+  }
+
+  Future _uploadProfiles(
+    List<CustomProfile?> localHisList, {
+    List<CustomProfile?>? listRemote,
+  }) async {
+    for (final profile in localHisList) {
+      executor.scheduleTask(() async {
+        final _oriRemote = listRemote
+            ?.firstWhereOrNull((element) => element?.name == profile?.name);
+
+        if (profile != null) {
+          final upload = webdavController.uploadGroupProfile(profile);
+          final delete = webdavController.deleteRemotGroup(_oriRemote);
+          await Future.wait([upload, delete]);
+        }
+      });
+    }
+    await executor.join(withWaiting: true);
   }
 }

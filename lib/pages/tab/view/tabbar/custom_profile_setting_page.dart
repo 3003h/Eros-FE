@@ -87,6 +87,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       listModeValue: listMode.name,
       hideTab: hideTab,
       // aggregateGroups: aggGroupList,
+      lastEditTime: DateTime.now().millisecondsSinceEpoch,
       advSearch: customProfile.advSearch?.copyWith(
             searchGalleryName: searchGalleryName,
             searchGalleryTags: searchGalleryTags,
