@@ -26,7 +26,7 @@ class CustomTabbarController extends DefaultTabViewController {
   set customTabConfig(CustomTabConfig? val) =>
       Global.profile = Global.profile.copyWith(customTabConfig: val);
 
-  RxList<CustomProfile> profiles = <CustomProfile>[].obs;
+  final RxList<CustomProfile> profiles = <CustomProfile>[].obs;
   Map<String, CustomProfile> get profileMap {
     Map<String, CustomProfile> _map = {};
     for (final profile in profiles) {
@@ -34,6 +34,9 @@ class CustomTabbarController extends DefaultTabViewController {
     }
     return _map;
   }
+
+  // 登记删除的profile和时间
+  final RxList<CustomProfile> delProfiles = <CustomProfile>[].obs;
 
   // 显示的分组
   List<CustomProfile> get profilesShow =>
@@ -107,6 +110,11 @@ class CustomTabbarController extends DefaultTabViewController {
           CustomTabConfig(lastIndex: value);
       Global.saveProfile();
     });
+
+    delProfiles(hiveHelper.getProfileDelList());
+    debounce<List<CustomProfile>>(delProfiles, (value) {
+      hiveHelper.setProfileDelList(value);
+    }, time: const Duration(seconds: 2));
 
     if (profiles.isNotEmpty) {
       currProfileUuid = profiles[index].uuid;
@@ -211,10 +219,23 @@ class CustomTabbarController extends DefaultTabViewController {
     if (_profileUuid == uuid) {
       Future.delayed(100.milliseconds).then((_) {
         pageController.jumpToPage(0);
-      }).then(
-          (value) => profiles.removeWhere((element) => element.uuid == uuid));
+      }).then((value) {
+        addDelProfile(profiles.firstWhere((element) => element.uuid == uuid));
+        profiles.removeWhere((element) => element.uuid == uuid);
+      });
     } else {
+      addDelProfile(profiles.firstWhere((element) => element.uuid == uuid));
       profiles.removeWhere((element) => element.uuid == uuid);
+    }
+  }
+
+  void addDelProfile(CustomProfile profile) {
+    final nowTime = DateTime.now().millisecondsSinceEpoch;
+    final _index = delProfiles.indexOf((e) => e.name == profile.name);
+    if (_index > -1) {
+      delProfiles[_index] = delProfiles[_index].copyWith(lastEditTime: nowTime);
+    } else {
+      delProfiles.add(profile);
     }
   }
 
@@ -322,6 +343,15 @@ class CustomTabbarController extends DefaultTabViewController {
         final _eLocal = listLocal
             .firstWhereOrNull((eLocal) => (eLocal.name) == eRemote.name);
 
+        // delProfiles 中 name 和远程文件一样的
+        final _eDelFlg =
+            delProfiles.where((eDel) => (eDel.name) == eRemote.name);
+
+        if (_eDelFlg.isNotEmpty) {
+          return _eDelFlg.every(
+              (e) => (eRemote.lastEditTime ?? 0) > (e.lastEditTime ?? 0));
+        }
+
         if (_eLocal == null) {
           return true;
         }
@@ -339,8 +369,8 @@ class CustomTabbarController extends DefaultTabViewController {
   Future _downloadProfiles(List<CustomProfile> remoteList) async {
     for (final remote in remoteList) {
       executor.scheduleTask(() async {
-        final _remote = await webdavController
-            .downloadGroupProfile('${remote.name}_${remote.lastEditTime}');
+        final _remote = await webdavController.downloadGroupProfile(
+            '${remote.name}$kGroupSeparator${remote.lastEditTime}');
         if (_remote != null) {
           final ori = profiles
               .firstWhereOrNull((element) => element.name == _remote.name);
@@ -348,7 +378,7 @@ class CustomTabbarController extends DefaultTabViewController {
               (remote.lastEditTime ?? 0) <= (ori.lastEditTime ?? 0)) {
             return;
           }
-          addProfile(_remote);
+          addProfile(_remote.copyWith(name: remote.name));
         }
       });
     }

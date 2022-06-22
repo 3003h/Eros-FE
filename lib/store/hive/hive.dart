@@ -13,6 +13,7 @@ const String configBox = 'config_box';
 const String searchHistoryKey = 'search_history';
 const String layoutConfigKey = 'config_layout';
 const String usersKey = 'users_info';
+const String profileDelKey = 'delete_profile';
 
 class HiveHelper {
   HiveHelper();
@@ -134,5 +135,19 @@ class HiveHelper {
       _users.add(User.fromJson(val as Map<String, dynamic>));
     }
     return _users;
+  }
+
+  Future<void> setProfileDelList(List<CustomProfile> delProfiles) async {
+    await _configBox.put(profileDelKey, jsonEncode(delProfiles));
+  }
+
+  List<CustomProfile> getProfileDelList() {
+    final all = _configBox.get(profileDelKey, defaultValue: '[]');
+
+    final _delProfiles = <CustomProfile>[];
+    for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
+      _delProfiles.add(CustomProfile.fromJson(val as Map<String, dynamic>));
+    }
+    return _delProfiles;
   }
 }

@@ -30,7 +30,7 @@ class HistoryController extends GetxController {
   final thrSync = Throttling(duration: const Duration(seconds: 60));
   final debSync = Debouncing(duration: const Duration(seconds: 80));
 
-  final executor = Executor(concurrency: 2);
+  final executor = Executor(concurrency: 1);
 
   bool get isListView =>
       _ehConfigService.listMode.value == ListModeEnum.list ||
