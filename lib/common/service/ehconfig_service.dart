@@ -201,7 +201,8 @@ class EhConfigService extends ProfileService {
 
     // _avatarBorderRadiusType
     avatarBorderRadiusType = EnumToString.fromString(
-            AvatarBorderRadiusType.values, ehConfig.boringAvatarsType ?? '') ??
+            AvatarBorderRadiusType.values,
+            ehConfig.avatarBorderRadiusType ?? '') ??
         AvatarBorderRadiusType.circle;
     everFromEunm(_avatarBorderRadiusType, (String value) {
       ehConfig = ehConfig.copyWith(avatarBorderRadiusType: value);
