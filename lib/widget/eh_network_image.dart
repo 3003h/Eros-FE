@@ -31,7 +31,7 @@ class EhNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.find<EhConfigService>().isSiteEx.value)
+    if (Get.find<EhConfigService>().isSiteEx.value && false)
       return NetworkExtendedImage(
         url: imageUrl.dfUrl,
         width: width,
