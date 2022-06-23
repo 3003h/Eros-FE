@@ -206,8 +206,6 @@ class Global {
     _checkReset();
 
     _initProfile();
-    Get.lazyPut(() => profile.webdav ?? const WebdavProfile(url: ''),
-        fenix: true);
 
     if (profile.dnsConfig.enableDomainFronting ?? false) {
       logger.d('enableDomainFronting');
