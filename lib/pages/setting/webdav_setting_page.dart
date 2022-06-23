@@ -124,8 +124,24 @@ class WebDavSettingView extends GetView<WebdavController> {
             controller.syncReadProgress = val;
           },
         ),
+        TextSwitchItem(
+          L10n.of(context).sync_group,
+          hideDivider: true,
+          intValue: controller.syncGroupProfile,
+          onChanged: (val) {
+            controller.syncGroupProfile = val;
+          },
+        ),
+        TextSwitchItem(
+          L10n.of(context).sync_quick_search,
+          hideDivider: true,
+          intValue: controller.syncQuickSearch,
+          onChanged: (val) {
+            controller.syncQuickSearch = val;
+          },
+        ),
         const ItemSpace(),
-        if (kDebugMode) CatProgressIndicator(),
+        // if (kDebugMode) CatProgressIndicator(),
         const ItemSpace(),
         // if (kDebugMode)
         //   CircularProgressIndicator(

@@ -311,7 +311,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_page_interval":
             MessageLookupByLibrary.simpleMessage("Show page interval"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
+        "sync_group": MessageLookupByLibrary.simpleMessage("Sync group"),
         "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
+        "sync_quick_search":
+            MessageLookupByLibrary.simpleMessage("Sync quick search"),
         "sync_read_progress":
             MessageLookupByLibrary.simpleMessage("Sync read progress"),
         "system_share": MessageLookupByLibrary.simpleMessage("System share"),
