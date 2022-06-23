@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -44,7 +46,8 @@ class QuickSearchController extends ProfileController {
       return;
     }
 
-    final _rs = await webdavController.downloadQuickSearch(_remoteTimes.max);
+    final _rs =
+        await webdavController.downloadQuickSearch(_remoteTimes.reduce(max));
     final remoteTime = _rs?.item2 ?? 0;
     if (remoteTime >= lastEditTime) {
       _rs?.item1.forEach((e) => addText(e, silent: true));
