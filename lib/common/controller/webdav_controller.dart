@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
@@ -25,7 +26,7 @@ const String kLocalReadDirPath = 'read';
 
 const String kGroupDirPath = '/fehviewer/group';
 const String kLocalGroupDirPath = 'group';
-const String kGroupSeparator = '_';
+const String kGroupSeparator = '‖@‖';
 
 const String idActionLogin = 'action_login';
 
@@ -418,8 +419,8 @@ class WebdavController extends GetxController {
     _file.writeAsStringSync(encrypted.base64);
 
     try {
-      await client!.writeFromFile(_path,
-          '$kGroupDirPath/${profile.name}$kGroupSeparator${profile.lastEditTime ?? '0'}.json');
+      await client!
+          .writeFromFile(_path, '$kGroupDirPath/${profile.syncFileName}.json');
     } on DioError catch (err) {
       logger.d('${err.response?.statusCode}');
       if (err.response?.statusCode == 404) {
@@ -434,15 +435,17 @@ class WebdavController extends GetxController {
   }
 
   // 下载分组
-  Future<CustomProfile?> downloadGroupProfile(String fileName) async {
+  Future<CustomProfile?> downloadGroupProfile(CustomProfile profile) async {
     if (client == null) {
       return null;
     }
-    logger.d('download group $fileName');
+    logger.d('download group ${profile.syncFileName}');
     chkTempDir(kLocalGroupDirPath);
-    final _path = path.join(Global.tempPath, kLocalGroupDirPath, fileName);
+    final _path =
+        path.join(Global.tempPath, kLocalGroupDirPath, profile.syncFileName);
     try {
-      await client!.read2File('$kGroupDirPath/$fileName.json', _path);
+      await client!
+          .read2File('$kGroupDirPath/${profile.syncFileName}.json', _path);
       final File _file = File(_path);
       if (!_file.existsSync()) {
         return null;
@@ -458,7 +461,7 @@ class WebdavController extends GetxController {
       final _group =
           CustomProfile.fromJson(jsonDecode(jsonText) as Map<String, dynamic>);
 
-      return _group;
+      return _group.copyWith(name: profile.name, uuid: profile.uuid);
     } catch (err) {
       logger.e('$err');
       return null;
@@ -473,10 +476,11 @@ class WebdavController extends GetxController {
     final profileObjs = list.map((e) {
       final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
       final arr = name?.split(kGroupSeparator);
-      final profileName = arr?.take(arr.length - 1).join(kGroupSeparator) ?? '';
+      final profileName = arr?.take(arr.length - 2).join(kGroupSeparator) ?? '';
+      final uuid = arr?[arr.length - 2] ?? generateUuidv4();
       final time = int.parse(arr?[arr.length - 1] ?? '0');
       if (profileName.isNotEmpty) {
-        return CustomProfile(name: profileName, uuid: '', lastEditTime: time);
+        return CustomProfile(name: profileName, uuid: uuid, lastEditTime: time);
       }
     }).toList();
     final _list = <CustomProfile>[];
@@ -494,8 +498,7 @@ class WebdavController extends GetxController {
     }
 
     try {
-      await client!.remove(
-          '$kGroupDirPath/${oriRemote.name}_${oriRemote.lastEditTime}.json');
+      await client!.remove('$kGroupDirPath/${oriRemote.syncFileName}.json');
     } catch (err) {
       logger.e('$err');
       return;
