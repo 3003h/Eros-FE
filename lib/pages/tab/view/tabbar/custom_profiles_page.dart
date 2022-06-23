@@ -112,7 +112,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // 同步按钮
-                  if (Get.find<WebdavController>().validAccount &&
+                  if (Get.find<WebdavController>().syncGroupProfile &&
                       !controller.reorderable)
                     CupertinoButton(
                       minSize: 40,

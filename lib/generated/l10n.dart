@@ -1830,6 +1830,26 @@ class L10n {
     );
   }
 
+  /// `Sync group`
+  String get sync_group {
+    return Intl.message(
+      'Sync group',
+      name: 'sync_group',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sync quick search`
+  String get sync_quick_search {
+    return Intl.message(
+      'Sync quick search',
+      name: 'sync_quick_search',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Skip`
   String get skip {
     return Intl.message(

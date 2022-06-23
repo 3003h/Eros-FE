@@ -325,8 +325,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_page_interval": MessageLookupByLibrary.simpleMessage(
             "Показывать интервал между страницами"),
         "skip": MessageLookupByLibrary.simpleMessage("Пропустить"),
+        "sync_group": MessageLookupByLibrary.simpleMessage("Sync group"),
         "sync_history":
             MessageLookupByLibrary.simpleMessage("Синхронизация истории"),
+        "sync_quick_search":
+            MessageLookupByLibrary.simpleMessage("Sync quick search"),
         "sync_read_progress": MessageLookupByLibrary.simpleMessage(
             "Синхронизация прогресса чтения"),
         "system_share":

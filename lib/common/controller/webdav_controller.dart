@@ -5,16 +5,11 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:webdav_client/webdav_client.dart' as webdav;
-
-import '../global.dart';
 
 const String kDirPath = '/fehviewer';
 const String kHistoryDirPath = '/fehviewer/history';
@@ -28,6 +23,10 @@ const String kGroupDirPath = '/fehviewer/group';
 const String kLocalGroupDirPath = 'group';
 const String kGroupSeparator = '‖@‖';
 
+const String kSearchDirPath = '/fehviewer/search';
+const String kLocalSearchDirPath = 'search';
+const String kQuickSearchFile = 'quick_search.info';
+
 const String idActionLogin = 'action_login';
 
 const String kAESKey = 'fehviewer is very good!!';
@@ -40,17 +39,39 @@ class WebdavController extends GetxController {
 
   bool get validAccount => webdavProfile.user?.isNotEmpty ?? false;
 
-  // bool isLongining = false;
-
   final _isLongining = false.obs;
   bool get isLongining => _isLongining.value;
   set isLongining(bool val) => _isLongining.value = val;
 
-  bool _syncHistory = false;
-  bool _syncReadProgress = false;
+  // 是否同步历史记录
+  final _syncHistory = false.obs;
+  bool get syncHistory => _syncHistory.value;
+  set syncHistory(bool val) {
+    final _dav = webdavProfile.copyWith(syncHistory: val);
+    _syncHistory.value = val;
+    update();
+    Global.profile = Global.profile.copyWith(webdav: _dav);
+    Global.saveProfile();
+  }
 
-  bool get syncHistory => _syncHistory;
-  bool get syncReadProgress => _syncReadProgress;
+  // 是否同步画廊阅读进度
+  final _syncReadProgress = false.obs;
+  bool get syncReadProgress => _syncReadProgress.value;
+  set syncReadProgress(bool val) {
+    final _dav = webdavProfile.copyWith(syncReadProgress: val);
+    _syncReadProgress.value = val;
+    update();
+    Global.profile = Global.profile.copyWith(webdav: _dav);
+    Global.saveProfile();
+  }
+
+  final _syncGroupProfile = false.obs;
+  bool get syncGroupProfile => _syncGroupProfile.value;
+  set syncGroupProfile(bool val) => _syncGroupProfile.value = val;
+
+  final _syncQuickSearch = false.obs;
+  bool get syncQuickSearch => _syncQuickSearch.value;
+  set syncQuickSearch(bool val) => _syncQuickSearch.value = val;
 
   late final encrypt.Key _key;
   late final encrypt.IV _iv;
@@ -94,24 +115,6 @@ class WebdavController extends GetxController {
     return rult;
   }
 
-  // 是否同步历史记录
-  set syncHistory(bool val) {
-    final _dav = webdavProfile.copyWith(syncHistory: val);
-    _syncHistory = val;
-    update();
-    Global.profile = Global.profile.copyWith(webdav: _dav);
-    Global.saveProfile();
-  }
-
-  // 是否同步画廊阅读进度
-  set syncReadProgress(bool val) {
-    final _dav = webdavProfile.copyWith(syncReadProgress: val);
-    _syncReadProgress = val;
-    update();
-    Global.profile = Global.profile.copyWith(webdav: _dav);
-    Global.saveProfile();
-  }
-
   @override
   void onInit() {
     super.onInit();
@@ -119,7 +122,32 @@ class WebdavController extends GetxController {
       initClient();
 
       syncHistory = webdavProfile.syncHistory ?? false;
+      ever(_syncHistory, (bool val) {
+        Global.profile = Global.profile
+            .copyWith(webdav: webdavProfile.copyWith(syncHistory: val));
+        Global.saveProfile();
+      });
+
       syncReadProgress = webdavProfile.syncReadProgress ?? false;
+      ever(_syncReadProgress, (bool val) {
+        Global.profile = Global.profile
+            .copyWith(webdav: webdavProfile.copyWith(syncReadProgress: val));
+        Global.saveProfile();
+      });
+
+      syncGroupProfile = webdavProfile.syncGroupProfile ?? false;
+      ever(_syncGroupProfile, (bool val) {
+        Global.profile = Global.profile
+            .copyWith(webdav: webdavProfile.copyWith(syncGroupProfile: val));
+        Global.saveProfile();
+      });
+
+      syncQuickSearch = webdavProfile.syncQuickSearch ?? false;
+      ever(_syncQuickSearch, (bool val) {
+        Global.profile = Global.profile
+            .copyWith(webdav: webdavProfile.copyWith(syncQuickSearch: val));
+        Global.saveProfile();
+      });
     }
 
     _key = encrypt.Key.fromUtf8(kAESKey);
@@ -155,7 +183,8 @@ class WebdavController extends GetxController {
     checkDir(dir: kHistoryDtlDirPath)
         .then((value) => checkDir(dir: kHistoryDelDirPath))
         .then((value) => checkDir(dir: kReadDirPath))
-        .then((value) => checkDir(dir: kGroupDirPath));
+        .then((value) => checkDir(dir: kGroupDirPath))
+        .then((value) => checkDir(dir: kSearchDirPath));
   }
 
   Future<void> checkDir({String dir = kDirPath}) async {
@@ -502,6 +531,60 @@ class WebdavController extends GetxController {
     } catch (err) {
       logger.e('$err');
       return;
+    }
+  }
+
+  Future<void> uploadQuickSearch(List<String> texts) async {
+    if (client == null) {
+      return;
+    }
+    chkTempDir(kLocalSearchDirPath);
+
+    final _path =
+        path.join(Global.tempPath, kLocalGroupDirPath, kQuickSearchFile);
+    final File _file = File(_path);
+
+    final _text = texts.join('\n');
+    _file.writeAsStringSync(_text);
+    // final encrypted = _encrypter.encrypt(_text, iv: _iv);
+    // _file.writeAsStringSync(encrypted.base64);
+
+    try {
+      await client!.writeFromFile(_path, '$kSearchDirPath/$kQuickSearchFile');
+    } on DioError catch (err) {
+      logger.d('${err.response?.statusCode}');
+      if (err.response?.statusCode == 404) {
+        logger.d('file 404');
+        rethrow;
+      } else {
+        rethrow;
+      }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+    }
+  }
+
+  Future<List<String>> downloadQuickSearch() async {
+    if (client == null) {
+      return [];
+    }
+
+    logger.d('download $kQuickSearchFile');
+    chkTempDir(kLocalSearchDirPath);
+    final _path =
+        path.join(Global.tempPath, kLocalSearchDirPath, kQuickSearchFile);
+    try {
+      await client!.read2File('$kSearchDirPath/$kQuickSearchFile', _path);
+      final File _file = File(_path);
+      if (!_file.existsSync()) {
+        return [];
+      }
+      final String _fileText = _file.readAsStringSync();
+
+      return _fileText.split('\n');
+    } catch (err) {
+      logger.e('$err');
+      return [];
     }
   }
 
