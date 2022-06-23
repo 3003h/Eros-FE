@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'common/controller/tag_trans_controller.dart';
+import 'common/controller/webdav_controller.dart';
 import 'common/enum.dart';
 import 'models/index.dart';
 import 'network/api.dart';
@@ -505,6 +506,9 @@ extension ExtCustomProfile on CustomProfile {
   ListModeEnum get listMode =>
       EnumToString.fromString(ListModeEnum.values, listModeValue ?? '') ??
       ListModeEnum.global;
+
+  String get syncFileName =>
+      '$name$kGroupSeparator$uuid$kGroupSeparator${lastEditTime ?? '0'}';
 }
 
 extension EhIterableExtension<T> on Iterable<T> {

@@ -177,6 +177,8 @@
   "webdav_Account": "WebDAV 帳號",
   "sync_history": "同步紀錄",
   "sync_read_progress": "同步讀取進度",
+  "sync_group": "同步分组",
+  "sync_quick_search": "同步快速搜索",
   "skip": "跳過",
   "export": "導出",
   "read_from_clipboard": "從剪貼簿讀取",

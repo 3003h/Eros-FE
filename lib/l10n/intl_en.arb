@@ -177,6 +177,8 @@
   "webdav_Account": "WebDAV Account",
   "sync_history": "Sync history",
   "sync_read_progress": "Sync read progress",
+  "sync_group": "Sync group",
+  "sync_quick_search": "Sync quick search",
   "skip": "Skip",
   "export": "Export",
   "read_from_clipboard": "Read from clipboard",

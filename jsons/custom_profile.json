@@ -10,5 +10,6 @@
   "advSearch?": "$advance_search",
   "listModeValue?": "list",
   "hideTab?": false,
-  "aggregateGroups?": ["", ""]
+  "aggregateGroups?": ["", ""],
+  "lastEditTime?": 1234
 }

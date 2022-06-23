@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -183,7 +185,8 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   }
 
   void scrollToItem(int index) {
-    ItemFrame channelFrame = channelFrameList[index];
+    ItemFrame channelFrame =
+        channelFrameList[min(index, channelFrameList.length - 1)];
 
     _indicatorPositionedLeft =
         channelFrame.left + widget.itemPadding.horizontal / 2;
@@ -355,9 +358,15 @@ class _TitleIndicatorState extends State<TitleIndicator> {
     super.initState();
     logger.v('_TitleIndicatorState initState index:${widget.index}');
 
-    positionedLeft = widget.channelFrameList[widget.index].left +
+    positionedLeft = widget
+            .channelFrameList[
+                min(widget.index, widget.channelFrameList.length - 1)]
+            .left +
         (widget.itemPadding?.horizontal ?? 0) / 2;
-    _indicatorWidth = widget.channelFrameList[widget.index].width -
+    _indicatorWidth = widget
+            .channelFrameList[
+                min(widget.index, widget.channelFrameList.length - 1)]
+            .width -
         (widget.itemPadding?.horizontal ?? 0);
 
     // pageController监听
