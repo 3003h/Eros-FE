@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -38,21 +39,22 @@ const String kAESIV = '0000000000000000';
 class WebdavController extends GetxController {
   late webdav.Client? client;
 
-  WebdavProfile get webdavProfile => Get.find();
+  WebdavProfile get webdavProfile =>
+      Global.profile.webdav ?? const WebdavProfile(url: '');
+  set webdavProfile(WebdavProfile val) =>
+      Global.profile = Global.profile.copyWith(webdav: val);
 
-  bool get validAccount => webdavProfile.user?.isNotEmpty ?? false;
+  final _validAccount = false.obs;
+  bool get validAccount => _validAccount.value;
+  set validAccount(bool val) => _validAccount.value = val;
 
-  final _isLongining = false.obs;
-
-  bool get isLongining => _isLongining.value;
-
-  set isLongining(bool val) => _isLongining.value = val;
+  final _isWaitLogin = false.obs;
+  bool get isLongining => _isWaitLogin.value;
+  set isLongining(bool val) => _isWaitLogin.value = val;
 
   // 是否同步历史记录
   final _syncHistory = false.obs;
-
   bool get syncHistory => _syncHistory.value;
-
   set syncHistory(bool val) {
     final _dav = webdavProfile.copyWith(syncHistory: val);
     _syncHistory.value = val;
@@ -63,9 +65,7 @@ class WebdavController extends GetxController {
 
   // 是否同步画廊阅读进度
   final _syncReadProgress = false.obs;
-
   bool get syncReadProgress => _syncReadProgress.value;
-
   set syncReadProgress(bool val) {
     final _dav = webdavProfile.copyWith(syncReadProgress: val);
     _syncReadProgress.value = val;
@@ -75,15 +75,11 @@ class WebdavController extends GetxController {
   }
 
   final _syncGroupProfile = false.obs;
-
   bool get syncGroupProfile => _syncGroupProfile.value;
-
   set syncGroupProfile(bool val) => _syncGroupProfile.value = val;
 
   final _syncQuickSearch = false.obs;
-
   bool get syncQuickSearch => _syncQuickSearch.value;
-
   set syncQuickSearch(bool val) => _syncQuickSearch.value = val;
 
   late final encrypt.Key _key;
@@ -136,29 +132,25 @@ class WebdavController extends GetxController {
 
       syncHistory = webdavProfile.syncHistory ?? false;
       ever(_syncHistory, (bool val) {
-        Global.profile = Global.profile
-            .copyWith(webdav: webdavProfile.copyWith(syncHistory: val));
+        webdavProfile = webdavProfile.copyWith(syncHistory: val);
         Global.saveProfile();
       });
 
       syncReadProgress = webdavProfile.syncReadProgress ?? false;
       ever(_syncReadProgress, (bool val) {
-        Global.profile = Global.profile
-            .copyWith(webdav: webdavProfile.copyWith(syncReadProgress: val));
+        webdavProfile = webdavProfile.copyWith(syncReadProgress: val);
         Global.saveProfile();
       });
 
       syncGroupProfile = webdavProfile.syncGroupProfile ?? false;
       ever(_syncGroupProfile, (bool val) {
-        Global.profile = Global.profile
-            .copyWith(webdav: webdavProfile.copyWith(syncGroupProfile: val));
+        webdavProfile = webdavProfile.copyWith(syncGroupProfile: val);
         Global.saveProfile();
       });
 
       syncQuickSearch = webdavProfile.syncQuickSearch ?? false;
       ever(_syncQuickSearch, (bool val) {
-        Global.profile = Global.profile
-            .copyWith(webdav: webdavProfile.copyWith(syncQuickSearch: val));
+        webdavProfile = webdavProfile.copyWith(syncQuickSearch: val);
         Global.saveProfile();
       });
     }
@@ -198,6 +190,8 @@ class WebdavController extends GetxController {
         .then((value) => checkDir(dir: kReadDirPath))
         .then((value) => checkDir(dir: kGroupDirPath))
         .then((value) => checkDir(dir: kSearchDirPath));
+
+    validAccount = webdavProfile.user?.isNotEmpty ?? false;
   }
 
   Future<void> checkDir({String dir = kDirPath}) async {
@@ -652,7 +646,6 @@ class WebdavController extends GetxController {
 
   Future<bool> addWebDAVProfile(String url, {String? user, String? pwd}) async {
     isLongining = true;
-    update([idActionLogin]);
     bool rult = false;
     try {
       _pingWebDAV(url, user: user, pwd: pwd);
@@ -667,12 +660,9 @@ class WebdavController extends GetxController {
           WebdavProfile(url: url, user: user, password: pwd);
       Global.profile = Global.profile.copyWith(webdav: webdavUser);
       Global.saveProfile();
-      Get.replace(webdavUser);
       initClient();
     }
     isLongining = false;
-    // update([idActionLogin]);
-    update();
     return rult;
   }
 
@@ -692,5 +682,19 @@ class WebdavController extends GetxController {
 
   String encryptAES(String plainText) {
     return '';
+  }
+
+  Future<void> readFromClipboard() async {
+    final String _clipText =
+        (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
+    final texts =
+        _clipText.split('\n').where((e) => e.trim().isNotEmpty).toList();
+    if (texts.length < 3) {
+      return;
+    }
+
+    urlController.text = texts[0].trim();
+    usernameController.text = texts[1].trim();
+    passwdController.text = texts[2].trim();
   }
 }

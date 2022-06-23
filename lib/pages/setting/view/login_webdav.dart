@@ -90,10 +90,17 @@ class LoginWebDAV extends GetView<WebdavController> {
                           children: [
                             const Spacer(),
                             GestureDetector(
+                              child: const Icon(
+                                FontAwesomeIcons.clipboard,
+                                size: 30,
+                              ).paddingOnly(bottom: 30, right: 28, top: 8),
+                              onTap: controller.readFromClipboard,
+                            ),
+                            GestureDetector(
                               child: Icon(controller.obscurePasswd
                                       ? FontAwesomeIcons.eyeSlash
                                       : FontAwesomeIcons.eye)
-                                  .paddingOnly(bottom: 30, right: 28),
+                                  .paddingOnly(bottom: 30, right: 28, top: 8),
                               onTap: controller.switchObscure,
                             ),
                           ],
