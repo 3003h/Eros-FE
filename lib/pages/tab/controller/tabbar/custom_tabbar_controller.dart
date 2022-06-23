@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:executor/executor.dart';
@@ -117,7 +118,7 @@ class CustomTabbarController extends DefaultTabViewController {
     }, time: const Duration(seconds: 2));
 
     if (profiles.isNotEmpty) {
-      currProfileUuid = profiles[index].uuid;
+      currProfileUuid = profiles[min(index, profiles.length - 1)].uuid;
     }
 
     for (final profile in profiles) {
@@ -202,31 +203,26 @@ class CustomTabbarController extends DefaultTabViewController {
   }
 
   // 交换位置
-  void onReorder(int oldIndex, int newIndex) {
+  Future<void> onReorder(int oldIndex, int newIndex) async {
     final _profileUuid = currProfileUuid;
     final _profile = profiles.removeAt(oldIndex);
     profiles.insert(newIndex, _profile);
     index = profiles.indexWhere((element) => element.uuid == _profileUuid);
-    Future.delayed(100.milliseconds).then((_) {
-      pageController.jumpToPage(index);
-    });
+    await 200.milliseconds.delay();
+    pageController.jumpToPage(index);
+    linkScrollBarController.scrollToItem(index);
   }
 
   // 删除分组配置
-  void deleteProfile({required String uuid}) {
+  Future<void> deleteProfile({required String uuid}) async {
     final _profileUuid = currProfileUuid;
 
     if (_profileUuid == uuid) {
-      Future.delayed(100.milliseconds).then((_) {
-        pageController.jumpToPage(0);
-      }).then((value) {
-        addDelProfile(profiles.firstWhere((element) => element.uuid == uuid));
-        profiles.removeWhere((element) => element.uuid == uuid);
-      });
-    } else {
-      addDelProfile(profiles.firstWhere((element) => element.uuid == uuid));
-      profiles.removeWhere((element) => element.uuid == uuid);
+      await 200.milliseconds.delay();
     }
+
+    addDelProfile(profiles.firstWhere((element) => element.uuid == uuid));
+    profiles.removeWhere((element) => element.uuid == uuid);
   }
 
   void addDelProfile(CustomProfile profile) {
@@ -270,17 +266,21 @@ class CustomTabbarController extends DefaultTabViewController {
   void addProfile(CustomProfile profile) {
     logger.d(' ${jsonEncode(profile)}');
 
-    final oriIndex =
+    final oriIndexOfSameUuid =
+        profiles.indexWhere((element) => element.uuid == profile.uuid);
+
+    final oriIndexOfSameName =
         profiles.indexWhere((element) => element.name == profile.name);
 
-    late final CustomSubListController subController;
-
-    if (oriIndex >= 0) {
-      // 修改profile
-      profiles[oriIndex] = profile;
+    if (oriIndexOfSameUuid >= 0) {
+      // 优先覆盖相同uuid
+      profiles[oriIndexOfSameUuid] = profile;
+    } else if (oriIndexOfSameName >= 0) {
+      // 其次覆盖相同组名
+      profiles[oriIndexOfSameName] = profile;
     } else {
-      // 新增profile
-      logger.d('new profile ${profile.name}');
+      // 都不匹配则新增
+      logger.d('new profile ${profile.name} ${profile.uuid}');
       profiles.add(profile);
     }
 
@@ -291,7 +291,7 @@ class CustomTabbarController extends DefaultTabViewController {
       fenix: true,
     );
 
-    subController = Get.find(tag: profile.uuid);
+    final CustomSubListController subController = Get.find(tag: profile.uuid);
     subController.listMode = profile.listMode;
     subController.onInit();
   }
@@ -301,7 +301,7 @@ class CustomTabbarController extends DefaultTabViewController {
     logger.v('listLocal ${listLocal.length} \n${listLocal.map((e) => e.uuid)}');
     logger.v('${jsonEncode(listLocal)} ');
 
-    // 下载远程列表
+    // 下载远程文件名列表 包含： 分组名 uuid 时间戳
     final listRemote = await webdavController.getRemotGroupList();
     // 远程列表为空 直接上传本地所有分组
     if (listRemote.isEmpty) {
@@ -312,6 +312,7 @@ class CustomTabbarController extends DefaultTabViewController {
     logger.v('listRemote size ${listRemote.length}');
 
     // 比较远程和本地的差异
+    // 合并列表
     final allProfile = <CustomProfile?>{...listRemote, ...listLocal};
     final diff = allProfile
         .where((element) =>
@@ -323,11 +324,8 @@ class CustomTabbarController extends DefaultTabViewController {
     // 本地分组中 编辑时间更靠后的
     final localNewer = listLocal.where(
       (eLocal) {
-        if (eLocal == null) {
-          return false;
-        }
-        final _eRemote = listRemote
-            .firstWhereOrNull((eRemote) => eRemote.name == eLocal.name);
+        final _eRemote = listRemote.firstWhereOrNull((eRemote) =>
+            eRemote.uuid == eLocal.uuid || eRemote.name == eLocal.name);
         if (_eRemote == null) {
           return true;
         }
@@ -340,12 +338,12 @@ class CustomTabbarController extends DefaultTabViewController {
     // 远程 编辑时间更靠后的
     final remoteNewer = listRemote.where(
       (eRemote) {
-        final _eLocal = listLocal
-            .firstWhereOrNull((eLocal) => (eLocal.name) == eRemote.name);
+        final _eLocal = listLocal.firstWhereOrNull((eLocal) =>
+            eLocal.uuid == eRemote.uuid || eLocal.name == eRemote.name);
 
         // delProfiles 中 name 和远程文件一样的
-        final _eDelFlg =
-            delProfiles.where((eDel) => (eDel.name) == eRemote.name);
+        final _eDelFlg = delProfiles.where(
+            (eDel) => eDel.uuid == eRemote.uuid || eDel.name == eRemote.name);
 
         if (_eDelFlg.isNotEmpty) {
           return _eDelFlg.every(
@@ -369,16 +367,16 @@ class CustomTabbarController extends DefaultTabViewController {
   Future _downloadProfiles(List<CustomProfile> remoteList) async {
     for (final remote in remoteList) {
       executor.scheduleTask(() async {
-        final _remote = await webdavController.downloadGroupProfile(
-            '${remote.name}$kGroupSeparator${remote.lastEditTime}');
+        final _remote = await webdavController.downloadGroupProfile(remote);
         if (_remote != null) {
-          final ori = profiles
-              .firstWhereOrNull((element) => element.name == _remote.name);
+          final ori = profiles.firstWhereOrNull((element) =>
+              element.uuid == _remote.uuid || element.name == _remote.name);
+
           if (ori != null &&
               (remote.lastEditTime ?? 0) <= (ori.lastEditTime ?? 0)) {
             return;
           }
-          addProfile(_remote.copyWith(name: remote.name));
+          addProfile(_remote);
         }
       });
     }
@@ -392,8 +390,8 @@ class CustomTabbarController extends DefaultTabViewController {
   }) async {
     for (final profile in localHisList) {
       executor.scheduleTask(() async {
-        final _oriRemote = listRemote
-            ?.firstWhereOrNull((element) => element?.name == profile?.name);
+        final _oriRemote = listRemote?.firstWhereOrNull((element) =>
+            element?.uuid == profile?.uuid || element?.name == profile?.name);
 
         if (profile != null) {
           final upload = webdavController.uploadGroupProfile(profile);
