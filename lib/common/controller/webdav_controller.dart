@@ -112,7 +112,6 @@ class WebdavController extends GetxController {
     }
 
     loadingLogin = true;
-    update();
     final rult = await addWebDAVProfile(
       urlController.text,
       user: usernameController.text,
@@ -120,7 +119,6 @@ class WebdavController extends GetxController {
     );
 
     loadingLogin = false;
-    update();
     return rult;
   }
 
