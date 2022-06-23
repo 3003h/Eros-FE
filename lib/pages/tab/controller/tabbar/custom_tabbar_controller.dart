@@ -264,7 +264,7 @@ class CustomTabbarController extends DefaultTabViewController {
   }
 
   void addProfile(CustomProfile profile) {
-    logger.d(' ${jsonEncode(profile)}');
+    logger.v(' ${jsonEncode(profile)}');
 
     final oriIndexOfSameUuid =
         profiles.indexWhere((element) => element.uuid == profile.uuid);

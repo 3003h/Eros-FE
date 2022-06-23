@@ -14,6 +14,7 @@ const String searchHistoryKey = 'search_history';
 const String layoutConfigKey = 'config_layout';
 const String usersKey = 'users_info';
 const String profileDelKey = 'delete_profile';
+const String qsLastTimeKey = 'quick_search_last_edit_time';
 
 class HiveHelper {
   HiveHelper();
@@ -149,5 +150,15 @@ class HiveHelper {
       _delProfiles.add(CustomProfile.fromJson(val as Map<String, dynamic>));
     }
     return _delProfiles;
+  }
+
+  int getQuickSearchLastEditTime() {
+    final _time = '${DateTime.now().millisecondsSinceEpoch}';
+    final val = _configBox.get(qsLastTimeKey, defaultValue: _time);
+    return int.parse(val ?? _time);
+  }
+
+  Future<void> setQuickSearchLastEditTime(int time) async {
+    await _configBox.put(qsLastTimeKey, '$time');
   }
 }

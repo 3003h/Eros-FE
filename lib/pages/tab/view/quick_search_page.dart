@@ -6,6 +6,7 @@ import 'package:device_info_platform_interface/model/ios_device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -177,6 +178,16 @@ class QuickSearchListPage extends StatelessWidget {
             ),
             onPressed: _showFile,
           ),
+          if (Get.find<WebdavController>().syncQuickSearch)
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                FontAwesomeIcons.arrowsRotate,
+                size: 20,
+              ),
+              onPressed: quickSearchController.syncQuickSearch,
+            ),
         ],
       ),
     );
