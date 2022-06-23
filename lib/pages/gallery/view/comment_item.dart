@@ -246,11 +246,11 @@ class CommentItem extends StatelessWidget {
                     galleryComment: galleryComment,
                     commentController: commentController,
                   ),
-                ).paddingSymmetric(horizontal: 12),
+                ).paddingSymmetric(horizontal: 8),
               // 编辑回复
               if ((galleryComment.canEdit ?? false) && !simple)
                 CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   minSize: 0,
                   child: Icon(
                     FontAwesomeIcons.edit,
@@ -293,7 +293,7 @@ class CommentItem extends StatelessWidget {
                   ),
                   padding:
                       const EdgeInsets.symmetric(vertical: 2.5, horizontal: 6),
-                  margin: const EdgeInsets.only(right: 6),
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
                     galleryComment.score.startsWith('+')
                         ? '+${galleryComment.score.substring(1)}'
