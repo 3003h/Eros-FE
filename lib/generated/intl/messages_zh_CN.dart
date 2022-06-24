@@ -60,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "always": MessageLookupByLibrary.simpleMessage("始终"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "ask_me": MessageLookupByLibrary.simpleMessage("询问"),
+        "auth_biometricHint": MessageLookupByLibrary.simpleMessage("验证身份"),
+        "auth_signInTitle": MessageLookupByLibrary.simpleMessage("需要进行身份验证"),
         "autoLock": MessageLookupByLibrary.simpleMessage("自动锁定"),
         "auto_select_profile": MessageLookupByLibrary.simpleMessage("自动选择配置"),
         "avatar": MessageLookupByLibrary.simpleMessage("头像"),

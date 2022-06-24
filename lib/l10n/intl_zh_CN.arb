@@ -368,5 +368,7 @@
   "reply_to_comment": "回复",
   "show_comment_avatar": "显示评论头像",
   "avatar": "头像",
-  "default_avatar_style": "默认头像样式"
+  "default_avatar_style": "默认头像样式",
+  "auth_signInTitle": "需要进行身份验证",
+  "auth_biometricHint": "验证身份"
 }

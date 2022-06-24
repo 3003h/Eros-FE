@@ -117,8 +117,7 @@ Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
 
     if (timeOut == -1 || ehConfigService.autoLockTimeOut.value == -1) {
       Future.delayed(const Duration(milliseconds: 400))
-          .then((_) =>
-              autoLockController.checkBiometrics(localizedReason: '认证以进行修改'))
+          .then((_) => autoLockController.checkBiometrics())
           .then((bool value) {
         autoLockController.resetLastLeaveTime();
         if (value) {

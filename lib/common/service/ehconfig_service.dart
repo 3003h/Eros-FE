@@ -209,7 +209,7 @@ class EhConfigService extends ProfileService {
     });
 
     /// 预载图片数量
-    preloadImage.value = downloadConfig.preloadImage ?? 5;
+    preloadImage.value = downloadConfig.preloadImage ?? 3;
     everProfile<int>(preloadImage, (value) {
       downloadConfig = downloadConfig.copyWith(preloadImage: value);
     });
@@ -496,7 +496,7 @@ class EhConfigService extends ProfileService {
             ehConfig = ehConfig.copyWith(tabletLayoutValue: value));
 
     // _showCommentAvatar
-    showCommentAvatar = ehConfig.showCommentAvatar ?? false;
+    showCommentAvatar = ehConfig.showCommentAvatar ?? true;
     everProfile<bool>(_showCommentAvatar, (value) {
       ehConfig = ehConfig.copyWith(showCommentAvatar: value);
     });
