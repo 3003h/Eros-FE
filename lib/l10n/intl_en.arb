@@ -368,5 +368,7 @@
   "reply_to_comment": "Reply",
   "show_comment_avatar": "Show comment avatar",
   "avatar": "Avatar",
-  "default_avatar_style": "Default avatar style"
+  "default_avatar_style": "Default avatar style",
+  "auth_signInTitle": "Authentication required",
+  "auth_biometricHint": "Verify identity"
 }

@@ -65,6 +65,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "always": MessageLookupByLibrary.simpleMessage("Постоянно"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "ask_me": MessageLookupByLibrary.simpleMessage("Спрашивать всегда"),
+        "auth_biometricHint":
+            MessageLookupByLibrary.simpleMessage("Verify identity"),
+        "auth_signInTitle":
+            MessageLookupByLibrary.simpleMessage("Authentication required"),
         "autoLock":
             MessageLookupByLibrary.simpleMessage("Автоматическая блокировка"),
         "auto_select_profile":

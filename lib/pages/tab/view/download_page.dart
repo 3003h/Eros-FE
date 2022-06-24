@@ -91,24 +91,6 @@ class _DownloadTabState extends State<DownloadTab> {
               ),
               onPressed: _showExportDialog,
             ),
-            // CupertinoButton(
-            //   minSize: 40,
-            //   padding: const EdgeInsets.all(0),
-            //   child: const Icon(
-            //     LineIcons.layerGroup,
-            //     size: 26,
-            //   ),
-            //   onPressed: () {
-            //     modal.CupertinoScaffold.showCupertinoModalBottomSheet(
-            //       context: context,
-            //       animationCurve: Curves.easeOutQuart,
-            //       // previousRouteAnimationCurve: Curves.easeInOutBack,
-            //       duration: const Duration(milliseconds: 400),
-            //       useRootNavigator: true,
-            //       builder: (context) => const DownloadLabelsView(),
-            //     );
-            //   },
-            // ),
           ],
         ),
       ),

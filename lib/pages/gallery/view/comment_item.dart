@@ -276,14 +276,6 @@ class CommentItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // 分值
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8.0, right: 4),
-                //   child: Icon(
-                //     FontAwesomeIcons.circleHalfStroke,
-                //     size: kSizeNotVote - 1,
-                //     color: ehTheme.commitIconColor,
-                //   ),
-                // ),
                 Container(
                   decoration: BoxDecoration(
                     color: ehTheme.commitIconColor,

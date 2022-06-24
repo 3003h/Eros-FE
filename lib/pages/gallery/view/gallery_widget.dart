@@ -688,35 +688,47 @@ class SearchHisTagButton extends StatelessWidget {
 
 class TextBtn extends StatelessWidget {
   const TextBtn(this.iconData,
-      {Key? key, this.iconSize, this.title, this.onTap, this.onLongPress})
+      {Key? key,
+      this.iconSize,
+      this.title,
+      this.onTap,
+      this.onLongPress,
+      this.color,
+      this.iconPadding})
       : super(key: key);
   final IconData iconData;
   final double? iconSize;
   final String? title;
+  final Color? color;
 
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final EdgeInsetsGeometry? iconPadding;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoTheme(
-      data: const CupertinoThemeData(primaryColor: CupertinoColors.systemGrey),
+      data:
+          CupertinoThemeData(primaryColor: color ?? CupertinoColors.systemGrey),
       child: GestureDetector(
+        // behavior: HitTestBehavior.opaque,
         child: Container(
           // padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              MouseRegionClick(
-                disable: onTap == null && onLongPress == null,
-                child: CupertinoButton(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  // color: CupertinoColors.activeBlue,
-                  child: Icon(
-                    iconData,
-                    size: iconSize ?? 28,
-                    // color: CupertinoColors.systemGrey3,
+              Container(
+                padding: iconPadding,
+                child: MouseRegionClick(
+                  disable: onTap == null && onLongPress == null,
+                  child: CupertinoButton(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Icon(
+                      iconData,
+                      size: iconSize ?? 28,
+                      // color: CupertinoColors.systemGrey3,
+                    ),
+                    onPressed: onTap,
                   ),
-                  onPressed: onTap,
                 ),
               ),
               Text(
