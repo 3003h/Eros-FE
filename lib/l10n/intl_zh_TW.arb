@@ -366,5 +366,7 @@
   "reply_to_comment": "回復評論",
   "show_comment_avatar": "Show comment avatar",
   "avatar": "Avatar",
-  "default_avatar_style": "Default avatar style"
+  "default_avatar_style": "Default avatar style",
+  "auth_signInTitle": "需要进行身份验证",
+  "auth_biometricHint": "验证身份"
 }

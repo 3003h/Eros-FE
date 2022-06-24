@@ -3763,6 +3763,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Authentication required`
+  String get auth_signInTitle {
+    return Intl.message(
+      'Authentication required',
+      name: 'auth_signInTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify identity`
+  String get auth_biometricHint {
+    return Intl.message(
+      'Verify identity',
+      name: 'auth_biometricHint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

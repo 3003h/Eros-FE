@@ -30,51 +30,10 @@ class _UnLockPageState extends State<UnLockPage> {
           child: SafeArea(
             child: Container(
               alignment: Alignment.center,
-/*              child: context.isPortrait
-                  ? Column(
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Spacer(flex: 2),
-                        if (Global.inDebugMode && false)
-                          _buildPatternLock(context),
-                        Expanded(flex: 1, child: _buildUnlockButton(context)),
-                      ],
-                    )
-                  : Row(
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Spacer(flex: 2),
-                        if (Global.inDebugMode && false)
-                          _buildPatternLock(context),
-                        Expanded(flex: 3, child: _buildUnlockButton(context)),
-                      ],
-                    )*/
               child: _buildUnlockButton(context),
             ),
           ),
         ));
-  }
-
-  Widget _buildText(BuildContext context) {
-    return Obx(() => Text(
-          controller.infoText,
-          style: TextStyle(
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemRed, context)),
-        ));
-  }
-
-  Widget _buildUnlock(BuildContext context) {
-    final Widget _unlockIcon = Icon(
-      CupertinoIcons.lock_fill,
-      size: 50,
-      color: CupertinoDynamicColor.resolve(CupertinoColors.systemRed, context),
-    ).paddingSymmetric(vertical: 20);
-
-    return GestureDetector(
-      onTap: () => controller.unlockAndback(context: context),
-      child: _unlockIcon,
-    );
   }
 
   Widget _buildUnlockButton(BuildContext context) {
