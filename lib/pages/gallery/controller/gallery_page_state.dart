@@ -127,4 +127,9 @@ class GalleryPageState {
 
   TaskStatus get downloadState => TaskStatus(
       _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ?? 0);
+
+  double get downloadProcess {
+    final task = _downloadController.dState.galleryTaskMap[int.parse(gid)];
+    return (task?.completCount ?? 0) * 100.0 / (task?.fileCount ?? 1);
+  }
 }

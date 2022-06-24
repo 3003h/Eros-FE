@@ -10,9 +10,11 @@ import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../const.dart';
 
@@ -110,6 +112,8 @@ class DownloadGalleryButton extends StatelessWidget {
 
   final GalleryPageController pageController;
 
+  DownloadController get _downloadController => Get.find();
+
   GalleryPageState get pageStat => pageController.gState;
 
   @override
@@ -130,28 +134,69 @@ class DownloadGalleryButton extends StatelessWidget {
           FontAwesomeIcons.solidCircleCheck,
           title: L10n.of(context).downloaded,
           onTap: () {},
+          color: CupertinoColors.activeGreen,
           // onTap: toDownloadPage,
           // onLongPress: toDownloadPage,
         ),
         // 下载中
         TaskStatus.running: TextBtn(
-          FontAwesomeIcons.solidCirclePlay,
+          FontAwesomeIcons.play,
+          iconPadding: const EdgeInsets.only(left: 2.5),
+          iconSize: 16,
           title: L10n.of(context).downloading,
-          onTap: () {},
-          // onTap: toDownloadPage,
+          onTap: () =>
+              _downloadController.galleryTaskPaused(int.parse(pageStat.gid)),
           // onLongPress: toDownloadPage,
         ),
         // 下载暂停
         TaskStatus.paused: TextBtn(
-          FontAwesomeIcons.solidCirclePause,
+          FontAwesomeIcons.pause,
+          iconSize: 16,
           title: L10n.of(context).paused,
-          onTap: () {},
+          onTap: () =>
+              _downloadController.galleryTaskResume(int.parse(pageStat.gid)),
           // onTap: toDownloadPage,
           // onLongPress: toDownloadPage,
         ),
       };
 
-      return iconMap[pageStat.downloadState] ?? defIcon;
+      final _dlWidget = Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          Container(
+            child: Obx(() {
+              return SleekCircularSlider(
+                appearance: CircularSliderAppearance(
+                  infoProperties: InfoProperties(
+                    mainLabelStyle:
+                        const TextStyle(color: CupertinoColors.systemGrey6),
+                    modifier: (_) => '',
+                  ),
+                  size: 31,
+                  customWidths: CustomSliderWidths(progressBarWidth: 4),
+                  customColors: CustomSliderColors(
+                    trackColor: CupertinoColors.systemGrey,
+                    progressBarColor: CupertinoColors.activeGreen,
+                    dotColor: CupertinoColors.activeGreen,
+                    hideShadow: true,
+                  ),
+                  startAngle: 270.0,
+                  angleRange: 360.0,
+                ),
+                min: 0,
+                max: 100,
+                initialValue: pageStat.downloadProcess,
+              );
+            }),
+            padding: const EdgeInsets.only(bottom: 19),
+          ),
+          iconMap[pageStat.downloadState] ?? const SizedBox(),
+        ],
+      );
+
+      return iconMap.keys.contains(pageStat.downloadState)
+          ? _dlWidget
+          : defIcon;
     });
   }
 }
