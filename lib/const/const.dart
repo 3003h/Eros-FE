@@ -429,9 +429,10 @@ class EHConst {
     'vietnamese': 'VI',
   };
 
-  static const List<String> fontFamilyFallback = [
+  static final List<String> fontFamilyFallback = [
     'miui',
-    // 'sans-serif',
+    // if (GetPlatform.isAndroid) 'SourceHanSansSC',
+    'sans-serif',
   ];
   static const List<String> monoFontFamilyFallback = [
     'monaco',
@@ -439,6 +440,8 @@ class EHConst {
     'Menlo',
     'Courier New',
   ];
+
+  static const emojiFontFamily = 'AppleEmoji';
 
   static const List<int> invList = [
     500,

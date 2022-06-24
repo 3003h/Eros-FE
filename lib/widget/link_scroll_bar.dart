@@ -464,7 +464,9 @@ class _InnerLinkTabItemState extends State<InnerLinkTabItem> {
 
   TextStyle get style => TextStyle(
         fontSize: widget.selected ? 14.0 : 14.0,
-        color: widget.selected ? CupertinoColors.activeBlue : null,
+        color: widget.selected
+            ? CupertinoColors.activeBlue
+            : CupertinoColors.label,
         // fontWeight: selected ? FontWeight.bold : FontWeight.normal,
       );
 
