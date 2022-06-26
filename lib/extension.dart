@@ -11,10 +11,12 @@ import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/webdav_controller.dart';
 import 'common/enum.dart';
+import 'common/global.dart';
 import 'models/index.dart';
 import 'network/api.dart';
 
@@ -240,6 +242,15 @@ extension ExtString on String {
             .firstWhereOrNull((e) => e.value == trim().toLowerCase())
             ?.key ??
         this;
+  }
+
+  String get realDirPath {
+    if (GetPlatform.isIOS) {
+      final List<String> pathList = path.split(this).reversed.toList();
+      return path.join(Global.appDocPath, pathList[1], pathList[0]);
+    } else {
+      return this;
+    }
   }
 }
 

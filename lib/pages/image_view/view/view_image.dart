@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:archive_async/archive_async.dart';
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -63,6 +65,12 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         widget.imageSer,
         context: context,
       );
+    }
+
+    if (vState.loadFrom == LoadFrom.archiver) {
+      final file = vState.asyncArchiveFiles[widget.imageSer - 1];
+      controller.imageArchiveFutureMap[widget.imageSer] =
+          controller.getFileData(file);
     }
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -163,16 +171,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     };
 
     /// 由图片文件构建 Widget
-    ///
     Widget fileImage(String path) {
-      // return ExtendedImage.file(
-      //   File(path),
-      //   fit: BoxFit.contain,
-      //   onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
-      //   enableSlideOutPage: true,
-      //   // mode: widget.mode,
-      // );
-
       return ExtendedImage.file(
         File(path),
         fit: BoxFit.contain,
@@ -226,12 +225,10 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       );
     }
 
-    ///
     /// 从画廊页查看
     Widget getViewImage() {
       return GetBuilder<ViewExtController>(
         builder: (ViewExtController controller) {
-          // loggerSimple.d('build viewImage online');
           final ViewExtState vState = controller.vState;
 
           return GestureDetector(
@@ -379,15 +376,144 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       );
     }
 
-    if (vState.loadFrom == LoadFrom.download) {
-      /// 从已下载查看
-      final path = vState.imagePathList[widget.imageSer - 1];
-      final Widget image = fileImage(path);
+    /// 归档页查看
+    Widget archiverImage() {
+      return GetBuilder<ViewExtController>(
+        builder: (ViewExtController controller) {
+          final ViewExtState vState = controller.vState;
 
-      return image;
-    } else {
-      /// 从画廊页查看
-      return getViewImage();
+          return FutureBuilder<Uint8List?>(
+              future: controller.imageArchiveFutureMap[widget.imageSer],
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError || snapshot.data == null) {
+                    String _errInfo = '';
+                    logger.e('${snapshot.error.runtimeType}');
+                    if (snapshot.error is EhError) {
+                      final EhError ehErr = snapshot.error as EhError;
+                      logger.e('$ehErr');
+                      _errInfo = ehErr.type.toString();
+                      if (ehErr.type == EhErrorType.image509) {
+                        return ViewErr509(ser: widget.imageSer);
+                      }
+                    } else {
+                      logger.e(
+                          'other error: ${snapshot.error}\n${snapshot.stackTrace}');
+                      _errInfo = snapshot.error.toString();
+                    }
+
+                    if ((vState.errCountMap[widget.imageSer] ?? 0) <
+                        vState.retryCount) {
+                      Future.delayed(const Duration(milliseconds: 100)).then(
+                          (_) => controller.reloadArchive(widget.imageSer));
+                      vState.errCountMap.update(
+                          widget.imageSer, (int value) => value + 1,
+                          ifAbsent: () => 1);
+
+                      logger.v('${vState.errCountMap}');
+                      logger.d(
+                          '${widget.imageSer} 重试 第 ${vState.errCountMap[widget.imageSer]} 次');
+                    }
+                    if ((vState.errCountMap[widget.imageSer] ?? 0) >=
+                        vState.retryCount) {
+                      return ViewError(ser: widget.imageSer, errInfo: _errInfo);
+                    } else {
+                      return ViewLoading(
+                        ser: widget.imageSer,
+                        duration: vState.viewMode != ViewMode.topToBottom
+                            ? const Duration(milliseconds: 50)
+                            : null,
+                      );
+                    }
+                  }
+                  final Uint8List _imageData = snapshot.data!;
+
+                  Widget image = ExtendedImage.memory(
+                    _imageData,
+                    fit: BoxFit.contain,
+                    enableSlideOutPage: widget.enableSlideOutPage,
+                    mode: widget.mode,
+                    initGestureConfigHandler: _initGestureConfigHandler,
+                    onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
+                    loadStateChanged: (ExtendedImageState state) {
+                      final ImageInfo? imageInfo = state.extendedImageInfo;
+                      if (state.extendedImageLoadState == LoadState.completed ||
+                          imageInfo != null) {
+                        controller.setScale100(imageInfo!, size);
+
+                        if (vState.imageSizeMap[widget.imageSer] == null) {
+                          vState.imageSizeMap[widget.imageSer] = Size(
+                              imageInfo.image.width.toDouble(),
+                              imageInfo.image.height.toDouble());
+                          Future.delayed(const Duration(milliseconds: 100))
+                              .then((value) => controller.update(
+                                  ['$idImageListView${widget.imageSer}']));
+                        }
+
+                        controller.onLoadCompleted(widget.imageSer);
+
+                        return controller.vState.viewMode !=
+                                ViewMode.topToBottom
+                            ? Hero(
+                                tag: '${widget.imageSer}',
+                                child: state.completedWidget,
+                                createRectTween: (Rect? begin, Rect? end) {
+                                  final tween = MaterialRectCenterArcTween(
+                                      begin: begin, end: end);
+                                  return tween;
+                                },
+                              )
+                            : state.completedWidget;
+                      } else if (state.extendedImageLoadState ==
+                          LoadState.loading) {
+                        final ImageChunkEvent? loadingProgress =
+                            state.loadingProgress;
+                        final double? progress =
+                            loadingProgress?.expectedTotalBytes != null
+                                ? (loadingProgress?.cumulativeBytesLoaded ??
+                                        0) /
+                                    (loadingProgress?.expectedTotalBytes ?? 1)
+                                : null;
+
+                        return ViewLoading(
+                          ser: widget.imageSer,
+                          progress: progress,
+                          duration: vState.viewMode != ViewMode.topToBottom
+                              ? const Duration(milliseconds: 50)
+                              : null,
+                        );
+                      }
+                    },
+                  );
+
+                  return image;
+                } else {
+                  return ViewLoading(
+                    ser: widget.imageSer,
+                    duration: vState.viewMode != ViewMode.topToBottom
+                        ? const Duration(milliseconds: 50)
+                        : null,
+                  );
+                }
+              });
+        },
+      );
+    }
+
+    switch (vState.loadFrom) {
+      case LoadFrom.download:
+
+        /// 从已下载查看
+        final path = vState.imagePathList[widget.imageSer - 1];
+        return fileImage(path);
+      case LoadFrom.gallery:
+
+        /// 从画廊页查看
+        return getViewImage();
+      case LoadFrom.archiver:
+        return archiverImage();
+      default:
+        return const Text('None');
     }
   }
 }

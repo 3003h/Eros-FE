@@ -24,6 +24,7 @@ enum ViewColumnMode {
 enum LoadFrom {
   gallery,
   download,
+  archiver,
 }
 
 Map<String, bool> _throttles = {};

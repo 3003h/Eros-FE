@@ -115,6 +115,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           return;
         }
 
+        // 下载的图片文件路径
         final List<String> pics = imageTasks
             .where((element) =>
                 element.filePath != null && element.filePath!.isNotEmpty)
@@ -133,6 +134,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             0;
         logger.d('lastIndex $lastIndex');
 
+        // 进入阅读
         NavigatorUtil.goGalleryViewPageFile(
             lastIndex, pics, '${galleryTask.gid}');
       },

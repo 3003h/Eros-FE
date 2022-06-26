@@ -1,8 +1,10 @@
+import 'package:fehviewer/common/controller/gallerycache_controller.dart';
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -23,6 +25,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
     required this.index,
     this.coverUrl,
     this.galleryUrl,
+    this.galleryGid,
+    required this.filePath,
   }) : super(key: key);
   final String title;
   final int progress;
@@ -30,6 +34,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
   final int index;
   final String? coverUrl;
   final String? galleryUrl;
+  final String? galleryGid;
+  final String filePath;
 
   @override
   Widget build(BuildContext context) {
@@ -63,41 +69,77 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
               ],
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 4, bottom: 4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          height: 1.2,
-                        ),
-                      ).paddingSymmetric(vertical: 4),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: LinearProgressIndicator(
-                            value: progress / 100.0,
-                            backgroundColor: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondarySystemFill, context),
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                CupertinoDynamicColor.resolve(
-                                    CupertinoColors.activeBlue, context)),
-                          ).paddingOnly(right: 8.0),
-                        ),
-                        Text(
-                          '$progress %',
+              child: GestureDetector(
+                onTap: () async {
+                  logger.d(
+                      'gid: $galleryGid , path: $filePath, path: ${filePath.realDirPath}');
+                  if (galleryGid == null) {
+                    return;
+                  }
+                  final gid = int.parse(galleryGid ?? '0');
+
+                  // 同步进度
+                  int? lastIndex;
+                  if (Get.find<WebdavController>().syncReadProgress) {
+                    lastIndex = await syncReadProgress(context, gid);
+                  }
+                  logger.v('lastIndex $lastIndex');
+                  lastIndex ??= (await Get.find<GalleryCacheController>()
+                              .getGalleryCache('$gid', sync: false))
+                          ?.lastIndex ??
+                      0;
+                  logger.v('lastIndex $lastIndex');
+
+                  // 异步读取zip
+
+
+                  final tuple = await readAsyncArchive(filePath.realDirPath);
+                  final asyncArchive = tuple.item1;
+                  final inputStream = tuple.item2;
+                  logger.d('${asyncArchive.length}');
+
+                  // 进入阅读
+                  await NavigatorUtil.goGalleryViewPageArchiver(
+                      lastIndex, asyncArchive, '$gid');
+
+                  inputStream.close();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4, bottom: 4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
                           style: const TextStyle(
                             fontSize: 13,
+                            height: 1.2,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ).paddingSymmetric(vertical: 4),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: LinearProgressIndicator(
+                              value: progress / 100.0,
+                              backgroundColor: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.secondarySystemFill, context),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  CupertinoDynamicColor.resolve(
+                                      CupertinoColors.activeBlue, context)),
+                            ).paddingOnly(right: 8.0),
+                          ),
+                          Text(
+                            '$progress %',
+                            style: const TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -142,6 +142,9 @@ dependencies:
   flutter_boring_avatars:
     git:
       url: https://github.com/xioxin/flutter_boring_avatars.git
+  archive_async:
+    git:
+      url: https://github.com/xioxin/archive_async.git
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
