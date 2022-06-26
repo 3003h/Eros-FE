@@ -103,9 +103,10 @@ class ImagePageView extends GetView<ViewExtController> {
                 // enableDoubleTap: false,
                 // initialScale:
                 //     logic.vState.showPageInterval ? 1.000001 : 1.000001,
-                // initialScale: GetPlatform.isAndroid ? 1.00000 : 1.0,
+                // initialScale: GetPlatform.isAndroid ? 1.000001 : 1.0,
                 mode: ExtendedImageMode.gesture,
                 // enableSlideOutPage: !GetPlatform.isAndroid,
+                // enableSlideOutPage: false,
               );
             },
           );

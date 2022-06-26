@@ -1,3 +1,4 @@
+import 'package:archive_async/archive_async.dart';
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
@@ -237,6 +238,7 @@ class NavigatorUtil {
     Get.delete<ViewExtController>();
   }
 
+  // 打开已下载任务阅读
   static Future<void> goGalleryViewPageFile(
       int index, List<String> pics, String gid) async {
     // 命名路由方式
@@ -245,6 +247,20 @@ class NavigatorUtil {
           index: index,
           files: pics,
           loadType: LoadFrom.download,
+          gid: gid,
+        ));
+    Get.delete<ViewExtController>();
+  }
+
+  // 打开归档压缩包阅读
+  static Future<void> goGalleryViewPageArchiver(
+      int index, AsyncArchive asyncArchive, String gid) async {
+    // 命名路由方式
+    await Get.toNamed(EHRoutes.galleryViewExt,
+        arguments: ViewRepository(
+          index: index,
+          asyncArchive: asyncArchive,
+          loadType: LoadFrom.archiver,
           gid: gid,
         ));
     Get.delete<ViewExtController>();
