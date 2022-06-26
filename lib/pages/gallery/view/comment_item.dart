@@ -34,6 +34,7 @@ class CommentItem extends StatelessWidget {
 
     /// 解析回复的评论
     final reptyComment = controller.parserCommentRepty(galleryComment);
+    final reptyComments = controller.parserAllCommentRepty(galleryComment);
 
     /// 评论item
     return GetBuilder<CommentController>(
@@ -54,9 +55,9 @@ class CommentItem extends StatelessWidget {
                   children: <Widget>[
                     buildHeader(context, _commentController),
                     if (galleryComment.id != '0' && reptyComment != null)
-                      buildReply(context, reptyComment: reptyComment),
+                      buildReply(context, reptyComments: reptyComments),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: simple
                           ? _buildSimpleExpTextLinkify(
                               context: context,
@@ -114,42 +115,51 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  Widget buildReply(BuildContext context,
-      {required GalleryComment reptyComment}) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: ehTheme.commentReplyBackgroundColor,
-      ),
-      padding: const EdgeInsets.all(6),
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+  Widget buildReply(
+    BuildContext context, {
+    required List<GalleryComment?> reptyComments,
+  }) {
+    return Column(
+      children: reptyComments.map((reptyComment) {
+        if (reptyComment == null) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: ehTheme.commentReplyBackgroundColor,
+          ),
+          padding: const EdgeInsets.all(6),
+          margin: const EdgeInsets.symmetric(vertical: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _buildUserWidget(
-                  comment: reptyComment,
-                  // fontSize: 12,
-                ).paddingOnly(bottom: 6),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildUserWidget(
+                      comment: reptyComment,
+                      // fontSize: 12,
+                    ).paddingOnly(bottom: 6),
+                  ),
+                ],
+              ),
+              Text(
+                reptyComment.text,
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13,
+                  height: 1.3,
+                  color: CupertinoDynamicColor.resolve(
+                      ThemeColors.commitText, context),
+                  fontFamilyFallback: EHConst.fontFamilyFallback,
+                ),
               ),
             ],
           ),
-          Text(
-            reptyComment.text,
-            maxLines: 5,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 13,
-              height: 1.3,
-              color: CupertinoDynamicColor.resolve(
-                  ThemeColors.commitText, context),
-              fontFamilyFallback: EHConst.fontFamilyFallback,
-            ),
-          ),
-        ],
-      ),
+        );
+      }).toList(),
     );
   }
 

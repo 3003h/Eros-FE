@@ -199,6 +199,102 @@ class CommentController extends GetxController with WidgetsBindingObserver {
     return repty;
   }
 
+  List<GalleryComment?> parserAllCommentRepty(GalleryComment comment) {
+    List<String> textList = comment.text.split('@').map((e) => '@$e').toList();
+
+    final reps = <GalleryComment?>[];
+
+    int textNum = 0;
+    for (final commentText in textList) {
+      textNum++;
+      if (textNum == 1) {
+        continue;
+      }
+
+      // 用户名无空格 id为 bcd code
+      final reg = RegExp(r'\s*@(\S+)((?!#\d+#).)+(#(\d+)#|\n([ ·-]+))?');
+      final match = reg.firstMatch(commentText);
+      if (match == null || match.groupCount == 0) {
+        continue;
+      }
+
+      final curIndex =
+          commentsSorted.indexWhere((element) => element.id == comment.id);
+      if (curIndex < 0) {
+        continue;
+      }
+      final fill =
+          commentsSorted.getRange(curIndex, commentsSorted.length).toList();
+
+      for (int i = 0; i < match.groupCount + 1; i++) {
+        logger.v('($i)  ${match.group(i)}');
+      }
+
+      final reptyUserName = match.group(1);
+      final reptyId = match.group(4);
+      final reptyIdMorse = match.group(5);
+
+      GalleryComment? repty;
+
+      // 有明确的评论id的
+      if (reptyId != null) {
+        repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
+      }
+
+      // id
+      if (reptyIdMorse != null && reptyIdMorse.isNotEmpty) {
+        final reptyId = bcdCode.deCode(reptyIdMorse);
+        logger.d('reptyId: [$reptyIdMorse]  => $reptyId');
+        repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
+      }
+
+      // 没有明确的评论id 或id和所 @用户名 对应不上的
+      if (repty == null && reptyUserName != null) {
+        // reptyUserName发表的离当前评论最进的评论
+        repty =
+            fill.firstWhereOrNull((element) => element.name == reptyUserName);
+        logger.v('没有明确的评论id 或id和所 @用户名 对应不上的\n${repty?.toJson()}');
+      }
+
+      if (repty == null) {
+        // 如果还是匹配不上 考虑用户名中带空格的可能性 但是需要换行结束
+        final regSpace = RegExp(r'\s*@(.+)(\n)?');
+        final matchSpace = regSpace.firstMatch(commentText);
+        if (matchSpace == null || matchSpace.groupCount == 0) {
+          continue;
+        }
+
+        // for (int i = 1; i < matchSpace.groupCount + 1; i++) {
+        //   logger.d('space ($i)  ${matchSpace.group(i)}');
+        // }
+
+        final _splitRegexp = RegExp(r'[\s+,.，。]');
+        final text = matchSpace.group(1) ?? '';
+        final arr = text.split(_splitRegexp);
+        for (int i = arr.length; i > 0; i--) {
+          final _name = arr.getRange(0, i).join(' ');
+          // logger.d('name ($_name)');
+
+          repty = fill.firstWhereOrNull(
+              (element) => element.name.replaceAll(_splitRegexp, ' ') == _name);
+        }
+      }
+
+      if (repty != null) {
+        reps.add(repty);
+      }
+    }
+
+    if (reps.isEmpty) {
+      final repty = parserCommentRepty(comment);
+      if (repty != null) {
+        reps.add(repty);
+      }
+    }
+
+    return reps;
+  }
+
   // 翻译评论内容
   Future<void> commitTranslate(String _id) async {
     logger.v('commitTranslate');
