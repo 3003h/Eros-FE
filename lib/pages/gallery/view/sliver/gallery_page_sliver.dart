@@ -21,7 +21,6 @@ import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
 import 'package:share/share.dart';
 
-import '../header.dart';
 import 'header_sliver.dart';
 
 const double kHeaderHeight = 200.0 + 52;
@@ -93,15 +92,6 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 ),
                 // 头部
                 if (pageState.fromUrl)
-                  // GalleryObxSliver(
-                  //   (state) => SliverToBoxAdapter(
-                  //     child: GalleryHeader(
-                  //       initGalleryProvider: state,
-                  //       tabTag: tabTag,
-                  //     ),
-                  //   ),
-                  //   pageController: _controller,
-                  // )
                   GalleryObxSliver(
                     (state) => GalleryHeaderSliver(
                       initGalleryProvider: state,
@@ -110,12 +100,6 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                     pageController: _controller,
                   )
                 else if (galleryProvider != null)
-                  // SliverToBoxAdapter(
-                  //   child: GalleryHeader(
-                  //     initGalleryProvider: galleryProvider,
-                  //     tabTag: tabTag,
-                  //   ),
-                  // ),
                   GalleryHeaderSliver(
                     initGalleryProvider: galleryProvider,
                     tabTag: tabTag,

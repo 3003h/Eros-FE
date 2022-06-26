@@ -11,6 +11,7 @@ import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 /// 封面小图 纯StatelessWidget
@@ -338,8 +339,9 @@ class GalleryRating extends StatelessWidget {
 }
 
 class TopCommentEx extends StatelessWidget {
-  const TopCommentEx({Key? key, this.comments}) : super(key: key);
+  const TopCommentEx({Key? key, this.comments, this.max = 2}) : super(key: key);
   final List<GalleryComment>? comments;
+  final int max;
 
   @override
   Widget build(BuildContext context) {
@@ -355,71 +357,17 @@ class TopCommentEx extends StatelessWidget {
     }
 
     return Column(
-      children: _topComment(comments, max: 2),
+      children: [
+        ..._topComment(comments, max: max),
+        if ((comments?.length ?? 0) > max)
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Icon(FontAwesomeIcons.ellipsis),
+          ),
+      ],
     );
   }
 }
-
-// class TopComment extends StatelessWidget {
-//   const TopComment({Key? key, this.showBtn = true}) : super(key: key);
-//
-//   // final List<GalleryComment> comment;
-//   final bool showBtn;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // 显示最前面两条
-//     List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
-//       return (comments?.take(max) ?? [])
-//           .map((GalleryComment comment) => CommentItem(
-//                 galleryComment: comment,
-//                 simple: true,
-//               ))
-//           .toList();
-//     }
-//
-//     return Column(
-//       children: <Widget>[
-//         // 评论
-//         GetBuilder<CommentController>(
-//           init: CommentController(),
-//           tag: pageCtrlTag,
-//           id: GetIds.PAGE_VIEW_TOP_COMMENT,
-//           builder: (CommentController _commentController) {
-//             return _commentController.obx(
-//                 (List<GalleryComment>? state) => Column(
-//                       children: <Widget>[
-//                         ..._topComment(state, max: 2),
-//                       ],
-//                     ),
-//                 onLoading: Container(
-//                   padding: const EdgeInsets.all(8),
-//                   child: const CupertinoActivityIndicator(
-//                     radius: 10,
-//                   ),
-//                 ));
-//           },
-//         ),
-//         // 评论按钮
-//         if (showBtn)
-//           CupertinoButton(
-//             minSize: 0,
-//             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-//             child: Text(
-//               L10n.of(Get.context!).all_comment,
-//               style: const TextStyle(fontSize: 16),
-//             ),
-//             onPressed: () {
-//               Get.toNamed(
-//                 EHRoutes.galleryComment,
-//                 id: isLayoutLarge ? 2 : null,
-//               );
-//             },
-//           ),
-//       ],
-//     );
-//   }
-// }
 
 /// 包含多个 TagGroup
 class TagBox extends StatelessWidget {
