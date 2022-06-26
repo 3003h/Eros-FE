@@ -1,3 +1,4 @@
+import 'package:archive_async/archive_async.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
@@ -22,6 +23,7 @@ class ViewRepository {
     this.index = 0,
     this.loadType = LoadFrom.gallery,
     this.files,
+    this.asyncArchive,
     required this.gid,
   });
 
@@ -29,6 +31,7 @@ class ViewRepository {
   final List<String>? files;
   final String gid;
   final LoadFrom loadType;
+  final AsyncArchive? asyncArchive;
 }
 
 class ViewPage extends StatefulWidget {

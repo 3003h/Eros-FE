@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:typed_data';
 
+import 'package:archive_async/archive_async.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
@@ -59,6 +61,8 @@ class ViewExtController extends GetxController {
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
+
+  Map<int, Future<Uint8List?>> imageArchiveFutureMap = {};
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -205,6 +209,11 @@ class ViewExtController extends GetxController {
     // 恢复系统旋转设置
     logger.d('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
+  }
+
+  Future<Uint8List> getFileData(AsyncArchiveFile file) async {
+    final fileData = await file.getContent();
+    return fileData as Uint8List;
   }
 
   void resetPageController() {
@@ -453,6 +462,11 @@ class ViewExtController extends GetxController {
     );
 
     update();
+  }
+
+  void reloadArchive(int itemSer) {
+    final file = vState.asyncArchiveFiles[itemSer-1];
+    imageArchiveFutureMap[itemSer] = getFileData(file);
   }
 
   void setScale100(ImageInfo imageInfo, Size size) {

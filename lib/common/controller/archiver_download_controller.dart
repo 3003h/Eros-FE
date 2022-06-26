@@ -66,13 +66,13 @@ class ArchiverDownloadController extends GetxController {
   void onReady() {
     super.onReady();
     flutterDownloaderPort.listen((dynamic data) {
-      logger.d('update listen');
+      logger.v('update listen');
       final dataList = data as List<dynamic>;
       String taskId = dataList[0] as String;
       DownloadTaskStatus status = dataList[1] as DownloadTaskStatus;
       int progress = dataList[2] as int;
 
-      logger.d('$taskId $status $progress');
+      logger.d('$taskId $status $progress%');
 
       // 更新任务状态
       updateTask(taskId, status, progress);
@@ -94,7 +94,7 @@ class ArchiverDownloadController extends GetxController {
     final _key = archiverTaskMap.entries
         .firstWhereOrNull((element) => element.value.taskId == taskId)
         ?.key;
-    logger.d('_key $_key');
+    logger.v('_key $_key');
 
     if (_key == null) {
       return;
@@ -139,7 +139,7 @@ class ArchiverDownloadController extends GetxController {
       title: title,
       imgUrl: imgUrl,
       galleryUrl: galleryUrl,
-      filePath: _downloadPath,
+      savedDir: _downloadPath,
     );
 
     _downloadViewAnimateListAdd();
@@ -233,6 +233,8 @@ class ArchiverDownloadController extends GetxController {
         archiverTaskMap[_taskInfo.tag!] = _taskInfo.copyWith(
           status: downloadTask.status.value,
           progress: downloadTask.progress,
+          fileName: downloadTask.filename,
+          savedDir: downloadTask.savedDir,
         );
 
         // 更新视图

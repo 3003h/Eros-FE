@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -708,6 +710,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
 
   GalleryPageController get galleryPageController =>
       controller.vState.galleryPageController;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ViewExtController>(
@@ -725,17 +728,36 @@ class ThumbnailListView extends GetView<ViewExtController> {
                 scrollDirection: Axis.horizontal,
                 reverse: logic.vState.viewMode == ViewMode.rightToLeft,
                 itemBuilder: (context, index) {
+                  // 缩略图
                   late Widget thumb;
-                  if (logic.vState.loadFrom == LoadFrom.download) {
-                    final path = controller.vState.imagePathList[index];
+                  switch (logic.vState.loadFrom) {
+                    case LoadFrom.download:
+                      final path = controller.vState.imagePathList[index];
 
-                    thumb = ExtendedImage.file(
-                      File(path),
-                      fit: BoxFit.cover,
-                    );
-                  } else {
-                    thumb = FutureThumbl(itemSer: index + 1);
+                      thumb = ExtendedImage.file(
+                        File(path),
+                        fit: BoxFit.cover,
+                      );
+                      break;
+                    case LoadFrom.gallery:
+                      thumb = FutureThumbl(itemSer: index + 1);
+                      break;
+                    case LoadFrom.archiver:
+                      final asyncFile = controller.vState.asyncArchiveFiles[index];
+                      thumb = FutureThumblArchive(asyncArchiveFile: asyncFile);
+                      break;
                   }
+
+                  // if (logic.vState.loadFrom == LoadFrom.download) {
+                  //   final path = controller.vState.imagePathList[index];
+                  //
+                  //   thumb = ExtendedImage.file(
+                  //     File(path),
+                  //     fit: BoxFit.cover,
+                  //   );
+                  // } else {
+                  //   thumb = FutureThumbl(itemSer: index + 1);
+                  // }
 
                   return GestureDetector(
                     onTap: () => logic.jumpToPage(index),
@@ -805,6 +827,71 @@ class ThumbnailListView extends GetView<ViewExtController> {
     );
   }
 }
+
+class FutureThumblArchive extends StatefulWidget {
+  const FutureThumblArchive({Key? key, required this.asyncArchiveFile}) : super(key: key);
+  final AsyncArchiveFile asyncArchiveFile;
+
+  @override
+  State<FutureThumblArchive> createState() => _FutureThumblArchiveState();
+}
+
+class _FutureThumblArchiveState extends State<FutureThumblArchive> {
+  late Future<Uint8List> _future;
+
+  Future<Uint8List> getFileData(AsyncArchiveFile file) async {
+    final fileData = await file.getContent();
+    return fileData as Uint8List;
+  }
+
+  @override
+  void initState() {
+    _future = getFileData(widget.asyncArchiveFile);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Uint8List>(
+      future: _future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          final _data = snapshot.data;
+          logger.v('${_data.runtimeType}');
+          if (_data != null) {
+            return ExtendedImage.memory(
+              _data,
+              fit: BoxFit.cover,
+            );
+          } else {
+            logger.d('${snapshot.error} ${snapshot.stackTrace}');
+            return buildErrorWidget();
+          }
+
+        } else {
+          return buildPlaceholder();
+        }
+      }
+    );
+  }
+
+  Widget buildPlaceholder() {
+    return const CupertinoActivityIndicator();
+  }
+
+  GestureDetector buildErrorWidget() {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        _future = getFileData(widget.asyncArchiveFile);
+        setState(() {});
+      },
+      child: const Icon(FontAwesomeIcons.rotateRight,
+          color: CupertinoColors.destructiveRed),
+    );
+  }
+}
+
 
 class FutureThumbl extends StatefulWidget {
   const FutureThumbl({
@@ -891,14 +978,6 @@ class _FutureThumblState extends State<FutureThumbl> {
 
   Widget buildPlaceholder() {
     return const CupertinoActivityIndicator();
-
-    // return Center(
-    //     child: ClipRRect(
-    //   borderRadius: BorderRadius.all(Radius.circular(40)),
-    //   child: Container(
-    //       color: Colors.grey.withOpacity(0.3),
-    //       child: const CupertinoActivityIndicator().paddingAll(4)),
-    // ));
   }
 
   GestureDetector builderrorWidget() {

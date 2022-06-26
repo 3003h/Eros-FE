@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
 
@@ -321,6 +322,8 @@ Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
           index: _taskIndex,
           coverUrl: _taskInfo.imgUrl,
           galleryUrl: _taskInfo.galleryUrl,
+          galleryGid: _taskInfo.gid,
+          filePath: path.join(_taskInfo.savedDir ?? '', _taskInfo.fileName),
         ),
       );
     },
