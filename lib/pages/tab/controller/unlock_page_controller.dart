@@ -16,18 +16,6 @@ class UnlockPageController extends GetxController {
   set infoText(String val) => _infoText.value = val;
 
   Future<bool> _unlock({required BuildContext context}) async {
-    final IOSAuthMessages iosStrings = IOSAuthMessages(
-        cancelButton: L10n.of(context).cancel,
-        goToSettingsButton: L10n.of(context).tab_setting,
-        goToSettingsDescription: 'Please set up your Touch & Face ID.',
-        lockOut: 'Please reenable your Touch & Face ID');
-
-    final AndroidAuthMessages androidStrings = AndroidAuthMessages(
-      cancelButton: L10n.of(context).cancel,
-      // signInTitle: '指纹认证',
-      biometricHint: '',
-    );
-
     infoText = '';
     try {
       final bool didAuthenticate = await localAuth.authenticate(
