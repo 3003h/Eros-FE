@@ -169,10 +169,29 @@ class CommentItem extends StatelessWidget {
           ),
         ),
         const Spacer(),
+        // 编辑回复
+        if ((galleryComment.canEdit ?? false) && !simple)
+          CupertinoButton(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            minSize: 0,
+            child: Icon(
+              FontAwesomeIcons.penToSquare,
+              size: kSizeNotVote,
+              color: ehTheme.commitIconColor,
+            ),
+            onPressed: () {
+              vibrateUtil.light();
+              logger.i('edit ${galleryComment.id}');
+              commentController.editComment(
+                id: galleryComment.id!,
+                oriComment: galleryComment.text,
+              );
+            },
+          ),
         // 点赞
         if (galleryComment.canVote ?? false)
           CupertinoButton(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             minSize: 0,
             child: Icon(
               galleryComment.vote! > 0
@@ -190,7 +209,7 @@ class CommentItem extends StatelessWidget {
         // 点踩
         if (galleryComment.canVote ?? false)
           CupertinoButton(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             minSize: 0,
             child: Icon(
               galleryComment.vote! < 0
@@ -207,7 +226,7 @@ class CommentItem extends StatelessWidget {
           ),
         if (showRepty)
           CupertinoButton(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             minSize: 0,
             child: Icon(
               // FontAwesomeIcons.reply,
@@ -243,28 +262,11 @@ class CommentItem extends StatelessWidget {
                 CupertinoTheme(
                   data: ehTheme.themeData!,
                   child: TranslateButton(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     galleryComment: galleryComment,
                     commentController: commentController,
                   ),
-                ).paddingSymmetric(horizontal: 8),
-              // 编辑回复
-              if ((galleryComment.canEdit ?? false) && !simple)
-                CupertinoButton(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  minSize: 0,
-                  child: Icon(
-                    FontAwesomeIcons.edit,
-                    size: kSizeNotVote,
-                    color: ehTheme.commitIconColor,
-                  ),
-                  onPressed: () {
-                    vibrateUtil.light();
-                    logger.i('edit ${galleryComment.id}');
-                    commentController.editComment(
-                      id: galleryComment.id!,
-                      oriComment: galleryComment.text,
-                    );
-                  },
                 ),
             ],
           ),
@@ -281,23 +283,27 @@ class CommentItem extends StatelessWidget {
                     color: ehTheme.commitIconColor,
                     // border:
                     //     Border.all(color: ehTheme.commitIconColor!, width: 1.4),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(9),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 2.5, horizontal: 6),
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    galleryComment.score.startsWith('+')
-                        ? '+${galleryComment.score.substring(1)}'
-                        : galleryComment.score.startsWith('-')
-                            ? galleryComment.score
-                            : '+${galleryComment.score}',
-                    style: TextStyle(
-                      fontSize: 10,
-                      height: 1.25,
-                      fontWeight: FontWeight.bold,
-                      // color: ehTheme.commitIconColor,
-                      color: ehTheme.commentBackgroundColor,
+                  constraints: const BoxConstraints(minWidth: 18),
+                  height: 18,
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  child: Center(
+                    child: Text(
+                      galleryComment.score.startsWith('+')
+                          ? '+${galleryComment.score.substring(1)}'
+                          : galleryComment.score.startsWith('-')
+                              ? galleryComment.score
+                              : '+${galleryComment.score}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        height: 1.3,
+                        fontWeight: FontWeight.w600,
+                        // color: ehTheme.commitIconColor,
+                        color: ehTheme.commentBackgroundColor,
+                      ),
                     ),
                   ),
                 ),
@@ -634,11 +640,13 @@ class TranslateButton extends StatefulWidget {
     this.sizeVote = kSizeVote,
     required this.galleryComment,
     required this.commentController,
+    this.padding,
   }) : super(key: key);
 
   final double sizeVote;
   final GalleryComment galleryComment;
   final CommentController commentController;
+  final EdgeInsetsGeometry? padding;
 
   @override
   _TranslateButtonState createState() => _TranslateButtonState();
@@ -663,7 +671,7 @@ class _TranslateButtonState extends State<TranslateButton> {
     const _w = CupertinoActivityIndicator(radius: kSizeVote / 2);
 
     return CupertinoButton(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: widget.padding,
       minSize: 0,
       child: translating ? _w : _icon,
       onPressed: () async {
