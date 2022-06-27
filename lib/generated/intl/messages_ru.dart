@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "change_to_favorites":
             MessageLookupByLibrary.simpleMessage("Change to favorites"),
+        "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("Очистить кэш"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("Очистить"),
         "clear_search_history":
