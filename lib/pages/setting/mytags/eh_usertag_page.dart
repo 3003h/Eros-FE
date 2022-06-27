@@ -61,8 +61,9 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            FontAwesomeIcons.penRuler,
-            size: 22,
+            // FontAwesomeIcons.penRuler,
+            CupertinoIcons.pencil_ellipsis_rectangle,
+            size: 28,
           ),
           onPressed: () async {
             final currName = controller.curTagSet?.name ?? '';
@@ -84,8 +85,9 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            FontAwesomeIcons.magnifyingGlass,
-            size: 22,
+            // FontAwesomeIcons.magnifyingGlass,
+            CupertinoIcons.search,
+            size: 28,
           ),
           onPressed: () => controller.isSearchUserTags = true,
         ),

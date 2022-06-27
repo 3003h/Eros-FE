@@ -29,6 +29,10 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
+                  // child: const Icon(
+                  //   CupertinoIcons.gauge,
+                  //   size: 28,
+                  // ),
                   child: const Icon(
                     FontAwesomeIcons.earthAmericas,
                     size: 22,
@@ -41,8 +45,9 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                   padding: const EdgeInsets.all(0),
                   minSize: 40,
                   child: const Icon(
-                    FontAwesomeIcons.plus,
-                    size: 22,
+                    // FontAwesomeIcons.plus,
+                    CupertinoIcons.plus_circle,
+                    size: 28,
                   ),
                   onPressed: () async {
                     final newName = await showCupertinoDialog<String>(

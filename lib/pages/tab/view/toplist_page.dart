@@ -67,13 +67,18 @@ class _ToplistTabState extends State<ToplistTab> {
           children: [
             CupertinoButton(
               padding: const EdgeInsets.all(0.0),
-              minSize: 36,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              minSize: 40,
+              child: Stack(
+                alignment: Alignment.centerRight,
+                // mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  // const Icon(
+                  //   FontAwesomeIcons.arrowDownWideShort,
+                  //   size: 20,
+                  // ),
                   const Icon(
-                    FontAwesomeIcons.arrowDownWideShort,
-                    size: 20,
+                    CupertinoIcons.sort_down,
+                    size: 28,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -100,7 +105,7 @@ class _ToplistTabState extends State<ToplistTab> {
                   border: Border.all(
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.activeBlue, context),
-                    width: 2.2,
+                    width: 1.8,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),

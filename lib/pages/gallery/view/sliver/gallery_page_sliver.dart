@@ -257,12 +257,13 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
               children: [
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  minSize: 38,
+                  minSize: 40,
                   child: const MouseRegionClick(
-                    child: Icon(
-                      FontAwesomeIcons.tags,
-                      size: 22,
-                    ),
+                    // child: Icon(
+                    //   FontAwesomeIcons.tags,
+                    //   size: 22,
+                    // ),
+                    child: Icon(CupertinoIcons.tags, size: 26),
                   ),
                   onPressed: () {
                     _controller.addTag();
@@ -272,10 +273,11 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                   padding: const EdgeInsets.all(0),
                   minSize: 38,
                   child: const MouseRegionClick(
-                    child: Icon(
-                      FontAwesomeIcons.share,
-                      size: 22,
-                    ),
+                    // child: Icon(
+                    //   FontAwesomeIcons.share,
+                    //   size: 22,
+                    // ),
+                    child: Icon(CupertinoIcons.share, size: 26),
                   ),
                   onPressed: () {
                     if (provider == null) {
