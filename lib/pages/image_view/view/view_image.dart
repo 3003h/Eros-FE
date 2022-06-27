@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:archive_async/archive_async.dart';
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -61,10 +59,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     vState.fade = true;
 
     if (vState.loadFrom == LoadFrom.gallery) {
-      controller.imageFutureMap[widget.imageSer] = controller.fetchImage(
-        widget.imageSer,
-        context: context,
-      );
+      controller.initFuture(widget.imageSer);
     }
 
     if (vState.loadFrom == LoadFrom.archiver) {
@@ -379,7 +374,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       return GetBuilder<ViewExtController>(
         builder: (ViewExtController controller) {
           final ViewExtState vState = controller.vState;
-          logger.d('widget.imageSer ${widget.imageSer}');
 
           return FutureBuilder<File?>(
               future: controller.imageArchiveFutureMap[widget.imageSer],
@@ -445,13 +439,11 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
     switch (vState.loadFrom) {
       case LoadFrom.download:
-
-        /// 从已下载查看
+        // 从已下载查看
         final path = vState.imagePathList[widget.imageSer - 1];
         return fileImage(path);
       case LoadFrom.gallery:
-
-        /// 从画廊页查看
+        // 从画廊页查看
         return getViewImage();
       case LoadFrom.archiver:
         return archiverImage();
