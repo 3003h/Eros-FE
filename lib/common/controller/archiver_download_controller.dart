@@ -65,7 +65,7 @@ class ArchiverDownloadController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    flutterDownloaderPort.listen((dynamic data) {
+    flutterDownloaderPort.listen((dynamic data) async {
       logger.v('update listen');
       final dataList = data as List<dynamic>;
       String taskId = dataList[0] as String;
@@ -75,7 +75,7 @@ class ArchiverDownloadController extends GetxController {
       logger.d('$taskId $status $progress%');
 
       // 更新任务状态
-      updateTask(taskId, status, progress);
+      await updateTask(taskId, status, progress);
     });
   }
 
@@ -89,7 +89,8 @@ class ArchiverDownloadController extends GetxController {
     _gStore.archiverTaskMap = _archiverTaskMap;
   }
 
-  void updateTask(String taskId, DownloadTaskStatus status, int progress) {
+  Future<void> updateTask(
+      String taskId, DownloadTaskStatus status, int progress) async {
     // 通过taskId找到任务
     final _key = archiverTaskMap.entries
         .firstWhereOrNull((element) => element.value.taskId == taskId)
@@ -100,8 +101,19 @@ class ArchiverDownloadController extends GetxController {
       return;
     }
 
-    archiverTaskMap[_key] = archiverTaskMap[_key]!
-        .copyWith(status: status.value, progress: progress);
+    late final String? fileName;
+    if (status == DownloadTaskStatus.complete) {
+      final List<DownloadTask> tasks =
+          await FlutterDownloader.loadTasks() ?? [];
+      final _task = tasks.firstWhereOrNull((e) => e.taskId == taskId);
+      fileName = _task?.filename;
+    }
+
+    archiverTaskMap[_key] = archiverTaskMap[_key]!.copyWith(
+      status: status.value,
+      progress: progress,
+      fileName: fileName,
+    );
 
     final _tag = archiverTaskMap[_key]!.tag;
     if (Get.isRegistered<DownloadViewController>()) {
@@ -190,8 +202,11 @@ class ArchiverDownloadController extends GetxController {
   }
 
   // 根据 downloadUrl 和 savePath 下载文件
-  Future<String?> _downloadArchiverFile(String downloadUrl, String savePath,
-      {String? fileName}) async {
+  Future<String?> _downloadArchiverFile(
+    String downloadUrl,
+    String savePath, {
+    String? fileName,
+  }) async {
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile.user.cookie,
     };
@@ -248,7 +263,7 @@ class ArchiverDownloadController extends GetxController {
 void _downloadCallback(String id, DownloadTaskStatus status, int progress) {
   // logger.d('$id $status $progress');
 
-  final SendPort send =
+  final SendPort sendPort =
       IsolateNameServer.lookupPortByName('downloader_send_port')!;
-  send.send([id, status, progress]);
+  sendPort.send([id, status, progress]);
 }

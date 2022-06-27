@@ -178,10 +178,20 @@ flutter_intl:
 
 flutter:
   uses-material-design: true
-  # fonts:
-  #   - family: SourceHanSansSC
-  #     fonts:
-  #       - asset: fonts/SourceHanSansSC-Regular.otf
+#  fonts:
+#    - family: AppleEmoji
+#      fonts:
+#        - asset: fonts/AppleColorEmoji.ttf
+#    - family: Seguiemj
+#      fonts:
+#        - asset: fonts/seguiemj.ttf
+#    - family: SourceHanSansSC
+#      fonts:
+#        - asset: fonts/SourceHanSansSC-Regular.otf
+#    - family: OpenMoji
+#      fonts:
+#        - asset: fonts/OpenMoji-Color.ttf
+
 
   assets:
     - assets/

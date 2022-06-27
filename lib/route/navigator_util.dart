@@ -259,7 +259,7 @@ class NavigatorUtil {
     await Get.toNamed(EHRoutes.galleryViewExt,
         arguments: ViewRepository(
           index: index,
-          asyncArchive: asyncArchive,
+          asyncArchives: asyncArchive.files,
           loadType: LoadFrom.archiver,
           gid: gid,
         ));

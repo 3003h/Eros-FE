@@ -13,6 +13,7 @@ export 'dns_config.dart';
 export 'gallery_cache.dart';
 export 'gallery_comment_span.dart';
 export 'uconfig.dart';
+export 'chapter.dart';
 export 'gallery_comment.dart';
 export 'eh_usertag.dart';
 export 'openl_translation.dart';

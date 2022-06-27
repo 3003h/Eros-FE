@@ -3783,6 +3783,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Chapter`
+  String get chapter {
+    return Intl.message(
+      'Chapter',
+      name: 'chapter',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

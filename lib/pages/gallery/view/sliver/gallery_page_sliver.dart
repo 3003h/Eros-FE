@@ -142,6 +142,94 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                   ),
                   pageController: _controller,
                 ),
+                // 章节 小标题
+                GalleryObxSliver(
+                  (state) => SliverToBoxAdapter(
+                    child: (state.chapter?.isNotEmpty ?? false)
+                        ? MiniTitle(title: L10n.of(context).chapter)
+                        : const SizedBox.shrink(),
+                  ),
+                  pageController: _controller,
+                ),
+
+                // 章节
+                GalleryObxSliver(
+                  (state) {
+                    final _pageStyle = TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    );
+                    final _authStyle = TextStyle(fontSize: 12);
+                    final _titleStyle = TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    );
+
+                    return SliverToBoxAdapter(
+                      child: (state.chapter?.isNotEmpty ?? false)
+                          ? Container(
+                              padding: const EdgeInsets.only(
+                                  left: kPadding, right: kPadding, bottom: 20),
+                              child: Wrap(
+                                spacing: 8.0,
+                                runSpacing: 8.0,
+                                children: state.chapter!
+                                    .map(
+                                      (e) => GestureDetector(
+                                        onTap: () {
+                                          NavigatorUtil.goGalleryViewPage(
+                                              e.page - 1,
+                                              _controller.gState.gid);
+                                        },
+                                        child: Container(
+                                          // height: 40,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                CupertinoDynamicColor.resolve(
+                                                    CupertinoColors.systemGrey6,
+                                                    context),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          constraints: const BoxConstraints(
+                                            // maxWidth: 80,
+                                            minHeight: 34,
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 8),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text('${e.page}.',
+                                                      style: _pageStyle),
+                                                  const SizedBox(width: 6),
+                                                  Text('${e.author}',
+                                                      style: _authStyle),
+                                                ],
+                                              ),
+                                              if (e.title != null)
+                                                Text('${e.title}',
+                                                    style: _titleStyle),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                    );
+                  },
+                  pageController: _controller,
+                ),
+
                 // 最上面的部分评论 小标题
                 SliverToBoxAdapter(
                   child: Row(
@@ -257,12 +345,13 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
               children: [
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  minSize: 38,
+                  minSize: 40,
                   child: const MouseRegionClick(
-                    child: Icon(
-                      FontAwesomeIcons.tags,
-                      size: 22,
-                    ),
+                    // child: Icon(
+                    //   FontAwesomeIcons.tags,
+                    //   size: 22,
+                    // ),
+                    child: Icon(CupertinoIcons.tags, size: 26),
                   ),
                   onPressed: () {
                     _controller.addTag();
@@ -272,10 +361,11 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                   padding: const EdgeInsets.all(0),
                   minSize: 38,
                   child: const MouseRegionClick(
-                    child: Icon(
-                      FontAwesomeIcons.share,
-                      size: 22,
-                    ),
+                    // child: Icon(
+                    //   FontAwesomeIcons.share,
+                    //   size: 22,
+                    // ),
+                    child: Icon(CupertinoIcons.share, size: 26),
                   ),
                   onPressed: () {
                     if (provider == null) {

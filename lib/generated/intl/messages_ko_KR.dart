@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "back": MessageLookupByLibrary.simpleMessage("뒤로"),
         "cancel": MessageLookupByLibrary.simpleMessage("취소"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨찾기 변경"),
+        "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("캐시 지우기"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("지우기"),
         "clear_search_history":

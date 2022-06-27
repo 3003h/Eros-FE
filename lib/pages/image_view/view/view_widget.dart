@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as path;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
@@ -743,21 +744,14 @@ class ThumbnailListView extends GetView<ViewExtController> {
                       thumb = FutureThumbl(itemSer: index + 1);
                       break;
                     case LoadFrom.archiver:
-                      final asyncFile = controller.vState.asyncArchiveFiles[index];
-                      thumb = FutureThumblArchive(asyncArchiveFile: asyncFile);
+                      final asyncFile =
+                          controller.vState.asyncArchiveFiles[index];
+                      // thumb = Container(color: Colors.white);
+                      thumb = FutureThumblArchive(
+                          gid: controller.vState.gid,
+                          asyncArchiveFile: asyncFile);
                       break;
                   }
-
-                  // if (logic.vState.loadFrom == LoadFrom.download) {
-                  //   final path = controller.vState.imagePathList[index];
-                  //
-                  //   thumb = ExtendedImage.file(
-                  //     File(path),
-                  //     fit: BoxFit.cover,
-                  //   );
-                  // } else {
-                  //   thumb = FutureThumbl(itemSer: index + 1);
-                  // }
 
                   return GestureDetector(
                     onTap: () => logic.jumpToPage(index),
@@ -829,50 +823,51 @@ class ThumbnailListView extends GetView<ViewExtController> {
 }
 
 class FutureThumblArchive extends StatefulWidget {
-  const FutureThumblArchive({Key? key, required this.asyncArchiveFile}) : super(key: key);
+  const FutureThumblArchive(
+      {Key? key, required this.asyncArchiveFile, this.gid})
+      : super(key: key);
   final AsyncArchiveFile asyncArchiveFile;
+  final String? gid;
 
   @override
   State<FutureThumblArchive> createState() => _FutureThumblArchiveState();
 }
 
 class _FutureThumblArchiveState extends State<FutureThumblArchive> {
-  late Future<Uint8List> _future;
+  late Future<File> _future;
+  final ViewExtController viewExtController = Get.find();
 
-  Future<Uint8List> getFileData(AsyncArchiveFile file) async {
-    final fileData = await file.getContent();
-    return fileData as Uint8List;
+  Future<File> getFileData(String? gid, AsyncArchiveFile file) async {
+    return await viewExtController.getArchiveFile(gid, file);
   }
 
   @override
   void initState() {
-    _future = getFileData(widget.asyncArchiveFile);
+    _future = getFileData(widget.gid, widget.asyncArchiveFile);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Uint8List>(
-      future: _future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final _data = snapshot.data;
-          logger.v('${_data.runtimeType}');
-          if (_data != null) {
-            return ExtendedImage.memory(
-              _data,
-              fit: BoxFit.cover,
-            );
+    return FutureBuilder<File?>(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final _data = snapshot.data;
+            logger.v('${_data.runtimeType}');
+            if (_data != null) {
+              return ExtendedImage.file(
+                _data,
+                fit: BoxFit.cover,
+              );
+            } else {
+              logger.d('${snapshot.error} ${snapshot.stackTrace}');
+              return buildErrorWidget();
+            }
           } else {
-            logger.d('${snapshot.error} ${snapshot.stackTrace}');
-            return buildErrorWidget();
+            return buildPlaceholder();
           }
-
-        } else {
-          return buildPlaceholder();
-        }
-      }
-    );
+        });
   }
 
   Widget buildPlaceholder() {
@@ -883,7 +878,7 @@ class _FutureThumblArchiveState extends State<FutureThumblArchive> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        _future = getFileData(widget.asyncArchiveFile);
+        _future = getFileData(widget.gid, widget.asyncArchiveFile);
         setState(() {});
       },
       child: const Icon(FontAwesomeIcons.rotateRight,
@@ -891,7 +886,6 @@ class _FutureThumblArchiveState extends State<FutureThumblArchive> {
     );
   }
 }
-
 
 class FutureThumbl extends StatefulWidget {
   const FutureThumbl({

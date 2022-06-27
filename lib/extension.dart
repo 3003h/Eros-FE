@@ -127,7 +127,8 @@ extension ExtGalleryProvider on GalleryProvider {
         archiverLink: item.archiverLink,
         torrentLink: item.torrentLink,
         lastViewTime: item.lastViewTime,
-        pageOfList: item.pageOfList);
+        pageOfList: item.pageOfList,
+        chapter: item.chapter);
   }
 }
 

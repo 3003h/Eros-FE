@@ -370,5 +370,6 @@
   "avatar": "Avatar",
   "default_avatar_style": "Default avatar style",
   "auth_signInTitle": "Authentication required",
-  "auth_biometricHint": "Verify identity"
+  "auth_biometricHint": "Verify identity",
+  "chapter": "Chapter"
 }

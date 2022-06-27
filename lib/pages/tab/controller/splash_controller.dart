@@ -51,7 +51,8 @@ class SplashController extends GetxController {
   }
 
   Future<void> _startHome(String url, {bool replace = true}) async {
-    await _autoLockController.resumed(forceLock: true && !kDebugMode);
+    // await _autoLockController.resumed(forceLock: true && !kDebugMode);
+    await _autoLockController.resumed(forceLock: true);
     // await _autoLockController.resumed(forceLock: true);
 
     final RegExp regGalleryUrl =

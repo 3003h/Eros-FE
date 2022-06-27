@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:archive_async/archive_async.dart';
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -61,16 +59,11 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     vState.fade = true;
 
     if (vState.loadFrom == LoadFrom.gallery) {
-      controller.imageFutureMap[widget.imageSer] = controller.fetchImage(
-        widget.imageSer,
-        context: context,
-      );
+      controller.initFuture(widget.imageSer);
     }
 
     if (vState.loadFrom == LoadFrom.archiver) {
-      final file = vState.asyncArchiveFiles[widget.imageSer - 1];
-      controller.imageArchiveFutureMap[widget.imageSer] =
-          controller.getFileData(file);
+      controller.initArchiveFuture(widget.imageSer);
     }
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
@@ -382,7 +375,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         builder: (ViewExtController controller) {
           final ViewExtState vState = controller.vState;
 
-          return FutureBuilder<Uint8List?>(
+          return FutureBuilder<File?>(
               future: controller.imageArchiveFutureMap[widget.imageSer],
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -405,7 +398,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                     if ((vState.errCountMap[widget.imageSer] ?? 0) <
                         vState.retryCount) {
                       Future.delayed(const Duration(milliseconds: 100)).then(
-                          (_) => controller.reloadArchive(widget.imageSer));
+                          (_) => controller.initArchiveFuture(widget.imageSer));
                       vState.errCountMap.update(
                           widget.imageSer, (int value) => value + 1,
                           ifAbsent: () => 1);
@@ -426,65 +419,9 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                       );
                     }
                   }
-                  final Uint8List _imageData = snapshot.data!;
+                  final File _file = snapshot.data!;
 
-                  Widget image = ExtendedImage.memory(
-                    _imageData,
-                    fit: BoxFit.contain,
-                    enableSlideOutPage: widget.enableSlideOutPage,
-                    mode: widget.mode,
-                    initGestureConfigHandler: _initGestureConfigHandler,
-                    onDoubleTap: widget.enableDoubleTap ? onDoubleTap : null,
-                    loadStateChanged: (ExtendedImageState state) {
-                      final ImageInfo? imageInfo = state.extendedImageInfo;
-                      if (state.extendedImageLoadState == LoadState.completed ||
-                          imageInfo != null) {
-                        controller.setScale100(imageInfo!, size);
-
-                        if (vState.imageSizeMap[widget.imageSer] == null) {
-                          vState.imageSizeMap[widget.imageSer] = Size(
-                              imageInfo.image.width.toDouble(),
-                              imageInfo.image.height.toDouble());
-                          Future.delayed(const Duration(milliseconds: 100))
-                              .then((value) => controller.update(
-                                  ['$idImageListView${widget.imageSer}']));
-                        }
-
-                        controller.onLoadCompleted(widget.imageSer);
-
-                        return controller.vState.viewMode !=
-                                ViewMode.topToBottom
-                            ? Hero(
-                                tag: '${widget.imageSer}',
-                                child: state.completedWidget,
-                                createRectTween: (Rect? begin, Rect? end) {
-                                  final tween = MaterialRectCenterArcTween(
-                                      begin: begin, end: end);
-                                  return tween;
-                                },
-                              )
-                            : state.completedWidget;
-                      } else if (state.extendedImageLoadState ==
-                          LoadState.loading) {
-                        final ImageChunkEvent? loadingProgress =
-                            state.loadingProgress;
-                        final double? progress =
-                            loadingProgress?.expectedTotalBytes != null
-                                ? (loadingProgress?.cumulativeBytesLoaded ??
-                                        0) /
-                                    (loadingProgress?.expectedTotalBytes ?? 1)
-                                : null;
-
-                        return ViewLoading(
-                          ser: widget.imageSer,
-                          progress: progress,
-                          duration: vState.viewMode != ViewMode.topToBottom
-                              ? const Duration(milliseconds: 50)
-                              : null,
-                        );
-                      }
-                    },
-                  );
+                  Widget image = fileImage(_file.path);
 
                   return image;
                 } else {
@@ -502,13 +439,11 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
     switch (vState.loadFrom) {
       case LoadFrom.download:
-
-        /// 从已下载查看
+        // 从已下载查看
         final path = vState.imagePathList[widget.imageSer - 1];
         return fileImage(path);
       case LoadFrom.gallery:
-
-        /// 从画廊页查看
+        // 从画廊页查看
         return getViewImage();
       case LoadFrom.archiver:
         return archiverImage();

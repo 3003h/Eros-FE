@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "back": MessageLookupByLibrary.simpleMessage("退回"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("更改為收藏夾"),
+        "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("清除緩存"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history": MessageLookupByLibrary.simpleMessage("清除搜尋紀錄"),
