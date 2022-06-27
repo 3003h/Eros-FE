@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/utils/chapter.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -386,11 +389,17 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
 
+  final _galleryComments = parseGalleryComment(document);
+
+  final _chapter = _parseChapter(_galleryComments);
+  print(_chapter.map((e) => e.toJson()).join('\n'));
+
   final galleryProvider = GalleryProvider(
     imgUrl: _imageUrl,
     tagGroup: await parseGalleryTags(document),
-    galleryComment: parseGalleryComment(document),
+    galleryComment: _galleryComments,
     galleryImages: parseGalleryImage(document),
+    chapter: _chapter,
     favTitle: _favTitle,
     favcat: _favcat,
     apiuid: _apiuid,
@@ -412,6 +421,18 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   );
 
   return galleryProvider;
+}
+
+List<Chapter> _parseChapter(List<GalleryComment> comments) {
+  final listListChapter = <List<Chapter>>[];
+  for (final comment in comments) {
+    final listChapter = parseChapter(comment.text);
+    listListChapter.add(listChapter);
+  }
+
+  final listChapter = listListChapter.reduce(
+      (value, element) => value.length > element.length ? value : element);
+  return listChapter;
 }
 
 List<GalleryImage> parseGalleryImageFromHtml(String response) {

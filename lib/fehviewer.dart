@@ -13,6 +13,7 @@ export 'route/main_observer.dart';
 export 'route/navigator_util.dart';
 export 'route/routes.dart';
 export 'route/second_observer.dart';
+export 'utils/chapter.dart';
 export 'utils/debounce.dart';
 export 'utils/dialog.dart';
 export 'utils/event_bus.dart';
