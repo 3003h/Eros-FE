@@ -156,7 +156,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                         controller: _controller,
                         chapter: state.chapter,
                         limit: 4,
-                      ),
+                      ).paddingOnly(bottom: 20),
                     );
                   },
                   pageController: _controller,
@@ -381,7 +381,7 @@ class _ChapterBoxState extends State<ChapterBox> {
         _animate,
         CupertinoButton(
           minSize: 0,
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.all(0),
           child: Center(child: _icon),
           onPressed: () {
             setState(() {
@@ -455,16 +455,16 @@ class ChapterItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         constraints: BoxConstraints(
-          // maxWidth: context.width-16,
-          minHeight: 32,
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        margin: const EdgeInsets.symmetric(vertical: 4),
+            // maxWidth: context.width-16,
+            // minHeight: 32,
+            ),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+        margin: const EdgeInsets.symmetric(vertical: 3),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('$author', style: _authStyle),
+            Text('$page. $author', style: _authStyle),
             if (title != null)
               Text(
                 '$title',
