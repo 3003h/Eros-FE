@@ -70,6 +70,8 @@ class ViewExtController extends GetxController {
 
   final imageArchiveLock = Lock();
 
+  final imageLock = Lock();
+
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
@@ -221,6 +223,10 @@ class ViewExtController extends GetxController {
     final file = vState.asyncArchiveFiles[ser - 1];
     logger.d('load ${file.name}');
     imageArchiveFutureMap[ser] = getArchiveFile(vState.gid, file);
+  }
+
+  Future<void> initFuture(int ser) async {
+    imageFutureMap[ser] = fetchImage(ser);
   }
 
   Future<File> getArchiveFile(String? gid, AsyncArchiveFile file) async {
@@ -402,7 +408,6 @@ class ViewExtController extends GetxController {
   Future<GalleryImage?> fetchImage(
     int itemSer, {
     bool changeSource = false,
-    BuildContext? context,
   }) async {
     // 首先检查下载记录中是否有记录
     vState.imageTaskDao ??= Get.find<DownloadController>().imageTaskDao;
@@ -429,7 +434,7 @@ class ViewExtController extends GetxController {
     if (tImage == null) {
       logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
 
-      // 直接获取需要的
+      // 直接获取所在页数据
       await _galleryPageController.loadImagesForSer(itemSer);
     }
 
@@ -445,13 +450,24 @@ class ViewExtController extends GetxController {
       }
     });
 
-    final GalleryImage? image =
-        await _galleryPageController.fetchAndParserImageInfo(
-      itemSer,
-      cancelToken: vState.getMoreCancelToken,
-      // refresh: refresh,
-      changeSource: changeSource,
-    );
+    late final GalleryImage? image;
+
+    if (vState.viewMode == ViewMode.topToBottom) {
+      image = await imageLock.synchronized(
+        () async => await _galleryPageController.fetchAndParserImageInfo(
+          itemSer,
+          cancelToken: vState.getMoreCancelToken,
+          changeSource: changeSource,
+        ),
+        // timeout: const Duration(seconds: 5),
+      );
+    } else {
+      image = await _galleryPageController.fetchAndParserImageInfo(
+        itemSer,
+        cancelToken: vState.getMoreCancelToken,
+        changeSource: changeSource,
+      );
+    }
 
     return image;
   }
@@ -480,7 +496,6 @@ class ViewExtController extends GetxController {
     // 换源重载
     imageFutureMap[itemSer] = fetchImage(
       itemSer,
-      // refresh: true,
       changeSource: changeSource,
     );
 

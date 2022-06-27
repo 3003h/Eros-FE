@@ -17,6 +17,7 @@ import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:synchronized/extension.dart';
 
 import 'all_previews_controller.dart';
 import 'gallery_fav_controller.dart';
@@ -41,6 +42,8 @@ class GalleryPageController extends GetxController
   final GalleryCacheController _galleryCacheController = Get.find();
   DownloadController get _downloadController => Get.find();
   final CacheController _cacheController = Get.find();
+
+  final imageLoadLock = Lock();
 
   @override
   void onInit() {
@@ -463,8 +466,8 @@ class GalleryPageController extends GetxController
               refresh: gState.isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
             ));
 
-    final List<GalleryImage> _moreImageList =
-        await gState.mapLoadImagesForSer[page]!;
+    final List<GalleryImage> _moreImageList = await imageLoadLock
+        .synchronized(() async => await gState.mapLoadImagesForSer[page]!);
 
     addAllImages(_moreImageList);
     if (Get.isRegistered<AllPreviewsPageController>()) {
