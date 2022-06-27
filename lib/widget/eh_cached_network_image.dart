@@ -60,7 +60,7 @@ final client = retry.RetryClient(
 
 final cacheManager = CacheManager(
   Config(
-    'cacheKey',
+    'CachedNetworkImage',
     fileService: HttpFileService(
       httpClient: client,
     ),

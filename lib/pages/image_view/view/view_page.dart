@@ -23,7 +23,7 @@ class ViewRepository {
     this.index = 0,
     this.loadType = LoadFrom.gallery,
     this.files,
-    this.asyncArchive,
+    this.asyncArchives,
     required this.gid,
   });
 
@@ -31,7 +31,7 @@ class ViewRepository {
   final List<String>? files;
   final String gid;
   final LoadFrom loadType;
-  final AsyncArchive? asyncArchive;
+  final List<AsyncArchiveFile>? asyncArchives;
 }
 
 class ViewPage extends StatefulWidget {
