@@ -76,6 +76,10 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                   if (galleryGid == null) {
                     return;
                   }
+                  if (status != DownloadTaskStatus.complete) {
+                    return;
+                  }
+
                   final gid = int.parse(galleryGid ?? '0');
 
                   // 同步进度
@@ -83,20 +87,18 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                   if (Get.find<WebdavController>().syncReadProgress) {
                     lastIndex = await syncReadProgress(context, gid);
                   }
-                  logger.v('lastIndex $lastIndex');
                   lastIndex ??= (await Get.find<GalleryCacheController>()
                               .getGalleryCache('$gid', sync: false))
                           ?.lastIndex ??
                       0;
-                  logger.v('lastIndex $lastIndex');
 
                   // 异步读取zip
-
-
                   final tuple = await readAsyncArchive(filePath.realDirPath);
                   final asyncArchive = tuple.item1;
                   final inputStream = tuple.item2;
                   logger.d('${asyncArchive.length}');
+                  logger.d(
+                      '${asyncArchive.files.map((e) => e.name).join('\n')} ');
 
                   // 进入阅读
                   await NavigatorUtil.goGalleryViewPageArchiver(

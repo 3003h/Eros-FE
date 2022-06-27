@@ -32,7 +32,7 @@ class ViewExtState {
         case LoadFrom.download:
           if (vr.files != null) {
             imagePathList = vr.files!;
-            initGid = vr.gid;
+            gid = vr.gid;
           }
           break;
         case LoadFrom.gallery:
@@ -40,8 +40,8 @@ class ViewExtState {
           break;
         case LoadFrom.archiver:
           logger.d('LoadFrom.archiver');
-          initGid = vr.gid;
-          asyncArchiveFiles.addAll(vr.asyncArchive!.files);
+          gid = vr.gid;
+          asyncArchiveFiles.addAll(vr.asyncArchives!);
       }
 
       currentItemIndex = vr.index;
@@ -62,7 +62,7 @@ class ViewExtState {
   ///
   LoadFrom loadFrom = LoadFrom.gallery;
 
-  late final String? initGid;
+  late final String? gid;
 
   /// 当前的index
   int _currentItemIndex = 0;
@@ -90,8 +90,8 @@ class ViewExtState {
             saveToStore: saveToStore);
       }
     } else {
-      if (initGid != null) {
-        _galleryCacheController.setIndex(initGid ?? '', currentItemIndex,
+      if (gid != null) {
+        _galleryCacheController.setIndex(gid ?? '', currentItemIndex,
             saveToStore: saveToStore);
       }
     }

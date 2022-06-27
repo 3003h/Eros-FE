@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive_async/archive_async.dart';
@@ -19,6 +20,7 @@ import 'package:path/path.dart' as path;
 import 'package:photo_view/photo_view.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:synchronized/synchronized.dart';
 import 'package:throttling/throttling.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -57,12 +59,16 @@ class ViewExtController extends GetxController {
 
   GalleryPageController get _galleryPageController =>
       vState.galleryPageController;
+
   GalleryPageState get _galleryPageStat => vState.pageState;
+
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
 
-  Map<int, Future<Uint8List?>> imageArchiveFutureMap = {};
+  Map<int, Future<File?>> imageArchiveFutureMap = {};
+
+  final imageArchiveLock = Lock();
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -211,9 +217,26 @@ class ViewExtController extends GetxController {
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
   }
 
-  Future<Uint8List> getFileData(AsyncArchiveFile file) async {
+  Future<void> initArchiveFuture(int ser) async {
+    final file = vState.asyncArchiveFiles[ser - 1];
+    logger.d('load ${file.name}');
+    imageArchiveFutureMap[ser] = getArchiveFile(vState.gid, file);
+  }
+
+  Future<File> getArchiveFile(String? gid, AsyncArchiveFile file) async {
+    // 同步锁 保证同时只有一个读取操作
+    return await imageArchiveLock.synchronized(() => _getFile(gid, file));
+  }
+
+  Future<File> _getFile(String? gid, AsyncArchiveFile file) async {
+    final outFile = File(path.join(Global.tempPath, 'archive_$gid', file.name));
+    if (outFile.existsSync()) {
+      return outFile;
+    }
     final fileData = await file.getContent();
-    return fileData as Uint8List;
+    await outFile.create(recursive: true);
+    await outFile.writeAsBytes(fileData as Uint8List);
+    return outFile;
   }
 
   void resetPageController() {
@@ -462,11 +485,6 @@ class ViewExtController extends GetxController {
     );
 
     update();
-  }
-
-  void reloadArchive(int itemSer) {
-    final file = vState.asyncArchiveFiles[itemSer-1];
-    imageArchiveFutureMap[itemSer] = getFileData(file);
   }
 
   void setScale100(ImageInfo imageInfo, Size size) {
@@ -775,6 +793,7 @@ class ViewExtController extends GetxController {
   }
 
   final debNextPage = Debouncing(duration: const Duration(seconds: 1));
+
   void _startAutoRead() {
     Wakelock.enable();
     final duration = Duration(milliseconds: _ehConfigService.turnPageInv);
@@ -864,6 +883,7 @@ class ViewExtController extends GetxController {
 
   final thrThumbScrollTo =
       Throttling(duration: const Duration(milliseconds: 200));
+
   void thumbScrollTo({int? index}) {
     final indexRange = vState.maxThumbIndex - vState.minThumbIndex;
     final toIndex = index ?? vState.currentItemIndex;
@@ -994,6 +1014,7 @@ class ViewExtController extends GetxController {
   }
 
   static Timer? debounceTimer;
+
   // 防抖函数
   void vvDebounce(
     Function? doSomething, {
@@ -1036,6 +1057,7 @@ class ViewExtController extends GetxController {
   }
 
   final Map<String, bool> _loadExtendedImageRectComplets = {};
+
   void handOnLoadCompletExtendedImageRect({required String url}) {
     Future.delayed(const Duration(milliseconds: 50)).then(
       (_) {
