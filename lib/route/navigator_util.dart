@@ -24,9 +24,10 @@ import 'main_observer.dart';
 
 class NavigatorUtil {
   // 带搜索条件打开搜索
-  static Future<void> goSearchPageWithText({
+  static Future<void> goSearchPageWithParam({
     required String simpleSearch,
     bool replace = false,
+    AdvanceSearch? advanceSearch,
   }) async {
     String _search = simpleSearch;
     if (simpleSearch.contains(':') &&
@@ -41,7 +42,8 @@ class NavigatorUtil {
     }
 
     Get.find<ControllerTagService>().pushSearchPageCtrl(searchText: _search);
-    Get.replace(SearchRepository(searchText: _search));
+    Get.replace(
+        SearchRepository(searchText: _search, advanceSearch: advanceSearch));
 
     Get.put(
       SearchPageController(),

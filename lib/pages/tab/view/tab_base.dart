@@ -533,10 +533,15 @@ Widget getGallerySliverList(
 }
 
 class SearchRepository {
-  SearchRepository({this.searchText, this.searchType = SearchType.normal});
+  SearchRepository({
+    this.searchText,
+    this.searchType = SearchType.normal,
+    this.advanceSearch,
+  });
 
   final String? searchText;
   final SearchType searchType;
+  final AdvanceSearch? advanceSearch;
 }
 
 class EndIndicator extends StatelessWidget {

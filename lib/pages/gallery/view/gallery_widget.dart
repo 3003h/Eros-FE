@@ -217,7 +217,7 @@ class GalleryUploader extends StatelessWidget {
       ),
       onTap: () {
         logger.v('search uploader:$uploader');
-        NavigatorUtil.goSearchPageWithText(simpleSearch: 'uploader:$uploader');
+        NavigatorUtil.goSearchPageWithParam(simpleSearch: 'uploader:$uploader');
       },
     );
   }
@@ -446,7 +446,7 @@ class TagGroupItem extends StatelessWidget {
             }(),
             onPressed: () {
               logger.v('search type[${tag.type}] tag[${tag.title}]');
-              NavigatorUtil.goSearchPageWithText(
+              NavigatorUtil.goSearchPageWithParam(
                   simpleSearch: '${tag.type}:${tag.title.trim()}');
             },
             onLongPress: () {

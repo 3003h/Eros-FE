@@ -369,7 +369,7 @@ class CommentItem extends StatelessWidget {
 
     void tapName() {
       logger.v('search uploader:$_name');
-      NavigatorUtil.goSearchPageWithText(simpleSearch: 'uploader:$_name');
+      NavigatorUtil.goSearchPageWithParam(simpleSearch: 'uploader:$_name');
     }
 
     return Obx(() {

@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
+import 'package:fehviewer/common/parser/eh_parser.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -53,7 +52,6 @@ class SplashController extends GetxController {
   Future<void> _startHome(String url, {bool replace = true}) async {
     // await _autoLockController.resumed(forceLock: true && !kDebugMode);
     await _autoLockController.resumed(forceLock: true);
-    // await _autoLockController.resumed(forceLock: true);
 
     final RegExp regGalleryUrl =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
@@ -62,6 +60,8 @@ class SplashController extends GetxController {
     final RegExp regTagUrl = RegExp(r'https?://e[-x]hentai.org/tag/(.+)/?');
     final RegExp regUploaderUrl =
         RegExp(r'https?://e[-x]hentai.org/uploader/(.+)/?');
+    final RegExp regSearchUrl =
+        RegExp(r'https?://e[-x]hentai.org/\?(f_search=.+)/?');
 
     if (url.isNotEmpty) {
       // 通过外部链接关联打开的时候
@@ -88,7 +88,7 @@ class SplashController extends GetxController {
             if (regTagUrl.hasMatch(url)) {
               searchText = regTagUrl.firstMatch(url)?.group(1);
               if (sharedText != null) {
-                NavigatorUtil.goSearchPageWithText(
+                NavigatorUtil.goSearchPageWithParam(
                   simpleSearch: searchText!,
                   replace: replace,
                 );
@@ -96,11 +96,18 @@ class SplashController extends GetxController {
             } else if (regUploaderUrl.hasMatch(url)) {
               searchText = regUploaderUrl.firstMatch(url)?.group(1);
               if (sharedText != null) {
-                NavigatorUtil.goSearchPageWithText(
+                NavigatorUtil.goSearchPageWithParam(
                   simpleSearch: 'uploader:${searchText!}',
                   replace: replace,
                 );
               }
+            } else if (regSearchUrl.hasMatch(url)) {
+              final param = regSearchUrl.firstMatch(url)?.group(1);
+              logger.d('param: $param');
+              final uri = Uri.parse(param ?? '');
+              final queryParameters = uri.queryParameters;
+              searchText = queryParameters['f_search'];
+              final advSearch = parserAdvanceSearch(param);
             }
           }
         },
