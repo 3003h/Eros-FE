@@ -156,7 +156,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                         controller: _controller,
                         chapter: state.chapter,
                         limit: 4,
-                      ).paddingOnly(bottom: 20),
+                      ).paddingOnly(bottom: state.chapter != null ? 20 : 0),
                     );
                   },
                   pageController: _controller,

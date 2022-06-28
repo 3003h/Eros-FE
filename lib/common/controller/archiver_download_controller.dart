@@ -18,8 +18,7 @@ Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
     : path.join(Global.appDocPath, 'Download');
 
-final ReceivePort flutterDownloaderPort = ReceivePort();
-const portName = 'downloader_send_port';
+const flutterDownloadPortName = 'downloader_send_port';
 
 class ArchiverDownloadController extends GetxController {
   final Map<String, DownloadArchiverTaskInfo> _archiverTaskMap =
@@ -46,15 +45,15 @@ class ArchiverDownloadController extends GetxController {
   void onInit() {
     super.onInit();
     logger.d('ArchiverDownloadController onInit');
-
-    IsolateNameServer.registerPortWithName(
-        flutterDownloaderPort.sendPort, portName);
-
-    FlutterDownloader.registerCallback(_downloadCallback);
+    bindBackgroundIsolate(updateTask);
 
     // 从GS中初始化 archiverDlMap
     final _archiver =
         _gStore.archiverTaskMap ?? <String, DownloadArchiverTaskInfo>{};
+
+    logger.d(
+        '_archiver\n${_archiver.entries.map((e) => '${e.key}  ${e.value.toJson()}').join('\n')}');
+
     _archiverTaskMap.clear();
     _archiverTaskMap.addAll(_archiver);
 
@@ -63,26 +62,39 @@ class ArchiverDownloadController extends GetxController {
   }
 
   @override
-  void onReady() {
-    super.onReady();
-    flutterDownloaderPort.listen((dynamic data) async {
+  void onClose() {
+    unbindBackgroundIsolate();
+    super.onClose();
+  }
+
+  void bindBackgroundIsolate(DownloadCallback callback) {
+    ReceivePort _port = ReceivePort();
+    bool isSuccess = IsolateNameServer.registerPortWithName(
+        _port.sendPort, flutterDownloadPortName);
+    if (!isSuccess) {
+      unbindBackgroundIsolate();
+      bindBackgroundIsolate(callback);
+      return;
+    }
+    logger.d('flutterDownloaderPort.listen');
+    _port.listen((dynamic data) {
       logger.v('update listen');
       final dataList = data as List<dynamic>;
       String taskId = dataList[0] as String;
       DownloadTaskStatus status = dataList[1] as DownloadTaskStatus;
       int progress = dataList[2] as int;
 
-      logger.d('$taskId $status $progress%');
+      logger.v('$taskId $status $progress%');
 
       // 更新任务状态
-      await updateTask(taskId, status, progress);
+      callback(taskId, status, progress);
     });
+    logger.d('FlutterDownloader.registerCallback');
+    FlutterDownloader.registerCallback(flutterDownloadCallback);
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-    IsolateNameServer.removePortNameMapping(portName);
+  void unbindBackgroundIsolate() {
+    IsolateNameServer.removePortNameMapping(flutterDownloadPortName);
   }
 
   void _saveTask() {
@@ -90,29 +102,40 @@ class ArchiverDownloadController extends GetxController {
   }
 
   Future<void> updateTask(
-      String taskId, DownloadTaskStatus status, int progress) async {
+    String taskId,
+    DownloadTaskStatus status,
+    int progress,
+  ) async {
     // 通过taskId找到任务
     final _key = archiverTaskMap.entries
         .firstWhereOrNull((element) => element.value.taskId == taskId)
         ?.key;
-    logger.v('_key $_key');
+    logger.v('updateTask _key $_key');
 
     if (_key == null) {
       return;
     }
 
-    late final String? fileName;
-    if (status == DownloadTaskStatus.complete) {
-      final List<DownloadTask> tasks =
-          await FlutterDownloader.loadTasks() ?? [];
-      final _task = tasks.firstWhereOrNull((e) => e.taskId == taskId);
-      fileName = _task?.filename;
-    }
+    // String? fileName;
+    // if (status == DownloadTaskStatus.complete) {
+    //   final List<DownloadTask> tasks =
+    //       await FlutterDownloader.loadTasks() ?? [];
+    //   final _task = tasks.firstWhereOrNull((e) => e.taskId == taskId);
+    //   fileName = _task?.filename;
+    // }
+
+    final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
+    final _task = tasks.firstWhereOrNull((e) => e.taskId == taskId);
+    final fileName = _task?.filename;
+    final url = _task?.url;
+    final timeCreated = _task?.timeCreated;
 
     archiverTaskMap[_key] = archiverTaskMap[_key]!.copyWith(
       status: status.value,
       progress: progress,
       fileName: fileName,
+      url: url,
+      timeCreated: timeCreated,
     );
 
     final _tag = archiverTaskMap[_key]!.tag;
@@ -154,7 +177,7 @@ class ArchiverDownloadController extends GetxController {
       savedDir: _downloadPath,
     );
 
-    _downloadViewAnimateListAdd();
+    _downloadViewAnimateListAdd(index: 0);
     if (Get.isRegistered<DownloadViewController>()) {
       Get.find<DownloadViewController>().update();
     }
@@ -167,9 +190,10 @@ class ArchiverDownloadController extends GetxController {
     _saveTask();
   }
 
-  void _downloadViewAnimateListAdd() {
+  void _downloadViewAnimateListAdd({int? index}) {
     if (Get.isRegistered<DownloadViewController>()) {
-      Get.find<DownloadViewController>().animateArchiverListAddTask();
+      Get.find<DownloadViewController>()
+          .animateArchiverListAddTask(index: index);
     }
   }
 
@@ -181,7 +205,7 @@ class ArchiverDownloadController extends GetxController {
       // 自定义路径
       logger.d('自定义下载路径');
       await requestManageExternalStoragePermission();
-      _dirPath = path.join(ehConfigService.downloadLocatino);
+      _dirPath = path.join(ehConfigService.downloadLocatino, 'Archiver');
     } else if (GetPlatform.isAndroid) {
       logger.d('无自定义下载路径');
       _dirPath =
@@ -223,22 +247,22 @@ class ArchiverDownloadController extends GetxController {
   /// 不在 archiverDlMap 中的任务
   Future<void> _getArchiverTask() async {
     final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
-    // logger.v(
-    //     'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
+    logger.d(
+        'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
 
     for (final DownloadTask downloadTask in tasks) {
       final int _index = archiverTaskMap.entries.toList().indexWhere(
           (MapEntry<String, DownloadArchiverTaskInfo> element) =>
               element.value.taskId == downloadTask.taskId);
 
-      // 不在 archiverTaskMap 中的任务 直接删除
+      // 不在 archiverTaskMap 中的任务 直接删除任务
       if (_index < 0) {
         logger.d(
             'remove task \n${downloadTask.toString().split(', ').join('\n')}');
         FlutterDownloader.remove(
             taskId: downloadTask.taskId, shouldDeleteContent: true);
       } else {
-        // 否则更新
+        // 否则,根据 downloadTask 更新 archiverTaskMap 中的数据
         final DownloadArchiverTaskInfo _taskInfo = archiverTaskMap.entries
             .firstWhere(
                 (element) => element.value.taskId == downloadTask.taskId)
@@ -250,6 +274,8 @@ class ArchiverDownloadController extends GetxController {
           progress: downloadTask.progress,
           fileName: downloadTask.filename,
           savedDir: downloadTask.savedDir,
+          url: downloadTask.url,
+          timeCreated: downloadTask.timeCreated,
         );
 
         // 更新视图
@@ -259,11 +285,13 @@ class ArchiverDownloadController extends GetxController {
   }
 }
 
-/// 下载进度回调顶级函数
-void _downloadCallback(String id, DownloadTaskStatus status, int progress) {
-  // logger.d('$id $status $progress');
-
+/// flutterDownload下载进度回调顶级函数
+@pragma('vm:entry-point')
+void flutterDownloadCallback(
+    String id, DownloadTaskStatus status, int progress) {
   final SendPort sendPort =
-      IsolateNameServer.lookupPortByName('downloader_send_port')!;
+      IsolateNameServer.lookupPortByName(flutterDownloadPortName)!;
+  // print('_downloadCallback ${sendPort.runtimeType}');
+  print('$id $status $progress%');
   sendPort.send([id, status, progress]);
 }
