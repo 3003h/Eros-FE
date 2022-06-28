@@ -316,14 +316,8 @@ Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
             logic.onLongPress(_taskIndex, type: DownloadType.archiver),
         behavior: HitTestBehavior.opaque,
         child: DownloadArchiverItem(
-          title: _taskInfo.title ?? '',
-          progress: _taskInfo.progress ?? 0,
-          status: DownloadTaskStatus(_taskInfo.status ?? 0),
+          archiverTaskInfo: _taskInfo,
           index: _taskIndex,
-          coverUrl: _taskInfo.imgUrl,
-          galleryUrl: _taskInfo.galleryUrl,
-          galleryGid: _taskInfo.gid,
-          filePath: path.join(_taskInfo.savedDir ?? '', _taskInfo.fileName),
         ),
       );
     },

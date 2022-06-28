@@ -11,23 +11,33 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/src/platform/platform_io.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 
 import 'download_gallery_item.dart';
 
 const kCardRadius = 10.0;
+final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
 
 class DownloadArchiverItem extends GetView<DownloadViewController> {
-  const DownloadArchiverItem({
+  DownloadArchiverItem({
     Key? key,
-    required this.title,
-    this.progress = 0,
-    required this.status,
     required this.index,
-    this.coverUrl,
-    this.galleryUrl,
-    this.galleryGid,
-    required this.filePath,
-  }) : super(key: key);
+    required this.archiverTaskInfo,
+  })  : title = archiverTaskInfo.title ?? '',
+        progress = archiverTaskInfo.progress ?? 0,
+        status = DownloadTaskStatus(archiverTaskInfo.status ?? 0),
+        coverUrl = archiverTaskInfo.imgUrl,
+        galleryUrl = archiverTaskInfo.galleryUrl,
+        galleryGid = archiverTaskInfo.gid,
+        filePath = path.join(
+            archiverTaskInfo.savedDir ?? '', archiverTaskInfo.fileName),
+        timeCreated = archiverTaskInfo.timeCreated != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                archiverTaskInfo.timeCreated ?? 0)
+            : null,
+        super(key: key);
+
   final String title;
   final int progress;
   final DownloadTaskStatus status;
@@ -36,6 +46,9 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
   final String? galleryUrl;
   final String? galleryGid;
   final String filePath;
+  final DateTime? timeCreated;
+
+  final DownloadArchiverTaskInfo archiverTaskInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +83,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
             ),
             Expanded(
               child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   logger.d(
                       'gid: $galleryGid , path: $filePath, path: ${filePath.realDirPath}');
@@ -112,34 +126,53 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            height: 1.2,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                height: 1.2,
+                              ),
+                            ).paddingOnly(bottom: 4),
+                            if (timeCreated != null)
+                              Text(
+                                formatter.format(timeCreated!),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  height: 1.2,
+                                  color: CupertinoDynamicColor.resolve(
+                                      CupertinoColors.secondaryLabel, context),
+                                ),
+                              ),
+                          ],
                         ).paddingSymmetric(vertical: 4),
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: LinearProgressIndicator(
-                              value: progress / 100.0,
-                              backgroundColor: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.secondarySystemFill, context),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  CupertinoDynamicColor.resolve(
-                                      CupertinoColors.activeBlue, context)),
-                            ).paddingOnly(right: 8.0),
-                          ),
-                          Text(
-                            '$progress %',
-                            style: const TextStyle(
-                              fontSize: 13,
+                      // 进度条
+                      if (status == DownloadTaskStatus.running ||
+                          status == DownloadTaskStatus.paused)
+                        Row(
+                          children: [
+                            Expanded(
+                              child: LinearProgressIndicator(
+                                value: progress / 100.0,
+                                backgroundColor: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondarySystemFill,
+                                    context),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CupertinoDynamicColor.resolve(
+                                        CupertinoColors.activeBlue, context)),
+                              ).paddingOnly(right: 8.0),
                             ),
-                          ),
-                        ],
-                      ),
+                            Text(
+                              '$progress %',
+                              style: const TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),
@@ -155,7 +188,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
   Widget _buildCover() {
     return GestureDetector(
       child: Container(
-        width: 64,
+        width: 74,
         child: coverUrl != null && coverUrl!.isNotEmpty
             ? DownloadItemCoverImage(
                 url: coverUrl,
@@ -196,7 +229,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                 padding: const EdgeInsets.all(0),
                 child: const Icon(
                   FontAwesomeIcons.pause,
-                  size: 14,
+                  size: 18,
                 ),
                 onPressed: () {
                   controller.pauseArchiverDownload(taskId: _taskInfo.taskId);
@@ -206,7 +239,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                 padding: const EdgeInsets.all(0),
                 child: const Icon(
                   FontAwesomeIcons.stop,
-                  size: 14,
+                  size: 18,
                 ),
                 onPressed: () {
                   controller.cancelArchiverDownload(taskId: _taskInfo.taskId);
@@ -216,12 +249,12 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
       // 完成时 按下无动作
       DownloadTaskStatus.complete: CupertinoTheme(
         data:
-            const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
+            const CupertinoThemeData(primaryColor: CupertinoColors.activeGreen),
         child: CupertinoButton(
           padding: const EdgeInsets.all(0),
           child: const Icon(
             FontAwesomeIcons.check,
-            size: 14,
+            size: 18,
           ),
           onPressed: () {},
         ),
@@ -229,12 +262,12 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
       // 暂停时 显示继续按钮。按下恢复任务
       DownloadTaskStatus.paused: CupertinoTheme(
         data:
-            const CupertinoThemeData(primaryColor: CupertinoColors.activeGreen),
+            const CupertinoThemeData(primaryColor: CupertinoColors.activeBlue),
         child: CupertinoButton(
           padding: const EdgeInsets.all(0),
           child: const Icon(
             FontAwesomeIcons.play,
-            size: 14,
+            size: 18,
           ),
           onPressed: () {
             controller.resumeArchiverDownload(index);
@@ -242,22 +275,25 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
         ),
       ),
       // 失败时 显示重试按钮。按下重试任务
-      DownloadTaskStatus.failed: CupertinoButton(
-        padding: const EdgeInsets.all(0),
-        child: const Icon(
-          FontAwesomeIcons.play,
-          size: 14,
+      DownloadTaskStatus.failed: CupertinoTheme(
+        data: const CupertinoThemeData(primaryColor: CupertinoColors.systemRed),
+        child: CupertinoButton(
+          padding: const EdgeInsets.all(0),
+          child: const Icon(
+            FontAwesomeIcons.arrowRotateLeft,
+            size: 18,
+          ),
+          onPressed: () {
+            controller.retryArchiverDownload(index);
+          },
         ),
-        onPressed: () {
-          controller.retryArchiverDownload(index);
-        },
       ),
       // 取消状态 显示重试按钮。按下重试任务
       DownloadTaskStatus.canceled: CupertinoButton(
         padding: const EdgeInsets.all(0),
         child: const Icon(
-          FontAwesomeIcons.redo,
-          size: 14,
+          FontAwesomeIcons.arrowRotateLeft,
+          size: 18,
         ),
         onPressed: () {
           controller.retryArchiverDownload(index);

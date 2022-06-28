@@ -392,7 +392,7 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   final _galleryComments = parseGalleryComment(document);
 
   final _chapter = _parseChapter(_galleryComments);
-  print(_chapter.map((e) => e.toJson()).join('\n'));
+  // print(_chapter.map((e) => e.toJson()).join('\n'));
 
   final galleryProvider = GalleryProvider(
     imgUrl: _imageUrl,
@@ -423,16 +423,19 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   return galleryProvider;
 }
 
-List<Chapter> _parseChapter(List<GalleryComment> comments) {
+List<Chapter>? _parseChapter(List<GalleryComment> comments) {
   final listListChapter = <List<Chapter>>[];
   for (final comment in comments) {
     final listChapter = parseChapter(comment.text);
     listListChapter.add(listChapter);
   }
 
-  final listChapter = listListChapter.reduce(
-      (value, element) => value.length > element.length ? value : element);
-  return listChapter;
+  if (listListChapter.isNotEmpty) {
+    final listChapter = listListChapter.reduce(
+        (value, element) => value.length > element.length ? value : element);
+    return listChapter;
+  }
+  return null;
 }
 
 List<GalleryImage> parseGalleryImageFromHtml(String response) {
