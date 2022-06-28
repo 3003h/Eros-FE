@@ -130,6 +130,8 @@ class ArchiverDownloadController extends GetxController {
     final url = _task?.url;
     final timeCreated = _task?.timeCreated;
 
+    if (fileName != null) logger.d('fileName $fileName');
+
     archiverTaskMap[_key] = archiverTaskMap[_key]!.copyWith(
       status: status.value,
       progress: progress,

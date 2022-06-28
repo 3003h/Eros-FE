@@ -245,10 +245,20 @@ extension ExtString on String {
         this;
   }
 
-  String get realDirPath {
+  String get realDownloadPath {
     if (GetPlatform.isIOS) {
       final List<String> pathList = path.split(this).reversed.toList();
       return path.join(Global.appDocPath, pathList[1], pathList[0]);
+    } else {
+      return this;
+    }
+  }
+
+  String get realArchiverPath {
+    if (GetPlatform.isIOS) {
+      final List<String> pathList = path.split(this).reversed.toList();
+      return path.join(
+          Global.appDocPath, pathList[2], pathList[1], pathList[0]);
     } else {
       return this;
     }
