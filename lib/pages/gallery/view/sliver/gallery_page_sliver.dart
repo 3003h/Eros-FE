@@ -155,8 +155,12 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                       child: ChapterGridView(
                         controller: _controller,
                         chapter: state.chapter,
-                        limit: 3,
-                      ).paddingOnly(bottom: state.chapter != null ? 20 : 0),
+                        maxLine: 3,
+                      ).paddingOnly(
+                          bottom: (state.chapter != null &&
+                                  state.chapter!.isNotEmpty)
+                              ? 20
+                              : 0),
                     );
                   },
                   pageController: _controller,
