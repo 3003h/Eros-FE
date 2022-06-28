@@ -72,7 +72,7 @@ class GStore {
       return null;
     }
 
-    logger.d('get archiverDlMap ${jsonDecode(val)}');
+    // logger.d('get archiverDlMap ${jsonDecode(val)}');
     final _map = <String, DownloadArchiverTaskInfo>{};
     for (final dynamic dlItemJson in jsonDecode(val) as List<dynamic>) {
       final _takInfo =

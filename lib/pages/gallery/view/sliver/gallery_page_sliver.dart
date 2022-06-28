@@ -1,8 +1,7 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -10,9 +9,6 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/slivers.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -155,76 +151,12 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 // 章节
                 GalleryObxSliver(
                   (state) {
-                    final _pageStyle = TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    );
-                    final _authStyle = TextStyle(fontSize: 12);
-                    final _titleStyle = TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    );
-
                     return SliverToBoxAdapter(
-                      child: (state.chapter?.isNotEmpty ?? false)
-                          ? Container(
-                              padding: const EdgeInsets.only(
-                                  left: kPadding, right: kPadding, bottom: 20),
-                              child: Wrap(
-                                spacing: 8.0,
-                                runSpacing: 8.0,
-                                children: state.chapter!
-                                    .map(
-                                      (e) => GestureDetector(
-                                        onTap: () {
-                                          NavigatorUtil.goGalleryViewPage(
-                                              e.page - 1,
-                                              _controller.gState.gid);
-                                        },
-                                        child: Container(
-                                          // height: 40,
-                                          decoration: BoxDecoration(
-                                            color:
-                                                CupertinoDynamicColor.resolve(
-                                                    CupertinoColors.systemGrey6,
-                                                    context),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          constraints: const BoxConstraints(
-                                            // maxWidth: 80,
-                                            minHeight: 34,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 8),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text('${e.page}.',
-                                                      style: _pageStyle),
-                                                  const SizedBox(width: 6),
-                                                  Text('${e.author}',
-                                                      style: _authStyle),
-                                                ],
-                                              ),
-                                              if (e.title != null)
-                                                Text('${e.title}',
-                                                    style: _titleStyle),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                            )
-                          : const SizedBox.shrink(),
+                      child: ChapterBox(
+                        controller: _controller,
+                        chapter: state.chapter,
+                        limit: 4,
+                      ).paddingOnly(bottom: state.chapter != null ? 20 : 0),
                     );
                   },
                   pageController: _controller,
@@ -380,6 +312,168 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
               ],
             )
           : ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4)),
+    );
+  }
+}
+
+class ChapterBox extends StatefulWidget {
+  const ChapterBox({
+    Key? key,
+    required GalleryPageController controller,
+    this.chapter,
+    this.limit,
+  })  : _controller = controller,
+        super(key: key);
+
+  final GalleryPageController _controller;
+  final List<Chapter>? chapter;
+  final int? limit;
+
+  @override
+  State<ChapterBox> createState() => _ChapterBoxState();
+}
+
+class _ChapterBoxState extends State<ChapterBox> {
+  bool showFull = false;
+
+  @override
+  void initState() {
+    super.initState();
+    showFull = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _chapter = widget.chapter;
+    if (_chapter == null) {
+      return const SizedBox.shrink();
+    }
+
+    Widget _full = getChapter();
+
+    if ((widget.limit ?? 0) > _chapter.length) {
+      return _full;
+    }
+
+    Widget _limit = getChapter(limit: widget.limit);
+
+    Widget _animate = AnimatedCrossFade(
+      firstChild: _limit,
+      secondChild: _full,
+      crossFadeState:
+          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 300),
+      firstCurve: Curves.ease,
+      secondCurve: Curves.ease,
+    );
+
+    Widget _icon = AnimatedCrossFade(
+      firstChild: const Icon(CupertinoIcons.chevron_down),
+      secondChild: const Icon(CupertinoIcons.chevron_up),
+      crossFadeState:
+          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _animate,
+        CupertinoButton(
+          minSize: 0,
+          padding: const EdgeInsets.all(0),
+          child: Center(child: _icon),
+          onPressed: () {
+            setState(() {
+              showFull = !showFull;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget getChapter({int? limit}) {
+    final _chapter = widget.chapter!;
+    return Container(
+      padding: const EdgeInsets.only(left: kPadding, right: kPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _chapter
+            .take(limit ?? _chapter.length)
+            .map(
+              (e) => ChapterItem(
+                gid: widget._controller.gState.gid,
+                page: e.page,
+                author: e.author,
+                title: e.title,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+}
+
+class ChapterItem extends StatelessWidget {
+  const ChapterItem({
+    Key? key,
+    required this.page,
+    this.author,
+    this.title,
+    required this.gid,
+  }) : super(key: key);
+
+  final int page;
+  final String gid;
+  final String? author;
+  final String? title;
+
+  @override
+  Widget build(BuildContext context) {
+    final _pageStyle = TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+    );
+    final _authStyle = TextStyle(
+        fontSize: 12, color: title != null ? ehTheme.commitIconColor : null);
+    final _titleStyle = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.bold,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+    );
+
+    return GestureDetector(
+      onTap: () {
+        NavigatorUtil.goGalleryViewPage(page - 1, gid);
+      },
+      child: Container(
+        // height: 40,
+        decoration: BoxDecoration(
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey6, context),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        constraints: BoxConstraints(
+            // maxWidth: context.width-16,
+            // minHeight: 32,
+            ),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+        margin: const EdgeInsets.symmetric(vertical: 3),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('$page. $author', style: _authStyle),
+            if (title != null)
+              Text(
+                '$title',
+                style: _titleStyle,
+                softWrap: true,
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

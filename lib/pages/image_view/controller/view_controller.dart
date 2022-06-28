@@ -452,22 +452,28 @@ class ViewExtController extends GetxController {
 
     late final GalleryImage? image;
 
-    if (vState.viewMode == ViewMode.topToBottom) {
-      image = await imageLock.synchronized(
-        () async => await _galleryPageController.fetchAndParserImageInfo(
-          itemSer,
-          cancelToken: vState.getMoreCancelToken,
-          changeSource: changeSource,
-        ),
-        // timeout: const Duration(seconds: 5),
-      );
-    } else {
-      image = await _galleryPageController.fetchAndParserImageInfo(
-        itemSer,
-        cancelToken: vState.getMoreCancelToken,
-        changeSource: changeSource,
-      );
-    }
+    image = await _galleryPageController.fetchAndParserImageInfo(
+      itemSer,
+      cancelToken: vState.getMoreCancelToken,
+      changeSource: changeSource,
+    );
+
+    // if (vState.viewMode == ViewMode.topToBottom) {
+    //   image = await imageLock.synchronized(
+    //     () async => await _galleryPageController.fetchAndParserImageInfo(
+    //       itemSer,
+    //       cancelToken: vState.getMoreCancelToken,
+    //       changeSource: changeSource,
+    //     ),
+    //     // timeout: const Duration(seconds: 5),
+    //   );
+    // } else {
+    //   image = await _galleryPageController.fetchAndParserImageInfo(
+    //     itemSer,
+    //     cancelToken: vState.getMoreCancelToken,
+    //     changeSource: changeSource,
+    //   );
+    // }
 
     return image;
   }
