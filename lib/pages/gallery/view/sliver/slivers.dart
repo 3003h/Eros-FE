@@ -412,13 +412,13 @@ class ChapterGridView extends StatefulWidget {
     Key? key,
     required GalleryPageController controller,
     this.chapter,
-    this.limit,
+    this.maxLine,
   })  : _controller = controller,
         super(key: key);
 
   final GalleryPageController _controller;
   final List<Chapter>? chapter;
-  final int? limit;
+  final int? maxLine;
 
   @override
   State<ChapterGridView> createState() => _ChapterGridViewState();
@@ -436,17 +436,38 @@ class _ChapterGridViewState extends State<ChapterGridView> {
   @override
   Widget build(BuildContext context) {
     final _chapter = widget.chapter;
-    if (_chapter == null) {
+    if (_chapter == null || _chapter.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    Widget _full = getChapter();
+    const _gridDelegateWithMaxCrossAxisExtent =
+        SliverGridDelegateWithMaxCrossAxisExtent(
+      maxCrossAxisExtent: 220,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      childAspectRatio: 3,
+    );
 
-    if ((widget.limit ?? 0) > _chapter.length) {
+    final _sgp = sliverGridDelegateWithMaxToCount(
+      context.width -
+          context.mediaQueryPadding.left -
+          context.mediaQueryPadding.right -
+          2 * kPadding,
+      _gridDelegateWithMaxCrossAxisExtent,
+    );
+
+    final gridDelegate = _sgp.gridDelegate;
+    final _crossAxisCount = gridDelegate.crossAxisCount;
+
+    Widget _full = getChapter(gridDelegate);
+    final limit = (widget.maxLine ?? 0) * _crossAxisCount;
+
+    if (limit > _chapter.length) {
+      logger.d('full _chapter');
       return _full;
     }
 
-    Widget _limit = getChapter(limit: widget.limit);
+    Widget _limit = getChapter(gridDelegate, limit: limit);
 
     Widget _animate = AnimatedCrossFade(
       firstChild: _limit,
@@ -484,27 +505,8 @@ class _ChapterGridViewState extends State<ChapterGridView> {
     );
   }
 
-  Widget getChapter({int? limit}) {
+  Widget getChapter(SliverGridDelegate gridDelegate, {int? limit}) {
     final _chapter = widget.chapter!;
-
-    const _gridDelegateWithMaxCrossAxisExtent =
-        SliverGridDelegateWithMaxCrossAxisExtent(
-      maxCrossAxisExtent: 220,
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
-      childAspectRatio: 3,
-    );
-
-    final _sgp = sliverGridDelegateWithMaxToCount(
-      context.width -
-          context.mediaQueryPadding.left -
-          context.mediaQueryPadding.right -
-          2 * kPadding,
-      _gridDelegateWithMaxCrossAxisExtent,
-    );
-
-    final gridDelegate = _sgp.gridDelegate;
-    final _crossAxisCount = gridDelegate.crossAxisCount;
 
     return Container(
       padding: const EdgeInsets.only(left: kPadding, right: kPadding),
@@ -514,7 +516,7 @@ class _ChapterGridViewState extends State<ChapterGridView> {
         shrinkWrap: true,
         gridDelegate: gridDelegate,
         children: _chapter
-            .take(limit != null ? limit * _crossAxisCount : _chapter.length)
+            .take(limit ?? _chapter.length)
             .map(
               (e) => ChapterItemFlex(
                 gid: widget._controller.gState.gid,
@@ -612,8 +614,11 @@ class ChapterItemFlex extends StatelessWidget {
       fontWeight: FontWeight.w500,
     );
     final _authStyle = TextStyle(
-        fontSize: title != null ? 11 : 13,
-        color: title != null ? ehTheme.commitIconColor : null);
+      fontSize: title != null ? 11 : 13,
+      color: title != null
+          ? ehTheme.commitIconColor
+          : CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+    );
     final _titleStyle = TextStyle(
       fontSize: 13,
       fontWeight: FontWeight.w500,
@@ -628,7 +633,7 @@ class ChapterItemFlex extends StatelessWidget {
         ],
       ),
       showDuration: const Duration(seconds: 2),
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: BoxDecoration(
         boxShadow: [
