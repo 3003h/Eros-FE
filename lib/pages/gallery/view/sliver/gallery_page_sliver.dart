@@ -152,10 +152,10 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                 GalleryObxSliver(
                   (state) {
                     return SliverToBoxAdapter(
-                      child: ChapterBox(
+                      child: ChapterGridView(
                         controller: _controller,
                         chapter: state.chapter,
-                        limit: 4,
+                        limit: 3,
                       ).paddingOnly(bottom: state.chapter != null ? 20 : 0),
                     );
                   },
@@ -283,7 +283,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                     //   FontAwesomeIcons.tags,
                     //   size: 22,
                     // ),
-                    child: Icon(CupertinoIcons.tags, size: 26),
+                    child: Icon(CupertinoIcons.tags, size: 24),
                   ),
                   onPressed: () {
                     _controller.addTag();
@@ -312,168 +312,6 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
               ],
             )
           : ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4)),
-    );
-  }
-}
-
-class ChapterBox extends StatefulWidget {
-  const ChapterBox({
-    Key? key,
-    required GalleryPageController controller,
-    this.chapter,
-    this.limit,
-  })  : _controller = controller,
-        super(key: key);
-
-  final GalleryPageController _controller;
-  final List<Chapter>? chapter;
-  final int? limit;
-
-  @override
-  State<ChapterBox> createState() => _ChapterBoxState();
-}
-
-class _ChapterBoxState extends State<ChapterBox> {
-  bool showFull = false;
-
-  @override
-  void initState() {
-    super.initState();
-    showFull = false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final _chapter = widget.chapter;
-    if (_chapter == null) {
-      return const SizedBox.shrink();
-    }
-
-    Widget _full = getChapter();
-
-    if ((widget.limit ?? 0) > _chapter.length) {
-      return _full;
-    }
-
-    Widget _limit = getChapter(limit: widget.limit);
-
-    Widget _animate = AnimatedCrossFade(
-      firstChild: _limit,
-      secondChild: _full,
-      crossFadeState:
-          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      duration: const Duration(milliseconds: 300),
-      firstCurve: Curves.ease,
-      secondCurve: Curves.ease,
-    );
-
-    Widget _icon = AnimatedCrossFade(
-      firstChild: const Icon(CupertinoIcons.chevron_down),
-      secondChild: const Icon(CupertinoIcons.chevron_up),
-      crossFadeState:
-          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      duration: const Duration(milliseconds: 300),
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _animate,
-        CupertinoButton(
-          minSize: 0,
-          padding: const EdgeInsets.all(0),
-          child: Center(child: _icon),
-          onPressed: () {
-            setState(() {
-              showFull = !showFull;
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget getChapter({int? limit}) {
-    final _chapter = widget.chapter!;
-    return Container(
-      padding: const EdgeInsets.only(left: kPadding, right: kPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: _chapter
-            .take(limit ?? _chapter.length)
-            .map(
-              (e) => ChapterItem(
-                gid: widget._controller.gState.gid,
-                page: e.page,
-                author: e.author,
-                title: e.title,
-              ),
-            )
-            .toList(),
-      ),
-    );
-  }
-}
-
-class ChapterItem extends StatelessWidget {
-  const ChapterItem({
-    Key? key,
-    required this.page,
-    this.author,
-    this.title,
-    required this.gid,
-  }) : super(key: key);
-
-  final int page;
-  final String gid;
-  final String? author;
-  final String? title;
-
-  @override
-  Widget build(BuildContext context) {
-    final _pageStyle = TextStyle(
-      fontSize: 12,
-      fontWeight: FontWeight.bold,
-    );
-    final _authStyle = TextStyle(
-        fontSize: 12, color: title != null ? ehTheme.commitIconColor : null);
-    final _titleStyle = TextStyle(
-      fontSize: 13,
-      fontWeight: FontWeight.bold,
-      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-    );
-
-    return GestureDetector(
-      onTap: () {
-        NavigatorUtil.goGalleryViewPage(page - 1, gid);
-      },
-      child: Container(
-        // height: 40,
-        decoration: BoxDecoration(
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey6, context),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        constraints: BoxConstraints(
-            // maxWidth: context.width-16,
-            // minHeight: 32,
-            ),
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-        margin: const EdgeInsets.symmetric(vertical: 3),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('$page. $author', style: _authStyle),
-            if (title != null)
-              Text(
-                '$title',
-                style: _titleStyle,
-                softWrap: true,
-              ),
-          ],
-        ),
-      ),
     );
   }
 }

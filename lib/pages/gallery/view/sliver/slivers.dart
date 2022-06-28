@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
@@ -305,4 +306,426 @@ class PreviewSliverGrid extends StatelessWidget {
       ),
     );
   }
+}
+
+class ChapterBox extends StatefulWidget {
+  const ChapterBox({
+    Key? key,
+    required GalleryPageController controller,
+    this.chapter,
+    this.limit,
+  })  : _controller = controller,
+        super(key: key);
+
+  final GalleryPageController _controller;
+  final List<Chapter>? chapter;
+  final int? limit;
+
+  @override
+  State<ChapterBox> createState() => _ChapterBoxState();
+}
+
+class _ChapterBoxState extends State<ChapterBox> {
+  bool showFull = false;
+
+  @override
+  void initState() {
+    super.initState();
+    showFull = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _chapter = widget.chapter;
+    if (_chapter == null) {
+      return const SizedBox.shrink();
+    }
+
+    Widget _full = getChapter();
+
+    if ((widget.limit ?? 0) > _chapter.length) {
+      return _full;
+    }
+
+    Widget _limit = getChapter(limit: widget.limit);
+
+    Widget _animate = AnimatedCrossFade(
+      firstChild: _limit,
+      secondChild: _full,
+      crossFadeState:
+          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 300),
+      firstCurve: Curves.ease,
+      secondCurve: Curves.ease,
+    );
+
+    Widget _icon = AnimatedCrossFade(
+      firstChild: const Icon(CupertinoIcons.chevron_down),
+      secondChild: const Icon(CupertinoIcons.chevron_up),
+      crossFadeState:
+          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _animate,
+        CupertinoButton(
+          minSize: 0,
+          padding: const EdgeInsets.all(0),
+          child: Center(child: _icon),
+          onPressed: () {
+            setState(() {
+              showFull = !showFull;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget getChapter({int? limit}) {
+    final _chapter = widget.chapter!;
+    return Container(
+      padding: const EdgeInsets.only(left: kPadding, right: kPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _chapter
+            .take(limit ?? _chapter.length)
+            .map(
+              (e) => ChapterItem(
+                gid: widget._controller.gState.gid,
+                page: e.page,
+                author: e.author,
+                title: e.title,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+}
+
+class ChapterGridView extends StatefulWidget {
+  const ChapterGridView({
+    Key? key,
+    required GalleryPageController controller,
+    this.chapter,
+    this.limit,
+  })  : _controller = controller,
+        super(key: key);
+
+  final GalleryPageController _controller;
+  final List<Chapter>? chapter;
+  final int? limit;
+
+  @override
+  State<ChapterGridView> createState() => _ChapterGridViewState();
+}
+
+class _ChapterGridViewState extends State<ChapterGridView> {
+  bool showFull = false;
+
+  @override
+  void initState() {
+    super.initState();
+    showFull = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _chapter = widget.chapter;
+    if (_chapter == null) {
+      return const SizedBox.shrink();
+    }
+
+    Widget _full = getChapter();
+
+    if ((widget.limit ?? 0) > _chapter.length) {
+      return _full;
+    }
+
+    Widget _limit = getChapter(limit: widget.limit);
+
+    Widget _animate = AnimatedCrossFade(
+      firstChild: _limit,
+      secondChild: _full,
+      crossFadeState:
+          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 300),
+      firstCurve: Curves.ease,
+      secondCurve: Curves.ease,
+    );
+
+    Widget _icon = AnimatedCrossFade(
+      firstChild: const Icon(CupertinoIcons.chevron_down),
+      secondChild: const Icon(CupertinoIcons.chevron_up),
+      crossFadeState:
+          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _animate,
+        CupertinoButton(
+          minSize: 0,
+          padding: const EdgeInsets.all(0),
+          child: Center(child: _icon),
+          onPressed: () {
+            setState(() {
+              showFull = !showFull;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget getChapter({int? limit}) {
+    final _chapter = widget.chapter!;
+
+    const _gridDelegateWithMaxCrossAxisExtent =
+        SliverGridDelegateWithMaxCrossAxisExtent(
+      maxCrossAxisExtent: 220,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      childAspectRatio: 3,
+    );
+
+    final _sgp = sliverGridDelegateWithMaxToCount(
+      context.width -
+          context.mediaQueryPadding.left -
+          context.mediaQueryPadding.right -
+          2 * kPadding,
+      _gridDelegateWithMaxCrossAxisExtent,
+    );
+
+    final gridDelegate = _sgp.gridDelegate;
+    final _crossAxisCount = gridDelegate.crossAxisCount;
+
+    return Container(
+      padding: const EdgeInsets.only(left: kPadding, right: kPadding),
+      child: GridView(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: gridDelegate,
+        children: _chapter
+            .take(limit != null ? limit * _crossAxisCount : _chapter.length)
+            .map(
+              (e) => ChapterItemFlex(
+                gid: widget._controller.gState.gid,
+                page: e.page,
+                author: e.author,
+                title: e.title,
+              ),
+            )
+            .toList(),
+      ),
+    );
+  }
+}
+
+class ChapterItem extends StatelessWidget {
+  const ChapterItem({
+    Key? key,
+    required this.page,
+    this.author,
+    this.title,
+    required this.gid,
+  }) : super(key: key);
+
+  final int page;
+  final String gid;
+  final String? author;
+  final String? title;
+
+  @override
+  Widget build(BuildContext context) {
+    final _pageStyle = TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+    );
+    final _authStyle = TextStyle(
+        fontSize: 12, color: title != null ? ehTheme.commitIconColor : null);
+    final _titleStyle = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.bold,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+    );
+
+    return GestureDetector(
+      onTap: () {
+        NavigatorUtil.goGalleryViewPage(page - 1, gid);
+      },
+      child: Container(
+        // height: 40,
+        decoration: BoxDecoration(
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey6, context),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        constraints: BoxConstraints(
+            // maxWidth: context.width-16,
+            // minHeight: 32,
+            ),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+        margin: const EdgeInsets.symmetric(vertical: 3),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('$page. $author', style: _authStyle),
+            if (title != null)
+              Text(
+                '$title',
+                style: _titleStyle,
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ChapterItemFlex extends StatelessWidget {
+  const ChapterItemFlex({
+    Key? key,
+    required this.page,
+    this.author,
+    this.title,
+    required this.gid,
+  }) : super(key: key);
+
+  final int page;
+  final String gid;
+  final String? author;
+  final String? title;
+
+  @override
+  Widget build(BuildContext context) {
+    final _pageStyle = TextStyle(
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+    );
+    final _authStyle = TextStyle(
+        fontSize: title != null ? 11 : 13,
+        color: title != null ? ehTheme.commitIconColor : null);
+    final _titleStyle = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w500,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+    );
+
+    return Tooltip(
+      richMessage: TextSpan(
+        children: [
+          if (title != null) TextSpan(text: '$title\n', style: _titleStyle),
+          TextSpan(text: author, style: _authStyle),
+        ],
+      ),
+      showDuration: const Duration(seconds: 2),
+      padding: const EdgeInsets.all(6),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.darkBackgroundGray, context)
+                .withOpacity(0.4),
+            offset: const Offset(0, 0),
+            blurRadius: 20, //阴影模糊程度
+            spreadRadius: 4, //阴影扩散程度
+          ),
+        ],
+        border: ehTheme.isDarkMode
+            ? Border.all(
+                width: 1,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey4, context))
+            : null,
+        borderRadius: BorderRadius.circular(10),
+        color:
+            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey6, context),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          NavigatorUtil.goGalleryViewPage(page - 1, gid);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemGrey6, context),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (title != null)
+                Expanded(
+                  child: Text(
+                    '$title',
+                    style: _titleStyle,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '$author',
+                      style: _authStyle,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: title != null ? null : 2,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text('$page', style: _pageStyle),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SGDelegatePack {
+  SGDelegatePack(this.gridDelegate, this.size);
+  SliverGridDelegateWithFixedCrossAxisCount gridDelegate;
+  Size size;
+}
+
+SGDelegatePack sliverGridDelegateWithMaxToCount(
+    double width, SliverGridDelegateWithMaxCrossAxisExtent sliverGridDelegate,
+    [double extendHeight = 0]) {
+  int crossAxisCount = (width /
+          (sliverGridDelegate.maxCrossAxisExtent +
+              sliverGridDelegate.crossAxisSpacing))
+      .ceil();
+  final double usableCrossAxisExtent =
+      width - sliverGridDelegate.crossAxisSpacing * (crossAxisCount - 1);
+  if (crossAxisCount < 1) {
+    crossAxisCount = 1;
+  }
+  final double childCrossAxisExtent = usableCrossAxisExtent / crossAxisCount;
+  double childMainAxisExtent =
+      childCrossAxisExtent / sliverGridDelegate.childAspectRatio;
+  childMainAxisExtent += extendHeight;
+  final childAspectRatio = childCrossAxisExtent / childMainAxisExtent;
+  return SGDelegatePack(
+      SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        mainAxisSpacing: sliverGridDelegate.mainAxisSpacing,
+        crossAxisSpacing: sliverGridDelegate.crossAxisSpacing,
+        childAspectRatio: childAspectRatio,
+      ),
+      Size(childCrossAxisExtent, childMainAxisExtent));
 }
