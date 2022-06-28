@@ -86,7 +86,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   logger.d(
-                      'gid: $galleryGid , path: $filePath, path: ${filePath.realDirPath}');
+                      'gid: $galleryGid\npath:\n$filePath\n${filePath.realArchiverPath}');
                   if (galleryGid == null) {
                     return;
                   }
@@ -107,7 +107,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                       0;
 
                   // 异步读取zip
-                  final tuple = await readAsyncArchive(filePath.realDirPath);
+                  final tuple =
+                      await readAsyncArchive(filePath.realArchiverPath);
                   final asyncArchive = tuple.item1;
                   final inputStream = tuple.item2;
                   logger.d('${asyncArchive.length}');
@@ -136,7 +137,9 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                                 height: 1.2,
                               ),
                             ).paddingOnly(bottom: 4),
-                            if (timeCreated != null)
+                            if (timeCreated != null &&
+                                status != DownloadTaskStatus.running &&
+                                status != DownloadTaskStatus.paused)
                               Text(
                                 formatter.format(timeCreated!),
                                 style: TextStyle(

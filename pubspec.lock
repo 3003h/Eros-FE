@@ -580,9 +580,11 @@ packages:
   flutter_downloader:
     dependency: "direct main"
     description:
-      name: flutter_downloader
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: dev
+      resolved-ref: "55d83f9190003727a9cca354438a21049e8bc075"
+      url: "https://github.com/honjow/flutter_downloader.git"
+    source: git
     version: "1.8.0+1"
   flutter_easyrefresh:
     dependency: "direct main"

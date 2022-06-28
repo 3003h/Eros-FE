@@ -74,7 +74,11 @@ dependencies:
   # 评星
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
-  flutter_downloader: ^1.6.0
+#  flutter_downloader: ^1.6.0
+  flutter_downloader:
+    git:
+      url: https://github.com/honjow/flutter_downloader.git
+      ref: dev
   floor: ^1.1.0
   copy_with_extension: ^4.0.0
   package_info: ^2.0.0
