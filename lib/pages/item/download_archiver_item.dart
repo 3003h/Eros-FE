@@ -6,6 +6,7 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -71,7 +72,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
         color: ehTheme.itemBackgroundColor,
         borderRadius: BorderRadius.circular(kCardRadius),
       ),
-      height: 80,
+      height: 84,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(kCardRadius),
         child: Row(
@@ -86,7 +87,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   logger.d(
-                      'gid: $galleryGid , path: $filePath, path: ${filePath.realDirPath}');
+                      'gid: $galleryGid\npath:\n$filePath\n${filePath.realArchiverPath}');
                   if (galleryGid == null) {
                     return;
                   }
@@ -107,7 +108,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                       0;
 
                   // 异步读取zip
-                  final tuple = await readAsyncArchive(filePath.realDirPath);
+                  final tuple =
+                      await readAsyncArchive(filePath.realArchiverPath);
                   final asyncArchive = tuple.item1;
                   final inputStream = tuple.item2;
                   logger.d('${asyncArchive.length}');
@@ -136,7 +138,9 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                                 height: 1.2,
                               ),
                             ).paddingOnly(bottom: 4),
-                            if (timeCreated != null)
+                            if (timeCreated != null &&
+                                status != DownloadTaskStatus.running &&
+                                status != DownloadTaskStatus.paused)
                               Text(
                                 formatter.format(timeCreated!),
                                 style: TextStyle(
@@ -224,7 +228,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
       // 下载时，显示暂停按钮
       DownloadTaskStatus.running: CupertinoTheme(
         data: const CupertinoThemeData(primaryColor: CupertinoColors.systemRed),
-        child: !GeneralPlatform.isIOS
+        child: !GeneralPlatform.isIOS || kDebugMode
             ? CupertinoButton(
                 padding: const EdgeInsets.all(0),
                 child: const Icon(

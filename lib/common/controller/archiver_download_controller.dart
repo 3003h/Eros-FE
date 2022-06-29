@@ -116,19 +116,13 @@ class ArchiverDownloadController extends GetxController {
       return;
     }
 
-    // String? fileName;
-    // if (status == DownloadTaskStatus.complete) {
-    //   final List<DownloadTask> tasks =
-    //       await FlutterDownloader.loadTasks() ?? [];
-    //   final _task = tasks.firstWhereOrNull((e) => e.taskId == taskId);
-    //   fileName = _task?.filename;
-    // }
-
     final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
     final _task = tasks.firstWhereOrNull((e) => e.taskId == taskId);
     final fileName = _task?.filename;
     final url = _task?.url;
     final timeCreated = _task?.timeCreated;
+
+    if (fileName != null) logger.d('fileName $fileName');
 
     archiverTaskMap[_key] = archiverTaskMap[_key]!.copyWith(
       status: status.value,
@@ -164,6 +158,8 @@ class ArchiverDownloadController extends GetxController {
 
     final _downloadPath = await _getArchiverDownloadPath();
 
+    // url =
+    //     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
     final String? _taskId = await _downloadArchiverFile(url, _downloadPath);
 
     archiverTaskMap[_tag] = kDefDownloadTaskInfo.copyWith(
