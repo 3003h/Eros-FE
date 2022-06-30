@@ -63,7 +63,7 @@ extension ChapterList on List<Chapter> {
 List<Chapter> parseChapter(String code) {
   final List<Chapter> result = [];
 
-  for (var line in code.split('\n')) {
+  for (final line in code.split('\n')) {
     final matchResult = _chapterPageExp.firstMatch(line.trim());
     if (matchResult == null) continue;
     final page = int.parse(matchResult.group(1)!);
