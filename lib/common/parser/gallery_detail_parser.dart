@@ -326,7 +326,7 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   final Element? _ratingImage = document.querySelector('#rating_image');
   final String _ratingImageClass = _ratingImage?.attributes['class'] ?? '';
   final _colorRating = _ratingImageClass;
-  final _isRatinged = _ratingImageClass.contains(RegExp(r'ir(r|g|b|y)'));
+  final _isRatinged = _ratingImageClass.contains(RegExp(r'ir([rgby])'));
 
   // 收藏次数
   final String _favCount =
@@ -427,7 +427,9 @@ List<Chapter>? _parseChapter(List<GalleryComment> comments) {
   final listListChapter = <List<Chapter>>[];
   for (final comment in comments) {
     final listChapter = parseChapter(comment.text);
-    listListChapter.add(listChapter);
+    if (listChapter.length >= 2) {
+      listListChapter.add(listChapter);
+    }
   }
 
   if (listListChapter.isNotEmpty) {

@@ -39,7 +39,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -52,7 +52,7 @@ android {
     defaultConfig {
         applicationId "com.honjow.fehviewer"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
 //        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
