@@ -340,7 +340,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
   Future<String?> _getTextTranslate(String text) async {
     final String? tranText =
-        await Get.find<TagTransController>().getTranTagWithNameSpaseSmart(text);
+        await Get.find<TagTransController>().getTranTagWithNameSpaseAuto(text);
     if (tranText?.trim() != text) {
       return tranText;
     }
