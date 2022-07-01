@@ -423,7 +423,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   Future<String?> _getTextTranslate(String text) async {
     final String? tranText =
-        await Get.find<TagTransController>().getTranTagWithNameSpaseSmart(text);
+        await Get.find<TagTransController>().getTranTagWithNameSpaseAuto(text);
     if (tranText != null && tranText.trim() != text) {
       return tranText;
     } else {

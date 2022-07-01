@@ -182,7 +182,7 @@ class TagTransController extends GetxController {
   }
 
   /// 自动拆分解析匹配查询tag翻译
-  Future<String?> getTranTagWithNameSpaseSmart(String text) async {
+  Future<String?> getTranTagWithNameSpaseAuto(String text) async {
     if (!text.trim().contains(' ')) {
       return await getTranTagWithNameSpase(text);
     }
@@ -191,7 +191,7 @@ class TagTransController extends GetxController {
     logger.v(array.map((e) => '[$e]').join(','));
 
     for (int i = 0; i < array.length; i++) {
-      if (array[i].startsWith(RegExp(r'\w+:"?'))) {
+      if (array[i].startsWith(RegExp(r'-?\w+:"?'))) {
         if (!RegExp(r'\$"?$').hasMatch(array[i])) {
           final tempArray = array.sublist(i);
           final offset = tempArray
