@@ -108,12 +108,6 @@ class FavDialogController extends GetxController {
             CupertinoDialogAction(
               child: Text(L10n.of(context).ok),
               onPressed: () {
-                // 添加收藏
-                final Map<String, String> favMap = <String, String>{
-                  'favcat': '$_favindex',
-                  'favTitle': favList[_favindex].favTitle,
-                  'favnode': _favnoteController.text
-                };
                 // 返回数据
                 Get.back(
                     result: favList[_favindex]
