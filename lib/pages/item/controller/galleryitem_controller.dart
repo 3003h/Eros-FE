@@ -3,7 +3,7 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
+import 'package:fehviewer/pages/controller/fav_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class GalleryItemController extends GetxController {
   GalleryItemController({required this.galleryProvider});
 
   final EhConfigService _ehConfigService = Get.find();
-  final FavDialogController _favDialogController = Get.find();
+  final FavController _favDialogController = Get.find();
   final TabHomeController _tabHomeController = Get.find();
   final HistoryController _historyController = Get.find();
 
@@ -165,7 +165,7 @@ class GalleryItemController extends GetxController {
                     Get.back();
 
                     try {
-                      final value = await _favDialogController.tapAddFav(
+                      final value = await _favDialogController.addFav(
                           galleryProvider.gid!, galleryProvider.token!);
                       if (value == null) {
                         return;
@@ -212,7 +212,7 @@ class GalleryItemController extends GetxController {
                     Get.back();
 
                     try {
-                      final value = await _favDialogController.tapAddFav(
+                      final value = await _favDialogController.addFav(
                           galleryProvider.gid!, galleryProvider.token!,
                           oriFavcat: galleryProvider.favcat!);
                       if (value != null) {
