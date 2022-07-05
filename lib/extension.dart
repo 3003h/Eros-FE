@@ -128,6 +128,7 @@ extension ExtGalleryProvider on GalleryProvider {
         torrentLink: item.torrentLink,
         lastViewTime: item.lastViewTime,
         pageOfList: item.pageOfList,
+        favNote: item.favNote,
         chapter: item.chapter);
   }
 }
