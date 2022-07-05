@@ -128,9 +128,11 @@ class GalleryItemWidget extends StatelessWidget {
                           galleryItemController: itemController,
                         ),
                         const SizedBox(height: 6),
-                        // 上传者
+                        // 上传者 或 收藏备注
                         Text(
-                          galleryProvider.uploader ?? '',
+                          (galleryProvider.uploader?.isNotEmpty ?? false)
+                              ? galleryProvider.uploader ?? ''
+                              : 'Note: ${galleryProvider.favNote ?? ''}',
                           style: const TextStyle(
                               fontSize: 12, color: CupertinoColors.systemGrey),
                         ),

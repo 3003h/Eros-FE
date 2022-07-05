@@ -783,6 +783,7 @@ Future<void> galleryAddfavorite(
   final FormData formData = FormData.fromMap({
     'favcat': favcat,
     'update': '1',
+    'favnote': favnote,
   });
 
   DioHttpResponse httpResponse = await dioHttpClient.post(

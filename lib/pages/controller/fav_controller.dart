@@ -17,7 +17,7 @@ import 'package:get/get.dart';
 
 import 'favorite_sel_controller.dart';
 
-class FavDialogController extends GetxController {
+class FavController extends GetxController {
   final EhConfigService _ehConfigService = Get.find();
   final UserController _userController = Get.find();
   final LocalFavController _localFavController = Get.find();
@@ -28,7 +28,9 @@ class FavDialogController extends GetxController {
   final FavoriteSelectorController _favoriteSelectorController = Get.find();
 
   Future<Favcat?> showFavListDialog(
-      BuildContext context, List<Favcat> favList) async {
+    BuildContext context,
+    List<Favcat> favList,
+  ) async {
     return _ehConfigService.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
@@ -108,12 +110,6 @@ class FavDialogController extends GetxController {
             CupertinoDialogAction(
               child: Text(L10n.of(context).ok),
               onPressed: () {
-                // 添加收藏
-                final Map<String, String> favMap = <String, String>{
-                  'favcat': '$_favindex',
-                  'favTitle': favList[_favindex].favTitle,
-                  'favnode': _favnoteController.text
-                };
                 // 返回数据
                 Get.back(
                     result: favList[_favindex]
@@ -128,7 +124,9 @@ class FavDialogController extends GetxController {
 
   /// 添加收藏 List形式
   Future<Favcat?> _showAddFavList(
-      BuildContext context, List<Favcat> favList) async {
+    BuildContext context,
+    List<Favcat> favList,
+  ) async {
     final List<Widget> _favcatList = List<Widget>.from(favList
         .where((value) => value.favId != 'a')
         .map((Favcat fav) => FavcatAddListItem(
@@ -188,29 +186,38 @@ class FavDialogController extends GetxController {
   }
 
   /// 点击收藏按钮处理
-  Future<Favcat?> tapAddFav(String gid, String token,
-      {String oriFavcat = ''}) async {
-    logger.d(' add fav $gid $token');
+  Future<Favcat?> addFav(
+    String gid,
+    String token, {
+    String oriFavcat = '',
+    String oriFavnote = '',
+  }) async {
+    logger.d('bbb add fav $gid $token');
     final String? _lastFavcat = _ehConfigService.lastFavcat.value;
+
+    _favnoteController.text = oriFavnote;
 
     // 添加到上次收藏夹
     if ((_ehConfigService.isFavLongTap.value) &&
         _lastFavcat != null &&
         _lastFavcat.isNotEmpty) {
       logger.v('添加到上次收藏夹');
-      return _addToLastFavcat(gid, token, _lastFavcat, oriFavcat: oriFavcat);
+      return addToLastFavcat(gid, token, _lastFavcat, oriFavcat: oriFavcat);
     } else {
       // 手选收藏夹
       logger.v('手选收藏夹');
-      return await _showAddFavDialog(gid, token, oriFavcat: oriFavcat);
+      return await selectToSave(gid, token, oriFavcat: oriFavcat);
     }
   }
 
   // 选择并收藏
-  Future<Favcat?> _showAddFavDialog(String gid, String token,
-      {String oriFavcat = ''}) async {
+  Future<Favcat?> selectToSave(
+    String gid,
+    String token, {
+    String oriFavcat = '',
+  }) async {
     final BuildContext context = Get.context!;
-    final bool _isLogin = _userController.isLogin;
+    // final bool _isLogin = _userController.isLogin;
 
     final List<Favcat> favList = _favoriteSelectorController.favcatList;
     logger.d(' ${favList.length}');
@@ -260,8 +267,13 @@ class FavDialogController extends GetxController {
     }
   }
 
-  Future<Favcat> _addToLastFavcat(String gid, String token, String _lastFavcat,
-      {String oriFavcat = ''}) async {
+  Future<Favcat> addToLastFavcat(
+    String gid,
+    String token,
+    String _lastFavcat, {
+    String oriFavcat = '',
+    String oriFavnote = '',
+  }) async {
     final String _favTitle =
         Global.profile.user.favcat?[int.parse(_lastFavcat)].favTitle ?? '...';
 

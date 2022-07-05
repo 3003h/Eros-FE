@@ -43,5 +43,6 @@
   "archiverLink?": "",
   "torrentLink?": "",
   "lastViewTime?": 123,
-  "pageOfList?": 1
+  "pageOfList?": 1,
+  "favNote?": ""
 }

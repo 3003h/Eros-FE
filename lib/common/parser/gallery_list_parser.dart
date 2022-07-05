@@ -146,6 +146,13 @@ GalleryList parseGalleryList(
           backgrondColor: backgroundColor));
     }
 
+    // favNote
+    final favNoteElm = tr.querySelector('div.glfnote');
+    final regFavnote = RegExp(r'Note:\s(.+)');
+    final matchFavnote = regFavnote.firstMatch(favNoteElm?.text ?? '');
+    final favNote = matchFavnote?.group(1);
+    // if (favNote != null) print('favNote:$favNote');
+
     /// 判断获取语言标识
     String _translated = '';
     try {
@@ -270,6 +277,7 @@ GalleryList parseGalleryList(
         uploader: _uplader,
         filecount: _filecount,
         translated: _translated,
+        favNote: favNote,
       ));
     }
 

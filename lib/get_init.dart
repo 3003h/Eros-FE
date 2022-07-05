@@ -21,7 +21,7 @@ import 'common/service/ehconfig_service.dart';
 import 'common/service/layout_service.dart';
 import 'common/service/locale_service.dart';
 import 'common/service/theme_service.dart';
-import 'pages/controller/fav_dialog_controller.dart';
+import 'pages/controller/fav_controller.dart';
 import 'pages/controller/favorite_sel_controller.dart';
 import 'pages/setting/controller/eh_mysettings_controller.dart';
 import 'pages/setting/controller/eh_mytags_controller.dart';
@@ -82,7 +82,7 @@ void getinit() {
   Get.lazyPut(() => FavoriteSelectorController(), fenix: true);
   Get.lazyPut(() => QuickSearchController(), fenix: true);
   Get.lazyPut(() => AdvanceSearchController(), fenix: true);
-  Get.lazyPut(() => FavDialogController(), fenix: true);
+  Get.lazyPut(() => FavController(), fenix: true);
   Get.lazyPut(() => UnlockPageController(), fenix: true);
   Get.lazyPut(() => TagTransController(), fenix: true);
   Get.lazyPut(() => SplashController());
