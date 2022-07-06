@@ -1,11 +1,11 @@
 {
     "name": "FEhViewer",
-    "identifier": "cn.honjow.fehviewer",
+    "identifier": "cn.honjow.fehv",
     "sourceURL": "https://github.com/Gigas002/FEhViewer/raw/master/AltStore.json",
     "apps": [
       {
         "name": "FEhViewer",
-        "bundleIdentifier": "cn.honjow.fehviewer",
+        "bundleIdentifier": "cn.honjow.fehv",
         "developerName": "honjow",
         "version": "1.2.46",
         "versionDate": "2022-07-01T01:01:01",
@@ -40,7 +40,7 @@
         "identifier": "fehviewer-now-available",
         "caption": "An Unofficial e-hentai app make on flutter",
         "tintColor": "289979",
-        "appID": "cn.honjow.fehviewer",
+        "appID": "cn.honjow.fehv",
         "date": "2022-07-07",
         "notify": false
       }
