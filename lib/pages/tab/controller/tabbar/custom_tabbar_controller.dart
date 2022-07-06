@@ -118,7 +118,7 @@ class CustomTabbarController extends DefaultTabViewController {
     }, time: const Duration(seconds: 2));
 
     if (profiles.isNotEmpty) {
-      currProfileUuid = profiles[min(index, profiles.length - 1)].uuid;
+      currProfileUuid = profiles[min(max(index, 0), profiles.length - 1)].uuid;
     }
 
     for (final profile in profiles) {
