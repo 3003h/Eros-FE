@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
@@ -13,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart' as path;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 

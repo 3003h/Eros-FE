@@ -132,7 +132,9 @@ class GalleryItemWidget extends StatelessWidget {
                         Text(
                           (galleryProvider.uploader?.isNotEmpty ?? false)
                               ? galleryProvider.uploader ?? ''
-                              : 'Note: ${galleryProvider.favNote ?? ''}',
+                              : (galleryProvider.favNote?.isNotEmpty ?? false)
+                                  ? 'Note: ${galleryProvider.favNote ?? ''}'
+                                  : '',
                           style: const TextStyle(
                               fontSize: 12, color: CupertinoColors.systemGrey),
                         ),
