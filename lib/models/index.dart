@@ -4,6 +4,7 @@ export 'local_fav.dart';
 export 'gallery_provider.dart';
 export 'eh_config.dart';
 export 'simple_tag.dart';
+export 'fav_add.dart';
 export 'fav_config.dart';
 export 'commit_vote_res.dart';
 export 'gallery_image.dart';

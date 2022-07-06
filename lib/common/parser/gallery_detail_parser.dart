@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -8,8 +6,6 @@ import 'package:get/get.dart' hide Node;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
-
-import '../../utils/logger.dart';
 
 String parseErrGallery(String response) {
   final Document document = parse(response);

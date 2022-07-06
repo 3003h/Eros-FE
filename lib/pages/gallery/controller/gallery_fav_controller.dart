@@ -1,20 +1,15 @@
 import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
-import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/vibrate.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_state.dart';
@@ -27,10 +22,7 @@ class GalleryFavController extends GetxController {
   set isLoading(bool value) => _isLoading.value = value;
   String favnote = '';
 
-  final LocalFavController _localFavController = Get.find();
   final EhConfigService _ehConfigService = Get.find();
-  final FavController _favDialogController = Get.find();
-  final FavoriteSelectorController _favoriteSelectorController = Get.find();
 
   late GalleryPageController _pageController;
   GalleryPageState get _pageState => _pageController.gState;
@@ -76,7 +68,6 @@ class GalleryFavController extends GetxController {
   bool get localFav => _pageState.localFav;
 
   final RxString _favTitle = L10n.of(Get.context!).notFav.obs;
-
   String get favTitle => _favTitle.value;
 
   final RxString _favcat = ''.obs;
@@ -104,19 +95,6 @@ class GalleryFavController extends GetxController {
         Global.profile.user.favcat![int.parse(_lastFavcat)].favTitle;
 
     try {
-      // await galleryAddfavorite(
-      //   _pageState.galleryProvider?.gid ?? '0',
-      //   _pageState.galleryProvider?.token ?? '',
-      //   favcat: _lastFavcat,
-      //   favnote: favnote,
-      // );
-      // _removeGalleryCache();
-      // final _oriFavcat = _favcat.value;
-      // if (_oriFavcat.isNotEmpty) {
-      //   _favoriteSelectorController.decrease(_oriFavcat);
-      // }
-      // _favoriteSelectorController.increase(_lastFavcat);
-
       await favController.addToLastFavcat(
         _pageState.galleryProvider?.gid ?? '0',
         _pageState.galleryProvider?.token ?? '',
@@ -167,12 +145,13 @@ class GalleryFavController extends GetxController {
       final result = await favController.selectToSave(
         _pageState.galleryProvider?.gid ?? '0',
         _pageState.galleryProvider?.token ?? '',
+        oriFavcat: favcat,
+        startLoading: () => isLoading = true,
       );
       if (result != null) {
         final _favcatFromRult = result.favId;
         final _favnoteFromRult = result.note ?? '';
         final _favTitleFromRult = result.favTitle;
-        isLoading = false;
         _favTitle.value = _favTitleFromRult;
         _favcat.value = _favcatFromRult;
 
@@ -180,79 +159,13 @@ class GalleryFavController extends GetxController {
             ?.copyWith(favcat: _favcatFromRult, favTitle: _favTitleFromRult);
         logger
             .d('after _showAddFavDialog ${_pageState.galleryProvider?.favcat}');
-        if (isRegItemController) {
-          logger.d('upt item');
-          _itemController.setFavTitleAndFavcat(
-              favTitle: favTitle, favcat: favcat);
-        }
+        setFav(favcat, favTitle);
         _removeGalleryCache();
       }
     } catch (e, stack) {
       showToast('$e\n$stack');
     } finally {
       isLoading = false;
-    }
-  }
-
-  // 选择并收藏
-  Future<void> _selectToSave_Old() async {
-    final BuildContext context = Get.context!;
-
-    final List<Favcat> favList = _favoriteSelectorController.favcatList;
-
-    // diaolog 获取选择结果
-    final Favcat? result =
-        await _favDialogController.showFavListDialog(context, favList);
-
-    logger.v('$result  ${result.runtimeType}');
-
-    if (result != null) {
-      logger.v('add fav ${result.favId}');
-
-      isLoading = true;
-      final String _favcatFromRult = result.favId;
-      final String _favnoteFromRult = result.note ?? '';
-      final String _favTitleFromRult = result.favTitle;
-
-      _ehConfigService.lastFavcat.value = _favcatFromRult;
-
-      try {
-        if (_favcatFromRult != 'l') {
-          // 网络收藏
-          await galleryAddfavorite(
-            _pageState.galleryProvider?.gid ?? '0',
-            _pageState.galleryProvider?.token ?? '',
-            favcat: _favcatFromRult,
-            favnote: _favnoteFromRult,
-          );
-          _removeGalleryCache();
-        } else {
-          // 本地收藏
-          _pageState.localFav = true;
-          _localFavController.addLocalFav(_pageState.galleryProvider);
-        }
-        final _oriFavcat = _favcat.value;
-        if (_oriFavcat.isNotEmpty) {
-          _favoriteSelectorController.decrease(_oriFavcat);
-        }
-        _favoriteSelectorController.increase(_favcatFromRult);
-      } catch (e, stack) {
-        showToast('$e\n$stack');
-      } finally {
-        isLoading = false;
-        _favTitle.value = _favTitleFromRult;
-        _favcat.value = _favcatFromRult;
-
-        _pageState.galleryProvider = _pageState.galleryProvider
-            ?.copyWith(favcat: _favcatFromRult, favTitle: _favTitleFromRult);
-        logger
-            .d('after _showAddFavDialog ${_pageState.galleryProvider?.favcat}');
-        if (isRegItemController) {
-          logger.d('upt item');
-          _itemController.setFavTitleAndFavcat(
-              favTitle: favTitle, favcat: favcat);
-        }
-      }
     }
   }
 
@@ -270,51 +183,12 @@ class GalleryFavController extends GetxController {
       _favcat.value = '';
       _pageState.galleryProvider =
           _pageState.galleryProvider?.copyWith(favcat: '', favTitle: '');
-      if (isRegItemController) {
-        logger.d('del fav ${_itemController.galleryProvider.gid} ,upt item');
-        _itemController.setFavTitleAndFavcat(favTitle: '', favcat: '');
-      }
+      setFav(favcat, favTitle);
     } catch (e, stack) {
       showToast('$e\n$stack');
     } finally {
       isLoading = false;
     }
-  }
-
-  /// 删除收藏
-  Future<bool> delFav_Old() async {
-    isLoading = true;
-
-    try {
-      if (favcat.isNotEmpty && favcat != 'l') {
-        logger.v('删除网络收藏');
-        await galleryAddfavorite(
-          _pageState.galleryProvider?.gid ?? '0',
-          _pageState.galleryProvider?.token ?? '',
-        );
-      } else {
-        logger.v('取消本地收藏');
-        _pageState.localFav = false;
-        _localFavController.removeFav(_pageState.galleryProvider);
-      }
-      _favoriteSelectorController.decrease(favcat);
-
-      _removeGalleryCache();
-    } catch (e) {
-      return true;
-    } finally {
-      isLoading = false;
-      _favTitle.value = '';
-      _favcat.value = '';
-      _pageState.galleryProvider =
-          _pageState.galleryProvider?.copyWith(favcat: '', favTitle: '');
-      if (isRegItemController) {
-        logger.d('del fav ${_itemController.galleryProvider.gid} ,upt item');
-        _itemController.setFavTitleAndFavcat(favTitle: '', favcat: '');
-      }
-      logger.d('after delFav ${_pageState.galleryProvider?.favcat}');
-    }
-    return false;
   }
 
   // 长按事件

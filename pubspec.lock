@@ -72,7 +72,7 @@ packages:
       name: basic_utils
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.2.2"
+    version: "4.3.0"
   bitsdojo_window:
     dependency: "direct main"
     description:
@@ -401,7 +401,7 @@ packages:
       name: drift
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.7.0"
+    version: "1.7.1"
   easy_animated_tabbar:
     dependency: "direct main"
     description:
@@ -749,7 +749,7 @@ packages:
       name: hive
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.2"
+    version: "2.2.3"
   hive_flutter:
     dependency: "direct main"
     description:
@@ -1404,14 +1404,14 @@ packages:
       name: sentry
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.6.1"
+    version: "6.6.2"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.6.1"
+    version: "6.6.2"
   share:
     dependency: "direct main"
     description:
@@ -1549,7 +1549,7 @@ packages:
       name: sqflite
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.2+1"
+    version: "2.0.3"
   sqflite_common:
     dependency: transitive
     description:
@@ -1857,7 +1857,7 @@ packages:
       name: worker_manager
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.2.6"
+    version: "4.3.5"
   xdg_directories:
     dependency: transitive
     description:
