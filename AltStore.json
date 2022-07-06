@@ -1,7 +1,7 @@
 {
     "name": "FEhViewer",
     "identifier": "cn.honjow.fehv",
-    "sourceURL": "https://github.com/Gigas002/FEhViewer/raw/master/AltStore.json",
+    "sourceURL": "https://github.com/honjow/FEhViewer/raw/master/AltStore.json",
     "apps": [
       {
         "name": "FEhViewer",
