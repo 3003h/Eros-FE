@@ -54,24 +54,12 @@ class WebdavController extends GetxController {
   // 是否同步历史记录
   final _syncHistory = false.obs;
   bool get syncHistory => _syncHistory.value;
-  set syncHistory(bool val) {
-    final _dav = webdavProfile.copyWith(syncHistory: val);
-    _syncHistory.value = val;
-    update();
-    Global.profile = Global.profile.copyWith(webdav: _dav);
-    Global.saveProfile();
-  }
+  set syncHistory(bool val) => _syncHistory.value = val;
 
   // 是否同步画廊阅读进度
   final _syncReadProgress = false.obs;
   bool get syncReadProgress => _syncReadProgress.value;
-  set syncReadProgress(bool val) {
-    final _dav = webdavProfile.copyWith(syncReadProgress: val);
-    _syncReadProgress.value = val;
-    update();
-    Global.profile = Global.profile.copyWith(webdav: _dav);
-    Global.saveProfile();
-  }
+  set syncReadProgress(bool val) => _syncReadProgress.value = val;
 
   final _syncGroupProfile = false.obs;
   bool get syncGroupProfile => _syncGroupProfile.value;
@@ -126,31 +114,31 @@ class WebdavController extends GetxController {
     super.onInit();
     if (webdavProfile.url.isNotEmpty) {
       initClient();
-
-      syncHistory = webdavProfile.syncHistory ?? false;
-      ever(_syncHistory, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncHistory: val);
-        Global.saveProfile();
-      });
-
-      syncReadProgress = webdavProfile.syncReadProgress ?? false;
-      ever(_syncReadProgress, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncReadProgress: val);
-        Global.saveProfile();
-      });
-
-      syncGroupProfile = webdavProfile.syncGroupProfile ?? false;
-      ever(_syncGroupProfile, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncGroupProfile: val);
-        Global.saveProfile();
-      });
-
-      syncQuickSearch = webdavProfile.syncQuickSearch ?? false;
-      ever(_syncQuickSearch, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncQuickSearch: val);
-        Global.saveProfile();
-      });
     }
+
+    syncHistory = webdavProfile.syncHistory ?? false;
+    ever(_syncHistory, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncHistory: val);
+      Global.saveProfile();
+    });
+
+    syncReadProgress = webdavProfile.syncReadProgress ?? false;
+    ever(_syncReadProgress, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncReadProgress: val);
+      Global.saveProfile();
+    });
+
+    syncGroupProfile = webdavProfile.syncGroupProfile ?? false;
+    ever(_syncGroupProfile, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncGroupProfile: val);
+      Global.saveProfile();
+    });
+
+    syncQuickSearch = webdavProfile.syncQuickSearch ?? false;
+    ever(_syncQuickSearch, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncQuickSearch: val);
+      Global.saveProfile();
+    });
 
     _key = encrypt.Key.fromUtf8(kAESKey);
     _iv = encrypt.IV.fromUtf8(kAESIV);

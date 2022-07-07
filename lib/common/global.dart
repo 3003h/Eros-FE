@@ -221,7 +221,7 @@ class Global {
 
   // 持久化Profile信息
   static void saveProfile() {
-    // logger.d(profile.customTabConfig?.toJson());
+    // logger.d(profile.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }
