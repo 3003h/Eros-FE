@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'dart:math';
+import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:image/image.dart';
 
 class Pixel {
@@ -11,6 +14,34 @@ class Pixel {
   @override
   String toString() {
     return 'red: $_red, green: $_green, blue: $_blue, alpha: $_alpha';
+  }
+}
+
+final PHashHelper pHashHelper = PHashHelper();
+
+class PHashHelper {
+  BigInt? lastHash;
+  Future<void> compareLast(String imageUrl) async {
+    File? imageFile;
+    if (await cachedImageExists(imageUrl)) {
+      imageFile = await getCachedImageFile(imageUrl);
+    }
+
+    imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
+        headers: {'cookie': Global.profile.user.cookie});
+
+    final data = imageFile.readAsBytesSync();
+    final pHash = PHash.calculate(PHash.getValidImage(data));
+
+    if (lastHash != null) {
+      final diff = PHash.hammingDistance(lastHash!, pHash);
+      showToast(
+          '${pHash.toRadixString(16)}\n${lastHash!.toRadixString(16)}\n$diff');
+    } else {
+      showToast(pHash.toRadixString(16));
+    }
+
+    lastHash = pHash;
   }
 }
 
@@ -140,5 +171,24 @@ class PHash {
       ret++;
     }
     return ret;
+  }
+
+  /// Helper function to validate [List]
+  /// of bytes format and return [Image].
+  /// Throws exception if format is invalid.
+  static Image getValidImage(List<int> bytes) {
+    Image? image;
+    try {
+      image = decodeImage(bytes);
+    } on Exception {
+      throw const FormatException(
+          'Insufficient data provided to identify image.');
+    }
+
+    if (image == null) {
+      throw const FormatException('image null');
+    }
+
+    return image;
   }
 }
