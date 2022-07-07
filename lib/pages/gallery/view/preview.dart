@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/utils/p_hash/phash_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_compare/image_compare.dart';
 
 class PreviewContainer extends StatelessWidget {
   PreviewContainer({
@@ -67,6 +72,11 @@ class PreviewContainer extends StatelessWidget {
       onTap: () {
         NavigatorUtil.goGalleryViewPage(index, gid);
       },
+      onLongPress: () {
+        if (galleryImage.largeThumb ?? false) {
+          pHashHelper.compareLast(galleryImage.thumbUrl ?? '');
+        }
+      },
       child: Container(
         child: Column(
           children: <Widget>[
@@ -74,24 +84,11 @@ class PreviewContainer extends StatelessWidget {
               child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4),
-                  // child: Hero(
-                  //   tag: '${index + 1}',
-                  //   createRectTween: (Rect? begin, Rect? end) {
-                  //     final tween =
-                  //         MaterialRectCenterArcTween(begin: begin, end: end);
-                  //     logger.d('begin $begin\n end $end');
-                  //     return tween;
-                  //   },
-                  //   child: Container(
-                  //     child: _buildImage(),
-                  //   ),
-                  // ),
                   child: Hero(
                     tag: '${index + 1}',
                     createRectTween: (Rect? begin, Rect? end) {
                       final tween =
                           MaterialRectCenterArcTween(begin: begin, end: end);
-                      // logger.d('begin $begin\n end $end');
                       return tween;
                     },
                     child: _buildImage(),

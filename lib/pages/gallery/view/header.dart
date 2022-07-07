@@ -52,8 +52,6 @@ class GalleryHeader extends StatelessWidget {
                       imageUrl: initGalleryProvider.imgUrl!,
                       heroTag: '${initGalleryProvider.gid}_cover_$tabTag',
                     ),
-                    // child: EhCachedNetworkImage(
-                    //     imageUrl: initGalleryProvider.imgUrl!),
                   );
                 }),
                 // EhCachedNetworkImage(imageUrl: initGalleryProvider.imgUrl!),

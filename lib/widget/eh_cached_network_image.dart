@@ -41,7 +41,7 @@ class EhCachedNetworkImage extends StatelessWidget {
     }
 
     return CachedNetworkImage(
-      cacheManager: cacheManager,
+      cacheManager: imageCacheManager,
       httpHeaders: _httpHeaders,
       width: width,
       height: height,
@@ -58,7 +58,7 @@ final client = retry.RetryClient(
   http.Client(),
 );
 
-final cacheManager = CacheManager(
+final imageCacheManager = CacheManager(
   Config(
     'CachedNetworkImage',
     fileService: HttpFileService(
