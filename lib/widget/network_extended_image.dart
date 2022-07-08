@@ -3,6 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NetworkExtendedImage extends StatefulWidget {
   const NetworkExtendedImage({
@@ -17,6 +18,7 @@ class NetworkExtendedImage extends StatefulWidget {
     this.progressIndicatorBuilder,
     this.httpHeaders,
     this.cancelToken,
+    this.heroTag,
   }) : super(key: key);
   final String url;
   final double? height;
@@ -29,6 +31,7 @@ class NetworkExtendedImage extends StatefulWidget {
   final LoadingErrorWidgetBuilder? errorWidget;
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
   final CancellationToken? cancelToken;
+  final Object? heroTag;
 
   @override
   _NetworkExtendedImageState createState() => _NetworkExtendedImageState();
@@ -55,7 +58,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 0),
+      duration: const Duration(milliseconds: 300),
     );
   }
 
@@ -88,32 +91,17 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
                   child: const CupertinoActivityIndicator(),
                 );
           case LoadState.completed:
-            // return state.completedWidget;
-            // return controller.vState.viewMode != ViewMode.topToBottom
-            //     ? state.completedWidget
-            //     : FadeTransition(
-            //         opacity: animationController,
-            //         child: state.completedWidget,
-            //       );
             animationController.forward();
-            //
-            return FadeTransition(
-              opacity: animationController,
-              child: state.completedWidget,
-            );
 
-          // return ExtendedRawImage(
-          //   fit: BoxFit.contain,
-          //   image: state.extendedImageInfo?.image,
-          // );
+            if (widget.heroTag != null) {
+              return Hero(tag: widget.heroTag!, child: state.completedWidget);
+            } else {
+              return FadeTransition(
+                opacity: animationController,
+                child: state.completedWidget,
+              );
+            }
 
-          // return FadeTransition(
-          //   opacity: animationController,
-          //   child: ExtendedRawImage(
-          //     fit: BoxFit.contain,
-          //     image: state.extendedImageInfo?.image,
-          //   ),
-          // );
           case LoadState.failed:
             return Container(
               alignment: Alignment.center,

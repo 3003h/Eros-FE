@@ -43,6 +43,21 @@ class PHashHelper {
 
     lastHash = pHash;
   }
+
+  Future<BigInt> calculatePHash(String imageUrl) async {
+    File? imageFile;
+    if (await cachedImageExists(imageUrl)) {
+      imageFile = await getCachedImageFile(imageUrl);
+    }
+
+    imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
+        headers: {'cookie': Global.profile.user.cookie});
+
+    final data = imageFile.readAsBytesSync();
+    final pHash = PHash.calculate(PHash.getValidImage(data));
+    // print('url: $imageUrl hash:${pHash.toRadixString(16)}');
+    return pHash;
+  }
 }
 
 class PHash {
