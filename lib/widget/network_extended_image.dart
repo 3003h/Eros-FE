@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class NetworkExtendedImage extends StatefulWidget {
@@ -19,6 +21,8 @@ class NetworkExtendedImage extends StatefulWidget {
     this.httpHeaders,
     this.cancelToken,
     this.heroTag,
+    this.onLoadCompleted,
+    this.checkHide = false,
   }) : super(key: key);
   final String url;
   final double? height;
@@ -32,6 +36,8 @@ class NetworkExtendedImage extends StatefulWidget {
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
   final CancellationToken? cancelToken;
   final Object? heroTag;
+  final VoidCallback? onLoadCompleted;
+  final bool checkHide;
 
   @override
   _NetworkExtendedImageState createState() => _NetworkExtendedImageState();
@@ -41,6 +47,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
     with SingleTickerProviderStateMixin {
   Map<String, String> _httpHeaders = {};
   late AnimationController animationController;
+  ImageHideController imageHideController = Get.find();
 
   @override
   void initState() {
@@ -58,7 +65,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 0),
     );
   }
 
@@ -84,7 +91,6 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            // return null;
             return widget.placeholder?.call(context, widget.url.dfUrl) ??
                 Container(
                   alignment: Alignment.center,
@@ -92,14 +98,44 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
                 );
           case LoadState.completed:
             animationController.forward();
+            widget.onLoadCompleted?.call();
 
+            Widget _image;
             if (widget.heroTag != null) {
               return Hero(tag: widget.heroTag!, child: state.completedWidget);
             } else {
-              return FadeTransition(
+              _image = FadeTransition(
                 opacity: animationController,
                 child: state.completedWidget,
               );
+            }
+
+            // return _image;
+
+            if (!widget.checkHide) {
+              return _image;
+            } else {
+              return FutureBuilder<bool>(
+                  future: imageHideController.checkHide(widget.url.dfUrl),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final showCustomWidget = snapshot.data ?? false;
+                      return showCustomWidget
+                          ? const Center(
+                              child: Icon(FontAwesomeIcons.rectangleAd))
+                          : _image;
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return widget.placeholder
+                              ?.call(context, widget.url.dfUrl) ??
+                          Container(
+                            alignment: Alignment.center,
+                            child: const CupertinoActivityIndicator(),
+                          );
+                      // return _image;
+                    }
+                    return _image;
+                  });
             }
 
           case LoadState.failed:

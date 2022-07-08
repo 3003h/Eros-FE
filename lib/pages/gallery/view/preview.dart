@@ -4,6 +4,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/utils/p_hash/phash_base.dart';
+import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,6 +44,7 @@ class PreviewContainer extends StatelessWidget {
           progressIndicatorBuilder: (_, __, ___) {
             return const CupertinoActivityIndicator();
           },
+          checkHide: true,
         );
       } else {
         // 缩略小图 需要切割

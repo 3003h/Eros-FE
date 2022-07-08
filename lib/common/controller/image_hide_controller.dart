@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/utils/p_hash/phash_base.dart';
+import 'package:fehviewer/utils/p_hash/phash_base.dart' as phash;
+import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 import '../../fehviewer.dart';
 
@@ -29,16 +29,16 @@ class ImageHideController extends GetxController {
         headers: {'cookie': Global.profile.user.cookie});
 
     final data = imageFile.readAsBytesSync();
-    final pHash = PHash.calculate(PHash.getValidImage(data));
+    final pHash = phash.calculatePHash(phash.getValidImage(data));
     customHides
         .add(ImageHide(pHash: pHash.toRadixString(16), imageUrl: imageUrl));
   }
 
   Future<bool> checkHide(String url) async {
-    final hash = await pHashHelper.calculatePHash(url);
+    final hash = await pHashHelper.calculatePHashFromUrl(url);
     return customHides.any((e) =>
-        PHash.hammingDistance(
+        phash.hammingDistance(
             BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash) <=
-        5);
+        4);
   }
 }

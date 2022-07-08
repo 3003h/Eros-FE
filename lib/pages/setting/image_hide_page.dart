@@ -19,7 +19,7 @@ class ImageHidePage extends GetView<ImageHideController> {
             ? CupertinoColors.secondarySystemBackground
             : null,
         navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(start: 0),
+          padding: const EdgeInsetsDirectional.only(end: 12),
           middle: Text(_title),
           trailing: CupertinoButton(
             // 清除按钮
@@ -27,7 +27,9 @@ class ImageHidePage extends GetView<ImageHideController> {
               FontAwesomeIcons.trashCan,
               size: 22,
             ),
-            onPressed: () {},
+            onPressed: () {
+              controller.customHides.clear();
+            },
           ),
         ),
         child: SafeArea(
@@ -38,7 +40,10 @@ class ImageHidePage extends GetView<ImageHideController> {
               itemCount: controller.customHides.length,
               itemBuilder: (context, index) {
                 final imageHide = controller.customHides[index];
-                return ImageHideItem(imageHide: imageHide);
+                return ImageHideItem(
+                  imageHide: imageHide,
+                  onDelete: () => controller.customHides.removeAt(index),
+                );
               },
               separatorBuilder: (context, index) {
                 return Divider(
@@ -57,8 +62,10 @@ class ImageHidePage extends GetView<ImageHideController> {
 }
 
 class ImageHideItem extends StatelessWidget {
-  const ImageHideItem({Key? key, required this.imageHide}) : super(key: key);
+  const ImageHideItem({Key? key, required this.imageHide, this.onDelete})
+      : super(key: key);
   final ImageHide imageHide;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +74,25 @@ class ImageHideItem extends StatelessWidget {
       height: 80,
       child: Row(
         children: [
-          Container(
-              width: 50,
-              margin: const EdgeInsets.only(right: 12),
-              child: EhNetworkImage(imageUrl: imageHide.imageUrl ?? '')),
-          Text(imageHide.pHash),
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                    width: 50,
+                    margin: const EdgeInsets.only(right: 12),
+                    child: EhNetworkImage(imageUrl: imageHide.imageUrl ?? '')),
+                Text(imageHide.pHash),
+              ],
+            ),
+          ),
+          CupertinoButton(
+            // 清除按钮
+            child: const Icon(
+              FontAwesomeIcons.circleXmark,
+              size: 22,
+            ),
+            onPressed: onDelete,
+          ),
         ],
       ),
     );

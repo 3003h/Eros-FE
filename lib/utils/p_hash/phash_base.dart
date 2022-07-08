@@ -1,7 +1,4 @@
-import 'dart:io';
 import 'dart:math';
-import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/fehviewer.dart';
 import 'package:image/image.dart';
 
 class Pixel {
@@ -17,193 +14,152 @@ class Pixel {
   }
 }
 
-final PHashHelper pHashHelper = PHashHelper();
+const int _kSize = 32;
 
-class PHashHelper {
-  BigInt? lastHash;
-  Future<void> compareLast(String imageUrl) async {
-    File? imageFile;
-    if (await cachedImageExists(imageUrl)) {
-      imageFile = await getCachedImageFile(imageUrl);
-    }
-
-    imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
-        headers: {'cookie': Global.profile.user.cookie});
-
-    final data = imageFile.readAsBytesSync();
-    final pHash = PHash.calculate(PHash.getValidImage(data));
-
-    if (lastHash != null) {
-      final diff = PHash.hammingDistance(lastHash!, pHash);
-      showToast(
-          '${pHash.toRadixString(16)}\n${lastHash!.toRadixString(16)}\n$diff');
-    } else {
-      showToast(pHash.toRadixString(16));
-    }
-
-    lastHash = pHash;
+BigInt calculatePHash(Image image) {
+  image = copyResize(image, width: 32, height: 32);
+  final List<Pixel> pixelList = [];
+  const bytesPerPixel = 4;
+  final bytes = image.getBytes();
+  for (var i = 0; i <= bytes.length - bytesPerPixel; i += bytesPerPixel) {
+    pixelList.add(Pixel(bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]));
   }
-
-  Future<BigInt> calculatePHash(String imageUrl) async {
-    File? imageFile;
-    if (await cachedImageExists(imageUrl)) {
-      imageFile = await getCachedImageFile(imageUrl);
-    }
-
-    imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
-        headers: {'cookie': Global.profile.user.cookie});
-
-    final data = imageFile.readAsBytesSync();
-    final pHash = PHash.calculate(PHash.getValidImage(data));
-    // print('url: $imageUrl hash:${pHash.toRadixString(16)}');
-    return pHash;
-  }
+  return _calcPhash(pixelList);
 }
 
-class PHash {
-  static const int _size = 32;
+BigInt calculateFromList(List<int> data) {
+  return calculatePHash(getValidImage(data));
+}
 
-  static BigInt calculate(Image image) {
-    image = copyResize(image, width: 32, height: 32);
-    final List<Pixel> pixelList = [];
-    const bytesPerPixel = 4;
-    final bytes = image.getBytes();
-    for (var i = 0; i <= bytes.length - bytesPerPixel; i += bytesPerPixel) {
-      pixelList.add(Pixel(bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]));
-    }
-    return calcPhash(pixelList);
-  }
+///Helper function to convert a Unit8List to a nD matrix
+List<List<Pixel>> _unit8ListToMatrix(List<Pixel> pixelList) {
+  final copy = pixelList.sublist(0);
+  // pixelList.clear();
+  final pixelListDest = <List<Pixel>>[];
 
-  ///Helper function to convert a Unit8List to a nD matrix
-  static List<List<Pixel>> unit8ListToMatrix(List<Pixel> pixelList) {
-    final copy = pixelList.sublist(0);
-    // pixelList.clear();
-    final pixelListDest = <List<Pixel>>[];
+  for (int r = 0; r < _kSize; r++) {
+    final res = <Pixel>[];
+    for (var c = 0; c < _kSize; c++) {
+      var i = r * _kSize + c;
 
-    for (int r = 0; r < _size; r++) {
-      final res = <Pixel>[];
-      for (var c = 0; c < _size; c++) {
-        var i = r * _size + c;
-
-        if (i < copy.length) {
-          res.add(copy[i]);
-        }
-      }
-
-      pixelListDest.add(res);
-    }
-
-    return pixelListDest;
-  }
-
-  /// Helper function which computes a binary hash of a [List] of [Pixel]
-  static BigInt calcPhash(List<Pixel> pixelList) {
-    String bitString = '';
-    final matrix = List<List<num>>.filled(32, []);
-    final row = List<num>.filled(32, 0);
-    final rows = List<List<num>>.filled(32, []);
-    final col = List<num>.filled(32, 0);
-
-    final data = unit8ListToMatrix(pixelList); //returns a matrix used for DCT
-
-    for (int y = 0; y < _size; y++) {
-      for (int x = 0; x < _size; x++) {
-        final color = data[x][y];
-
-        row[x] = getLuminanceRgb(color._red, color._green, color._blue);
-      }
-
-      rows[y] = calculateDCT(row);
-    }
-    for (int x = 0; x < _size; x++) {
-      for (int y = 0; y < _size; y++) {
-        col[y] = rows[y][x];
-      }
-
-      matrix[x] = calculateDCT(col);
-    }
-
-    // Extract the top 8x8 pixels.
-    var pixels = <num>[];
-
-    for (int y = 0; y < 8; y++) {
-      for (int x = 0; x < 8; x++) {
-        pixels.add(matrix[y][x]);
+      if (i < copy.length) {
+        res.add(copy[i]);
       }
     }
 
-    // Calculate hash.
-    final bits = <num>[];
-    final compare = average(pixels);
-
-    for (final pixel in pixels) {
-      bits.add(pixel > compare ? 1 : 0);
-    }
-
-    bits.forEach((element) {
-      bitString += (1 * element).toString();
-    });
-
-    return BigInt.parse(bitString, radix: 2);
+    pixelListDest.add(res);
   }
 
-  ///Helper function to perform 1D discrete cosine tranformation on a matrix
-  static List<num> calculateDCT(List<num> matrix) {
-    final transformed = List<num>.filled(32, 0);
-    final _size = matrix.length;
+  return pixelListDest;
+}
 
-    for (int i = 0; i < _size; i++) {
-      num sum = 0;
+/// Helper function which computes a binary hash of a [List] of [Pixel]
+BigInt _calcPhash(List<Pixel> pixelList) {
+  String bitString = '';
+  final matrix = List<List<num>>.filled(32, []);
+  final row = List<num>.filled(32, 0);
+  final rows = List<List<num>>.filled(32, []);
+  final col = List<num>.filled(32, 0);
 
-      for (int j = 0; j < _size; j++) {
-        sum += matrix[j] * cos((i * pi * (j + 0.5)) / _size);
-      }
+  final data = _unit8ListToMatrix(pixelList); //returns a matrix used for DCT
 
-      sum *= sqrt(2 / _size);
+  for (int y = 0; y < _kSize; y++) {
+    for (int x = 0; x < _kSize; x++) {
+      final color = data[x][y];
 
-      if (i == 0) {
-        sum *= 1 / sqrt(2);
-      }
-
-      transformed[i] = sum;
+      row[x] = getLuminanceRgb(color._red, color._green, color._blue);
     }
 
-    return transformed;
+    rows[y] = _calculateDCT(row);
   }
-
-  ///Helper funciton to compute the average of an array after dct caclulations
-  static num average(List<num> pixels) {
-    // Calculate the average value from top 8x8 pixels, except for the first one.
-    final n = pixels.length - 1;
-    return pixels.sublist(1, n).reduce((a, b) => a + b) / n;
-  }
-
-  static int hammingDistance(BigInt x, BigInt y) {
-    BigInt s = x ^ y;
-    int ret = 0;
-    while (s != BigInt.zero) {
-      s &= s - BigInt.one;
-      ret++;
-    }
-    return ret;
-  }
-
-  /// Helper function to validate [List]
-  /// of bytes format and return [Image].
-  /// Throws exception if format is invalid.
-  static Image getValidImage(List<int> bytes) {
-    Image? image;
-    try {
-      image = decodeImage(bytes);
-    } on Exception {
-      throw const FormatException(
-          'Insufficient data provided to identify image.');
+  for (int x = 0; x < _kSize; x++) {
+    for (int y = 0; y < _kSize; y++) {
+      col[y] = rows[y][x];
     }
 
-    if (image == null) {
-      throw const FormatException('image null');
+    matrix[x] = _calculateDCT(col);
+  }
+
+  // Extract the top 8x8 pixels.
+  var pixels = <num>[];
+
+  for (int y = 0; y < 8; y++) {
+    for (int x = 0; x < 8; x++) {
+      pixels.add(matrix[y][x]);
+    }
+  }
+
+  // Calculate hash.
+  final bits = <num>[];
+  final compare = _average(pixels);
+
+  for (final pixel in pixels) {
+    bits.add(pixel > compare ? 1 : 0);
+  }
+
+  bits.forEach((element) {
+    bitString += (1 * element).toString();
+  });
+
+  return BigInt.parse(bitString, radix: 2);
+}
+
+///Helper function to perform 1D discrete cosine tranformation on a matrix
+List<num> _calculateDCT(List<num> matrix) {
+  final transformed = List<num>.filled(32, 0);
+  final _size = matrix.length;
+
+  for (int i = 0; i < _size; i++) {
+    num sum = 0;
+
+    for (int j = 0; j < _size; j++) {
+      sum += matrix[j] * cos((i * pi * (j + 0.5)) / _size);
     }
 
-    return image;
+    sum *= sqrt(2 / _size);
+
+    if (i == 0) {
+      sum *= 1 / sqrt(2);
+    }
+
+    transformed[i] = sum;
   }
+
+  return transformed;
+}
+
+///Helper funciton to compute the average of an array after dct caclulations
+num _average(List<num> pixels) {
+  // Calculate the average value from top 8x8 pixels, except for the first one.
+  final n = pixels.length - 1;
+  return pixels.sublist(1, n).reduce((a, b) => a + b) / n;
+}
+
+int hammingDistance(BigInt x, BigInt y) {
+  BigInt s = x ^ y;
+  int ret = 0;
+  while (s != BigInt.zero) {
+    s &= s - BigInt.one;
+    ret++;
+  }
+  return ret;
+}
+
+/// Helper function to validate [List]
+/// of bytes format and return [Image].
+/// Throws exception if format is invalid.
+Image getValidImage(List<int> bytes) {
+  Image? image;
+  try {
+    image = decodeImage(bytes);
+  } on Exception {
+    throw const FormatException(
+        'Insufficient data provided to identify image.');
+  }
+
+  if (image == null) {
+    throw const FormatException('image null');
+  }
+
+  return image;
 }

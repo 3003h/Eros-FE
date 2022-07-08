@@ -869,6 +869,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.3"
+  isolate:
+    dependency: "direct main"
+    description:
+      name: isolate
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.1"
   isolate_handler:
     dependency: "direct main"
     description:
