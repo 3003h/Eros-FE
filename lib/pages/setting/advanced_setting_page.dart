@@ -114,6 +114,18 @@ class ListViewAdvancedSetting extends StatelessWidget {
           },
         ),
       const ItemSpace(),
+      SelectorSettingItem(
+        hideLine: true,
+        title: 'Image hide',
+        selector: '',
+        onTap: () {
+          Get.toNamed(
+            EHRoutes.imageHide,
+            id: isLayoutLarge ? 2 : null,
+          );
+        },
+      ),
+      const ItemSpace(),
       // 清除缓存
       _cacheController.obx(
           (String? state) => SelectorSettingItem(

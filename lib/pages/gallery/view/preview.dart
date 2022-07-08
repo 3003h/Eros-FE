@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/utils/p_hash/phash_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_compare/image_compare.dart';
 
 class PreviewContainer extends StatelessWidget {
@@ -27,6 +29,8 @@ class PreviewContainer extends StatelessWidget {
   final GalleryImage galleryImage;
   final VoidCallback? onLoadComplet;
   final String? referer;
+
+  final ImageHideController imageHideController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +79,7 @@ class PreviewContainer extends StatelessWidget {
       onLongPress: () {
         if (galleryImage.largeThumb ?? false) {
           pHashHelper.compareLast(galleryImage.thumbUrl ?? '');
+          imageHideController.addCustomImageHide(galleryImage.thumbUrl ?? '');
         }
       },
       child: Container(

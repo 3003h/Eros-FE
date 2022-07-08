@@ -16,6 +16,7 @@ class EhCachedNetworkImage extends StatelessWidget {
     this.errorWidget,
     this.progressIndicatorBuilder,
     this.httpHeaders,
+    this.onLoadCompleted,
   }) : super(key: key);
 
   final String imageUrl;
@@ -27,6 +28,32 @@ class EhCachedNetworkImage extends StatelessWidget {
   final PlaceholderWidgetBuilder? placeholder;
   final LoadingErrorWidgetBuilder? errorWidget;
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
+  final VoidCallback? onLoadCompleted;
+
+  ProgressIndicatorBuilder? _getProgressIndicatorBuilder() {
+    if (progressIndicatorBuilder != null) {
+      return (context, url, progress) {
+        if ((progress.progress ?? 0.0) >= 1.0) {
+          onLoadCompleted?.call();
+        }
+        return progressIndicatorBuilder!.call(context, url, progress);
+      };
+    } else if (placeholder != null) {
+      return (context, url, progress) {
+        if ((progress.progress ?? 0.0) >= 1.0) {
+          onLoadCompleted?.call();
+        }
+        return placeholder!.call(context, url);
+      };
+    } else {
+      return (context, url, progress) {
+        if ((progress.progress ?? 0.0) >= 1.0) {
+          onLoadCompleted?.call();
+        }
+        return const SizedBox.shrink();
+      };
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +67,19 @@ class EhCachedNetworkImage extends StatelessWidget {
       _httpHeaders.addAll(httpHeaders!);
     }
 
-    return CachedNetworkImage(
+    final image = CachedNetworkImage(
       cacheManager: imageCacheManager,
       httpHeaders: _httpHeaders,
       width: width,
       height: height,
       fit: fit,
       imageUrl: imageUrl.dfUrl,
-      placeholder: placeholder,
+      // placeholder: onLoadCompleted == null ? placeholder : null,
       errorWidget: errorWidget,
-      progressIndicatorBuilder: progressIndicatorBuilder,
+      progressIndicatorBuilder: _getProgressIndicatorBuilder(),
     );
+
+    return image;
   }
 }
 

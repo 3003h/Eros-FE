@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -55,9 +56,9 @@ void getinit() {
   Get.lazyPut(() => LocalFavController(), fenix: true);
   Get.lazyPut(() => HistoryController(), fenix: true);
   Get.lazyPut(() => UserController(), fenix: true);
-  // Get.lazyPut(() => GalleryCacheController(), fenix: true);
   Get.lazyPut(() => AvatarController(), fenix: true);
   Get.lazyPut(() => CacheController(), fenix: true);
+  Get.lazyPut(() => ImageHideController(), fenix: true);
 
   Get.put(GalleryCacheController(), permanent: true);
 
