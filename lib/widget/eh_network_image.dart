@@ -18,6 +18,7 @@ class EhNetworkImage extends StatefulWidget {
     this.errorWidget,
     this.progressIndicatorBuilder,
     this.httpHeaders,
+    this.checkHide = false,
   }) : super(key: key);
 
   final String imageUrl;
@@ -31,6 +32,8 @@ class EhNetworkImage extends StatefulWidget {
   final LoadingErrorWidgetBuilder? errorWidget;
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
+  final bool checkHide;
+
   @override
   State<EhNetworkImage> createState() => _EhNetworkImageState();
 }
@@ -40,8 +43,8 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.find<EhConfigService>().isSiteEx.value || true)
-      return NetworkExtendedImage(
+    if (Get.find<EhConfigService>().isSiteEx.value || true) {
+      final image = NetworkExtendedImage(
         url: widget.imageUrl.dfUrl,
         width: widget.width,
         height: widget.height,
@@ -49,7 +52,13 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
         placeholder: widget.placeholder,
         errorWidget: widget.errorWidget,
         progressIndicatorBuilder: widget.progressIndicatorBuilder,
+        checkHide: widget.checkHide,
       );
+
+      return showCustomWidget
+          ? const Center(child: Icon(FontAwesomeIcons.rectangleAd))
+          : image;
+    }
 
     final image = EhCachedNetworkImage(
       width: widget.width,
