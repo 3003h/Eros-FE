@@ -1,10 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/utils/p_hash/phash_base.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class EhNetworkImage extends StatefulWidget {
@@ -39,12 +36,10 @@ class EhNetworkImage extends StatefulWidget {
 }
 
 class _EhNetworkImageState extends State<EhNetworkImage> {
-  bool showCustomWidget = false;
-
   @override
   Widget build(BuildContext context) {
-    if (Get.find<EhConfigService>().isSiteEx.value || true) {
-      final image = NetworkExtendedImage(
+    if (Get.find<EhConfigService>().isSiteEx.value && false) {
+      return NetworkExtendedImage(
         url: widget.imageUrl.dfUrl,
         width: widget.width,
         height: widget.height,
@@ -54,13 +49,9 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
         progressIndicatorBuilder: widget.progressIndicatorBuilder,
         checkHide: widget.checkHide,
       );
-
-      return showCustomWidget
-          ? const Center(child: Icon(FontAwesomeIcons.rectangleAd))
-          : image;
     }
 
-    final image = EhCachedNetworkImage(
+    return EhCachedNetworkImage(
       width: widget.width,
       height: widget.height,
       fit: widget.fit,
@@ -69,20 +60,7 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
       placeholder: widget.placeholder,
       errorWidget: widget.errorWidget,
       progressIndicatorBuilder: widget.progressIndicatorBuilder,
-      onLoadCompleted: () async {
-        // // final hash = pHashHelper.calculatePHash(widget.imageUrl.dfUrl);
-        // ImageHideController imageHideController = Get.find();
-        // final needHide =
-        //     await imageHideController.checkHide(widget.imageUrl.dfUrl);
-        // logger.d('needHide $needHide');
-        // setState(() {
-        //   showCustomWidget = needHide;
-        // });
-      },
+      checkHide: widget.checkHide,
     );
-
-    return showCustomWidget
-        ? Container(child: Icon(FontAwesomeIcons.rectangleAd))
-        : image;
   }
 }

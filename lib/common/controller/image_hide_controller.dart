@@ -9,6 +9,7 @@ import '../../fehviewer.dart';
 
 class ImageHideController extends GetxController {
   final RxList<ImageHide> customHides = <ImageHide>[].obs;
+  final Map<String, BigInt> pHashMap = <String, BigInt>{};
 
   @override
   void onInit() {
@@ -20,6 +21,10 @@ class ImageHideController extends GetxController {
   }
 
   Future<void> addCustomImageHide(String imageUrl) async {
+    if (customHides.any((e) => e.imageUrl == imageUrl)) {
+      return;
+    }
+
     File? imageFile;
     if (await cachedImageExists(imageUrl)) {
       imageFile = await getCachedImageFile(imageUrl);
@@ -30,15 +35,34 @@ class ImageHideController extends GetxController {
 
     final data = imageFile.readAsBytesSync();
     final pHash = phash.calculatePHash(phash.getValidImage(data));
+    if (customHides.any((e) => e.pHash == pHash.toRadixString(16))) {
+      return;
+    }
     customHides
         .add(ImageHide(pHash: pHash.toRadixString(16), imageUrl: imageUrl));
   }
 
   Future<bool> checkHide(String url) async {
-    final hash = await pHashHelper.calculatePHashFromUrl(url);
+    BigInt? hash = await calculatePHash(url);
+    loggerSimple.d('checkHide url:$url hash:${hash.toRadixString(16)}');
+
     return customHides.any((e) =>
         phash.hammingDistance(
             BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash) <=
         4);
+  }
+
+  Future<BigInt> calculatePHash(String url) async {
+    BigInt? hash;
+    if (pHashMap.containsKey(url)) {
+      hash = pHashMap[url]!;
+    }
+
+    if (hash == null) {
+      hash = await pHashHelper.calculatePHashFromUrl(url);
+      pHashMap[url] = hash;
+    }
+
+    return hash;
   }
 }

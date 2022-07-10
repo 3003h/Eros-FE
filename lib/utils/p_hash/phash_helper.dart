@@ -44,10 +44,13 @@ class PHashHelper {
     imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
         headers: {'cookie': Global.profile.user.cookie});
 
-    final List<int> data = imageFile.readAsBytesSync();
+    final path = imageFile.path;
+
+    // final List<int> data = imageFile.readAsBytesSync();
 
     final lb = await loadBalancer;
-    final pHash = await lb.run(calculateFromList, data);
+    // final pHash = await lb.run(calculateFromList, data);
+    final pHash = await lb.run(calculateFromFile, path);
 
     // final pHash = calculateFromList(data);
     // final pHash = await compute(calculateFromList, data);

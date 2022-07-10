@@ -151,6 +151,7 @@ dependencies:
       url: https://github.com/xioxin/archive_async.git
   image_compare: ^1.1.2
   isolate: ^2.1.1
+  octo_image: ^1.0.2
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

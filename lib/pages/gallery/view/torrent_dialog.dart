@@ -183,31 +183,17 @@ Future<void> showTorrentDialog() {
   return showCupertinoDialog<void>(
       context: Get.overlayContext!,
       barrierDismissible: true,
-      builder: (_) {
+      builder: (context) {
         return CupertinoAlertDialog(
-          title: Text(L10n.of(Get.context!).p_Torrent),
+          title: Text(L10n.of(context).p_Torrent),
           content: const TorrentView(),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(L10n.of(Get.context!).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
-          ],
-        );
-      });
-}
-
-Future<void> showTorrentModal() {
-  return showCupertinoModalBottomSheet<void>(
-      context: Get.overlayContext!,
-      // barrierDismissible: true,
-      builder: (_) {
-        return CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-                onPressed: () {}, child: const TorrentView()),
           ],
         );
       });

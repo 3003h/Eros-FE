@@ -1,14 +1,11 @@
-import 'dart:io';
-
-import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/utils/p_hash/phash_base.dart';
 import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_compare/image_compare.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PreviewContainer extends StatelessWidget {
   PreviewContainer({
@@ -80,8 +77,59 @@ class PreviewContainer extends StatelessWidget {
       },
       onLongPress: () {
         if (galleryImage.largeThumb ?? false) {
-          pHashHelper.compareLast(galleryImage.thumbUrl ?? '');
-          imageHideController.addCustomImageHide(galleryImage.thumbUrl ?? '');
+          if (!kReleaseMode)
+            pHashHelper.compareLast(galleryImage.thumbUrl ?? '');
+          // imageHideController.addCustomImageHide(galleryImage.thumbUrl ?? '');
+          showCupertinoModalPopup(
+              context: context,
+              builder: (context) {
+                return CupertinoActionSheet(
+                  message: Column(
+                    children: [
+                      // Text(galleryImage.thumbUrl ?? ''),
+                      FutureBuilder<BigInt>(
+                          future: imageHideController
+                              .calculatePHash(galleryImage.thumbUrl ?? ''),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                !snapshot.hasError &&
+                                snapshot.data != null) {
+                              return SelectableText(
+                                  'hash: ${snapshot.data!.toRadixString(16)}');
+                            } else {
+                              return const CupertinoActivityIndicator();
+                            }
+                          }),
+                    ],
+                  ),
+                  title: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Container(
+                        constraints: const BoxConstraints(maxHeight: 100),
+                        child: EhNetworkImage(
+                            imageUrl: galleryImage.thumbUrl ?? ''),
+                      ),
+                    ),
+                  ),
+                  cancelButton: CupertinoActionSheetAction(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text(L10n.of(context).cancel)),
+                  actions: [
+                    CupertinoActionSheetAction(
+                      onPressed: () {
+                        imageHideController
+                            .addCustomImageHide(galleryImage.thumbUrl ?? '');
+                        Get.back();
+                      },
+                      child: Text('Hide'),
+                    ),
+                  ],
+                );
+              });
         }
       },
       child: Container(
