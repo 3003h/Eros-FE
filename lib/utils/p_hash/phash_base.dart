@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:image/image.dart';
 
@@ -28,6 +29,12 @@ BigInt calculatePHash(Image image) {
 }
 
 BigInt calculateFromList(List<int> data) {
+  return calculatePHash(getValidImage(data));
+}
+
+BigInt calculateFromFile(String path) {
+  final imageFile = File(path);
+  final List<int> data = imageFile.readAsBytesSync();
   return calculatePHash(getValidImage(data));
 }
 
