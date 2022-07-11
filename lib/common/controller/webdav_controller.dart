@@ -581,7 +581,12 @@ class WebdavController extends GetxController {
       }
       final String _fileText = _file.readAsStringSync();
 
-      return Tuple2(_fileText.split('\n'), maxTime);
+      return Tuple2(
+          _fileText
+              .split('\n')
+              .where((element) => element.trim().isNotEmpty)
+              .toList(),
+          maxTime);
     } catch (err) {
       logger.e('$err');
       return null;
