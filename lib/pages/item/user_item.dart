@@ -154,7 +154,7 @@ class UserWidget extends GetView<UserController> {
       color: CupertinoColors.systemGrey,
     );
 
-    logger.d('${controller.user().toJson()} ');
+    // logger.d('${controller.user().toJson()} ');
     final String _avatarUrl = controller.user().avatarUrl ?? '';
     return Obx(() {
       if (controller.isLogin && _avatarUrl.isNotEmpty) {
