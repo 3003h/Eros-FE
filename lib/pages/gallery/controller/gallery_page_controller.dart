@@ -302,8 +302,8 @@ class GalleryPageController extends GetxController
 
   /// 添加缩略图对象
   void addAllImages(List<GalleryImage> galleryImages) {
-    logger5.v(
-        'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
+    // logger5.v(
+    //     'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
 
     for (final GalleryImage _image in galleryImages) {
       final int index =
