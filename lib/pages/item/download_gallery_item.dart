@@ -35,8 +35,9 @@ Future<int?> syncReadProgress(
   bool _needShowDialog = true;
 
   Future<int> _sync() async {
-    final _cache =
-        await Get.find<GalleryCacheController>().getGalleryCache('$gid');
+    final _cache = await Get.find<GalleryCacheController>()
+        .listenGalleryCache('$gid')
+        .last;
     _needShowDialog = false;
     return _cache?.lastIndex ?? 0;
   }
@@ -122,13 +123,14 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
-        // 同步进度
+        // 读取进度
         int? lastIndex = 0;
         if (Get.find<WebdavController>().syncReadProgress) {
           lastIndex = await syncReadProgress(context, galleryTask.gid);
         }
         final cache = await Get.find<GalleryCacheController>()
-            .getGalleryCache('${galleryTask.gid}', sync: false);
+            .listenGalleryCache('${galleryTask.gid}', sync: false)
+            .first;
         if (cache?.lastIndex != null) {
           lastIndex = cache?.lastIndex;
         }

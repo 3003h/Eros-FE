@@ -97,13 +97,14 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
 
                   final gid = int.parse(galleryGid ?? '0');
 
-                  // 同步进度
+                  // 进度
                   int? lastIndex = 0;
                   if (Get.find<WebdavController>().syncReadProgress) {
                     lastIndex = await syncReadProgress(context, gid);
                   }
                   final cache = await Get.find<GalleryCacheController>()
-                      .getGalleryCache('$gid', sync: false);
+                      .listenGalleryCache('$gid', sync: false)
+                      .first;
                   if (cache?.lastIndex != null) {
                     lastIndex = cache?.lastIndex;
                   }
