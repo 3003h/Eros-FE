@@ -554,6 +554,7 @@ class GalleryPageController extends GetxController
             imageWidth: _image.imageWidth,
             imageHeight: _image.imageHeight,
             originImageUrl: _image.originImageUrl,
+            changeSource: changeSource,
           );
 
           logger.v('_imageCopyWith ${_imageCopyWith.toJson()}');
