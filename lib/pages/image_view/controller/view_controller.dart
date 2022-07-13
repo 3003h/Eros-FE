@@ -221,7 +221,7 @@ class ViewExtController extends GetxController {
 
   Future<void> initArchiveFuture(int ser) async {
     final file = vState.asyncArchiveFiles[ser - 1];
-    logger.d('load ${file.name}');
+    logger.v('load ${file.name}');
     imageArchiveFutureMap[ser] = getArchiveFile(vState.gid, file);
   }
 

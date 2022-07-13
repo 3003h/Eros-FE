@@ -123,20 +123,19 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
             .toList();
 
         // 同步进度
-        int? lastIndex;
+        int? lastIndex = 0;
         if (Get.find<WebdavController>().syncReadProgress) {
           lastIndex = await syncReadProgress(context, galleryTask.gid);
         }
-        logger.d('lastIndex $lastIndex');
-        lastIndex ??= (await Get.find<GalleryCacheController>()
-                    .getGalleryCache('${galleryTask.gid}', sync: false))
-                ?.lastIndex ??
-            0;
-        logger.d('lastIndex $lastIndex');
+        final cache = await Get.find<GalleryCacheController>()
+            .getGalleryCache('${galleryTask.gid}', sync: false);
+        if (cache?.lastIndex != null) {
+          lastIndex = cache?.lastIndex;
+        }
 
         // 进入阅读
         NavigatorUtil.goGalleryViewPageFile(
-            lastIndex, pics, '${galleryTask.gid}');
+            lastIndex ?? 0, pics, '${galleryTask.gid}');
       },
       onLongPress: () => controller.onLongPress(taskIndex, task: galleryTask),
       child: _buildCardItem(context, _complete, addTime: addTime),

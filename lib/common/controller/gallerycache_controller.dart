@@ -24,41 +24,54 @@ class GalleryCacheController extends GetxController {
   Future<GalleryCache?> getGalleryCache(String gid, {bool sync = true}) async {
     final _localCache = gStore.getCache(gid);
 
+    GalleryCache? _galleryCache;
+
     if (!gCacheMap.containsKey(gid) && _localCache != null) {
-      logger.v('get from store');
+      logger.d('get from store');
       gCacheMap[gid] = _localCache;
+      _galleryCache = _localCache;
     }
 
     if (!sync || !webdavController.syncReadProgress) {
-      return gCacheMap[gid];
+      _galleryCache = gCacheMap[gid];
     } else {
       try {
         final remotelist = await webdavController.getRemotReadList();
         logger.v('remotelist $remotelist');
         if (remotelist.contains(gid)) {
           final remote = await webdavController.downloadRead(gid);
-          logger.v('remote ${remote?.toJson()}');
+          logger.v('远程 ${remote?.toJson()}');
           if (_localCache == null && remote != null) {
             logger.v('local null');
             gCacheMap[gid] = GalleryCache(lastIndex: remote.lastIndex);
+            _galleryCache = gCacheMap[gid];
           } else if (_localCache != null && remote != null) {
-            logger.v('both not null');
+            // logger.d('both not null');
             if ((remote.time ?? 0) > (_localCache.time ?? 0)) {
               gCacheMap[gid] = _localCache.copyWith(
                   lastIndex: remote.lastIndex, time: remote.time);
+              _galleryCache = gCacheMap[gid];
             }
           }
         }
       } catch (e) {
-        return gCacheMap[gid];
+        logger.e('$e');
+        _galleryCache = gCacheMap[gid];
       }
     }
-    return gCacheMap[gid];
+    if (_galleryCache?.gid != null) {
+      return _galleryCache;
+    }
+    return null;
   }
 
-  Future<void> setIndex(String gid, int index,
-      {bool saveToStore = false}) async {
+  Future<void> setIndex(
+    String gid,
+    int index, {
+    bool saveToStore = false,
+  }) async {
     final GalleryCache? _ori = await getGalleryCache(gid, sync: false);
+    // logger.d('_ori ${_ori?.toJson()}');
     final _time = DateTime.now().millisecondsSinceEpoch;
     if (_ori == null) {
       final _newCache = GalleryCache(gid: gid, lastIndex: index, time: _time);
