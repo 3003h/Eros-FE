@@ -92,8 +92,8 @@ class GalleryPageController extends GetxController
 
       // 初始
       _galleryCacheController
-          .getGalleryCache(gState.galleryProvider?.gid ?? '')
-          .then((_galleryCache) =>
+          .listenGalleryCache(gState.galleryProvider?.gid ?? '')
+          .listen((_galleryCache) =>
               gState.lastIndex = _galleryCache?.lastIndex ?? 0);
     }
   }
