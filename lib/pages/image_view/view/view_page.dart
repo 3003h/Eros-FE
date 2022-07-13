@@ -49,7 +49,7 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    logger.d('initState');
+    logger.v('initState');
   }
 
   @override

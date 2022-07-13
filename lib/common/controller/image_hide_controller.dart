@@ -44,7 +44,7 @@ class ImageHideController extends GetxController {
 
   Future<bool> checkHide(String url) async {
     BigInt? hash = await calculatePHash(url);
-    loggerSimple.d('checkHide url:$url hash:${hash.toRadixString(16)}');
+    loggerSimple.v('checkHide url:$url hash:${hash.toRadixString(16)}');
 
     return customHides.any((e) =>
         phash.hammingDistance(

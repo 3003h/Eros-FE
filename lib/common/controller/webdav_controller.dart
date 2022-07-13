@@ -346,7 +346,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return;
     }
-    logger.d('upload Read');
+    logger.d('upload Read [${read.toJson()}] ');
     chkTempDir(kLocalReadDirPath);
 
     final _path = path.join(Global.tempPath, 'read', read.gid);
