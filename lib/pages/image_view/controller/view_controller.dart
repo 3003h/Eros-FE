@@ -496,7 +496,11 @@ class ViewExtController extends GetxController {
     }
     _galleryPageController.uptImageBySer(
       ser: itemSer,
-      image: _currentImage.copyWith(imageUrl: ''),
+      image: _currentImage.copyWith(
+        imageUrl: '',
+        changeSource: changeSource,
+        completeCache: false,
+      ),
     );
 
     // 换源重载

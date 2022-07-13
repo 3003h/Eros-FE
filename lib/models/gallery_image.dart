@@ -24,6 +24,7 @@ class GalleryImage {
     this.token,
     this.completeDownload,
     this.filePath,
+    this.changeSource,
   });
 
   final bool? largeThumb;
@@ -45,6 +46,7 @@ class GalleryImage {
   final String? token;
   final bool? completeDownload;
   final String? filePath;
+  final bool? changeSource;
 
   factory GalleryImage.fromJson(Map<String,dynamic> json) => GalleryImage(
     largeThumb: json['largeThumb'] != null ? json['largeThumb'] as bool : null,
@@ -65,7 +67,8 @@ class GalleryImage {
     gid: json['gid'] != null ? json['gid'] as String : null,
     token: json['token'] != null ? json['token'] as String : null,
     completeDownload: json['completeDownload'] != null ? json['completeDownload'] as bool : null,
-    filePath: json['filePath'] != null ? json['filePath'] as String : null
+    filePath: json['filePath'] != null ? json['filePath'] as String : null,
+    changeSource: json['changeSource'] != null ? json['changeSource'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -87,7 +90,8 @@ class GalleryImage {
     'gid': gid,
     'token': token,
     'completeDownload': completeDownload,
-    'filePath': filePath
+    'filePath': filePath,
+    'changeSource': changeSource
   };
 
   GalleryImage clone() => GalleryImage(
@@ -109,7 +113,8 @@ class GalleryImage {
     gid: gid,
     token: token,
     completeDownload: completeDownload,
-    filePath: filePath
+    filePath: filePath,
+    changeSource: changeSource
   );
 
     
@@ -132,7 +137,8 @@ class GalleryImage {
     String? gid,
     String? token,
     bool? completeDownload,
-    String? filePath
+    String? filePath,
+    bool? changeSource
   }) => GalleryImage(
     largeThumb: largeThumb ?? this.largeThumb,
     completeCache: completeCache ?? this.completeCache,
@@ -153,12 +159,13 @@ class GalleryImage {
     token: token ?? this.token,
     completeDownload: completeDownload ?? this.completeDownload,
     filePath: filePath ?? this.filePath,
+    changeSource: changeSource ?? this.changeSource,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath;
+    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath && changeSource == other.changeSource;
 
   @override
-  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode;
+  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode ^ changeSource.hashCode;
 }

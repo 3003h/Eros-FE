@@ -271,6 +271,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 )
               : state.completedWidget;
         } else if (state.extendedImageLoadState == LoadState.loading) {
+          return null;
           // 显示加载中
           final ImageChunkEvent? loadingProgress = state.loadingProgress;
           final double? progress = loadingProgress?.expectedTotalBytes != null
@@ -367,7 +368,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onLongPress: () async {
-            logger.d('long press');
+            logger.v('long press');
             vibrateUtil.medium();
             final GalleryImage? _currentImage =
                 vState.pageState.imageMap[widget.imageSer];
@@ -388,14 +389,16 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
   Widget _buildFutureImage() {
     final GalleryImage? _image = vState.pageState.imageMap[widget.imageSer];
-    if ((_image?.completeCache ?? false) &&
-        (_image?.sourceId?.isEmpty ?? false)) {
+    logger.d('_image ${_image?.toJson()}');
+
+    if ((_image?.completeCache ?? false) && !(_image?.changeSource ?? false)) {
       final imageProvider =
           ExtendedNetworkImageProvider(_image!.imageUrl!, cache: true);
       logger.d('return providerImage ${widget.imageSer}');
       return providerImage(imageProvider);
     }
 
+    logger.d('return FutureBuilder ${widget.imageSer}');
     return FutureBuilder<GalleryImage?>(
         future: controller.imageFutureMap[widget.imageSer],
         builder: (context, snapshot) {
@@ -440,7 +443,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 return ViewLoading(
                   ser: widget.imageSer,
                   duration: vState.viewMode != ViewMode.topToBottom
-                      ? const Duration(milliseconds: 50)
+                      ? const Duration(milliseconds: 200)
                       : null,
                 );
               }
@@ -500,7 +503,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             return ViewLoading(
               ser: widget.imageSer,
               duration: vState.viewMode != ViewMode.topToBottom
-                  ? const Duration(milliseconds: 120)
+                  ? const Duration(milliseconds: 200)
                   : null,
             );
           }
