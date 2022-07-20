@@ -59,11 +59,9 @@ class ImageHideController extends GetxController {
   }
 
   Future<bool> checkQRCodeHide(String url) async {
-    logger.d('checkQRCodeHide start');
     final barcode = await scanQRCodeFromUrl(url);
     if (barcode != null) {
-      logger.d(
-          'barcode ${barcode.type} ${barcode.displayValue} ${barcode.rawValue}');
+      logger.d('barcode ${barcode.type} ${barcode.displayValue} , url: $url');
     }
 
     return barcode?.type == BarcodeType.url;

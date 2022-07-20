@@ -43,18 +43,18 @@ class EhCachedNetworkImage extends StatelessWidget {
   Future<bool> _future() async {
     // logger
     //     .d('checkPHashHide $checkPHashHide checkQRCodeHide  $checkQRCodeHide');
-    // if (checkPHashHide && checkQRCodeHide) {
-    //   return await imageHideController.checkPHashHide(imageUrl) ||
-    //       await imageHideController.checkQRCodeHide(imageUrl);
-    // }
-    // if (checkPHashHide) {
-    //   return await imageHideController.checkPHashHide(imageUrl);
-    // } else {
-    //   return await imageHideController.checkQRCodeHide(imageUrl);
-    // }
+    if (checkPHashHide && checkQRCodeHide) {
+      return await imageHideController.checkPHashHide(imageUrl) ||
+          await imageHideController.checkQRCodeHide(imageUrl);
+    }
     if (checkPHashHide) {
       return await imageHideController.checkPHashHide(imageUrl);
+    } else {
+      return await imageHideController.checkQRCodeHide(imageUrl);
     }
+    // if (checkPHashHide) {
+    //   return await imageHideController.checkPHashHide(imageUrl);
+    // }
     return false;
   }
 
