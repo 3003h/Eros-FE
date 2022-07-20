@@ -98,4 +98,5 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.startup:startup-runtime:1.1.1"
+    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
 }

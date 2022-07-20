@@ -22,7 +22,8 @@ class NetworkExtendedImage extends StatefulWidget {
     this.cancelToken,
     this.heroTag,
     this.onLoadCompleted,
-    this.checkHide = false,
+    this.checkPHashHide = false,
+    this.checkQRCodeHide = false,
   }) : super(key: key);
   final String url;
   final double? height;
@@ -37,7 +38,8 @@ class NetworkExtendedImage extends StatefulWidget {
   final CancellationToken? cancelToken;
   final Object? heroTag;
   final VoidCallback? onLoadCompleted;
-  final bool checkHide;
+  final bool checkPHashHide;
+  final bool checkQRCodeHide;
 
   @override
   _NetworkExtendedImageState createState() => _NetworkExtendedImageState();
@@ -112,11 +114,24 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
 
             // return _image;
 
-            if (!widget.checkHide) {
-              return _image;
-            } else {
+            logger.d(
+                'widget.checkPHashHide   widget.checkQRCodeHide ${widget.checkPHashHide}  ${widget.checkQRCodeHide}');
+            if (widget.checkPHashHide || widget.checkQRCodeHide) {
+              Future<bool> _future() async {
+                if (!widget.checkQRCodeHide) {
+                  return await imageHideController
+                      .checkPHashHide(widget.url.dfUrl);
+                } else if (!widget.checkPHashHide) {
+                  return await imageHideController
+                      .checkQRCodeHide(widget.url.dfUrl);
+                }
+                return await imageHideController
+                        .checkPHashHide(widget.url.dfUrl) ||
+                    await imageHideController.checkQRCodeHide(widget.url.dfUrl);
+              }
+
               return FutureBuilder<bool>(
-                  future: imageHideController.checkPHashHide(widget.url.dfUrl),
+                  future: _future(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       final showCustomWidget = snapshot.data ?? false;
@@ -137,6 +152,8 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
                     return _image;
                   });
             }
+
+            return _image;
 
           case LoadState.failed:
             return Container(

@@ -6,6 +6,7 @@ import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -195,7 +196,7 @@ class ViewLoading extends StatelessWidget {
 }
 
 class ImageExt extends GetView<ViewExtController> {
-  const ImageExt({
+  ImageExt({
     Key? key,
     required this.url,
     required this.ser,
@@ -223,6 +224,10 @@ class ImageExt extends GetView<ViewExtController> {
   final DoubleTap? onDoubleTap;
   final ExtendedImageMode mode;
   final bool enableSlideOutPage;
+
+  final EhConfigService ehConfigService = Get.find();
+  bool get checkPHashHide => ehConfigService.enablePHashCheck;
+  bool get checkQRCodeHide => ehConfigService.enableQRCodeCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -276,7 +281,15 @@ class ImageExt extends GetView<ViewExtController> {
                   )
                 : image;
 
-            image = ImageWithPhash(url: url, child: image, ser: ser);
+            if (checkPHashHide || checkQRCodeHide) {
+              image = ImageWithPhash(
+                url: url,
+                child: image,
+                ser: ser,
+                checkPHashHide: checkPHashHide,
+                checkQRCodeHide: checkQRCodeHide,
+              );
+            }
 
             return image;
 
@@ -348,10 +361,15 @@ class ImageWithPhash extends StatefulWidget {
     required this.url,
     required this.child,
     required this.ser,
+    this.checkPHashHide = false,
+    this.checkQRCodeHide = false,
   }) : super(key: key);
   final String url;
   final Widget child;
   final int ser;
+
+  final bool checkPHashHide;
+  final bool checkQRCodeHide;
 
   @override
   State<ImageWithPhash> createState() => _ImageWithPhashState();
@@ -359,18 +377,28 @@ class ImageWithPhash extends StatefulWidget {
 
 class _ImageWithPhashState extends State<ImageWithPhash> {
   final ImageHideController imageHideController = Get.find();
-  late Future<bool?> future;
+  late Future<bool> _future;
+
+  Future<bool> _futureFunc() async {
+    if (!widget.checkQRCodeHide) {
+      return imageHideController.checkPHashHide(widget.url);
+    } else if (!widget.checkPHashHide) {
+      return imageHideController.checkQRCodeHide(widget.url);
+    }
+    return await imageHideController.checkPHashHide(widget.url) ||
+        await imageHideController.checkQRCodeHide(widget.url);
+  }
 
   @override
   void initState() {
     super.initState();
-    future = imageHideController.checkPHashHide(widget.url);
+    _future = _futureFunc();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool?>(
-        future: future,
+        future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data ?? false) {

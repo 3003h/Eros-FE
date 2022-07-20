@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/utils/p_hash/phash_base.dart' as phash;
 import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:get/get.dart';
+import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 import '../../fehviewer.dart';
 
@@ -54,15 +58,16 @@ class ImageHideController extends GetxController {
         kMaxPhashDiff);
   }
 
-  // Future<bool> checkHideFromProvider(ImageProvider provider) async {
-  //   BigInt? hash = await calculatePHash(url);
-  //   loggerSimple.v('checkHide url:$url hash:${hash.toRadixString(16)}');
-  //
-  //   return customHides.any((e) =>
-  //   phash.hammingDistance(
-  //       BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash) <=
-  //       kMaxPhashDiff);
-  // }
+  Future<bool> checkQRCodeHide(String url) async {
+    logger.d('checkQRCodeHide start');
+    final barcode = await scanQRCodeFromUrl(url);
+    if (barcode != null) {
+      logger.d(
+          'barcode ${barcode.type} ${barcode.displayValue} ${barcode.rawValue}');
+    }
+
+    return barcode?.type == BarcodeType.url;
+  }
 
   Future<BigInt> calculatePHash(String url) async {
     BigInt? hash;
@@ -76,5 +81,28 @@ class ImageHideController extends GetxController {
     }
 
     return hash;
+  }
+
+  Future<Barcode?> scanQRCodeFromUrl(String imageUrl) async {
+    File? imageFile;
+    if (await cachedImageExists(imageUrl)) {
+      imageFile = await getCachedImageFile(imageUrl);
+    }
+
+    imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
+        headers: {'cookie': Global.profile.user.cookie});
+
+    final path = imageFile.path;
+
+    final Uint8List data = imageFile.readAsBytesSync();
+
+    final inputImage = InputImage.fromFilePath(path);
+
+    BarcodeScanner scanner = BarcodeScanner(formats: [
+      BarcodeFormat.qrCode,
+    ]);
+
+    final list = await scanner.processImage(inputImage);
+    return list.firstOrNull;
   }
 }

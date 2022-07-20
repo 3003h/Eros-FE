@@ -48,7 +48,7 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
         placeholder: widget.placeholder,
         errorWidget: widget.errorWidget,
         progressIndicatorBuilder: widget.progressIndicatorBuilder,
-        checkHide: widget.checkHide,
+        checkPHashHide: widget.checkHide,
       );
     }
 
@@ -61,7 +61,8 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
       placeholder: widget.placeholder,
       errorWidget: widget.errorWidget,
       progressIndicatorBuilder: widget.progressIndicatorBuilder,
-      checkHide: widget.checkHide && ehConfigService.enablePHashCheck,
+      checkPHashHide: widget.checkHide && ehConfigService.enablePHashCheck,
+      checkQRCodeHide: widget.checkHide && ehConfigService.enableQRCodeCheck,
     );
   }
 }

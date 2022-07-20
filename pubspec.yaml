@@ -117,6 +117,10 @@ dependencies:
     git:
       url: https://github.com/honjow/learning.git
       path: packages/learning_language
+#  learning_barcode_scanning:
+#    git:
+#      url: https://github.com/honjow/learning.git
+#      path: packages/learning_barcode_scanning
   encrypt: ^5.0.1
   wakelock: ^0.6.1+1
   jinja: ^0.3.4
@@ -152,6 +156,11 @@ dependencies:
   image_compare: ^1.1.2
   isolate: ^2.1.1
   octo_image: ^1.0.2
+  google_mlkit_barcode_scanning: ^0.3.0
+#  qrscan: ^0.3.2
+#  scan: ^1.6.0
+#  flutter_qr_reader: ^1.0.5
+#  mobile_scanner: ^2.0.0
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
