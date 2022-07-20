@@ -105,7 +105,7 @@ class WebDavSettingView extends GetView<WebdavController> {
               },
             );
           },
-          hideLine: true,
+          hideDivider: true,
         ),
         const ItemSpace(),
         TextSwitchItem(

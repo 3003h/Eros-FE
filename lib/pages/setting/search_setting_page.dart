@@ -41,7 +41,7 @@ class ListViewSearchSetting extends StatelessWidget {
             id: isLayoutLarge ? 2 : null,
           );
         },
-        hideLine: true,
+        hideDivider: true,
       ),
     ];
     return ListView.builder(

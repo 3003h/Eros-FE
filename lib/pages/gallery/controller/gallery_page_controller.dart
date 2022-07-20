@@ -521,7 +521,7 @@ class GalleryPageController extends GetxController
             ? gState.galleryProvider?.imageMap[itemSer]?.sourceId
             : '';
 
-        logger.d(
+        logger.v(
             'ser:$itemSer ,href: ${gState.galleryProvider?.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {

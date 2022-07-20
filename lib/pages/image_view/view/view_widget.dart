@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -69,6 +70,56 @@ class ViewErr509 extends StatelessWidget {
   }
 }
 
+class ViewAD extends StatelessWidget {
+  const ViewAD({Key? key, required this.ser}) : super(key: key);
+  final int ser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            constraints: const BoxConstraints(
+              maxHeight: 100,
+              maxWidth: 100,
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: CupertinoColors.systemPink.darkColor,
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Icon(
+                      CupertinoIcons.xmark_shield_fill,
+                      size: 80,
+                      color: CupertinoColors.systemPink.darkColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            '$ser',
+            style: const TextStyle(
+                color: CupertinoColors.secondarySystemBackground),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ViewError extends StatelessWidget {
   const ViewError({Key? key, required this.ser, this.errInfo})
       : super(key: key);
@@ -107,15 +158,25 @@ class ViewError extends StatelessWidget {
 }
 
 class ViewLoading extends StatelessWidget {
-  const ViewLoading({Key? key, required this.ser, this.duration, this.progress})
-      : super(key: key);
+  const ViewLoading({
+    Key? key,
+    required this.ser,
+    this.duration,
+    this.progress,
+    this.animationEnabled,
+  }) : super(key: key);
   final int ser;
   final Duration? duration;
   final double? progress;
+  final bool? animationEnabled;
 
   @override
   Widget build(BuildContext context) {
-    final _loadWidget = _ViewLoading(ser: ser, progress: progress);
+    final _loadWidget = _ViewLoading(
+      ser: ser,
+      progress: progress,
+      animationEnabled: animationEnabled ?? true,
+    );
 
     if (duration == null) {
       return _loadWidget;
@@ -198,7 +259,12 @@ class ImageExt extends GetView<ViewExtController> {
 
             onLoadCompleted?.call(state);
 
-            return controller.vState.viewMode != ViewMode.topToBottom
+            Widget image = FadeTransition(
+              opacity: fadeAnimationController,
+              child: state.completedWidget,
+            );
+
+            image = controller.vState.viewMode != ViewMode.topToBottom
                 ? Hero(
                     tag: '$ser',
                     createRectTween: (Rect? begin, Rect? end) {
@@ -206,15 +272,13 @@ class ImageExt extends GetView<ViewExtController> {
                           MaterialRectCenterArcTween(begin: begin, end: end);
                       return tween;
                     },
-                    child: FadeTransition(
-                      opacity: fadeAnimationController,
-                      child: state.completedWidget,
-                    ),
+                    child: image,
                   )
-                : FadeTransition(
-                    opacity: fadeAnimationController,
-                    child: state.completedWidget,
-                  );
+                : image;
+
+            image = ImageWithPhash(url: url, child: image, ser: ser);
+
+            return image;
 
           case LoadState.failed:
             logger.d('Failed url: $url');
@@ -278,15 +342,64 @@ class ImageExt extends GetView<ViewExtController> {
   }
 }
 
+class ImageWithPhash extends StatefulWidget {
+  const ImageWithPhash({
+    Key? key,
+    required this.url,
+    required this.child,
+    required this.ser,
+  }) : super(key: key);
+  final String url;
+  final Widget child;
+  final int ser;
+
+  @override
+  State<ImageWithPhash> createState() => _ImageWithPhashState();
+}
+
+class _ImageWithPhashState extends State<ImageWithPhash> {
+  final ImageHideController imageHideController = Get.find();
+  late Future<bool?> future;
+
+  @override
+  void initState() {
+    super.initState();
+    future = imageHideController.checkPHashHide(widget.url);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool?>(
+        future: future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data ?? false) {
+              return ViewAD(ser: widget.ser);
+            } else {
+              return widget.child;
+            }
+          } else {
+            return ViewLoading(
+              ser: widget.ser,
+              progress: 1.0,
+              animationEnabled: false,
+            );
+          }
+        });
+  }
+}
+
 class _ViewLoading extends StatelessWidget {
   const _ViewLoading({
     Key? key,
     this.progress,
     required this.ser,
+    this.animationEnabled = true,
   }) : super(key: key);
 
   final double? progress;
   final int ser;
+  final bool animationEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -307,10 +420,12 @@ class _ViewLoading extends StatelessWidget {
             ),
             child: SleekCircularSlider(
               appearance: CircularSliderAppearance(
-                  infoProperties: InfoProperties(
-                      mainLabelStyle:
-                          const TextStyle(color: CupertinoColors.systemGrey6)),
-                  customWidths: CustomSliderWidths(progressBarWidth: 10)),
+                animationEnabled: animationEnabled,
+                infoProperties: InfoProperties(
+                    mainLabelStyle:
+                        const TextStyle(color: CupertinoColors.systemGrey6)),
+                customWidths: CustomSliderWidths(progressBarWidth: 10),
+              ),
               min: 0,
               max: 100,
               initialValue: (progress ?? 0) * 100,

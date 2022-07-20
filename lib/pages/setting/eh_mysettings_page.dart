@@ -236,7 +236,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         // title: L10n.of(context).uc_exc_lang,
         // child: const ExcludedLanguageWidget(),
         child: SelectorSettingItem(
-          hideLine: true,
+          hideDivider: true,
           title: L10n.of(context).uc_exc_lang,
           onTap: () {
             Get.to(

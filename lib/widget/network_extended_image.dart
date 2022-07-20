@@ -116,7 +116,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
               return _image;
             } else {
               return FutureBuilder<bool>(
-                  future: imageHideController.checkHide(widget.url.dfUrl),
+                  future: imageHideController.checkPHashHide(widget.url.dfUrl),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       final showCustomWidget = snapshot.data ?? false;

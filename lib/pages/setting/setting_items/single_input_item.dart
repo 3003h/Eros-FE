@@ -37,7 +37,7 @@ class SingleInputItem extends StatelessWidget {
 
     return SelectorSettingItem(
       title: title,
-      hideLine: hideLine,
+      hideDivider: hideLine,
       selector: selector ??
           ((_initValue.isNotEmpty && suffixText != null)
               ? '$_initValue $suffixText'
