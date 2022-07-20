@@ -95,7 +95,7 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                                 id: isLayoutLarge ? 2 : null,
                               );
                             },
-                            hideLine: index == state.length - 1,
+                            hideDivider: index == state.length - 1,
                           );
                           // return _list[index];
                         },

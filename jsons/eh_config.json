@@ -41,5 +41,7 @@
   "tagTranslateDataUpdateMode?": "",
   "showCommentAvatar?": false,
   "boringAvatarsType?": "",
-  "avatarBorderRadiusType?": ""
+  "avatarBorderRadiusType?": "",
+  "enablePHashCheck?": false,
+  "enableQRCodeCheck?": false
 }

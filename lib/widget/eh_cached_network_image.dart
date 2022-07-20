@@ -47,7 +47,7 @@ class EhCachedNetworkImage extends StatelessWidget {
         );
         if (checkHide) {
           return FutureBuilder<bool>(
-              future: imageHideController.checkHide(imageUrl),
+              future: imageHideController.checkPHashHide(imageUrl),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
@@ -57,12 +57,14 @@ class EhCachedNetworkImage extends StatelessWidget {
                   return showCustomWidget
                       ? Container(
                           child: Center(
-                              child: Icon(
-                          FontAwesomeIcons.rectangleAd,
-                          size: 32,
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.systemGrey3, context),
-                        )))
+                            child: Icon(
+                              CupertinoIcons.xmark_shield_fill,
+                              size: 32,
+                              color: CupertinoDynamicColor.resolve(
+                                  CupertinoColors.systemGrey3, context),
+                            ),
+                          ),
+                        )
                       : _image;
                 } else {
                   return placeholder?.call(context, imageUrl) ??

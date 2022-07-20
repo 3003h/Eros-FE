@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 
 import '../../fehviewer.dart';
 
+const int kMaxPhashDiff = 5;
+
 class ImageHideController extends GetxController {
   final RxList<ImageHide> customHides = <ImageHide>[].obs;
   final Map<String, BigInt> pHashMap = <String, BigInt>{};
@@ -42,15 +44,25 @@ class ImageHideController extends GetxController {
         .add(ImageHide(pHash: pHash.toRadixString(16), imageUrl: imageUrl));
   }
 
-  Future<bool> checkHide(String url) async {
+  Future<bool> checkPHashHide(String url) async {
     BigInt? hash = await calculatePHash(url);
     loggerSimple.v('checkHide url:$url hash:${hash.toRadixString(16)}');
 
     return customHides.any((e) =>
         phash.hammingDistance(
             BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash) <=
-        4);
+        kMaxPhashDiff);
   }
+
+  // Future<bool> checkHideFromProvider(ImageProvider provider) async {
+  //   BigInt? hash = await calculatePHash(url);
+  //   loggerSimple.v('checkHide url:$url hash:${hash.toRadixString(16)}');
+  //
+  //   return customHides.any((e) =>
+  //   phash.hammingDistance(
+  //       BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash) <=
+  //       kMaxPhashDiff);
+  // }
 
   Future<BigInt> calculatePHash(String url) async {
     BigInt? hash;

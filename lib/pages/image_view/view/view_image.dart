@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -9,7 +10,6 @@ import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +27,7 @@ class ViewImage extends StatefulWidget {
     this.enableDoubleTap = true,
     this.mode = ExtendedImageMode.gesture,
     this.enableSlideOutPage = true,
+    // this.checkHide = false,
   }) : super(key: key);
 
   final int imageSer;
@@ -34,6 +35,7 @@ class ViewImage extends StatefulWidget {
   final bool enableDoubleTap;
   final ExtendedImageMode mode;
   final bool enableSlideOutPage;
+  // final bool checkHide;
 
   @override
   _ViewImageState createState() => _ViewImageState();
@@ -41,6 +43,7 @@ class ViewImage extends StatefulWidget {
 
 class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   final ViewExtController controller = Get.find();
+  final EhConfigService ehConfigService = Get.find();
   late AnimationController _doubleClickAnimationController;
   Animation<double>? _doubleClickAnimation;
   late DoubleClickAnimationListener _doubleClickAnimationListener;
@@ -48,6 +51,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   late AnimationController _fadeAnimationController;
 
   ViewExtState get vState => controller.vState;
+
+  bool get checkPHashHide => ehConfigService.enablePHashCheck;
 
   @override
   void initState() {
@@ -233,7 +238,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   }
 
   /// 本地图片文件 构建Widget
-  Widget providerImage(ImageProvider imageProvider) {
+  Widget providerImage(ImageProvider imageProvider, String url, int ser) {
     final Size size = MediaQuery.of(context).size;
     return ExtendedImage(
       image: imageProvider,
@@ -259,7 +264,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
           controller.onLoadCompleted(widget.imageSer);
 
-          return controller.vState.viewMode != ViewMode.topToBottom
+          Widget image = controller.vState.viewMode != ViewMode.topToBottom
               ? Hero(
                   tag: '${widget.imageSer}',
                   child: state.completedWidget,
@@ -270,6 +275,12 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   },
                 )
               : state.completedWidget;
+
+          if (checkPHashHide) {
+            image = ImageWithPhash(url: url, child: image, ser: ser);
+          }
+
+          return image;
         } else if (state.extendedImageLoadState == LoadState.loading) {
           return null;
           // 显示加载中
@@ -389,16 +400,16 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
   Widget _buildFutureImage() {
     final GalleryImage? _image = vState.pageState.imageMap[widget.imageSer];
-    logger.d('_image ${_image?.toJson()}');
+    logger.v('_image ${_image?.toJson()}');
 
     if ((_image?.completeCache ?? false) && !(_image?.changeSource ?? false)) {
       final imageProvider =
           ExtendedNetworkImageProvider(_image!.imageUrl!, cache: true);
-      logger.d('return providerImage ${widget.imageSer}');
-      return providerImage(imageProvider);
+      // logger.d('return providerImage ${widget.imageSer}');
+      return providerImage(imageProvider, _image.imageUrl!, widget.imageSer);
     }
 
-    logger.d('return FutureBuilder ${widget.imageSer}');
+    // logger.d('return FutureBuilder ${widget.imageSer}');
     return FutureBuilder<GalleryImage?>(
         future: controller.imageFutureMap[widget.imageSer],
         builder: (context, snapshot) {

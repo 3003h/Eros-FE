@@ -1,100 +1,64 @@
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/setting_base.dart';
+import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-import '../../fehviewer.dart';
 
 class ImageHidePage extends GetView<ImageHideController> {
   const ImageHidePage({Key? key}) : super(key: key);
+  EhConfigService get _ehConfigService => Get.find();
 
   @override
   Widget build(BuildContext context) {
-    const String _title = 'Image hide';
+    const String _title = 'Image Hide';
     return Obx(() {
       return CupertinoPageScaffold(
         backgroundColor: !ehTheme.isDarkMode
             ? CupertinoColors.secondarySystemBackground
             : null,
-        navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(end: 12),
+        navigationBar: const CupertinoNavigationBar(
+          padding: EdgeInsetsDirectional.only(end: 12),
           middle: Text(_title),
-          trailing: CupertinoButton(
-            // 清除按钮
-            child: const Icon(
-              FontAwesomeIcons.trashCan,
-              size: 22,
-            ),
-            onPressed: () {
-              controller.customHides.clear();
-            },
-          ),
         ),
         child: SafeArea(
           bottom: false,
           top: false,
           child: Container(
-            child: ListView.separated(
-              itemCount: controller.customHides.length,
-              itemBuilder: (context, index) {
-                final imageHide = controller.customHides[index];
-                return ImageHideItem(
-                  imageHide: imageHide,
-                  onDelete: () => controller.customHides.removeAt(index),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider(
-                  indent: 12,
-                  thickness: 1.0,
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4, context),
-                );
-              },
+            child: ListView(
+              children: [
+                Obx(() => TextSwitchItem(
+                      'QRCode Check',
+                      intValue: _ehConfigService.enableQRCodeCheck,
+                      onChanged: (bool val) =>
+                          _ehConfigService.enableQRCodeCheck = val,
+                      hideDivider: true,
+                    )),
+                const ItemSpace(),
+                Obx(() => TextSwitchItem(
+                      'PHash Check',
+                      intValue: _ehConfigService.enablePHashCheck,
+                      onChanged: (bool val) =>
+                          _ehConfigService.enablePHashCheck = val,
+                    )),
+                SelectorSettingItem(
+                  hideDivider: true,
+                  title: 'Mange Hided Images',
+                  selector: '',
+                  onTap: () {
+                    Get.toNamed(
+                      EHRoutes.mangaHidedImage,
+                      id: isLayoutLarge ? 2 : null,
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
       );
     });
-  }
-}
-
-class ImageHideItem extends StatelessWidget {
-  const ImageHideItem({Key? key, required this.imageHide, this.onDelete})
-      : super(key: key);
-  final ImageHide imageHide;
-  final VoidCallback? onDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      height: 80,
-      child: Row(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                Container(
-                    width: 50,
-                    margin: const EdgeInsets.only(right: 12),
-                    child: EhNetworkImage(imageUrl: imageHide.imageUrl ?? '')),
-                Text(imageHide.pHash),
-              ],
-            ),
-          ),
-          CupertinoButton(
-            // 清除按钮
-            child: const Icon(
-              FontAwesomeIcons.circleXmark,
-              size: 22,
-            ),
-            onPressed: onDelete,
-          ),
-        ],
-      ),
-    );
   }
 }

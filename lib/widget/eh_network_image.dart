@@ -36,6 +36,7 @@ class EhNetworkImage extends StatefulWidget {
 }
 
 class _EhNetworkImageState extends State<EhNetworkImage> {
+  final EhConfigService ehConfigService = Get.find();
   @override
   Widget build(BuildContext context) {
     if (Get.find<EhConfigService>().isSiteEx.value && false) {
@@ -60,7 +61,7 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
       placeholder: widget.placeholder,
       errorWidget: widget.errorWidget,
       progressIndicatorBuilder: widget.progressIndicatorBuilder,
-      checkHide: widget.checkHide,
+      checkHide: widget.checkHide && ehConfigService.enablePHashCheck,
     );
   }
 }

@@ -131,7 +131,7 @@ Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        hideLine: hideLine,
+        hideDivider: hideLine,
         selector: _getTimeText(ehConfigService.autoLockTimeOut.value),
         onTap: () async {
           final int? _result = await _showActionSheet(context);

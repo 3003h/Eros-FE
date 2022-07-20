@@ -116,7 +116,7 @@ class ListViewDownloadSetting extends StatelessWidget {
         onTap: () async {
           await Get.find<DownloadController>().rebuildGalleryTasks();
         },
-        hideLine: true,
+        hideDivider: true,
       ),
     ];
     return ListView.builder(
@@ -232,7 +232,7 @@ Widget _buildMultiDownloadItem(BuildContext context, {bool hideLine = false}) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        hideLine: hideLine,
+        hideDivider: hideLine,
         selector: ehConfigService.multiDownload.toString(),
         onTap: () async {
           final int? _result = await _showActionSheet(context);

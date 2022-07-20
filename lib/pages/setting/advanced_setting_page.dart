@@ -103,7 +103,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             )),
       if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
-          hideLine: true,
+          hideDivider: true,
           title: L10n.of(context).tabbar_setting,
           selector: '',
           onTap: () {
@@ -115,8 +115,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
         ),
       const ItemSpace(),
       SelectorSettingItem(
-        hideLine: true,
-        title: 'Image hide',
+        hideDivider: true,
+        title: 'Image Hide',
         selector: '',
         onTap: () {
           Get.toNamed(
@@ -131,7 +131,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           (String? state) => SelectorSettingItem(
                 title: L10n.of(context).clear_cache,
                 selector: state ?? '',
-                hideLine: true,
+                hideDivider: true,
                 onTap: () {
                   logger.d(' clear_cache');
                   _cacheController.clearAllCache();
@@ -140,7 +140,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           onLoading: SelectorSettingItem(
             title: L10n.of(context).clear_cache,
             selector: '',
-            hideLine: true,
+            hideDivider: true,
             onTap: () {
               logger.d(' clear_cache');
               _cacheController.clearAllCache();
@@ -195,7 +195,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             titleColor: !_dnsService.enableDomainFronting
                 ? CupertinoColors.secondaryLabel
                 : null,
-            hideLine: true,
+            hideDivider: true,
           )),
       // TextSwitchItem(
       //   'DNS-over-HTTPS',

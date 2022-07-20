@@ -163,7 +163,7 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          hideLine: true,
+          hideDivider: true,
           title: L10n.of(context).ehentai_my_tags,
           selector: L10n.of(context).mytags_on_website,
           onTap: () {
@@ -187,7 +187,7 @@ class ListViewEhSetting extends StatelessWidget {
             id: isLayoutLarge ? 2 : null,
           );
         },
-        hideLine: true,
+        hideDivider: true,
       ),
       if (GetPlatform.isAndroid)
         FutureBuilder<bool>(future: () async {
@@ -203,7 +203,7 @@ class ListViewEhSetting extends StatelessWidget {
                   title: L10n.of(context).open_supported_links,
                   desc: L10n.of(context).open_supported_links_summary,
                   onTap: OpenByDefault.open,
-                  hideLine: true,
+                  hideDivider: true,
                 ),
               ],
             );

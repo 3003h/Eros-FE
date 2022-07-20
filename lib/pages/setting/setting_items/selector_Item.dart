@@ -85,7 +85,7 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
 
     return SelectorSettingItem(
       title: widget.title,
-      hideLine: widget.hideDivider,
+      hideDivider: widget.hideDivider,
       selector: selector,
       titleFlex: widget.titleFlex,
       valueFlex: widget.valueFlex,

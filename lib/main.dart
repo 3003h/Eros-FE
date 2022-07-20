@@ -89,13 +89,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _autoLockController.resumed();
-    // bindBackgroundIsolate(Get.find<ArchiverDownloadController>().updateTask);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // unbindBackgroundIsolate();
     super.dispose();
   }
 
