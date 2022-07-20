@@ -204,6 +204,11 @@ class EhConfigService extends ProfileService {
       ehConfig = ehConfig.copyWith(enablePHashCheck: value);
     });
 
+    enableQRCodeCheck = ehConfig.enableQRCodeCheck ?? enableQRCodeCheck;
+    everProfile<bool>(_enableQRCodeCheck, (value) {
+      ehConfig = ehConfig.copyWith(enableQRCodeCheck: value);
+    });
+
     // _boringAvatarsType
     boringAvatarsType = EnumToString.fromString(
             BoringAvatarsType.values, ehConfig.boringAvatarsType ?? '') ??

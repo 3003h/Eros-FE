@@ -21,7 +21,8 @@ class EhCachedNetworkImage extends StatelessWidget {
     this.progressIndicatorBuilder,
     this.httpHeaders,
     this.onLoadCompleted,
-    this.checkHide = false,
+    this.checkPHashHide = false,
+    this.checkQRCodeHide = false,
   }) : super(key: key);
 
   final String imageUrl;
@@ -34,9 +35,28 @@ class EhCachedNetworkImage extends StatelessWidget {
   final LoadingErrorWidgetBuilder? errorWidget;
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
   final VoidCallback? onLoadCompleted;
-  final bool checkHide;
+  final bool checkPHashHide;
+  final bool checkQRCodeHide;
 
   final ImageHideController imageHideController = Get.find();
+
+  Future<bool> _future() async {
+    // logger
+    //     .d('checkPHashHide $checkPHashHide checkQRCodeHide  $checkQRCodeHide');
+    // if (checkPHashHide && checkQRCodeHide) {
+    //   return await imageHideController.checkPHashHide(imageUrl) ||
+    //       await imageHideController.checkQRCodeHide(imageUrl);
+    // }
+    // if (checkPHashHide) {
+    //   return await imageHideController.checkPHashHide(imageUrl);
+    // } else {
+    //   return await imageHideController.checkQRCodeHide(imageUrl);
+    // }
+    if (checkPHashHide) {
+      return await imageHideController.checkPHashHide(imageUrl);
+    }
+    return false;
+  }
 
   ImageWidgetBuilder get imageWidgetBuilder => (context, imageProvider) {
         final _image = OctoImage(
@@ -45,9 +65,9 @@ class EhCachedNetworkImage extends StatelessWidget {
           height: height,
           fit: fit,
         );
-        if (checkHide) {
+        if (checkPHashHide || checkQRCodeHide) {
           return FutureBuilder<bool>(
-              future: imageHideController.checkPHashHide(imageUrl),
+              future: _future(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {

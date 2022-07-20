@@ -28,7 +28,7 @@ packages:
       name: archive
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.3.0"
+    version: "3.3.1"
   archive_async:
     dependency: "direct main"
     description:
@@ -72,7 +72,7 @@ packages:
       name: basic_utils
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.3.0"
+    version: "4.4.1"
   bitsdojo_window:
     dependency: "direct main"
     description:
@@ -177,7 +177,7 @@ packages:
       name: built_value
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "8.3.3"
+    version: "8.4.0"
   buttons_tabbar:
     dependency: "direct main"
     description:
@@ -387,7 +387,7 @@ packages:
       name: dio_smart_retry
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.2"
   drift:
     dependency: transitive
     description:
@@ -634,7 +634,7 @@ packages:
       name: flutter_markdown
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.10+2"
+    version: "0.6.10+3"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -655,14 +655,14 @@ packages:
       name: flutter_slidable
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.3.1"
+    version: "1.3.2"
   flutter_smart_dialog:
     dependency: "direct main"
     description:
       name: flutter_smart_dialog
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.5.3+6"
+    version: "4.5.3+7"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -729,6 +729,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
+  google_mlkit_barcode_scanning:
+    dependency: "direct main"
+    description:
+      name: google_mlkit_barcode_scanning
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
+  google_mlkit_commons:
+    dependency: transitive
+    description:
+      name: google_mlkit_commons
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.0"
   graphs:
     dependency: transitive
     description:
@@ -923,10 +937,10 @@ packages:
     description:
       path: "packages/learning_language"
       ref: HEAD
-      resolved-ref: a796b460ab00338b109ceb8d40de3baf00c897d7
+      resolved-ref: "338544518769f36b00ce757afdebe6fee836189e"
       url: "https://github.com/honjow/learning.git"
     source: git
-    version: "0.0.3+2"
+    version: "0.0.4"
   linked_scroll_controller:
     dependency: "direct main"
     description:
@@ -975,7 +989,7 @@ packages:
       name: local_auth_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.6"
   local_auth_ios:
     dependency: transitive
     description:
@@ -1306,7 +1320,7 @@ packages:
       name: pointycastle
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.6.0"
+    version: "3.6.1"
   pool:
     dependency: transitive
     description:
@@ -1390,7 +1404,7 @@ packages:
       name: rxdart
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.27.4"
+    version: "0.27.5"
   scroll_to_index:
     dependency: "direct main"
     description:
@@ -1703,7 +1717,7 @@ packages:
       name: url_launcher
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.1.4"
+    version: "6.1.5"
   url_launcher_android:
     dependency: transitive
     description:

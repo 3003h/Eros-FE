@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
@@ -44,6 +45,7 @@ class ViewImage extends StatefulWidget {
 class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   final ViewExtController controller = Get.find();
   final EhConfigService ehConfigService = Get.find();
+
   late AnimationController _doubleClickAnimationController;
   Animation<double>? _doubleClickAnimation;
   late DoubleClickAnimationListener _doubleClickAnimationListener;
@@ -53,6 +55,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   ViewExtState get vState => controller.vState;
 
   bool get checkPHashHide => ehConfigService.enablePHashCheck;
+  bool get checkQRCodeHide => ehConfigService.enableQRCodeCheck;
 
   @override
   void initState() {
@@ -276,8 +279,14 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 )
               : state.completedWidget;
 
-          if (checkPHashHide) {
-            image = ImageWithPhash(url: url, child: image, ser: ser);
+          if (checkPHashHide || checkQRCodeHide) {
+            image = ImageWithPhash(
+              url: url,
+              child: image,
+              ser: ser,
+              checkPHashHide: checkPHashHide,
+              checkQRCodeHide: checkQRCodeHide,
+            );
           }
 
           return image;
