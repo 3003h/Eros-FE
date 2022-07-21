@@ -113,14 +113,6 @@ dependencies:
   persistent_bottom_nav_bar: ^4.0.2
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
-  learning_language:
-    git:
-      url: https://github.com/honjow/learning.git
-      path: packages/learning_language
-#  learning_barcode_scanning:
-#    git:
-#      url: https://github.com/honjow/learning.git
-#      path: packages/learning_barcode_scanning
   encrypt: ^5.0.1
   wakelock: ^0.6.1+1
   jinja: ^0.3.4
@@ -157,10 +149,8 @@ dependencies:
   isolate: ^2.1.1
   octo_image: ^1.0.2
   google_mlkit_barcode_scanning: ^0.3.0
-#  qrscan: ^0.3.2
-#  scan: ^1.6.0
-#  flutter_qr_reader: ^1.0.5
-#  mobile_scanner: ^2.0.0
+#  google_mlkit_translation: ^0.3.0
+  google_mlkit_language_id: ^0.3.0
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

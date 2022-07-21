@@ -743,6 +743,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.0"
+  google_mlkit_language_id:
+    dependency: "direct main"
+    description:
+      name: google_mlkit_language_id
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
   graphs:
     dependency: transitive
     description:
@@ -932,15 +939,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.0"
-  learning_language:
-    dependency: "direct main"
-    description:
-      path: "packages/learning_language"
-      ref: HEAD
-      resolved-ref: "338544518769f36b00ce757afdebe6fee836189e"
-      url: "https://github.com/honjow/learning.git"
-    source: git
-    version: "0.0.4"
   linked_scroll_controller:
     dependency: "direct main"
     description:
