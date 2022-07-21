@@ -1,17 +1,18 @@
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PreviewContainer extends StatelessWidget {
   PreviewContainer({
     Key? key,
     required this.index,
-    required this.galleryImageList,
+    required List<GalleryImage> galleryImageList,
     required this.gid,
     this.onLoadComplet,
     this.referer,
@@ -22,13 +23,14 @@ class PreviewContainer extends StatelessWidget {
 
   final int index;
   final String gid;
-  final List<GalleryImage> galleryImageList;
   final List<String> hrefs;
   final GalleryImage galleryImage;
   final VoidCallback? onLoadComplet;
   final String? referer;
 
   final ImageHideController imageHideController = Get.find();
+  final _galleryPageController =
+      Get.find<GalleryPageController>(tag: pageCtrlTag);
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,17 @@ class PreviewContainer extends StatelessWidget {
             return const CupertinoActivityIndicator();
           },
           checkHide: true,
+          onHideFlagChanged: (val) {
+            if (val) {
+              logger.d('hide ser: ${galleryImage.ser} val:$val');
+            }
+            _galleryPageController.uptImageBySer(
+              ser: galleryImage.ser,
+              image: galleryImage.copyWith(
+                hide: val,
+              ),
+            );
+          },
         );
       } else {
         // 缩略小图 需要切割

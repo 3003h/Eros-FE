@@ -23,6 +23,7 @@ class EhCachedNetworkImage extends StatelessWidget {
     this.onLoadCompleted,
     this.checkPHashHide = false,
     this.checkQRCodeHide = false,
+    this.onHideFlagChanged,
   }) : super(key: key);
 
   final String imageUrl;
@@ -37,12 +38,11 @@ class EhCachedNetworkImage extends StatelessWidget {
   final VoidCallback? onLoadCompleted;
   final bool checkPHashHide;
   final bool checkQRCodeHide;
+  final ValueChanged<bool>? onHideFlagChanged;
 
   final ImageHideController imageHideController = Get.find();
 
   Future<bool> _future() async {
-    // logger
-    //     .d('checkPHashHide $checkPHashHide checkQRCodeHide  $checkQRCodeHide');
     if (checkPHashHide && checkQRCodeHide) {
       return await imageHideController.checkPHashHide(imageUrl) ||
           await imageHideController.checkQRCodeHide(imageUrl);
@@ -52,10 +52,6 @@ class EhCachedNetworkImage extends StatelessWidget {
     } else {
       return await imageHideController.checkQRCodeHide(imageUrl);
     }
-    // if (checkPHashHide) {
-    //   return await imageHideController.checkPHashHide(imageUrl);
-    // }
-    return false;
   }
 
   ImageWidgetBuilder get imageWidgetBuilder => (context, imageProvider) {
@@ -73,8 +69,9 @@ class EhCachedNetworkImage extends StatelessWidget {
                   if (snapshot.hasError) {
                     return _image;
                   }
-                  final showCustomWidget = snapshot.data ?? false;
-                  return showCustomWidget
+                  final showHidePlaceWidget = snapshot.data ?? false;
+                  onHideFlagChanged?.call(showHidePlaceWidget);
+                  return showHidePlaceWidget
                       ? Container(
                           child: Center(
                             child: Icon(

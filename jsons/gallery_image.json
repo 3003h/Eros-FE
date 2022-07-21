@@ -18,5 +18,6 @@
   "token?": "1234",
   "completeDownload?": false,
   "filePath?": "",
-  "changeSource?": false
+  "changeSource?": false,
+  "hide?": false
 }

@@ -16,6 +16,7 @@ class EhNetworkImage extends StatefulWidget {
     this.progressIndicatorBuilder,
     this.httpHeaders,
     this.checkHide = false,
+    this.onHideFlagChanged,
   }) : super(key: key);
 
   final String imageUrl;
@@ -30,6 +31,7 @@ class EhNetworkImage extends StatefulWidget {
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
   final bool checkHide;
+  final ValueChanged<bool>? onHideFlagChanged;
 
   @override
   State<EhNetworkImage> createState() => _EhNetworkImageState();
@@ -63,6 +65,7 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
       progressIndicatorBuilder: widget.progressIndicatorBuilder,
       checkPHashHide: widget.checkHide && ehConfigService.enablePHashCheck,
       checkQRCodeHide: widget.checkHide && ehConfigService.enableQRCodeCheck,
+      onHideFlagChanged: widget.onHideFlagChanged,
     );
   }
 }
