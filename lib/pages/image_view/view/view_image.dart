@@ -418,7 +418,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     if ((_image?.completeCache ?? false) && !(_image?.changeSource ?? false)) {
       final imageProvider =
           ExtendedNetworkImageProvider(_image!.imageUrl!, cache: true);
-      // logger.d('return providerImage ${widget.imageSer}');
       return providerImage(imageProvider, _image.imageUrl!, widget.imageSer);
     }
 
