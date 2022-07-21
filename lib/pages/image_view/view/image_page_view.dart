@@ -106,7 +106,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 // initialScale: GetPlatform.isAndroid ? 1.000001 : 1.0,
                 mode: ExtendedImageMode.gesture,
                 // enableSlideOutPage: !GetPlatform.isAndroid,
-                // enableSlideOutPage: false,
+                enableSlideOutPage: false,
               );
             },
           );
