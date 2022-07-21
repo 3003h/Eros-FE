@@ -6,7 +6,6 @@ import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
 

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-
 // import 'package:extended_text/extended_text.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
@@ -99,7 +98,7 @@ class SelectorSettingItem extends StatefulWidget {
     this.titleColor,
     this.desc,
     this.selector,
-    this.hideLine = false,
+    this.hideDivider = false,
     this.onLongPress,
     this.titleFlex = 1,
     this.valueFlex = 0,
@@ -110,7 +109,7 @@ class SelectorSettingItem extends StatefulWidget {
   final String title;
   final String? selector;
   final String? desc;
-  final bool hideLine;
+  final bool hideDivider;
   final Color? titleColor;
   final int titleFlex;
   final int valueFlex;
@@ -217,7 +216,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
               ],
             ),
           ),
-          if (!widget.hideLine)
+          if (!widget.hideDivider)
             Divider(
               indent: 20,
               height: kDividerHeight,
@@ -278,6 +277,7 @@ class TextSwitchItem extends StatefulWidget {
     this.icon,
     this.iconIndent = 0.0,
     this.suffix,
+    this.onTap,
   }) : super(key: key);
 
   final bool? intValue;
@@ -289,6 +289,8 @@ class TextSwitchItem extends StatefulWidget {
   final Widget? icon;
   final double iconIndent;
   final Widget? suffix;
+  // 点击回调
+  final VoidCallback? onTap;
 
   @override
   _TextSwitchItemState createState() => _TextSwitchItemState();
@@ -298,22 +300,43 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
   bool _switchValue = false;
   String? _desc;
 
+  late Color _color;
+  late Color _pBackgroundColor;
+
   @override
   void initState() {
     super.initState();
     _switchValue = widget.intValue ?? false;
     _desc = _switchValue ? widget.descOn : widget.desc;
+
+    _color = CupertinoDynamicColor.resolve(
+        ehTheme.itemBackgroundColor!, Get.context!);
+    _pBackgroundColor = _color;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Container(
-        color: ehTheme.itemBackgroundColor,
+    final Color color =
+        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
+    if (_pBackgroundColor.value != color.value) {
+      _color = color;
+      _pBackgroundColor = color;
+    }
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onTap,
+      onTapDown: widget.onTap != null ? (_) => _updatePressedColor() : null,
+      onTapUp: (_) {
+        Future.delayed(const Duration(milliseconds: 80), () {
+          _updateNormalColor();
+        });
+      },
+      child: Container(
+        color: _color,
         child: Column(
           children: <Widget>[
             Container(
-              // height: kItemHeight,
               constraints: const BoxConstraints(
                 minHeight: kItemHeight,
               ),
@@ -342,7 +365,6 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                             ).paddingOnly(top: 2.0),
                         ]),
                   ),
-                  // const Spacer(),
                   if (widget.suffix != null) widget.suffix!,
                   // if (widget.onChanged != null)
                   CupertinoSwitch(
@@ -357,6 +379,11 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                         : null,
                     value: _switchValue,
                   ),
+                  if (widget.onTap != null)
+                    const Icon(
+                      CupertinoIcons.forward,
+                      color: CupertinoColors.systemGrey,
+                    ),
                 ],
               ),
             ),
@@ -369,7 +396,21 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
               ),
           ],
         ),
-      );
+      ),
+    );
+  }
+
+  void _updateNormalColor() {
+    setState(() {
+      _color =
+          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
+    });
+  }
+
+  void _updatePressedColor() {
+    setState(() {
+      _color =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
     });
   }
 }

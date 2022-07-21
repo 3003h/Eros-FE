@@ -14,7 +14,6 @@ import 'package:sliver_tools/sliver_tools.dart';
 
 import '../const.dart';
 import '../gallery_favcat.dart';
-import '../header.dart';
 
 class GalleryHeaderSliver extends StatelessWidget {
   const GalleryHeaderSliver({

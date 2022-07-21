@@ -3,9 +3,8 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
-class EhNetworkImage extends StatelessWidget {
+class EhNetworkImage extends StatefulWidget {
   const EhNetworkImage({
     Key? key,
     required this.imageUrl,
@@ -16,6 +15,8 @@ class EhNetworkImage extends StatelessWidget {
     this.errorWidget,
     this.progressIndicatorBuilder,
     this.httpHeaders,
+    this.checkHide = false,
+    this.onHideFlagChanged,
   }) : super(key: key);
 
   final String imageUrl;
@@ -29,28 +30,42 @@ class EhNetworkImage extends StatelessWidget {
   final LoadingErrorWidgetBuilder? errorWidget;
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
+  final bool checkHide;
+  final ValueChanged<bool>? onHideFlagChanged;
+
+  @override
+  State<EhNetworkImage> createState() => _EhNetworkImageState();
+}
+
+class _EhNetworkImageState extends State<EhNetworkImage> {
+  final EhConfigService ehConfigService = Get.find();
   @override
   Widget build(BuildContext context) {
-    if (Get.find<EhConfigService>().isSiteEx.value && false)
+    if (Get.find<EhConfigService>().isSiteEx.value && false) {
       return NetworkExtendedImage(
-        url: imageUrl.dfUrl,
-        width: width,
-        height: height,
-        fit: fit,
-        placeholder: placeholder,
-        errorWidget: errorWidget,
-        progressIndicatorBuilder: progressIndicatorBuilder,
+        url: widget.imageUrl.dfUrl,
+        width: widget.width,
+        height: widget.height,
+        fit: widget.fit,
+        placeholder: widget.placeholder,
+        errorWidget: widget.errorWidget,
+        progressIndicatorBuilder: widget.progressIndicatorBuilder,
+        checkPHashHide: widget.checkHide,
       );
+    }
 
     return EhCachedNetworkImage(
-      width: width,
-      height: height,
-      fit: fit,
-      imageUrl: imageUrl.dfUrl,
-      httpHeaders: httpHeaders,
-      placeholder: placeholder,
-      errorWidget: errorWidget,
-      progressIndicatorBuilder: progressIndicatorBuilder,
+      width: widget.width,
+      height: widget.height,
+      fit: widget.fit,
+      imageUrl: widget.imageUrl.dfUrl,
+      httpHeaders: widget.httpHeaders,
+      placeholder: widget.placeholder,
+      errorWidget: widget.errorWidget,
+      progressIndicatorBuilder: widget.progressIndicatorBuilder,
+      checkPHashHide: widget.checkHide && ehConfigService.enablePHashCheck,
+      checkQRCodeHide: widget.checkHide && ehConfigService.enableQRCodeCheck,
+      onHideFlagChanged: widget.onHideFlagChanged,
     );
   }
 }

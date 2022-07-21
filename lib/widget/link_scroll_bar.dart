@@ -185,8 +185,8 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   }
 
   void scrollToItem(int index) {
-    ItemFrame channelFrame =
-        channelFrameList[min(index, channelFrameList.length - 1)];
+    ItemFrame channelFrame = channelFrameList[
+        min(max(index, 0), max(channelFrameList.length - 1, 0))];
 
     _indicatorPositionedLeft =
         channelFrame.left + widget.itemPadding.horizontal / 2;
@@ -359,13 +359,13 @@ class _TitleIndicatorState extends State<TitleIndicator> {
     logger.v('_TitleIndicatorState initState index:${widget.index}');
 
     positionedLeft = widget
-            .channelFrameList[
-                min(widget.index, widget.channelFrameList.length - 1)]
+            .channelFrameList[min(max(widget.index, 0),
+                max(widget.channelFrameList.length - 1, 0))]
             .left +
         (widget.itemPadding?.horizontal ?? 0) / 2;
     _indicatorWidth = widget
-            .channelFrameList[
-                min(widget.index, widget.channelFrameList.length - 1)]
+            .channelFrameList[min(max(widget.index, 0),
+                max(widget.channelFrameList.length - 1, 0))]
             .width -
         (widget.itemPadding?.horizontal ?? 0);
 

@@ -1,6 +1,5 @@
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';

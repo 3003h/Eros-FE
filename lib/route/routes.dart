@@ -27,6 +27,9 @@ class EHRoutes {
   static const String userTags = '/userTags';
   static const String tagTranslat = '/tagTranslat';
 
+  static const String imageHide = '/imageHide';
+  static const String mangaHidedImage = '/imageHide/mangaHidedImage';
+
   static const String login = '/login';
   static const String webLogin = '/webLogin';
 

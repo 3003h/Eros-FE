@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/pages/login/controller/login_controller.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -45,6 +46,7 @@ class ListViewEhSetting extends StatelessWidget {
   final UserController userController = Get.find();
   final TagTransController transController = Get.find();
   final LocaleService localeService = Get.find();
+  final LoginController loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,7 @@ class ListViewEhSetting extends StatelessWidget {
         getExIgneous();
       }
       Api.selEhProfile();
+      loginController.asyncGetUserInfo();
     }
 
     void _handleJpnTitleChanged(bool newValue) {
@@ -160,7 +163,7 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          hideLine: true,
+          hideDivider: true,
           title: L10n.of(context).ehentai_my_tags,
           selector: L10n.of(context).mytags_on_website,
           onTap: () {
@@ -184,7 +187,7 @@ class ListViewEhSetting extends StatelessWidget {
             id: isLayoutLarge ? 2 : null,
           );
         },
-        hideLine: true,
+        hideDivider: true,
       ),
       if (GetPlatform.isAndroid)
         FutureBuilder<bool>(future: () async {
@@ -200,7 +203,7 @@ class ListViewEhSetting extends StatelessWidget {
                   title: L10n.of(context).open_supported_links,
                   desc: L10n.of(context).open_supported_links_summary,
                   onTap: OpenByDefault.open,
-                  hideLine: true,
+                  hideDivider: true,
                 ),
               ],
             );

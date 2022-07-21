@@ -2,11 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/profile.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:get/get.dart';
 
 import 'base_controller.dart';
@@ -20,9 +16,8 @@ class QuickSearchController extends ProfileController {
       searchTextList.map((element) => element.trim()).toList();
 
   void addText(String text, {bool silent = false}) {
-    if (_trimList.contains(text.trim())) {
-      // logger.e('搜索词已存在');
-      // if (!silent) showToast('搜索词已存在');
+    if (_trimList.contains(text.trim()) || text.trim().isEmpty) {
+      return;
     } else {
       searchTextList.add(text.trim());
       if (!silent) {
@@ -49,6 +44,7 @@ class QuickSearchController extends ProfileController {
     final _rs =
         await webdavController.downloadQuickSearch(_remoteTimes.reduce(max));
     final remoteTime = _rs?.item2 ?? 0;
+    // 远程时间大于等于本地最后编辑时间 下载远程数据
     if (remoteTime >= lastEditTime) {
       _rs?.item1.forEach((e) => addText(e, silent: true));
     } else {

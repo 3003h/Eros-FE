@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -30,8 +28,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_proxy/system_proxy.dart';
-
-import 'controller/archiver_download_controller.dart';
 
 const int kProxyPort = 4041;
 
@@ -225,7 +221,7 @@ class Global {
 
   // 持久化Profile信息
   static void saveProfile() {
-    // logger.d(profile.customTabConfig?.toJson());
+    // logger.d(profile.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }

@@ -17,6 +17,8 @@ import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
+import 'package:fehviewer/pages/setting/image_hide_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
@@ -269,6 +271,16 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => const EhUserTagsPage(),
+                            );
+                          case EHRoutes.imageHide:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const ImageHidePage(),
+                            );
+                          case EHRoutes.mangaHidedImage:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const PHashImageListPage(),
                             );
                           case EHRoutes.loginWebDAV:
                             return GetPageRoute(

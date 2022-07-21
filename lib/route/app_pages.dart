@@ -21,6 +21,8 @@ import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
+import 'package:fehviewer/pages/setting/image_hide_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
@@ -246,6 +248,14 @@ class AppPages {
     GetPage(
       name: EHRoutes.userTags,
       page: () => const EhUserTagsPage(),
+    ),
+    GetPage(
+      name: EHRoutes.imageHide,
+      page: () => const ImageHidePage(),
+    ),
+    GetPage(
+      name: EHRoutes.mangaHidedImage,
+      page: () => const PHashImageListPage(),
     ),
     GetPage(
       name: EHRoutes.loginWebDAV,

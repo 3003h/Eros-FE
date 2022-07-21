@@ -6,7 +6,6 @@ import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/widget/cat_progress_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -106,7 +105,7 @@ class WebDavSettingView extends GetView<WebdavController> {
               },
             );
           },
-          hideLine: true,
+          hideDivider: true,
         ),
         const ItemSpace(),
         TextSwitchItem(

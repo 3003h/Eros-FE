@@ -53,12 +53,6 @@ class PreviewImageClipper extends StatelessWidget {
       'host': Uri.parse(imgUrl).host,
     };
 
-    // final ImageStream imageStream = CachedNetworkImageProvider(
-    //   imgUrl,
-    //   scale: kScale,
-    //   headers: _httpHeaders,
-    // ).resolve(const ImageConfiguration());
-
     final ImageStream imageStream = ExtendedNetworkImageProvider(
       imgUrl.dfUrl,
       scale: kScale,

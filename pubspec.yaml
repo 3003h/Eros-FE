@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.46+406
+version: 1.2.50+410
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -113,10 +113,6 @@ dependencies:
   persistent_bottom_nav_bar: ^4.0.2
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
-  learning_language:
-    git:
-      url: https://github.com/honjow/learning.git
-      path: packages/learning_language
   encrypt: ^5.0.1
   wakelock: ^0.6.1+1
   jinja: ^0.3.4
@@ -149,6 +145,12 @@ dependencies:
   archive_async:
     git:
       url: https://github.com/xioxin/archive_async.git
+  image_compare: ^1.1.2
+  isolate: ^2.1.1
+  octo_image: ^1.0.2
+  google_mlkit_barcode_scanning: ^0.3.0
+#  google_mlkit_translation: ^0.3.0
+  google_mlkit_language_id: ^0.3.0
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

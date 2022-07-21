@@ -92,8 +92,8 @@ class GalleryPageController extends GetxController
 
       // 初始
       _galleryCacheController
-          .getGalleryCache(gState.galleryProvider?.gid ?? '')
-          .then((_galleryCache) =>
+          .listenGalleryCache(gState.galleryProvider?.gid ?? '')
+          .listen((_galleryCache) =>
               gState.lastIndex = _galleryCache?.lastIndex ?? 0);
     }
   }
@@ -302,8 +302,8 @@ class GalleryPageController extends GetxController
 
   /// 添加缩略图对象
   void addAllImages(List<GalleryImage> galleryImages) {
-    logger5.v(
-        'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
+    // logger5.v(
+    //     'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
 
     for (final GalleryImage _image in galleryImages) {
       final int index =
@@ -521,7 +521,7 @@ class GalleryPageController extends GetxController
             ? gState.galleryProvider?.imageMap[itemSer]?.sourceId
             : '';
 
-        logger.d(
+        logger.v(
             'ser:$itemSer ,href: ${gState.galleryProvider?.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
@@ -554,6 +554,7 @@ class GalleryPageController extends GetxController
             imageWidth: _image.imageWidth,
             imageHeight: _image.imageHeight,
             originImageUrl: _image.originImageUrl,
+            changeSource: changeSource,
           );
 
           logger.v('_imageCopyWith ${_imageCopyWith.toJson()}');

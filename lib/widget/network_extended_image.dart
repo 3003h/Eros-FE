@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class NetworkExtendedImage extends StatefulWidget {
   const NetworkExtendedImage({
@@ -17,6 +20,10 @@ class NetworkExtendedImage extends StatefulWidget {
     this.progressIndicatorBuilder,
     this.httpHeaders,
     this.cancelToken,
+    this.heroTag,
+    this.onLoadCompleted,
+    this.checkPHashHide = false,
+    this.checkQRCodeHide = false,
   }) : super(key: key);
   final String url;
   final double? height;
@@ -29,6 +36,10 @@ class NetworkExtendedImage extends StatefulWidget {
   final LoadingErrorWidgetBuilder? errorWidget;
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
   final CancellationToken? cancelToken;
+  final Object? heroTag;
+  final VoidCallback? onLoadCompleted;
+  final bool checkPHashHide;
+  final bool checkQRCodeHide;
 
   @override
   _NetworkExtendedImageState createState() => _NetworkExtendedImageState();
@@ -38,6 +49,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
     with SingleTickerProviderStateMixin {
   Map<String, String> _httpHeaders = {};
   late AnimationController animationController;
+  ImageHideController imageHideController = Get.find();
 
   @override
   void initState() {
@@ -81,39 +93,68 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            // return null;
             return widget.placeholder?.call(context, widget.url.dfUrl) ??
                 Container(
                   alignment: Alignment.center,
                   child: const CupertinoActivityIndicator(),
                 );
           case LoadState.completed:
-            // return state.completedWidget;
-            // return controller.vState.viewMode != ViewMode.topToBottom
-            //     ? state.completedWidget
-            //     : FadeTransition(
-            //         opacity: animationController,
-            //         child: state.completedWidget,
-            //       );
             animationController.forward();
-            //
-            return FadeTransition(
-              opacity: animationController,
-              child: state.completedWidget,
-            );
+            widget.onLoadCompleted?.call();
 
-          // return ExtendedRawImage(
-          //   fit: BoxFit.contain,
-          //   image: state.extendedImageInfo?.image,
-          // );
+            Widget _image;
+            if (widget.heroTag != null) {
+              return Hero(tag: widget.heroTag!, child: state.completedWidget);
+            } else {
+              _image = FadeTransition(
+                opacity: animationController,
+                child: state.completedWidget,
+              );
+            }
 
-          // return FadeTransition(
-          //   opacity: animationController,
-          //   child: ExtendedRawImage(
-          //     fit: BoxFit.contain,
-          //     image: state.extendedImageInfo?.image,
-          //   ),
-          // );
+            // return _image;
+
+            logger.d(
+                'widget.checkPHashHide   widget.checkQRCodeHide ${widget.checkPHashHide}  ${widget.checkQRCodeHide}');
+            if (widget.checkPHashHide || widget.checkQRCodeHide) {
+              Future<bool> _future() async {
+                if (!widget.checkQRCodeHide) {
+                  return await imageHideController
+                      .checkPHashHide(widget.url.dfUrl);
+                } else if (!widget.checkPHashHide) {
+                  return await imageHideController
+                      .checkQRCodeHide(widget.url.dfUrl);
+                }
+                return await imageHideController
+                        .checkPHashHide(widget.url.dfUrl) ||
+                    await imageHideController.checkQRCodeHide(widget.url.dfUrl);
+              }
+
+              return FutureBuilder<bool>(
+                  future: _future(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final showCustomWidget = snapshot.data ?? false;
+                      return showCustomWidget
+                          ? const Center(
+                              child: Icon(FontAwesomeIcons.rectangleAd))
+                          : _image;
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return widget.placeholder
+                              ?.call(context, widget.url.dfUrl) ??
+                          Container(
+                            alignment: Alignment.center,
+                            child: const CupertinoActivityIndicator(),
+                          );
+                      // return _image;
+                    }
+                    return _image;
+                  });
+            }
+
+            return _image;
+
           case LoadState.failed:
             return Container(
               alignment: Alignment.center,

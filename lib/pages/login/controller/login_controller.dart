@@ -194,7 +194,11 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> asyncGetUserInfo(String memberId) async {
+  Future<void> asyncGetUserInfo([String? memberId]) async {
+    memberId ??= userController.user.value.memberId;
+    if (memberId == null) {
+      return;
+    }
     // 异步获取昵称和头像
     logger.d('异步获取昵称和头像');
     late User? info;

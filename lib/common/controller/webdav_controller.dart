@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fehviewer/fehviewer.dart';
@@ -55,24 +54,12 @@ class WebdavController extends GetxController {
   // 是否同步历史记录
   final _syncHistory = false.obs;
   bool get syncHistory => _syncHistory.value;
-  set syncHistory(bool val) {
-    final _dav = webdavProfile.copyWith(syncHistory: val);
-    _syncHistory.value = val;
-    update();
-    Global.profile = Global.profile.copyWith(webdav: _dav);
-    Global.saveProfile();
-  }
+  set syncHistory(bool val) => _syncHistory.value = val;
 
   // 是否同步画廊阅读进度
   final _syncReadProgress = false.obs;
   bool get syncReadProgress => _syncReadProgress.value;
-  set syncReadProgress(bool val) {
-    final _dav = webdavProfile.copyWith(syncReadProgress: val);
-    _syncReadProgress.value = val;
-    update();
-    Global.profile = Global.profile.copyWith(webdav: _dav);
-    Global.saveProfile();
-  }
+  set syncReadProgress(bool val) => _syncReadProgress.value = val;
 
   final _syncGroupProfile = false.obs;
   bool get syncGroupProfile => _syncGroupProfile.value;
@@ -127,31 +114,31 @@ class WebdavController extends GetxController {
     super.onInit();
     if (webdavProfile.url.isNotEmpty) {
       initClient();
-
-      syncHistory = webdavProfile.syncHistory ?? false;
-      ever(_syncHistory, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncHistory: val);
-        Global.saveProfile();
-      });
-
-      syncReadProgress = webdavProfile.syncReadProgress ?? false;
-      ever(_syncReadProgress, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncReadProgress: val);
-        Global.saveProfile();
-      });
-
-      syncGroupProfile = webdavProfile.syncGroupProfile ?? false;
-      ever(_syncGroupProfile, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncGroupProfile: val);
-        Global.saveProfile();
-      });
-
-      syncQuickSearch = webdavProfile.syncQuickSearch ?? false;
-      ever(_syncQuickSearch, (bool val) {
-        webdavProfile = webdavProfile.copyWith(syncQuickSearch: val);
-        Global.saveProfile();
-      });
     }
+
+    syncHistory = webdavProfile.syncHistory ?? false;
+    ever(_syncHistory, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncHistory: val);
+      Global.saveProfile();
+    });
+
+    syncReadProgress = webdavProfile.syncReadProgress ?? false;
+    ever(_syncReadProgress, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncReadProgress: val);
+      Global.saveProfile();
+    });
+
+    syncGroupProfile = webdavProfile.syncGroupProfile ?? false;
+    ever(_syncGroupProfile, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncGroupProfile: val);
+      Global.saveProfile();
+    });
+
+    syncQuickSearch = webdavProfile.syncQuickSearch ?? false;
+    ever(_syncQuickSearch, (bool val) {
+      webdavProfile = webdavProfile.copyWith(syncQuickSearch: val);
+      Global.saveProfile();
+    });
 
     _key = encrypt.Key.fromUtf8(kAESKey);
     _iv = encrypt.IV.fromUtf8(kAESIV);
@@ -359,7 +346,7 @@ class WebdavController extends GetxController {
     if (client == null) {
       return;
     }
-    logger.d('upload Read');
+    logger.v('upload Read [${read.toJson()}] ');
     chkTempDir(kLocalReadDirPath);
 
     final _path = path.join(Global.tempPath, 'read', read.gid);
@@ -594,7 +581,12 @@ class WebdavController extends GetxController {
       }
       final String _fileText = _file.readAsStringSync();
 
-      return Tuple2(_fileText.split('\n'), maxTime);
+      return Tuple2(
+          _fileText
+              .split('\n')
+              .where((element) => element.trim().isNotEmpty)
+              .toList(),
+          maxTime);
     } catch (err) {
       logger.e('$err');
       return null;

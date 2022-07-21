@@ -1,14 +1,11 @@
-import 'package:english_words/english_words.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 // import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:zoom_widget/zoom_widget.dart';
 
 import '../controller/view_controller.dart';
 import 'view_image.dart';
@@ -42,19 +39,6 @@ class ImageListView extends GetView<ViewExtController> {
       ),
     );
 
-    final _list = generateWordPairs().take(700).toList();
-    Widget wordlist = Container(
-      color: Colors.blueGrey,
-      child: ListView.builder(
-        itemCount: _list.length,
-        itemBuilder: (_, index) {
-          final w = _list[index];
-          return Text('$w', style: const TextStyle(color: Colors.white));
-        },
-      ),
-    );
-
-    // if (false)
     return PhotoViewGallery.builder(
       itemCount: 1,
       builder: (_, __) {
@@ -84,17 +68,26 @@ class ImageListView extends GetView<ViewExtController> {
               loggerSimple.v('builder itemBuilder $itemSer');
 
               final vState = logic.vState;
+
+              // 计算容器高度
               double? _height = () {
+                final _curImage = vState.imageMap[itemSer];
+                if (_curImage?.hide ?? false) {
+                  return 150.0;
+                }
+
+                // 如果存在缓存的图片尺寸信息
                 if (vState.imageSizeMap[itemSer] != null) {
                   final imageSize = vState.imageSizeMap[itemSer]!;
                   return imageSize.height * (context.width / imageSize.width);
                 }
 
+                // 不存在则根据大图进行计算
                 try {
-                  final _curImage = vState.imageMap[itemSer];
                   return _curImage!.imageHeight! *
                       (context.width / _curImage.imageWidth!);
                 } on Exception catch (_) {
+                  // 根据缩略图进行计算
                   final _curImage = vState.imageMap[itemSer];
                   return _curImage!.thumbHeight! *
                       (context.width / _curImage.thumbWidth!);
@@ -112,7 +105,6 @@ class ImageListView extends GetView<ViewExtController> {
               return AnimatedContainer(
                 padding:
                     EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
-                // height: _height ?? context.mediaQueryShortestSide * 4 / 3,
                 height: _height ?? context.mediaQueryShortestSide,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.ease,

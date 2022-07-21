@@ -15,6 +15,7 @@ const String layoutConfigKey = 'config_layout';
 const String usersKey = 'users_info';
 const String profileDelKey = 'delete_profile';
 const String qsLastTimeKey = 'quick_search_last_edit_time';
+const String customImageHideKey = 'custom_image_hide';
 
 class HiveHelper {
   HiveHelper();
@@ -160,5 +161,19 @@ class HiveHelper {
 
   Future<void> setQuickSearchLastEditTime(int time) async {
     await _configBox.put(qsLastTimeKey, '$time');
+  }
+
+  Future<void> setAllCustomImageHide(List<ImageHide> imageHides) async {
+    await _configBox.put(customImageHideKey, jsonEncode(imageHides));
+  }
+
+  List<ImageHide> getAllCustomImageHide() {
+    final all = _configBox.get(customImageHideKey, defaultValue: '[]');
+
+    final _imageHides = <ImageHide>[];
+    for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
+      _imageHides.add(ImageHide.fromJson(val as Map<String, dynamic>));
+    }
+    return _imageHides;
   }
 }

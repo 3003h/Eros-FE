@@ -765,7 +765,7 @@ Future<bool?> postComment({
   }
 }
 
-Future<void> galleryAddfavorite(
+Future<void> galleryAddFavorite(
   String gid,
   String token, {
   String favcat = 'favdel',
@@ -792,6 +792,38 @@ Future<void> galleryAddfavorite(
     data: formData,
     options: getCacheOptions(forceRefresh: true),
   );
+}
+
+Future<FavAdd> galleryGetFavorite(
+  String gid,
+  String token,
+) async {
+  const String url = '/gallerypopups.php';
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+
+  final Map<String, dynamic> _params = {
+    'gid': gid,
+    't': token,
+    'act': 'addfav',
+  };
+
+  DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    queryParameters: _params,
+    options: getCacheOptions(forceRefresh: true),
+    httpTransformer: HttpTransformerBuilder(
+      (response) async {
+        final favAdd = await compute(parserAddFavPage, response.data as String);
+        return DioHttpResponse<FavAdd>.success(favAdd);
+      },
+    ),
+  );
+
+  if (httpResponse.ok && httpResponse.data is FavAdd) {
+    return httpResponse.data as FavAdd;
+  } else {
+    throw httpResponse.error ?? HttpException('get fav add error');
+  }
 }
 
 Future<Map> getTranslateTagDBInfo(String url) async {

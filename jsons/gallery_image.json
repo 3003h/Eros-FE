@@ -17,5 +17,7 @@
   "gid?": "1234",
   "token?": "1234",
   "completeDownload?": false,
-  "filePath?": ""
+  "filePath?": "",
+  "changeSource?": false,
+  "hide?": false
 }

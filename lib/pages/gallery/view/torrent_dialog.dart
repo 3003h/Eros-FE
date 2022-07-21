@@ -12,7 +12,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class TorrentView extends StatelessWidget {
@@ -184,31 +183,17 @@ Future<void> showTorrentDialog() {
   return showCupertinoDialog<void>(
       context: Get.overlayContext!,
       barrierDismissible: true,
-      builder: (_) {
+      builder: (context) {
         return CupertinoAlertDialog(
-          title: Text(L10n.of(Get.context!).p_Torrent),
+          title: Text(L10n.of(context).p_Torrent),
           content: const TorrentView(),
           actions: <Widget>[
             CupertinoDialogAction(
-              child: Text(L10n.of(Get.context!).cancel),
+              child: Text(L10n.of(context).cancel),
               onPressed: () {
                 Get.back();
               },
             ),
-          ],
-        );
-      });
-}
-
-Future<void> showTorrentModal() {
-  return showCupertinoModalBottomSheet<void>(
-      context: Get.overlayContext!,
-      // barrierDismissible: true,
-      builder: (_) {
-        return CupertinoActionSheet(
-          actions: [
-            CupertinoActionSheetAction(
-                onPressed: () {}, child: const TorrentView()),
           ],
         );
       });

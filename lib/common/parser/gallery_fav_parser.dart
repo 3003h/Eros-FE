@@ -1,27 +1,39 @@
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
-class GalleryFavParser {
-  static List<Favcat> parserAddFavPage(String? response) {
-    // 解析响应信息dom
-    final Document document = parse(response);
+FavAdd parserAddFavPage(String? response) {
+  // 解析响应信息dom
+  final Document document = parse(response);
 
-    logger.v('frome parserAddFavPage');
+  final List<Favcat> favList = <Favcat>[];
 
-    final List<Favcat> favList = <Favcat>[];
-
-    final List<Element> favcats =
-        document.querySelectorAll('#galpop > div > div.nosel > div');
-    for (final Element fav in favcats) {
-      final List<Element> divs = fav.querySelectorAll('div');
-      final String favId =
-          divs[0].querySelector('input')?.attributes['value']?.trim() ?? '';
-      final String favTitle = divs[2].text.trim();
-      favList.add(Favcat(favId: favId, favTitle: favTitle));
+  late String? select;
+  final List<Element> favcats =
+      document.querySelectorAll('#galpop > div > div.nosel > div');
+  for (final Element fav in favcats) {
+    final List<Element> divs = fav.querySelectorAll('div');
+    final String favId =
+        divs[0].querySelector('input')?.attributes['value']?.trim() ?? '';
+    final String checked =
+        divs[0].querySelector('input')?.attributes['checked']?.trim() ?? '';
+    if (checked.isNotEmpty) {
+      select = favId;
     }
-
-    return favList.sublist(0, 10);
+    final String favTitle = divs[2].text.trim();
+    favList.add(Favcat(favId: favId, favTitle: favTitle));
   }
+
+  // note  #galpop > div > div:nth-child(2) > textarea
+  final textareaElm = document.querySelector('textarea');
+  final note = textareaElm?.text.trim();
+  // print(note);
+
+  return FavAdd(
+    favcats: favList.sublist(0, 10),
+    usedNoteSlots: '1',
+    maxNoteSlots: '100',
+    favNote: note,
+    selectFavcat: select,
+  );
 }
