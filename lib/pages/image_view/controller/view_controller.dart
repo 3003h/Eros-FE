@@ -48,6 +48,8 @@ const int _speedInv = 10;
 
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
+  ViewExtController();
+
   /// 状态
   final ViewExtState vState = ViewExtState();
 
