@@ -7,7 +7,6 @@ import 'package:fehviewer/utils/p_hash/phash_base.dart' as phash;
 import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
-import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 import '../../fehviewer.dart';
 

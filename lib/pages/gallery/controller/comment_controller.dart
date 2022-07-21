@@ -10,7 +10,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
-import 'package:learning_language/learning_language.dart';
 
 import '../../../utils/bcd_code.dart';
 import 'gallery_page_controller.dart';
@@ -68,25 +67,15 @@ class CommentController extends GetxController with WidgetsBindingObserver {
   bool get isEditStat => _editState.value == EditState.editComment;
   bool get isReptyStat => _editState.value == EditState.reptyComment;
 
-  final LanguageIdentifier identifier = LanguageIdentifier();
-
   @override
   void onInit() {
     super.onInit();
     logger.v('CommentController onInit');
 
-    // _loadComment();
-
     _bottomInset = _mediaQueryBottomInset();
     _preBottomInset = _bottomInset;
     _widgetsBinding?.addObserver(this);
   }
-
-  // Future<void> _loadComment() async {
-  //   // await Future.delayed(const Duration(milliseconds: 200));
-  //   change(_pageState.galleryProvider?.galleryComment,
-  //       status: RxStatus.success());
-  // }
 
   @override
   void didChangeMetrics() {
@@ -310,15 +299,7 @@ class CommentController extends GetxController with WidgetsBindingObserver {
             return;
           }
 
-          final language = await identifier.identify(spans[i].text ?? '');
-
-          logger.d('language $language');
-
-          translate = await TranslatorHelper.translateText(
-            spans[i].text ?? '',
-            from: language,
-            to: 'zh',
-          );
+          translate = await translatorHelper.translateText(spans[i].text ?? '');
 
           if (translate.trim().isEmpty) {
             return;
