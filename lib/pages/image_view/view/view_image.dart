@@ -28,7 +28,6 @@ class ViewImage extends StatefulWidget {
     this.enableDoubleTap = true,
     this.mode = ExtendedImageMode.gesture,
     this.enableSlideOutPage = true,
-    // this.checkHide = false,
   }) : super(key: key);
 
   final int imageSer;
@@ -36,7 +35,6 @@ class ViewImage extends StatefulWidget {
   final bool enableDoubleTap;
   final ExtendedImageMode mode;
   final bool enableSlideOutPage;
-  // final bool checkHide;
 
   @override
   _ViewImageState createState() => _ViewImageState();
@@ -199,6 +197,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           // 加载完成 显示图片
           controller.setScale100(imageInfo!, size);
 
+          // 重新设置图片容器大小
           if (vState.imageSizeMap[widget.imageSer] == null) {
             vState.imageSizeMap[widget.imageSer] = Size(
                 imageInfo.image.width.toDouble(),
@@ -257,6 +256,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           // 加载完成 显示图片
           controller.setScale100(imageInfo!, size);
 
+          // 重新设置图片容器大小
           if (vState.imageSizeMap[widget.imageSer] == null) {
             vState.imageSizeMap[widget.imageSer] = Size(
                 imageInfo.image.width.toDouble(),
@@ -280,7 +280,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               : state.completedWidget;
 
           if (checkPHashHide || checkQRCodeHide) {
-            image = ImageWithPhash(
+            image = ImageWithHide(
               url: url,
               child: image,
               ser: ser,
@@ -411,6 +411,10 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     final GalleryImage? _image = vState.pageState.imageMap[widget.imageSer];
     logger.v('_image ${_image?.toJson()}');
 
+    if (_image?.hide ?? false) {
+      return ViewAD(ser: widget.imageSer);
+    }
+
     if ((_image?.completeCache ?? false) && !(_image?.changeSource ?? false)) {
       final imageProvider =
           ExtendedNetworkImageProvider(_image!.imageUrl!, cache: true);
@@ -501,11 +505,11 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
                 if (_image != null) {
                   final GalleryImage? _tmpImage = vState.imageMap[_image.ser];
-                  if (_tmpImage != null &&
-                      !(_tmpImage.completeHeight ?? false)) {
+                  if (_tmpImage != null) {
                     vState.galleryPageController.uptImageBySer(
-                        ser: _image.ser,
-                        image: _tmpImage.copyWith(completeHeight: true));
+                      ser: _image.ser,
+                      image: _tmpImage.copyWith(completeHeight: true),
+                    );
 
                     logger.v('upt _tmpImage ${_tmpImage.ser}');
                     Future.delayed(const Duration(milliseconds: 100)).then(

@@ -10,6 +10,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -282,7 +283,7 @@ class ImageExt extends GetView<ViewExtController> {
                 : image;
 
             if (checkPHashHide || checkQRCodeHide) {
-              image = ImageWithPhash(
+              image = ImageWithHide(
                 url: url,
                 child: image,
                 ser: ser,
@@ -355,8 +356,8 @@ class ImageExt extends GetView<ViewExtController> {
   }
 }
 
-class ImageWithPhash extends StatefulWidget {
-  const ImageWithPhash({
+class ImageWithHide extends StatefulWidget {
+  const ImageWithHide({
     Key? key,
     required this.url,
     required this.child,
@@ -372,12 +373,15 @@ class ImageWithPhash extends StatefulWidget {
   final bool checkQRCodeHide;
 
   @override
-  State<ImageWithPhash> createState() => _ImageWithPhashState();
+  State<ImageWithHide> createState() => _ImageWithHideState();
 }
 
-class _ImageWithPhashState extends State<ImageWithPhash> {
+class _ImageWithHideState extends State<ImageWithHide> {
   final ImageHideController imageHideController = Get.find();
   late Future<bool> _future;
+
+  final ViewExtController viewController = Get.find();
+  ViewExtState get vState => viewController.vState;
 
   Future<bool> _futureFunc() async {
     if (!widget.checkQRCodeHide) {
@@ -402,6 +406,17 @@ class _ImageWithPhashState extends State<ImageWithPhash> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data ?? false) {
+              final GalleryImage? _tmpImage = vState.imageMap[widget.ser];
+              if (_tmpImage != null) {
+                vState.galleryPageController.uptImageBySer(
+                  ser: widget.ser,
+                  image: _tmpImage.copyWith(hide: true),
+                );
+
+                Future.delayed(const Duration(milliseconds: 100)).then(
+                    (value) => viewController.update(
+                        [idSlidePage, '$idImageListView${widget.ser}']));
+              }
               return ViewAD(ser: widget.ser);
             } else {
               return widget.child;

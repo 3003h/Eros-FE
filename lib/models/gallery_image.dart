@@ -25,6 +25,7 @@ class GalleryImage {
     this.completeDownload,
     this.filePath,
     this.changeSource,
+    this.hide,
   });
 
   final bool? largeThumb;
@@ -47,6 +48,7 @@ class GalleryImage {
   final bool? completeDownload;
   final String? filePath;
   final bool? changeSource;
+  final bool? hide;
 
   factory GalleryImage.fromJson(Map<String,dynamic> json) => GalleryImage(
     largeThumb: json['largeThumb'] != null ? json['largeThumb'] as bool : null,
@@ -68,7 +70,8 @@ class GalleryImage {
     token: json['token'] != null ? json['token'] as String : null,
     completeDownload: json['completeDownload'] != null ? json['completeDownload'] as bool : null,
     filePath: json['filePath'] != null ? json['filePath'] as String : null,
-    changeSource: json['changeSource'] != null ? json['changeSource'] as bool : null
+    changeSource: json['changeSource'] != null ? json['changeSource'] as bool : null,
+    hide: json['hide'] != null ? json['hide'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -91,7 +94,8 @@ class GalleryImage {
     'token': token,
     'completeDownload': completeDownload,
     'filePath': filePath,
-    'changeSource': changeSource
+    'changeSource': changeSource,
+    'hide': hide
   };
 
   GalleryImage clone() => GalleryImage(
@@ -114,7 +118,8 @@ class GalleryImage {
     token: token,
     completeDownload: completeDownload,
     filePath: filePath,
-    changeSource: changeSource
+    changeSource: changeSource,
+    hide: hide
   );
 
     
@@ -138,7 +143,8 @@ class GalleryImage {
     String? token,
     bool? completeDownload,
     String? filePath,
-    bool? changeSource
+    bool? changeSource,
+    bool? hide
   }) => GalleryImage(
     largeThumb: largeThumb ?? this.largeThumb,
     completeCache: completeCache ?? this.completeCache,
@@ -160,12 +166,13 @@ class GalleryImage {
     completeDownload: completeDownload ?? this.completeDownload,
     filePath: filePath ?? this.filePath,
     changeSource: changeSource ?? this.changeSource,
+    hide: hide ?? this.hide,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath && changeSource == other.changeSource;
+    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath && changeSource == other.changeSource && hide == other.hide;
 
   @override
-  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode ^ changeSource.hashCode;
+  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode ^ changeSource.hashCode ^ hide.hashCode;
 }
