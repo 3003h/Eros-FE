@@ -270,18 +270,6 @@ class ImageExt extends GetView<ViewExtController> {
               child: state.completedWidget,
             );
 
-            image = controller.vState.viewMode != ViewMode.topToBottom
-                ? Hero(
-                    tag: '$ser',
-                    createRectTween: (Rect? begin, Rect? end) {
-                      final tween =
-                          MaterialRectCenterArcTween(begin: begin, end: end);
-                      return tween;
-                    },
-                    child: image,
-                  )
-                : image;
-
             if (checkPHashHide || checkQRCodeHide) {
               image = ImageWithHide(
                 url: url,

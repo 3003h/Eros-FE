@@ -190,7 +190,7 @@ class AppPages {
       name: EHRoutes.galleryViewExt,
       page: () => const ViewPage(),
       binding: BindingsBuilder<dynamic>(() {
-        Get.lazyPut(() => ViewExtController());
+        Get.lazyPut(() => ViewExtController(), fenix: true);
       }),
       // opaque: kDebugMode,
       opaque: false,
