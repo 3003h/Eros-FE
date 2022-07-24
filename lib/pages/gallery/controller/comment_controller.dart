@@ -233,7 +233,7 @@ class CommentController extends GetxController with WidgetsBindingObserver {
       // id
       if (reptyIdMorse != null && reptyIdMorse.isNotEmpty) {
         final reptyId = bcdCode.deCode(reptyIdMorse);
-        logger.d('reptyId: [$reptyIdMorse]  => $reptyId');
+        // logger.d('reptyId: [$reptyIdMorse]  => $reptyId');
         repty = comments?.firstWhereOrNull((element) => element.id == reptyId);
       }
 
