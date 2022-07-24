@@ -44,15 +44,13 @@ class PreviewContainer extends StatelessWidget {
             return const CupertinoActivityIndicator();
           },
           checkHide: true,
-          onHideFlagChanged: (val) {
-            if (val) {
-              logger.d('hide ser: ${galleryImage.ser} val:$val');
+          onHideFlagChanged: (isHideImage) {
+            if (isHideImage) {
+              logger.d('hide ser: ${galleryImage.ser} val:$isHideImage');
             }
             _galleryPageController.uptImageBySer(
               ser: galleryImage.ser,
-              image: galleryImage.copyWith(
-                hide: val,
-              ),
+              imageCallback: (image) => image.copyWith(hide: isHideImage),
             );
           },
         );

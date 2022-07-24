@@ -145,6 +145,7 @@ class ViewError extends StatelessWidget {
           ),
           Text(
             errInfo ?? '',
+            maxLines: 20,
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.secondarySystemBackground),
           ),
@@ -398,7 +399,7 @@ class _ImageWithHideState extends State<ImageWithHide> {
               if (_tmpImage != null) {
                 vState.galleryPageController.uptImageBySer(
                   ser: widget.ser,
-                  image: _tmpImage.copyWith(hide: true),
+                  imageCallback: (image) => image.copyWith(hide: true),
                 );
 
                 Future.delayed(const Duration(milliseconds: 100)).then(

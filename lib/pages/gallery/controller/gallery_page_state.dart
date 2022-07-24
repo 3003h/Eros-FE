@@ -8,7 +8,7 @@ import '../../../fehviewer.dart';
 import '../../item/controller/galleryitem_controller.dart';
 
 class GalleryPageState {
-  GalleryPageState() {}
+  GalleryPageState();
 
   final EhConfigService _ehConfigService = Get.find();
   DownloadController get _downloadController => Get.find();
@@ -38,9 +38,10 @@ class GalleryPageState {
   int get lastIndex => _lastIndex.value;
   set lastIndex(int val) => _lastIndex.value = val;
 
-  List<GalleryImage> get images => galleryProvider?.galleryImages ?? [];
-  Map<int, GalleryImage> get imageMap => galleryProvider?.imageMap ?? {};
-  set imageMap(Map<int, GalleryImage> val) {}
+  final RxList<GalleryImage> images = <GalleryImage>[].obs;
+  Map<int, GalleryImage> get imageMap =>
+      {for (GalleryImage v in images) v.ser: v};
+
   int get filecount => int.parse(galleryProvider?.filecount ?? '0');
 
   // 阅读按钮开关
@@ -72,7 +73,7 @@ class GalleryPageState {
   // 正在获取href
   bool isImageInfoGeting = false;
 
-  /// 是否存在本地收藏中
+  /// 是否已经存在本地收藏中
   set localFav(bool value) {
     galleryProvider = galleryProvider?.copyWith(localFav: value);
   }
@@ -83,6 +84,7 @@ class GalleryPageState {
   // get topTitle => _topTitle.value;
   set topTitle(String val) => _topTitle.value = val;
 
+  // 经过序号排序处理的图片对象list
   List<GalleryImage> get imagesFromMap {
     List<MapEntry<int, GalleryImage>> list = imageMap.entries
         .map((MapEntry<int, GalleryImage> e) => MapEntry(e.key, e.value))

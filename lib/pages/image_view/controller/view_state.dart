@@ -25,7 +25,7 @@ class ViewExtState {
     // 设置加载类型
     if (Get.arguments is ViewRepository) {
       final ViewRepository vr = Get.arguments as ViewRepository;
-      logger.d('vr.loadType ${vr.loadType}');
+      logger.d('vr.loadType ${vr.loadType}, index: ${vr.index}');
       loadFrom = vr.loadType;
 
       switch (loadFrom) {
@@ -37,6 +37,7 @@ class ViewExtState {
           break;
         case LoadFrom.gallery:
           galleryPageController = Get.find(tag: pageCtrlTag);
+          gid = galleryPageController.gState.gid;
           break;
         case LoadFrom.archiver:
           logger.d('LoadFrom.archiver');
@@ -58,8 +59,8 @@ class ViewExtState {
   final CancelToken getMoreCancelToken = CancelToken();
 
   Map<int, GalleryImage> get imageMap => pageState.imageMap;
+  RxList<GalleryImage> get images => pageState.images;
 
-  ///
   LoadFrom loadFrom = LoadFrom.gallery;
 
   late final String? gid;
