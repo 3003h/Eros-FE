@@ -418,7 +418,31 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         if (process < 1.0) {
           return ViewLoading(ser: widget.imageSer, progress: process);
         } else {
-          logger.d('p 下载完成回调 加载图片文件');
+          logger.d('p1 下载完成回调 加载图片文件');
+          return fileImage(_image.filePath!);
+        }
+      },
+    );
+  }
+
+  Widget _buildDownloadImage2() {
+    return GetBuilder<ViewExtController>(
+      id: '${idProcess}_${widget.imageSer}',
+      builder: (controller) {
+        final _image = controller.vState.imageMap[widget.imageSer]!;
+
+        if (_image.errorInfo?.isNotEmpty ?? false) {
+          return ViewError(
+            ser: widget.imageSer,
+            errInfo: _image.errorInfo,
+          );
+        }
+
+        final process = _image.downloadProcess ?? 0.0;
+        if (process < 1.0) {
+          return ViewLoading(ser: widget.imageSer, progress: process);
+        } else {
+          logger.d('p2 下载完成回调 加载图片文件');
           return fileImage(_image.filePath!);
         }
       },
@@ -434,30 +458,21 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     }
 
     if ((_image?.completeCache ?? false) && !(_image?.changeSource ?? false)) {
-      // final imageProvider =
-      // ExtendedNetworkImageProvider(_image!.imageUrl!, cache: true);
-      // return providerImage(imageProvider, _image.imageUrl!, widget.imageSer);
       // 图片文件已下载 加载显示本地图片文件
       if (_image?.filePath?.isNotEmpty ?? false) {
-        if (vState.imageMap[widget.imageSer] != null) {
-          vState.galleryPageController.uptImageBySer(
-              ser: _image!.ser,
-              imageCallback: (image) =>
-                  image.copyWith(filePath: _image.filePath!));
-        }
         logger.d('${widget.imageSer} filePath 不为空，加载图片文件');
         return fileImage(_image!.filePath!);
       }
-    }
 
-    if (_image?.imageUrl != null && (_image?.downloadProcess == null)) {
-      controller.downloadImage(
-        ser: widget.imageSer,
-        url: _image!.imageUrl!,
-      );
+      if (_image?.imageUrl != null && (_image?.downloadProcess == null)) {
+        controller.downloadImage(
+          ser: widget.imageSer,
+          url: _image!.imageUrl!,
+        );
 
-      logger.d('_buildDownloadImage');
-      return _buildDownloadImage();
+        logger.d('_buildDownloadImage ...');
+        return _buildDownloadImage();
+      }
     }
 
     logger.d('return FutureBuilder ser:${widget.imageSer}');
@@ -513,29 +528,27 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             final GalleryImage? _image = snapshot.data;
 
             // 图片文件已下载 加载显示本地图片文件
-            if (_image != null &&
-                _image.filePath != null &&
-                _image.filePath!.isNotEmpty) {
-              if (vState.imageMap[widget.imageSer] != null) {
-                vState.galleryPageController.uptImageBySer(
-                    ser: _image.ser,
-                    imageCallback: (image) =>
-                        image.copyWith(filePath: _image.filePath!));
-              }
-              return fileImage(_image.filePath!);
-            }
+            // if (_image?.filePath?.isNotEmpty ?? false) {
+            //   logger.d('file... ${_image?.filePath}');
+            //   return fileImage(_image!.filePath!);
+            // }
 
-            if (_image?.imageUrl != null && (_image?.downloadProcess == null)) {
+            if (_image?.imageUrl != null) {
+              logger.d('downloadImage...');
+
               controller.downloadImage(
                 ser: widget.imageSer,
                 url: _image!.imageUrl!,
+                reset: true,
               );
             }
 
-            Widget image = _buildDownloadImage();
+            Widget image = _buildDownloadImage2();
 
             return image;
           } else {
+            // TODO
+            return SizedBox();
             return ViewLoading(
               ser: widget.imageSer,
               duration: vState.viewMode != ViewMode.topToBottom

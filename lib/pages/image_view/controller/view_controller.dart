@@ -1120,9 +1120,21 @@ class ViewExtController extends GetxController {
 
   void scaleReset() {}
 
-  Future<void> downloadImage({required int ser, required String url}) async {
+  Future<void> downloadImage(
+      {required int ser, required String url, bool reset = false}) async {
     logger.d('downloadImage $url');
     final savePath = path.join(Global.tempPath, 'ViewTemp', vState.gid, '$ser');
+
+    // if (reset) {
+    //   _galleryPageController.uptImageBySer(
+    //       ser: ser,
+    //       imageCallback: (image) {
+    //         return image.copyWith(
+    //           filePath: '',
+    //         );
+    //       });
+    // }
+
     try {
       await ehDownload(
         savePath: savePath,
@@ -1145,6 +1157,7 @@ class ViewExtController extends GetxController {
               imageCallback: (image) => image.copyWith(
                     filePath: savePath,
                     completeCache: true,
+                    changeSource: false,
                   ));
         },
       );
