@@ -74,24 +74,6 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isJpnTitle(newValue);
     }
 
-    // Future<void> _handleTagTranslatChanged(bool newValue) async {
-    //   _ehConfigService.isTagTranslat = newValue;
-    //   if (newValue) {
-    //     try {
-    //       if (await transController.checkUpdate()) {
-    //         showToast('更新开始');
-    //         await transController.updateDB();
-    //         showToast('更新完成');
-    //       } else {
-    //         logger.v('do not need update');
-    //       }
-    //     } catch (e) {
-    //       logger.e('更新翻译异常 $e');
-    //       rethrow;
-    //     }
-    //   }
-    // }
-
     void _handleTagTranslatCDNChanged(bool newValue) {
       _ehConfigService.enableTagTranslateCDN = newValue;
     }
@@ -108,13 +90,7 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isClipboardLink.value = val;
     }
 
-    // Future<void> _forceUpdateTranslate() async {
-    //   if (await transController.checkUpdate(force: true)) {
-    //     showToast('手动更新开始');
-    //     await transController.updateDB();
-    //     showToast('更新完成');
-    //   }
-    // }
+    Future<EhHome?> _futureImageLimits = getEhHome(refresh: true);
 
     final List<Widget> _list = <Widget>[
       if (_isLogin)
@@ -163,7 +139,6 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          hideDivider: true,
           title: L10n.of(context).ehentai_my_tags,
           selector: L10n.of(context).mytags_on_website,
           onTap: () {
@@ -178,6 +153,33 @@ class ListViewEhSetting extends StatelessWidget {
             );
           },
         ),
+      if (_isLogin)
+        StatefulBuilder(builder: (context, setState) {
+          return FutureBuilder<EhHome?>(
+              future: _futureImageLimits,
+              builder: (context, snapshot) {
+                EhHome? ehHome;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  ehHome = snapshot.data;
+                }
+                return SelectorSettingItem(
+                  hideDivider: true,
+                  title: 'Image Limits',
+                  selector: ehHome == null
+                      ? ''
+                      : '${ehHome.currentLimit}/${ehHome.totLimit}',
+                  desc: 'Reset Cost: ${ehHome?.resetCost ?? 0} GP',
+                  suffix: snapshot.connectionState != ConnectionState.done
+                      ? const CupertinoActivityIndicator()
+                      : const SizedBox(),
+                  onTap: () {
+                    setState(() {
+                      _futureImageLimits = getEhHome(refresh: true);
+                    });
+                  },
+                );
+              });
+        }),
       const ItemSpace(),
       SelectorSettingItem(
         title: 'WebDAV',

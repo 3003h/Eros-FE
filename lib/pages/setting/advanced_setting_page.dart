@@ -15,7 +15,6 @@ import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../component/setting_base.dart';
