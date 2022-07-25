@@ -11,6 +11,8 @@ import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
+import 'package:fehviewer/widget/image/eh_check_hide_image_provider.dart';
+import 'package:fehviewer/widget/image/extended_eh_image_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -399,7 +401,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   origImageUrl: _currentImage?.originImageUrl,
                   title: '${vState.pageState.title} [${widget.imageSer}]');
             },
-            child: _buildViewImageWidgetOld(),
+            child: _buildViewImageWidgetProvider(),
           );
         });
   }
@@ -477,13 +479,16 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         });
   }
 
-  Widget _buildViewImageWidgetOld() {
+  Widget _buildViewImageWidgetProvider() {
     final GalleryImage? _image = vState.pageState.imageMap[widget.imageSer];
     logger.v('_image ${_image?.toJson()}');
 
     if (_image?.hide ?? false) {
       return ViewAD(ser: widget.imageSer);
     }
+
+    final checkPHashHide = ehConfigService.enablePHashCheck;
+    final checkQRCodeHide = ehConfigService.enableQRCodeCheck;
 
     logger.d('return FutureBuilder ser:${widget.imageSer}');
     return FutureBuilder<GalleryImage?>(
@@ -506,8 +511,64 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               return fileImage(_image!.tempPath!);
             }
 
-            Widget image = ImageExt(
-              url: _image?.imageUrl ?? '',
+            final _onLoadCompleted = (ExtendedImageState state) {
+              final ImageInfo? imageInfo = state.extendedImageInfo;
+              controller.setScale100(imageInfo!, context.mediaQuerySize);
+
+              if (_image != null) {
+                final GalleryImage? _tmpImage = vState.imageMap[_image.ser];
+                if (_tmpImage != null && !(_tmpImage.completeHeight ?? false)) {
+                  vState.galleryPageController.uptImageBySer(
+                    ser: _image.ser,
+                    imageCallback: (image) =>
+                        image.copyWith(completeHeight: true),
+                  );
+
+                  logger.v('upt _tmpImage ${_tmpImage.ser}');
+                  Future.delayed(const Duration(milliseconds: 100)).then(
+                      (value) => controller.update(
+                          [idSlidePage, '$idImageListView${_image.ser}']));
+                }
+              }
+
+              controller.onLoadCompleted(widget.imageSer);
+            };
+
+            if (kReleaseMode) {
+              logger.d('ImageExt');
+              return ImageExt(
+                url: _image?.imageUrl ?? '',
+                onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
+                ser: widget.imageSer,
+                mode: widget.mode,
+                enableSlideOutPage: widget.enableSlideOutPage,
+                reloadImage: () =>
+                    controller.reloadImage(widget.imageSer, changeSource: true),
+                fadeAnimationController: _fadeAnimationController,
+                initGestureConfigHandler: _initGestureConfigHandler,
+                onLoadCompleted: _onLoadCompleted,
+              );
+            }
+
+            logger.d('ImageExtProvider');
+            Widget image = ImageExtProvider(
+              // url: _image?.imageUrl ?? '',
+              image: ExtendedResizeImage.resizeIfNeeded(
+                provider: ExtendedEHNetworkImageProvider(
+                  _image?.imageUrl ?? '',
+                  timeLimit: const Duration(seconds: 10),
+                  cache: true,
+                ),
+              ),
+              // image: EhCheckHideImage(
+              //   checkQRCodeHide: checkQRCodeHide,
+              //   checkPHashHide: checkPHashHide,
+              //   imageProvider: ExtendedEHNetworkImageProvider(
+              //     _image?.imageUrl ?? '',
+              //     timeLimit: const Duration(seconds: 10),
+              //     cache: true,
+              //   ),
+              // ),
               onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
               ser: widget.imageSer,
               mode: widget.mode,
@@ -516,28 +577,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   controller.reloadImage(widget.imageSer, changeSource: true),
               fadeAnimationController: _fadeAnimationController,
               initGestureConfigHandler: _initGestureConfigHandler,
-              onLoadCompleted: (ExtendedImageState state) {
-                final ImageInfo? imageInfo = state.extendedImageInfo;
-                controller.setScale100(imageInfo!, context.mediaQuerySize);
-
-                if (_image != null) {
-                  final GalleryImage? _tmpImage = vState.imageMap[_image.ser];
-                  if (_tmpImage != null) {
-                    vState.galleryPageController.uptImageBySer(
-                      ser: _image.ser,
-                      imageCallback: (image) =>
-                          image.copyWith(completeHeight: true),
-                    );
-
-                    logger.v('upt _tmpImage ${_tmpImage.ser}');
-                    Future.delayed(const Duration(milliseconds: 100)).then(
-                        (value) => controller.update(
-                            [idSlidePage, '$idImageListView${_image.ser}']));
-                  }
-                }
-
-                controller.onLoadCompleted(widget.imageSer);
-              },
+              onLoadCompleted: _onLoadCompleted,
             );
 
             return image;
