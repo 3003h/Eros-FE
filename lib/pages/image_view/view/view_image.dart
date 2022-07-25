@@ -507,13 +507,37 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             }
 
             Widget image = ImageExt(
-              url: _image!.imageUrl!,
-              ser: _image.ser,
-              fadeAnimationController: _fadeAnimationController,
+              url: _image?.imageUrl ?? '',
+              onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
+              ser: widget.imageSer,
+              mode: widget.mode,
+              enableSlideOutPage: widget.enableSlideOutPage,
               reloadImage: () =>
-                  controller.reloadImage(_image.ser, changeSource: true),
+                  controller.reloadImage(widget.imageSer, changeSource: true),
+              fadeAnimationController: _fadeAnimationController,
               initGestureConfigHandler: _initGestureConfigHandler,
-              onDoubleTap: _onDoubleTap,
+              onLoadCompleted: (ExtendedImageState state) {
+                final ImageInfo? imageInfo = state.extendedImageInfo;
+                controller.setScale100(imageInfo!, context.mediaQuerySize);
+
+                if (_image != null) {
+                  final GalleryImage? _tmpImage = vState.imageMap[_image.ser];
+                  if (_tmpImage != null) {
+                    vState.galleryPageController.uptImageBySer(
+                      ser: _image.ser,
+                      imageCallback: (image) =>
+                          image.copyWith(completeHeight: true),
+                    );
+
+                    logger.v('upt _tmpImage ${_tmpImage.ser}');
+                    Future.delayed(const Duration(milliseconds: 100)).then(
+                        (value) => controller.update(
+                            [idSlidePage, '$idImageListView${_image.ser}']));
+                  }
+                }
+
+                controller.onLoadCompleted(widget.imageSer);
+              },
             );
 
             return image;
