@@ -798,7 +798,7 @@ packages:
       name: http_client_helper
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   http_multi_server:
     dependency: transitive
     description:
