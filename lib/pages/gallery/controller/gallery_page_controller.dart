@@ -473,10 +473,12 @@ class GalleryPageController extends GetxController
               refresh: gState.isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
             ));
 
-    final List<GalleryImage> _moreImageList = await imageLoadLock
-        .synchronized(() async => await gState.mapLoadImagesForSer[page]!);
+    final List<GalleryImage>? _moreImageList = await imageLoadLock
+        .synchronized(() async => await gState.mapLoadImagesForSer[page]);
 
-    addAllImages(_moreImageList);
+    if (_moreImageList != null) {
+      addAllImages(_moreImageList);
+    }
     if (Get.isRegistered<AllPreviewsPageController>()) {
       Get.find<AllPreviewsPageController>().update();
     }
@@ -559,10 +561,12 @@ class GalleryPageController extends GetxController
             imageHeight: _image.imageHeight,
             originImageUrl: _image.originImageUrl,
             changeSource: changeSource,
+            errorInfo: '',
+            tempPath: '',
+            completeCache: false,
           );
 
           return uptImageBySer(ser: itemSer, imageCallback: (image) => __image);
-          // return _imageCopyWith;
         } catch (_) {
           rethrow;
         }
