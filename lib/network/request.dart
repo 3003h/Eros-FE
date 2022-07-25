@@ -1008,3 +1008,26 @@ Future<GalleryList?> searchImage(
     throw httpResponse.error ?? EhError(error: 'searchImage error');
   }
 }
+
+Future<EhHome?> getEhHome({bool refresh = false}) async {
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  final String url = '${Api.getBaseUrl()}/home.php';
+
+  final DioHttpResponse httpResponse = await dioHttpClient.get(
+    url,
+    httpTransformer: HttpTransformerBuilder(
+      (response) async {
+        final ehHome = parserEhHome(response.data as String);
+        return DioHttpResponse<EhHome>.success(ehHome);
+      },
+    ),
+    options: getCacheOptions(forceRefresh: refresh),
+  );
+
+  if (httpResponse.ok && httpResponse.data is EhHome) {
+    return httpResponse.data as EhHome;
+  } else {
+    logger.e('${httpResponse.error.runtimeType}');
+    throw httpResponse.error ?? EhError(error: 'getEhHome error');
+  }
+}
