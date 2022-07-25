@@ -12,6 +12,7 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -167,14 +168,19 @@ class ViewLoading extends StatelessWidget {
     this.duration,
     this.progress,
     this.animationEnabled,
+    this.debugLable,
   }) : super(key: key);
   final int ser;
   final Duration? duration;
   final double? progress;
   final bool? animationEnabled;
+  final String? debugLable;
 
   @override
   Widget build(BuildContext context) {
+    if (debugLable != null && kDebugMode) {
+      logger.i('build ViewLoading $debugLable');
+    }
     final _loadWidget = _ViewLoading(
       ser: ser,
       progress: progress,
@@ -1060,6 +1066,11 @@ class _FutureThumblState extends State<FutureThumbl> {
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              logger.e('${snapshot.error}\n${snapshot.stackTrace}');
+              return builderrorWidget();
+            }
+
             final _image = snapshot.data;
             if (_image != null &&
                 _image.thumbUrl != null &&
