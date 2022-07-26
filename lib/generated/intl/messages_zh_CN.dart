@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意数据安全"),
+        "QR_code_check": MessageLookupByLibrary.simpleMessage("二维码检查"),
         "about": MessageLookupByLibrary.simpleMessage("关于"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("添加搜索"),
         "add_tag_placeholder":
@@ -130,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide": MessageLookupByLibrary.simpleMessage("隐藏"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
         "image_download_type": MessageLookupByLibrary.simpleMessage("下载类型"),
+        "image_hide": MessageLookupByLibrary.simpleMessage("图片隐藏"),
         "image_limits": MessageLookupByLibrary.simpleMessage("图片限制"),
         "input_empty": MessageLookupByLibrary.simpleMessage("输入空"),
         "input_error": MessageLookupByLibrary.simpleMessage("输入格式有误"),
@@ -155,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("登录"),
         "login_web": MessageLookupByLibrary.simpleMessage("通过网页登录"),
+        "mange_hidden_images": MessageLookupByLibrary.simpleMessage("管理隐藏图片"),
         "manually_sel_favorites": MessageLookupByLibrary.simpleMessage("手动选择"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大历史记录"),
         "min": MessageLookupByLibrary.simpleMessage("分钟"),
@@ -193,6 +196,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error": MessageLookupByLibrary.simpleMessage("输入范围有误"),
         "passwd": MessageLookupByLibrary.simpleMessage("密码"),
         "paused": MessageLookupByLibrary.simpleMessage("已暂停"),
+        "phash_check": MessageLookupByLibrary.simpleMessage("感知哈希检查"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("请输入密码"),
         "pls_i_username": MessageLookupByLibrary.simpleMessage("请输入用户名"),
         "preload_image": MessageLookupByLibrary.simpleMessage("预载图片数量"),

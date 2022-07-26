@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意數據安全"),
+        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
         "about": MessageLookupByLibrary.simpleMessage("關於"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("添加搜尋"),
         "add_tag_placeholder":
@@ -136,6 +137,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("小時"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
+        "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty": MessageLookupByLibrary.simpleMessage("空白輸入"),
         "input_error": MessageLookupByLibrary.simpleMessage("輸入錯誤"),
@@ -162,6 +164,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("登入"),
         "login_web": MessageLookupByLibrary.simpleMessage("透過網頁登入"),
+        "mange_hidden_images":
+            MessageLookupByLibrary.simpleMessage("Manage Hidden Images"),
         "manually_sel_favorites":
             MessageLookupByLibrary.simpleMessage("手動選擇收藏夾"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大歷史紀錄"),
@@ -204,6 +208,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error": MessageLookupByLibrary.simpleMessage("頁數範圍錯誤"),
         "passwd": MessageLookupByLibrary.simpleMessage("密碼"),
         "paused": MessageLookupByLibrary.simpleMessage("暫停"),
+        "phash_check":
+            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
         "pls_i_username": MessageLookupByLibrary.simpleMessage("請輸入用戶名"),
         "preload_image": MessageLookupByLibrary.simpleMessage("預載圖片數量"),

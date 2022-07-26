@@ -13,20 +13,20 @@ import '../../fehviewer.dart';
 const int kMaxPhashDiff = 5;
 
 class ImageHideController extends GetxController {
-  final RxList<ImageHide> customHides = <ImageHide>[].obs;
+  final RxList<ImageHide> customHideList = <ImageHide>[].obs;
   final Map<String, BigInt> pHashMap = <String, BigInt>{};
 
   @override
   void onInit() {
     super.onInit();
-    customHides(hiveHelper.getAllCustomImageHide());
-    debounce<List<ImageHide>>(customHides, (value) {
+    customHideList(hiveHelper.getAllCustomImageHide());
+    debounce<List<ImageHide>>(customHideList, (value) {
       hiveHelper.setAllCustomImageHide(value);
     }, time: const Duration(seconds: 2));
   }
 
   Future<void> addCustomImageHide(String imageUrl) async {
-    if (customHides.any((e) => e.imageUrl == imageUrl)) {
+    if (customHideList.any((e) => e.imageUrl == imageUrl)) {
       return;
     }
 
@@ -40,18 +40,19 @@ class ImageHideController extends GetxController {
 
     final data = imageFile.readAsBytesSync();
     final pHash = phash.calculatePHash(phash.getValidImage(data));
-    if (customHides.any((e) => e.pHash == pHash.toRadixString(16))) {
+    if (customHideList.any((e) => e.pHash == pHash.toRadixString(16))) {
       return;
     }
-    customHides
-        .add(ImageHide(pHash: pHash.toRadixString(16), imageUrl: imageUrl));
+
+    customHideList.insert(
+        0, ImageHide(pHash: pHash.toRadixString(16), imageUrl: imageUrl));
   }
 
   Future<bool> checkPHashHide(String url) async {
     BigInt? hash = await calculatePHash(url);
     loggerSimple.v('checkHide url:$url hash:${hash.toRadixString(16)}');
 
-    return customHides.any((e) =>
+    return customHideList.any((e) =>
         phash.hammingDistance(
             BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash) <=
         kMaxPhashDiff);
