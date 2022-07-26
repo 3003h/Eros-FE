@@ -270,10 +270,10 @@ class L10n {
     );
   }
 
-  /// `Sign in on the web`
+  /// `Sign in on the Web`
   String get login_web {
     return Intl.message(
-      'Sign in on the web',
+      'Sign in on the Web',
       name: 'login_web',
       desc: '',
       args: [],
@@ -400,10 +400,10 @@ class L10n {
     );
   }
 
-  /// `Preload image`
+  /// `Preload Image`
   String get preload_image {
     return Intl.message(
-      'Preload image',
+      'Preload Image',
       name: 'preload_image',
       desc: '',
       args: [],
@@ -430,10 +430,10 @@ class L10n {
     );
   }
 
-  /// `Follow system`
+  /// `Follow System`
   String get follow_system {
     return Intl.message(
-      'Follow system',
+      'Follow System',
       name: 'follow_system',
       desc: '',
       args: [],
@@ -460,10 +460,10 @@ class L10n {
     );
   }
 
-  /// `Custom hosts`
+  /// `Custom Hosts`
   String get custom_hosts {
     return Intl.message(
-      'Custom hosts',
+      'Custom Hosts',
       name: 'custom_hosts',
       desc: '',
       args: [],
@@ -810,20 +810,20 @@ class L10n {
     );
   }
 
-  /// `Clear all history`
+  /// `Clear All History`
   String get t_Clear_all_history {
     return Intl.message(
-      'Clear all history',
+      'Clear All History',
       name: 't_Clear_all_history',
       desc: '',
       args: [],
     );
   }
 
-  /// `Gallery site`
+  /// `Gallery Site`
   String get galery_site {
     return Intl.message(
-      'Gallery site',
+      'Gallery Site',
       name: 'galery_site',
       desc: '',
       args: [],
@@ -840,50 +840,50 @@ class L10n {
     );
   }
 
-  /// `EHentai settings`
+  /// `EHentai Settings`
   String get ehentai_settings {
     return Intl.message(
-      'EHentai settings',
+      'EHentai Settings',
       name: 'ehentai_settings',
       desc: '',
       args: [],
     );
   }
 
-  /// `Setting on website`
+  /// `Setting on Website`
   String get setting_on_website {
     return Intl.message(
-      'Setting on website',
+      'Setting on Website',
       name: 'setting_on_website',
       desc: '',
       args: [],
     );
   }
 
-  /// `My tags`
+  /// `My Tags`
   String get ehentai_my_tags {
     return Intl.message(
-      'My tags',
+      'My Tags',
       name: 'ehentai_my_tags',
       desc: '',
       args: [],
     );
   }
 
-  /// `My tags on website`
+  /// `My Tags on Website`
   String get mytags_on_website {
     return Intl.message(
-      'My tags on website',
+      'My Tags on Website',
       name: 'mytags_on_website',
       desc: '',
       args: [],
     );
   }
 
-  /// `List mode`
+  /// `List Mode`
   String get list_mode {
     return Intl.message(
-      'List mode',
+      'List Mode',
       name: 'list_mode',
       desc: '',
       args: [],
@@ -940,60 +940,60 @@ class L10n {
     );
   }
 
-  /// `Favorites order`
+  /// `Favorites Order`
   String get favorites_order {
     return Intl.message(
-      'Favorites order',
+      'Favorites Order',
       name: 'favorites_order',
       desc: '',
       args: [],
     );
   }
 
-  /// `Use posted`
+  /// `Use Posted`
   String get favorites_order_Use_posted {
     return Intl.message(
-      'Use posted',
+      'Use Posted',
       name: 'favorites_order_Use_posted',
       desc: '',
       args: [],
     );
   }
 
-  /// `Use favorited`
+  /// `Use Favorited`
   String get favorites_order_Use_favorited {
     return Intl.message(
-      'Use favorited',
+      'Use Favorited',
       name: 'favorites_order_Use_favorited',
       desc: '',
       args: [],
     );
   }
 
-  /// `Show japanese title`
+  /// `Show Japanese Title`
   String get show_jpn_title {
     return Intl.message(
-      'Show japanese title',
+      'Show Japanese Title',
       name: 'show_jpn_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Current version`
+  /// `Current Version`
   String get current_version {
     return Intl.message(
-      'Current version',
+      'Current Version',
       name: 'current_version',
       desc: '',
       args: [],
     );
   }
 
-  /// `Maximum history`
+  /// `Maximum History`
   String get max_history {
     return Intl.message(
-      'Maximum history',
+      'Maximum History',
       name: 'max_history',
       desc: '',
       args: [],
@@ -3444,20 +3444,20 @@ class L10n {
     );
   }
 
-  /// `Group name`
+  /// `Group Name`
   String get groupName {
     return Intl.message(
-      'Group name',
+      'Group Name',
       name: 'groupName',
       desc: '',
       args: [],
     );
   }
 
-  /// `Group type`
+  /// `Group Type`
   String get groupType {
     return Intl.message(
-      'Group type',
+      'Group Type',
       name: 'groupType',
       desc: '',
       args: [],
@@ -3514,10 +3514,10 @@ class L10n {
     );
   }
 
-  /// `Download type`
+  /// `Download Type`
   String get image_download_type {
     return Intl.message(
-      'Download type',
+      'Download Type',
       name: 'image_download_type',
       desc: '',
       args: [],
@@ -3554,10 +3554,10 @@ class L10n {
     );
   }
 
-  /// `Ask for me`
+  /// `Ask for Me`
   String get ask_me {
     return Intl.message(
-      'Ask for me',
+      'Ask for Me',
       name: 'ask_me',
       desc: '',
       args: [],
@@ -3574,10 +3574,10 @@ class L10n {
     );
   }
 
-  /// `Add to mytags`
+  /// `Add to Mytags`
   String get tag_add_to_mytag {
     return Intl.message(
-      'Add to mytags',
+      'Add to Mytags',
       name: 'tag_add_to_mytag',
       desc: '',
       args: [],
@@ -3624,30 +3624,30 @@ class L10n {
     );
   }
 
-  /// `Default color`
+  /// `Default Color`
   String get tag_dialog_Default_color {
     return Intl.message(
-      'Default color',
+      'Default Color',
       name: 'tag_dialog_Default_color',
       desc: '',
       args: [],
     );
   }
 
-  /// `primary`
+  /// `Primary`
   String get color_picker_primary {
     return Intl.message(
-      'primary',
+      'Primary',
       name: 'color_picker_primary',
       desc: '',
       args: [],
     );
   }
 
-  /// `wheel`
+  /// `Wheel`
   String get color_picker_wheel {
     return Intl.message(
-      'wheel',
+      'Wheel',
       name: 'color_picker_wheel',
       desc: '',
       args: [],
@@ -3754,30 +3754,30 @@ class L10n {
     );
   }
 
-  /// `Default avatar style`
+  /// `Default Avatar Style`
   String get default_avatar_style {
     return Intl.message(
-      'Default avatar style',
+      'Default Avatar Style',
       name: 'default_avatar_style',
       desc: '',
       args: [],
     );
   }
 
-  /// `Authentication required`
+  /// `Authentication Required`
   String get auth_signInTitle {
     return Intl.message(
-      'Authentication required',
+      'Authentication Required',
       name: 'auth_signInTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Verify identity`
+  /// `Verify Identity`
   String get auth_biometricHint {
     return Intl.message(
-      'Verify identity',
+      'Verify Identity',
       name: 'auth_biometricHint',
       desc: '',
       args: [],
@@ -3789,6 +3789,66 @@ class L10n {
     return Intl.message(
       'Chapter',
       name: 'chapter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image Limits`
+  String get image_limits {
+    return Intl.message(
+      'Image Limits',
+      name: 'image_limits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Cost`
+  String get reset_cost {
+    return Intl.message(
+      'Reset Cost',
+      name: 'reset_cost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image Hide`
+  String get image_hide {
+    return Intl.message(
+      'Image Hide',
+      name: 'image_hide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QR code Check`
+  String get QR_code_check {
+    return Intl.message(
+      'QR code Check',
+      name: 'QR_code_check',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Perceptual Hash Check`
+  String get phash_check {
+    return Intl.message(
+      'Perceptual Hash Check',
+      name: 'phash_check',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage Hidden Images`
+  String get mange_hidden_images {
+    return Intl.message(
+      'Manage Hidden Images',
+      name: 'mange_hidden_images',
       desc: '',
       args: [],
     );

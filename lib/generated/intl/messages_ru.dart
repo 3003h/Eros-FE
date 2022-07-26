@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE":
             MessageLookupByLibrary.simpleMessage("Никому не показывайте"),
+        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
         "about": MessageLookupByLibrary.simpleMessage("О приложении"),
         "add_quick_search":
             MessageLookupByLibrary.simpleMessage("Добавить в БП"),
@@ -162,6 +163,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("час(ов)"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Тип загрузки"),
+        "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty":
             MessageLookupByLibrary.simpleMessage("Буфер обмена пуст"),
         "input_error": MessageLookupByLibrary.simpleMessage("Ошибка ввода"),
@@ -194,6 +197,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("Войти"),
         "login_web":
             MessageLookupByLibrary.simpleMessage("Войти через браузер"),
+        "mange_hidden_images":
+            MessageLookupByLibrary.simpleMessage("Manage Hidden Images"),
         "manually_sel_favorites": MessageLookupByLibrary.simpleMessage(
             "Вручную выбирать группу избранного"),
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
@@ -241,6 +246,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Page range error"),
         "passwd": MessageLookupByLibrary.simpleMessage("Пароль"),
         "paused": MessageLookupByLibrary.simpleMessage("На паузе"),
+        "phash_check":
+            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
         "pls_i_passwd":
             MessageLookupByLibrary.simpleMessage("Пожалуйста, введите пароль"),
         "pls_i_username":
@@ -266,6 +273,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Удалить из избранного"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("Reply"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Сжатое"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("Reset Cost"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Возобновить задания"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("Справа налево"),

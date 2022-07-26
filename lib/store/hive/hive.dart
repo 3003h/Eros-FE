@@ -17,6 +17,8 @@ const String profileDelKey = 'delete_profile';
 const String qsLastTimeKey = 'quick_search_last_edit_time';
 const String customImageHideKey = 'custom_image_hide';
 
+const String ehHomeKey = 'eh_home';
+
 class HiveHelper {
   HiveHelper();
   static final _historyBox = Hive.box<String>(historyBox);
@@ -175,5 +177,15 @@ class HiveHelper {
       _imageHides.add(ImageHide.fromJson(val as Map<String, dynamic>));
     }
     return _imageHides;
+  }
+
+  Future<void> setEhHome(EhHome ehHome) async {
+    await _configBox.put(ehHomeKey, jsonEncode(ehHome));
+  }
+
+  EhHome getEhHome() {
+    final val = _configBox.get(ehHomeKey, defaultValue: '{}');
+
+    return EhHome.fromJson(jsonDecode(val ?? '{}') as Map<String, dynamic>);
   }
 }

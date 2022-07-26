@@ -11,7 +11,7 @@ class PHashImageListPage extends GetView<ImageHideController> {
 
   @override
   Widget build(BuildContext context) {
-    const String _title = 'Image hide';
+    final String _title = L10n.of(context).mange_hidden_images;
     return Obx(() {
       return CupertinoPageScaffold(
         backgroundColor: !ehTheme.isDarkMode
@@ -27,7 +27,7 @@ class PHashImageListPage extends GetView<ImageHideController> {
               size: 22,
             ),
             onPressed: () {
-              controller.customHides.clear();
+              controller.customHideList.clear();
             },
           ),
         ),
@@ -36,12 +36,12 @@ class PHashImageListPage extends GetView<ImageHideController> {
           top: false,
           child: Container(
             child: ListView.separated(
-              itemCount: controller.customHides.length,
+              itemCount: controller.customHideList.length,
               itemBuilder: (context, index) {
-                final imageHide = controller.customHides[index];
+                final imageHide = controller.customHideList[index];
                 return ImageHideItem(
                   imageHide: imageHide,
-                  onDelete: () => controller.customHides.removeAt(index),
+                  onDelete: () => controller.customHideList.removeAt(index),
                 );
               },
               separatorBuilder: (context, index) {

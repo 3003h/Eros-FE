@@ -15,7 +15,6 @@ import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../component/setting_base.dart';
@@ -116,7 +115,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       const ItemSpace(),
       SelectorSettingItem(
         hideDivider: true,
-        title: 'Image Hide',
+        title: L10n.of(context).image_hide,
         selector: '',
         onTap: () {
           Get.toNamed(
@@ -153,31 +152,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         onChanged: _handleDFChanged,
         desc: 'By pass SNI',
       ),
-      // Obx(() {
-      //   return AnimatedCrossFade(
-      //     alignment: Alignment.center,
-      //     crossFadeState: _dnsService.enableDomainFronting
-      //         ? CrossFadeState.showSecond
-      //         : CrossFadeState.showFirst,
-      //     firstCurve: Curves.easeIn,
-      //     secondCurve: Curves.easeOut,
-      //     duration: const Duration(milliseconds: 200),
-      //     firstChild: const SizedBox(),
-      //     secondChild: SelectorSettingItem(
-      //       title: L10n.of(context).custom_hosts,
-      //       selector: _dnsService.enableCustomHosts
-      //           ? L10n.of(context).on
-      //           : L10n.of(context).off,
-      //       onTap: () {
-      //         Get.toNamed(
-      //           EHRoutes.customHosts,
-      //           id: isLayoutLarge ? 2 : null,
-      //         );
-      //       },
-      //       hideLine: true,
-      //     ),
-      //   );
-      // }),
+
       Obx(() => SelectorSettingItem(
             title: L10n.of(context).custom_hosts,
             selector: _dnsService.enableCustomHosts

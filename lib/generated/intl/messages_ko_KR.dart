@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("안전하게 보관하세요!"),
+        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
         "about": MessageLookupByLibrary.simpleMessage("정보"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("빠른 검색 추가"),
         "add_tag_placeholder":
@@ -143,6 +144,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
+        "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty": MessageLookupByLibrary.simpleMessage("인풋 비어있음"),
         "input_error": MessageLookupByLibrary.simpleMessage("인풋 에러"),
         "instantly": MessageLookupByLibrary.simpleMessage("즉시"),
@@ -168,6 +171,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("로컬 즐겨찾기"),
         "login": MessageLookupByLibrary.simpleMessage("로그인"),
         "login_web": MessageLookupByLibrary.simpleMessage("웹 로그인"),
+        "mange_hidden_images":
+            MessageLookupByLibrary.simpleMessage("Manage Hidden Images"),
         "manually_sel_favorites":
             MessageLookupByLibrary.simpleMessage("수동으로 즐겨찾기 선택"),
         "max_history": MessageLookupByLibrary.simpleMessage("최대 방문 기록"),
@@ -208,6 +213,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error": MessageLookupByLibrary.simpleMessage("페이지 범위 오류"),
         "passwd": MessageLookupByLibrary.simpleMessage("비밀번호"),
         "paused": MessageLookupByLibrary.simpleMessage("Paused"),
+        "phash_check":
+            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("비밀번호를 입력하여 주세요."),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("사용자 이름을 입력하여 주세요."),
@@ -229,6 +236,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("Reply"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("Reset Cost"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),

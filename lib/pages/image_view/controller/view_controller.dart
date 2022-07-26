@@ -8,6 +8,7 @@ import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
@@ -42,6 +43,7 @@ const String idThumbnailListView = 'ThumbnailListView';
 const String idShowThumbListIcon = 'ShowThumbListIcon';
 const String idAutoReadIcon = 'AutoReadIcon';
 const String idIconBar = 'IconBar';
+const String idProcess = 'Process';
 
 const int _speedMaxCount = 50;
 const int _speedInv = 10;
@@ -67,6 +69,8 @@ class ViewExtController extends GetxController {
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
+
+  Map<int, Stream<GalleryImage?>> imageStreamMap = {};
 
   Map<int, Future<File?>> imageArchiveFutureMap = {};
 
@@ -167,7 +171,8 @@ class ViewExtController extends GetxController {
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          _galleryPageController.uptImageBySer(ser: event.ser, image: event);
+          _galleryPageController.uptImageBySer(
+              ser: event.ser, imageCallback: (image) => event);
         }
       });
     }
@@ -217,7 +222,7 @@ class ViewExtController extends GetxController {
     // FlutterStatusbarManager.setTranslucent(false);
 
     // 恢复系统旋转设置
-    logger.d('恢复系统旋转设置');
+    logger.v('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
   }
 
@@ -294,7 +299,8 @@ class ViewExtController extends GetxController {
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          _galleryPageController.uptImageBySer(ser: event.ser, image: event);
+          _galleryPageController.uptImageBySer(
+              ser: event.ser, imageCallback: (val) => event);
         }
       });
     }
@@ -381,9 +387,19 @@ class ViewExtController extends GetxController {
     return image;
   }
 
-  GalleryImage? _getImageFromImageTasks(int itemSer, String? dir) {
+  Future<GalleryImage?> _getImageFromImageTasks(
+    int itemSer,
+    String? dir, {
+    bool reLoadDB = false,
+  }) async {
     if (dir == null) {
       return null;
+    }
+
+    if (reLoadDB) {
+      vState.imageTasks = (await vState.imageTaskDao
+              ?.findAllTaskByGid(int.parse(_galleryPageStat.gid))) ??
+          [];
     }
 
     final imageTask = vState.imageTasks
@@ -399,6 +415,7 @@ class ViewExtController extends GetxController {
         filePath: path.join(dir, imageTask.filePath!),
       );
     }
+    return null;
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
@@ -416,74 +433,48 @@ class ViewExtController extends GetxController {
     vState.galleryTaskDao ??= Get.find<DownloadController>().galleryTaskDao;
     vState.dirPath ??= await _getTaskDirPath(int.parse(_galleryPageStat.gid));
 
-    GalleryImage? imageFromTasks =
-        _getImageFromImageTasks(itemSer, vState.dirPath);
-    if (imageFromTasks != null) {
-      return imageFromTasks;
-    }
+    late GalleryImage? image;
 
-    vState.imageTasks = (await vState.imageTaskDao
-            ?.findAllTaskByGid(int.parse(_galleryPageStat.gid))) ??
-        [];
+    image = await _getImageFromImageTasks(itemSer, vState.dirPath);
 
-    imageFromTasks = _getImageFromImageTasks(itemSer, vState.dirPath);
-    // 存在下载记录 直接返回
-    if (imageFromTasks != null) {
-      return imageFromTasks;
-    }
+    if (image == null) {
+      image ??= await _getImageFromImageTasks(itemSer, vState.dirPath,
+          reLoadDB: true);
 
-    final tImage = _galleryPageStat.imageMap[itemSer];
-    if (tImage == null) {
-      logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
+      final tImage = _galleryPageStat.imageMap[itemSer];
+      if (tImage == null) {
+        logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
 
-      // 直接获取所在页数据
-      await _galleryPageController.loadImagesForSer(itemSer);
-    }
-
-    GalleryPara.instance
-        .ehPrecacheImages(
-      imageMap: _galleryPageStat.imageMap,
-      itemSer: itemSer,
-      max: _ehConfigService.preloadImage.value,
-    )
-        .listen((GalleryImage? event) {
-      if (event != null) {
-        _galleryPageController.uptImageBySer(ser: event.ser, image: event);
+        // 直接获取所在页数据
+        await _galleryPageController.loadImagesForSer(itemSer);
       }
-    });
 
-    late final GalleryImage? image;
+      GalleryPara.instance
+          .ehPrecacheImages(
+        imageMap: _galleryPageStat.imageMap,
+        itemSer: itemSer,
+        max: _ehConfigService.preloadImage.value,
+      )
+          .listen((GalleryImage? event) {
+        if (event != null) {
+          _galleryPageController.uptImageBySer(
+              ser: event.ser, imageCallback: (val) => val = event);
+        }
+      });
 
-    image = await _galleryPageController.fetchAndParserImageInfo(
-      itemSer,
-      cancelToken: vState.getMoreCancelToken,
-      changeSource: changeSource,
-    );
-
-    // if (vState.viewMode == ViewMode.topToBottom) {
-    //   image = await imageLock.synchronized(
-    //     () async => await _galleryPageController.fetchAndParserImageInfo(
-    //       itemSer,
-    //       cancelToken: vState.getMoreCancelToken,
-    //       changeSource: changeSource,
-    //     ),
-    //     // timeout: const Duration(seconds: 5),
-    //   );
-    // } else {
-    //   image = await _galleryPageController.fetchAndParserImageInfo(
-    //     itemSer,
-    //     cancelToken: vState.getMoreCancelToken,
-    //     changeSource: changeSource,
-    //   );
-    // }
+      image = await _galleryPageController.fetchAndParserImageInfo(
+        itemSer,
+        cancelToken: vState.getMoreCancelToken,
+        changeSource: changeSource,
+      );
+    }
 
     return image;
   }
 
   /// 重载图片数据，重构部件
   Future<void> reloadImage(int itemSer, {bool changeSource = true}) async {
-    final GalleryImage? _currentImage =
-        _galleryPageStat.galleryProvider?.imageMap[itemSer];
+    final GalleryImage? _currentImage = _galleryPageStat.imageMap[itemSer];
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存
@@ -498,7 +489,7 @@ class ViewExtController extends GetxController {
     }
     _galleryPageController.uptImageBySer(
       ser: itemSer,
-      image: _currentImage.copyWith(
+      imageCallback: (image) => image.copyWith(
         imageUrl: '',
         changeSource: changeSource,
         completeCache: false,
@@ -511,7 +502,8 @@ class ViewExtController extends GetxController {
       changeSource: changeSource,
     );
 
-    update();
+    // update();
+    update(['$idImageListView$itemSer']);
   }
 
   void setScale100(ImageInfo imageInfo, Size size) {
@@ -1113,4 +1105,48 @@ class ViewExtController extends GetxController {
   void scaleDown() {}
 
   void scaleReset() {}
+
+  Future<void> downloadImage({
+    required int ser,
+    required String url,
+    bool reset = false,
+    onError(e)?,
+  }) async {
+    logger.d('downloadImage $url');
+    final savePath = path.join(Global.tempPath, 'ViewTemp', vState.gid, '$ser');
+
+    try {
+      await ehDownload(
+        savePath: savePath,
+        url: url,
+        progressCallback: (int count, int total) {
+          final process = count / total;
+          // loggerSimple.d('ViewTemp download file, $ser $process');
+          // _galleryPageController.uptImageProcess(ser, process);
+          _galleryPageController.uptImageBySer(
+              ser: ser,
+              imageCallback: (image) {
+                return image.copyWith(downloadProcess: process);
+              });
+          update(['${idProcess}_$ser']);
+        },
+        onDownloadComplete: () {
+          _galleryPageController.uptImageBySer(
+              ser: ser,
+              imageCallback: (image) => image.copyWith(
+                    tempPath: savePath,
+                    completeCache: true,
+                    changeSource: false,
+                  ));
+        },
+      );
+    } catch (e) {
+      onError?.call(e);
+      // logger.e('$e');
+      // logger.e('${e.runtimeType}');
+      // _galleryPageController.uptImageBySer(
+      //     ser: ser, imageCallback: (image) => image.copyWith(errorInfo: '$e'));
+      // update(['${idProcess}_$ser']);
+    }
+  }
 }

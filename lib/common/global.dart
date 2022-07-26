@@ -46,7 +46,7 @@ DioHttpConfig ehDioConfig = DioHttpConfig(
   cookiesPath: Global.appSupportPath,
   connectTimeout: 10000,
   sendTimeout: 8000,
-  receiveTimeout: 10000,
+  receiveTimeout: 20000,
 );
 
 DioHttpConfig exDioConfig = DioHttpConfig(
@@ -54,7 +54,7 @@ DioHttpConfig exDioConfig = DioHttpConfig(
   cookiesPath: Global.appSupportPath,
   connectTimeout: 15000,
   sendTimeout: 8000,
-  receiveTimeout: 15000,
+  receiveTimeout: 25000,
   maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost,
 );
 

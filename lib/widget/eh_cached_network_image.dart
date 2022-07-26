@@ -124,32 +124,6 @@ class EhCachedNetworkImage extends StatelessWidget {
 
     return image;
   }
-
-  Widget _octoPlaceholderBuilder(BuildContext context) {
-    return placeholder!(context, imageUrl);
-  }
-
-  Widget _octoProgressIndicatorBuilder(
-    BuildContext context,
-    ImageChunkEvent? progress,
-  ) {
-    int? totalSize;
-    var downloaded = 0;
-    if (progress != null) {
-      totalSize = progress.expectedTotalBytes;
-      downloaded = progress.cumulativeBytesLoaded;
-    }
-    return progressIndicatorBuilder!(
-        context, imageUrl, DownloadProgress(imageUrl, totalSize, downloaded));
-  }
-
-  Widget _octoErrorBuilder(
-    BuildContext context,
-    Object error,
-    StackTrace? stackTrace,
-  ) {
-    return errorWidget!(context, imageUrl, error);
-  }
 }
 
 final client = retry.RetryClient(

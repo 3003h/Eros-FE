@@ -19,5 +19,9 @@
   "completeDownload?": false,
   "filePath?": "",
   "changeSource?": false,
-  "hide?": false
+  "hide?": false,
+  "checkHide?": false,
+  "downloadProcess?": 1.0,
+  "errorInfo?": "",
+  "tempPath?": ""
 }

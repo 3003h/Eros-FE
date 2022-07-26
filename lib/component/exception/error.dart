@@ -8,6 +8,8 @@ enum EhErrorType {
   login,
 
   image509,
+
+  imageHide,
 }
 
 class EhError implements Exception {

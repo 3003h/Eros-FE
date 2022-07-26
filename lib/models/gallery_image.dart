@@ -26,6 +26,10 @@ class GalleryImage {
     this.filePath,
     this.changeSource,
     this.hide,
+    this.checkHide,
+    this.downloadProcess,
+    this.errorInfo,
+    this.tempPath,
   });
 
   final bool? largeThumb;
@@ -49,6 +53,10 @@ class GalleryImage {
   final String? filePath;
   final bool? changeSource;
   final bool? hide;
+  final bool? checkHide;
+  final double? downloadProcess;
+  final String? errorInfo;
+  final String? tempPath;
 
   factory GalleryImage.fromJson(Map<String,dynamic> json) => GalleryImage(
     largeThumb: json['largeThumb'] != null ? json['largeThumb'] as bool : null,
@@ -71,7 +79,11 @@ class GalleryImage {
     completeDownload: json['completeDownload'] != null ? json['completeDownload'] as bool : null,
     filePath: json['filePath'] != null ? json['filePath'] as String : null,
     changeSource: json['changeSource'] != null ? json['changeSource'] as bool : null,
-    hide: json['hide'] != null ? json['hide'] as bool : null
+    hide: json['hide'] != null ? json['hide'] as bool : null,
+    checkHide: json['checkHide'] != null ? json['checkHide'] as bool : null,
+    downloadProcess: json['downloadProcess'] != null ? json['downloadProcess'] as double : null,
+    errorInfo: json['errorInfo'] != null ? json['errorInfo'] as String : null,
+    tempPath: json['tempPath'] != null ? json['tempPath'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -95,7 +107,11 @@ class GalleryImage {
     'completeDownload': completeDownload,
     'filePath': filePath,
     'changeSource': changeSource,
-    'hide': hide
+    'hide': hide,
+    'checkHide': checkHide,
+    'downloadProcess': downloadProcess,
+    'errorInfo': errorInfo,
+    'tempPath': tempPath
   };
 
   GalleryImage clone() => GalleryImage(
@@ -119,7 +135,11 @@ class GalleryImage {
     completeDownload: completeDownload,
     filePath: filePath,
     changeSource: changeSource,
-    hide: hide
+    hide: hide,
+    checkHide: checkHide,
+    downloadProcess: downloadProcess,
+    errorInfo: errorInfo,
+    tempPath: tempPath
   );
 
     
@@ -144,7 +164,11 @@ class GalleryImage {
     bool? completeDownload,
     String? filePath,
     bool? changeSource,
-    bool? hide
+    bool? hide,
+    bool? checkHide,
+    double? downloadProcess,
+    String? errorInfo,
+    String? tempPath
   }) => GalleryImage(
     largeThumb: largeThumb ?? this.largeThumb,
     completeCache: completeCache ?? this.completeCache,
@@ -167,12 +191,16 @@ class GalleryImage {
     filePath: filePath ?? this.filePath,
     changeSource: changeSource ?? this.changeSource,
     hide: hide ?? this.hide,
+    checkHide: checkHide ?? this.checkHide,
+    downloadProcess: downloadProcess ?? this.downloadProcess,
+    errorInfo: errorInfo ?? this.errorInfo,
+    tempPath: tempPath ?? this.tempPath,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath && changeSource == other.changeSource && hide == other.hide;
+    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath && changeSource == other.changeSource && hide == other.hide && checkHide == other.checkHide && downloadProcess == other.downloadProcess && errorInfo == other.errorInfo && tempPath == other.tempPath;
 
   @override
-  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode ^ changeSource.hashCode ^ hide.hashCode;
+  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode ^ changeSource.hashCode ^ hide.hashCode ^ checkHide.hashCode ^ downloadProcess.hashCode ^ errorInfo.hashCode ^ tempPath.hashCode;
 }

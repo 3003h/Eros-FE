@@ -369,5 +369,11 @@
   "default_avatar_style": "Default avatar style",
   "auth_signInTitle": "需要进行身份验证",
   "auth_biometricHint": "验证身份",
-  "chapter": "Chapter"
+  "chapter": "Chapter",
+  "image_limits": "Image Limits",
+  "reset_cost": "Reset Cost",
+  "image_hide": "Image Hide",
+  "QR_code_check": "QR code Check",
+  "phash_check": "Perceptual Hash Check",
+  "mange_hidden_images": "Manage Hidden Images"
 }

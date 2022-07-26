@@ -74,15 +74,11 @@ extension ExtCommentSpan on GalleryCommentSpan {
       EnumToString.fromString(CommentSpanType.values, type ?? '') ??
       CommentSpanType.text;
 
-  // set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
   GalleryCommentSpan copyWithSpanType(CommentSpanType val) =>
       copyWith(type: EnumToString.convertToString(val));
 }
 
 extension ExtGalleryProvider on GalleryProvider {
-  Map<int, GalleryImage> get imageMap =>
-      {for (GalleryImage v in galleryImages ?? []) v.ser: v};
-
   GalleryProvider copyWithAll(GalleryProvider item) {
     return copyWith(
         token: item.token,

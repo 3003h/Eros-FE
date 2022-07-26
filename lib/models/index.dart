@@ -28,6 +28,7 @@ export 'mvp_image.dart';
 export 'eh_profile.dart';
 export 'gallery_list.dart';
 export 'custom_profile.dart';
+export 'eh_home.dart';
 export 'user.dart';
 export 'history_index.dart';
 export 'download_config.dart';
