@@ -88,7 +88,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.systemGrey, context),
                     ),
-                    Text(''),
+                    const Text(''),
                   ],
                 ),
               ).autoCompressKeyboard(Get.context!),

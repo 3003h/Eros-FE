@@ -46,11 +46,13 @@ class TabViewController extends GetxController
 
   // 请求一批画廊数据
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    throw UnimplementedError();
+    cancelToken = CancelToken();
+    return null;
   }
 
   Future<GalleryList?> fetchMoreData() async {
-    throw UnimplementedError();
+    cancelToken = CancelToken();
+    return null;
   }
 
   // 首次请求
@@ -174,7 +176,7 @@ class TabViewController extends GetxController
 
   // 跳转到指定页加载
   Future<void> loadFromPage(int page) async {
-    throw UnimplementedError();
+    cancelToken = CancelToken();
   }
 
   Future<void> onRefresh() async {
