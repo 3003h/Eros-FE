@@ -23,6 +23,7 @@ import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
 import 'package:fehviewer/pages/setting/image_hide_page.dart';
+import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
@@ -50,6 +51,7 @@ import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:fehviewer/pages/tab/view/watched_page.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../pages/tab/view/search_image_page.dart';
@@ -97,6 +99,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.about,
       page: () => AboutPage(),
+    ),
+    GetPage(
+      name: EHRoutes.license,
+      page: () => customLicensePage,
     ),
     GetPage(
       name: EHRoutes.downloadSetting,

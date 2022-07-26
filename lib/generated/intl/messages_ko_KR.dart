@@ -66,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Verify identity"),
         "auth_signInTitle":
             MessageLookupByLibrary.simpleMessage("Authentication required"),
+        "author": MessageLookupByLibrary.simpleMessage("Author"),
         "autoLock": MessageLookupByLibrary.simpleMessage("자동 잠금"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
@@ -103,6 +104,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete task only"),
         "disabled": MessageLookupByLibrary.simpleMessage("비활성화 됨"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("도메인 프론팅"),
+        "donate": MessageLookupByLibrary.simpleMessage("Donate"),
         "done": MessageLookupByLibrary.simpleMessage("완료"),
         "double_click_back":
             MessageLookupByLibrary.simpleMessage("한번 더 누르면 종료됩니다."),
@@ -154,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "최근 즐겨찾기, 길게 눌러 수동으로 선택할 수 있습니다."),
         "left_to_right": MessageLookupByLibrary.simpleMessage("왼쪽에서 오른쪽으로"),
+        "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("밝게"),
         "link_redirect": MessageLookupByLibrary.simpleMessage("Link redirect"),
         "link_redirect_summary": MessageLookupByLibrary.simpleMessage(
@@ -531,6 +534,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploader": MessageLookupByLibrary.simpleMessage("업로더"),
         "user_login": MessageLookupByLibrary.simpleMessage("로그인"),
         "user_name": MessageLookupByLibrary.simpleMessage("사용자 이름"),
+        "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("진동 피드백"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("비추천 성공"),

@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Verify identity"),
         "auth_signInTitle":
             MessageLookupByLibrary.simpleMessage("Authentication required"),
+        "author": MessageLookupByLibrary.simpleMessage("Author"),
         "autoLock":
             MessageLookupByLibrary.simpleMessage("Автоматическая блокировка"),
         "auto_select_profile":
@@ -117,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "disabled": MessageLookupByLibrary.simpleMessage("Выключено"),
         "domain_fronting":
             MessageLookupByLibrary.simpleMessage("Фронтинг домена"),
+        "donate": MessageLookupByLibrary.simpleMessage("Donate"),
         "done": MessageLookupByLibrary.simpleMessage("Готово"),
         "double_click_back": MessageLookupByLibrary.simpleMessage(
             "Нажмите еще раз, чтобы выйти"),
@@ -175,6 +177,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Последнее использованное избранное, долгий тап чтобы выбрать вручную"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Слева направо"),
+        "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("Светлая"),
         "link_redirect":
             MessageLookupByLibrary.simpleMessage("Перенаправление ссылок"),
@@ -595,6 +598,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploader": MessageLookupByLibrary.simpleMessage("Загрузчик"),
         "user_login": MessageLookupByLibrary.simpleMessage("User Sign"),
         "user_name": MessageLookupByLibrary.simpleMessage("Логин"),
+        "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("Вибрация"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("Дизлайк успешно поставлен"),

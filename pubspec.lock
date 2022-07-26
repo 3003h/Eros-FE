@@ -570,6 +570,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  flutter_custom_license_page:
+    dependency: "direct main"
+    description:
+      name: flutter_custom_license_page
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   flutter_downloader:
     dependency: "direct main"
     description:
@@ -953,6 +960,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  lint:
+    dependency: transitive
+    description:
+      name: lint
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.10.0"
   lints:
     dependency: transitive
     description:
