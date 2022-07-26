@@ -156,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("Instantly"),
@@ -253,6 +254,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Remove from favorites"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("Reply"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("Reset Cost"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("Right to left"),

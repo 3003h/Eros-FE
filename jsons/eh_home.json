@@ -1,5 +1,5 @@
 {
-  "currentLimit": 0,
-  "totLimit": 5000,
-  "resetCost": 100
+  "currentLimit?": 0,
+  "totLimit?": 5000,
+  "resetCost?": 100
 }

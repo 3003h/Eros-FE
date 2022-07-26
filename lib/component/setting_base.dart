@@ -204,11 +204,11 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
                   child: Row(
                     children: [
                       Expanded(flex: widget.titleFlex, child: titleWidget),
+                      if (widget.suffix != null) widget.suffix!,
                       Expanded(flex: widget.valueFlex, child: selectedWidget),
                     ],
                   ),
                 ),
-                if (widget.suffix != null) widget.suffix!,
                 const Icon(
                   CupertinoIcons.forward,
                   color: CupertinoColors.systemGrey,
