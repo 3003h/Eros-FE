@@ -550,7 +550,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               );
             }
 
-            logger.d('ImageExtProvider');
+            logger.v('ImageExtProvider');
             Widget image = ImageExtProvider(
               // url: _image?.imageUrl ?? '',
               image: ExtendedResizeImage.resizeIfNeeded(
