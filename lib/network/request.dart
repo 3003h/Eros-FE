@@ -108,6 +108,7 @@ Future<GalleryList?> getGallery({
   );
 
   if (httpResponse.error is ListDisplayModeException) {
+    logger.d('ListDisplayModeException');
     logger.d(' inline_set dml');
     _params['inline_set'] = 'dm_l';
 
@@ -122,6 +123,7 @@ Future<GalleryList?> getGallery({
   }
 
   if (httpResponse.error is FavOrderException) {
+    logger.d('FavOrderException');
     final _order = (httpResponse.error as FavOrderException).order;
     _params['inline_set'] = _order;
     _params.removeWhere((key, value) => key == 'page');
@@ -1011,7 +1013,7 @@ Future<GalleryList?> searchImage(
 
 Future<EhHome?> getEhHome({bool refresh = false}) async {
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
-  final String url = '${Api.getBaseUrl()}/home.php';
+  const String url = '${EHConst.EH_BASE_URL}/home.php';
 
   final DioHttpResponse httpResponse = await dioHttpClient.get(
     url,

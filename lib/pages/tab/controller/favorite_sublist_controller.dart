@@ -12,7 +12,7 @@ import 'tabview_controller.dart';
 
 class FavoriteSubListController extends TabViewController {
   late String favcat;
-  final CancelToken _cancelToken = CancelToken();
+
   final LocalFavController _localFavController = Get.find();
 
   FavoriteSelectorController? get _favoriteSelectorController {
@@ -24,12 +24,13 @@ class FavoriteSubListController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchData({bool refresh = false}) async {
+    await super.fetchData();
     if (favcat != 'l') {
       // 网络收藏夹
       final rult = await getGallery(
         favcat: favcat,
         refresh: refresh,
-        cancelToken: _cancelToken,
+        cancelToken: cancelToken,
         galleryListType: GalleryListType.favorite,
       );
 
@@ -48,6 +49,7 @@ class FavoriteSubListController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchMoreData() async {
+    await super.fetchMoreData();
     final fetchConfig = FetchParams(
       page: nextPage,
       fromGid: state?.last.gid ?? '0',
@@ -61,6 +63,7 @@ class FavoriteSubListController extends TabViewController {
 
   @override
   Future<void> loadFromPage(int page) async {
+    await super.loadFromPage(page);
     logger.d('jump to page =>  $page');
     canLoadMore = false;
     pageState = PageState.Loading;
@@ -99,11 +102,13 @@ class FavoriteSubListController extends TabViewController {
 
   @override
   Future<void> lastComplete() async {
-    await super.lastComplete();
-    if (curPage < maxPage - 1 && pageState != PageState.Loading) {
+    super.lastComplete();
+    if ((state ?? []).isNotEmpty &&
+        curPage < maxPage - 1 &&
+        pageState != PageState.Loading) {
       // 加载更多
       logger.d('加载更多');
-      await loadDataMore();
+      loadDataMore();
     }
   }
 

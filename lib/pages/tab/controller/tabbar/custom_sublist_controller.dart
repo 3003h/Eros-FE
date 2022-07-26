@@ -54,7 +54,7 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    cancelToken = CancelToken();
+    await super.fetchData();
 
     logger.v(' ${jsonEncode(profile)}');
 
@@ -82,7 +82,7 @@ class CustomSubListController extends TabViewController {
       pageState = PageState.Loading;
 
       try {
-        for (FetchListClient? fetchListClient in fetchListClientList) {
+        for (final FetchListClient? fetchListClient in fetchListClientList) {
           if (fetchListClient == null) {
             continue;
           }
@@ -153,7 +153,7 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchMoreData() async {
-    cancelToken = CancelToken();
+    await super.fetchMoreData();
     final fetchConfig = FetchParams(
       page: nextPage,
       fromGid: state?.last.gid ?? '0',
@@ -171,11 +171,11 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<void> loadFromPage(int page) async {
+    await super.loadFromPage(page);
     canLoadMore = false;
     pageState = PageState.Loading;
     change(state, status: RxStatus.loading());
 
-    cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       page: page,
       cats: profile?.cats,
