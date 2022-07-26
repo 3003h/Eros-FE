@@ -206,3 +206,4 @@ flutter:
     - assets/templates/epub/OEBPS/
     - assets/templates/epub/OEBPS/content/
     - assets/templates/epub/OEBPS/content/resources/
+    - assets/images/
