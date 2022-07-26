@@ -62,7 +62,7 @@ class FavoriteSubListController extends TabViewController {
   @override
   Future<void> loadFromPage(int page) async {
     logger.d('jump to page =>  $page');
-
+    canLoadMore = false;
     pageState = PageState.Loading;
     change(state, status: RxStatus.loading());
 
@@ -86,7 +86,10 @@ class FavoriteSubListController extends TabViewController {
       pageState = PageState.None;
     } catch (e) {
       pageState = PageState.LoadingError;
+      change(null, status: RxStatus.error('$e'));
       rethrow;
+    } finally {
+      canLoadMore = true;
     }
   }
 

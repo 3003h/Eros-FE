@@ -162,6 +162,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("час(ов)"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Тип загрузки"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty":
             MessageLookupByLibrary.simpleMessage("Буфер обмена пуст"),
         "input_error": MessageLookupByLibrary.simpleMessage("Ошибка ввода"),
@@ -266,6 +267,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Удалить из избранного"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("Reply"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Сжатое"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("Reset Cost"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Возобновить задания"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("Справа налево"),

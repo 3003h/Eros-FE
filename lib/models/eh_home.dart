@@ -5,19 +5,19 @@ import 'package:flutter/foundation.dart';
 class EhHome {
   
   const EhHome({
-    required this.currentLimit,
-    required this.totLimit,
-    required this.resetCost,
+    this.currentLimit,
+    this.totLimit,
+    this.resetCost,
   });
 
-  final int currentLimit;
-  final int totLimit;
-  final int resetCost;
+  final int? currentLimit;
+  final int? totLimit;
+  final int? resetCost;
 
   factory EhHome.fromJson(Map<String,dynamic> json) => EhHome(
-    currentLimit: json['currentLimit'] as int,
-    totLimit: json['totLimit'] as int,
-    resetCost: json['resetCost'] as int
+    currentLimit: json['currentLimit'] != null ? json['currentLimit'] as int : null,
+    totLimit: json['totLimit'] != null ? json['totLimit'] as int : null,
+    resetCost: json['resetCost'] != null ? json['resetCost'] as int : null
   );
   
   Map<String, dynamic> toJson() => {

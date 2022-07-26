@@ -143,6 +143,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty": MessageLookupByLibrary.simpleMessage("인풋 비어있음"),
         "input_error": MessageLookupByLibrary.simpleMessage("인풋 에러"),
         "instantly": MessageLookupByLibrary.simpleMessage("즉시"),
@@ -229,6 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("Reply"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("Reset Cost"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),

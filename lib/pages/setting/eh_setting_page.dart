@@ -157,18 +157,22 @@ class ListViewEhSetting extends StatelessWidget {
         StatefulBuilder(builder: (context, setState) {
           return FutureBuilder<EhHome?>(
               future: _futureImageLimits,
+              initialData: hiveHelper.getEhHome(),
               builder: (context, snapshot) {
-                EhHome? ehHome;
+                EhHome? ehHome = snapshot.data;
                 if (snapshot.connectionState == ConnectionState.done) {
-                  ehHome = snapshot.data;
+                  if (ehHome != null) {
+                    hiveHelper.setEhHome(ehHome);
+                  }
                 }
                 return SelectorSettingItem(
                   hideDivider: true,
-                  title: 'Image Limits',
+                  title: L10n.of(context).image_limits,
                   selector: ehHome == null
                       ? ''
                       : '${ehHome.currentLimit}/${ehHome.totLimit}',
-                  desc: 'Reset Cost: ${ehHome?.resetCost ?? 0} GP',
+                  desc:
+                      '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP',
                   suffix: snapshot.connectionState != ConnectionState.done
                       ? const CupertinoActivityIndicator()
                       : const SizedBox(),

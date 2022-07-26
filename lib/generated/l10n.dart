@@ -3793,6 +3793,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Image Limits`
+  String get image_limits {
+    return Intl.message(
+      'Image Limits',
+      name: 'image_limits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Cost`
+  String get reset_cost {
+    return Intl.message(
+      'Reset Cost',
+      name: 'reset_cost',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

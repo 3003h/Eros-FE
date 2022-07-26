@@ -371,5 +371,7 @@
   "default_avatar_style": "默认头像样式",
   "auth_signInTitle": "需要进行身份验证",
   "auth_biometricHint": "验证身份",
-  "chapter": "章节"
+  "chapter": "章节",
+  "image_limits": "图片限制",
+  "reset_cost": "重置花费"
 }

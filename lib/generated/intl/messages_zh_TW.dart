@@ -136,6 +136,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("小時"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty": MessageLookupByLibrary.simpleMessage("空白輸入"),
         "input_error": MessageLookupByLibrary.simpleMessage("輸入錯誤"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
@@ -220,6 +221,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "remove_from_favorites": MessageLookupByLibrary.simpleMessage("從收藏中刪除"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("回復評論"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("Reset Cost"),
         "restore_tasks_data": MessageLookupByLibrary.simpleMessage("恢復數據"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("從右至左"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("高級選項"),
