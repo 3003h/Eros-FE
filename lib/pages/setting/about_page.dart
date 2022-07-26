@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
@@ -99,6 +100,65 @@ class ListViewAbout extends StatelessWidget {
               Get.toNamed(
                 EHRoutes.license,
                 id: isLayoutLarge ? 2 : null,
+              );
+            },
+          ),
+          TextItem(
+            L10n.of(context).donate,
+            onTap: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: Text(L10n.of(context).donate),
+                    content: Container(
+                      // padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          CupertinoButton(
+                              child: Column(
+                                children: [
+                                  ExtendedImage.asset(
+                                    'assets/images/afdian.png',
+                                    width: 50,
+                                  ),
+                                  Text(
+                                    '爱发电',
+                                  ),
+                                ],
+                              ),
+                              onPressed: () {
+                                launchUrlString('https://afdian.net/@honjow');
+                              }),
+                          CupertinoButton(
+                            child: Column(
+                              children: [
+                                ExtendedImage.asset(
+                                  'assets/images/dundun.png',
+                                  width: 40,
+                                ).paddingSymmetric(vertical: 6),
+                                Text(
+                                  '顿顿饭',
+                                ),
+                              ],
+                            ),
+                            onPressed: () {
+                              launchUrlString(
+                                  'https://dun.mianbaoduo.com/@honjow');
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      CupertinoDialogAction(
+                        child: Text(L10n.of(context).cancel),
+                        onPressed: Get.back,
+                      ),
+                    ],
+                  );
+                },
               );
             },
             hideLine: true,
