@@ -23,11 +23,8 @@ const Map<ToplistType, String> topListVal = {
 class TopListViewController extends DefaultTabViewController {
   final RxString _title = ''.obs;
 
-  final EhConfigService ehConfigService = Get.find();
-
   @override
   void onInit() {
-    // fetchNormal = Api.getToplist;
     heroTag = EHRoutes.toplist;
     super.onInit();
   }

@@ -17,6 +17,8 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
@@ -104,7 +106,7 @@ SliverPadding buildWaterfallFlow(
   );
 }
 
-SliverPadding buildGrid(
+SliverPadding buildGridView(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
   int? maxPage,
@@ -314,7 +316,7 @@ Widget buildDelGallerySliverListItem(
   );
 }
 
-Widget buildGallerySliverListView(
+Widget buildAnimatedGallerySliverListView(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
   int? maxPage,
@@ -324,7 +326,7 @@ Widget buildGallerySliverListView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
-  logger.v('buildGallerySliverListView');
+  logger.v('buildAnimatedGallerySliverListView');
   return SliverAnimatedList(
     key: key,
     initialItemCount: galleryProviders.length,
@@ -378,7 +380,57 @@ Widget buildGallerySliverListView(
   );
 }
 
-Widget buildGallerySliverListSimpleView(
+Widget buildGallerySliverListView(
+  List<GalleryProvider> galleryProviders,
+  dynamic tabTag, {
+  int? maxPage,
+  int curPage = 0,
+  VoidCallback? lastComplete,
+  Key? key,
+  Key? centerKey,
+  int? lastTopitemIndex,
+  bool keepPosition = false,
+}) {
+  logger.v('buildGallerySliverListView');
+
+  return FlutterSliverList(
+    key: centerKey,
+    delegate: FlutterListViewDelegate(
+      (context, index) {
+        if (galleryProviders.length - 1 < index) {
+          return const SizedBox.shrink();
+        }
+
+        if (maxPage != null) {
+          if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+            // 加载完成最后一项的回调
+            SchedulerBinding.instance
+                .addPostFrameCallback((_) => lastComplete?.call());
+          }
+        }
+
+        final GalleryProvider _provider = galleryProviders[index];
+        Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+        Get.lazyReplace(
+          () => GalleryItemController(
+              galleryProvider: Get.find(tag: _provider.gid)),
+          tag: _provider.gid,
+          fenix: true,
+        );
+
+        return GalleryItemWidget(
+          galleryProvider: _provider,
+          tabTag: tabTag,
+        );
+      },
+      onItemKey: (index) => galleryProviders[index].gid ?? '',
+      childCount: galleryProviders.length,
+      keepPosition: true,
+    ),
+  );
+}
+
+Widget buildAnimatedGallerySliverListSimpleView(
   List<GalleryProvider> galleryProviders,
   tabTag, {
   int? maxPage,
@@ -442,6 +494,7 @@ Widget getGallerySliverList(
   Key? centerKey,
   int? lastTopitemIndex,
   Rx<ListModeEnum>? listMode,
+  bool keepPosition = false,
 }) {
   final EhConfigService ehConfigService = Get.find();
   final _key = key ?? ValueKey(galleryProviders.hashCode);
@@ -457,6 +510,16 @@ Widget getGallerySliverList(
 
     switch (mod) {
       case ListModeEnum.list:
+        // return buildAnimatedGallerySliverListView(
+        //   galleryProviders ?? [],
+        //   tabTag,
+        //   maxPage: maxPage,
+        //   curPage: curPage ?? 0,
+        //   lastComplete: lastComplete,
+        //   key: _key,
+        //   centerKey: centerKey,
+        //   lastTopitemIndex: lastTopitemIndex,
+        // );
         return buildGallerySliverListView(
           galleryProviders ?? [],
           tabTag,
@@ -466,6 +529,7 @@ Widget getGallerySliverList(
           key: _key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
+          keepPosition: keepPosition,
         );
       case ListModeEnum.waterfall:
         return buildWaterfallFlow(
@@ -491,7 +555,7 @@ Widget getGallerySliverList(
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.simpleList:
-        return buildGallerySliverListSimpleView(
+        return buildAnimatedGallerySliverListSimpleView(
           galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
@@ -501,9 +565,8 @@ Widget getGallerySliverList(
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
         );
-
       case ListModeEnum.grid:
-        return buildGrid(
+        return buildGridView(
           galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
@@ -558,7 +621,7 @@ class EndIndicator extends StatelessWidget {
       child: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.only(
-                  top: 50, bottom: 50.0 + context.mediaQueryPadding.bottom),
+                  top: 50, bottom: 100.0 + context.mediaQueryPadding.bottom),
               child: () {
                 switch (pageState) {
                   case PageState.None:

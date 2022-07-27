@@ -62,12 +62,14 @@ class FavoriteSubListController extends TabViewController {
   }
 
   @override
-  Future<void> loadFromPage(int page) async {
+  Future<void> loadFromPage(int page, {bool previous = false}) async {
     await super.loadFromPage(page);
     logger.d('jump to page =>  $page');
     canLoadMore = false;
     pageState = PageState.Loading;
-    change(state, status: RxStatus.loading());
+    if (!previous) {
+      change(state, status: RxStatus.loading());
+    }
 
     final fetchConfig = FetchParams(
       page: page,
@@ -81,15 +83,27 @@ class FavoriteSubListController extends TabViewController {
 
       curPage = page;
       minPage = page;
-      nextPage = rult?.nextPage ?? page + 1;
+      if (!previous) {
+        nextPage = rult?.nextPage ?? page + 1;
+      }
+      prevPage = rult?.prevPage;
       logger.d('after loadFromPage nextPage is $nextPage');
       if (rult != null) {
-        change(rult.gallerys, status: RxStatus.success());
+        if (previous) {
+          state?.insertAll(0, rult.gallerys ?? []);
+          change(state, status: RxStatus.success());
+        } else {
+          change(rult.gallerys, status: RxStatus.success());
+        }
       }
       pageState = PageState.None;
     } catch (e) {
       pageState = PageState.LoadingError;
-      change(null, status: RxStatus.error('$e'));
+      if (!previous) {
+        change(null, status: RxStatus.error('$e'));
+      } else {
+        showToast('$e');
+      }
       rethrow;
     } finally {
       canLoadMore = true;

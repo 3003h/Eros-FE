@@ -37,7 +37,7 @@ Widget body(
                 desc:
                     '${licenseData!.packageLicenseBindings[currentPackage]!.length} ${L10n.of(context).license}',
                 onTap: () {
-                  List<LicenseEntry> packageLicenses = licenseData!
+                  List<LicenseEntry> packageLicenses = licenseData
                       .packageLicenseBindings[currentPackage]!
                       .map((binding) => licenseData.licenses[binding])
                       .toList();

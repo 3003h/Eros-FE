@@ -6,7 +6,6 @@ import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
-import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -18,7 +17,6 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../comm.dart';
-import '../view/popular_page.dart';
 import '../view/setting_page.dart';
 
 const double kIconSize = 24.0;
@@ -28,18 +26,12 @@ class TabPages {
   final Map<String, EhTabController?> scrollControllerMap = {};
 
   Map<String, Widget> get tabViews => <String, Widget>{
-        EHRoutes.popular: const PopularListTab(),
-        EHRoutes.watched: const WatchedListTab(),
-        // EHRoutes.gallery: const GalleryListTab(),
         EHRoutes.gallery: const CustomTabbarList(),
-        // EHRoutes.favoriteTabbar: const FavoriteTabTabBarPage(),
-        // EHRoutes.favorite: const FavoriteTab(),
         EHRoutes.favorite: const FavoriteTabTabBarPage(),
         EHRoutes.toplist: const ToplistTab(),
         EHRoutes.history: const HistoryTab(),
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
-        // EHRoutes.customlist: const CustomTabbarList(),
       };
 
   final Map<String, IconData> iconDatas = <String, IconData>{
