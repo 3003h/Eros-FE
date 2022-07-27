@@ -69,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Verify Identity"),
         "auth_signInTitle":
             MessageLookupByLibrary.simpleMessage("Authentication Required"),
+        "author": MessageLookupByLibrary.simpleMessage("Author"),
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
@@ -112,6 +113,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
         "domain_fronting":
             MessageLookupByLibrary.simpleMessage("Domain fronting"),
+        "donate": MessageLookupByLibrary.simpleMessage("Donate"),
         "done": MessageLookupByLibrary.simpleMessage("Done"),
         "double_click_back":
             MessageLookupByLibrary.simpleMessage("Press again to exit"),
@@ -167,6 +169,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Last Favorites, long press to manually select"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Left to right"),
+        "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("Ligth"),
         "link_redirect": MessageLookupByLibrary.simpleMessage("Link redirect"),
         "link_redirect_summary": MessageLookupByLibrary.simpleMessage(
@@ -570,6 +573,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploader": MessageLookupByLibrary.simpleMessage("Uploader"),
         "user_login": MessageLookupByLibrary.simpleMessage("User Sign"),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
+        "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback":
             MessageLookupByLibrary.simpleMessage("Vibrate feedback"),
         "vote_down_successfully":

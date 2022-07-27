@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.52+412
+version: 1.2.54+414
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -151,6 +151,8 @@ dependencies:
   google_mlkit_barcode_scanning: ^0.3.0
 #  google_mlkit_translation: ^0.3.0
   google_mlkit_language_id: ^0.3.0
+  flutter_custom_license_page: ^0.0.3
+  flutter_list_view: ^1.1.18
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -205,3 +207,4 @@ flutter:
     - assets/templates/epub/OEBPS/
     - assets/templates/epub/OEBPS/content/
     - assets/templates/epub/OEBPS/content/resources/
+    - assets/images/

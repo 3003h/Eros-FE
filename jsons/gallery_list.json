@@ -2,5 +2,6 @@
   "gallerys?": "$[]gallery_provider",
   "maxPage?": 50,
   "nextPage?": 3,
+  "prevPage?": 2,
   "favList?": "$[]favcat"
 }

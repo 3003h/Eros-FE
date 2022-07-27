@@ -95,6 +95,8 @@ GalleryList parseGalleryList(
   final _nextPage = int.parse(_curPage.split('-').last);
   // logger.d('_curPage:$_curPage, nextIndex:$_nextPage');
 
+  final _prevPage = int.parse(_curPage.split('-').last) - 2;
+
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
 
@@ -299,5 +301,6 @@ GalleryList parseGalleryList(
     maxPage: _maxPage,
     favList: favcatList,
     nextPage: _nextPage,
+    prevPage: _prevPage,
   );
 }

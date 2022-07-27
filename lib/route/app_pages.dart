@@ -23,6 +23,7 @@ import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
 import 'package:fehviewer/pages/setting/image_hide_page.dart';
+import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
@@ -39,7 +40,6 @@ import 'package:fehviewer/pages/tab/view/empty.dart';
 import 'package:fehviewer/pages/tab/view/favorite_sel_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/home_page.dart';
-import 'package:fehviewer/pages/tab/view/popular_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
 import 'package:fehviewer/pages/tab/view/search_page.dart';
 import 'package:fehviewer/pages/tab/view/splash_page.dart';
@@ -49,7 +49,6 @@ import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
-import 'package:fehviewer/pages/tab/view/watched_page.dart';
 import 'package:get/get.dart';
 
 import '../pages/tab/view/search_image_page.dart';
@@ -97,6 +96,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.about,
       page: () => AboutPage(),
+    ),
+    GetPage(
+      name: EHRoutes.license,
+      page: () => customLicensePage,
     ),
     GetPage(
       name: EHRoutes.downloadSetting,
@@ -156,10 +159,6 @@ class AppPages {
       page: () => const HistoryTab(),
     ),
     GetPage(
-      name: EHRoutes.watched,
-      page: () => const WatchedListTab(),
-    ),
-    GetPage(
       name: EHRoutes.favorite,
       // page: () => const FavoriteTab(),
       page: () => const FavoriteTabTabBarPage(),
@@ -171,10 +170,6 @@ class AppPages {
     GetPage(
       name: EHRoutes.toplist,
       page: () => const ToplistTab(),
-    ),
-    GetPage(
-      name: EHRoutes.popular,
-      page: () => const PopularListTab(),
     ),
     GetPage(
       name: EHRoutes.download,

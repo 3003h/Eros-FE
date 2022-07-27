@@ -3853,6 +3853,46 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Author`
+  String get author {
+    return Intl.message(
+      'Author',
+      name: 'author',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get version {
+    return Intl.message(
+      'Version',
+      name: 'version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Donate`
+  String get donate {
+    return Intl.message(
+      'Donate',
+      name: 'donate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `License`
+  String get license {
+    return Intl.message(
+      'License',
+      name: 'license',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

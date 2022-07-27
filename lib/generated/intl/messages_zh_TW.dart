@@ -64,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ask_me": MessageLookupByLibrary.simpleMessage("每次都詢問我"),
         "auth_biometricHint": MessageLookupByLibrary.simpleMessage("验证身份"),
         "auth_signInTitle": MessageLookupByLibrary.simpleMessage("需要进行身份验证"),
+        "author": MessageLookupByLibrary.simpleMessage("Author"),
         "autoLock": MessageLookupByLibrary.simpleMessage("自動上鎖"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
@@ -98,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_task_only": MessageLookupByLibrary.simpleMessage("只刪除工作"),
         "disabled": MessageLookupByLibrary.simpleMessage("停用"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域前置"),
+        "donate": MessageLookupByLibrary.simpleMessage("Donate"),
         "done": MessageLookupByLibrary.simpleMessage("完成"),
         "double_click_back": MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
         "double_page_model": MessageLookupByLibrary.simpleMessage("雙頁模式"),
@@ -147,6 +149,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "last_favorites":
             MessageLookupByLibrary.simpleMessage("最後的收藏夾（長按來手動選擇）"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("從左至右"),
+        "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("淺色模式"),
         "link_redirect": MessageLookupByLibrary.simpleMessage("Link redirect"),
         "link_redirect_summary": MessageLookupByLibrary.simpleMessage(
@@ -502,6 +505,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploader": MessageLookupByLibrary.simpleMessage("上傳者"),
         "user_login": MessageLookupByLibrary.simpleMessage("用戶登入"),
         "user_name": MessageLookupByLibrary.simpleMessage("用戶名"),
+        "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("震動"),
         "vote_down_successfully": MessageLookupByLibrary.simpleMessage("已送出負評"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("評價成功"),

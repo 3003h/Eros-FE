@@ -375,5 +375,9 @@
   "image_hide": "Image Hide",
   "QR_code_check": "QR code Check",
   "phash_check": "Perceptual Hash Check",
-  "mange_hidden_images": "Manage Hidden Images"
+  "mange_hidden_images": "Manage Hidden Images",
+  "author": "Author",
+  "version": "Version",
+  "donate": "Donate",
+  "license": "License"
 }
