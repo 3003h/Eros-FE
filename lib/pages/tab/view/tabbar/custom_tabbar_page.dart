@@ -78,7 +78,6 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
               controller: controller.pageController,
               children: controller.profiles.isNotEmpty
                   ? [
-                      // 画廊列表
                       ...controller.profilesShow
                           .map((e) => SubListView<CustomSubListController>(
                                 profileUuid: e.uuid,

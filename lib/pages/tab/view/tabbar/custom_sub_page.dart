@@ -55,19 +55,12 @@ class _SubListViewState<T extends CustomSubListController>
   Widget build(BuildContext context) {
     super.build(context);
     return CustomScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
+      // physics: const AlwaysScrollableScrollPhysics(),
+      physics:
+          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       slivers: [
-        SliverPadding(
-            padding: EdgeInsets.only(
-                top: context.mediaQueryPadding.top + kTopTabbarHeight),
-            sliver: EhCupertinoSliverRefreshControl(
-              onRefresh: subController.onRefresh,
-            )),
-        SliverSafeArea(
-          top: false,
-          bottom: false,
-          sliver: _getGallerySliverList(),
-        ),
+        _buildRefresh(context),
+        _buildListView(),
         Obx(() {
           return EndIndicator(
             pageState: subController.pageState,
@@ -78,58 +71,83 @@ class _SubListViewState<T extends CustomSubListController>
     );
   }
 
-  Widget _getGallerySliverList() {
-    return subController.obx(
-        (List<GalleryProvider>? state) {
-          if (state == null || state.isEmpty) {
+  Widget _buildRefresh(BuildContext context) {
+    return SliverPadding(
+        padding: EdgeInsets.only(
+            top: context.mediaQueryPadding.top + kTopTabbarHeight),
+        sliver: EhCupertinoSliverRefreshControl(
+          onRefresh: subController.onRefresh,
+        ));
+  }
+
+  Widget _buildListView() {
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      sliver: GetBuilder<CustomSubListController>(
+        global: false,
+        init: subController,
+        id: subController.listViewId,
+        builder: (logic) {
+          final status = logic.status;
+
+          if (status.isLoading) {
             return SliverFillRemaining(
               child: Container(
                 alignment: Alignment.center,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.hippo,
-                      size: 100,
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemGrey, context),
-                    ),
-                    Text(''),
-                  ],
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
                 ),
-              ).autoCompressKeyboard(Get.context!),
+              ),
             );
           }
-          return getGallerySliverList(
-            state,
-            subController.heroTag,
-            maxPage: subController.maxPage,
-            curPage: subController.curPage,
-            lastComplete: subController.lastComplete,
-            key: subController.sliverAnimatedListKey,
-            listMode: subController.listModeObs,
-          );
-        },
-        onLoading: SliverFillRemaining(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 50),
-            child: const CupertinoActivityIndicator(
-              radius: 14.0,
-            ),
-          ),
-        ),
-        onError: (err) {
-          logger.e(' $err');
+
+          if (status.isError) {
+            return SliverFillRemaining(
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 50),
+                child: GalleryErrorPage(
+                  onTap: subController.reLoadDataFirst,
+                  error: status.errorMessage,
+                ),
+              ),
+            );
+          }
+
+          if (status.isSuccess) {
+            return getGallerySliverList(
+              logic.state,
+              subController.heroTag,
+              maxPage: subController.maxPage,
+              curPage: subController.curPage,
+              lastComplete: subController.lastComplete,
+              // key: subController.sliverAnimatedListKey,
+              listMode: subController.listModeObs,
+              // centerKey: subController.galleryGroupKey,
+              keepPosition: subController.keepPosition,
+            );
+          }
+
           return SliverFillRemaining(
             child: Container(
-              padding: const EdgeInsets.only(bottom: 50),
-              child: GalleryErrorPage(
-                onTap: subController.reLoadDataFirst,
-                error: err,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.hippo,
+                    size: 100,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey, context),
+                  ),
+                  Text(''),
+                ],
               ),
-            ),
+            ).autoCompressKeyboard(Get.context!),
           );
-        });
+        },
+      ),
+    );
   }
 }

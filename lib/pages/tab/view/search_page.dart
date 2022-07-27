@@ -158,7 +158,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                 sliver: () {
                   switch (controller.listType) {
                     case ListType.gallery:
-                      return _getGallerySliverList();
+                      return _buildListView(context);
                     case ListType.tag:
                       return _getTagQryList();
                     case ListType.init:
@@ -638,62 +638,68 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     );
   }
 
-  Widget _getGallerySliverList() {
-    return controller.obx(
-      (List<GalleryProvider>? state) {
-        if (state == null || state.isEmpty) {
+  Widget _buildListView(BuildContext context) {
+    return GetBuilder<SearchPageController>(
+      global: false,
+      init: controller,
+      id: controller.listViewId,
+      builder: (logic) {
+        final status = logic.status;
+
+        if (status.isLoading) {
           return SliverFillRemaining(
             child: Container(
               alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    FontAwesomeIcons.hippo,
-                    size: 100,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.systemGrey, context),
-                  ),
-                  Text(''),
-                ],
+              padding: const EdgeInsets.only(bottom: 50),
+              child: const CupertinoActivityIndicator(
+                radius: 14.0,
+              ),
+            ),
+          );
+        }
+
+        if (status.isError) {
+          return SliverFillRemaining(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: GalleryErrorPage(
+                onTap: () => controller.onEditingComplete(),
               ),
             ).autoCompressKeyboard(Get.context!),
           );
         }
-        return getGallerySliverList(
-          state,
-          controller.tabIndex,
-          maxPage: controller.maxPage,
-          curPage: controller.curPage,
-          lastComplete: controller.lastComplete,
-          // centerKey: centerKey,
-          key: controller.sliverAnimatedListKey,
-          lastTopitemIndex: controller.lastTopitemIndex,
-        );
-      },
-      onLoading: SliverFillRemaining(
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(bottom: 50),
-          child: const CupertinoActivityIndicator(
-            radius: 14.0,
-          ),
-        ).autoCompressKeyboard(Get.context!),
-      ),
-      onError: (err) {
-        logger.e(' $err');
+
+        if (status.isSuccess) {
+          return getGallerySliverList(
+            logic.state,
+            controller.heroTag,
+            maxPage: controller.maxPage,
+            curPage: controller.curPage,
+            lastComplete: controller.lastComplete,
+            centerKey: centerKey,
+            key: controller.sliverAnimatedListKey,
+            lastTopitemIndex: controller.lastTopitemIndex,
+          );
+        }
+
         return SliverFillRemaining(
           child: Container(
-            padding: const EdgeInsets.only(bottom: 50),
-            child: GalleryErrorPage(
-              onTap: () => controller.onEditingComplete(),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  FontAwesomeIcons.hippo,
+                  size: 100,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey, context),
+                ),
+                Text(''),
+              ],
             ),
-          ).autoCompressKeyboard(Get.context!),
+          ).autoCompressKeyboard(context),
         );
       },
-      onEmpty: SliverFillRemaining(
-        child: Container().autoCompressKeyboard(Get.context!),
-      ),
     );
   }
 

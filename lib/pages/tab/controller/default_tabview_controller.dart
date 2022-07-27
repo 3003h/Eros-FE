@@ -173,74 +173,16 @@ class DefaultTabViewController extends TabViewController {
     lastItemBuildComplete = false;
   }
 
-  // 加载上一页
   @override
-  Future<void> loadPrevious() async {
-    if (!canLoadData) {
-      return;
-    }
-
-    pageState = PageState.Loading;
-    cancelToken = CancelToken();
-
-    final int _catNum = ehConfigService.catFilter.value;
-
-    final lastTopitemGid = state?.first.gid ?? '';
-    logger.d('lastTopitemGid $lastTopitemGid');
-
-    // 增加延时 避免build期间进行 setState
-    await Future<void>.delayed(const Duration(milliseconds: 100));
-
-    try {
-      final fetchParams = FetchParams(
-        page: minPage - 1,
-        cats: cats ?? _catNum,
-        refresh: true,
-        cancelToken: cancelToken,
-        favcat: curFavcat,
-        toplist: currToplist,
-        searchType: searchType,
-        searchText: searchText,
-      );
-      FetchListClient fetchListClient = getFetchListClient(fetchParams);
-      final GalleryList? rult = await fetchListClient.fetch();
-
-      if (rult == null) {
-        logger.d('rult null');
-        return;
-      }
-
-      final List<GalleryProvider> _itemList = rult.gallerys ?? [];
-
-      if (_itemList.isNotEmpty) {
-        state?.insertAll(0, _itemList);
-
-        maxPage = rult.maxPage ?? 0;
-        nextPage = rult.nextPage ?? 1;
-
-        lastTopitemIndex =
-            state?.indexWhere((e) => e.gid == lastTopitemGid) ?? 0;
-        logger.d('lastTopitemIndex $lastTopitemIndex');
-      }
-      // 成功才-1
-      minPage -= 1;
-      curPage = minPage;
-      update();
-      lastItemBuildComplete = false;
-      pageState = PageState.None;
-    } catch (e, stack) {
-      pageState = PageState.LoadingError;
-      rethrow;
-    }
-  }
-
-  @override
-  Future<void> loadFromPage(int page) async {
+  Future<void> loadFromPage(int page, {bool previous = false}) async {
+    await super.loadFromPage(page);
     logger.d('jump to page =>  $page');
 
     final int _catNum = ehConfigService.catFilter.value;
     pageState = PageState.Loading;
-    change(state, status: RxStatus.loading());
+    if (!previous) {
+      change(state, status: RxStatus.loading());
+    }
 
     previousList.clear();
 
@@ -260,16 +202,31 @@ class DefaultTabViewController extends TabViewController {
 
       curPage = page;
       minPage = page;
-      nextPage = rult?.nextPage ?? page + 1;
+      if (!previous) {
+        nextPage = rult?.nextPage ?? page + 1;
+      }
+      prevPage = rult?.prevPage;
       logger.d('after loadFromPage nextPage is $nextPage');
       if (rult != null) {
-        change(rult.gallerys, status: RxStatus.success());
+        if (previous) {
+          state?.insertAll(0, rult.gallerys ?? []);
+          change(state, status: RxStatus.success());
+        } else {
+          change(rult.gallerys, status: RxStatus.success());
+        }
       }
       pageState = PageState.None;
       lastItemBuildComplete = false;
     } catch (e) {
       pageState = PageState.LoadingError;
+      if (!previous) {
+        change(null, status: RxStatus.error('$e'));
+      } else {
+        showToast('$e');
+      }
       rethrow;
+    } finally {
+      canLoadMore = true;
     }
   }
 

@@ -123,8 +123,9 @@ class ListViewAbout extends StatelessWidget {
                                     'assets/images/afdian.png',
                                     width: 50,
                                   ),
-                                  Text(
+                                  const Text(
                                     '爱发电',
+                                    textScaleFactor: 0.8,
                                   ),
                                 ],
                               ),
@@ -138,8 +139,9 @@ class ListViewAbout extends StatelessWidget {
                                   'assets/images/dundun.png',
                                   width: 40,
                                 ).paddingSymmetric(vertical: 6),
-                                Text(
+                                const Text(
                                   '顿顿饭',
+                                  textScaleFactor: 0.8,
                                 ),
                               ],
                             ),

@@ -6,6 +6,7 @@ import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
 
@@ -144,10 +145,7 @@ class _ToplistTabState extends State<ToplistTab> {
         EhCupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
-        SliverSafeArea(
-          top: false,
-          sliver: _getTopList(),
-        ),
+        _buildListView(context),
         Obx(() {
           return EndIndicator(
             pageState: controller.pageState,
@@ -166,38 +164,73 @@ class _ToplistTabState extends State<ToplistTab> {
     );
   }
 
-  Widget _getTopList() {
-    return controller.obx(
-      (List<GalleryProvider>? state) => getGallerySliverList(
-        state,
-        controller.heroTag,
-        maxPage: controller.maxPage,
-        curPage: controller.curPage,
-        lastComplete: controller.lastComplete,
-        centerKey: centerKey,
-        key: controller.sliverAnimatedListKey,
-        lastTopitemIndex: controller.lastTopitemIndex,
+  Widget _buildListView(BuildContext context) {
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      sliver: GetBuilder<TopListViewController>(
+        global: false,
+        init: controller,
+        id: controller.listViewId,
+        builder: (logic) {
+          final status = logic.status;
+
+          if (status.isLoading) {
+            return SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
+                ),
+              ),
+            );
+          }
+
+          if (status.isError) {
+            return SliverFillRemaining(
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 50),
+                child: GalleryErrorPage(
+                  onTap: logic.reLoadDataFirst,
+                  error: status.errorMessage,
+                ),
+              ),
+            );
+          }
+
+          if (status.isSuccess) {
+            return getGallerySliverList(
+              logic.state,
+              controller.heroTag,
+              maxPage: controller.maxPage,
+              curPage: controller.curPage,
+              lastComplete: controller.lastComplete,
+              centerKey: centerKey,
+              key: controller.sliverAnimatedListKey,
+              lastTopitemIndex: controller.lastTopitemIndex,
+            );
+          }
+
+          return SliverFillRemaining(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.hippo,
+                    size: 100,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey, context),
+                  ),
+                  Text(''),
+                ],
+              ),
+            ).autoCompressKeyboard(context),
+          );
+        },
       ),
-      onLoading: SliverFillRemaining(
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(bottom: 50),
-          child: const CupertinoActivityIndicator(
-            radius: 14.0,
-          ),
-        ),
-      ),
-      onError: (err) {
-        logger.e(' $err');
-        return SliverFillRemaining(
-          child: Container(
-            padding: const EdgeInsets.only(bottom: 50),
-            child: GalleryErrorPage(
-              onTap: controller.reLoadDataFirst,
-            ),
-          ),
-        );
-      },
     );
   }
 }
