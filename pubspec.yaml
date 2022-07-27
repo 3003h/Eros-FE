@@ -151,7 +151,10 @@ dependencies:
   google_mlkit_barcode_scanning: ^0.3.0
 #  google_mlkit_translation: ^0.3.0
   google_mlkit_language_id: ^0.3.0
-  flutter_custom_license_page: ^0.0.3
+  flutter_custom_license_page:
+    git:
+      url: https://github.com/honjow/flutter_custom_license_page.git
+      ref: flutter2
   flutter_list_view: ^1.1.18
 
 dev_dependencies:

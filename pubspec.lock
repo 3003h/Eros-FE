@@ -577,6 +577,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.3.0"
+  flutter_custom_license_page:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: flutter2
+      resolved-ref: "0527ca9b2cdb5f6a91331f5bf64a51333123fe9e"
+      url: "https://github.com/honjow/flutter_custom_license_page.git"
+    source: git
+    version: "0.0.3"
   flutter_downloader:
     dependency: "direct main"
     description:
@@ -630,6 +639,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
+  flutter_list_view:
+    dependency: "direct main"
+    description:
+      name: flutter_list_view
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.18"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -736,6 +752,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0"
+  google_mlkit_barcode_scanning:
+    dependency: "direct main"
+    description:
+      name: google_mlkit_barcode_scanning
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
+  google_mlkit_commons:
+    dependency: transitive
+    description:
+      name: google_mlkit_commons
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.0"
+  google_mlkit_language_id:
+    dependency: "direct main"
+    description:
+      name: google_mlkit_language_id
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.0"
   graphs:
     dependency: transitive
     description:
@@ -806,6 +843,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.3"
+  image_compare:
+    dependency: "direct main"
+    description:
+      name: image_compare
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.2"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -869,6 +913,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.3"
+  isolate:
+    dependency: "direct main"
+    description:
+      name: isolate
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.1"
   isolate_handler:
     dependency: "direct main"
     description:
@@ -911,15 +962,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.6"
-  learning_language:
-    dependency: "direct main"
-    description:
-      path: "packages/learning_language"
-      ref: HEAD
-      resolved-ref: a796b460ab00338b109ceb8d40de3baf00c897d7
-      url: "https://github.com/honjow/learning.git"
-    source: git
-    version: "0.0.3+2"
   linked_scroll_controller:
     dependency: "direct main"
     description:
@@ -934,6 +976,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.1.0"
+  lint:
+    dependency: transitive
+    description:
+      name: lint
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.9.0"
   lints:
     dependency: transitive
     description:
@@ -1061,7 +1110,7 @@ packages:
     source: hosted
     version: "4.1.0"
   octo_image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: octo_image
       url: "https://pub.flutter-io.cn"
@@ -1229,14 +1278,14 @@ packages:
       name: permission_handler
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "9.2.0"
+    version: "10.0.0"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "9.0.2+1"
+    version: "10.0.0"
   permission_handler_apple:
     dependency: transitive
     description:
@@ -1676,6 +1725,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.1"
+  universal_io:
+    dependency: transitive
+    description:
+      name: universal_io
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.4"
   url_launcher:
     dependency: "direct main"
     description:
