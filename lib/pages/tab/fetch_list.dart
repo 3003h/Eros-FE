@@ -144,7 +144,7 @@ class ToplistFetchListClient extends FetchListClient {
         ?.where((element) => tagController.needHide(element.simpleTags ?? []))
         .map((e) => e.gid);
     if (gidList != null && gidList.isNotEmpty) {
-      logger.e('${fetchParams.galleryListType} remove gallery $gidList');
+      logger.i('${fetchParams.galleryListType} remove gallery $gidList');
       rult?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
     }
 

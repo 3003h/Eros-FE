@@ -108,7 +108,7 @@ class Global {
   // init
   static Future<void> init() async {
     // 判断是否debug模式
-    inDebugMode = EHUtils().isInDebugMode;
+    inDebugMode = kDebugMode;
 
     if (GetPlatform.isMobile) {
       await FlutterDownloader.initialize(debug: kDebugMode, ignoreSsl: true);

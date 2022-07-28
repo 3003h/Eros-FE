@@ -188,7 +188,7 @@ class ListViewEhSetting extends StatelessWidget {
                   title: L10n.of(context).image_limits,
                   selector: ehHome == null
                       ? ''
-                      : '${ehHome.currentLimit}/${ehHome.totLimit}',
+                      : '${ehHome.currentLimit ?? ''} / ${ehHome.totLimit ?? ''}',
                   desc:
                       '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP',
                   suffix: snapshot.connectionState != ConnectionState.done
