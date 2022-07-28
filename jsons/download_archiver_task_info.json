@@ -12,5 +12,6 @@
   "dowmloadType?": "",
   "status?": 1,
   "progress?": 100,
-  "timeCreated?": 123
+  "timeCreated?": 123,
+  "resolution?": "1280x"
 }

@@ -179,7 +179,7 @@ class ViewLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (debugLable != null && kDebugMode) {
-      logger.i('build ViewLoading $debugLable');
+      logger.v('build ViewLoading $debugLable');
     }
     final _loadWidget = _ViewLoading(
       ser: ser,

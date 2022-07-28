@@ -39,7 +39,6 @@ class _PreviewContainerState extends State<PreviewContainer> {
   @override
   Widget build(BuildContext context) {
     Widget _buildImage() {
-      logger.d('_buildImage');
       if (widget.galleryImage.largeThumb ?? false) {
         // 缩略大图
         return EhNetworkImage(

@@ -19,6 +19,7 @@ class DownloadArchiverTaskInfo {
     this.status,
     this.progress,
     this.timeCreated,
+    this.resolution,
   });
 
   final String? tag;
@@ -35,6 +36,7 @@ class DownloadArchiverTaskInfo {
   final int? status;
   final int? progress;
   final int? timeCreated;
+  final String? resolution;
 
   factory DownloadArchiverTaskInfo.fromJson(Map<String,dynamic> json) => DownloadArchiverTaskInfo(
     tag: json['tag'] != null ? json['tag'] as String : null,
@@ -50,7 +52,8 @@ class DownloadArchiverTaskInfo {
     dowmloadType: json['dowmloadType'] != null ? json['dowmloadType'] as String : null,
     status: json['status'] != null ? json['status'] as int : null,
     progress: json['progress'] != null ? json['progress'] as int : null,
-    timeCreated: json['timeCreated'] != null ? json['timeCreated'] as int : null
+    timeCreated: json['timeCreated'] != null ? json['timeCreated'] as int : null,
+    resolution: json['resolution'] != null ? json['resolution'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -67,7 +70,8 @@ class DownloadArchiverTaskInfo {
     'dowmloadType': dowmloadType,
     'status': status,
     'progress': progress,
-    'timeCreated': timeCreated
+    'timeCreated': timeCreated,
+    'resolution': resolution
   };
 
   DownloadArchiverTaskInfo clone() => DownloadArchiverTaskInfo(
@@ -84,7 +88,8 @@ class DownloadArchiverTaskInfo {
     dowmloadType: dowmloadType,
     status: status,
     progress: progress,
-    timeCreated: timeCreated
+    timeCreated: timeCreated,
+    resolution: resolution
   );
 
     
@@ -102,7 +107,8 @@ class DownloadArchiverTaskInfo {
     String? dowmloadType,
     int? status,
     int? progress,
-    int? timeCreated
+    int? timeCreated,
+    String? resolution
   }) => DownloadArchiverTaskInfo(
     tag: tag ?? this.tag,
     gid: gid ?? this.gid,
@@ -118,12 +124,13 @@ class DownloadArchiverTaskInfo {
     status: status ?? this.status,
     progress: progress ?? this.progress,
     timeCreated: timeCreated ?? this.timeCreated,
+    resolution: resolution ?? this.resolution,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is DownloadArchiverTaskInfo && tag == other.tag && gid == other.gid && type == other.type && title == other.title && taskId == other.taskId && savedDir == other.savedDir && fileName == other.fileName && url == other.url && imgUrl == other.imgUrl && galleryUrl == other.galleryUrl && dowmloadType == other.dowmloadType && status == other.status && progress == other.progress && timeCreated == other.timeCreated;
+    || other is DownloadArchiverTaskInfo && tag == other.tag && gid == other.gid && type == other.type && title == other.title && taskId == other.taskId && savedDir == other.savedDir && fileName == other.fileName && url == other.url && imgUrl == other.imgUrl && galleryUrl == other.galleryUrl && dowmloadType == other.dowmloadType && status == other.status && progress == other.progress && timeCreated == other.timeCreated && resolution == other.resolution;
 
   @override
-  int get hashCode => tag.hashCode ^ gid.hashCode ^ type.hashCode ^ title.hashCode ^ taskId.hashCode ^ savedDir.hashCode ^ fileName.hashCode ^ url.hashCode ^ imgUrl.hashCode ^ galleryUrl.hashCode ^ dowmloadType.hashCode ^ status.hashCode ^ progress.hashCode ^ timeCreated.hashCode;
+  int get hashCode => tag.hashCode ^ gid.hashCode ^ type.hashCode ^ title.hashCode ^ taskId.hashCode ^ savedDir.hashCode ^ fileName.hashCode ^ url.hashCode ^ imgUrl.hashCode ^ galleryUrl.hashCode ^ dowmloadType.hashCode ^ status.hashCode ^ progress.hashCode ^ timeCreated.hashCode ^ resolution.hashCode;
 }
