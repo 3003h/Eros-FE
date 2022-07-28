@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/epub/epub_builder.dart';
@@ -38,6 +39,8 @@ const String idDownloadArchiverView = 'DownloadArchiverView';
 const String idDownloadGalleryItem = 'DownloadGalleryItem';
 const String idDownloadArchiverItem = 'DownloadArchiverItem';
 
+const String viewTypeStoreKey = 'DownloadView.viewType';
+
 class DownloadViewController extends GetxController {
   late final ArchiverDownloadController _archiverDownloadController;
 
@@ -51,6 +54,10 @@ class DownloadViewController extends GetxController {
 
   late String tabTag;
 
+  final _viewType = DownloadType.gallery.obs;
+  DownloadType get viewType => _viewType.value;
+  set viewType(DownloadType val) => _viewType.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -58,6 +65,12 @@ class DownloadViewController extends GetxController {
       _archiverDownloadController = Get.find();
     }
     tabTag = EHRoutes.download;
+
+    viewType = EnumToString.fromString(DownloadType.values,
+            hiveHelper.getString(viewTypeStoreKey) ?? '') ??
+        viewType;
+    ever<DownloadType>(
+        _viewType, (val) => hiveHelper.setString(viewTypeStoreKey, val.name));
   }
 
   List<DownloadType> pageList = <DownloadType>[
