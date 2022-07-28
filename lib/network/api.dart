@@ -332,7 +332,7 @@ class Api {
     final bool existFEhProfile = fepIndex > -1;
 
     if (ehProfiles.isNotEmpty)
-      logger.d('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
+      logger.v('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
 
     if (existFEhProfile) {
       // 存在名称为 FEhViewer 的配置

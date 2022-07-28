@@ -1,5 +1,5 @@
 # FEhViewer
-English | [简体中文](https://github.com/honjow/FEhViewer/blob/nullsafety/README_cn.md)
+English | [简体中文](https://github.com/honjow/FEhViewer/blob/master/README_cn.md)
 
 [![](https://img.shields.io/github/downloads/honjow/FEhViewer/total.svg)](https://gitHub.com/honjow/FEhViewer/releases)
 [![](https://img.shields.io/github/downloads/honjow/FEhViewer/latest/total)](https://github.com/honjow/FEhViewer/releases/latest)
