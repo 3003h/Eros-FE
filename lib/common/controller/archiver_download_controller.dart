@@ -20,6 +20,8 @@ Future<String> get defDownloadPath async => GetPlatform.isAndroid
 
 const flutterDownloadPortName = 'downloader_send_port';
 
+final regExpResolution = RegExp(r'-(\d+[xX])\.\w+$');
+
 class ArchiverDownloadController extends GetxController {
   final Map<String, DownloadArchiverTaskInfo> _archiverTaskMap =
       <String, DownloadArchiverTaskInfo>{};
@@ -124,12 +126,15 @@ class ArchiverDownloadController extends GetxController {
 
     if (fileName != null) logger.d('fileName $fileName');
 
+    final _resolution = regExpResolution.firstMatch(fileName ?? '')?.group(1);
+
     archiverTaskMap[_key] = archiverTaskMap[_key]!.copyWith(
       status: status.value,
       progress: progress,
       fileName: fileName,
       url: url,
       timeCreated: timeCreated,
+      resolution: _resolution,
     );
 
     final _tag = archiverTaskMap[_key]!.tag;
@@ -264,6 +269,9 @@ class ArchiverDownloadController extends GetxController {
                 (element) => element.value.taskId == downloadTask.taskId)
             .value;
 
+        final _resolution =
+            regExpResolution.firstMatch(downloadTask.filename ?? '')?.group(1);
+
         // 触发ever 保存到GS中
         archiverTaskMap[_taskInfo.tag!] = _taskInfo.copyWith(
           status: downloadTask.status.value,
@@ -272,6 +280,7 @@ class ArchiverDownloadController extends GetxController {
           savedDir: downloadTask.savedDir,
           url: downloadTask.url,
           timeCreated: downloadTask.timeCreated,
+          resolution: _resolution,
         );
 
         // 更新视图

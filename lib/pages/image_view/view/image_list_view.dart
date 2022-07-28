@@ -71,10 +71,12 @@ class ImageListView extends GetView<ViewExtController> {
 
               // 计算容器高度
               double? _height = () {
-                final _curImage = vState.imageMap[itemSer];
-                if (_curImage?.hide ?? false) {
-                  return 150.0;
-                }
+                // 从已下载进入阅读的情况 imageMap 会未初始化
+                try {
+                  if (vState.imageMap[itemSer]?.hide ?? false) {
+                    return 150.0;
+                  }
+                } catch (_) {}
 
                 // 如果存在缓存的图片尺寸信息
                 if (vState.imageSizeMap[itemSer] != null) {
@@ -84,6 +86,7 @@ class ImageListView extends GetView<ViewExtController> {
 
                 // 不存在则根据大图进行计算
                 try {
+                  final _curImage = vState.imageMap[itemSer];
                   return _curImage!.imageHeight! *
                       (context.width / _curImage.imageWidth!);
                 } on Exception catch (_) {

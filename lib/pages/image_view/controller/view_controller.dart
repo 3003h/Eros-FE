@@ -3,7 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive_async/archive_async.dart';
+import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -13,8 +15,10 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
+import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
@@ -67,6 +71,11 @@ class ViewExtController extends GetxController {
   GalleryPageState get _galleryPageStat => vState.pageState;
 
   EhConfigService get _ehConfigService => vState.ehConfigService;
+
+  final ArchiverDownloadController archiverDownloadController = Get.find();
+
+  Map<String, DownloadArchiverTaskInfo> get archiverTaskMap =>
+      archiverDownloadController.archiverTaskMap;
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
 
@@ -224,10 +233,12 @@ class ViewExtController extends GetxController {
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
+
+    vState.asyncInputStreamMap.values.map((e) => e.close());
   }
 
-  Future<void> initArchiveFuture(int ser) async {
-    final file = vState.asyncArchiveFiles[ser - 1];
+  Future<void> initArchiveFuture(int ser, {AsyncArchiveFile? asyncFile}) async {
+    final file = asyncFile ?? vState.asyncArchiveFiles[ser - 1];
     logger.v('load ${file.name}');
     imageArchiveFutureMap[ser] = getArchiveFile(vState.gid, file);
   }
@@ -435,12 +446,16 @@ class ViewExtController extends GetxController {
 
     late GalleryImage? image;
 
+    // 检查是否已下载
     image = await _getImageFromImageTasks(itemSer, vState.dirPath);
+    image ??=
+        await _getImageFromImageTasks(itemSer, vState.dirPath, reLoadDB: true);
 
+    // 检查是否已下载archive
+    image ??= await getFromArchiverTask(itemSer);
+
+    // 请求页面 解析为 [GalleryImage]
     if (image == null) {
-      image ??= await _getImageFromImageTasks(itemSer, vState.dirPath,
-          reLoadDB: true);
-
       final tImage = _galleryPageStat.imageMap[itemSer];
       if (tImage == null) {
         logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
@@ -470,6 +485,42 @@ class ViewExtController extends GetxController {
     }
 
     return image;
+  }
+
+  Future<GalleryImage?> getFromArchiverTask(int itemSer) async {
+    final gid = vState.gid;
+    // 读取缓存
+    AsyncArchive? asyncArchive = vState.asyncArchiveMap[gid];
+
+    if (asyncArchive == null && gid != null) {
+      // archiver任务
+      final task = archiverTaskMap.values
+          .sorted((t1, t2) => (t1.type ?? '').compareTo(t2.type ?? ''))
+          .where((element) =>
+              element.gid == _galleryPageStat.gid &&
+              element.status == DownloadTaskStatus.complete.value)
+          .toList()
+          .first;
+
+      final filePath = path.join(task.savedDir ?? '', task.fileName);
+
+      // 异步读取zip
+      final tuple = await readAsyncArchive(filePath.realArchiverPath);
+      final asyncArchive = tuple.item1;
+      final asyncInputStream = tuple.item2;
+      vState.asyncArchiveMap[gid] = asyncArchive;
+      vState.asyncInputStreamMap[gid] = asyncInputStream;
+    }
+
+    if (asyncArchive == null) {
+      return null;
+    }
+
+    final file =
+        await getArchiveFile(vState.gid, asyncArchive.files[itemSer - 1]);
+
+    return GalleryImage(
+        ser: itemSer, gid: _galleryPageStat.gid, tempPath: file.path);
   }
 
   /// 重载图片数据，重构部件
