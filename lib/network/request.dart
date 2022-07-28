@@ -339,13 +339,13 @@ Future<String> postArchiverLocalDownload(
 
 Future<EhSettings?> getEhSettings(
     {bool refresh = false, String? selectProfile}) async {
-  logger.d('getEhSettings ${ehDioConfig.baseUrl}');
+  logger.v('getEhSettings ${ehDioConfig.baseUrl}');
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
   const String url = '/uconfig.php';
 
   late DioHttpResponse httpResponse;
   for (int i = 0; i < 3; i++) {
-    logger.d('getUconfig sp:$selectProfile idx:$i');
+    logger.v('getUconfig sp:$selectProfile idx:$i');
     httpResponse = await dioHttpClient.get(
       url,
       httpTransformer: UconfigHttpTransformer(),

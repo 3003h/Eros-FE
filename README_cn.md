@@ -1,5 +1,5 @@
 # FEhViewer
-[English](https://github.com/honjow/FEhViewer/blob/nullsafety/README.md) | 简体中文
+[English](https://github.com/honjow/FEhViewer/blob/master/README.md) | 简体中文
 
 [![](https://img.shields.io/github/downloads/honjow/FEhViewer/total.svg)](https://gitHub.com/honjow/FEhViewer/releases)
 [![](https://img.shields.io/github/downloads/honjow/FEhViewer/latest/total)](https://github.com/honjow/FEhViewer/releases/latest)
@@ -16,7 +16,7 @@
 
 其实主要是想写给自己用，因为用的 ios，感觉现有的几个项目感觉不能满足自己的使用 \
 然后对原生开发不咋熟悉，就起了用 flutter 自己搞一个的想法 \
-就这样从入门到入土，有了现在的版本，虽然问题还缺失的功能还不少。但至少是个能看的版本了
+就这样从入门到入土，有了现在的版本
 
 UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-HentaiViewer)
 
@@ -47,40 +47,44 @@ ehentai译文数据库
 
 ### 主页列表
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/home1.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/home1.jpg" >
 
 ### 画廊
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/gallery1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/gallery2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/gallery3.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery3.jpg" >
 
 ### 搜索
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/search1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/search2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/search3.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search3.jpg" >
 
 ### 阅读
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/read1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/nullsafety/screenshot/read2.jpg" >
+<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/read1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/read2.jpg" >
 
 ## 功能
 
 - [x] 热门,关注,主页,收藏
-- [x] 列表视图,瀑布流视图切换
+- [x] 自定义分组，组合多种条件，分组独立样式
+- [x] 列表视图,瀑布流视图,网格视图等切换
+- [x] 浅色深色模式
 - [x] 画廊信息查看
 - [x] 图片浏览
 - [x] 自动翻页
 - [x] 里站表站切换
-- [x] 标签搜索
-- [x] 登录
-- [x] 搜索
-- [x] 搜索词匹配tag
-- [x] 高级搜索
-- [x] 单张图片保存于与分享
+- [x] 搜索，高级搜索，图片文件搜索
+- [x] 标签翻译，自动匹配标签搜索
+- [x] 用户登录
 - [x] 缓存优化
 - [x] 高级设置
-- [x] 发表评论 赞和踩
-- [x] watched 和用户 tag
-- [x] Domain Fronting 域前置 支持直连， 自定义hosts
-- [x] 下载
+- [x] 生物认证锁定
+- [x] 发表评论，对评论赞和踩，评论翻译
+- [x] 评论显示论坛头像，快速@回复(带锚点)，自动显示引用评论
+- [x] EH设置，同步网站
+- [x] Mytag设置，编辑关注、隐藏、颜色、权重等。长按Tag快速设置
+- [x] Domain Fronting 域前置 支持直连，自定义hosts
+- [x] 下载，下载原图，归档包下载，直接阅读已下载
+- [x] WebDAV同步历史，快速搜索，阅读进度，分组配置
+- [x] 可屏蔽带二维码的图片。可标记广告图片，记录pHash值，后续屏蔽相似图片
 
 
 ## TODO
