@@ -507,7 +507,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             }
 
             if (_image?.tempPath?.isNotEmpty ?? false) {
-              logger.d('tempPath file... ${_image?.tempPath}');
+              logger.v('tempPath file... ${_image?.tempPath}');
               return fileImage(_image!.tempPath!);
             }
 

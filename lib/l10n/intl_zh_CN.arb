@@ -381,5 +381,6 @@
   "author": "作者",
   "version": "版本",
   "donate": "捐赠",
-  "license": "开源许可"
+  "license": "开源许可",
+  "fullscreen": "全屏"
 }

@@ -19,6 +19,7 @@ import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
@@ -147,7 +148,7 @@ class ViewExtController extends GetxController {
       handItemPositionsChange(positions);
     });
 
-    Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+    Future.delayed(const Duration(milliseconds: 200)).then((value) =>
         thumbScrollController.jumpTo(index: vState.currentItemIndex));
 
     // 缩略图滚动组件监听
@@ -193,20 +194,11 @@ class ViewExtController extends GetxController {
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
           [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
-      // OrientationPlugin.forceOrientation(
-      //     orientationMap[_orientation] ?? DeviceOrientation.portraitUp);
     }
 
     vState.sliderValue = vState.currentItemIndex / 1.0;
 
-    if (GetPlatform.isIOS) {
-      setFullscreen();
-      // FlutterStatusbarManager.setFullscreen(true);
-    }
-    // FlutterStatusbarManager.setHidden(true,
-    //     animation: StatusBarAnimation.SLIDE);
-    // FlutterStatusbarManager.setTranslucent(true);
-    // FlutterStatusbarManager.setColor(Colors.transparent);
+    setFullscreen();
   }
 
   @override
@@ -224,11 +216,6 @@ class ViewExtController extends GetxController {
     vState.getMoreCancelToken.cancel();
 
     unsetFullscreen();
-
-    // FlutterStatusbarManager.setHidden(false,
-    //     animation: StatusBarAnimation.SLIDE);
-    // FlutterStatusbarManager.setFullscreen(false);
-    // FlutterStatusbarManager.setTranslucent(false);
 
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
@@ -580,26 +567,33 @@ class ViewExtController extends GetxController {
       return;
     }
 
+    // android会有抖动
     if (GetPlatform.isIOS) {
       if (!vState.showBar) {
-        // show
-        // FlutterStatusbarManager.setFullscreen(false);
         unsetFullscreen();
         vState.showBar = !vState.showBar;
-        update([idViewBar]);
+        // update([idViewBar]);
       } else {
         // hide
         vState.showBar = !vState.showBar;
-        update([idViewBar]);
-        // await Future.delayed(const Duration(milliseconds: 200));
-        // FlutterStatusbarManager.setFullscreen(true);
+        // update([idViewBar]);
+
         setFullscreen();
-        // FlutterStatusbarManager.setHidden(true);
       }
     } else {
       vState.showBar = !vState.showBar;
       update([idViewBar]);
     }
+  }
+
+  void setFullscreen() {
+    if (_ehConfigService.viewFullscreen) {
+      FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+    }
+  }
+
+  void unsetFullscreen() {
+    FullScreen.exitFullScreen();
   }
 
   Future<void> tapLeft() async {

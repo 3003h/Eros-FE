@@ -3893,6 +3893,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Fullscreen`
+  String get fullscreen {
+    return Intl.message(
+      'Fullscreen',
+      name: 'fullscreen',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
