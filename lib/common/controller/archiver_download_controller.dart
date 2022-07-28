@@ -124,7 +124,7 @@ class ArchiverDownloadController extends GetxController {
     final url = _task?.url;
     final timeCreated = _task?.timeCreated;
 
-    if (fileName != null) logger.d('fileName $fileName');
+    if (fileName != null) logger.v('fileName $fileName');
 
     final _resolution = regExpResolution.firstMatch(fileName ?? '')?.group(1);
 

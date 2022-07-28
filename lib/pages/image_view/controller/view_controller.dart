@@ -500,13 +500,17 @@ class ViewExtController extends GetxController {
               element.gid == _galleryPageStat.gid &&
               element.status == DownloadTaskStatus.complete.value)
           .toList()
-          .first;
+          .firstOrNull;
+
+      if (task == null) {
+        return null;
+      }
 
       final filePath = path.join(task.savedDir ?? '', task.fileName);
 
       // 异步读取zip
       final tuple = await readAsyncArchive(filePath.realArchiverPath);
-      final asyncArchive = tuple.item1;
+      asyncArchive = tuple.item1;
       final asyncInputStream = tuple.item2;
       vState.asyncArchiveMap[gid] = asyncArchive;
       vState.asyncInputStreamMap[gid] = asyncInputStream;

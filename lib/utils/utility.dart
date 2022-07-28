@@ -274,10 +274,6 @@ class EHUtils {
     return result;
   }
 
-  bool get isInDebugMode {
-    return kDebugMode;
-  }
-
   static String getLangeage(String value) {
     for (final String key in EHConst.iso936.keys) {
       if (key.toUpperCase().trim() == value.toUpperCase().trim()) {
