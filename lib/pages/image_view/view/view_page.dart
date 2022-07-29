@@ -65,12 +65,9 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
         data: CupertinoThemeData(
           brightness: Brightness.dark,
         ),
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle.light,
-          child: ImagePlugins(
-            child: ImageGestureDetector(
-              child: ImageView(),
-            ),
+        child: ImagePlugins(
+          child: ImageGestureDetector(
+            child: ImageView(),
           ),
         ),
       ),
@@ -285,7 +282,8 @@ class ImagePlugins extends GetView<ViewExtController> {
   @override
   Widget build(BuildContext context) {
     vState.bottomBarHeight = context.mediaQueryPadding.bottom +
-        kTopBarHeight * 2 +
+        kBottomBarHeight +
+        kSliderBarHeight +
         (vState.showThumbList ? kThumbListViewHeight : 0);
 
     return Container(

@@ -47,7 +47,7 @@ class ReadSettingPage extends StatelessWidget {
 class ViewSettingList extends StatelessWidget {
   final EhConfigService ehConfigService = Get.find();
 
-  void onViewFullscreenChanged(bool val) {
+  Future<void> onViewFullscreenChanged(bool val) async {
     ehConfigService.viewFullscreen = val;
     final history = MainNavigatorObserver().history;
     final prevMainRoute = history[max(0, history.length - 2)].settings.name;
@@ -55,9 +55,14 @@ class ViewSettingList extends StatelessWidget {
 
     if (prevMainRoute == EHRoutes.galleryViewExt) {
       if (val) {
-        FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+        await FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
       } else {
-        FullScreen.exitFullScreen();
+        await FullScreen.exitFullScreen();
+        // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        //   systemNavigationBarColor: Colors.transparent,
+        //   systemNavigationBarDividerColor: Colors.transparent,
+        //   statusBarColor: Colors.transparent,
+        // ));
       }
     }
   }
