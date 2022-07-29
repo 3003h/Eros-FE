@@ -152,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "fixed_height_of_list_items": MessageLookupByLibrary.simpleMessage(
             "Фиксированная высота элементов списка"),
         "follow_system": MessageLookupByLibrary.simpleMessage("Как в системе"),
+        "fullscreen": MessageLookupByLibrary.simpleMessage("Fullscreen"),
         "galery_site": MessageLookupByLibrary.simpleMessage("Каталог галереи"),
         "gallery_comments":
             MessageLookupByLibrary.simpleMessage("Комментарии галереи"),

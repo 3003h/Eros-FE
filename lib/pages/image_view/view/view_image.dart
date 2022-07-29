@@ -490,7 +490,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     final checkPHashHide = ehConfigService.enablePHashCheck;
     final checkQRCodeHide = ehConfigService.enableQRCodeCheck;
 
-    logger.d('return FutureBuilder ser:${widget.imageSer}');
+    logger.v('return FutureBuilder ser:${widget.imageSer}');
     return FutureBuilder<GalleryImage?>(
         future: controller.imageFutureMap[widget.imageSer],
         builder: (context, snapshot) {
@@ -502,12 +502,12 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
             // 图片文件已下载 加载显示本地图片文件
             if (_image?.filePath?.isNotEmpty ?? false) {
-              logger.d('file... ${_image?.filePath}');
+              logger.v('图片文件已下载 file... ${_image?.filePath}');
               return fileImage(_image!.filePath!);
             }
 
             if (_image?.tempPath?.isNotEmpty ?? false) {
-              logger.d('file... ${_image?.tempPath}');
+              logger.v('tempPath file... ${_image?.tempPath}');
               return fileImage(_image!.tempPath!);
             }
 

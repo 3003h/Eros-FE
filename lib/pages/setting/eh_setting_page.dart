@@ -50,7 +50,6 @@ class ListViewEhSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool _siteEx = _ehConfigService.isSiteEx.value;
     final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
     final bool _tagTranslat = _ehConfigService.isTagTranslat;
     final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
@@ -93,17 +92,36 @@ class ListViewEhSetting extends StatelessWidget {
     Future<EhHome?> _futureImageLimits = getEhHome(refresh: true);
 
     final List<Widget> _list = <Widget>[
+      // if (_isLogin)
+      //   Obx(() {
+      //     return GestureDetector(
+      //       onLongPress: Api.selEhProfile,
+      //       child: TextSwitchItem(
+      //         L10n.of(context).galery_site,
+      //         intValue: _ehConfigService.isSiteEx.value,
+      //         onChanged: _handleSiteChanged,
+      //         desc: L10n.of(context).current_site('E-Hentai'),
+      //         descOn: L10n.of(context).current_site('ExHentai'),
+      //       ),
+      //     );
+      //   }),
       if (_isLogin)
-        GestureDetector(
-          onLongPress: Api.selEhProfile,
-          child: TextSwitchItem(
+        Obx(() {
+          return SlidingSegmentedItem<String>(
             L10n.of(context).galery_site,
-            intValue: _siteEx,
-            onChanged: _handleSiteChanged,
-            desc: L10n.of(context).current_site('E-Hentai'),
-            descOn: L10n.of(context).current_site('ExHentai'),
-          ),
-        ),
+            intValue: _ehConfigService.isSiteEx.value
+                ? EHConst.EX_BASE_HOST
+                : EHConst.EH_BASE_HOST,
+            onValueChanged: (val) {
+              logger.d('val  $val');
+              _handleSiteChanged(EHConst.EX_BASE_HOST == val);
+            },
+            slidingChildren: const {
+              EHConst.EH_BASE_HOST: Text('E-Hentai', textScaleFactor: 0.8),
+              EHConst.EX_BASE_HOST: Text('ExHentai', textScaleFactor: 0.8)
+            },
+          );
+        }),
       TextSwitchItem(
         L10n.of(context).link_redirect,
         intValue: _ehConfigService.linkRedirect,
@@ -170,7 +188,7 @@ class ListViewEhSetting extends StatelessWidget {
                   title: L10n.of(context).image_limits,
                   selector: ehHome == null
                       ? ''
-                      : '${ehHome.currentLimit}/${ehHome.totLimit}',
+                      : '${ehHome.currentLimit ?? ''} / ${ehHome.totLimit ?? ''}',
                   desc:
                       '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP',
                   suffix: snapshot.connectionState != ConnectionState.done

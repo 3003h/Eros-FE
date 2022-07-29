@@ -179,7 +179,7 @@ class ViewLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (debugLable != null && kDebugMode) {
-      logger.i('build ViewLoading $debugLable');
+      logger.v('build ViewLoading $debugLable');
     }
     final _loadWidget = _ViewLoading(
       ser: ser,
@@ -660,7 +660,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                     },
                     child: Container(
                       width: 40,
-                      height: kBottomBarHeight,
+                      height: kTopBarButtonHeight,
                       child: const Icon(
                         FontAwesomeIcons.chevronLeft,
                         color: CupertinoColors.systemGrey6,
@@ -674,7 +674,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                   builder: (logic) {
                     return Container(
                       alignment: Alignment.center,
-                      height: kBottomBarHeight,
+                      height: kTopBarButtonHeight,
                       child: Text(
                         '${logic.vState.currentItemIndex + 1}/${logic.vState.filecount}',
                         style: const TextStyle(
@@ -693,7 +693,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                     child: Container(
                       width: 40,
                       margin: const EdgeInsets.only(right: 8.0),
-                      height: kBottomBarHeight,
+                      height: kTopBarButtonHeight,
                       child: const Icon(
                         FontAwesomeIcons.ellipsisH,
                         color: CupertinoColors.systemGrey6,
@@ -727,12 +727,11 @@ class ViewBottomBar extends GetView<ViewExtController> {
       id: idViewBottomBar,
       builder: (logic) {
         logic.vState.bottomBarHeight = context.mediaQueryPadding.bottom +
-            kTopBarHeight * 2 +
+            kBottomBarHeight +
+            kSliderBarHeight +
             (logic.vState.showThumbList ? kThumbListViewHeight : 0);
 
         return AnimatedContainer(
-          // color:
-          //     CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.75),
           height: controller.vState.bottomBarHeight,
           width: context.mediaQuery.size.width,
           duration: const Duration(milliseconds: 300),
@@ -746,12 +745,13 @@ class ViewBottomBar extends GetView<ViewExtController> {
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOut,
               ),
-              // 控制按钮栏
+              // 控制栏
               const BottomBarControlWidget(),
             ],
           ).frosted(
             height: context.mediaQueryPadding.bottom +
-                kTopBarHeight * 2 +
+                kBottomBarHeight +
+                kSliderBarHeight +
                 kThumbListViewHeight,
             width: context.mediaQuery.size.width,
             blur: 20,
@@ -780,11 +780,12 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // 滑动控件
               GetBuilder<ViewExtController>(
                 id: idViewPageSlider,
                 builder: (logic) {
                   return SizedBox(
-                    height: kBottomBarHeight,
+                    height: kSliderBarHeight,
                     child: ViewPageSlider(
                       max: logic.vState.filecount - 1.0,
                       sliderValue: min(logic.vState.sliderValue,
@@ -796,6 +797,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                   );
                 },
               ),
+              // 按钮栏
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -808,7 +810,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                       },
                       child: Container(
                         width: 40,
-                        height: kBottomBarHeight,
+                        height: kBottomBarButtonHeight,
                         child: Column(
                           children: [
                             const Icon(
@@ -846,7 +848,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                         builder: (logic) {
                           return Container(
                             width: 40,
-                            height: kBottomBarHeight,
+                            height: kBottomBarButtonHeight,
                             child: Column(
                               children: [
                                 Icon(
@@ -894,7 +896,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                       },
                       child: Container(
                         width: 40,
-                        height: kBottomBarHeight,
+                        height: kBottomBarButtonHeight,
                         child: Column(
                           children: [
                             GetBuilder<ViewExtController>(
@@ -938,7 +940,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                       child: Container(
                         width: 40,
                         // margin: const EdgeInsets.only(right: 10.0),
-                        height: kBottomBarHeight,
+                        height: kBottomBarButtonHeight,
                         child: Column(
                           children: [
                             GetBuilder<ViewExtController>(

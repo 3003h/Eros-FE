@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -107,15 +108,6 @@ Size getTextSize(
 T radomList<T>(Iterable<T> srcList) {
   final index = Random().nextInt(srcList.length);
   return srcList.toList()[index];
-}
-
-void setFullscreen() {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-}
-
-void unsetFullscreen() {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-      overlays: [SystemUiOverlay.top]);
 }
 
 double? initScaleWithSize({
@@ -272,10 +264,6 @@ class EHUtils {
       result[i ~/ 2] = byte;
     }
     return result;
-  }
-
-  bool get isInDebugMode {
-    return kDebugMode;
   }
 
   static String getLangeage(String value) {

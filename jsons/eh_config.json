@@ -43,5 +43,6 @@
   "boringAvatarsType?": "",
   "avatarBorderRadiusType?": "",
   "enablePHashCheck?": false,
-  "enableQRCodeCheck?": false
+  "enableQRCodeCheck?": false,
+  "viewFullscreen?": false
 }

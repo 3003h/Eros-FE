@@ -123,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "fixed_height_of_list_items":
             MessageLookupByLibrary.simpleMessage("固定列表项高度"),
         "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
+        "fullscreen": MessageLookupByLibrary.simpleMessage("全屏"),
         "galery_site": MessageLookupByLibrary.simpleMessage("画廊站点"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("画廊评论"),
         "global_setting": MessageLookupByLibrary.simpleMessage("全局设置"),

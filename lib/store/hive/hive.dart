@@ -188,4 +188,12 @@ class HiveHelper {
 
     return EhHome.fromJson(jsonDecode(val ?? '{}') as Map<String, dynamic>);
   }
+
+  String? getString(String key) {
+    return _configBox.get(key, defaultValue: '');
+  }
+
+  Future<void> setString(String key, String value) async {
+    await _configBox.put(key, value);
+  }
 }

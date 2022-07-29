@@ -200,7 +200,7 @@ class LoginController extends GetxController {
       return;
     }
     // 异步获取昵称和头像
-    logger.d('异步获取昵称和头像');
+    logger.v('异步获取昵称和头像');
     late User? info;
     try {
       info = await getUserInfo(memberId);

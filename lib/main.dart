@@ -158,11 +158,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ],
         localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
           final Locale _locale = window.locale;
-          logger.d(
+          logger.v(
               'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
           // logger.d('${_locale} ${supportedLocales}');
           if (locale != null) {
-            logger.d('sel $locale');
+            // logger.d('sel $locale');
             //如果已经选定语言，则不跟随系统
             return locale;
           } else {

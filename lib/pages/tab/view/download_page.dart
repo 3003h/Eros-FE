@@ -30,9 +30,8 @@ class DownloadTab extends StatefulWidget {
 class _DownloadTabState extends State<DownloadTab> {
   final DownloadViewController controller = Get.find();
   late PageController pageController;
-  DownloadType viewType = DownloadType.gallery;
 
-  int get currIndex => controller.pageList.indexOf(viewType);
+  int get currIndex => controller.pageList.indexOf(controller.viewType);
 
   @override
   void initState() {
@@ -61,7 +60,7 @@ class _DownloadTabState extends State<DownloadTab> {
                 style: const TextStyle(fontSize: 14),
               ).marginSymmetric(horizontal: 6),
             },
-            groupValue: viewType,
+            groupValue: controller.viewType,
             onValueChanged: (DownloadType? value) {
               final toIndex =
                   controller.pageList.indexOf(value ?? DownloadType.gallery);
@@ -98,7 +97,7 @@ class _DownloadTabState extends State<DownloadTab> {
         children: viewList,
         onPageChanged: (index) {
           setState(() {
-            viewType = controller.pageList[index];
+            controller.viewType = controller.pageList[index];
           });
         },
       ),

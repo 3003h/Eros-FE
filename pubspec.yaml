@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.54+414
+version: 1.2.56+416
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
@@ -156,6 +156,7 @@ dependencies:
       url: https://github.com/honjow/flutter_custom_license_page.git
       ref: flutter2
   flutter_list_view: ^1.1.18
+  fullscreen: ^1.0.3
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

@@ -37,6 +37,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
             ? DateTime.fromMillisecondsSinceEpoch(
                 archiverTaskInfo.timeCreated ?? 0)
             : null,
+        resolution = archiverTaskInfo.resolution,
         super(key: key);
 
   final String title;
@@ -48,6 +49,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
   final String? galleryGid;
   final String filePath;
   final DateTime? timeCreated;
+  final String? resolution;
 
   final DownloadArchiverTaskInfo archiverTaskInfo;
 
@@ -135,23 +137,46 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                           children: [
                             Text(
                               title,
+                              maxLines: 3,
                               style: const TextStyle(
                                 fontSize: 13,
                                 height: 1.2,
                               ),
                             ).paddingOnly(bottom: 4),
-                            if (timeCreated != null &&
-                                status != DownloadTaskStatus.running &&
-                                status != DownloadTaskStatus.paused)
-                              Text(
-                                formatter.format(timeCreated!),
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  height: 1.2,
-                                  color: CupertinoDynamicColor.resolve(
-                                      CupertinoColors.secondaryLabel, context),
-                                ),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (resolution?.isNotEmpty ?? false)
+                                  Text(
+                                    resolution ?? '',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      height: 1.2,
+                                      fontWeight: FontWeight.w600,
+                                      color: CupertinoDynamicColor.resolve(
+                                          CupertinoColors.secondaryLabel,
+                                          context),
+                                    ),
+                                  )
+                                else
+                                  const SizedBox.shrink(),
+                                if (timeCreated != null &&
+                                    status != DownloadTaskStatus.running &&
+                                    status != DownloadTaskStatus.paused)
+                                  Text(
+                                    formatter.format(timeCreated!),
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      height: 1.2,
+                                      color: CupertinoDynamicColor.resolve(
+                                          CupertinoColors.secondaryLabel,
+                                          context),
+                                    ),
+                                  )
+                                else
+                                  const SizedBox.shrink(),
+                              ],
+                            ),
                           ],
                         ).paddingSymmetric(vertical: 4),
                       ),

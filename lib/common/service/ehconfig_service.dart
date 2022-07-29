@@ -195,9 +195,18 @@ class EhConfigService extends ProfileService {
   bool get enableQRCodeCheck => _enableQRCodeCheck.value;
   set enableQRCodeCheck(bool val) => _enableQRCodeCheck.value = val;
 
+  final _viewFullscreen = false.obs;
+  bool get viewFullscreen => _viewFullscreen.value;
+  set viewFullscreen(bool val) => _viewFullscreen.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    viewFullscreen = ehConfig.viewFullscreen ?? viewFullscreen;
+    everProfile<bool>(_viewFullscreen, (value) {
+      ehConfig = ehConfig.copyWith(viewFullscreen: value);
+    });
 
     enablePHashCheck = ehConfig.enablePHashCheck ?? enablePHashCheck;
     everProfile<bool>(_enablePHashCheck, (value) {

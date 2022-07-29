@@ -50,6 +50,7 @@ class EhConfig {
     this.avatarBorderRadiusType,
     this.enablePHashCheck,
     this.enableQRCodeCheck,
+    this.viewFullscreen,
   });
 
   final bool jpnTitle;
@@ -97,6 +98,7 @@ class EhConfig {
   final String? avatarBorderRadiusType;
   final bool? enablePHashCheck;
   final bool? enableQRCodeCheck;
+  final bool? viewFullscreen;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => EhConfig(
     jpnTitle: json['jpnTitle'] as bool,
@@ -143,7 +145,8 @@ class EhConfig {
     boringAvatarsType: json['boringAvatarsType'] != null ? json['boringAvatarsType'] as String : null,
     avatarBorderRadiusType: json['avatarBorderRadiusType'] != null ? json['avatarBorderRadiusType'] as String : null,
     enablePHashCheck: json['enablePHashCheck'] != null ? json['enablePHashCheck'] as bool : null,
-    enableQRCodeCheck: json['enableQRCodeCheck'] != null ? json['enableQRCodeCheck'] as bool : null
+    enableQRCodeCheck: json['enableQRCodeCheck'] != null ? json['enableQRCodeCheck'] as bool : null,
+    viewFullscreen: json['viewFullscreen'] != null ? json['viewFullscreen'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -191,7 +194,8 @@ class EhConfig {
     'boringAvatarsType': boringAvatarsType,
     'avatarBorderRadiusType': avatarBorderRadiusType,
     'enablePHashCheck': enablePHashCheck,
-    'enableQRCodeCheck': enableQRCodeCheck
+    'enableQRCodeCheck': enableQRCodeCheck,
+    'viewFullscreen': viewFullscreen
   };
 
   EhConfig clone() => EhConfig(
@@ -239,7 +243,8 @@ class EhConfig {
     boringAvatarsType: boringAvatarsType,
     avatarBorderRadiusType: avatarBorderRadiusType,
     enablePHashCheck: enablePHashCheck,
-    enableQRCodeCheck: enableQRCodeCheck
+    enableQRCodeCheck: enableQRCodeCheck,
+    viewFullscreen: viewFullscreen
   );
 
     
@@ -288,7 +293,8 @@ class EhConfig {
     String? boringAvatarsType,
     String? avatarBorderRadiusType,
     bool? enablePHashCheck,
-    bool? enableQRCodeCheck
+    bool? enableQRCodeCheck,
+    bool? viewFullscreen
   }) => EhConfig(
     jpnTitle: jpnTitle ?? this.jpnTitle,
     tagTranslat: tagTranslat ?? this.tagTranslat,
@@ -335,12 +341,13 @@ class EhConfig {
     avatarBorderRadiusType: avatarBorderRadiusType ?? this.avatarBorderRadiusType,
     enablePHashCheck: enablePHashCheck ?? this.enablePHashCheck,
     enableQRCodeCheck: enableQRCodeCheck ?? this.enableQRCodeCheck,
+    viewFullscreen: viewFullscreen ?? this.viewFullscreen,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && tabletLayoutValue == other.tabletLayoutValue && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && tapToTurnPageAnimations == other.tapToTurnPageAnimations && selectProfile == other.selectProfile && linkRedirect == other.linkRedirect && viewColumnMode == other.viewColumnMode && fixedHeightOfListItems == other.fixedHeightOfListItems && tagTranslateDataUpdateMode == other.tagTranslateDataUpdateMode && showCommentAvatar == other.showCommentAvatar && boringAvatarsType == other.boringAvatarsType && avatarBorderRadiusType == other.avatarBorderRadiusType && enablePHashCheck == other.enablePHashCheck && enableQRCodeCheck == other.enableQRCodeCheck;
+    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && tabletLayoutValue == other.tabletLayoutValue && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && tapToTurnPageAnimations == other.tapToTurnPageAnimations && selectProfile == other.selectProfile && linkRedirect == other.linkRedirect && viewColumnMode == other.viewColumnMode && fixedHeightOfListItems == other.fixedHeightOfListItems && tagTranslateDataUpdateMode == other.tagTranslateDataUpdateMode && showCommentAvatar == other.showCommentAvatar && boringAvatarsType == other.boringAvatarsType && avatarBorderRadiusType == other.avatarBorderRadiusType && enablePHashCheck == other.enablePHashCheck && enableQRCodeCheck == other.enableQRCodeCheck && viewFullscreen == other.viewFullscreen;
 
   @override
-  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ tabletLayoutValue.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ tapToTurnPageAnimations.hashCode ^ selectProfile.hashCode ^ linkRedirect.hashCode ^ viewColumnMode.hashCode ^ fixedHeightOfListItems.hashCode ^ tagTranslateDataUpdateMode.hashCode ^ showCommentAvatar.hashCode ^ boringAvatarsType.hashCode ^ avatarBorderRadiusType.hashCode ^ enablePHashCheck.hashCode ^ enableQRCodeCheck.hashCode;
+  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ tabletLayoutValue.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ tapToTurnPageAnimations.hashCode ^ selectProfile.hashCode ^ linkRedirect.hashCode ^ viewColumnMode.hashCode ^ fixedHeightOfListItems.hashCode ^ tagTranslateDataUpdateMode.hashCode ^ showCommentAvatar.hashCode ^ boringAvatarsType.hashCode ^ avatarBorderRadiusType.hashCode ^ enablePHashCheck.hashCode ^ enableQRCodeCheck.hashCode ^ viewFullscreen.hashCode;
 }

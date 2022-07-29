@@ -1,16 +1,22 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
+import 'package:fehviewer/route/main_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 
@@ -41,6 +47,26 @@ class ReadSettingPage extends StatelessWidget {
 class ViewSettingList extends StatelessWidget {
   final EhConfigService ehConfigService = Get.find();
 
+  Future<void> onViewFullscreenChanged(bool val) async {
+    ehConfigService.viewFullscreen = val;
+    final history = MainNavigatorObserver().history;
+    final prevMainRoute = history[max(0, history.length - 2)].settings.name;
+    logger.d('prevMainRoute $prevMainRoute');
+
+    if (prevMainRoute == EHRoutes.galleryViewExt) {
+      if (val) {
+        await FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+      } else {
+        await FullScreen.exitFullScreen();
+        // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        //   systemNavigationBarColor: Colors.transparent,
+        //   systemNavigationBarDividerColor: Colors.transparent,
+        //   statusBarColor: Colors.transparent,
+        // ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // iPad不显示旋转设置
@@ -67,6 +93,11 @@ class ViewSettingList extends StatelessWidget {
         onChanged: (bool val) {
           ehConfigService.tapToTurnPageAnimations = val;
         },
+      ),
+      TextSwitchItem(
+        L10n.of(context).fullscreen,
+        intValue: ehConfigService.viewFullscreen,
+        onChanged: onViewFullscreenChanged,
         hideDivider: true,
       ),
     ];

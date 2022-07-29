@@ -237,4 +237,7 @@ class ViewExtState {
     final _first = speedList.firstOrNull ?? 0.00;
     return speedList.any((element) => element != _first);
   }
+
+  Map<String, AsyncArchive> asyncArchiveMap = {};
+  Map<String, AsyncInputStream> asyncInputStreamMap = {};
 }

@@ -3,7 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive_async/archive_async.dart';
+import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -13,8 +15,12 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
+import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
@@ -27,8 +33,22 @@ import 'package:wakelock/wakelock.dart';
 
 import 'view_state.dart';
 
-const double kBottomBarHeight = 44.0;
+// 底栏控制栏按钮高度
+const double kBottomBarButtonHeight = 54.0;
+
+// 底栏控制栏高度
+const double kBottomBarHeight = 64.0;
+
+// 底栏滑动栏高度
+const double kSliderBarHeight = 64.0;
+
+// 顶栏高度
 const double kTopBarHeight = 44.0;
+
+// 顶栏按钮高度
+const double kTopBarButtonHeight = 44.0;
+
+// 缩略图栏高度
 const double kThumbListViewHeight = 120.0;
 
 const String idViewTopBar = 'ViewTopBar';
@@ -67,6 +87,11 @@ class ViewExtController extends GetxController {
   GalleryPageState get _galleryPageStat => vState.pageState;
 
   EhConfigService get _ehConfigService => vState.ehConfigService;
+
+  final ArchiverDownloadController archiverDownloadController = Get.find();
+
+  Map<String, DownloadArchiverTaskInfo> get archiverTaskMap =>
+      archiverDownloadController.archiverTaskMap;
 
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
 
@@ -138,7 +163,7 @@ class ViewExtController extends GetxController {
       handItemPositionsChange(positions);
     });
 
-    Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+    Future.delayed(const Duration(milliseconds: 200)).then((value) =>
         thumbScrollController.jumpTo(index: vState.currentItemIndex));
 
     // 缩略图滚动组件监听
@@ -184,20 +209,11 @@ class ViewExtController extends GetxController {
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
           [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
-      // OrientationPlugin.forceOrientation(
-      //     orientationMap[_orientation] ?? DeviceOrientation.portraitUp);
     }
 
     vState.sliderValue = vState.currentItemIndex / 1.0;
 
-    if (GetPlatform.isIOS) {
-      setFullscreen();
-      // FlutterStatusbarManager.setFullscreen(true);
-    }
-    // FlutterStatusbarManager.setHidden(true,
-    //     animation: StatusBarAnimation.SLIDE);
-    // FlutterStatusbarManager.setTranslucent(true);
-    // FlutterStatusbarManager.setColor(Colors.transparent);
+    setFullscreen();
   }
 
   @override
@@ -216,18 +232,15 @@ class ViewExtController extends GetxController {
 
     unsetFullscreen();
 
-    // FlutterStatusbarManager.setHidden(false,
-    //     animation: StatusBarAnimation.SLIDE);
-    // FlutterStatusbarManager.setFullscreen(false);
-    // FlutterStatusbarManager.setTranslucent(false);
-
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
+
+    vState.asyncInputStreamMap.values.map((e) => e.close());
   }
 
-  Future<void> initArchiveFuture(int ser) async {
-    final file = vState.asyncArchiveFiles[ser - 1];
+  Future<void> initArchiveFuture(int ser, {AsyncArchiveFile? asyncFile}) async {
+    final file = asyncFile ?? vState.asyncArchiveFiles[ser - 1];
     logger.v('load ${file.name}');
     imageArchiveFutureMap[ser] = getArchiveFile(vState.gid, file);
   }
@@ -435,12 +448,16 @@ class ViewExtController extends GetxController {
 
     late GalleryImage? image;
 
+    // 检查是否已下载
     image = await _getImageFromImageTasks(itemSer, vState.dirPath);
+    image ??=
+        await _getImageFromImageTasks(itemSer, vState.dirPath, reLoadDB: true);
 
+    // 检查是否已下载archive
+    image ??= await getFromArchiverTask(itemSer);
+
+    // 请求页面 解析为 [GalleryImage]
     if (image == null) {
-      image ??= await _getImageFromImageTasks(itemSer, vState.dirPath,
-          reLoadDB: true);
-
       final tImage = _galleryPageStat.imageMap[itemSer];
       if (tImage == null) {
         logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
@@ -470,6 +487,46 @@ class ViewExtController extends GetxController {
     }
 
     return image;
+  }
+
+  Future<GalleryImage?> getFromArchiverTask(int itemSer) async {
+    final gid = vState.gid;
+    // 读取缓存
+    AsyncArchive? asyncArchive = vState.asyncArchiveMap[gid];
+
+    if (asyncArchive == null && gid != null) {
+      // archiver任务
+      final task = archiverTaskMap.values
+          .sorted((t1, t2) => (t1.type ?? '').compareTo(t2.type ?? ''))
+          .where((element) =>
+              element.gid == _galleryPageStat.gid &&
+              element.status == DownloadTaskStatus.complete.value)
+          .toList()
+          .firstOrNull;
+
+      if (task == null) {
+        return null;
+      }
+
+      final filePath = path.join(task.savedDir ?? '', task.fileName);
+
+      // 异步读取zip
+      final tuple = await readAsyncArchive(filePath.realArchiverPath);
+      asyncArchive = tuple.item1;
+      final asyncInputStream = tuple.item2;
+      vState.asyncArchiveMap[gid] = asyncArchive;
+      vState.asyncInputStreamMap[gid] = asyncInputStream;
+    }
+
+    if (asyncArchive == null) {
+      return null;
+    }
+
+    final file =
+        await getArchiveFile(vState.gid, asyncArchive.files[itemSer - 1]);
+
+    return GalleryImage(
+        ser: itemSer, gid: _galleryPageStat.gid, tempPath: file.path);
   }
 
   /// 重载图片数据，重构部件
@@ -525,26 +582,38 @@ class ViewExtController extends GetxController {
       return;
     }
 
+    // android会有抖动
     if (GetPlatform.isIOS) {
       if (!vState.showBar) {
-        // show
-        // FlutterStatusbarManager.setFullscreen(false);
         unsetFullscreen();
         vState.showBar = !vState.showBar;
-        update([idViewBar]);
+        // update([idViewBar]);
       } else {
         // hide
         vState.showBar = !vState.showBar;
-        update([idViewBar]);
-        // await Future.delayed(const Duration(milliseconds: 200));
-        // FlutterStatusbarManager.setFullscreen(true);
+        // update([idViewBar]);
+
         setFullscreen();
-        // FlutterStatusbarManager.setHidden(true);
       }
     } else {
       vState.showBar = !vState.showBar;
       update([idViewBar]);
     }
+  }
+
+  void setFullscreen() {
+    if (_ehConfigService.viewFullscreen) {
+      FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+    }
+  }
+
+  Future<void> unsetFullscreen() async {
+    await FullScreen.exitFullScreen();
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.transparent,
+    //   systemNavigationBarDividerColor: Colors.transparent,
+    //   statusBarColor: Colors.transparent,
+    // ));
   }
 
   Future<void> tapLeft() async {
