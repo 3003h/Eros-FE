@@ -384,6 +384,7 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
 
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
+  print('######_uploader $_uploader');
 
   final _galleryComments = parseGalleryComment(document);
 

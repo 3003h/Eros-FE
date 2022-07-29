@@ -51,33 +51,39 @@ class GalleryHeaderSliver extends StatelessWidget {
                     imageUrl: initGalleryProvider.imgUrl!,
                     heroTag: '${initGalleryProvider.gid}_cover_$tabTag',
                   ),
-                  // child: EhCachedNetworkImage(
-                  //     imageUrl: initGalleryProvider.imgUrl!),
                 ),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // 标题
-                      GalleryTitle(
-                        title: _pageState.title,
-                      ),
-                      // 上传用户
-                      GalleryUploader(
-                          uploader: _pageState.galleryProvider?.uploader ?? ''),
-                      const Spacer(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          // 阅读按钮
-                          ReadButton(gid: initGalleryProvider.gid ?? ''),
-                          const Spacer(),
-                          // 收藏按钮
-                          const GalleryFavButton(),
-                        ],
-                      )
-                    ],
-                  ),
+                  child: GetBuilder<GalleryPageController>(
+                      assignId: true,
+                      id: GetIds.PAGE_VIEW_HEADER,
+                      tag: pageCtrlTag,
+                      builder: (logic) {
+                        final _pageState = logic.gState;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 标题
+                            GalleryTitle(
+                              title: _pageState.title,
+                            ),
+                            // 上传用户
+                            GalleryUploader(
+                                uploader:
+                                    _pageState.galleryProvider?.uploader ?? ''),
+                            const Spacer(),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                // 阅读按钮
+                                ReadButton(gid: initGalleryProvider.gid ?? ''),
+                                const Spacer(),
+                                // 收藏按钮
+                                const GalleryFavButton(),
+                              ],
+                            )
+                          ],
+                        );
+                      }),
                 ),
               ],
             ),
