@@ -116,13 +116,13 @@ class FavoriteSubListController extends TabViewController {
 
   @override
   Future<void> lastComplete() async {
-    super.lastComplete();
+    await super.lastComplete();
     if ((state ?? []).isNotEmpty &&
         curPage < maxPage - 1 &&
         pageState != PageState.Loading) {
       // 加载更多
       logger.d('加载更多');
-      loadDataMore();
+      await loadDataMore();
     }
   }
 
