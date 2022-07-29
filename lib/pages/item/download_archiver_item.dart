@@ -138,6 +138,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                             Text(
                               title,
                               maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 13,
                                 height: 1.2,
