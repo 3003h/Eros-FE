@@ -134,14 +134,11 @@ class Global {
     }
 
     //statusBar设置为透明，去除半透明遮罩
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-
-    // SystemUiOverlayStyle uiStyle = SystemUiOverlayStyle.light.copyWith(
-    //   statusBarColor: Colors.transparent,
-    // );
-    //
-    // SystemChrome.setSystemUIOverlayStyle(uiStyle);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      statusBarColor: Colors.transparent,
+    ));
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;

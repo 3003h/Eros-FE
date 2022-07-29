@@ -17,6 +17,7 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fullscreen/fullscreen.dart';
@@ -32,8 +33,22 @@ import 'package:wakelock/wakelock.dart';
 
 import 'view_state.dart';
 
-const double kBottomBarHeight = 44.0;
+// 底栏控制栏按钮高度
+const double kBottomBarButtonHeight = 54.0;
+
+// 底栏控制栏高度
+const double kBottomBarHeight = 64.0;
+
+// 底栏滑动栏高度
+const double kSliderBarHeight = 64.0;
+
+// 顶栏高度
 const double kTopBarHeight = 44.0;
+
+// 顶栏按钮高度
+const double kTopBarButtonHeight = 44.0;
+
+// 缩略图栏高度
 const double kThumbListViewHeight = 120.0;
 
 const String idViewTopBar = 'ViewTopBar';
@@ -592,8 +607,13 @@ class ViewExtController extends GetxController {
     }
   }
 
-  void unsetFullscreen() {
-    FullScreen.exitFullScreen();
+  Future<void> unsetFullscreen() async {
+    await FullScreen.exitFullScreen();
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.transparent,
+    //   systemNavigationBarDividerColor: Colors.transparent,
+    //   statusBarColor: Colors.transparent,
+    // ));
   }
 
   Future<void> tapLeft() async {
