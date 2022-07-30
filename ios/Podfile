@@ -1,5 +1,6 @@
 # source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '11.0'
+$iOSVersion = '11.0'
+platform :ios, $iOSVersion
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -37,10 +38,15 @@ target 'Runner' do
 end
 
 post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+      config.build_settings["EXCLUDED_ARCHS[sdk=*]"] = "armv7"
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
+  end
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+      config.build_settings["EXCLUDED_ARCHS[sdk=*]"] = "armv7"
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $iOSVersion
       config.build_settings['SWIFT_VERSION'] = '5.0'  # required by simple_permission
       config.build_settings['ENABLE_BITCODE'] = 'NO'
       # You can enable the permissions needed here. For example to enable camera
