@@ -138,6 +138,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                             Text(
                               title,
                               maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 13,
                                 height: 1.2,
@@ -255,7 +256,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
       // 下载时，显示暂停按钮
       DownloadTaskStatus.running: CupertinoTheme(
         data: const CupertinoThemeData(primaryColor: CupertinoColors.systemRed),
-        child: !GeneralPlatform.isIOS || kDebugMode
+        child: !GeneralPlatform.isIOS || true
             ? CupertinoButton(
                 padding: const EdgeInsets.all(0),
                 child: const Icon(

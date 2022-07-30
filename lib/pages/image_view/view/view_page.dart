@@ -60,7 +60,7 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return const ViewKeyboardListener(
+    Widget body = const ViewKeyboardListener(
       child: CupertinoTheme(
         data: CupertinoThemeData(
           brightness: Brightness.dark,
@@ -71,6 +71,18 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarDividerColor: Colors.transparent,
+        statusBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: body,
     );
   }
 }

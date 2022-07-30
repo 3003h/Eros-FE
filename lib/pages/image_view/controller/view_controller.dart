@@ -587,18 +587,16 @@ class ViewExtController extends GetxController {
       if (!vState.showBar) {
         unsetFullscreen();
         vState.showBar = !vState.showBar;
-        // update([idViewBar]);
       } else {
         // hide
         vState.showBar = !vState.showBar;
-        // update([idViewBar]);
-
         setFullscreen();
       }
     } else {
       vState.showBar = !vState.showBar;
-      update([idViewBar]);
     }
+
+    update([idViewBar]);
   }
 
   void setFullscreen() {
