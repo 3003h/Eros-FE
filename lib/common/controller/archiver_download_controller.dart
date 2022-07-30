@@ -124,14 +124,16 @@ class ArchiverDownloadController extends GetxController {
     final url = _task?.url;
     final timeCreated = _task?.timeCreated;
 
-    if (fileName != null) logger.v('fileName $fileName');
+    if (fileName != null) {
+      logger.d('fileName $fileName');
+    }
 
     final _resolution = regExpResolution.firstMatch(fileName ?? '')?.group(1);
 
     archiverTaskMap[_key] = archiverTaskMap[_key]!.copyWith(
       status: status.value,
       progress: progress,
-      fileName: fileName,
+      fileName: fileName != '<null>' ? fileName : null,
       url: url,
       timeCreated: timeCreated,
       resolution: _resolution,
@@ -141,6 +143,11 @@ class ArchiverDownloadController extends GetxController {
     if (Get.isRegistered<DownloadViewController>()) {
       Get.find<DownloadViewController>()
           .update(['${idDownloadArchiverItem}_$_tag']);
+    }
+
+    if (status == DownloadTaskStatus.complete && fileName == null) {
+      await 200.milliseconds.delay();
+      await updateTask(taskId, status, progress);
     }
     _saveTask();
   }
@@ -163,8 +170,6 @@ class ArchiverDownloadController extends GetxController {
 
     final _downloadPath = await _getArchiverDownloadPath();
 
-    // url =
-    //     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
     final String? _taskId = await _downloadArchiverFile(url, _downloadPath);
 
     archiverTaskMap[_tag] = kDefDownloadTaskInfo.copyWith(
