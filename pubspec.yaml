@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.56+416
+version: 1.2.57+417
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -149,11 +149,16 @@ dependencies:
   isolate: ^2.1.1
   octo_image: ^1.0.2
   google_mlkit_barcode_scanning: ^0.3.0
-#  google_mlkit_translation: ^0.3.0
   google_mlkit_language_id: ^0.3.0
   flutter_custom_license_page: ^0.0.3
   flutter_list_view: ^1.1.18
   fullscreen: ^1.0.3
+  # firebase
+  firebase_analytics: ^9.1.0
+  firebase_crashlytics: ^2.5.0
+  firebase_performance: ^0.8.0+5
+  cloud_firestore: ^3.1.0
+  dio_firebase_performance: ^0.3.1-dev.3
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -180,6 +185,7 @@ dev_dependencies:
 
 dependency_overrides:
   json_serializable: ^6.0.1
+  firebase_performance: ^0.8.0+5
 
 flutter_intl:
   enabled: true
