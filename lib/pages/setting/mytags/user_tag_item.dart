@@ -51,6 +51,33 @@ class _UserTagItemState extends State<UserTagItem> {
     _pBackgroundColor = _color;
   }
 
+  Widget icon() {
+    late final IconData iconData;
+    late final Color iconColor;
+    if (widget.watch) {
+      iconColor =
+          CupertinoDynamicColor.resolve(CupertinoColors.activeGreen, context);
+      iconData = FontAwesomeIcons.circleCheck;
+    } else if (widget.hide) {
+      iconColor = CupertinoDynamicColor.resolve(
+          CupertinoColors.destructiveRed, context);
+      iconData = FontAwesomeIcons.circleXmark;
+    } else {
+      iconColor =
+          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+      iconData = FontAwesomeIcons.circleDot;
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      child: Icon(
+        iconData,
+        size: 24,
+        color: iconColor,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color color =
@@ -70,33 +97,33 @@ class _UserTagItemState extends State<UserTagItem> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                if (!widget.addItem)
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Column(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.circleCheck,
-                          size: 16,
-                          color: widget.watch
-                              ? CupertinoDynamicColor.resolve(
-                                  CupertinoColors.activeGreen, context)
-                              : CupertinoDynamicColor.resolve(
-                                  CupertinoColors.systemGrey4, context),
-                        ),
-                        Icon(
-                          // LineIcons.eyeSlash,
-                          FontAwesomeIcons.circleCheck,
-                          size: 16,
-                          color: widget.hide
-                              ? CupertinoDynamicColor.resolve(
-                                  CupertinoColors.destructiveRed, context)
-                              : CupertinoDynamicColor.resolve(
-                                  CupertinoColors.systemGrey4, context),
-                        ),
-                      ],
-                    ),
-                  ),
+                if (!widget.addItem) icon(),
+                // Container(
+                //   margin: const EdgeInsets.only(right: 10),
+                //   child: Column(
+                //     children: [
+                //       Icon(
+                //         FontAwesomeIcons.circleCheck,
+                //         size: 14,
+                //         color: widget.watch
+                //             ? CupertinoDynamicColor.resolve(
+                //                 CupertinoColors.activeGreen, context)
+                //             : CupertinoDynamicColor.resolve(
+                //                 CupertinoColors.systemGrey4, context),
+                //       ),
+                //       const SizedBox(height: 4),
+                //       Icon(
+                //         FontAwesomeIcons.circleCheck,
+                //         size: 14,
+                //         color: widget.hide
+                //             ? CupertinoDynamicColor.resolve(
+                //                 CupertinoColors.destructiveRed, context)
+                //             : CupertinoDynamicColor.resolve(
+                //                 CupertinoColors.systemGrey4, context),
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 if (!widget.addItem)
                   Container(
                     margin: const EdgeInsets.only(right: 10),

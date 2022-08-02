@@ -51,7 +51,7 @@ class SearchImagePage extends GetView<SearchImageController> {
             Obx(() {
               // logger.d('listType ${controller.listType}');
               if (controller.listType == ListType.gallery) {
-                return _getGallerySliverList(context);
+                return _buildListView(context);
               }
 
               return _getInitView();
@@ -63,10 +63,54 @@ class SearchImagePage extends GetView<SearchImageController> {
     );
   }
 
-  Widget _getGallerySliverList(BuildContext context) {
-    return controller.obx(
-      (List<GalleryProvider>? state) {
-        if (state == null || state.isEmpty) {
+  Widget _buildListView(BuildContext context) {
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      sliver: GetBuilder<SearchImageController>(
+        global: false,
+        init: controller,
+        id: controller.listViewId,
+        builder: (logic) {
+          final status = logic.status;
+
+          if (status.isLoading) {
+            return SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
+                ),
+              ),
+            );
+          }
+
+          if (status.isError) {
+            return SliverFillRemaining(
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 50),
+                child: GalleryErrorPage(
+                  onTap: logic.reLoadDataFirst,
+                  error: status.errorMessage,
+                ),
+              ),
+            );
+          }
+
+          if (status.isSuccess) {
+            return getGallerySliverList(
+              logic.state,
+              controller.tabIndex,
+              maxPage: controller.maxPage,
+              curPage: controller.curPage,
+              lastComplete: controller.lastComplete,
+              // centerKey: centerKey,
+              key: controller.sliverAnimatedListKey,
+              lastTopitemIndex: controller.lastTopitemIndex,
+            );
+          }
+
           return SliverFillRemaining(
             child: Container(
               alignment: Alignment.center,
@@ -82,42 +126,9 @@ class SearchImagePage extends GetView<SearchImageController> {
                   Text(''),
                 ],
               ),
-            ).autoCompressKeyboard(Get.context!),
+            ).autoCompressKeyboard(context),
           );
-        }
-        return getGallerySliverList(
-          state,
-          controller.tabIndex,
-          maxPage: controller.maxPage,
-          curPage: controller.curPage,
-          lastComplete: controller.lastComplete,
-          // centerKey: centerKey,
-          key: controller.sliverAnimatedListKey,
-          lastTopitemIndex: controller.lastTopitemIndex,
-        );
-      },
-      onLoading: SliverFillRemaining(
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(bottom: 50),
-          child: const CupertinoActivityIndicator(
-            radius: 14.0,
-          ),
-        ).autoCompressKeyboard(Get.context!),
-      ),
-      onError: (err) {
-        logger.e(' $err');
-        return SliverFillRemaining(
-          child: Container(
-            padding: const EdgeInsets.only(bottom: 50),
-            child: GalleryErrorPage(
-              onTap: () => controller.startSearch(),
-            ),
-          ).autoCompressKeyboard(Get.context!),
-        );
-      },
-      onEmpty: SliverFillRemaining(
-        child: Container().autoCompressKeyboard(Get.context!),
+        },
       ),
     );
   }

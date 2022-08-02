@@ -64,14 +64,7 @@ Future<void> main() async {
 
     updateTagTranslate();
 
-    runApp(kReleaseMode || GetPlatform.isDesktop
-        ? MyApp()
-        : DevicePreview(
-            // enabled: !kReleaseMode,
-            enabled: false,
-            isToolbarVisible: true,
-            builder: (context) => MyApp(),
-          ));
+    runApp(MyApp());
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
@@ -173,12 +166,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           GlobalWidgetsLocalizations.delegate,
         ],
         localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
-          final Locale _locale = DevicePreview.locale(context) ?? window.locale;
-          logger.d(
+          final Locale _locale = window.locale;
+          logger.v(
               'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
           // logger.d('${_locale} ${supportedLocales}');
           if (locale != null) {
-            logger.d('sel $locale');
+            // logger.d('sel $locale');
             //如果已经选定语言，则不跟随系统
             return locale;
           } else {

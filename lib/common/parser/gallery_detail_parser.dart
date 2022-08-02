@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/utils/chapter.dart';
 import 'package:get/get.dart' hide Node;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
@@ -21,9 +22,23 @@ List<GalleryComment> parseGalleryComment(Document document) {
   final List<Element> commentList = document.querySelectorAll(commentSelect);
   for (final Element comment in commentList) {
     try {
+      final userElm = comment.querySelector('div.c2 > div.c3');
+      final childrenElms = userElm?.children;
+
       // 评论人
-      final Element? postElem = comment.querySelector('div.c2 > div.c3 > a');
+      final Element? postElem = childrenElms?[0];
       final String postName = postElem?.text.trim() ?? '';
+
+      final Element? userIndexElm =
+          comment.querySelector('div.c2 > div.c3 > a:nth-child(3)');
+
+      // print('userIndexElm ${userIndexElm?.innerHtml}');
+
+      final String userIndex = userIndexElm?.attributes['href']?.trim() ?? '';
+      final String userId = RegExp(r'.+index\.php\?showuser=(\d+)')
+              .firstMatch(userIndex)
+              ?.group(1) ??
+          '';
 
       // 解析时间
       final Element? timeElem = comment.querySelector('div.c2 > div.c3');
@@ -45,7 +60,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
       final Element? scoreElem = comment.querySelector('div.c2 > div.c5.nosel');
       String score = '';
       if (scoreElem != null) {
-        score = RegExp(r'((\+|-)(\d+))')
+        score = RegExp(r'(([+-])(\d+))')
                 .firstMatch(scoreElem.text.trim())
                 ?.group(1) ??
             '';
@@ -63,11 +78,9 @@ List<GalleryComment> parseGalleryComment(Document document) {
       if (_c4 != null) {
         final Element _hand = _c4.children.first;
         final String _handText = _hand.attributes['onclick'] ?? '';
-        if (_handText != null) {
-          _id = RegExp(r'\((\d+)\)').firstMatch(_handText)?.group(1) ?? '';
-          _canEdit = _handText.contains('edit_');
-          _canVote = _handText.contains('vote_');
-        }
+        // _id = RegExp(r'\((\d+)\)').firstMatch(_handText)?.group(1) ?? '';
+        _canEdit = _handText.contains('edit_');
+        _canVote = _handText.contains('vote_');
 
         if (_c4.children.length > 1) {
           final Element _vUp = _c4.children.elementAt(0);
@@ -82,6 +95,10 @@ List<GalleryComment> parseGalleryComment(Document document) {
           }
         }
       }
+
+      final Element? _c6 = comment.querySelector('div.c6');
+      final String _attriId = _c6?.attributes['id'] ?? '';
+      _id = RegExp(r'_(\d+)').firstMatch(_attriId)?.group(1) ?? '';
 
       // 解析评论内容
       final Element? contextElem = comment.querySelector('div.c6');
@@ -198,6 +215,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
         time: postTimeLocal,
         score: score,
         scoreDetails: _scoreDetails,
+        menberId: userId,
       ));
     } catch (e, stack) {
       // logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
@@ -304,7 +322,7 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   final Element? _ratingImage = document.querySelector('#rating_image');
   final String _ratingImageClass = _ratingImage?.attributes['class'] ?? '';
   final _colorRating = _ratingImageClass;
-  final _isRatinged = _ratingImageClass.contains(RegExp(r'ir(r|g|b|y)'));
+  final _isRatinged = _ratingImageClass.contains(RegExp(r'ir([rgby])'));
 
   // 收藏次数
   final String _favCount =
@@ -366,12 +384,19 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
 
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
+  print('######_uploader $_uploader');
+
+  final _galleryComments = parseGalleryComment(document);
+
+  final _chapter = _parseChapter(_galleryComments);
+  // print(_chapter.map((e) => e.toJson()).join('\n'));
 
   final galleryProvider = GalleryProvider(
     imgUrl: _imageUrl,
     tagGroup: await parseGalleryTags(document),
-    galleryComment: parseGalleryComment(document),
+    galleryComment: _galleryComments,
     galleryImages: parseGalleryImage(document),
+    chapter: _chapter,
     favTitle: _favTitle,
     favcat: _favcat,
     apiuid: _apiuid,
@@ -393,6 +418,23 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   );
 
   return galleryProvider;
+}
+
+List<Chapter>? _parseChapter(List<GalleryComment> comments) {
+  final listListChapter = <List<Chapter>>[];
+  for (final comment in comments) {
+    final listChapter = parseChapter(comment.text);
+    if (listChapter.length >= 2) {
+      listListChapter.add(listChapter);
+    }
+  }
+
+  if (listListChapter.isNotEmpty) {
+    final listChapter = listListChapter.reduce(
+        (value, element) => value.length > element.length ? value : element);
+    return listChapter;
+  }
+  return null;
 }
 
 List<GalleryImage> parseGalleryImageFromHtml(String response) {

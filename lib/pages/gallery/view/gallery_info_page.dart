@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,8 +39,7 @@ class GalleryInfoPage extends StatelessWidget {
                 final _infoMap = {
                   'Gid': pageState.galleryProvider!.gid,
                   'Token': pageState.galleryProvider!.token,
-                  'Url':
-                      '${pageState.galleryProvider!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${pageState.galleryProvider!.url}',
+                  'Url': pageState.url,
                   'Title': pageState.galleryProvider!.englishTitle,
                   'Jpn Title': pageState.galleryProvider!.japaneseTitle,
                   'Thumb': pageState.galleryProvider!.imgUrl,

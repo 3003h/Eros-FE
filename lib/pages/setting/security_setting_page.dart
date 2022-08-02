@@ -1,9 +1,9 @@
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/component/setting_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -117,8 +117,7 @@ Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
 
     if (timeOut == -1 || ehConfigService.autoLockTimeOut.value == -1) {
       Future.delayed(const Duration(milliseconds: 400))
-          .then((_) =>
-              autoLockController.checkBiometrics(localizedReason: '认证以进行修改'))
+          .then((_) => autoLockController.checkBiometrics())
           .then((bool value) {
         autoLockController.resetLastLeaveTime();
         if (value) {
@@ -132,7 +131,7 @@ Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        hideLine: hideLine,
+        hideDivider: hideLine,
         selector: _getTimeText(ehConfigService.autoLockTimeOut.value),
         onTap: () async {
           final int? _result = await _showActionSheet(context);

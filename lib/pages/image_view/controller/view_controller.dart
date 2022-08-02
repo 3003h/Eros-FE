@@ -1,29 +1,54 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:archive_async/archive_async.dart';
+import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
+import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
 import 'package:photo_view/photo_view.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:synchronized/synchronized.dart';
 import 'package:throttling/throttling.dart';
 import 'package:wakelock/wakelock.dart';
 
 import 'view_state.dart';
 
-const double kBottomBarHeight = 44.0;
+// 底栏控制栏按钮高度
+const double kBottomBarButtonHeight = 54.0;
+
+// 底栏控制栏高度
+const double kBottomBarHeight = 64.0;
+
+// 底栏滑动栏高度
+const double kSliderBarHeight = 64.0;
+
+// 顶栏高度
 const double kTopBarHeight = 44.0;
+
+// 顶栏按钮高度
+const double kTopBarButtonHeight = 44.0;
+
+// 缩略图栏高度
 const double kThumbListViewHeight = 120.0;
 
 const String idViewTopBar = 'ViewTopBar';
@@ -38,12 +63,15 @@ const String idThumbnailListView = 'ThumbnailListView';
 const String idShowThumbListIcon = 'ShowThumbListIcon';
 const String idAutoReadIcon = 'AutoReadIcon';
 const String idIconBar = 'IconBar';
+const String idProcess = 'Process';
 
 const int _speedMaxCount = 50;
 const int _speedInv = 10;
 
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
+  ViewExtController();
+
   /// 状态
   final ViewExtState vState = ViewExtState();
 
@@ -55,10 +83,25 @@ class ViewExtController extends GetxController {
 
   GalleryPageController get _galleryPageController =>
       vState.galleryPageController;
+
   GalleryPageState get _galleryPageStat => vState.pageState;
+
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
+  final ArchiverDownloadController archiverDownloadController = Get.find();
+
+  Map<String, DownloadArchiverTaskInfo> get archiverTaskMap =>
+      archiverDownloadController.archiverTaskMap;
+
   Map<int, Future<GalleryImage?>> imageFutureMap = {};
+
+  Map<int, Stream<GalleryImage?>> imageStreamMap = {};
+
+  Map<int, Future<File?>> imageArchiveFutureMap = {};
+
+  final imageArchiveLock = Lock();
+
+  final imageLock = Lock();
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -120,7 +163,7 @@ class ViewExtController extends GetxController {
       handItemPositionsChange(positions);
     });
 
-    Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+    Future.delayed(const Duration(milliseconds: 200)).then((value) =>
         thumbScrollController.jumpTo(index: vState.currentItemIndex));
 
     // 缩略图滚动组件监听
@@ -153,7 +196,8 @@ class ViewExtController extends GetxController {
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          _galleryPageController.uptImageBySer(ser: event.ser, image: event);
+          _galleryPageController.uptImageBySer(
+              ser: event.ser, imageCallback: (image) => event);
         }
       });
     }
@@ -165,20 +209,11 @@ class ViewExtController extends GetxController {
         _orientation != ReadOrientation.auto) {
       OrientationPlugin.setPreferredOrientations(
           [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
-      // OrientationPlugin.forceOrientation(
-      //     orientationMap[_orientation] ?? DeviceOrientation.portraitUp);
     }
 
     vState.sliderValue = vState.currentItemIndex / 1.0;
 
-    if (GetPlatform.isIOS) {
-      setFullscreen();
-      // FlutterStatusbarManager.setFullscreen(true);
-    }
-    // FlutterStatusbarManager.setHidden(true,
-    //     animation: StatusBarAnimation.SLIDE);
-    // FlutterStatusbarManager.setTranslucent(true);
-    // FlutterStatusbarManager.setColor(Colors.transparent);
+    setFullscreen();
   }
 
   @override
@@ -197,17 +232,43 @@ class ViewExtController extends GetxController {
 
     unsetFullscreen();
 
-    // FlutterStatusbarManager.setHidden(false,
-    //     animation: StatusBarAnimation.SLIDE);
-    // FlutterStatusbarManager.setFullscreen(false);
-    // FlutterStatusbarManager.setTranslucent(false);
-
     // 恢复系统旋转设置
-    logger.d('恢复系统旋转设置');
+    logger.v('恢复系统旋转设置');
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
+
+    vState.asyncInputStreamMap.values.map((e) => e.close());
+  }
+
+  Future<void> initArchiveFuture(int ser, {AsyncArchiveFile? asyncFile}) async {
+    final file = asyncFile ?? vState.asyncArchiveFiles[ser - 1];
+    logger.v('load ${file.name}');
+    imageArchiveFutureMap[ser] = getArchiveFile(vState.gid, file);
+  }
+
+  Future<void> initFuture(int ser) async {
+    imageFutureMap[ser] = fetchImage(ser);
+  }
+
+  Future<File> getArchiveFile(String? gid, AsyncArchiveFile file) async {
+    // 同步锁 保证同时只有一个读取操作
+    return await imageArchiveLock.synchronized(() => _getFile(gid, file));
+  }
+
+  Future<File> _getFile(String? gid, AsyncArchiveFile file) async {
+    final outFile = File(path.join(Global.tempPath, 'archive_$gid', file.name));
+    if (outFile.existsSync()) {
+      return outFile;
+    }
+    final fileData = await file.getContent();
+    await outFile.create(recursive: true);
+    await outFile.writeAsBytes(fileData as Uint8List);
+    return outFile;
   }
 
   void resetPageController() {
+    pageController.dispose();
+    extendedPageController.dispose();
+
     pageController = PageController(
       initialPage: pageController.positions.isNotEmpty
           ? pageController.page?.round() ?? vState.currentItemIndex
@@ -251,7 +312,8 @@ class ViewExtController extends GetxController {
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          _galleryPageController.uptImageBySer(ser: event.ser, image: event);
+          _galleryPageController.uptImageBySer(
+              ser: event.ser, imageCallback: (val) => event);
         }
       });
     }
@@ -296,6 +358,8 @@ class ViewExtController extends GetxController {
     update([idViewColumnModeIcon, idSlidePage]);
     await Future.delayed(const Duration(milliseconds: 50));
 
+    // resetPageController();
+
     // pageController.jumpToPage(_toIndex);
     // extendedPageController.jumpToPage(_toIndex);
 
@@ -336,9 +400,19 @@ class ViewExtController extends GetxController {
     return image;
   }
 
-  GalleryImage? _getImageFromImageTasks(int itemSer, String? dir) {
+  Future<GalleryImage?> _getImageFromImageTasks(
+    int itemSer,
+    String? dir, {
+    bool reLoadDB = false,
+  }) async {
     if (dir == null) {
       return null;
+    }
+
+    if (reLoadDB) {
+      vState.imageTasks = (await vState.imageTaskDao
+              ?.findAllTaskByGid(int.parse(_galleryPageStat.gid))) ??
+          [];
     }
 
     final imageTask = vState.imageTasks
@@ -354,6 +428,7 @@ class ViewExtController extends GetxController {
         filePath: path.join(dir, imageTask.filePath!),
       );
     }
+    return null;
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
@@ -365,64 +440,98 @@ class ViewExtController extends GetxController {
   Future<GalleryImage?> fetchImage(
     int itemSer, {
     bool changeSource = false,
-    BuildContext? context,
   }) async {
     // 首先检查下载记录中是否有记录
     vState.imageTaskDao ??= Get.find<DownloadController>().imageTaskDao;
     vState.galleryTaskDao ??= Get.find<DownloadController>().galleryTaskDao;
     vState.dirPath ??= await _getTaskDirPath(int.parse(_galleryPageStat.gid));
 
-    GalleryImage? imageFromTasks =
-        _getImageFromImageTasks(itemSer, vState.dirPath);
-    if (imageFromTasks != null) {
-      return imageFromTasks;
-    }
+    late GalleryImage? image;
 
-    vState.imageTasks = (await vState.imageTaskDao
-            ?.findAllTaskByGid(int.parse(_galleryPageStat.gid))) ??
-        [];
+    // 检查是否已下载
+    image = await _getImageFromImageTasks(itemSer, vState.dirPath);
+    image ??=
+        await _getImageFromImageTasks(itemSer, vState.dirPath, reLoadDB: true);
 
-    imageFromTasks = _getImageFromImageTasks(itemSer, vState.dirPath);
-    // 存在下载记录 直接返回
-    if (imageFromTasks != null) {
-      return imageFromTasks;
-    }
+    // 检查是否已下载archive
+    image ??= await getFromArchiverTask(itemSer);
 
-    final tImage = _galleryPageStat.imageMap[itemSer];
-    if (tImage == null) {
-      logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
+    // 请求页面 解析为 [GalleryImage]
+    if (image == null) {
+      final tImage = _galleryPageStat.imageMap[itemSer];
+      if (tImage == null) {
+        logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
 
-      // 直接获取需要的
-      await _galleryPageController.loadImagesForSer(itemSer);
-    }
-
-    GalleryPara.instance
-        .ehPrecacheImages(
-      imageMap: _galleryPageStat.imageMap,
-      itemSer: itemSer,
-      max: _ehConfigService.preloadImage.value,
-    )
-        .listen((GalleryImage? event) {
-      if (event != null) {
-        _galleryPageController.uptImageBySer(ser: event.ser, image: event);
+        // 直接获取所在页数据
+        await _galleryPageController.loadImagesForSer(itemSer);
       }
-    });
 
-    final GalleryImage? image =
-        await _galleryPageController.fetchAndParserImageInfo(
-      itemSer,
-      cancelToken: vState.getMoreCancelToken,
-      // refresh: refresh,
-      changeSource: changeSource,
-    );
+      GalleryPara.instance
+          .ehPrecacheImages(
+        imageMap: _galleryPageStat.imageMap,
+        itemSer: itemSer,
+        max: _ehConfigService.preloadImage.value,
+      )
+          .listen((GalleryImage? event) {
+        if (event != null) {
+          _galleryPageController.uptImageBySer(
+              ser: event.ser, imageCallback: (val) => val = event);
+        }
+      });
+
+      image = await _galleryPageController.fetchAndParserImageInfo(
+        itemSer,
+        cancelToken: vState.getMoreCancelToken,
+        changeSource: changeSource,
+      );
+    }
 
     return image;
   }
 
+  Future<GalleryImage?> getFromArchiverTask(int itemSer) async {
+    final gid = vState.gid;
+    // 读取缓存
+    AsyncArchive? asyncArchive = vState.asyncArchiveMap[gid];
+
+    if (asyncArchive == null && gid != null) {
+      // archiver任务
+      final task = archiverTaskMap.values
+          .sorted((t1, t2) => (t1.type ?? '').compareTo(t2.type ?? ''))
+          .where((element) =>
+              element.gid == _galleryPageStat.gid &&
+              element.status == DownloadTaskStatus.complete.value)
+          .toList()
+          .firstOrNull;
+
+      if (task == null) {
+        return null;
+      }
+
+      final filePath = path.join(task.savedDir ?? '', task.fileName);
+
+      // 异步读取zip
+      final tuple = await readAsyncArchive(filePath.realArchiverPath);
+      asyncArchive = tuple.item1;
+      final asyncInputStream = tuple.item2;
+      vState.asyncArchiveMap[gid] = asyncArchive;
+      vState.asyncInputStreamMap[gid] = asyncInputStream;
+    }
+
+    if (asyncArchive == null) {
+      return null;
+    }
+
+    final file =
+        await getArchiveFile(vState.gid, asyncArchive.files[itemSer - 1]);
+
+    return GalleryImage(
+        ser: itemSer, gid: _galleryPageStat.gid, tempPath: file.path);
+  }
+
   /// 重载图片数据，重构部件
   Future<void> reloadImage(int itemSer, {bool changeSource = true}) async {
-    final GalleryImage? _currentImage =
-        _galleryPageStat.galleryProvider?.imageMap[itemSer];
+    final GalleryImage? _currentImage = _galleryPageStat.imageMap[itemSer];
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存
@@ -437,17 +546,21 @@ class ViewExtController extends GetxController {
     }
     _galleryPageController.uptImageBySer(
       ser: itemSer,
-      image: _currentImage.copyWith(imageUrl: ''),
+      imageCallback: (image) => image.copyWith(
+        imageUrl: '',
+        changeSource: changeSource,
+        completeCache: false,
+      ),
     );
 
     // 换源重载
     imageFutureMap[itemSer] = fetchImage(
       itemSer,
-      // refresh: true,
       changeSource: changeSource,
     );
 
-    update();
+    // update();
+    update(['$idImageListView$itemSer']);
   }
 
   void setScale100(ImageInfo imageInfo, Size size) {
@@ -469,26 +582,38 @@ class ViewExtController extends GetxController {
       return;
     }
 
+    // android会有抖动
     if (GetPlatform.isIOS) {
       if (!vState.showBar) {
-        // show
-        // FlutterStatusbarManager.setFullscreen(false);
         unsetFullscreen();
         vState.showBar = !vState.showBar;
-        update([idViewBar]);
+        // update([idViewBar]);
       } else {
         // hide
         vState.showBar = !vState.showBar;
-        update([idViewBar]);
-        // await Future.delayed(const Duration(milliseconds: 200));
-        // FlutterStatusbarManager.setFullscreen(true);
+        // update([idViewBar]);
+
         setFullscreen();
-        // FlutterStatusbarManager.setHidden(true);
       }
     } else {
       vState.showBar = !vState.showBar;
       update([idViewBar]);
     }
+  }
+
+  void setFullscreen() {
+    if (_ehConfigService.viewFullscreen) {
+      FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+    }
+  }
+
+  Future<void> unsetFullscreen() async {
+    await FullScreen.exitFullScreen();
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.transparent,
+    //   systemNavigationBarDividerColor: Colors.transparent,
+    //   statusBarColor: Colors.transparent,
+    // ));
   }
 
   Future<void> tapLeft() async {
@@ -537,9 +662,8 @@ class ViewExtController extends GetxController {
         itemScrollController.isAttached &&
         !vState.isScrolling &&
         vState.pageIndex > 0) {
-      logger.d('${vState.minImageIndex}');
+      logger.v('${vState.minImageIndex}');
       itemScrollController.scrollTo(
-        // index: vState.pageIndex - 1,
         index: vState.minImageIndex - 1,
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
@@ -652,11 +776,11 @@ class ViewExtController extends GetxController {
     }
   }
 
-  Future tapAutoRead(BuildContext context) async {
+  Future tapAutoRead(BuildContext context, {bool setInv = true}) async {
     // logger.d('tap autoRead');
 
     if (!vState.autoRead) {
-      await _setAutoReadInv(context);
+      await _setAutoReadInv(context, setInv: setInv);
       update([idAutoReadIcon]);
       _startAutoRead();
     } else {
@@ -669,19 +793,21 @@ class ViewExtController extends GetxController {
     _startAutoRead();
   }
 
-  Future<void> _setAutoReadInv(BuildContext context) async {
-    // logger.d('_ehConfigService.turnPageInv ${_ehConfigService.turnPageInv}');
-
+  Future<void> _setAutoReadInv(
+    BuildContext context, {
+    bool setInv = true,
+  }) async {
     final initIndex = EHConst.invList
         .indexWhere((int element) => element == _ehConfigService.turnPageInv);
-    final int? inv = await _showAutoReadInvPicker(
-      context,
-      EHConst.invList,
-      initIndex: initIndex,
-    );
+    final int? inv = setInv
+        ? await _showAutoReadInvPicker(
+            context,
+            EHConst.invList,
+            initIndex: initIndex,
+          )
+        : _ehConfigService.turnPageInv;
 
     if (inv != null) {
-      // logger.d('set inv $inv');
       _ehConfigService.turnPageInv = inv;
       vState.autoRead = !vState.autoRead;
     }
@@ -755,6 +881,7 @@ class ViewExtController extends GetxController {
   }
 
   final debNextPage = Debouncing(duration: const Duration(seconds: 1));
+
   void _startAutoRead() {
     Wakelock.enable();
     final duration = Duration(milliseconds: _ehConfigService.turnPageInv);
@@ -844,6 +971,7 @@ class ViewExtController extends GetxController {
 
   final thrThumbScrollTo =
       Throttling(duration: const Duration(milliseconds: 200));
+
   void thumbScrollTo({int? index}) {
     final indexRange = vState.maxThumbIndex - vState.minThumbIndex;
     final toIndex = index ?? vState.currentItemIndex;
@@ -974,6 +1102,7 @@ class ViewExtController extends GetxController {
   }
 
   static Timer? debounceTimer;
+
   // 防抖函数
   void vvDebounce(
     Function? doSomething, {
@@ -1016,6 +1145,7 @@ class ViewExtController extends GetxController {
   }
 
   final Map<String, bool> _loadExtendedImageRectComplets = {};
+
   void handOnLoadCompletExtendedImageRect({required String url}) {
     Future.delayed(const Duration(milliseconds: 50)).then(
       (_) {
@@ -1036,6 +1166,56 @@ class ViewExtController extends GetxController {
       onPageController.call();
     } else {
       onExtendedPageController.call();
+    }
+  }
+
+  void scaleUp() {}
+
+  void scaleDown() {}
+
+  void scaleReset() {}
+
+  Future<void> downloadImage({
+    required int ser,
+    required String url,
+    bool reset = false,
+    onError(e)?,
+  }) async {
+    logger.d('downloadImage $url');
+    final savePath = path.join(Global.tempPath, 'ViewTemp', vState.gid, '$ser');
+
+    try {
+      await ehDownload(
+        savePath: savePath,
+        url: url,
+        progressCallback: (int count, int total) {
+          final process = count / total;
+          // loggerSimple.d('ViewTemp download file, $ser $process');
+          // _galleryPageController.uptImageProcess(ser, process);
+          _galleryPageController.uptImageBySer(
+              ser: ser,
+              imageCallback: (image) {
+                return image.copyWith(downloadProcess: process);
+              });
+          update(['${idProcess}_$ser']);
+        },
+        onDownloadComplete: () {
+          _galleryPageController.uptImageBySer(
+              ser: ser,
+              imageCallback: (image) => image.copyWith(
+                    tempPath: savePath,
+                    completeCache: true,
+                    changeSource: false,
+                  ));
+        },
+      );
+    } catch (e) {
+      onError?.call(e);
+      // logger.e('$e');
+      // logger.e('${e.runtimeType}');
+      // _galleryPageController.uptImageBySer(
+      //     ser: ser, imageCallback: (image) => image.copyWith(errorInfo: '$e'));
+      // update(['${idProcess}_$ser']);
     }
   }
 }

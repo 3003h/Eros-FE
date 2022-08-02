@@ -35,8 +35,9 @@ Future<int?> syncReadProgress(
   bool _needShowDialog = true;
 
   Future<int> _sync() async {
-    final _cache =
-        await Get.find<GalleryCacheController>().getGalleryCache('$gid');
+    final _cache = await Get.find<GalleryCacheController>()
+        .listenGalleryCache('$gid')
+        .last;
     _needShowDialog = false;
     return _cache?.lastIndex ?? 0;
   }
@@ -115,26 +116,28 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           return;
         }
 
+        // 下载的图片文件路径
         final List<String> pics = imageTasks
             .where((element) =>
                 element.filePath != null && element.filePath!.isNotEmpty)
             .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
             .toList();
 
-        // 同步进度
-        int? lastIndex;
+        // 读取进度
+        int? lastIndex = 0;
         if (Get.find<WebdavController>().syncReadProgress) {
           lastIndex = await syncReadProgress(context, galleryTask.gid);
         }
-        logger.d('lastIndex $lastIndex');
-        lastIndex ??= (await Get.find<GalleryCacheController>()
-                    .getGalleryCache('${galleryTask.gid}', sync: false))
-                ?.lastIndex ??
-            0;
-        logger.d('lastIndex $lastIndex');
+        final cache = await Get.find<GalleryCacheController>()
+            .listenGalleryCache('${galleryTask.gid}', sync: false)
+            .first;
+        if (cache?.lastIndex != null) {
+          lastIndex = cache?.lastIndex;
+        }
 
+        // 进入阅读
         NavigatorUtil.goGalleryViewPageFile(
-            lastIndex, pics, '${galleryTask.gid}');
+            lastIndex ?? 0, pics, '${galleryTask.gid}');
       },
       onLongPress: () => controller.onLongPress(taskIndex, task: galleryTask),
       child: _buildCardItem(context, _complete, addTime: addTime),

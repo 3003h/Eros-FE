@@ -169,8 +169,9 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               minSize: 40,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                FontAwesomeIcons.magnifyingGlass,
-                size: 20,
+                // FontAwesomeIcons.magnifyingGlass,
+                CupertinoIcons.search,
+                size: 28,
               ),
               onPressed: () {
                 final bool fromTabItem = Get.find<TabHomeController>()
@@ -182,13 +183,18 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
             ),
             CupertinoButton(
               padding: const EdgeInsets.all(0.0),
-              minSize: 38,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              minSize: 40,
+              child: Stack(
+                alignment: Alignment.centerRight,
+                // mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  // const Icon(
+                  //   FontAwesomeIcons.arrowDownWideShort,
+                  //   size: 20,
+                  // ),
                   const Icon(
-                    FontAwesomeIcons.arrowDownWideShort,
-                    size: 20,
+                    CupertinoIcons.sort_down,
+                    size: 28,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -214,7 +220,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                     border: Border.all(
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.activeBlue, context),
-                      width: 2.3,
+                      width: 1.8,
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(8))),
                 child: Obx(() => Text(

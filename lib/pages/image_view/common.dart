@@ -24,6 +24,7 @@ enum ViewColumnMode {
 enum LoadFrom {
   gallery,
   download,
+  archiver,
 }
 
 Map<String, bool> _throttles = {};
@@ -77,7 +78,7 @@ class GalleryPara {
       GalleryImage _image = _imageTemp;
 
       if (_image.completeCache ?? false) {
-        logger.v('ser $_ser 已存在预载中 跳过');
+        logger.v('ser $_ser 已预载完成 跳过');
         continue;
       }
 

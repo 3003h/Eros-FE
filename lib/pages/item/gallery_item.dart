@@ -29,7 +29,6 @@ const double kFixedHeight = 200.0;
 final EhConfigService _ehConfigService = Get.find();
 
 /// 画廊列表项
-/// 标题和tag需要随设置变化重构ui
 class GalleryItemWidget extends StatelessWidget {
   const GalleryItemWidget(
       {Key? key, required this.tabTag, required this.galleryProvider})
@@ -38,7 +37,7 @@ class GalleryItemWidget extends StatelessWidget {
   final GalleryProvider galleryProvider;
   final dynamic tabTag;
 
-  GalleryItemController get galleryProviderController =>
+  GalleryItemController get itemController =>
       Get.find(tag: galleryProvider.gid);
 
   @override
@@ -68,11 +67,11 @@ class GalleryItemWidget extends StatelessWidget {
         ),
       ),
       behavior: HitTestBehavior.opaque,
-      onTap: () => galleryProviderController.onTap(tabTag),
-      onTapDown: galleryProviderController.onTapDown,
-      onTapUp: galleryProviderController.onTapUp,
-      onTapCancel: galleryProviderController.onTapCancel,
-      onLongPress: galleryProviderController.onLongPress,
+      onTap: () => itemController.onTap(tabTag),
+      onTapDown: itemController.onTapDown,
+      onTapUp: itemController.onTapUp,
+      onTapCancel: itemController.onTapCancel,
+      onLongPress: itemController.onLongPress,
     ).autoCompressKeyboard(context);
   }
 
@@ -94,7 +93,7 @@ class GalleryItemWidget extends StatelessWidget {
                       offset: const Offset(0.5, 4),
                     )
                   ],
-            color: galleryProviderController.colorTap.value,
+            color: itemController.colorTap.value,
             borderRadius: BorderRadius.circular(kCardRadius),
           ),
           padding: const EdgeInsets.only(right: kPaddingHorizontal),
@@ -107,7 +106,7 @@ class GalleryItemWidget extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _CoverImage(
-                        galleryProviderController: galleryProviderController,
+                        galleryProviderController: itemController,
                         tabTag: tabTag,
                         cardType: true,
                       ),
@@ -126,12 +125,16 @@ class GalleryItemWidget extends StatelessWidget {
                       children: <Widget>[
                         // 标题 provider
                         _Title(
-                          galleryProviderController: galleryProviderController,
+                          galleryItemController: itemController,
                         ),
                         const SizedBox(height: 6),
-                        // 上传者
+                        // 上传者 或 收藏备注
                         Text(
-                          galleryProvider.uploader ?? '',
+                          (galleryProvider.uploader?.isNotEmpty ?? false)
+                              ? galleryProvider.uploader ?? ''
+                              : (galleryProvider.favNote?.isNotEmpty ?? false)
+                                  ? 'Note: ${galleryProvider.favNote ?? ''}'
+                                  : '',
                           style: const TextStyle(
                               fontSize: 12, color: CupertinoColors.systemGrey),
                         ),
@@ -150,41 +153,34 @@ class GalleryItemWidget extends StatelessWidget {
                         const SizedBox(height: 6),
                         const Spacer(),
                         // 评分行
-                        GetBuilder<GalleryItemController>(
-                          tag: galleryProvider.gid,
-                          builder: (logic) => Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              // 评分
-                              Expanded(
-                                child: _Rating(
-                                  rating: galleryProvider.rating,
-                                  ratingFallBack:
-                                      galleryProvider.ratingFallBack,
-                                  colorRating: galleryProvider.colorRating,
-                                ),
-                                // child: _RatingObx(
-                                //     galleryProviderController:
-                                //         galleryProviderController),
-                              ),
-                              // _Rating(
-                              //   rating: logic.galleryProvider.rating,
-                              //   ratingFallBack:
-                              //       logic.galleryProvider.ratingFallBack,
-                              //   colorRating: logic.galleryProvider.colorRating,
-                              // ),
-                              // 收藏图标
-                              _FavcatIcon(
-                                galleryProviderController: logic,
-                              ),
-                              // 图片数量
-                              _Filecont(
-                                translated: galleryProvider.translated,
-                                filecount: galleryProvider.filecount,
-                              ),
-                            ],
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            // 评分
+                            Expanded(
+                              child: Obx(() {
+                                return _Rating(
+                                  rating: itemController.rating,
+                                  ratingFallBack: itemController.ratingFallBack,
+                                  colorRating: itemController.colorRating,
+                                );
+                              }),
+                            ),
+                            // 收藏图标
+                            Obx(() {
+                              logger.v(
+                                  '${itemController.galleryProvider.gid} favCat ${itemController.favCat}');
+                              return _FavcatIcon(
+                                favCat: itemController.favCat,
+                              );
+                            }),
+                            // 图片数量
+                            _Filecont(
+                              translated: galleryProvider.translated,
+                              filecount: galleryProvider.filecount,
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 6,
@@ -335,12 +331,6 @@ class _CoverImage extends StatelessWidget {
         fit: StackFit.passthrough,
         children: [
           if (_fit == BoxFit.contain) getImageBlureFittedBox(),
-          // Container(
-          //   width: coverImageWidth,
-          //   height: coverImageHeigth,
-          //   color: CupertinoDynamicColor.resolve(
-          //       CupertinoColors.systemGrey5, context),
-          // ),
           Center(
             child: HeroMode(
               enabled: !isLayoutLarge,
@@ -376,14 +366,14 @@ class _CoverImage extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({Key? key, required this.galleryProviderController})
+  const _Title({Key? key, required this.galleryItemController})
       : super(key: key);
-  final GalleryItemController galleryProviderController;
+  final GalleryItemController galleryItemController;
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => Text(
-          galleryProviderController.title,
+          galleryItemController.title,
           maxLines: _ehConfigService.fixedHeightOfListItems ? 2 : 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
@@ -433,50 +423,23 @@ class _Filecont extends StatelessWidget {
 }
 
 class _FavcatIcon extends StatelessWidget {
-  const _FavcatIcon({Key? key, required this.galleryProviderController})
-      : super(key: key);
-  final GalleryItemController galleryProviderController;
+  const _FavcatIcon({Key? key, required this.favCat}) : super(key: key);
+  final String favCat;
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        logger.v(
-            '${galleryProviderController.galleryProvider.gid}  isFav:${galleryProviderController.isFav}');
-        return Container(
-          child: galleryProviderController.isFav
-              ? Container(
-                  padding: const EdgeInsets.only(bottom: 2, right: 2, left: 2),
-                  child: Icon(
-                    FontAwesomeIcons.solidHeart,
-                    size: 12,
-                    color: ThemeColors.favColor[
-                        galleryProviderController.galleryProvider.favcat],
-                  ),
-                )
-              : Container(),
-        );
-      },
+    return Container(
+      child: favCat.isNotEmpty
+          ? Container(
+              padding: const EdgeInsets.only(bottom: 2, right: 2, left: 2),
+              child: Icon(
+                FontAwesomeIcons.solidHeart,
+                size: 12,
+                color: ThemeColors.favColor[favCat],
+              ),
+            )
+          : Container(),
     );
-  }
-}
-
-class _RatingObx extends StatelessWidget {
-  const _RatingObx({Key? key, required this.galleryProviderController})
-      : super(key: key);
-  final GalleryItemController galleryProviderController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() {
-      // logger.d('_RatingObx ${galleryProviderController.ratingFB}');
-      return Container(
-        child: _Rating(
-          ratingFallBack: galleryProviderController.ratingFB,
-          colorRating: galleryProviderController.galleryProvider.colorRating,
-        ),
-      );
-    });
   }
 }
 
@@ -507,14 +470,14 @@ class _Rating extends StatelessWidget {
                 CupertinoColors.systemGrey3, Get.context!),
           ),
         ),
-        Text(
-          rating?.toString() ?? '',
-          style: TextStyle(
-            fontSize: 11,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey, Get.context!),
-          ),
-        ),
+        // Text(
+        //   rating?.toString() ?? '',
+        //   style: TextStyle(
+        //     fontSize: 11,
+        //     color: CupertinoDynamicColor.resolve(
+        //         CupertinoColors.systemGrey, Get.context!),
+        //   ),
+        // ),
       ],
     ).paddingOnly(right: 4);
   }

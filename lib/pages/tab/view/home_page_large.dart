@@ -8,17 +8,21 @@ import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
+import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
+import 'package:fehviewer/pages/setting/avatar_setting_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
-import 'package:fehviewer/pages/setting/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
-import 'package:fehviewer/pages/setting/eh_usertag_page.dart';
+import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
+import 'package:fehviewer/pages/setting/image_hide_page.dart';
+import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
+import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
+import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
@@ -128,6 +132,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                               transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                             );
+
                           case EHRoutes.ehSetting:
                             return GetPageRoute(
                               settings: settings,
@@ -164,7 +169,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.advancedSetting:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => AdvancedSettingPage(),
+                              page: () => const AdvancedSettingPage(),
                               binding: BindingsBuilder(
                                   () => Get.lazyPut(() => CacheController())),
                               transition: Transition.fadeIn,
@@ -185,6 +190,11 @@ class TabHomeLarge extends GetView<TabHomeController> {
                               settings: settings,
                               page: () => TagTranslatePage(),
                             );
+                          case EHRoutes.avatarSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => AvatarSettingPage(),
+                            );
                           case EHRoutes.logfile:
                             return GetPageRoute(
                               settings: settings,
@@ -200,7 +210,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.galleryPage:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => GalleryMainPage(),
+                              page: () => GallerySliverPage(),
                               transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                               // fullscreenDialog: true,
@@ -264,6 +274,16 @@ class TabHomeLarge extends GetView<TabHomeController> {
                               settings: settings,
                               page: () => const EhUserTagsPage(),
                             );
+                          case EHRoutes.imageHide:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const ImageHidePage(),
+                            );
+                          case EHRoutes.mangaHidedImage:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const PHashImageListPage(),
+                            );
                           case EHRoutes.loginWebDAV:
                             return GetPageRoute(
                               settings: settings,
@@ -278,6 +298,11 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => const CustomProfileSettingPage(),
+                            );
+                          case EHRoutes.license:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => customLicensePage,
                             );
                           default:
                             return GetPageRoute(

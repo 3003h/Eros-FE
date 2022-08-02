@@ -3,7 +3,7 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/controller/fav_dialog_controller.dart';
+import 'package:fehviewer/pages/controller/fav_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +13,79 @@ class GalleryItemController extends GetxController {
   GalleryItemController({required this.galleryProvider});
 
   final EhConfigService _ehConfigService = Get.find();
-  final FavDialogController _favDialogController = Get.find();
+  final FavController _favDialogController = Get.find();
   final TabHomeController _tabHomeController = Get.find();
   final HistoryController _historyController = Get.find();
 
   late List<GalleryImage> firstPageImage;
-  // late GalleryProvider galleryProvider;
   final GalleryProvider galleryProvider;
+
+  final RxBool _isFav = false.obs;
+  bool get isFav => _isFav.value;
+  set isFav(bool val) => _isFav.value = val;
+
+  final _favCat = ''.obs;
+  String get favCat => _favCat.value;
+  set favCat(String val) => _favCat.value = val;
+
+  final _rating = 0.0.obs;
+  double get rating => _rating.value;
+  set rating(double val) => _rating.value = val;
+
+  final _ratingFallBack = 0.0.obs;
+  double get ratingFallBack => _ratingFallBack.value;
+  set ratingFallBack(double val) => _ratingFallBack.value = val;
+
+  final _colorRating = ''.obs;
+  String get colorRating => _colorRating.value;
+  set colorRating(String val) => _colorRating.value = val;
+
+  @override
+  void onInit() {
+    super.onInit();
+    logger.v(
+        'init GalleryProviderController ${galleryProvider.gid}  ${galleryProvider.englishTitle}');
+    if (galleryProvider.favTitle != null &&
+        galleryProvider.favTitle!.isNotEmpty) {
+      isFav = true;
+    }
+
+    rating = galleryProvider.rating ?? 0.00;
+    colorRating = galleryProvider.colorRating ?? '';
+
+    ratingFallBack = galleryProvider.ratingFallBack ?? 0.00;
+    logger.v('ratingFB=$ratingFallBack');
+
+    favCat = galleryProvider.favcat ?? '';
+    logger.v('favCat=$favCat');
+  }
+
+  /// 设置收藏夹
+  void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
+    logger.v('设置收藏夹, 原 isFav :[$isFav]');
+    galleryProvider.copyWith(favTitle: favTitle);
+    isFav = favTitle.isNotEmpty;
+    logger.v('设置收藏夹, 当前 isFav :[$isFav]');
+    if (favcat != null || (favcat?.isNotEmpty ?? false)) {
+      favCat = favcat!;
+      galleryProvider.copyWith(favcat: favcat);
+      logger.v('item set favcat [$favcat]');
+    } else {
+      favCat = '';
+      galleryProvider.copyWith(favcat: '', favTitle: '');
+    }
+  }
+
+  String get title {
+    if ((_ehConfigService.isJpnTitle.value) &&
+        (galleryProvider.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryProvider.japaneseTitle ?? '';
+    } else {
+      return galleryProvider.englishTitle ?? '';
+    }
+  }
+
+  Rx<Color?> colorTap = ehTheme.itemBackgroundColor.obs;
 
   /// 点击item
   void onTap(dynamic tabTag) {
@@ -38,53 +104,7 @@ class GalleryItemController extends GetxController {
 
   void onTapCancel() => _updateNormalColor();
 
-  @override
-  void onInit() {
-    super.onInit();
-    logger.v(
-        'init GalleryProviderController ${galleryProvider.gid}  ${galleryProvider.englishTitle}');
-    if (galleryProvider.favTitle != null &&
-        galleryProvider.favTitle!.isNotEmpty) {
-      isFav = true;
-    }
-    ratingFB = galleryProvider.ratingFallBack ?? 0.0;
-    logger.v('ratingFB=$ratingFB');
-  }
-
-  final RxBool _isFav = false.obs;
-  bool get isFav => _isFav.value;
-  set isFav(bool val) => _isFav.value = val;
-
-  final _ratingFB = 0.0.obs;
-  double get ratingFB => _ratingFB.value;
-  set ratingFB(double val) => _ratingFB.value = val;
-
-  void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
-    logger.v('setFavTitle ori isFav :$isFav');
-    galleryProvider.copyWith(favTitle: favTitle);
-    isFav = favTitle.isNotEmpty;
-    logger.v('setFavTitle cur isFav :$isFav');
-    if (favcat != null || (favcat?.isNotEmpty ?? false)) {
-      galleryProvider.copyWith(favcat: favcat);
-      logger.v('item set favcat $favcat');
-    } else {
-      galleryProvider.copyWith(favcat: '', favTitle: '');
-    }
-  }
-
-  String get title {
-    if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryProvider.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryProvider.japaneseTitle ?? '';
-    } else {
-      return galleryProvider.englishTitle ?? '';
-    }
-  }
-
-  Rx<Color?> colorTap = ehTheme.itemBackgroundColor.obs;
-
   void _updateNormalColor() {
-    // colorTap.value = Colors.transparent;
     colorTap.value = ehTheme.itemBackgroundColor;
   }
 
@@ -107,7 +127,6 @@ class GalleryItemController extends GetxController {
 
     firstPageImage =
         galleryProvider.galleryImages?.sublist(0, galleryImage.length) ?? [];
-    // logger.d(' _firstPagePreview ${firstPagePreview.length}');
   }
 
   /// 长按菜单
@@ -138,39 +157,46 @@ class GalleryItemController extends GetxController {
               if (galleryProvider.favcat == null ||
                   (galleryProvider.favcat?.isEmpty ?? false))
                 CupertinoActionSheetAction(
-                  onPressed: () {
+                  onPressed: () async {
                     if (galleryProvider.gid == null ||
                         galleryProvider.token == null) {
                       return;
                     }
                     Get.back();
-                    _favDialogController
-                        .tapAddFav(galleryProvider.gid!, galleryProvider.token!)
-                        .then((Favcat? value) {
-                      if (value != null) {
-                        setFavTitleAndFavcat(
-                            favTitle: value.favTitle, favcat: value.favId);
-                        showToast('successfully add');
+
+                    try {
+                      final value = await _favDialogController.addFav(
+                          galleryProvider.gid!, galleryProvider.token!);
+                      if (value == null) {
+                        return;
                       }
-                    });
+                      setFavTitleAndFavcat(
+                          favTitle: value.favTitle, favcat: value.favId);
+                      showToast('successfully add');
+                    } catch (e) {
+                      rethrow;
+                    }
                   },
                   child: Text(L10n.of(context).add_to_favorites),
                 ),
               if (galleryProvider.favcat != null &&
                   (galleryProvider.favcat?.isNotEmpty ?? false))
                 CupertinoActionSheetAction(
-                  onPressed: () {
+                  onPressed: () async {
                     if (galleryProvider.gid == null ||
                         galleryProvider.token == null) {
                       return;
                     }
-                    _favDialogController
-                        .delFav(galleryProvider.favcat!, galleryProvider.gid!,
-                            galleryProvider.token!)
-                        .then((_) {
-                      setFavTitleAndFavcat(favTitle: '', favcat: '');
-                      showToast('successfully deleted');
-                    });
+
+                    try {
+                      await _favDialogController.delFav(galleryProvider.favcat!,
+                          galleryProvider.gid!, galleryProvider.token!);
+                    } catch (e) {
+                      rethrow;
+                    }
+                    setFavTitleAndFavcat(favTitle: '', favcat: '');
+                    showToast('successfully deleted');
+
                     Get.back();
                   },
                   child: Text(L10n.of(context).remove_from_favorites),
@@ -178,23 +204,26 @@ class GalleryItemController extends GetxController {
               if (galleryProvider.favcat != null &&
                   (galleryProvider.favcat?.isNotEmpty ?? false))
                 CupertinoActionSheetAction(
-                  onPressed: () {
+                  onPressed: () async {
                     if (galleryProvider.gid == null ||
                         galleryProvider.token == null) {
                       return;
                     }
                     Get.back();
-                    _favDialogController
-                        .tapAddFav(galleryProvider.gid!, galleryProvider.token!,
-                            oriFavcat: galleryProvider.favcat!)
-                        .then((Favcat? value) {
+
+                    try {
+                      final value = await _favDialogController.addFav(
+                          galleryProvider.gid!, galleryProvider.token!,
+                          oriFavcat: galleryProvider.favcat!);
                       if (value != null) {
                         setFavTitleAndFavcat(favTitle: '', favcat: '');
                         setFavTitleAndFavcat(
                             favTitle: value.favTitle, favcat: value.favId);
                         showToast('successfully changed');
                       }
-                    });
+                    } catch (e) {
+                      rethrow;
+                    }
                   },
                   child: Text(L10n.of(context).change_to_favorites),
                 ),

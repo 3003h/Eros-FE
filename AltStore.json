@@ -1,0 +1,49 @@
+{
+    "name": "FEhViewer",
+    "identifier": "cn.honjow.fehv",
+    "sourceURL": "https://github.com/honjow/FEhViewer/raw/master/AltStore.json",
+    "apps": [
+      {
+        "name": "FEhViewer",
+        "bundleIdentifier": "cn.honjow.fehv",
+        "developerName": "honjow",
+        "version": "1.2.46",
+        "versionDate": "2022-07-01T01:01:01",
+        "versionDescription": "修复空评论时画廊解析问题\n修改章节显示样式\n修复一些archiver的下载问题",
+        "downloadURL": "https://github.com/honjow/FEhViewer/releases/download/v1.2.46%2B406/feh_1.2.46_406.ipa",
+        "localizedDescription": "An unofficial E-Hentai App for iOS.",
+        "iconURL": "https://github.com/honjow/FEhViewer/raw/master/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+        "tintColor": "289979",
+        "size": 28996921,
+        "screenshotURLs": [
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/home1.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery1.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery2.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery3.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search1.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search2.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search3.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/read1.jpg",
+            "https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/read2.jpg"
+          ],
+        "permissions": [
+          {
+            "type": "network",
+            "usageDescription": "Needs this permission to access the Internet"
+          }
+        ]
+      }
+    ],
+    "news": [
+      {
+        "title": "FEhViewer now available!",
+        "identifier": "fehviewer-now-available",
+        "caption": "An Unofficial e-hentai app make on flutter",
+        "tintColor": "289979",
+        "appID": "cn.honjow.fehv",
+        "date": "2022-07-07",
+        "notify": false
+      }
+    ]
+  }
+  

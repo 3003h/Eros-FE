@@ -70,13 +70,14 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           },
           child: Obx(() {
             return PageView(
+              // CustomScrollPhysics对于改善滑动问题没有帮助
+              // physics: const CustomScrollPhysics(),
               key: ValueKey(
                   controller.profiles.map((e) => '${e.uuid}${e.name}').join()),
               // key: UniqueKey(),
               controller: controller.pageController,
               children: controller.profiles.isNotEmpty
                   ? [
-                      // 画廊列表
                       ...controller.profilesShow
                           .map((e) => SubListView<CustomSubListController>(
                                 profileUuid: e.uuid,
@@ -264,8 +265,9 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              FontAwesomeIcons.magnifyingGlass,
-              size: 20,
+              // FontAwesomeIcons.magnifyingGlass,
+              CupertinoIcons.search,
+              size: 28,
             ),
             onPressed: () {
               NavigatorUtil.goSearchPage();
@@ -282,7 +284,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                 border: Border.all(
                   color: CupertinoDynamicColor.resolve(
                       CupertinoColors.activeBlue, context),
-                  width: 2.3,
+                  width: 1.8,
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),

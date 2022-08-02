@@ -8,12 +8,13 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/const/locale.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../component/setting_base.dart';
@@ -72,7 +73,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       if (!newValue) {
         HttpOverrides.global = null;
       } else {
-        HttpOverrides.global = Global.dfHttpOverrides;
+        HttpOverrides.global = ehHttpOverrides..skipCertificateCheck = true;
         final HttpClient eClient =
             ExtendedNetworkImageProvider.httpClient as HttpClient;
         eClient.badCertificateCallback =
@@ -83,7 +84,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     final List<Widget> _list = <Widget>[
-      _buildLanguageItem(context),
+      _buildLanguageItem(context, hideLine: true),
       const ItemSpace(),
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
@@ -101,7 +102,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             )),
       if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
-          hideLine: true,
+          hideDivider: true,
           title: L10n.of(context).tabbar_setting,
           selector: '',
           onTap: () {
@@ -112,12 +113,24 @@ class ListViewAdvancedSetting extends StatelessWidget {
           },
         ),
       const ItemSpace(),
+      SelectorSettingItem(
+        hideDivider: true,
+        title: L10n.of(context).image_hide,
+        selector: '',
+        onTap: () {
+          Get.toNamed(
+            EHRoutes.imageHide,
+            id: isLayoutLarge ? 2 : null,
+          );
+        },
+      ),
+      const ItemSpace(),
       // 清除缓存
       _cacheController.obx(
           (String? state) => SelectorSettingItem(
                 title: L10n.of(context).clear_cache,
                 selector: state ?? '',
-                hideLine: true,
+                hideDivider: true,
                 onTap: () {
                   logger.d(' clear_cache');
                   _cacheController.clearAllCache();
@@ -126,7 +139,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           onLoading: SelectorSettingItem(
             title: L10n.of(context).clear_cache,
             selector: '',
-            hideLine: true,
+            hideDivider: true,
             onTap: () {
               logger.d(' clear_cache');
               _cacheController.clearAllCache();
@@ -139,31 +152,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         onChanged: _handleDFChanged,
         desc: 'By pass SNI',
       ),
-      // Obx(() {
-      //   return AnimatedCrossFade(
-      //     alignment: Alignment.center,
-      //     crossFadeState: _dnsService.enableDomainFronting
-      //         ? CrossFadeState.showSecond
-      //         : CrossFadeState.showFirst,
-      //     firstCurve: Curves.easeIn,
-      //     secondCurve: Curves.easeOut,
-      //     duration: const Duration(milliseconds: 200),
-      //     firstChild: const SizedBox(),
-      //     secondChild: SelectorSettingItem(
-      //       title: L10n.of(context).custom_hosts,
-      //       selector: _dnsService.enableCustomHosts
-      //           ? L10n.of(context).on
-      //           : L10n.of(context).off,
-      //       onTap: () {
-      //         Get.toNamed(
-      //           EHRoutes.customHosts,
-      //           id: isLayoutLarge ? 2 : null,
-      //         );
-      //       },
-      //       hideLine: true,
-      //     ),
-      //   );
-      // }),
+
       Obx(() => SelectorSettingItem(
             title: L10n.of(context).custom_hosts,
             selector: _dnsService.enableCustomHosts
@@ -181,7 +170,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
             titleColor: !_dnsService.enableDomainFronting
                 ? CupertinoColors.secondaryLabel
                 : null,
-            hideLine: true,
+            hideDivider: true,
           )),
       // TextSwitchItem(
       //   'DNS-over-HTTPS',
@@ -194,7 +183,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         L10n.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
-        hideLine: true,
+        hideDivider: true,
       ),
       const ItemSpace(),
       SelectorSettingItem(
@@ -210,7 +199,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         'Log debugMode',
         intValue: _ehConfigService.debugMode,
         onChanged: (bool val) => _ehConfigService.debugMode = val,
-        hideLine: true,
+        hideDivider: true,
       ),
     ];
 
@@ -223,62 +212,29 @@ class ListViewAdvancedSetting extends StatelessWidget {
   }
 
   /// 语言设置部件
-  Widget _buildLanguageItem(BuildContext context) {
+  Widget _buildLanguageItem(BuildContext context, {bool hideLine = false}) {
     final LocaleService localeService = Get.find();
     final String _title = L10n.of(context).language;
 
     final Map<String, String> localeMap = <String, String>{
       '': L10n.of(context).follow_system,
-      'en_US': 'English',
-      'zh_CN': '简体中文',
-      'ko_KR': '한국어',
     };
 
-    List<Widget> _getLocaleList(BuildContext context) {
-      return List<Widget>.from(localeMap.keys.map((String element) {
-        return CupertinoActionSheetAction(
-            onPressed: () {
-              Get.back(result: element);
-            },
-            child: Text(localeMap[element] ?? ''));
-      }).toList());
-    }
+    localeMap.addAll(languageMenu);
 
-    Future<String?> _showDialog(BuildContext context) {
-      return showCupertinoModalPopup<String>(
-          context: context,
-          builder: (BuildContext context) {
-            final CupertinoActionSheet dialog = CupertinoActionSheet(
-              cancelButton: CupertinoActionSheetAction(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(L10n.of(context).cancel)),
-              actions: <Widget>[
-                ..._getLocaleList(context),
-              ],
-            );
-            return dialog;
-          });
-    }
-
-    return Obx(() => SelectorSettingItem(
-          title: _title,
-          selector: localeMap[localeService.localCode.value] ?? '',
-          hideLine: true,
-          onTap: () async {
-            logger.v('tap LanguageItem');
-            final String? _result = await _showDialog(context);
-            if (_result is String) {
-              localeService.localCode.value = _result;
-            }
-            // logger.v('$_result');
-          },
-        ));
+    return Obx(() {
+      return SelectorItem<String>(
+        title: _title,
+        hideDivider: hideLine,
+        actionMap: localeMap,
+        initVal: localeService.localCode.value,
+        onValueChanged: (val) => localeService.localCode.value = val,
+      );
+    });
   }
 
   /// 主题设置部件
-  Widget _buildThemeItem(BuildContext context) {
+  Widget _buildThemeItem(BuildContext context, {bool hideLine = false}) {
     final String _title = L10n.of(context).theme;
     final ThemeService themeService = Get.find();
 
@@ -288,44 +244,14 @@ class ListViewAdvancedSetting extends StatelessWidget {
       ThemesModeEnum.darkMode: L10n.of(context).dark,
     };
 
-    List<Widget> _getThemeList(BuildContext context) {
-      return List<Widget>.from(themeMap.keys.map((ThemesModeEnum themesMode) {
-        return CupertinoActionSheetAction(
-            onPressed: () {
-              Get.back(result: themesMode);
-            },
-            child: Text(themeMap[themesMode] ?? ''));
-      }).toList());
-    }
-
-    Future<ThemesModeEnum?> _showDialog(BuildContext context) {
-      return showCupertinoModalPopup<ThemesModeEnum>(
-          context: context,
-          builder: (BuildContext context) {
-            final CupertinoActionSheet dialog = CupertinoActionSheet(
-              cancelButton: CupertinoActionSheetAction(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(L10n.of(context).cancel)),
-              actions: <Widget>[
-                ..._getThemeList(context),
-              ],
-            );
-            return dialog;
-          });
-    }
-
-    return SelectorSettingItem(
-      title: _title,
-      selector: themeMap[themeService.themeModel] ?? '',
-      onTap: () async {
-        logger.v('tap ThemeItem');
-        final ThemesModeEnum? _result = await _showDialog(context);
-        if (_result is ThemesModeEnum) {
-          themeService.themeModel = _result;
-        }
-      },
-    );
+    return Obx(() {
+      return SelectorItem<ThemesModeEnum>(
+        title: _title,
+        hideDivider: hideLine,
+        actionMap: themeMap,
+        initVal: themeService.themeModel,
+        onValueChanged: (val) => themeService.themeModel = val,
+      );
+    });
   }
 }

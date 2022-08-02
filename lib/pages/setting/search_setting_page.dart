@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/component/setting_base.dart';
+import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -41,7 +41,7 @@ class ListViewSearchSetting extends StatelessWidget {
             id: isLayoutLarge ? 2 : null,
           );
         },
-        hideLine: true,
+        hideDivider: true,
       ),
     ];
     return ListView.builder(

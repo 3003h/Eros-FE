@@ -2,11 +2,10 @@ import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/widget/cat_progress_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,39 +27,41 @@ class WebDavSetting extends GetView<WebdavController> {
           middle: Text(_title),
           trailing: _buildListBtns(context),
         ),
-        child: GetBuilder<WebdavController>(
-          builder: (logic) {
-            return SafeArea(
-              child:
-                  logic.validAccount ? const WebDavSettingView() : Container(),
-            );
-          },
-        ),
+        child: Obx(() {
+          return SafeArea(
+            child: controller.validAccount
+                ? const WebDavSettingView()
+                : Container(),
+          );
+        }),
       );
     });
   }
 
   Widget _buildListBtns(BuildContext context) {
-    return controller.validAccount
-        ? const SizedBox.shrink()
-        : CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              FontAwesomeIcons.signInAlt,
-              size: 28,
-            ),
-            onPressed: () async {
-              // showWebDAVLogin(context);
-              final result = await Get.toNamed(
-                EHRoutes.loginWebDAV,
-                id: isLayoutLarge ? 2 : null,
-              );
-              if (result != null && result is bool && result) {
-                Get.back();
-              }
-            },
-          );
+    return Obx(() {
+      return Container(
+        child: controller.validAccount
+            ? const SizedBox.shrink()
+            : CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  FontAwesomeIcons.arrowRightToBracket,
+                  size: 28,
+                ),
+                onPressed: () async {
+                  final result = await Get.toNamed(
+                    EHRoutes.loginWebDAV,
+                    id: isLayoutLarge ? 2 : null,
+                  );
+                  if (result != null && result is bool && result) {
+                    Get.back();
+                  }
+                },
+              ),
+      );
+    });
   }
 }
 
@@ -94,11 +95,9 @@ class WebDavSettingView extends GetView<WebdavController> {
                         Global.profile = Global.profile
                             .copyWith(webdav: const WebdavProfile(url: ''));
                         Global.saveProfile();
-                        Get.replace(const WebdavProfile(url: ''));
+                        controller.initClient();
                         controller.closeClient();
                         Get.back();
-                        controller.update();
-                        controller.update([idActionLogin]);
                       },
                     ),
                   ],
@@ -106,7 +105,7 @@ class WebDavSettingView extends GetView<WebdavController> {
               },
             );
           },
-          hideLine: true,
+          hideDivider: true,
         ),
         const ItemSpace(),
         TextSwitchItem(
@@ -118,14 +117,28 @@ class WebDavSettingView extends GetView<WebdavController> {
         ),
         TextSwitchItem(
           L10n.of(context).sync_read_progress,
-          hideLine: true,
           intValue: controller.syncReadProgress,
           onChanged: (val) {
             controller.syncReadProgress = val;
           },
         ),
+        TextSwitchItem(
+          L10n.of(context).sync_group,
+          intValue: controller.syncGroupProfile,
+          onChanged: (val) {
+            controller.syncGroupProfile = val;
+          },
+        ),
+        TextSwitchItem(
+          L10n.of(context).sync_quick_search,
+          hideDivider: true,
+          intValue: controller.syncQuickSearch,
+          onChanged: (val) {
+            controller.syncQuickSearch = val;
+          },
+        ),
         const ItemSpace(),
-        if (kDebugMode) CatProgressIndicator(),
+        // if (kDebugMode) CatProgressIndicator(),
         const ItemSpace(),
         // if (kDebugMode)
         //   CircularProgressIndicator(
@@ -141,6 +154,8 @@ Future<void> showWebDAVLogin(BuildContext context) async {
   final TextEditingController _urlController = TextEditingController();
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
+  final controller = Get.find<WebdavController>();
+
   final FocusNode _nodePwd = FocusNode();
   final FocusNode _nodeUname = FocusNode();
   return showCupertinoDialog<void>(
@@ -184,30 +199,28 @@ Future<void> showWebDAVLogin(BuildContext context) async {
             Container(
               height: 10,
             ),
-            GetBuilder<WebdavController>(builder: (logic) {
-              return CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                clearButtonMode: OverlayVisibilityMode.editing,
-                controller: _pwdController,
-                placeholder: 'Password',
-                focusNode: _nodePwd,
-                obscureText: true,
-                onEditingComplete: () async {
-                  // 点击键盘完成
-                  final rult = await logic.addWebDAVProfile(
-                    _urlController.text,
-                    user: _unameController.text,
-                    pwd: _pwdController.text,
-                  );
-                  if (rult) {
-                    Get.back();
-                  }
-                },
-              );
-            }),
+            CupertinoTextField(
+              decoration: BoxDecoration(
+                color: ehTheme.textFieldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              clearButtonMode: OverlayVisibilityMode.editing,
+              controller: _pwdController,
+              placeholder: 'Password',
+              focusNode: _nodePwd,
+              obscureText: true,
+              onEditingComplete: () async {
+                // 点击键盘完成
+                final rult = await controller.addWebDAVProfile(
+                  _urlController.text,
+                  user: _unameController.text,
+                  pwd: _pwdController.text,
+                );
+                if (rult) {
+                  Get.back();
+                }
+              },
+            ),
           ],
         ),
         actions: <Widget>[
@@ -217,29 +230,26 @@ Future<void> showWebDAVLogin(BuildContext context) async {
               Get.back();
             },
           ),
-          GetBuilder<WebdavController>(
-            id: idActionLogin,
-            builder: (logic) {
-              return CupertinoDialogAction(
-                child: logic.isLongining
-                    ? const CupertinoActivityIndicator()
-                    : Text(L10n.of(context).ok),
-                onPressed: logic.isLongining
-                    ? null
-                    : () async {
-                        logic.isLongining = true;
-                        final rult = await logic.addWebDAVProfile(
-                          _urlController.text,
-                          user: _unameController.text,
-                          pwd: _pwdController.text,
-                        );
-                        if (rult) {
-                          Get.back();
-                        }
-                      },
-              );
-            },
-          ),
+          Obx(() {
+            return CupertinoDialogAction(
+              child: controller.isLongining
+                  ? const CupertinoActivityIndicator()
+                  : Text(L10n.of(context).ok),
+              onPressed: controller.isLongining
+                  ? null
+                  : () async {
+                      controller.isLongining = true;
+                      final rult = await controller.addWebDAVProfile(
+                        _urlController.text,
+                        user: _unameController.text,
+                        pwd: _pwdController.text,
+                      );
+                      if (rult) {
+                        Get.back();
+                      }
+                    },
+            );
+          }),
         ],
       );
     },

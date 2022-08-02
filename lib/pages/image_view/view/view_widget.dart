@@ -2,21 +2,17 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:math';
 
+import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/gallery_image.dart';
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/widget/eh_dark_cupertino_theme.dart';
-import 'package:fehviewer/widget/eh_network_image.dart';
-import 'package:fehviewer/widget/network_extended_image.dart';
+import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -77,6 +73,56 @@ class ViewErr509 extends StatelessWidget {
   }
 }
 
+class ViewAD extends StatelessWidget {
+  const ViewAD({Key? key, required this.ser}) : super(key: key);
+  final int ser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            constraints: const BoxConstraints(
+              maxHeight: 100,
+              maxWidth: 100,
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: CupertinoColors.systemPink.darkColor,
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: Icon(
+                      CupertinoIcons.xmark_shield_fill,
+                      size: 80,
+                      color: CupertinoColors.systemPink.darkColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            '$ser',
+            style: const TextStyle(
+                color: CupertinoColors.secondarySystemBackground),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ViewError extends StatelessWidget {
   const ViewError({Key? key, required this.ser, this.errInfo})
       : super(key: key);
@@ -100,6 +146,7 @@ class ViewError extends StatelessWidget {
           ),
           Text(
             errInfo ?? '',
+            maxLines: 20,
             style: const TextStyle(
                 fontSize: 12, color: CupertinoColors.secondarySystemBackground),
           ),
@@ -115,15 +162,30 @@ class ViewError extends StatelessWidget {
 }
 
 class ViewLoading extends StatelessWidget {
-  const ViewLoading({Key? key, required this.ser, this.duration, this.progress})
-      : super(key: key);
+  const ViewLoading({
+    Key? key,
+    required this.ser,
+    this.duration,
+    this.progress,
+    this.animationEnabled,
+    this.debugLable,
+  }) : super(key: key);
   final int ser;
   final Duration? duration;
   final double? progress;
+  final bool? animationEnabled;
+  final String? debugLable;
 
   @override
   Widget build(BuildContext context) {
-    final _loadWidget = _ViewLoading(ser: ser, progress: progress);
+    if (debugLable != null && kDebugMode) {
+      logger.v('build ViewLoading $debugLable');
+    }
+    final _loadWidget = _ViewLoading(
+      ser: ser,
+      progress: progress,
+      animationEnabled: animationEnabled ?? true,
+    );
 
     if (duration == null) {
       return _loadWidget;
@@ -142,7 +204,7 @@ class ViewLoading extends StatelessWidget {
 }
 
 class ImageExt extends GetView<ViewExtController> {
-  const ImageExt({
+  ImageExt({
     Key? key,
     required this.url,
     required this.ser,
@@ -170,6 +232,10 @@ class ImageExt extends GetView<ViewExtController> {
   final DoubleTap? onDoubleTap;
   final ExtendedImageMode mode;
   final bool enableSlideOutPage;
+
+  final EhConfigService ehConfigService = Get.find();
+  bool get checkPHashHide => ehConfigService.enablePHashCheck;
+  bool get checkQRCodeHide => ehConfigService.enableQRCodeCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -206,23 +272,22 @@ class ImageExt extends GetView<ViewExtController> {
 
             onLoadCompleted?.call(state);
 
-            return controller.vState.viewMode != ViewMode.topToBottom
-                ? Hero(
-                    tag: '$ser',
-                    createRectTween: (Rect? begin, Rect? end) {
-                      final tween =
-                          MaterialRectCenterArcTween(begin: begin, end: end);
-                      return tween;
-                    },
-                    child: FadeTransition(
-                      opacity: fadeAnimationController,
-                      child: state.completedWidget,
-                    ),
-                  )
-                : FadeTransition(
-                    opacity: fadeAnimationController,
-                    child: state.completedWidget,
-                  );
+            Widget image = FadeTransition(
+              opacity: fadeAnimationController,
+              child: state.completedWidget,
+            );
+
+            if (checkPHashHide || checkQRCodeHide) {
+              image = ImageWithHide(
+                url: url,
+                child: image,
+                ser: ser,
+                checkPHashHide: checkPHashHide,
+                checkQRCodeHide: checkQRCodeHide,
+              );
+            }
+
+            return image;
 
           case LoadState.failed:
             logger.d('Failed url: $url');
@@ -286,15 +351,230 @@ class ImageExt extends GetView<ViewExtController> {
   }
 }
 
+class ImageExtProvider extends GetView<ViewExtController> {
+  ImageExtProvider({
+    Key? key,
+    required this.image,
+    required this.ser,
+    required this.fadeAnimationController,
+    required this.reloadImage,
+    this.imageHeight,
+    this.imageWidth,
+    this.retryCount = 5,
+    this.onLoadCompleted,
+    required this.initGestureConfigHandler,
+    required this.onDoubleTap,
+    this.mode = ExtendedImageMode.none,
+    this.enableSlideOutPage = false,
+  }) : super(key: key);
+
+  final ImageProvider image;
+
+  // final String url;
+  final int ser;
+  final AnimationController fadeAnimationController;
+  final VoidCallback reloadImage;
+  final double? imageHeight;
+  final double? imageWidth;
+  final int retryCount;
+  final ValueChanged<ExtendedImageState>? onLoadCompleted;
+  final InitGestureConfigHandler initGestureConfigHandler;
+  final DoubleTap? onDoubleTap;
+  final ExtendedImageMode mode;
+  final bool enableSlideOutPage;
+
+  final EhConfigService ehConfigService = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    return ExtendedImage(
+      image: image,
+      fit: BoxFit.contain,
+      handleLoadingProgress: true,
+      clearMemoryCacheIfFailed: true,
+      enableSlideOutPage: enableSlideOutPage,
+      mode: mode,
+      initGestureConfigHandler: initGestureConfigHandler,
+      onDoubleTap: onDoubleTap,
+      loadStateChanged: (ExtendedImageState state) {
+        switch (state.extendedImageLoadState) {
+          case LoadState.loading:
+            fadeAnimationController.reset();
+            final ImageChunkEvent? loadingProgress = state.loadingProgress;
+            final double? progress = loadingProgress?.expectedTotalBytes != null
+                ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
+                    (loadingProgress?.expectedTotalBytes ?? 1)
+                : null;
+
+            return _ViewLoading(progress: progress, ser: ser);
+
+          ///if you don't want override completed widget
+          ///please return null or state.completedWidget
+          //return null;
+          //return state.completedWidget;
+          case LoadState.completed:
+            fadeAnimationController.forward();
+
+            onLoadCompleted?.call(state);
+
+            Widget image = FadeTransition(
+              opacity: fadeAnimationController,
+              child: state.completedWidget,
+            );
+
+            return image;
+
+          case LoadState.failed:
+            // logger.d('Failed url: $url');
+            fadeAnimationController.reset();
+
+            // logger.d('Failed e: ${state.lastException}\n${state.lastStack}');
+
+            bool reload = false;
+            reload = (controller.vState.errCountMap[ser] ?? 0) < retryCount;
+            if (reload) {
+              Future.delayed(const Duration(milliseconds: 100))
+                  .then((_) => reloadImage());
+              controller.vState.errCountMap
+                  .update(ser, (int value) => value + 1, ifAbsent: () => 1);
+              logger.d('$ser 重试 第 ${controller.vState.errCountMap[ser]} 次');
+            }
+
+            if (reload) {
+              // return const SizedBox.shrink();
+              return _ViewLoading(ser: ser);
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                constraints: BoxConstraints(
+                  maxHeight: context.width * 0.8,
+                ),
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.error,
+                        size: 50,
+                        color: Colors.red,
+                      ),
+                      const Text(
+                        'Load image failed',
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: CupertinoColors.secondarySystemBackground),
+                      ),
+                      Text(
+                        '${ser + 1}',
+                        style: const TextStyle(
+                            color: CupertinoColors.secondarySystemBackground),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    // state.reLoadImage();
+                    reloadImage();
+                  },
+                ),
+              );
+            }
+
+          default:
+            return null;
+        }
+      },
+    );
+  }
+}
+
+class ImageWithHide extends StatefulWidget {
+  const ImageWithHide({
+    Key? key,
+    required this.url,
+    required this.child,
+    required this.ser,
+    this.checkPHashHide = false,
+    this.checkQRCodeHide = false,
+  }) : super(key: key);
+  final String url;
+  final Widget child;
+  final int ser;
+
+  final bool checkPHashHide;
+  final bool checkQRCodeHide;
+
+  @override
+  State<ImageWithHide> createState() => _ImageWithHideState();
+}
+
+class _ImageWithHideState extends State<ImageWithHide> {
+  final ImageHideController imageHideController = Get.find();
+  late Future<bool> _future;
+
+  final ViewExtController viewController = Get.find();
+  ViewExtState get vState => viewController.vState;
+
+  Future<bool> _futureFunc() async {
+    if (!widget.checkQRCodeHide) {
+      return imageHideController.checkPHashHide(widget.url);
+    } else if (!widget.checkPHashHide) {
+      return imageHideController.checkQRCodeHide(widget.url);
+    }
+    return await imageHideController.checkPHashHide(widget.url) ||
+        await imageHideController.checkQRCodeHide(widget.url);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _futureFunc();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool?>(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data ?? false) {
+              final GalleryImage? _tmpImage = vState.imageMap[widget.ser];
+              if (_tmpImage != null) {
+                vState.galleryPageController.uptImageBySer(
+                  ser: widget.ser,
+                  imageCallback: (image) => image.copyWith(hide: true),
+                );
+
+                Future.delayed(const Duration(milliseconds: 100)).then(
+                    (value) => viewController.update(
+                        [idSlidePage, '$idImageListView${widget.ser}']));
+              }
+              return ViewAD(ser: widget.ser);
+            } else {
+              return widget.child;
+            }
+          } else {
+            return ViewLoading(
+              ser: widget.ser,
+              progress: 1.0,
+              animationEnabled: false,
+            );
+          }
+        });
+  }
+}
+
 class _ViewLoading extends StatelessWidget {
   const _ViewLoading({
     Key? key,
     this.progress,
     required this.ser,
+    this.animationEnabled = true,
   }) : super(key: key);
 
   final double? progress;
   final int ser;
+  final bool animationEnabled;
 
   @override
   Widget build(BuildContext context) {
@@ -315,10 +595,12 @@ class _ViewLoading extends StatelessWidget {
             ),
             child: SleekCircularSlider(
               appearance: CircularSliderAppearance(
-                  infoProperties: InfoProperties(
-                      mainLabelStyle:
-                          const TextStyle(color: CupertinoColors.systemGrey6)),
-                  customWidths: CustomSliderWidths(progressBarWidth: 10)),
+                animationEnabled: animationEnabled,
+                infoProperties: InfoProperties(
+                    mainLabelStyle:
+                        const TextStyle(color: CupertinoColors.systemGrey6)),
+                customWidths: CustomSliderWidths(progressBarWidth: 10),
+              ),
               min: 0,
               max: 100,
               initialValue: (progress ?? 0) * 100,
@@ -370,18 +652,20 @@ class ViewTopBar extends GetView<ViewExtController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    width: 40,
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.chevronLeft,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
+                MouseRegionClick(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Container(
+                      width: 40,
+                      height: kTopBarButtonHeight,
+                      child: const Icon(
+                        FontAwesomeIcons.chevronLeft,
+                        color: CupertinoColors.systemGrey6,
+                        // size: 24,
+                      ),
                     ),
                   ),
                 ),
@@ -390,7 +674,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                   builder: (logic) {
                     return Container(
                       alignment: Alignment.center,
-                      height: kBottomBarHeight,
+                      height: kTopBarButtonHeight,
                       child: Text(
                         '${logic.vState.currentItemIndex + 1}/${logic.vState.filecount}',
                         style: const TextStyle(
@@ -400,19 +684,21 @@ class ViewTopBar extends GetView<ViewExtController> {
                     );
                   },
                 ),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    Get.toNamed(EHRoutes.readSeting);
-                  },
-                  child: Container(
-                    width: 40,
-                    margin: const EdgeInsets.only(right: 8.0),
-                    height: kBottomBarHeight,
-                    child: const Icon(
-                      FontAwesomeIcons.ellipsisH,
-                      color: CupertinoColors.systemGrey6,
-                      // size: 24,
+                MouseRegionClick(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Get.toNamed(EHRoutes.readSeting);
+                    },
+                    child: Container(
+                      width: 40,
+                      margin: const EdgeInsets.only(right: 8.0),
+                      height: kTopBarButtonHeight,
+                      child: const Icon(
+                        FontAwesomeIcons.ellipsisH,
+                        color: CupertinoColors.systemGrey6,
+                        // size: 24,
+                      ),
                     ),
                   ),
                 ),
@@ -441,29 +727,31 @@ class ViewBottomBar extends GetView<ViewExtController> {
       id: idViewBottomBar,
       builder: (logic) {
         logic.vState.bottomBarHeight = context.mediaQueryPadding.bottom +
-            kTopBarHeight * 2 +
+            kBottomBarHeight +
+            kSliderBarHeight +
             (logic.vState.showThumbList ? kThumbListViewHeight : 0);
 
         return AnimatedContainer(
-          // color:
-          //     CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.75),
           height: controller.vState.bottomBarHeight,
           width: context.mediaQuery.size.width,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
           child: Column(
             children: [
+              // 缩略图栏
               AnimatedContainer(
                 height: logic.vState.showThumbList ? kThumbListViewHeight : 0,
                 child: const ThumbnailListView(),
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeOut,
               ),
+              // 控制栏
               const BottomBarControlWidget(),
             ],
           ).frosted(
             height: context.mediaQueryPadding.bottom +
-                kTopBarHeight * 2 +
+                kBottomBarHeight +
+                kSliderBarHeight +
                 kThumbListViewHeight,
             width: context.mediaQuery.size.width,
             blur: 20,
@@ -492,11 +780,12 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // 滑动控件
               GetBuilder<ViewExtController>(
                 id: idViewPageSlider,
                 builder: (logic) {
                   return SizedBox(
-                    height: kBottomBarHeight,
+                    height: kSliderBarHeight,
                     child: ViewPageSlider(
                       max: logic.vState.filecount - 1.0,
                       sliderValue: min(logic.vState.sliderValue,
@@ -508,168 +797,190 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                   );
                 },
               ),
+              // 按钮栏
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   // 分享按钮
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      controller.tapShare(context);
-                    },
-                    child: Container(
-                      width: 40,
-                      height: kBottomBarHeight,
-                      child: Column(
-                        children: [
-                          const Icon(
-                            FontAwesomeIcons.shareSquare,
-                            color: CupertinoColors.systemGrey6,
-                            size: 22,
-                          ),
-                          const Spacer(),
-                          Text(
-                            L10n.of(context).share,
-                            style: _kBottomTextStyle,
-                          ),
-                        ],
+                  MouseRegionClick(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.tapShare(context);
+                      },
+                      child: Container(
+                        width: 40,
+                        height: kBottomBarButtonHeight,
+                        child: Column(
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.shareFromSquare,
+                              color: CupertinoColors.systemGrey6,
+                              size: 22,
+                            ),
+                            // const Spacer(),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  L10n.of(context).share,
+                                  style: _kBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
 
                   // 自动阅读按钮
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      // if (logic.vState.viewMode != ViewMode.topToBottom)
-                      controller.tapAutoRead(context);
-                    },
-                    onLongPress: () {
-                      // if (logic.vState.viewMode != ViewMode.topToBottom)
-                      controller.longTapAutoRead(context);
-                    },
-                    child: GetBuilder<ViewExtController>(
-                      id: idAutoReadIcon,
-                      builder: (logic) {
-                        return Container(
-                          width: 40,
-                          height: kBottomBarHeight,
-                          child: Column(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.hourglassHalf,
-                                size: 22,
-                                color: () {
-                                  // if (logic.vState.viewMode ==
-                                  //     ViewMode.topToBottom) {
-                                  //   return CupertinoColors.systemGrey;
-                                  // }
-
-                                  return logic.vState.autoRead
-                                      ? CupertinoColors.activeBlue
-                                      : CupertinoColors.systemGrey6;
-                                }(),
-                              ),
-                              const Spacer(),
-                              const Text(
-                                'Auto',
-                                style: _kBottomTextStyle,
-                              ),
-                            ],
-                          ),
-                        );
+                  MouseRegionClick(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.tapAutoRead(context);
                       },
+                      onLongPress: () {
+                        controller.longTapAutoRead(context);
+                      },
+                      child: GetBuilder<ViewExtController>(
+                        id: idAutoReadIcon,
+                        builder: (logic) {
+                          return Container(
+                            width: 40,
+                            height: kBottomBarButtonHeight,
+                            child: Column(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.hourglassHalf,
+                                  size: 22,
+                                  color: () {
+                                    // if (logic.vState.viewMode ==
+                                    //     ViewMode.topToBottom) {
+                                    //   return CupertinoColors.systemGrey;
+                                    // }
+
+                                    return logic.vState.autoRead
+                                        ? CupertinoColors.activeBlue
+                                        : CupertinoColors.systemGrey6;
+                                  }(),
+                                ),
+                                const Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      'Auto',
+                                      style: _kBottomTextStyle,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   // else
                   //   const SizedBox(width: 40),
 
                   // 缩略图预览按钮
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      controller.switchShowThumbList();
-                    },
-                    onLongPress: () {
-                      vibrateUtil.light();
-                      controller.thumbScrollTo();
-                    },
-                    child: Container(
-                      width: 40,
-                      height: kBottomBarHeight,
-                      child: Column(
-                        children: [
-                          GetBuilder<ViewExtController>(
-                            id: idShowThumbListIcon,
-                            builder: (logic) {
-                              return Icon(
-                                FontAwesomeIcons.images,
-                                size: 22,
-                                color: logic.vState.showThumbList
-                                    ? CupertinoColors.activeBlue
-                                    : CupertinoColors.systemGrey6,
-                                // color: CupertinoColors.systemGrey6,
-                              );
-                            },
-                          ),
-                          const Spacer(),
-                          const Text(
-                            'Thumb',
-                            style: _kBottomTextStyle,
-                          ),
-                        ],
+                  MouseRegionClick(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        controller.switchShowThumbList();
+                      },
+                      onLongPress: () {
+                        vibrateUtil.light();
+                        controller.thumbScrollTo();
+                      },
+                      child: Container(
+                        width: 40,
+                        height: kBottomBarButtonHeight,
+                        child: Column(
+                          children: [
+                            GetBuilder<ViewExtController>(
+                              id: idShowThumbListIcon,
+                              builder: (logic) {
+                                return Icon(
+                                  FontAwesomeIcons.images,
+                                  size: 22,
+                                  color: logic.vState.showThumbList
+                                      ? CupertinoColors.activeBlue
+                                      : CupertinoColors.systemGrey6,
+                                  // color: CupertinoColors.systemGrey6,
+                                );
+                              },
+                            ),
+                            const Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Thumb',
+                                  style: _kBottomTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
 
                   // 双页切换按钮
                   // if (logic.vState.viewMode != ViewMode.topToBottom)
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      if (logic.vState.viewMode != ViewMode.topToBottom)
-                        controller.switchColumnMode();
-                    },
-                    child: Container(
-                      width: 40,
-                      // margin: const EdgeInsets.only(right: 10.0),
-                      height: kBottomBarHeight,
-                      child: Column(
-                        children: [
-                          GetBuilder<ViewExtController>(
-                            id: idViewColumnModeIcon,
-                            builder: (logic) {
-                              return Icon(
-                                FontAwesomeIcons.bookOpen,
-                                size: 22,
-                                color: () {
-                                  if (logic.vState.viewMode ==
-                                      ViewMode.topToBottom) {
-                                    return CupertinoColors.systemGrey;
-                                  }
+                  MouseRegionClick(
+                    disable: logic.vState.viewMode == ViewMode.topToBottom,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        if (logic.vState.viewMode != ViewMode.topToBottom) {
+                          controller.switchColumnMode();
+                        }
+                      },
+                      child: Container(
+                        width: 40,
+                        // margin: const EdgeInsets.only(right: 10.0),
+                        height: kBottomBarButtonHeight,
+                        child: Column(
+                          children: [
+                            GetBuilder<ViewExtController>(
+                              id: idViewColumnModeIcon,
+                              builder: (logic) {
+                                return Icon(
+                                  FontAwesomeIcons.bookOpen,
+                                  size: 22,
+                                  color: () {
+                                    if (logic.vState.viewMode ==
+                                        ViewMode.topToBottom) {
+                                      return CupertinoColors.systemGrey;
+                                    }
 
-                                  switch (logic.vState.columnMode) {
-                                    case ViewColumnMode.single:
-                                      return CupertinoColors.systemGrey6;
-                                    case ViewColumnMode.oddLeft:
-                                      return CupertinoColors.activeBlue;
-                                    case ViewColumnMode.evenLeft:
-                                      return CupertinoColors.activeOrange;
-                                  }
-                                }(),
-                              );
-                            },
-                          ),
-                          const Spacer(),
-                          Text(
-                            'Double',
-                            style: _kBottomTextStyle.copyWith(
-                                color: logic.vState.viewMode ==
-                                        ViewMode.topToBottom
-                                    ? CupertinoColors.systemGrey
-                                    : null),
-                          ),
-                        ],
+                                    switch (logic.vState.columnMode) {
+                                      case ViewColumnMode.single:
+                                        return CupertinoColors.systemGrey6;
+                                      case ViewColumnMode.oddLeft:
+                                        return CupertinoColors.activeBlue;
+                                      case ViewColumnMode.evenLeft:
+                                        return CupertinoColors.activeOrange;
+                                    }
+                                  }(),
+                                );
+                              },
+                            ),
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  'Double',
+                                  style: _kBottomTextStyle.copyWith(
+                                      color: logic.vState.viewMode ==
+                                              ViewMode.topToBottom
+                                          ? CupertinoColors.systemGrey
+                                          : null),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -690,6 +1001,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
 
   GalleryPageController get galleryPageController =>
       controller.vState.galleryPageController;
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ViewExtController>(
@@ -707,16 +1019,28 @@ class ThumbnailListView extends GetView<ViewExtController> {
                 scrollDirection: Axis.horizontal,
                 reverse: logic.vState.viewMode == ViewMode.rightToLeft,
                 itemBuilder: (context, index) {
+                  // 缩略图
                   late Widget thumb;
-                  if (logic.vState.loadFrom == LoadFrom.download) {
-                    final path = controller.vState.imagePathList[index];
+                  switch (logic.vState.loadFrom) {
+                    case LoadFrom.download:
+                      final path = controller.vState.imagePathList[index];
 
-                    thumb = ExtendedImage.file(
-                      File(path),
-                      fit: BoxFit.cover,
-                    );
-                  } else {
-                    thumb = FutureThumbl(itemSer: index + 1);
+                      thumb = ExtendedImage.file(
+                        File(path),
+                        fit: BoxFit.cover,
+                      );
+                      break;
+                    case LoadFrom.gallery:
+                      thumb = FutureThumbl(itemSer: index + 1);
+                      break;
+                    case LoadFrom.archiver:
+                      final asyncFile =
+                          controller.vState.asyncArchiveFiles[index];
+                      // thumb = Container(color: Colors.white);
+                      thumb = FutureThumblArchive(
+                          gid: controller.vState.gid,
+                          asyncArchiveFile: asyncFile);
+                      break;
                   }
 
                   return GestureDetector(
@@ -734,7 +1058,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(4),
                                 child: Container(
-                                  child: thumb,
+                                  child: MouseRegionClick(child: thumb),
                                 ),
                               ),
                             ),
@@ -788,6 +1112,71 @@ class ThumbnailListView extends GetView<ViewExtController> {
   }
 }
 
+class FutureThumblArchive extends StatefulWidget {
+  const FutureThumblArchive(
+      {Key? key, required this.asyncArchiveFile, this.gid})
+      : super(key: key);
+  final AsyncArchiveFile asyncArchiveFile;
+  final String? gid;
+
+  @override
+  State<FutureThumblArchive> createState() => _FutureThumblArchiveState();
+}
+
+class _FutureThumblArchiveState extends State<FutureThumblArchive> {
+  late Future<File> _future;
+  final ViewExtController viewExtController = Get.find();
+
+  Future<File> getFileData(String? gid, AsyncArchiveFile file) async {
+    return await viewExtController.getArchiveFile(gid, file);
+  }
+
+  @override
+  void initState() {
+    _future = getFileData(widget.gid, widget.asyncArchiveFile);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<File?>(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final _data = snapshot.data;
+            logger.v('${_data.runtimeType}');
+            if (_data != null) {
+              return ExtendedImage.file(
+                _data,
+                fit: BoxFit.cover,
+              );
+            } else {
+              logger.d('${snapshot.error} ${snapshot.stackTrace}');
+              return buildErrorWidget();
+            }
+          } else {
+            return buildPlaceholder();
+          }
+        });
+  }
+
+  Widget buildPlaceholder() {
+    return const CupertinoActivityIndicator();
+  }
+
+  GestureDetector buildErrorWidget() {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        _future = getFileData(widget.gid, widget.asyncArchiveFile);
+        setState(() {});
+      },
+      child: const Icon(FontAwesomeIcons.rotateRight,
+          color: CupertinoColors.destructiveRed),
+    );
+  }
+}
+
 class FutureThumbl extends StatefulWidget {
   const FutureThumbl({
     Key? key,
@@ -816,6 +1205,11 @@ class _FutureThumblState extends State<FutureThumbl> {
         future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              logger.e('${snapshot.error}\n${snapshot.stackTrace}');
+              return builderrorWidget();
+            }
+
             final _image = snapshot.data;
             if (_image != null &&
                 _image.thumbUrl != null &&
@@ -873,14 +1267,6 @@ class _FutureThumblState extends State<FutureThumbl> {
 
   Widget buildPlaceholder() {
     return const CupertinoActivityIndicator();
-
-    // return Center(
-    //     child: ClipRRect(
-    //   borderRadius: BorderRadius.all(Radius.circular(40)),
-    //   child: Container(
-    //       color: Colors.grey.withOpacity(0.3),
-    //       child: const CupertinoActivityIndicator().paddingAll(4)),
-    // ));
   }
 
   GestureDetector builderrorWidget() {

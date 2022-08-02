@@ -12,8 +12,8 @@ import 'package:get/get.dart';
 
 import 'item_base.dart';
 
-const double kCoverImageWidth = 80.0;
-const double kItemHeight = 130.0;
+const double kCoverImageWidth = 90.0;
+const double kItemHeight = 134.0;
 const double kPaddingLeft = 8.0;
 
 /// 画廊列表项
@@ -38,7 +38,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
     final Widget containerGallery = Container(
       color: galleryProviderController.colorTap.value,
       height: showTag ? kItemHeight + 10 : kItemHeight,
-      padding: const EdgeInsets.fromLTRB(kPaddingLeft, 6, 6, 6),
+      padding: const EdgeInsets.fromLTRB(kPaddingLeft, 10, 8, 10),
       child: Row(children: <Widget>[
         // 封面图片
         _buildCoverImage(),
@@ -185,7 +185,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
           child: StaticRatingBar(
-            size: 16.0,
+            size: 12.0,
             rate: galleryProviderController.galleryProvider.ratingFallBack ?? 0,
             radiusRatio: 1.5,
             colorLight: ThemeColors.colorRatingMap[
@@ -198,7 +198,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
         Text(
           galleryProviderController.galleryProvider.rating?.toString() ?? '',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 11,
             color: CupertinoDynamicColor.resolve(
                 CupertinoColors.systemGrey, Get.context!),
           ),
@@ -215,12 +215,12 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           child: Text(
             galleryProviderController.galleryProvider.translated ?? '',
             style: const TextStyle(
-                fontSize: 12, color: CupertinoColors.systemGrey),
+                fontSize: 11, color: CupertinoColors.systemGrey),
           ),
         ),
         const Icon(
           Icons.panorama,
-          size: 13,
+          size: 12,
           color: CupertinoColors.systemGrey,
         ),
         Container(
@@ -228,7 +228,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
           child: Text(
             galleryProviderController.galleryProvider.filecount ?? '',
             style: const TextStyle(
-                fontSize: 12, color: CupertinoColors.systemGrey),
+                fontSize: 11, color: CupertinoColors.systemGrey),
           ),
         ),
       ],
@@ -243,7 +243,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 2.5, right: 8),
               child: Icon(
                 FontAwesomeIcons.solidHeart,
-                size: 12,
+                size: 11,
                 color: ThemeColors
                     .favColor[galleryProviderController.galleryProvider.favcat],
               ),
@@ -255,7 +255,7 @@ class GalleryItemSimpleWidget extends StatelessWidget {
   Widget _buildPostTime() {
     return Text(
       galleryProviderController.galleryProvider.postTime ?? '',
-      style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
+      style: const TextStyle(fontSize: 11, color: CupertinoColors.systemGrey),
     );
   }
 
@@ -270,13 +270,13 @@ class GalleryItemSimpleWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+        padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 4),
         color: _colorCategory,
         child: Text(
           galleryProviderController.galleryProvider.category ?? '',
           style: const TextStyle(
-            fontSize: 14,
-            height: 1,
+            fontSize: 10,
+            height: 1.1,
             color: CupertinoColors.white,
           ),
         ),

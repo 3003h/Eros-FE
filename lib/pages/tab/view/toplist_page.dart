@@ -67,13 +67,18 @@ class _ToplistTabState extends State<ToplistTab> {
           children: [
             CupertinoButton(
               padding: const EdgeInsets.all(0.0),
-              minSize: 36,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+              minSize: 40,
+              child: Stack(
+                alignment: Alignment.centerRight,
+                // mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  // const Icon(
+                  //   FontAwesomeIcons.arrowDownWideShort,
+                  //   size: 20,
+                  // ),
                   const Icon(
-                    FontAwesomeIcons.arrowDownWideShort,
-                    size: 20,
+                    CupertinoIcons.sort_down,
+                    size: 28,
                   ),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -100,7 +105,7 @@ class _ToplistTabState extends State<ToplistTab> {
                   border: Border.all(
                     color: CupertinoDynamicColor.resolve(
                         CupertinoColors.activeBlue, context),
-                    width: 2.2,
+                    width: 1.8,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -140,10 +145,7 @@ class _ToplistTabState extends State<ToplistTab> {
         EhCupertinoSliverRefreshControl(
           onRefresh: controller.onRefresh,
         ),
-        SliverSafeArea(
-          top: false,
-          sliver: _getTopList(),
-        ),
+        _buildListView(context),
         Obx(() {
           return EndIndicator(
             pageState: controller.pageState,
@@ -162,38 +164,73 @@ class _ToplistTabState extends State<ToplistTab> {
     );
   }
 
-  Widget _getTopList() {
-    return controller.obx(
-      (List<GalleryProvider>? state) => getGallerySliverList(
-        state,
-        controller.heroTag,
-        maxPage: controller.maxPage,
-        curPage: controller.curPage,
-        lastComplete: controller.lastComplete,
-        centerKey: centerKey,
-        key: controller.sliverAnimatedListKey,
-        lastTopitemIndex: controller.lastTopitemIndex,
+  Widget _buildListView(BuildContext context) {
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      sliver: GetBuilder<TopListViewController>(
+        global: false,
+        init: controller,
+        id: controller.listViewId,
+        builder: (logic) {
+          final status = logic.status;
+
+          if (status.isLoading) {
+            return SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
+                ),
+              ),
+            );
+          }
+
+          if (status.isError) {
+            return SliverFillRemaining(
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 50),
+                child: GalleryErrorPage(
+                  onTap: logic.reLoadDataFirst,
+                  error: status.errorMessage,
+                ),
+              ),
+            );
+          }
+
+          if (status.isSuccess) {
+            return getGallerySliverList(
+              logic.state,
+              controller.heroTag,
+              maxPage: controller.maxPage,
+              curPage: controller.curPage,
+              lastComplete: controller.lastComplete,
+              centerKey: centerKey,
+              key: controller.sliverAnimatedListKey,
+              lastTopitemIndex: controller.lastTopitemIndex,
+            );
+          }
+
+          return SliverFillRemaining(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.hippo,
+                    size: 100,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey, context),
+                  ),
+                  Text(''),
+                ],
+              ),
+            ).autoCompressKeyboard(context),
+          );
+        },
       ),
-      onLoading: SliverFillRemaining(
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(bottom: 50),
-          child: const CupertinoActivityIndicator(
-            radius: 14.0,
-          ),
-        ),
-      ),
-      onError: (err) {
-        logger.e(' $err');
-        return SliverFillRemaining(
-          child: Container(
-            padding: const EdgeInsets.only(bottom: 50),
-            child: GalleryErrorPage(
-              onTap: controller.reLoadDataFirst,
-            ),
-          ),
-        );
-      },
     );
   }
 }

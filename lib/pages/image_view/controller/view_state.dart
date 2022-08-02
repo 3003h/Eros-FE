@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:archive_async/archive_async.dart';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
@@ -24,15 +25,24 @@ class ViewExtState {
     // 设置加载类型
     if (Get.arguments is ViewRepository) {
       final ViewRepository vr = Get.arguments as ViewRepository;
-      logger.d('vr.loadType ${vr.loadType}');
+      logger.d('vr.loadType ${vr.loadType}, index: ${vr.index}');
       loadFrom = vr.loadType;
-      if (loadFrom == LoadFrom.download) {
-        if (vr.files != null) {
-          imagePathList = vr.files!;
-          initGid = vr.gid;
-        }
-      } else {
-        galleryPageController = Get.find(tag: pageCtrlTag);
+
+      switch (loadFrom) {
+        case LoadFrom.download:
+          if (vr.files != null) {
+            imagePathList = vr.files!;
+            gid = vr.gid;
+          }
+          break;
+        case LoadFrom.gallery:
+          galleryPageController = Get.find(tag: pageCtrlTag);
+          gid = galleryPageController.gState.gid;
+          break;
+        case LoadFrom.archiver:
+          logger.d('LoadFrom.archiver');
+          gid = vr.gid;
+          asyncArchiveFiles.addAll(vr.asyncArchives!);
       }
 
       currentItemIndex = vr.index;
@@ -49,15 +59,17 @@ class ViewExtState {
   final CancelToken getMoreCancelToken = CancelToken();
 
   Map<int, GalleryImage> get imageMap => pageState.imageMap;
+  RxList<GalleryImage> get images => pageState.images;
 
-  ///
   LoadFrom loadFrom = LoadFrom.gallery;
 
-  late final String? initGid;
+  late final String? gid;
 
   /// 当前的index
   int _currentItemIndex = 0;
+
   int get currentItemIndex => _currentItemIndex;
+
   set currentItemIndex(int val) {
     _currentItemIndex = val;
 
@@ -79,8 +91,8 @@ class ViewExtState {
             saveToStore: saveToStore);
       }
     } else {
-      if (initGid != null) {
-        _galleryCacheController.setIndex(initGid ?? '', currentItemIndex,
+      if (gid != null) {
+        _galleryCacheController.setIndex(gid ?? '', currentItemIndex,
             saveToStore: saveToStore);
       }
     }
@@ -88,6 +100,7 @@ class ViewExtState {
 
   /// 单页双页模式
   ViewColumnMode get columnMode => ehConfigService.viewColumnMode;
+
   set columnMode(ViewColumnMode val) {
     ehConfigService.viewColumnMode = val;
   }
@@ -129,10 +142,14 @@ class ViewExtState {
   int get filecount {
     if (loadFrom == LoadFrom.download) {
       return imagePathList.length;
-    } else {
+    } else if (loadFrom == LoadFrom.gallery) {
       return int.parse(pageState.galleryProvider?.filecount ?? '0');
+    } else {
+      return asyncArchiveFiles.length;
     }
   }
+
+  final List<AsyncArchiveFile> asyncArchiveFiles = [];
 
   final Map<int, int> errCountMap = {};
 
@@ -142,7 +159,9 @@ class ViewExtState {
 
   /// 显示页面间隔
   RxBool get _showPageInterval => ehConfigService.showPageInterval;
+
   bool get showPageInterval => _showPageInterval.value;
+
   set showPageInterval(bool val) => _showPageInterval.value = val;
 
   /// 显示Bar
@@ -179,7 +198,9 @@ class ViewExtState {
 
   /// 阅读模式
   Rx<ViewMode> get _viewMode => ehConfigService.viewMode;
+
   ViewMode get viewMode => _viewMode.value;
+
   set viewMode(ViewMode val) => _viewMode.value = val;
 
   bool fade = true;
@@ -216,4 +237,7 @@ class ViewExtState {
     final _first = speedList.firstOrNull ?? 0.00;
     return speedList.any((element) => element != _first);
   }
+
+  Map<String, AsyncArchive> asyncArchiveMap = {};
+  Map<String, AsyncInputStream> asyncInputStreamMap = {};
 }

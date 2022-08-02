@@ -10,14 +10,15 @@ import 'package:get/get.dart';
 import '../comm.dart';
 import 'enum.dart';
 
-class TabViewController extends GetxController
-    with StateMixin<List<GalleryProvider>> {
+abstract class TabViewController extends GetxController {
   // 当前页码
   final _curPage = (-1).obs;
   int get curPage => _curPage.value;
   set curPage(int val) => _curPage.value = val;
 
-  TagController tagController = Get.find();
+  final TagController tagController = Get.find();
+
+  String get listViewId => 'listViewId';
 
   // 最小页码
   int minPage = 1;
@@ -25,6 +26,8 @@ class TabViewController extends GetxController
   int maxPage = 1;
   // 下一页
   int nextPage = 1;
+  // 上一页
+  int? prevPage;
 
   String? heroTag;
 
@@ -32,8 +35,23 @@ class TabViewController extends GetxController
 
   bool canLoadMore = false;
 
+  bool keepPosition = false;
+
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
+
+  Key galleryGroupKey = UniqueKey();
+
+  List<GalleryProvider>? state = [];
+  RxStatus status = RxStatus.loading();
+
+  void change(List<GalleryProvider>? newState, {RxStatus? status}) {
+    state = newState;
+    if (status != null) {
+      this.status = status;
+    }
+    update([listViewId]);
+  }
 
   final Rx<PageState> _pageState = PageState.None.obs;
   PageState get pageState => _pageState.value;
@@ -46,11 +64,13 @@ class TabViewController extends GetxController
 
   // 请求一批画廊数据
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    throw UnimplementedError();
+    cancelToken = CancelToken();
+    return null;
   }
 
   Future<GalleryList?> fetchMoreData() async {
-    throw UnimplementedError();
+    cancelToken = CancelToken();
+    return null;
   }
 
   // 首次请求
@@ -101,9 +121,6 @@ class TabViewController extends GetxController
       maxPage = rult.maxPage ?? 0;
       nextPage = rult.nextPage ?? 1;
       change(rultList, status: RxStatus.success());
-      // for (final _ in rultList ?? []) {
-      //   sliverAnimatedListKey.currentState?.insertItem(0);
-      // }
     } catch (err) {
       // change(state, status: RxStatus.error(err.toString()));
       final errmsg = err is HttpException ? err.message : '$err';
@@ -125,7 +142,6 @@ class TabViewController extends GetxController
     }
 
     logger.v('loadDataMore .....');
-    cancelToken = CancelToken();
     pageState = PageState.LoadingMore;
 
     logger.d('load page: $nextPage');
@@ -146,6 +162,7 @@ class TabViewController extends GetxController
               -1) {
         maxPage = rult.maxPage ?? 0;
         nextPage = rult.nextPage ?? 1;
+        curPage = nextPage;
       }
 
       final insertIndex = state?.length ?? 0;
@@ -154,27 +171,31 @@ class TabViewController extends GetxController
 
       change([...?state, ...rultList], status: RxStatus.success());
 
-      for (final _ in rultList) {
-        sliverAnimatedListKey.currentState?.insertItem(insertIndex);
-      }
+      // for (final _ in rultList) {
+      //   sliverAnimatedListKey.currentState?.insertItem(insertIndex);
+      // }
     } catch (e, stack) {
       pageState = PageState.LoadingException;
       rethrow;
     }
     // 成功才更新
-    curPage = lastNextPage;
+
     pageState = PageState.None;
   }
 
   // 加载上一页
   Future<void> loadPrevious() async {
-    await loadFromPage(curPage - 1);
-    // throw UnimplementedError();
+    keepPosition = true;
+    try {
+      await loadFromPage(prevPage ?? 0, previous: true);
+    } finally {
+      keepPosition = false;
+    }
   }
 
   // 跳转到指定页加载
-  Future<void> loadFromPage(int page) async {
-    throw UnimplementedError();
+  Future<void> loadFromPage(int page, {bool previous = false}) async {
+    cancelToken = CancelToken();
   }
 
   Future<void> onRefresh() async {

@@ -1,4 +1,3 @@
-import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -8,6 +7,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/pages/login/controller/login_controller.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -46,10 +46,10 @@ class ListViewEhSetting extends StatelessWidget {
   final UserController userController = Get.find();
   final TagTransController transController = Get.find();
   final LocaleService localeService = Get.find();
+  final LoginController loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
-    final bool _siteEx = _ehConfigService.isSiteEx.value;
     final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
     final bool _tagTranslat = _ehConfigService.isTagTranslat;
     final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
@@ -66,29 +66,12 @@ class ListViewEhSetting extends StatelessWidget {
         getExIgneous();
       }
       Api.selEhProfile();
+      loginController.asyncGetUserInfo();
     }
 
     void _handleJpnTitleChanged(bool newValue) {
       _ehConfigService.isJpnTitle(newValue);
     }
-
-    // Future<void> _handleTagTranslatChanged(bool newValue) async {
-    //   _ehConfigService.isTagTranslat = newValue;
-    //   if (newValue) {
-    //     try {
-    //       if (await transController.checkUpdate()) {
-    //         showToast('更新开始');
-    //         await transController.updateDB();
-    //         showToast('更新完成');
-    //       } else {
-    //         logger.v('do not need update');
-    //       }
-    //     } catch (e) {
-    //       logger.e('更新翻译异常 $e');
-    //       rethrow;
-    //     }
-    //   }
-    // }
 
     void _handleTagTranslatCDNChanged(bool newValue) {
       _ehConfigService.enableTagTranslateCDN = newValue;
@@ -106,26 +89,39 @@ class ListViewEhSetting extends StatelessWidget {
       _ehConfigService.isClipboardLink.value = val;
     }
 
-    // Future<void> _forceUpdateTranslate() async {
-    //   if (await transController.checkUpdate(force: true)) {
-    //     showToast('手动更新开始');
-    //     await transController.updateDB();
-    //     showToast('更新完成');
-    //   }
-    // }
+    Future<EhHome?> _futureImageLimits = getEhHome(refresh: true);
 
     final List<Widget> _list = <Widget>[
+      // if (_isLogin)
+      //   Obx(() {
+      //     return GestureDetector(
+      //       onLongPress: Api.selEhProfile,
+      //       child: TextSwitchItem(
+      //         L10n.of(context).galery_site,
+      //         intValue: _ehConfigService.isSiteEx.value,
+      //         onChanged: _handleSiteChanged,
+      //         desc: L10n.of(context).current_site('E-Hentai'),
+      //         descOn: L10n.of(context).current_site('ExHentai'),
+      //       ),
+      //     );
+      //   }),
       if (_isLogin)
-        GestureDetector(
-          onLongPress: Api.selEhProfile,
-          child: TextSwitchItem(
+        Obx(() {
+          return SlidingSegmentedItem<String>(
             L10n.of(context).galery_site,
-            intValue: _siteEx,
-            onChanged: _handleSiteChanged,
-            desc: L10n.of(context).current_site('E-Hentai'),
-            descOn: L10n.of(context).current_site('ExHentai'),
-          ),
-        ),
+            intValue: _ehConfigService.isSiteEx.value
+                ? EHConst.EX_BASE_HOST
+                : EHConst.EH_BASE_HOST,
+            onValueChanged: (val) {
+              logger.d('val  $val');
+              _handleSiteChanged(EHConst.EX_BASE_HOST == val);
+            },
+            slidingChildren: const {
+              EHConst.EH_BASE_HOST: Text('E-Hentai', textScaleFactor: 0.8),
+              EHConst.EX_BASE_HOST: Text('ExHentai', textScaleFactor: 0.8)
+            },
+          );
+        }),
       TextSwitchItem(
         L10n.of(context).link_redirect,
         intValue: _ehConfigService.linkRedirect,
@@ -141,7 +137,7 @@ class ListViewEhSetting extends StatelessWidget {
       TextSwitchItem(
         L10n.of(context).auto_select_profile,
         intValue: _autoSelectProfile,
-        hideLine: !_isLogin,
+        hideDivider: !_isLogin,
         onChanged: (val) => _ehConfigService.autoSelectProfile = val,
       ),
       if (_isLogin)
@@ -161,7 +157,6 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       if (_isLogin)
         SelectorSettingItem(
-          hideLine: true,
           title: L10n.of(context).ehentai_my_tags,
           selector: L10n.of(context).mytags_on_website,
           onTap: () {
@@ -176,6 +171,37 @@ class ListViewEhSetting extends StatelessWidget {
             );
           },
         ),
+      if (_isLogin)
+        StatefulBuilder(builder: (context, setState) {
+          return FutureBuilder<EhHome?>(
+              future: _futureImageLimits,
+              initialData: hiveHelper.getEhHome(),
+              builder: (context, snapshot) {
+                EhHome? ehHome = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (ehHome != null) {
+                    hiveHelper.setEhHome(ehHome);
+                  }
+                }
+                return SelectorSettingItem(
+                  hideDivider: true,
+                  title: L10n.of(context).image_limits,
+                  selector: ehHome == null
+                      ? ''
+                      : '${ehHome.currentLimit ?? ''} / ${ehHome.totLimit ?? ''}',
+                  desc:
+                      '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP',
+                  suffix: snapshot.connectionState != ConnectionState.done
+                      ? const CupertinoActivityIndicator()
+                      : const SizedBox(),
+                  onTap: () {
+                    setState(() {
+                      _futureImageLimits = getEhHome(refresh: true);
+                    });
+                  },
+                );
+              });
+        }),
       const ItemSpace(),
       SelectorSettingItem(
         title: 'WebDAV',
@@ -185,7 +211,7 @@ class ListViewEhSetting extends StatelessWidget {
             id: isLayoutLarge ? 2 : null,
           );
         },
-        hideLine: true,
+        hideDivider: true,
       ),
       if (GetPlatform.isAndroid)
         FutureBuilder<bool>(future: () async {
@@ -199,10 +225,9 @@ class ListViewEhSetting extends StatelessWidget {
                 const ItemSpace(),
                 SelectorSettingItem(
                   title: L10n.of(context).open_supported_links,
-                  desc:
-                      '从 Android 12 开始, 应用只有在获得批准的情况下，才能作为网络链接的处理应用。否则会使用默认浏览器处理。您可以在此手动批准',
+                  desc: L10n.of(context).open_supported_links_summary,
                   onTap: OpenByDefault.open,
-                  hideLine: true,
+                  hideDivider: true,
                 ),
               ],
             );
@@ -225,38 +250,6 @@ class ListViewEhSetting extends StatelessWidget {
             desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
           );
         }),
-      // if (localeService.isLanguageCodeZh)
-      //   TextSwitchItem(
-      //     '启用CDN',
-      //     intValue: _ehConfigService.enableTagTranslateCDN,
-      //     onChanged: _handleTagTranslatCDNChanged,
-      //     desc: '加速下载翻译数据',
-      //   ),
-      // if (localeService.isLanguageCodeZh)
-      //   Obx(() => TextSwitchItem(
-      //         '显示标签中文翻译',
-      //         intValue: _tagTranslat,
-      //         onChanged: _handleTagTranslatChanged,
-      //         desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
-      //         suffix: CupertinoButton(
-      //           padding: const EdgeInsets.all(0),
-      //           child: const Icon(CupertinoIcons.refresh),
-      //           onPressed: _forceUpdateTranslate,
-      //         ),
-      //       )),
-      // Obx(() {
-      //   return AnimatedCrossFade(
-      //     alignment: Alignment.center,
-      //     crossFadeState: _ehConfigService.isTagTranslat
-      //         ? CrossFadeState.showSecond
-      //         : CrossFadeState.showFirst,
-      //     firstCurve: Curves.easeIn,
-      //     secondCurve: Curves.easeOut,
-      //     duration: const Duration(milliseconds: 200),
-      //     firstChild: const SizedBox(),
-      //     secondChild: _buildTagIntroImgLvItem(context),
-      //   );
-      // }),
       TextSwitchItem(
         L10n.of(context).show_jpn_title,
         intValue: _jpnTitle,
@@ -268,7 +261,7 @@ class ListViewEhSetting extends StatelessWidget {
           '画廊封面模糊',
           intValue: _galleryImgBlur,
           onChanged: _handleGalleryListImgBlurChanged,
-          hideLine: true,
+          hideDivider: true,
           // desc: '画廊列表封面模糊效果',
         ),
       const ItemSpace(),
@@ -292,6 +285,7 @@ class ListViewEhSetting extends StatelessWidget {
             L10n.of(context).fixed_height_of_list_items,
             intValue: _ehConfigService.fixedHeightOfListItems,
             onChanged: (val) => _ehConfigService.fixedHeightOfListItems = val,
+            hideDivider: true,
           ),
         );
       }),
@@ -303,12 +297,26 @@ class ListViewEhSetting extends StatelessWidget {
         desc: L10n.of(context).manually_sel_favorites,
         descOn: L10n.of(context).last_favorites,
       ),
+      Obx(() {
+        return SelectorSettingItem(
+          title: L10n.of(context).avatar,
+          onTap: () {
+            Get.toNamed(
+              EHRoutes.avatarSetting,
+              id: isLayoutLarge ? 2 : null,
+            );
+          },
+          selector: _ehConfigService.showCommentAvatar
+              ? L10n.of(context).on
+              : L10n.of(context).off,
+        );
+      }),
       TextSwitchItem(
         L10n.of(context).clipboard_detection,
         intValue: _isClipboar,
         onChanged: _handleClipboarLinkTapChange,
         desc: L10n.of(context).clipboard_detection_desc,
-        hideLine: !localeService.isLanguageCodeZh,
+        hideDivider: !localeService.isLanguageCodeZh,
       ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
@@ -318,7 +326,7 @@ class ListViewEhSetting extends StatelessWidget {
               _ehConfigService.commentTrans.value = newValue,
           desc: '关闭',
           descOn: '用机器翻译将评论翻译为简体中文',
-          hideLine: true,
+          hideDivider: true,
         ),
     ];
 

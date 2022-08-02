@@ -270,10 +270,10 @@ class L10n {
     );
   }
 
-  /// `Sign in on the web`
+  /// `Sign in on the Web`
   String get login_web {
     return Intl.message(
-      'Sign in on the web',
+      'Sign in on the Web',
       name: 'login_web',
       desc: '',
       args: [],
@@ -400,10 +400,10 @@ class L10n {
     );
   }
 
-  /// `Preload image`
+  /// `Preload Image`
   String get preload_image {
     return Intl.message(
-      'Preload image',
+      'Preload Image',
       name: 'preload_image',
       desc: '',
       args: [],
@@ -430,10 +430,10 @@ class L10n {
     );
   }
 
-  /// `Follow system`
+  /// `Follow System`
   String get follow_system {
     return Intl.message(
-      'Follow system',
+      'Follow System',
       name: 'follow_system',
       desc: '',
       args: [],
@@ -460,10 +460,10 @@ class L10n {
     );
   }
 
-  /// `Custom hosts`
+  /// `Custom Hosts`
   String get custom_hosts {
     return Intl.message(
-      'Custom hosts',
+      'Custom Hosts',
       name: 'custom_hosts',
       desc: '',
       args: [],
@@ -810,20 +810,20 @@ class L10n {
     );
   }
 
-  /// `Clear all history`
+  /// `Clear All History`
   String get t_Clear_all_history {
     return Intl.message(
-      'Clear all history',
+      'Clear All History',
       name: 't_Clear_all_history',
       desc: '',
       args: [],
     );
   }
 
-  /// `Gallery site`
+  /// `Gallery Site`
   String get galery_site {
     return Intl.message(
-      'Gallery site',
+      'Gallery Site',
       name: 'galery_site',
       desc: '',
       args: [],
@@ -840,50 +840,50 @@ class L10n {
     );
   }
 
-  /// `EHentai settings`
+  /// `EHentai Settings`
   String get ehentai_settings {
     return Intl.message(
-      'EHentai settings',
+      'EHentai Settings',
       name: 'ehentai_settings',
       desc: '',
       args: [],
     );
   }
 
-  /// `Setting on website`
+  /// `Setting on Website`
   String get setting_on_website {
     return Intl.message(
-      'Setting on website',
+      'Setting on Website',
       name: 'setting_on_website',
       desc: '',
       args: [],
     );
   }
 
-  /// `My tags`
+  /// `My Tags`
   String get ehentai_my_tags {
     return Intl.message(
-      'My tags',
+      'My Tags',
       name: 'ehentai_my_tags',
       desc: '',
       args: [],
     );
   }
 
-  /// `My tags on website`
+  /// `My Tags on Website`
   String get mytags_on_website {
     return Intl.message(
-      'My tags on website',
+      'My Tags on Website',
       name: 'mytags_on_website',
       desc: '',
       args: [],
     );
   }
 
-  /// `List mode`
+  /// `List Mode`
   String get list_mode {
     return Intl.message(
-      'List mode',
+      'List Mode',
       name: 'list_mode',
       desc: '',
       args: [],
@@ -940,60 +940,60 @@ class L10n {
     );
   }
 
-  /// `Favorites order`
+  /// `Favorites Order`
   String get favorites_order {
     return Intl.message(
-      'Favorites order',
+      'Favorites Order',
       name: 'favorites_order',
       desc: '',
       args: [],
     );
   }
 
-  /// `Use posted`
+  /// `Use Posted`
   String get favorites_order_Use_posted {
     return Intl.message(
-      'Use posted',
+      'Use Posted',
       name: 'favorites_order_Use_posted',
       desc: '',
       args: [],
     );
   }
 
-  /// `Use favorited`
+  /// `Use Favorited`
   String get favorites_order_Use_favorited {
     return Intl.message(
-      'Use favorited',
+      'Use Favorited',
       name: 'favorites_order_Use_favorited',
       desc: '',
       args: [],
     );
   }
 
-  /// `Show japanese title`
+  /// `Show Japanese Title`
   String get show_jpn_title {
     return Intl.message(
-      'Show japanese title',
+      'Show Japanese Title',
       name: 'show_jpn_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Current version`
+  /// `Current Version`
   String get current_version {
     return Intl.message(
-      'Current version',
+      'Current Version',
       name: 'current_version',
       desc: '',
       args: [],
     );
   }
 
-  /// `Maximum history`
+  /// `Maximum History`
   String get max_history {
     return Intl.message(
-      'Maximum history',
+      'Maximum History',
       name: 'max_history',
       desc: '',
       args: [],
@@ -1830,6 +1830,26 @@ class L10n {
     );
   }
 
+  /// `Sync group`
+  String get sync_group {
+    return Intl.message(
+      'Sync group',
+      name: 'sync_group',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sync quick search`
+  String get sync_quick_search {
+    return Intl.message(
+      'Sync quick search',
+      name: 'sync_quick_search',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Skip`
   String get skip {
     return Intl.message(
@@ -2130,10 +2150,10 @@ class L10n {
     );
   }
 
-  /// `By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\nEach letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.`
+  /// `By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.`
   String get uc_rating_desc {
     return Intl.message(
-      'By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\nEach letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.',
+      'By default, galleries that you have rated will appear with red stars for ratings of 2 stars and below, green for ratings between 2.5 and 4 stars, and blue for ratings of 4.5 or 5 stars. You can customize this by entering your desired color combination below.\n Each letter represents one star. The default RRGGB means R(ed) for the first and second star, G(reen) for the third and fourth, and B(lue) for the fifth. You can also use (Y)ellow for the normal stars. Any five-letter R/G/B/Y combo works.',
       name: 'uc_rating_desc',
       desc: '',
       args: [],
@@ -3210,30 +3230,30 @@ class L10n {
     );
   }
 
-  /// `Align left;\nOnly scale if image is larger than browser width`
+  /// `Align left;\n Only scale if image is larger than browser width`
   String get uc_ms_0 {
     return Intl.message(
-      'Align left;\nOnly scale if image is larger than browser width',
+      'Align left;\n Only scale if image is larger than browser width',
       name: 'uc_ms_0',
       desc: '',
       args: [],
     );
   }
 
-  /// `Align center;\nOnly scale if image is larger than browser width`
+  /// `Align center;\n Only scale if image is larger than browser width`
   String get uc_ms_1 {
     return Intl.message(
-      'Align center;\nOnly scale if image is larger than browser width',
+      'Align center;\n Only scale if image is larger than browser width',
       name: 'uc_ms_1',
       desc: '',
       args: [],
     );
   }
 
-  /// `Align center;\nAlways scale images to fit browser width`
+  /// `Align center;\n Always scale images to fit browser width`
   String get uc_ms_2 {
     return Intl.message(
-      'Align center;\nAlways scale images to fit browser width',
+      'Align center;\n Always scale images to fit browser width',
       name: 'uc_ms_2',
       desc: '',
       args: [],
@@ -3424,20 +3444,20 @@ class L10n {
     );
   }
 
-  /// `Group name`
+  /// `Group Name`
   String get groupName {
     return Intl.message(
-      'Group name',
+      'Group Name',
       name: 'groupName',
       desc: '',
       args: [],
     );
   }
 
-  /// `Group type`
+  /// `Group Type`
   String get groupType {
     return Intl.message(
-      'Group type',
+      'Group Type',
       name: 'groupType',
       desc: '',
       args: [],
@@ -3484,10 +3504,20 @@ class L10n {
     );
   }
 
-  /// `Download type`
+  /// `Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here`
+  String get open_supported_links_summary {
+    return Intl.message(
+      'Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here',
+      name: 'open_supported_links_summary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Download Type`
   String get image_download_type {
     return Intl.message(
-      'Download type',
+      'Download Type',
       name: 'image_download_type',
       desc: '',
       args: [],
@@ -3524,10 +3554,10 @@ class L10n {
     );
   }
 
-  /// `Ask for me`
+  /// `Ask for Me`
   String get ask_me {
     return Intl.message(
-      'Ask for me',
+      'Ask for Me',
       name: 'ask_me',
       desc: '',
       args: [],
@@ -3544,10 +3574,10 @@ class L10n {
     );
   }
 
-  /// `Add to mytags`
+  /// `Add to Mytags`
   String get tag_add_to_mytag {
     return Intl.message(
-      'Add to mytags',
+      'Add to Mytags',
       name: 'tag_add_to_mytag',
       desc: '',
       args: [],
@@ -3594,30 +3624,30 @@ class L10n {
     );
   }
 
-  /// `Default color`
+  /// `Default Color`
   String get tag_dialog_Default_color {
     return Intl.message(
-      'Default color',
+      'Default Color',
       name: 'tag_dialog_Default_color',
       desc: '',
       args: [],
     );
   }
 
-  /// `primary`
+  /// `Primary`
   String get color_picker_primary {
     return Intl.message(
-      'primary',
+      'Primary',
       name: 'color_picker_primary',
       desc: '',
       args: [],
     );
   }
 
-  /// `wheel`
+  /// `Wheel`
   String get color_picker_wheel {
     return Intl.message(
-      'wheel',
+      'Wheel',
       name: 'color_picker_wheel',
       desc: '',
       args: [],
@@ -3673,6 +3703,206 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Double page model`
+  String get double_page_model {
+    return Intl.message(
+      'Double page model',
+      name: 'double_page_model',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Model {modelName}`
+  String model(Object modelName) {
+    return Intl.message(
+      'Model $modelName',
+      name: 'model',
+      desc: '',
+      args: [modelName],
+    );
+  }
+
+  /// `Reply`
+  String get reply_to_comment {
+    return Intl.message(
+      'Reply',
+      name: 'reply_to_comment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show comment avatar`
+  String get show_comment_avatar {
+    return Intl.message(
+      'Show comment avatar',
+      name: 'show_comment_avatar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avatar`
+  String get avatar {
+    return Intl.message(
+      'Avatar',
+      name: 'avatar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default Avatar Style`
+  String get default_avatar_style {
+    return Intl.message(
+      'Default Avatar Style',
+      name: 'default_avatar_style',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Authentication Required`
+  String get auth_signInTitle {
+    return Intl.message(
+      'Authentication Required',
+      name: 'auth_signInTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify Identity`
+  String get auth_biometricHint {
+    return Intl.message(
+      'Verify Identity',
+      name: 'auth_biometricHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chapter`
+  String get chapter {
+    return Intl.message(
+      'Chapter',
+      name: 'chapter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image Limits`
+  String get image_limits {
+    return Intl.message(
+      'Image Limits',
+      name: 'image_limits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Cost`
+  String get reset_cost {
+    return Intl.message(
+      'Reset Cost',
+      name: 'reset_cost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image Hide`
+  String get image_hide {
+    return Intl.message(
+      'Image Hide',
+      name: 'image_hide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `QR code Check`
+  String get QR_code_check {
+    return Intl.message(
+      'QR code Check',
+      name: 'QR_code_check',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Perceptual Hash Check`
+  String get phash_check {
+    return Intl.message(
+      'Perceptual Hash Check',
+      name: 'phash_check',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage Hidden Images`
+  String get mange_hidden_images {
+    return Intl.message(
+      'Manage Hidden Images',
+      name: 'mange_hidden_images',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Author`
+  String get author {
+    return Intl.message(
+      'Author',
+      name: 'author',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get version {
+    return Intl.message(
+      'Version',
+      name: 'version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Donate`
+  String get donate {
+    return Intl.message(
+      'Donate',
+      name: 'donate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `License`
+  String get license {
+    return Intl.message(
+      'License',
+      name: 'license',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fullscreen`
+  String get fullscreen {
+    return Intl.message(
+      'Fullscreen',
+      name: 'fullscreen',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
@@ -3682,6 +3912,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'ko', countryCode: 'KR'),
+      Locale.fromSubtags(languageCode: 'ru'),
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'),
       Locale.fromSubtags(languageCode: 'zh', countryCode: 'TW'),
     ];

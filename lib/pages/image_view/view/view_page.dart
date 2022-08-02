@@ -1,3 +1,4 @@
+import 'package:archive_async/archive_async.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
@@ -22,6 +23,7 @@ class ViewRepository {
     this.index = 0,
     this.loadType = LoadFrom.gallery,
     this.files,
+    this.asyncArchives,
     required this.gid,
   });
 
@@ -29,6 +31,7 @@ class ViewRepository {
   final List<String>? files;
   final String gid;
   final LoadFrom loadType;
+  final List<AsyncArchiveFile>? asyncArchives;
 }
 
 class ViewPage extends StatefulWidget {
@@ -46,7 +49,7 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    logger.d('initState');
+    logger.v('initState');
   }
 
   @override
@@ -57,18 +60,59 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return const CupertinoTheme(
-      data: CupertinoThemeData(
-        brightness: Brightness.dark,
-      ),
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
+    return const ViewKeyboardListener(
+      child: CupertinoTheme(
+        data: CupertinoThemeData(
+          brightness: Brightness.dark,
+        ),
         child: ImagePlugins(
           child: ImageGestureDetector(
             child: ImageView(),
           ),
         ),
       ),
+    );
+  }
+}
+
+class ViewKeyboardListener extends GetView<ViewExtController> {
+  const ViewKeyboardListener({required this.child, Key? key}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyboardListener(
+      autofocus: true,
+      focusNode: FocusNode(),
+      onKeyEvent: (KeyEvent event) async {
+        if (event is! KeyDownEvent) {
+          return;
+        }
+
+        // 按键对应的事件
+        Map<LogicalKeyboardKey, Function> actionMap = {
+          LogicalKeyboardKey.arrowLeft: controller.tapLeft,
+          LogicalKeyboardKey.arrowUp: controller.tapLeft,
+          LogicalKeyboardKey.arrowRight: controller.tapRight,
+          LogicalKeyboardKey.arrowDown: controller.tapRight,
+          LogicalKeyboardKey.space: controller.handOnTapCent,
+          LogicalKeyboardKey.enter: controller.handOnTapCent,
+          LogicalKeyboardKey.escape: Get.back,
+          LogicalKeyboardKey.backspace: Get.back,
+          LogicalKeyboardKey.equal: controller.scaleUp,
+          LogicalKeyboardKey.minus: controller.scaleDown,
+          LogicalKeyboardKey.digit0: controller.scaleReset,
+          LogicalKeyboardKey.keyP: controller.switchColumnMode,
+          LogicalKeyboardKey.keyT: controller.switchShowThumbList,
+          LogicalKeyboardKey.keyA: () =>
+              controller.tapAutoRead(context, setInv: false),
+        };
+
+        logger.d('logicalKey: ${event.logicalKey}');
+        actionMap[event.logicalKey]?.call();
+      },
+      child: child,
     );
   }
 }
@@ -238,7 +282,8 @@ class ImagePlugins extends GetView<ViewExtController> {
   @override
   Widget build(BuildContext context) {
     vState.bottomBarHeight = context.mediaQueryPadding.bottom +
-        kTopBarHeight * 2 +
+        kBottomBarHeight +
+        kSliderBarHeight +
         (vState.showThumbList ? kThumbListViewHeight : 0);
 
     return Container(

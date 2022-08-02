@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/epub/epub_builder.dart';
@@ -38,6 +39,8 @@ const String idDownloadArchiverView = 'DownloadArchiverView';
 const String idDownloadGalleryItem = 'DownloadGalleryItem';
 const String idDownloadArchiverItem = 'DownloadArchiverItem';
 
+const String viewTypeStoreKey = 'DownloadView.viewType';
+
 class DownloadViewController extends GetxController {
   late final ArchiverDownloadController _archiverDownloadController;
 
@@ -51,6 +54,10 @@ class DownloadViewController extends GetxController {
 
   late String tabTag;
 
+  final _viewType = DownloadType.gallery.obs;
+  DownloadType get viewType => _viewType.value;
+  set viewType(DownloadType val) => _viewType.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -58,6 +65,12 @@ class DownloadViewController extends GetxController {
       _archiverDownloadController = Get.find();
     }
     tabTag = EHRoutes.download;
+
+    viewType = EnumToString.fromString(DownloadType.values,
+            hiveHelper.getString(viewTypeStoreKey) ?? '') ??
+        viewType;
+    ever<DownloadType>(
+        _viewType, (val) => hiveHelper.setString(viewTypeStoreKey, val.name));
   }
 
   List<DownloadType> pageList = <DownloadType>[
@@ -68,6 +81,8 @@ class DownloadViewController extends GetxController {
   List<DownloadArchiverTaskInfo> get archiverTasks =>
       _archiverDownloadController.archiverTaskMap.entries
           .map((e) => e.value)
+          .toList()
+          .reversed
           .toList();
 
   Map<int, GalleryTask> get galleryTaskMap =>
@@ -103,17 +118,19 @@ class DownloadViewController extends GetxController {
     final String? _oriTaskid = archiverTasks[index].taskId;
     final int? _oriStatus = archiverTasks[index].status;
 
-    String? _newTaskId = '';
+    String? _newTaskId;
     if (_oriStatus == DownloadTaskStatus.paused.value) {
       _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskid ?? '');
     } else if (_oriStatus == DownloadTaskStatus.failed.value) {
-      await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
+      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
     }
 
-    logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
-    if (_newTaskId != null &&
-        _newTaskId.isNotEmpty &&
-        archiverTasks[index].tag != null) {
+    if (_newTaskId == null) {
+      return;
+    }
+
+    logger.d('oriTaskid $_oriTaskid,  newTaskId $_newTaskId');
+    if (_newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
@@ -123,20 +140,26 @@ class DownloadViewController extends GetxController {
 
   // Archiver重试任务
   Future<void> retryArchiverDownload(int index) async {
-    final String? _oriTaskid = archiverTasks[index].taskId;
+    logger.d('Archiver重试任务');
+    final _oriTask = archiverTasks[index];
+    final String? _oriTaskid = _oriTask.taskId;
     final int? _oriStatus = archiverTasks[index].status;
 
-    String? _newTaskId = '';
+    String? _newTaskId;
     if (_oriStatus == DownloadTaskStatus.paused.value) {
       _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
     } else if (_oriStatus == DownloadTaskStatus.failed.value) {
-      await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
+      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
     }
 
-    logger.d('oritaskid $_oriTaskid,  newID $_newTaskId');
-    if (_newTaskId != null &&
-        _newTaskId.isNotEmpty &&
-        archiverTasks[index].tag != null) {
+    if (_newTaskId == null || _newTaskId.isEmpty) {
+      // await retryArchiverDownload(index);
+      logger.d('url ${_oriTask.gid} ${_oriTask.url}');
+      return;
+    }
+
+    logger.d('oriTaskid $_oriTaskid, newTaskid $_newTaskId');
+    if (_newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
@@ -207,8 +230,9 @@ class DownloadViewController extends GetxController {
     animatedGalleryListKey.currentState?.insertItem(galleryTasks.length - 1);
   }
 
-  void animateArchiverListAddTask() {
-    animatedArchiverListKey.currentState?.insertItem(archiverTasks.length - 1);
+  void animateArchiverListAddTask({int? index}) {
+    animatedArchiverListKey.currentState
+        ?.insertItem(index ?? archiverTasks.length - 1);
   }
 
   void onLongPress(

@@ -1,5 +1,5 @@
+import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,25 +15,13 @@ class UnlockPageController extends GetxController {
   set infoText(String val) => _infoText.value = val;
 
   Future<bool> _unlock({required BuildContext context}) async {
-    final IOSAuthMessages iosStrings = IOSAuthMessages(
-        cancelButton: L10n.of(context).cancel,
-        goToSettingsButton: L10n.of(context).tab_setting,
-        goToSettingsDescription: 'Please set up your Touch & Face ID.',
-        lockOut: 'Please reenable your Touch & Face ID');
-
-    final AndroidAuthMessages androidStrings = AndroidAuthMessages(
-      cancelButton: L10n.of(context).cancel,
-      // signInTitle: '指纹认证',
-      biometricHint: '',
-    );
-
     infoText = '';
     try {
       final bool didAuthenticate = await localAuth.authenticate(
-        localizedReason: '验证以解锁应用',
-        authMessages: const <AuthMessages>[
-          IOSAuthMessages(),
-          AndroidAuthMessages(),
+        localizedReason: ' ',
+        authMessages: <AuthMessages>[
+          AutoLockController.iOSAuthMessages,
+          AutoLockController.androidAuthMessages,
         ],
       );
       return didAuthenticate;

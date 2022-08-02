@@ -3,7 +3,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/gallery/view/comment_item.dart';
@@ -11,6 +10,7 @@ import 'package:fehviewer/pages/gallery/view/taginfo_dialog.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 /// 封面小图 纯StatelessWidget
@@ -96,12 +96,7 @@ class CoverImage extends StatelessWidget {
                 },
                 imageUrl: (imageUrl ?? '').dfUrl,
                 fit: BoxFit.cover,
-                // httpHeaders: _httpHeaders,
               ),
-              // child: NetworkExtendedImage(
-              //   url: imageUrl ?? '',
-              //   fit: BoxFit.cover,
-              // ),
             ),
           ),
         );
@@ -145,12 +140,15 @@ class CoverImage extends StatelessWidget {
 }
 
 class GalleryTitle extends StatelessWidget {
-  GalleryTitle({
+  const GalleryTitle({
     Key? key,
+    required this.title,
   }) : super(key: key);
 
-  final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
-  GalleryPageState get _pageState => _pageController.gState;
+  // final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);
+  // GalleryPageState get _pageState => _pageController.gState;
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +165,7 @@ class GalleryTitle extends StatelessWidget {
 
     return GestureDetector(
       child: SelectableText(
-        _pageState.title,
+        title,
         maxLines: 6,
         minLines: 1,
         textAlign: TextAlign.left,
@@ -184,25 +182,6 @@ class GalleryTitle extends StatelessWidget {
           forceStrutHeight: true,
         ),
       ),
-      // child: ExtendedText(
-      //   _pageController.title,
-      //   selectionEnabled: true,
-      //   textAlign: TextAlign.left,
-      //   // 对齐方式
-      //   overflow: TextOverflow.ellipsis, // 超出部分省略号
-      //   maxLines: 6,
-      //   // selectionControls: EHTextSelectionControls(),
-      //   style: const TextStyle(
-      //     textBaseline: TextBaseline.alphabetic,
-      //     // height: 1.2,
-      //     fontSize: 16,
-      //     fontWeight: FontWeight.w500,
-      //   ),
-      //   strutStyle: const StrutStyle(
-      //     height: 1.2,
-      //     forceStrutHeight: true,
-      //   ),
-      // ),
     );
   }
 }
@@ -237,7 +216,7 @@ class GalleryUploader extends StatelessWidget {
       ),
       onTap: () {
         logger.v('search uploader:$uploader');
-        NavigatorUtil.goSearchPageWithText(simpleSearch: 'uploader:$uploader');
+        NavigatorUtil.goSearchPageWithParam(simpleSearch: 'uploader:$uploader');
       },
     );
   }
@@ -256,21 +235,23 @@ class ReadButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => CupertinoButton(
-          child: Text(
-            (_pageState.lastIndex > 0)
-                ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
-                : L10n.of(context).read.toUpperCase(),
-            style: const TextStyle(fontSize: 15, height: 1.2),
-          ),
-          minSize: 20,
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-          borderRadius: BorderRadius.circular(20),
-          color: CupertinoColors.activeBlue,
-          onPressed: _pageState.enableRead
-              ? () => _toViewPage(
-                  _pageState.galleryProvider?.gid ?? '0', _pageState.lastIndex)
-              : null),
+      () => MouseRegionClick(
+        child: CupertinoButton(
+            child: Text(
+              (_pageState.lastIndex > 0)
+                  ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
+                  : L10n.of(context).read.toUpperCase(),
+              style: const TextStyle(fontSize: 15, height: 1.2),
+            ),
+            minSize: 20,
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+            borderRadius: BorderRadius.circular(20),
+            color: CupertinoColors.activeBlue,
+            onPressed: _pageState.enableRead
+                ? () => _toViewPage(_pageState.galleryProvider?.gid ?? '0',
+                    _pageState.lastIndex)
+                : null),
+      ),
     );
   }
 
@@ -356,62 +337,31 @@ class GalleryRating extends StatelessWidget {
   }
 }
 
-class TopComment extends StatelessWidget {
-  const TopComment({Key? key, this.showBtn = true}) : super(key: key);
-
-  // final List<GalleryComment> comment;
-  final bool showBtn;
+class TopCommentEx extends StatelessWidget {
+  const TopCommentEx({Key? key, this.comments, this.max = 2}) : super(key: key);
+  final List<GalleryComment>? comments;
+  final int max;
 
   @override
   Widget build(BuildContext context) {
     // 显示最前面两条
     List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
       final Iterable<GalleryComment> _comments = comments?.take(max) ?? [];
-      return List<Widget>.from(_comments
+      return _comments
           .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
                 simple: true,
               ))
-          .toList());
+          .toList();
     }
 
     return Column(
-      children: <Widget>[
-        // 评论
-        GetBuilder<CommentController>(
-          init: CommentController(),
-          tag: pageCtrlTag,
-          id: GetIds.PAGE_VIEW_TOP_COMMENT,
-          builder: (CommentController _commentController) {
-            return _commentController.obx(
-                (List<GalleryComment>? state) => Column(
-                      children: <Widget>[
-                        ..._topComment(state, max: 2),
-                      ],
-                    ),
-                onLoading: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: const CupertinoActivityIndicator(
-                    radius: 10,
-                  ),
-                ));
-          },
-        ),
-        // 评论按钮
-        if (showBtn)
-          CupertinoButton(
-            minSize: 0,
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-            child: Text(
-              L10n.of(Get.context!).all_comment,
-              style: const TextStyle(fontSize: 16),
-            ),
-            onPressed: () {
-              Get.toNamed(
-                EHRoutes.galleryComment,
-                id: isLayoutLarge ? 2 : null,
-              );
-            },
+      children: [
+        ..._topComment(comments, max: max),
+        if ((comments?.length ?? 0) > max)
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: Icon(FontAwesomeIcons.ellipsis),
           ),
       ],
     );
@@ -426,12 +376,10 @@ class TagBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> listGroupWidget = <Widget>[];
-    for (final TagGroup tagGroupData in listTagGroup) {
-      listGroupWidget.add(TagGroupItem(tagGroupData: tagGroupData));
-    }
-
-    return Column(children: listGroupWidget);
+    return Column(
+        children: listTagGroup
+            .map((tagGroupData) => TagGroupItem(tagGroupData: tagGroupData))
+            .toList());
   }
 }
 
@@ -473,52 +421,43 @@ class TagGroupItem extends StatelessWidget {
   final TagGroup tagGroupData;
 
   List<Widget> _initTagBtnList(
-      List<GalleryTag> galleryTags, BuildContext context) {
+    List<GalleryTag> galleryTags,
+    BuildContext context,
+  ) {
     final EhConfigService ehConfigService = Get.find();
-    final List<Widget> _tagBtnList = <Widget>[];
-    for (var tag in galleryTags) {
-      tag = tag.setColor();
-      _tagBtnList.add(
-        Obx(() => TagButton(
-              text: ehConfigService.isTagTranslat ? tag.tagTranslat : tag.title,
-              color: ColorsUtil.hexStringToColor(tag.backgrondColor),
-              textColor: () {
-                switch (tag.vote) {
-                  case 0:
-                    return ColorsUtil.hexStringToColor(tag.color);
-                  case 1:
-                    return CupertinoDynamicColor.resolve(
-                        ThemeColors.tagUpColor, context);
-                  case -1:
-                    return CupertinoDynamicColor.resolve(
-                        ThemeColors.tagDownColor, context);
-                }
-              }(),
-              onPressed: () {
-                logger.v('search type[${tag.type}] tag[${tag.title}]');
-                NavigatorUtil.goSearchPageWithText(
-                    simpleSearch: '${tag.type}:${tag.title.trim()}');
-              },
-              onLongPress: () {
-                // if (ehConfigService.isTagTranslat) {
-                //   showTagInfoDialog(
-                //     tag.title,
-                //     translate: tag.tagTranslat,
-                //     type: tag.type,
-                //     vote: tag.vote ?? 0,
-                //   );
-                // }
-                showTagInfoDialog(
-                  tag.title,
-                  translate: tag.tagTranslat,
-                  type: tag.type,
-                  vote: tag.vote ?? 0,
-                );
-              },
-            )),
-      );
-    }
-    return _tagBtnList;
+
+    return galleryTags.map((e) {
+      final tag = e.setColor();
+      return Obx(() => TagButton(
+            text: ehConfigService.isTagTranslat ? tag.tagTranslat : tag.title,
+            color: ColorsUtil.hexStringToColor(tag.backgrondColor),
+            textColor: () {
+              switch (tag.vote) {
+                case 0:
+                  return ColorsUtil.hexStringToColor(tag.color);
+                case 1:
+                  return CupertinoDynamicColor.resolve(
+                      ThemeColors.tagUpColor, context);
+                case -1:
+                  return CupertinoDynamicColor.resolve(
+                      ThemeColors.tagDownColor, context);
+              }
+            }(),
+            onPressed: () {
+              logger.v('search type[${tag.type}] tag[${tag.title}]');
+              NavigatorUtil.goSearchPageWithParam(
+                  simpleSearch: '${tag.type}:${tag.title.trim()}');
+            },
+            onLongPress: () {
+              showTagInfoDialog(
+                tag.title,
+                translate: tag.tagTranslat,
+                type: tag.type,
+                vote: tag.vote ?? 0,
+              );
+            },
+          ));
+    }).toList();
   }
 
   @override
@@ -532,7 +471,7 @@ class TagGroupItem extends StatelessWidget {
     logger.v('tagType $_tagType');
 
     final Container container = Container(
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -553,12 +492,10 @@ class TagGroupItem extends StatelessWidget {
                 : const SizedBox.shrink()),
           ),
           Expanded(
-            child: Container(
-              child: Wrap(
-                spacing: 4, //主轴上子控件的间距
-                runSpacing: 4, //交叉轴上子控件之间的间距
-                children: _tagBtnList, //要显示的子控件集合
-              ),
+            child: Wrap(
+              spacing: 4, //主轴上子控件的间距
+              runSpacing: 4, //交叉轴上子控件之间的间距
+              children: _tagBtnList, //要显示的子控件集合
             ),
           )
         ],
@@ -573,6 +510,58 @@ class TagGroupItem extends StatelessWidget {
 /// onPressed 回调
 class TagButton extends StatelessWidget {
   const TagButton({
+    Key? key,
+    required this.text,
+    this.textColor,
+    this.color,
+    this.onPressed,
+    this.padding,
+    this.onLongPress,
+  }) : super(key: key);
+
+  final String text;
+  final Color? textColor;
+  final Color? color;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
+  final EdgeInsets? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      onLongPress: onLongPress,
+      child: ClipRRect(
+        // key: key,
+        borderRadius: BorderRadius.circular(8),
+        child: Container(
+          padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
+          color: color ??
+              CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
+          child: Column(
+            children: [
+              Text(
+                text,
+                style: TextStyle(
+                  color: textColor ??
+                      CupertinoDynamicColor.resolve(
+                          ThemeColors.tagText, context),
+                  fontSize: 13,
+                  fontWeight: textColor != null ? FontWeight.w500 : null,
+                  height: 1.3,
+                ),
+                strutStyle: const StrutStyle(height: 1),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SearchHisTagButton extends StatelessWidget {
+  const SearchHisTagButton({
     Key? key,
     required this.text,
     this.desc,
@@ -615,7 +604,6 @@ class TagButton extends StatelessWidget {
                     fontSize: 13,
                     fontWeight: textColor != null ? FontWeight.w500 : null,
                     height: 1.3,
-//              fontWeight: FontWeight.w500,
                   ),
                   strutStyle: const StrutStyle(height: 1),
                 ),
@@ -647,33 +635,48 @@ class TagButton extends StatelessWidget {
 
 class TextBtn extends StatelessWidget {
   const TextBtn(this.iconData,
-      {Key? key, this.iconSize, this.title, this.onTap, this.onLongPress})
+      {Key? key,
+      this.iconSize,
+      this.title,
+      this.onTap,
+      this.onLongPress,
+      this.color,
+      this.iconPadding})
       : super(key: key);
   final IconData iconData;
   final double? iconSize;
   final String? title;
+  final Color? color;
 
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
+  final EdgeInsetsGeometry? iconPadding;
 
   @override
   Widget build(BuildContext context) {
     return CupertinoTheme(
-      data: const CupertinoThemeData(primaryColor: CupertinoColors.systemGrey),
+      data:
+          CupertinoThemeData(primaryColor: color ?? CupertinoColors.systemGrey),
       child: GestureDetector(
+        // behavior: HitTestBehavior.opaque,
         child: Container(
           // padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              CupertinoButton(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                // color: CupertinoColors.activeBlue,
-                child: Icon(
-                  iconData,
-                  size: iconSize ?? 28,
-                  // color: CupertinoColors.systemGrey3,
+              Container(
+                padding: iconPadding,
+                child: MouseRegionClick(
+                  disable: onTap == null && onLongPress == null,
+                  child: CupertinoButton(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Icon(
+                      iconData,
+                      size: iconSize ?? 28,
+                      // color: CupertinoColors.systemGrey3,
+                    ),
+                    onPressed: onTap,
+                  ),
                 ),
-                onPressed: onTap,
               ),
               Text(
                 title ?? '',
@@ -684,6 +687,37 @@ class TextBtn extends StatelessWidget {
         ),
         onLongPress: onLongPress,
       ),
+    );
+  }
+}
+
+// 导航栏封面小图
+class NavigationBarImage extends StatelessWidget {
+  const NavigationBarImage({
+    Key? key,
+    this.imageUrl,
+    this.scrollController,
+  }) : super(key: key);
+
+  final String? imageUrl;
+  final ScrollController? scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    final double _statusBarHeight = MediaQuery.of(Get.context!).padding.top;
+    return GestureDetector(
+      onTap: () {
+        scrollController?.animateTo(0,
+            duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      },
+      child: imageUrl == null || (imageUrl?.isEmpty ?? true)
+          ? const SizedBox.expand()
+          : Container(
+              child: CoveTinyImage(
+                imgUrl: imageUrl!,
+                statusBarHeight: _statusBarHeight,
+              ),
+            ),
     );
   }
 }

@@ -1,0 +1,7 @@
+{
+  "favcats":"$[]favcat",
+  "selectFavcat?": "1",
+  "favNote?": "",
+  "maxNoteSlots": "1000",
+  "usedNoteSlots": "5"
+}

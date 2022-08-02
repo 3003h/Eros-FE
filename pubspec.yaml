@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.34+394
+version: 1.2.56+416
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -41,7 +41,7 @@ dependencies:
   tuple: ^2.0.0
   get: ^4.3.8
   get_storage: ^2.0.3
-  photo_view: ^0.13.0
+  photo_view: ^0.14.0
   cached_network_image: ^3.0.0
   extended_image: ^6.0.1
   liquid_progress_indicator_ns: ^1.0.0
@@ -57,7 +57,7 @@ dependencies:
   # 分享
   share: ^2.0.1
   # 权限检查
-  permission_handler: ^9.0.1
+  permission_handler: ^10.0.0
   # 缓存
   flutter_cache_manager: ^3.0.2
   # 图片保存
@@ -74,17 +74,14 @@ dependencies:
   # 评星
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
-  flutter_downloader: ^1.6.0
+#  flutter_downloader: ^1.6.0
+  flutter_downloader:
+    git:
+      url: https://github.com/honjow/flutter_downloader.git
+      ref: dev
   floor: ^1.1.0
   copy_with_extension: ^4.0.0
   package_info: ^2.0.0
-
-  # firebase
-  firebase_analytics: ^9.1.0
-  firebase_crashlytics: ^2.5.0
-  firebase_performance: ^0.8.0+5
-  cloud_firestore: ^3.1.0
-  dio_firebase_performance: ^0.3.1-dev.3
 
   pretty_dio_logger: ^1.2.0-beta-1
   translator: ^0.1.7
@@ -114,26 +111,15 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
   persistent_bottom_nav_bar: ^4.0.2
-  device_preview: ^1.0.0
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
-#  google_ml_kit: ^0.7.1
-#  google_ml_kit:
-#    path: /Users/honjow/git/Google-Ml-Kit-plugin
-#    git:
-#      url: https://github.com/honjow/Google-Ml-Kit-plugin.git
-  learning_language:
-#    path: /Users/honjow/git/learning/packages/learning_language
-    git:
-      url: https://github.com/honjow/learning.git
-      path: packages/learning_language
   encrypt: ^5.0.1
   wakelock: ^0.6.1+1
   jinja: ^0.3.4
   restart_app: ^1.1.0
   image: ^3.0.8
   palette_generator: ^0.3.2
-  getwidget: ^2.0.4
+  getwidget: ^3.0.1
   open_file: ^3.2.1
   flustars: ^2.0.1
   dio_smart_retry: ^1.0.3
@@ -152,6 +138,22 @@ dependencies:
   flex_color_picker: ^2.3.0
   bitsdojo_window: ^0.1.1+1
   image_picker: ^0.8.5
+  sliver_tools: ^0.2.6
+  flutter_boring_avatars:
+    git:
+      url: https://github.com/xioxin/flutter_boring_avatars.git
+  archive_async:
+    git:
+      url: https://github.com/xioxin/archive_async.git
+  image_compare: ^1.1.2
+  isolate: ^2.1.1
+  octo_image: ^1.0.2
+  google_mlkit_barcode_scanning: ^0.3.0
+#  google_mlkit_translation: ^0.3.0
+  google_mlkit_language_id: ^0.3.0
+  flutter_custom_license_page: ^0.0.3
+  flutter_list_view: ^1.1.18
+  fullscreen: ^1.0.3
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -177,18 +179,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
 
 dependency_overrides:
-#  intl_utils: ^2.6.1
-#  async: ^2.8.2
   json_serializable: ^6.0.1
-  firebase_performance: ^0.8.0+5
-  #args: ^2.1.0
-  #expressions: ^0.2.2
-  #logging: ^1.0.1
-
-  # google_ml_kit pod 依赖冲突 降低firebase版本处理
-#  firebase_core: 1.1.0
-#  firebase_crashlytics: 2.0.0
-#  cloud_firestore: 2.0.0
 
 flutter_intl:
   enabled: true
@@ -196,10 +187,20 @@ flutter_intl:
 
 flutter:
   uses-material-design: true
-  # fonts:
-  #   - family: SourceHanSansSC
-  #     fonts:
-  #       - asset: fonts/SourceHanSansSC-Regular.otf
+#  fonts:
+#    - family: AppleEmoji
+#      fonts:
+#        - asset: fonts/AppleColorEmoji.ttf
+#    - family: Seguiemj
+#      fonts:
+#        - asset: fonts/seguiemj.ttf
+#    - family: SourceHanSansSC
+#      fonts:
+#        - asset: fonts/SourceHanSansSC-Regular.otf
+#    - family: OpenMoji
+#      fonts:
+#        - asset: fonts/OpenMoji-Color.ttf
+
 
   assets:
     - assets/
@@ -207,3 +208,4 @@ flutter:
     - assets/templates/epub/OEBPS/
     - assets/templates/epub/OEBPS/content/
     - assets/templates/epub/OEBPS/content/resources/
+    - assets/images/

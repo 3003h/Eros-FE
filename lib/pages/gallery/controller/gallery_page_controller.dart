@@ -10,22 +10,24 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/request.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:fehviewer/pages/gallery/gallery_repository.dart';
+import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:synchronized/extension.dart';
 
 import 'all_previews_controller.dart';
-import 'comment_controller.dart';
 import 'gallery_fav_controller.dart';
 import 'gallery_page_state.dart';
 import 'taginfo_controller.dart';
 import 'torrent_controller.dart';
 
-const double kHeaderHeightOffset = kHeaderHeight;
+const double kHeaderHeightOffset = kHeaderHeight + 52.0;
+
+typedef ImageCallback = GalleryImage Function(GalleryImage image);
 
 class GalleryPageController extends GetxController
     with StateMixin<GalleryProvider> {
@@ -43,6 +45,8 @@ class GalleryPageController extends GetxController
   DownloadController get _downloadController => Get.find();
   final CacheController _cacheController = Get.find();
 
+  final imageLoadLock = Lock();
+
   @override
   void onInit() {
     super.onInit();
@@ -56,11 +60,11 @@ class GalleryPageController extends GetxController
       // url跳转
       // 解析gid等信息
       final RegExp urlRex =
-          RegExp(r'(http?s://e(-|x)hentai.org)?/g/(\d+)/(\w+)/?$');
+          RegExp(r'(http?s://e[-x]hentai.org)?/g/(\d+)/(\w+)/?$');
       final RegExpMatch? urlRult =
           urlRex.firstMatch(galleryRepository.url ?? '');
-      final String gid = urlRult?.group(3) ?? '';
-      final String token = urlRult?.group(4) ?? '';
+      final String gid = urlRult?.group(2) ?? '';
+      final String token = urlRult?.group(3) ?? '';
 
       if (!_loadDataFromCache(
         gid,
@@ -84,14 +88,14 @@ class GalleryPageController extends GetxController
     gState.hideNavigationBtn = true;
 
     if (!isStateFromCache) {
-      logger.d('state new load');
+      logger.v('state new load');
       gState.galleryRepository = galleryRepository;
       _loadData();
 
       // 初始
       _galleryCacheController
-          .getGalleryCache(gState.galleryProvider?.gid ?? '')
-          .then((_galleryCache) =>
+          .listenGalleryCache(gState.galleryProvider?.gid ?? '')
+          .listen((_galleryCache) =>
               gState.lastIndex = _galleryCache?.lastIndex ?? 0);
     }
   }
@@ -122,19 +126,6 @@ class GalleryPageController extends GetxController
       // 跳转提示dialog
       if (gState.galleryRepository?.jumpSer != null) {
         startReadDialog(gState.galleryRepository!.jumpSer!);
-      }
-
-      if (!GetPlatform.isWindows) {
-        analytics?.logViewItem(
-          items: [
-            AnalyticsEventItem(
-              itemId: gState.galleryProvider?.gid ?? '',
-              itemName: gState.galleryProvider?.englishTitle ?? '',
-              itemCategory: gState.galleryProvider?.category ?? '',
-              creativeName: gState.galleryProvider?.japaneseTitle,
-            )
-          ],
-        );
       }
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -187,15 +178,12 @@ class GalleryPageController extends GetxController
       gState.currentImagePage = 0;
       setImageAfterRequest(gState.galleryProvider?.galleryImages);
 
+      // 评论
+      gState.comments(gState.galleryProvider?.galleryComment);
+
       try {
-        // 页面内刷新时的处理
-        if (refresh) {
-          // 评论控制器状态数据更新
-          Get.find<CommentController>(tag: pageCtrlTag)
-              .change(gState.galleryProvider?.galleryComment);
-          // 评分状态更新
-          gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
-        } else {
+        if (!refresh) {
+          // 如果不是refresh情况。 收藏状态 评分状态从Provider中继承
           gState.galleryProvider = gState.galleryProvider?.copyWith(
             ratingFallBack:
                 gState.galleryProvider?.ratingFallBack ?? _oriRatingFallBack,
@@ -204,9 +192,6 @@ class GalleryPageController extends GetxController
             // isRatinged: _oriIsRatinged,
           );
 
-          // 评分状态更新
-          gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
-
           // 收藏控制器状态更新
           final GalleryFavController _favController =
               Get.find(tag: pageCtrlTag);
@@ -214,6 +199,9 @@ class GalleryPageController extends GetxController
               gState.galleryProvider?.favTitle ?? '');
         }
       } catch (_) {}
+
+      // 评分状态更新
+      gState.isRatinged = gState.galleryProvider?.isRatinged ?? false;
 
       gState.galleryProvider = gState.galleryProvider?.copyWith(
           imgUrl: gState.galleryProvider?.imgUrl ??
@@ -285,35 +273,45 @@ class GalleryPageController extends GetxController
 
     // logger.d('update GetIds.PAGE_VIEW_HEADER');
     update([GetIds.PAGE_VIEW_HEADER]);
-    gState.itemController?.ratingFB =
+    gState.itemController?.ratingFallBack =
         gState.galleryProvider?.ratingFallBack ?? 0.0;
+
+    gState.itemController?.rating = gState.galleryProvider?.rating ?? 0.0;
+
+    gState.itemController?.colorRating =
+        gState.galleryProvider?.colorRating ?? '';
 
     gState.itemController?.update();
   }
 
-  void uptImageBySer({required int ser, required GalleryImage image}) {
-    final int? _index = gState.galleryProvider?.galleryImages
-        ?.indexWhere((GalleryImage element) => element.ser == ser);
+  GalleryImage? uptImageBySer({
+    required int ser,
+    required ImageCallback imageCallback,
+  }) {
+    final int? _index =
+        gState.images.indexWhere((GalleryImage element) => element.ser == ser);
     if (_index != null && _index >= 0) {
-      gState.galleryProvider?.galleryImages?[_index] = image;
+      final image = imageCallback(gState.images[_index]);
+      // logger.d('${image.toJson()}');
+      gState.images[_index] = image;
+      return image;
     }
+    return null;
   }
 
   void setImageAfterRequest(List<GalleryImage>? images) {
+    // 进行请求后图片对象存放
     if (images?.isNotEmpty ?? false) {
-      gState.galleryProvider =
-          gState.galleryProvider?.copyWith(galleryImages: images);
+      gState.images(images);
     }
 
+    // 存放第一页的图片对象
     gState.firstPageImage =
         gState.galleryProvider?.galleryImages?.sublist(0, images?.length) ?? [];
   }
 
   /// 添加缩略图对象
   void addAllImages(List<GalleryImage> galleryImages) {
-    logger5.v(
-        'addAllPreview ${galleryImages.first.ser}~${galleryImages.last.ser} ');
-
     for (final GalleryImage _image in galleryImages) {
       final int index =
           gState.images.indexWhere((GalleryImage e) => e.ser == _image.ser);
@@ -475,10 +473,12 @@ class GalleryPageController extends GetxController
               refresh: gState.isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
             ));
 
-    final List<GalleryImage> _moreImageList =
-        await gState.mapLoadImagesForSer[page]!;
+    final List<GalleryImage>? _moreImageList = await imageLoadLock
+        .synchronized(() async => await gState.mapLoadImagesForSer[page]);
 
-    addAllImages(_moreImageList);
+    if (_moreImageList != null) {
+      addAllImages(_moreImageList);
+    }
     if (Get.isRegistered<AllPreviewsPageController>()) {
       Get.find<AllPreviewsPageController>().update();
     }
@@ -505,13 +505,11 @@ class GalleryPageController extends GetxController
   Future<GalleryImage?> fetchAndParserImageInfo(
     int itemSer, {
     CancelToken? cancelToken,
-    // bool refresh = false,
     bool changeSource = false,
   }) async {
     try {
       /// 当前缩略图对象
-      final GalleryImage? _curImages =
-          gState.galleryProvider?.imageMap[itemSer];
+      final GalleryImage? _curImages = gState.imageMap[itemSer];
 
       if (_curImages == null) {
         return null;
@@ -524,25 +522,24 @@ class GalleryPageController extends GetxController
           _largeImageUrl.isNotEmpty &&
           _curImages.imageHeight != null &&
           _curImages.imageWidth != null) {
-        return gState.galleryProvider?.imageMap[itemSer];
+        return gState.imageMap[itemSer];
       } else {
-        final String? _sourceId = changeSource
-            ? gState.galleryProvider?.imageMap[itemSer]?.sourceId
-            : '';
+        final String? _sourceId =
+            changeSource ? gState.imageMap[itemSer]?.sourceId : '';
 
-        logger.d(
-            'ser:$itemSer ,href: ${gState.galleryProvider?.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
+        logger.v(
+            'ser:$itemSer ,href: ${gState.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
           if (changeSource) {
             // 删除旧缓存
             _cacheController.clearDioCache(
-                path: gState.galleryProvider?.imageMap[itemSer]?.href ?? '');
+                path: gState.imageMap[itemSer]?.href ?? '');
           }
 
           // 加载当前页信息
           final GalleryImage? _image = await fetchImageInfo(
-            gState.galleryProvider?.imageMap[itemSer]?.href ?? '',
+            gState.imageMap[itemSer]?.href ?? '',
             sourceId: _sourceId,
           );
 
@@ -557,18 +554,19 @@ class GalleryPageController extends GetxController
             return _curImages;
           }
 
-          final GalleryImage _imageCopyWith = _curImages.copyWith(
+          final __image = _curImages.copyWith(
             sourceId: _image.sourceId,
             imageUrl: _image.imageUrl,
             imageWidth: _image.imageWidth,
             imageHeight: _image.imageHeight,
             originImageUrl: _image.originImageUrl,
+            changeSource: changeSource,
+            errorInfo: '',
+            tempPath: '',
+            completeCache: false,
           );
 
-          logger.v('_imageCopyWith ${_imageCopyWith.toJson()}');
-
-          uptImageBySer(ser: itemSer, image: _imageCopyWith);
-          return _imageCopyWith;
+          return uptImageBySer(ser: itemSer, imageCallback: (image) => __image);
         } catch (_) {
           rethrow;
         }

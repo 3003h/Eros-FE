@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "当前 ${site}";
 
-  static String m1(rating) => "${rating} ⭐";
+  static String m1(modelName) => "模式 ${modelName}";
 
-  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+  static String m2(rating) => "${rating} ⭐";
+
+  static String m3(tagNamespace) => "${Intl.select(tagNamespace, {
             'reclass': '重新分类',
             'language': '语言',
             'parody': '原作',
@@ -42,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意数据安全"),
+        "QR_code_check": MessageLookupByLibrary.simpleMessage("二维码检查"),
         "about": MessageLookupByLibrary.simpleMessage("关于"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("添加搜索"),
         "add_tag_placeholder":
@@ -58,11 +61,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "always": MessageLookupByLibrary.simpleMessage("始终"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "ask_me": MessageLookupByLibrary.simpleMessage("询问"),
+        "auth_biometricHint": MessageLookupByLibrary.simpleMessage("验证身份"),
+        "auth_signInTitle": MessageLookupByLibrary.simpleMessage("需要进行身份验证"),
+        "author": MessageLookupByLibrary.simpleMessage("作者"),
         "autoLock": MessageLookupByLibrary.simpleMessage("自动锁定"),
         "auto_select_profile": MessageLookupByLibrary.simpleMessage("自动选择配置"),
+        "avatar": MessageLookupByLibrary.simpleMessage("头像"),
         "back": MessageLookupByLibrary.simpleMessage("返回"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("修改收藏夹"),
+        "chapter": MessageLookupByLibrary.simpleMessage("章节"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("清除缓存"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history": MessageLookupByLibrary.simpleMessage("清空搜索历史"),
@@ -79,6 +87,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom_hosts": MessageLookupByLibrary.simpleMessage("自定义hosts"),
         "dark": MessageLookupByLibrary.simpleMessage("深色模式"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("深色模式效果"),
+        "default_avatar_style": MessageLookupByLibrary.simpleMessage("默认头像样式"),
         "default_favorites": MessageLookupByLibrary.simpleMessage("默认收藏夹设置"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
         "delete_task": MessageLookupByLibrary.simpleMessage("删除任务"),
@@ -87,8 +96,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_task_only": MessageLookupByLibrary.simpleMessage("仅删除任务"),
         "disabled": MessageLookupByLibrary.simpleMessage("停用"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域名前置"),
+        "donate": MessageLookupByLibrary.simpleMessage("捐赠"),
         "done": MessageLookupByLibrary.simpleMessage("完成"),
         "double_click_back": MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
+        "double_page_model": MessageLookupByLibrary.simpleMessage("双页模式"),
         "download": MessageLookupByLibrary.simpleMessage("下载"),
         "download_location": MessageLookupByLibrary.simpleMessage("下载路径"),
         "download_ori_image": MessageLookupByLibrary.simpleMessage("下载原图"),
@@ -112,6 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "fixed_height_of_list_items":
             MessageLookupByLibrary.simpleMessage("固定列表项高度"),
         "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),
+        "fullscreen": MessageLookupByLibrary.simpleMessage("全屏"),
         "galery_site": MessageLookupByLibrary.simpleMessage("画廊站点"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("画廊评论"),
         "global_setting": MessageLookupByLibrary.simpleMessage("全局设置"),
@@ -122,6 +134,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide": MessageLookupByLibrary.simpleMessage("隐藏"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
         "image_download_type": MessageLookupByLibrary.simpleMessage("下载类型"),
+        "image_hide": MessageLookupByLibrary.simpleMessage("图片隐藏"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("图片限制"),
         "input_empty": MessageLookupByLibrary.simpleMessage("输入空"),
         "input_error": MessageLookupByLibrary.simpleMessage("输入格式有误"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
@@ -129,6 +143,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("语言设置"),
         "last_favorites": MessageLookupByLibrary.simpleMessage("使用上次选择，长按选择其他"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("从左到右"),
+        "license": MessageLookupByLibrary.simpleMessage("开源许可"),
         "light": MessageLookupByLibrary.simpleMessage("浅色模式"),
         "link_redirect": MessageLookupByLibrary.simpleMessage("链接重定向"),
         "link_redirect_summary":
@@ -146,9 +161,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("登录"),
         "login_web": MessageLookupByLibrary.simpleMessage("通过网页登录"),
+        "mange_hidden_images": MessageLookupByLibrary.simpleMessage("管理隐藏图片"),
         "manually_sel_favorites": MessageLookupByLibrary.simpleMessage("手动选择"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大历史记录"),
         "min": MessageLookupByLibrary.simpleMessage("分钟"),
+        "model": m1,
         "morePreviews": MessageLookupByLibrary.simpleMessage("更多预览"),
         "multi_download": MessageLookupByLibrary.simpleMessage("同时下载图片数量"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("网页上的标签设置"),
@@ -163,6 +180,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "ok": MessageLookupByLibrary.simpleMessage("确定"),
         "on": MessageLookupByLibrary.simpleMessage("打开"),
         "open_supported_links": MessageLookupByLibrary.simpleMessage("打开支持的链接"),
+        "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(
+            "从 Android 12 开始, 应用只有在获得批准的情况下，才能作为网络链接的处理应用。否则会使用默认浏览器处理。您可以在此手动批准"),
         "open_with_other_apps": MessageLookupByLibrary.simpleMessage("其他应用打开"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("自动旋转"),
         "orientation_landscapeLeft":
@@ -181,6 +200,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error": MessageLookupByLibrary.simpleMessage("输入范围有误"),
         "passwd": MessageLookupByLibrary.simpleMessage("密码"),
         "paused": MessageLookupByLibrary.simpleMessage("已暂停"),
+        "phash_check": MessageLookupByLibrary.simpleMessage("感知哈希检查"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("请输入密码"),
         "pls_i_username": MessageLookupByLibrary.simpleMessage("请输入用户名"),
         "preload_image": MessageLookupByLibrary.simpleMessage("预载图片数量"),
@@ -197,7 +217,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),
+        "reply_to_comment": MessageLookupByLibrary.simpleMessage("回复"),
         "resample_image": MessageLookupByLibrary.simpleMessage("重采样图片"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("重置花费"),
         "restore_tasks_data": MessageLookupByLibrary.simpleMessage("恢复下载任务数据"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("从右到左"),
         "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("高级选项"),
@@ -224,7 +246,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("搜索被删除的画廊"),
         "s_and": MessageLookupByLibrary.simpleMessage("到"),
         "s_pages": MessageLookupByLibrary.simpleMessage("页数"),
-        "s_stars": m1,
+        "s_stars": m2,
         "save_into_album": MessageLookupByLibrary.simpleMessage("保存到相册"),
         "saved_successfully": MessageLookupByLibrary.simpleMessage("保存成功"),
         "screen_orientation": MessageLookupByLibrary.simpleMessage("屏幕方向"),
@@ -239,11 +261,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "setting_on_website": MessageLookupByLibrary.simpleMessage("网页上的设置"),
         "share": MessageLookupByLibrary.simpleMessage("分享"),
         "share_image": MessageLookupByLibrary.simpleMessage("分享图片"),
+        "show_comment_avatar": MessageLookupByLibrary.simpleMessage("显示评论头像"),
         "show_filter": MessageLookupByLibrary.simpleMessage("显示筛选"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("显示日文标题"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("显示页面间隔"),
         "skip": MessageLookupByLibrary.simpleMessage("跳过"),
+        "sync_group": MessageLookupByLibrary.simpleMessage("同步分组"),
         "sync_history": MessageLookupByLibrary.simpleMessage("同步历史记录"),
+        "sync_quick_search": MessageLookupByLibrary.simpleMessage("同步快速搜索"),
         "sync_read_progress": MessageLookupByLibrary.simpleMessage("同步阅读进度"),
         "system_share": MessageLookupByLibrary.simpleMessage("系统分享"),
         "t_Clear_all_history": MessageLookupByLibrary.simpleMessage("清除所有历史"),
@@ -255,16 +280,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_setting": MessageLookupByLibrary.simpleMessage("设置"),
         "tab_sort": MessageLookupByLibrary.simpleMessage("长按并拖动以进行排序"),
         "tab_toplist": MessageLookupByLibrary.simpleMessage("排行"),
-        "tab_watched": MessageLookupByLibrary.simpleMessage("关注"),
+        "tab_watched": MessageLookupByLibrary.simpleMessage("订阅"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("主页标签设置"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("平板布局"),
-        "tagNamespace": m2,
+        "tagNamespace": m3,
         "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("添加到我的标签"),
         "tag_dialog_Default_color":
             MessageLookupByLibrary.simpleMessage("默认颜色"),
         "tag_dialog_Hide": MessageLookupByLibrary.simpleMessage("隐藏"),
         "tag_dialog_TagColor": MessageLookupByLibrary.simpleMessage("标签颜色"),
-        "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("关注"),
+        "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("订阅"),
         "tag_dialog_tagWeight": MessageLookupByLibrary.simpleMessage("标签权重"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("投反对票"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("投赞成票"),
@@ -321,7 +346,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_dm_1": MessageLookupByLibrary.simpleMessage("缩略图"),
         "uc_dm_2": MessageLookupByLibrary.simpleMessage("扩展"),
         "uc_dm_3": MessageLookupByLibrary.simpleMessage("最小化"),
-        "uc_dm_4": MessageLookupByLibrary.simpleMessage("最小化+关注标签"),
+        "uc_dm_4": MessageLookupByLibrary.simpleMessage("最小化+订阅标签"),
         "uc_exc_lang": MessageLookupByLibrary.simpleMessage("排除语言"),
         "uc_exc_lang_desc": MessageLookupByLibrary.simpleMessage(
             "如果您希望以图库列表中的某些语言隐藏图库并进行搜索，请从下面的列表中选择它们。\n请注意，无论搜索查询如何，匹配的图库都不会出现。"),
@@ -409,7 +434,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_tag_short_order": MessageLookupByLibrary.simpleMessage("图库标签排序"),
         "uc_tag_wt": MessageLookupByLibrary.simpleMessage("标签订阅阈值"),
         "uc_tag_wt_desc": MessageLookupByLibrary.simpleMessage(
-            "你可以通过将标签加入「我的标签」并设置一个正权重来关注它们。如果一个最近上传的作品所有标签的权重之和高于设定值，则它将会被包含在「关注」里。这个值可以设定为 0 ~ 9999。"),
+            "你可以通过将标签加入「我的标签」并设置一个正权重来订阅它们。如果一个最近上传的作品所有标签的权重之和高于设定值，则它将会被包含在「订阅」里。这个值可以设定为 0 ~ 9999。"),
         "uc_tb_0": MessageLookupByLibrary.simpleMessage("按字母排序"),
         "uc_tb_1": MessageLookupByLibrary.simpleMessage("按标签权重"),
         "uc_thor_hath": MessageLookupByLibrary.simpleMessage("通过H@H加载"),
@@ -443,6 +468,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploader": MessageLookupByLibrary.simpleMessage("上传者"),
         "user_login": MessageLookupByLibrary.simpleMessage("用户登录"),
         "user_name": MessageLookupByLibrary.simpleMessage("用户名"),
+        "version": MessageLookupByLibrary.simpleMessage("版本"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("震动反馈"),
         "vote_down_successfully": MessageLookupByLibrary.simpleMessage("点踩成功"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("投票成功"),

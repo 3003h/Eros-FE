@@ -1,13 +1,11 @@
-import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
-import 'package:fehviewer/pages/tab/controller/search_image_controller.dart';
-import 'package:fehviewer/pages/tab/controller/tabbar/custom_tabbar_controller.dart';
-import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
+import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'common/controller/advance_search_controller.dart';
 import 'common/controller/archiver_download_controller.dart';
 import 'common/controller/auto_lock_controller.dart';
+import 'common/controller/avatar_controller.dart';
 import 'common/controller/cache_controller.dart';
 import 'common/controller/download_controller.dart';
 import 'common/controller/gallerycache_controller.dart';
@@ -24,18 +22,22 @@ import 'common/service/ehconfig_service.dart';
 import 'common/service/layout_service.dart';
 import 'common/service/locale_service.dart';
 import 'common/service/theme_service.dart';
-import 'pages/controller/fav_dialog_controller.dart';
+import 'pages/controller/fav_controller.dart';
 import 'pages/controller/favorite_sel_controller.dart';
 import 'pages/setting/controller/eh_mysettings_controller.dart';
 import 'pages/setting/controller/eh_mytags_controller.dart';
 import 'pages/tab/controller/download_view_controller.dart';
 import 'pages/tab/controller/favorite_controller.dart';
+import 'pages/tab/controller/favorite_tabbar_controller.dart';
 import 'pages/tab/controller/gallery_controller.dart';
 import 'pages/tab/controller/history_view_controller.dart';
 import 'pages/tab/controller/popular_controller.dart';
+import 'pages/tab/controller/search_image_controller.dart';
 import 'pages/tab/controller/setting_controller.dart';
 import 'pages/tab/controller/splash_controller.dart';
+import 'pages/tab/controller/tabbar/custom_tabbar_controller.dart';
 import 'pages/tab/controller/tabhome_controller.dart';
+import 'pages/tab/controller/toplist_controller.dart';
 import 'pages/tab/controller/unlock_page_controller.dart';
 import 'pages/tab/controller/watched_controller.dart';
 
@@ -54,8 +56,9 @@ void getinit() {
   Get.lazyPut(() => LocalFavController(), fenix: true);
   Get.lazyPut(() => HistoryController(), fenix: true);
   Get.lazyPut(() => UserController(), fenix: true);
-  // Get.lazyPut(() => GalleryCacheController(), fenix: true);
+  Get.lazyPut(() => AvatarController(), fenix: true);
   Get.lazyPut(() => CacheController(), fenix: true);
+  Get.lazyPut(() => ImageHideController(), fenix: true);
 
   Get.put(GalleryCacheController(), permanent: true);
 
@@ -80,7 +83,7 @@ void getinit() {
   Get.lazyPut(() => FavoriteSelectorController(), fenix: true);
   Get.lazyPut(() => QuickSearchController(), fenix: true);
   Get.lazyPut(() => AdvanceSearchController(), fenix: true);
-  Get.lazyPut(() => FavDialogController(), fenix: true);
+  Get.lazyPut(() => FavController(), fenix: true);
   Get.lazyPut(() => UnlockPageController(), fenix: true);
   Get.lazyPut(() => TagTransController(), fenix: true);
   Get.lazyPut(() => SplashController());

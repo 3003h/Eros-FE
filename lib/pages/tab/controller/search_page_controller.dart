@@ -9,7 +9,6 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
@@ -109,10 +108,6 @@ class SearchPageController extends DefaultTabViewController {
     searchText = searchTextController.text.trim();
 
     if (searchText.isNotEmpty) {
-      if (!GetPlatform.isWindows) {
-        analytics?.logSearch(searchTerm: searchText);
-      }
-
       _addHistory();
 
       if (clear) {

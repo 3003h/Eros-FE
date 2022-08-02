@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_fav_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +20,7 @@ class GalleryFavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
-      return Container(
+      return MouseRegionClick(
         child: Column(
           children: <Widget>[
             if (_favController.isFav)

@@ -1,16 +1,22 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
-import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
+import 'package:fehviewer/route/main_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 
@@ -41,6 +47,26 @@ class ReadSettingPage extends StatelessWidget {
 class ViewSettingList extends StatelessWidget {
   final EhConfigService ehConfigService = Get.find();
 
+  Future<void> onViewFullscreenChanged(bool val) async {
+    ehConfigService.viewFullscreen = val;
+    final history = MainNavigatorObserver().history;
+    final prevMainRoute = history[max(0, history.length - 2)].settings.name;
+    logger.d('prevMainRoute $prevMainRoute');
+
+    if (prevMainRoute == EHRoutes.galleryViewExt) {
+      if (val) {
+        await FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+      } else {
+        await FullScreen.exitFullScreen();
+        // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        //   systemNavigationBarColor: Colors.transparent,
+        //   systemNavigationBarDividerColor: Colors.transparent,
+        //   statusBarColor: Colors.transparent,
+        // ));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // iPad不显示旋转设置
@@ -67,7 +93,12 @@ class ViewSettingList extends StatelessWidget {
         onChanged: (bool val) {
           ehConfigService.tapToTurnPageAnimations = val;
         },
-        hideLine: true,
+      ),
+      TextSwitchItem(
+        L10n.of(context).fullscreen,
+        intValue: ehConfigService.viewFullscreen,
+        onChanged: onViewFullscreenChanged,
+        hideDivider: true,
       ),
     ];
     return ListView.builder(
@@ -208,13 +239,13 @@ class ReadOrientationItem extends StatelessWidget {
 
 /// 双页设置切换
 Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
-  const String _title = '双页设置';
+  final String _title = L10n.of(context).double_page_model;
   final EhConfigService ehConfigService = Get.find();
 
   final Map<ViewColumnMode, String> actionMap = <ViewColumnMode, String>{
-    ViewColumnMode.single: '关',
-    ViewColumnMode.oddLeft: '模式A',
-    ViewColumnMode.evenLeft: '模式B',
+    ViewColumnMode.single: L10n.of(context).off,
+    ViewColumnMode.oddLeft: L10n.of(context).model('A'),
+    ViewColumnMode.evenLeft: L10n.of(context).model('B'),
   };
 
   Widget _getTempPage(String ser) {
@@ -270,11 +301,11 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
   ];
 
   final Map<ViewColumnMode, Widget> actionWidgetMap = <ViewColumnMode, Widget>{
-    ViewColumnMode.single: Text('关'),
+    ViewColumnMode.single: Text(L10n.of(context).off),
     ViewColumnMode.oddLeft: Column(
       children: [
         Text(
-          '模式A',
+          L10n.of(context).model('A'),
           textScaleFactor: 0.8,
         ),
         Container(
@@ -293,7 +324,7 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
     ViewColumnMode.evenLeft: Column(
       children: [
         Text(
-          '模式B',
+          L10n.of(context).model('B'),
           textScaleFactor: 0.8,
         ),
         Container(

@@ -11,6 +11,7 @@ class GalleryComment {
     required this.score,
     this.vote,
     this.id,
+    this.menberId,
     this.canEdit,
     this.canVote,
     this.showTranslate,
@@ -23,6 +24,7 @@ class GalleryComment {
   final String score;
   final int? vote;
   final String? id;
+  final String? menberId;
   final bool? canEdit;
   final bool? canVote;
   final bool? showTranslate;
@@ -35,6 +37,7 @@ class GalleryComment {
     score: json['score'] as String,
     vote: json['vote'] != null ? json['vote'] as int : null,
     id: json['id'] != null ? json['id'] as String : null,
+    menberId: json['menberId'] != null ? json['menberId'] as String : null,
     canEdit: json['canEdit'] != null ? json['canEdit'] as bool : null,
     canVote: json['canVote'] != null ? json['canVote'] as bool : null,
     showTranslate: json['showTranslate'] != null ? json['showTranslate'] as bool : null,
@@ -48,6 +51,7 @@ class GalleryComment {
     'score': score,
     'vote': vote,
     'id': id,
+    'menberId': menberId,
     'canEdit': canEdit,
     'canVote': canVote,
     'showTranslate': showTranslate,
@@ -61,6 +65,7 @@ class GalleryComment {
     score: score,
     vote: vote,
     id: id,
+    menberId: menberId,
     canEdit: canEdit,
     canVote: canVote,
     showTranslate: showTranslate,
@@ -75,6 +80,7 @@ class GalleryComment {
     String? score,
     int? vote,
     String? id,
+    String? menberId,
     bool? canEdit,
     bool? canVote,
     bool? showTranslate,
@@ -86,6 +92,7 @@ class GalleryComment {
     score: score ?? this.score,
     vote: vote ?? this.vote,
     id: id ?? this.id,
+    menberId: menberId ?? this.menberId,
     canEdit: canEdit ?? this.canEdit,
     canVote: canVote ?? this.canVote,
     showTranslate: showTranslate ?? this.showTranslate,
@@ -94,8 +101,8 @@ class GalleryComment {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryComment && name == other.name && time == other.time && span == other.span && score == other.score && vote == other.vote && id == other.id && canEdit == other.canEdit && canVote == other.canVote && showTranslate == other.showTranslate && scoreDetails == other.scoreDetails;
+    || other is GalleryComment && name == other.name && time == other.time && span == other.span && score == other.score && vote == other.vote && id == other.id && menberId == other.menberId && canEdit == other.canEdit && canVote == other.canVote && showTranslate == other.showTranslate && scoreDetails == other.scoreDetails;
 
   @override
-  int get hashCode => name.hashCode ^ time.hashCode ^ span.hashCode ^ score.hashCode ^ vote.hashCode ^ id.hashCode ^ canEdit.hashCode ^ canVote.hashCode ^ showTranslate.hashCode ^ scoreDetails.hashCode;
+  int get hashCode => name.hashCode ^ time.hashCode ^ span.hashCode ^ score.hashCode ^ vote.hashCode ^ id.hashCode ^ menberId.hashCode ^ canEdit.hashCode ^ canVote.hashCode ^ showTranslate.hashCode ^ scoreDetails.hashCode;
 }

@@ -2,15 +2,14 @@ import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:fehviewer/pages/setting/mytags/eh_usertag_edit_dialog.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-import '../../../fehviewer.dart';
-import '../eh_usertag_edit_dialog.dart';
 
 const kEhMyTags = EhMytags(tagsets: []);
 
@@ -216,7 +215,10 @@ class EhMyTagsController extends GetxController
   }
 
   Future<void> renameTagset({required String newName}) async {
-    final rult = await actionRenameTagSet(tagsetname: newName);
+    final rult = await actionRenameTagSet(
+      tagsetname: newName,
+      tagset: currSelected,
+    );
     if (rult) {
       isStackLoading = true;
       await reloadData();
@@ -235,11 +237,13 @@ class EhMyTagsController extends GetxController
     }
   }
 
+  // 添加新的用户tag
   Future<void> showAddNewTagDialog(
     BuildContext context, {
     required EhUsertag userTag,
   }) async {
-    final saveToset = await showCupertinoDialog<String>(
+    // 选择需要保存到的tagset
+    final saveToSet = await showCupertinoDialog<String>(
         context: context,
         barrierDismissible: true,
         builder: (context) {
@@ -254,6 +258,7 @@ class EhMyTagsController extends GetxController
                   }
 
                   if (state.length == 1) {
+                    // 如果只有一个tagset 自动选择并返回
                     Get.back(result: state.first.value);
                     return const SizedBox.shrink();
                   }
@@ -278,9 +283,10 @@ class EhMyTagsController extends GetxController
           );
         });
 
-    logger.d('saveToset $saveToset');
+    logger.d('saveToSet $saveToSet');
 
-    currSelected = saveToset ?? '1';
+    // 不选择的话默认 set 1
+    currSelected = saveToSet ?? '1';
     firstLoad();
 
     await showNewOrChangeUserTagDialog(context, userTag: userTag);
@@ -290,6 +296,7 @@ class EhMyTagsController extends GetxController
     BuildContext context, {
     required EhUsertag userTag,
   }) async {
+    // 新tag标志
     bool _newUsertag = true;
     final _userTag = await showCupertinoDialog<EhUsertag>(
         context: context,
@@ -298,12 +305,14 @@ class EhMyTagsController extends GetxController
           return obx(
             (state) {
               if (usertags.map((e) => e.title).contains(userTag.title)) {
+                // 如果该tagset中已经存在了，查询并显示编辑对话框
                 _newUsertag = false;
                 final _oriUserTag = usertags
                     .firstWhere((element) => element.title == userTag.title);
                 logger.d('edit tag ${userTag.title}');
                 return EhUserTagEditDialog(usertag: _oriUserTag);
               } else {
+                // 正常新增
                 logger.d('new tag ${userTag.title}');
                 return EhUserTagEditDialog(usertag: userTag);
               }

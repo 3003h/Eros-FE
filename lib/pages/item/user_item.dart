@@ -149,12 +149,12 @@ const double kNameTextSize = 11.0;
 class UserWidget extends GetView<UserController> {
   Widget _buildAvastat() {
     const Widget _defAvatar = Icon(
-      FontAwesomeIcons.solidUserCircle,
+      FontAwesomeIcons.solidCircleUser,
       size: kAvatarSize,
       color: CupertinoColors.systemGrey,
     );
 
-    // logger.d('${controller.user().avatarUrl} ');
+    // logger.d('${controller.user().toJson()} ');
     final String _avatarUrl = controller.user().avatarUrl ?? '';
     return Obx(() {
       if (controller.isLogin && _avatarUrl.isNotEmpty) {

@@ -5,7 +5,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
@@ -13,7 +12,6 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -64,10 +62,6 @@ class AppDio with DioMixin implements Dio {
     //       request: true,
     //       requestBody: true));
     // }
-
-    if (GetPlatform.isMobile && enableFirebase) {
-      interceptors.add(DioFirebasePerformanceInterceptor());
-    }
 
     interceptors.add(PrettyDioLogger(
       requestHeader: true,

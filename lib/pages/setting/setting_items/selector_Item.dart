@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../component/setting_base.dart';
-import '../../../utils/logger.dart';
 
 class SelectorItem<T> extends StatefulWidget {
   const SelectorItem({
@@ -16,6 +15,8 @@ class SelectorItem<T> extends StatefulWidget {
     required this.initVal,
     this.onValueChanged,
     this.actionWidgetMap,
+    this.titleFlex = 1,
+    this.valueFlex = 0,
   }) : super(key: key);
   final String title;
   final String? actionTitle;
@@ -25,6 +26,8 @@ class SelectorItem<T> extends StatefulWidget {
   final T initVal;
   final ValueChanged<T>? onValueChanged;
   final Map<T, Widget>? actionWidgetMap;
+  final int titleFlex;
+  final int valueFlex;
 
   @override
   _SelectorItemState<T> createState() => _SelectorItemState<T>();
@@ -82,10 +85,11 @@ class _SelectorItemState<T> extends State<SelectorItem<T>> {
 
     return SelectorSettingItem(
       title: widget.title,
-      hideLine: widget.hideDivider,
+      hideDivider: widget.hideDivider,
       selector: selector,
-      titleFlex: 0,
-      valueFlex: 1,
+      titleFlex: widget.titleFlex,
+      valueFlex: widget.valueFlex,
+      // maxLines: 3,
       onTap: () async {
         // 显示dialog 选择选项
         final T? _result = await _showDialog(context);

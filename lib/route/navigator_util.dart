@@ -1,5 +1,5 @@
+import 'package:archive_async/archive_async.dart';
 import 'package:collection/collection.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -9,7 +9,7 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/gallery/view/gallery_page.dart';
+import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
@@ -24,9 +24,10 @@ import 'main_observer.dart';
 
 class NavigatorUtil {
   // 带搜索条件打开搜索
-  static Future<void> goSearchPageWithText({
+  static Future<void> goSearchPageWithParam({
     required String simpleSearch,
     bool replace = false,
+    AdvanceSearch? advanceSearch,
   }) async {
     String _search = simpleSearch;
     if (simpleSearch.contains(':') &&
@@ -41,7 +42,8 @@ class NavigatorUtil {
     }
 
     Get.find<ControllerTagService>().pushSearchPageCtrl(searchText: _search);
-    Get.replace(SearchRepository(searchText: _search));
+    Get.replace(
+        SearchRepository(searchText: _search, advanceSearch: advanceSearch));
 
     Get.put(
       SearchPageController(),
@@ -180,10 +182,12 @@ class NavigatorUtil {
       if (isLayoutLarge) {
         Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
 
-        logger.d('topSecondRoute: $topSecondRoute');
+        logger.v('topSecondRoute: $topSecondRoute');
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
-          final curTag = (int.parse(pageCtrlTag) - 1).toString();
+          final curTag = pageCtrlTag;
+          logger.v(
+              'curTag $curTag  isReg:${Get.isRegistered<GalleryPageController>(tag: curTag)}');
           if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
               Get.find<GalleryPageController>(tag: curTag).gState.gid == _gid) {
             logger.d('same gallery');
@@ -236,6 +240,7 @@ class NavigatorUtil {
     Get.delete<ViewExtController>();
   }
 
+  // 打开已下载任务阅读
   static Future<void> goGalleryViewPageFile(
       int index, List<String> pics, String gid) async {
     // 命名路由方式
@@ -244,6 +249,20 @@ class NavigatorUtil {
           index: index,
           files: pics,
           loadType: LoadFrom.download,
+          gid: gid,
+        ));
+    Get.delete<ViewExtController>();
+  }
+
+  // 打开归档压缩包阅读
+  static Future<void> goGalleryViewPageArchiver(
+      int index, AsyncArchive asyncArchive, String gid) async {
+    // 命名路由方式
+    await Get.toNamed(EHRoutes.galleryViewExt,
+        arguments: ViewRepository(
+          index: index,
+          asyncArchives: asyncArchive.files,
+          loadType: LoadFrom.archiver,
           gid: gid,
         ));
     Get.delete<ViewExtController>();

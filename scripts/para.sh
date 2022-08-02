@@ -1,6 +1,6 @@
 export scripts_path=`pwd`
 export release_bundle_identifier='cn.honjow.fehv'
-export dev_bundle_identifier='dev3.cn.honjow.fehv'
+export dev_bundle_identifier='dev2.cn.honjow.fehv'
 
 export pub_output_path="$HOME/Public/fehv";
 

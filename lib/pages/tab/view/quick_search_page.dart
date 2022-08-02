@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info/device_info.dart';
 import 'package:device_info_platform_interface/model/ios_device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -33,7 +34,7 @@ class QuickSearchListPage extends StatelessWidget {
 
   Future<String?> _getTextTranslate(String text) async {
     final String? tranText =
-        await Get.find<TagTransController>().getTranTagWithNameSpaseSmart(text);
+        await Get.find<TagTransController>().getTranTagWithNameSpaseAuto(text);
     if (tranText?.trim() != text) {
       return tranText;
     } else {
@@ -41,102 +42,7 @@ class QuickSearchListPage extends StatelessWidget {
     }
   }
 
-  Future _upload() async {
-    if (firestore == null) {
-      return;
-    }
-
-    final List<String> _searchTextList = quickSearchController.searchTextList;
-    final String _searchText = _searchTextList.join('\n');
-    logger.v(_searchText);
-
-    final CollectionReference qSearchs = firestore!.collection('fehviewer');
-
-    final DateTime _now = DateTime.now();
-    final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
-    final String _time = formatter.format(_now);
-
-    qSearchs
-        .doc(await _getUniqueId())
-        .collection('quick_search')
-        .doc('default')
-        .set({
-      'time': _time,
-      'list': _searchTextList,
-    });
-  }
-
-  Future _download() async {
-    if (firestore == null) {
-      return;
-    }
-
-    final CollectionReference qSearchs = firestore!.collection('fehviewer');
-
-    final DocumentSnapshot<Object?> docById = await qSearchs
-        .doc(await _getUniqueId())
-        .collection('quick_search')
-        .doc('default')
-        .get();
-    if (docById.exists) {
-      final _importTexts = docById.get('list');
-
-      logger.v(_importTexts);
-
-      _importTexts.forEach((element) {
-        final text = element.toString();
-        if (text.trim().isNotEmpty && !text.startsWith('#')) {
-          quickSearchController.addText(element.toString(), silent: true);
-        }
-      });
-    }
-  }
-
-  Future _merge() async {
-    await _download();
-    await _upload();
-  }
-
   Widget _buildListBtns(BuildContext context) {
-    Future<void> _showCloud() async {
-      return showCupertinoDialog<void>(
-        context: Get.overlayContext!,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text('CloudSync'),
-            content: Text('Sync with Google Cloud Firestore'),
-            actions: [
-              CupertinoDialogAction(
-                  onPressed: () async {
-                    await _upload();
-                    Get.back();
-                    showToast('Upload success');
-                  },
-                  child: Text('Upload')),
-              CupertinoDialogAction(
-                  onPressed: () async {
-                    await _download();
-                    Get.back();
-                  },
-                  child: Text('Download')),
-              CupertinoDialogAction(
-                  onPressed: () async {
-                    await _merge();
-                    Get.back();
-                  },
-                  child: Text('Merge')),
-              CupertinoDialogAction(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(L10n.of(context).cancel)),
-            ],
-          );
-        },
-      );
-    }
-
     Future<String?> _writeFile() async {
       final List<String> _searchTextList = quickSearchController.searchTextList;
       if (_searchTextList.isNotEmpty) {
@@ -272,15 +178,15 @@ class QuickSearchListPage extends StatelessWidget {
             ),
             onPressed: _showFile,
           ),
-          if (enableFirebase)
+          if (Get.find<WebdavController>().syncQuickSearch)
             CupertinoButton(
               minSize: 40,
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                FontAwesomeIcons.cloud,
+                FontAwesomeIcons.arrowsRotate,
                 size: 20,
               ),
-              onPressed: _showCloud,
+              onPressed: quickSearchController.syncQuickSearch,
             ),
         ],
       ),
@@ -415,7 +321,7 @@ class QuickSearchListPage extends StatelessWidget {
     final User _user = _userController.user.value;
     logger.v(_user.cookie);
 
-    final String memberId = _user.memberIdFB;
+    final String memberId = _user.memberId ?? '';
     if (memberId.isNotEmpty) {
       logger.v('memberId $memberId');
       return memberId;

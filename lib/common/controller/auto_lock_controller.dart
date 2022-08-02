@@ -6,8 +6,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:local_auth_ios/local_auth_ios.dart';
-import 'package:local_auth_android/local_auth_android.dart';
-import 'package:local_auth_ios/local_auth_ios.dart';
 
 import '../global.dart';
 
@@ -17,15 +15,18 @@ class AutoLockController extends GetxController {
       Global.profile = Global.profile.copyWith(autoLock: val);
   final EhConfigService _ehConfigService = Get.find();
 
-  static final IOSAuthMessages iosStrings = IOSAuthMessages(
+  static final IOSAuthMessages iOSAuthMessages = IOSAuthMessages(
       cancelButton: L10n.of(Get.context!).cancel,
       goToSettingsButton: L10n.of(Get.context!).tab_setting,
       goToSettingsDescription: 'Please set up your Touch & Face ID.',
       lockOut: 'Please reenable your Touch & Face ID');
 
-  static final AndroidAuthMessages androidStrings = AndroidAuthMessages(
+  static final AndroidAuthMessages androidAuthMessages = AndroidAuthMessages(
+    signInTitle: L10n.of(Get.context!).auth_signInTitle,
+    biometricHint: L10n.of(Get.context!).auth_biometricHint,
+    // biometricNotRecognized: 'Not recognized. Try again.',
+    biometricSuccess: L10n.of(Get.context!).done,
     cancelButton: L10n.of(Get.context!).cancel,
-    // signInTitle: '验证',
   );
 
   /// 最后挂起时间
@@ -53,11 +54,12 @@ class AutoLockController extends GetxController {
 
   Future<bool> checkBiometrics({String? localizedReason}) async {
     final bool didAuthenticate = await localAuth.authenticate(
-        localizedReason: localizedReason ?? '验证以解锁应用',
-        authMessages: [
-          AutoLockController.iosStrings,
-          AutoLockController.androidStrings,
-        ]);
+      localizedReason: localizedReason ?? ' ',
+      authMessages: [
+        AutoLockController.iOSAuthMessages,
+        AutoLockController.androidAuthMessages,
+      ],
+    );
     return didAuthenticate;
   }
 

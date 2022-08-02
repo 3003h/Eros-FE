@@ -95,6 +95,8 @@ GalleryList parseGalleryList(
   final _nextPage = int.parse(_curPage.split('-').last);
   // logger.d('_curPage:$_curPage, nextIndex:$_nextPage');
 
+  final _prevPage = int.parse(_curPage.split('-').last) - 2;
+
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
 
@@ -145,6 +147,13 @@ GalleryList parseGalleryList(
           color: color,
           backgrondColor: backgroundColor));
     }
+
+    // favNote
+    final favNoteElm = tr.querySelector('div.glfnote');
+    final regFavnote = RegExp(r'Note:\s(.+)');
+    final matchFavnote = regFavnote.firstMatch(favNoteElm?.text ?? '');
+    final favNote = matchFavnote?.group(1);
+    // if (favNote != null) print('favNote:$favNote');
 
     /// 判断获取语言标识
     String _translated = '';
@@ -270,6 +279,7 @@ GalleryList parseGalleryList(
         uploader: _uplader,
         filecount: _filecount,
         translated: _translated,
+        favNote: favNote,
       ));
     }
 
@@ -291,5 +301,6 @@ GalleryList parseGalleryList(
     maxPage: _maxPage,
     favList: favcatList,
     nextPage: _nextPage,
+    prevPage: _prevPage,
   );
 }

@@ -35,6 +35,7 @@
   "tagGroup?": "$[]tag_group",
   "galleryComment?": "$[]gallery_comment",
   "galleryImages?": "$[]gallery_image",
+  "chapter?": "$[]chapter",
   "apikey?": "",
   "apiuid?": "",
   "isRatinged?": false,
@@ -42,5 +43,6 @@
   "archiverLink?": "",
   "torrentLink?": "",
   "lastViewTime?": 123,
-  "pageOfList?": 1
+  "pageOfList?": 1,
+  "favNote?": ""
 }

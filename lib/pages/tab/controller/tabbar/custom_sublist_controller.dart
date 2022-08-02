@@ -1,14 +1,13 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:get/get.dart';
 
 import '../../fetch_list.dart';
-import 'custom_tabbar_controller.dart';
 import '../enum.dart';
+import 'custom_tabbar_controller.dart';
 
 /// 控制单个自定义列表
 class CustomSubListController extends TabViewController {
@@ -54,7 +53,7 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    cancelToken = CancelToken();
+    await super.fetchData();
 
     logger.v(' ${jsonEncode(profile)}');
 
@@ -69,9 +68,8 @@ class CustomSubListController extends TabViewController {
                 refresh: refresh,
                 cancelToken: cancelToken,
                 searchText: p?.searchText?.join(' '),
-                advanceSearchParam: (p?.enableAdvance ?? false)
-                    ? p?.advSearch?.param ?? {}
-                    : {},
+                advanceSearch:
+                    (p?.enableAdvance ?? false) ? p?.advSearch : null,
                 galleryListType: p?.listType ?? GalleryListType.gallery,
               )))
           .toList();
@@ -83,7 +81,7 @@ class CustomSubListController extends TabViewController {
       pageState = PageState.Loading;
 
       try {
-        for (FetchListClient? fetchListClient in fetchListClientList) {
+        for (final FetchListClient? fetchListClient in fetchListClientList) {
           if (fetchListClient == null) {
             continue;
           }
@@ -111,14 +109,14 @@ class CustomSubListController extends TabViewController {
       }
     }
 
+    // 普通搜索
     final fetchConfig = FetchParams(
       cats: profile?.cats,
       refresh: refresh,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: (profile?.enableAdvance ?? false)
-          ? profile?.advSearch?.param ?? {}
-          : {},
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
 
@@ -154,7 +152,7 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchMoreData() async {
-    cancelToken = CancelToken();
+    await super.fetchMoreData();
     final fetchConfig = FetchParams(
       page: nextPage,
       fromGid: state?.last.gid ?? '0',
@@ -162,9 +160,8 @@ class CustomSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: (profile?.enableAdvance ?? false)
-          ? profile?.advSearch?.param ?? {}
-          : {},
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
@@ -172,21 +169,22 @@ class CustomSubListController extends TabViewController {
   }
 
   @override
-  Future<void> loadFromPage(int page) async {
+  Future<void> loadFromPage(int page, {bool previous = false}) async {
+    await super.loadFromPage(page);
     canLoadMore = false;
     pageState = PageState.Loading;
-    change(state, status: RxStatus.loading());
+    if (!previous) {
+      change(state, status: RxStatus.loading());
+    }
 
-    cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       page: page,
       cats: profile?.cats,
       refresh: true,
       cancelToken: cancelToken,
       searchText: profile?.searchText?.join(' '),
-      advanceSearchParam: (profile?.enableAdvance ?? false)
-          ? profile?.advSearch?.param ?? {}
-          : {},
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
     );
 
@@ -196,25 +194,32 @@ class CustomSubListController extends TabViewController {
 
       curPage = page;
       minPage = page;
-      nextPage = rult?.nextPage ?? page + 1;
-      logger.d('after loadFromPage nextPage is $nextPage');
+      if (!previous) {
+        nextPage = rult?.nextPage ?? page + 1;
+      }
+      prevPage = rult?.prevPage;
+
       if (rult != null) {
-        change(rult.gallerys, status: RxStatus.success());
+        if (previous) {
+          state?.insertAll(0, rult.gallerys ?? []);
+          change(state, status: RxStatus.success());
+        } else {
+          change(rult.gallerys, status: RxStatus.success());
+        }
       }
       pageState = PageState.None;
     } catch (e) {
       pageState = PageState.LoadingError;
-      change(null, status: RxStatus.error('$e'));
+      if (!previous) {
+        change(null, status: RxStatus.error('$e'));
+      } else {
+        showToast('$e');
+      }
       rethrow;
     } finally {
       canLoadMore = true;
     }
   }
-
-  // @override
-  // Future<void> loadPrevious() async {
-  //   await reloadData();
-  // }
 
   @override
   Future<void> lastComplete() async {

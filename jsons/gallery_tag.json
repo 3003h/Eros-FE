@@ -5,5 +5,7 @@
     "intro?": "",
     "vote?": 0,
     "color?": "",
-    "backgrondColor?": ""
+    "backgrondColor?": "",
+    "watch?": false,
+    "hide?": false
 }

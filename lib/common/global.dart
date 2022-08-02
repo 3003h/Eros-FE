@@ -1,12 +1,10 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
@@ -16,7 +14,7 @@ import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/http_override.dart';
 import 'package:fehviewer/utils/storage.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,9 +31,9 @@ import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
 
-late final bool enableFirebase;
-late final FirebaseAnalytics? analytics;
-late final FirebaseFirestore? firestore;
+// late final bool enableFirebase;
+// late final FirebaseAnalytics? analytics;
+// late final FirebaseFirestore? firestore;
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
@@ -48,17 +46,19 @@ DioHttpConfig ehDioConfig = DioHttpConfig(
   cookiesPath: Global.appSupportPath,
   connectTimeout: 10000,
   sendTimeout: 8000,
-  receiveTimeout: 10000,
+  receiveTimeout: 20000,
 );
 
 DioHttpConfig exDioConfig = DioHttpConfig(
   baseUrl: EHConst.EX_BASE_URL,
   cookiesPath: Global.appSupportPath,
-  connectTimeout: 10000,
+  connectTimeout: 15000,
   sendTimeout: 8000,
-  receiveTimeout: 10000,
-  // maxConnectionsPerHost: 2,
+  receiveTimeout: 25000,
+  maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost,
 );
+
+final EhHttpOverrides ehHttpOverrides = EhHttpOverrides();
 
 // 全局配置
 // ignore: avoid_classes_with_only_static_members
@@ -81,7 +81,7 @@ class Global {
   static late PersistCookieJar cookieJar;
 
   // static HttpProxy httpProxy = HttpProxy('localhost', '$kProxyPort');
-  static DFHttpOverrides dfHttpOverrides = DFHttpOverrides();
+  // static DFHttpOverrides dfHttpOverrides = DFHttpOverrides();
 
   static String appSupportPath = '';
   static String appDocPath = '';
@@ -108,10 +108,10 @@ class Global {
   // init
   static Future<void> init() async {
     // 判断是否debug模式
-    inDebugMode = EHUtils().isInDebugMode;
+    inDebugMode = kDebugMode;
 
     if (GetPlatform.isMobile) {
-      await FlutterDownloader.initialize(debug: kDebugMode);
+      await FlutterDownloader.initialize(debug: kDebugMode, ignoreSsl: true);
     }
 
     if (GetPlatform.isMobile) {
@@ -126,22 +126,19 @@ class Global {
     }
 
     if (GetPlatform.isMobile) {
-      // the proxy value likes:  {port: 8899, host: 127.0.0.1}
-      Map<String, String>? proxy = await SystemProxy.getProxySettings();
-      if (proxy != null) {
-        print('proxy $proxy');
+      // the systemProxy value likes:  {port: 8899, host: 127.0.0.1}
+      Map<String, String>? systemProxy = await SystemProxy.getProxySettings();
+      if (systemProxy != null) {
+        print('systemProxy $systemProxy');
       }
     }
 
     //statusBar设置为透明，去除半透明遮罩
-    SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-
-    // SystemUiOverlayStyle uiStyle = SystemUiOverlayStyle.light.copyWith(
-    //   statusBarColor: Colors.transparent,
-    // );
-    //
-    // SystemChrome.setSystemUIOverlayStyle(uiStyle);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      statusBarColor: Colors.transparent,
+    ));
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
     appDocPath = (await getApplicationDocumentsDirectory()).path;
@@ -206,12 +203,10 @@ class Global {
     _checkReset();
 
     _initProfile();
-    Get.lazyPut(() => profile.webdav ?? const WebdavProfile(url: ''),
-        fenix: true);
 
     if (profile.dnsConfig.enableDomainFronting ?? false) {
       logger.d('enableDomainFronting');
-      HttpOverrides.global = dfHttpOverrides;
+      HttpOverrides.global = ehHttpOverrides..skipCertificateCheck = true;
     }
   }
 
@@ -223,7 +218,7 @@ class Global {
 
   // 持久化Profile信息
   static void saveProfile() {
-    // logger.d(profile.customTabConfig?.toJson());
+    // logger.d(profile.toJson());
     final GStore gStore = Get.find<GStore>();
     gStore.profile = profile;
   }

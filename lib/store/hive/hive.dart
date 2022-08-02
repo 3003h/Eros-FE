@@ -12,6 +12,12 @@ const String configBox = 'config_box';
 
 const String searchHistoryKey = 'search_history';
 const String layoutConfigKey = 'config_layout';
+const String usersKey = 'users_info';
+const String profileDelKey = 'delete_profile';
+const String qsLastTimeKey = 'quick_search_last_edit_time';
+const String customImageHideKey = 'custom_image_hide';
+
+const String ehHomeKey = 'eh_home';
 
 class HiveHelper {
   HiveHelper();
@@ -119,5 +125,75 @@ class HiveHelper {
   EhLayout getEhLayout() {
     final val = _configBox.get(layoutConfigKey, defaultValue: '{}');
     return EhLayout.fromJson(jsonDecode(val ?? '{}') as Map<String, dynamic>);
+  }
+
+  Future<void> setUsersInfo(List<User> users) async {
+    await _configBox.put(usersKey, jsonEncode(users));
+  }
+
+  List<User> getUsersInfo() {
+    final all = _configBox.get(usersKey, defaultValue: '[]');
+
+    final _users = <User>[];
+    for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
+      _users.add(User.fromJson(val as Map<String, dynamic>));
+    }
+    return _users;
+  }
+
+  Future<void> setProfileDelList(List<CustomProfile> delProfiles) async {
+    await _configBox.put(profileDelKey, jsonEncode(delProfiles));
+  }
+
+  List<CustomProfile> getProfileDelList() {
+    final all = _configBox.get(profileDelKey, defaultValue: '[]');
+
+    final _delProfiles = <CustomProfile>[];
+    for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
+      _delProfiles.add(CustomProfile.fromJson(val as Map<String, dynamic>));
+    }
+    return _delProfiles;
+  }
+
+  int getQuickSearchLastEditTime() {
+    final _time = '${DateTime.now().millisecondsSinceEpoch}';
+    final val = _configBox.get(qsLastTimeKey, defaultValue: _time);
+    return int.parse(val ?? _time);
+  }
+
+  Future<void> setQuickSearchLastEditTime(int time) async {
+    await _configBox.put(qsLastTimeKey, '$time');
+  }
+
+  Future<void> setAllCustomImageHide(List<ImageHide> imageHides) async {
+    await _configBox.put(customImageHideKey, jsonEncode(imageHides));
+  }
+
+  List<ImageHide> getAllCustomImageHide() {
+    final all = _configBox.get(customImageHideKey, defaultValue: '[]');
+
+    final _imageHides = <ImageHide>[];
+    for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
+      _imageHides.add(ImageHide.fromJson(val as Map<String, dynamic>));
+    }
+    return _imageHides;
+  }
+
+  Future<void> setEhHome(EhHome ehHome) async {
+    await _configBox.put(ehHomeKey, jsonEncode(ehHome));
+  }
+
+  EhHome getEhHome() {
+    final val = _configBox.get(ehHomeKey, defaultValue: '{}');
+
+    return EhHome.fromJson(jsonDecode(val ?? '{}') as Map<String, dynamic>);
+  }
+
+  String? getString(String key) {
+    return _configBox.get(key, defaultValue: '');
+  }
+
+  Future<void> setString(String key, String value) async {
+    await _configBox.put(key, value);
   }
 }

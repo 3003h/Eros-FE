@@ -89,26 +89,26 @@ HttpException _parseException(Exception error, {dynamic data}) {
           switch (errCode) {
             case 400:
               return BadRequestException(
-                  message: '请求语法错误', code: errCode, data: data);
+                  message: '400', code: errCode, data: data);
             case 401:
-              return UnauthorisedException(message: '没有权限', code: errCode);
+              return UnauthorisedException(
+                  message: '401 Unauthorised', code: errCode);
             case 403:
               return BadRequestException(
-                  message: '服务器拒绝执行', code: errCode, data: data);
+                  message: '403 Error', code: errCode, data: data);
             case 404:
               return BadRequestException(
-                  message: '服务未找到', code: errCode, data: data);
+                  message: '404 Not Found', code: errCode, data: data);
             case 405:
-              return BadRequestException(message: '请求方法被禁止', code: errCode);
+              return BadRequestException(message: '405', code: errCode);
             case 500:
-              return BadServiceException(message: '服务器内部错误', code: errCode);
+              return BadServiceException(message: '500', code: errCode);
             case 502:
-              return BadServiceException(message: '无效的请求', code: errCode);
+              return BadServiceException(message: '502', code: errCode);
             case 503:
-              return BadServiceException(message: '服务器挂了', code: errCode);
+              return BadServiceException(message: '503', code: errCode);
             case 505:
-              return UnauthorisedException(
-                  message: '不支持HTTP协议请求', code: errCode);
+              return UnauthorisedException(message: '505', code: errCode);
             default:
               return UnknownException(error.error.message as String?);
           }

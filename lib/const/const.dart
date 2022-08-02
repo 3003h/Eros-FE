@@ -5,6 +5,7 @@ import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 final kFilenameFormat =
@@ -254,6 +255,8 @@ class EHConst {
 
   static const String DB_NAME = 'feh.db';
 
+  static const int exMaxConnectionsPerHost = 5;
+
   static String getBaseSite([bool isEx = false]) =>
       isEx ? EX_BASE_URL : EH_BASE_URL;
 
@@ -290,10 +293,6 @@ class EHConst {
     3,
     5,
     7,
-    9,
-    11,
-    13,
-    17,
   ];
 
   static List<int> multiDownload = <int>[
@@ -431,15 +430,89 @@ class EHConst {
     'vietnamese': 'VI',
   };
 
-  static const List<String> fontFamilyFallback = [
+  static final List<String> fontFamilyFallback = [
     'miui',
-    // 'sans-serif',
+    // if (GetPlatform.isAndroid) 'SourceHanSansSC',
+    'sans-serif',
   ];
   static const List<String> monoFontFamilyFallback = [
     'monaco',
     'monospace',
     'Menlo',
     'Courier New',
+  ];
+
+  static const emojiFontFamily = 'AppleEmoji';
+
+  static const List<IconData> fontAwesomeIconSicons = [
+    FontAwesomeIcons.solidHeart,
+    FontAwesomeIcons.heart,
+    FontAwesomeIcons.fireFlameCurved,
+    FontAwesomeIcons.fire,
+    FontAwesomeIcons.poop,
+    FontAwesomeIcons.skull,
+    FontAwesomeIcons.wheelchairMove,
+    FontAwesomeIcons.earthAmericas,
+    FontAwesomeIcons.maskFace,
+    FontAwesomeIcons.appleWhole,
+    FontAwesomeIcons.binoculars,
+    FontAwesomeIcons.boxesStacked,
+    FontAwesomeIcons.bottleDroplet,
+    FontAwesomeIcons.bus,
+    FontAwesomeIcons.brush,
+    FontAwesomeIcons.chessQueen,
+    FontAwesomeIcons.church,
+    FontAwesomeIcons.crow,
+    FontAwesomeIcons.democrat,
+    FontAwesomeIcons.dog,
+    FontAwesomeIcons.dove,
+    FontAwesomeIcons.eye,
+    FontAwesomeIcons.glasses,
+    FontAwesomeIcons.leaf,
+    FontAwesomeIcons.mask,
+    FontAwesomeIcons.moon,
+    FontAwesomeIcons.paperPlane,
+    FontAwesomeIcons.plane,
+    FontAwesomeIcons.seedling,
+    FontAwesomeIcons.shirt,
+    FontAwesomeIcons.spider,
+    FontAwesomeIcons.wallet,
+    FontAwesomeIcons.a,
+    FontAwesomeIcons.b,
+    FontAwesomeIcons.c,
+    FontAwesomeIcons.d,
+    FontAwesomeIcons.e,
+    FontAwesomeIcons.f,
+    FontAwesomeIcons.g,
+    FontAwesomeIcons.h,
+    FontAwesomeIcons.i,
+    FontAwesomeIcons.j,
+    FontAwesomeIcons.k,
+    FontAwesomeIcons.l,
+    FontAwesomeIcons.m,
+    FontAwesomeIcons.n,
+    FontAwesomeIcons.o,
+    FontAwesomeIcons.p,
+    FontAwesomeIcons.q,
+    FontAwesomeIcons.r,
+    FontAwesomeIcons.s,
+    FontAwesomeIcons.t,
+    FontAwesomeIcons.u,
+    FontAwesomeIcons.v,
+    FontAwesomeIcons.w,
+    FontAwesomeIcons.x,
+    FontAwesomeIcons.y,
+    FontAwesomeIcons.z,
+    FontAwesomeIcons.zero,
+    FontAwesomeIcons.one,
+    FontAwesomeIcons.two,
+    FontAwesomeIcons.tree,
+    FontAwesomeIcons.four,
+    FontAwesomeIcons.five,
+    FontAwesomeIcons.six,
+    FontAwesomeIcons.seven,
+    FontAwesomeIcons.eight,
+    FontAwesomeIcons.nine,
   ];
 
   static const List<int> invList = [

@@ -251,7 +251,7 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              maxLines: 2,
+              // maxLines: 2,
               textAlign: TextAlign.start,
             ),
           ),

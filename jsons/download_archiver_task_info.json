@@ -4,10 +4,14 @@
   "type?": "",
   "title?": "",
   "taskId?": "",
-  "filePath?": "",
+  "savedDir?": "",
+  "fileName?": "",
+  "url?": "",
   "imgUrl?": "",
   "galleryUrl?": "",
   "dowmloadType?": "",
   "status?": 1,
-  "progress?": 100
+  "progress?": 100,
+  "timeCreated?": 123,
+  "resolution?": "1280x"
 }

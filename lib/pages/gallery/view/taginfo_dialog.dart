@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 Future<void> showTagInfoDialog(String text,
     {required String type, required String translate, int vote = 0}) {
@@ -288,7 +288,7 @@ class _TagDialogViewState extends State<TagDialogView> {
     final String? _openUrl = Uri.encodeFull(url ?? '');
     final RegExp regExp =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
-    if (await canLaunch(_openUrl!)) {
+    if (await canLaunchUrlString(_openUrl!)) {
       if (regExp.hasMatch(_openUrl)) {
         final String? _realUrl = regExp.firstMatch(_openUrl)?.group(0);
         logger.v('in $_realUrl');
@@ -296,7 +296,7 @@ class _TagDialogViewState extends State<TagDialogView> {
           url: _realUrl,
         );
       } else {
-        await launch(_openUrl);
+        await launchUrlString(_openUrl);
       }
     } else {
       throw 'Could not launch $_openUrl';

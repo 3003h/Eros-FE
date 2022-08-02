@@ -185,7 +185,8 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   }
 
   void scrollToItem(int index) {
-    ItemFrame channelFrame = channelFrameList[index];
+    ItemFrame channelFrame = channelFrameList[
+        min(max(index, 0), max(channelFrameList.length - 1, 0))];
 
     _indicatorPositionedLeft =
         channelFrame.left + widget.itemPadding.horizontal / 2;
@@ -357,9 +358,15 @@ class _TitleIndicatorState extends State<TitleIndicator> {
     super.initState();
     logger.v('_TitleIndicatorState initState index:${widget.index}');
 
-    positionedLeft = widget.channelFrameList[widget.index].left +
+    positionedLeft = widget
+            .channelFrameList[min(max(widget.index, 0),
+                max(widget.channelFrameList.length - 1, 0))]
+            .left +
         (widget.itemPadding?.horizontal ?? 0) / 2;
-    _indicatorWidth = widget.channelFrameList[widget.index].width -
+    _indicatorWidth = widget
+            .channelFrameList[min(max(widget.index, 0),
+                max(widget.channelFrameList.length - 1, 0))]
+            .width -
         (widget.itemPadding?.horizontal ?? 0);
 
     // pageController监听
@@ -457,7 +464,11 @@ class _InnerLinkTabItemState extends State<InnerLinkTabItem> {
 
   TextStyle get style => TextStyle(
         fontSize: widget.selected ? 14.0 : 14.0,
-        color: widget.selected ? CupertinoColors.activeBlue : null,
+        color: CupertinoDynamicColor.resolve(
+            widget.selected
+                ? CupertinoColors.activeBlue
+                : CupertinoColors.label,
+            context),
         // fontWeight: selected ? FontWeight.bold : FontWeight.normal,
       );
 

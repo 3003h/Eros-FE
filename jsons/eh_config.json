@@ -30,6 +30,7 @@
   "turnPageInv?": 3000,
   "toplist?": "15",
   "tabletLayout?": true,
+  "tabletLayoutValue?": "automatic",
   "enableTagTranslateCDN?": false,
   "autoSelectProfile?": true,
   "tapToTurnPageAnimations?": true,
@@ -37,5 +38,11 @@
   "linkRedirect?": false,
   "viewColumnMode?": "",
   "fixedHeightOfListItems?": true,
-  "tagTranslateDataUpdateMode?": ""
+  "tagTranslateDataUpdateMode?": "",
+  "showCommentAvatar?": false,
+  "boringAvatarsType?": "",
+  "avatarBorderRadiusType?": "",
+  "enablePHashCheck?": false,
+  "enableQRCodeCheck?": false,
+  "viewFullscreen?": false
 }

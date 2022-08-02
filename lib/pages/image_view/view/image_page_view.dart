@@ -80,13 +80,14 @@ class ImagePageView extends GetView<ViewExtController> {
 
           /// ExtendedImageGesturePageView 的看图功能
           /// 存在问题。更新 flutter3 后，Android系统下手势操作异常，不能正常进行滑动
+          /// 6.2.1 好像可以滑动了
           return ExtendedImageGesturePageView.builder(
             controller: logic.extendedPageController,
             itemCount: logic.vState.pageCount,
             onPageChanged: (pageIndex) =>
                 controller.handOnPageChanged(pageIndex),
             scrollDirection: Axis.horizontal,
-            // physics: const CustomScrollPhysics(),
+            physics: const CustomScrollPhysics(),
             reverse: reverse,
             itemBuilder: (BuildContext context, int index) {
               logger.v('pageIndex $index ser ${index + 1}');
@@ -102,9 +103,10 @@ class ImagePageView extends GetView<ViewExtController> {
                 // enableDoubleTap: false,
                 // initialScale:
                 //     logic.vState.showPageInterval ? 1.000001 : 1.000001,
-                // initialScale: GetPlatform.isAndroid ? 1.00000 : 1.0,
+                // initialScale: GetPlatform.isAndroid ? 1.000001 : 1.0,
                 mode: ExtendedImageMode.gesture,
                 // enableSlideOutPage: !GetPlatform.isAndroid,
+                enableSlideOutPage: false,
               );
             },
           );

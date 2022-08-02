@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -42,7 +41,7 @@ class LoginController extends GetxController {
 
   bool obscurePasswd = true;
 
-  /// 普通用户登录
+  /// 用户登录
   Future<void> pressLogin() async {
     if (loadingLogin) {
       return;
@@ -64,7 +63,9 @@ class LoginController extends GetxController {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
     User? user;
     try {
+      // 这个 user
       user = await userLogin(usernameController.text, passwdController.text);
+      logger.d('user: ${user?.toJson()}');
     } on EhError catch (e, stack) {
       logger.e('$e\n$stack');
       if (e.type == EhErrorType.login) {
@@ -91,12 +92,6 @@ class LoginController extends GetxController {
       return;
     }
 
-    loggerNoStack.i({
-      'ibp_member_id': idController.text,
-      'ibp_pass_hash': hashController.text,
-      'igneous': igneousController.text,
-    });
-
     final memberId = idController.text.trim();
     final passHash = hashController.text.trim();
     final igneous = igneousController.text.trim();
@@ -115,13 +110,25 @@ class LoginController extends GetxController {
       Cookie('ipb_member_id', memberId),
       Cookie('ipb_pass_hash', passHash),
       if (igneous.isNotEmpty) Cookie('igneous', igneous),
-      Cookie('nw', '1'),
     ];
 
-    final PersistCookieJar cookieJar = await Api.cookieJar;
+    // final PersistCookieJar cookieJar = await Api.cookieJar;
 
     // 设置EH的cookie
-    cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
+    // cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
+
+    final user = userController.user.value.copyWith(
+      username: '${memberId.substring(0, 1)}****',
+      memberId: memberId,
+      passHash: _getCookiesValue(cookies, 'ipb_pass_hash'),
+      igneous: _getCookiesValue(cookies, 'igneous'),
+      hathPerks: _getCookiesValue(cookies, 'hath_perks'),
+      sk: _getCookiesValue(cookies, 'sk'),
+    );
+
+    logger.d('user ${user.toJson()}');
+
+    userController.user(user);
 
     try {
       await asyncGetUserInfo(memberId);
@@ -130,15 +137,6 @@ class LoginController extends GetxController {
       update();
       return;
     }
-
-    userController.user(userController.user.value.copyWith(
-      username: memberId,
-      memberId: memberId,
-      passHash: _getCookiesValue(cookies, 'ipb_pass_hash'),
-      igneous: _getCookiesValue(cookies, 'igneous'),
-      hathPerks: _getCookiesValue(cookies, 'hath_perks'),
-      sk: _getCookiesValue(cookies, 'sk'),
-    ));
 
     Get.back(result: true);
     Api.selEhProfile();
@@ -158,25 +156,34 @@ class LoginController extends GetxController {
     logger.d(' $cookies');
 
     if (cookies != null && cookies is List<Cookie>) {
-      final PersistCookieJar cookieJar = await Api.cookieJar;
+      // final PersistCookieJar cookieJar = await Api.cookieJar;
 
       // 设置EH的cookie
-      cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
+      // cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
 
-      final memberId = _getCookiesValue(cookies, 'ipb_member_id');
+      final memberId = _getCookiesValue(cookies, 'ipb_member_id')?.trim();
+      final passHash = _getCookiesValue(cookies, 'ipb_pass_hash')?.trim();
 
-      if (memberId == null || memberId == '0') {
+      if (memberId == null ||
+          memberId == '0' ||
+          memberId.isEmpty ||
+          passHash == null ||
+          passHash.isEmpty) {
         return;
       }
 
-      userController.user(userController.user.value.copyWith(
-        username: memberId,
+      final user = userController.user.value.copyWith(
+        username: '${memberId.substring(0, 1)}****',
         memberId: memberId,
         passHash: _getCookiesValue(cookies, 'ipb_pass_hash'),
         igneous: _getCookiesValue(cookies, 'igneous'),
         hathPerks: _getCookiesValue(cookies, 'hath_perks'),
         sk: _getCookiesValue(cookies, 'sk'),
-      ));
+      );
+
+      logger.d('user ${user.toJson()}');
+
+      userController.user(user);
 
       if (memberId.isNotEmpty) {
         asyncGetUserInfo(memberId);
@@ -187,9 +194,13 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> asyncGetUserInfo(String memberId) async {
+  Future<void> asyncGetUserInfo([String? memberId]) async {
+    memberId ??= userController.user.value.memberId;
+    if (memberId == null) {
+      return;
+    }
     // 异步获取昵称和头像
-    logger.d('异步获取昵称和头像');
+    logger.v('异步获取昵称和头像');
     late User? info;
     try {
       info = await getUserInfo(memberId);
@@ -207,14 +218,14 @@ class LoginController extends GetxController {
 
   Future<void> readCookieFromClipboard() async {
     final kMatchMenberId = RegExp(r'^\d+$');
-    final kMatchPassHash = RegExp(r'^[0-9a-f]{32}$');
-    final kMatchIgneous = RegExp(r'^[0-9a-f]+$');
+    final kMatchPassHash = RegExp(r'^[\da-f]{32}$');
+    final kMatchIgneous = RegExp(r'^[\da-f]+$');
 
     final String _clipText =
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
     // logger.d('Clipboard:\n' + _clipText);
     if (!_clipText.contains('{')) {
-      final textArray = _clipText.split(RegExp(r'\s|:;&='));
+      final textArray = _clipText.split(RegExp(r'[\s:;&=]'));
       logger.d('textArray:$textArray');
       for (final _text in textArray) {
         if (kMatchMenberId.hasMatch(_text)) {

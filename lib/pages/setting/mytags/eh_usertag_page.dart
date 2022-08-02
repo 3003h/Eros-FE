@@ -8,11 +8,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import 'comp/user_tag_item.dart';
-import 'const.dart';
-import 'controller/eh_mytags_controller.dart';
+import '../const.dart';
+import '../controller/eh_mytags_controller.dart';
+import '../webview/eh_tagset_edit_dialog.dart';
 import 'eh_usertag_edit_dialog.dart';
-import 'webview/eh_tagset_edit_dialog.dart';
+import 'user_tag_item.dart';
 
 class EhUserTagsPage extends StatefulWidget {
   const EhUserTagsPage({Key? key}) : super(key: key);
@@ -61,17 +61,9 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           padding: const EdgeInsets.all(0),
           minSize: 40,
           child: const Icon(
-            FontAwesomeIcons.magnifyingGlass,
-            size: 22,
-          ),
-          onPressed: () => controller.isSearchUserTags = true,
-        ),
-        CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          minSize: 40,
-          child: const Icon(
-            FontAwesomeIcons.edit,
-            size: 22,
+            // FontAwesomeIcons.penRuler,
+            CupertinoIcons.pencil_ellipsis_rectangle,
+            size: 28,
           ),
           onPressed: () async {
             final currName = controller.curTagSet?.name ?? '';
@@ -89,15 +81,16 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
             }
           },
         ),
-        // CupertinoButton(
-        //   padding: const EdgeInsets.all(0),
-        //   minSize: 40,
-        //   child: const Icon(
-        //     LineIcons.plus,
-        //     size: 24,
-        //   ),
-        //   onPressed: () async {},
-        // ),
+        CupertinoButton(
+          padding: const EdgeInsets.all(0),
+          minSize: 40,
+          child: const Icon(
+            // FontAwesomeIcons.magnifyingGlass,
+            CupertinoIcons.search,
+            size: 28,
+          ),
+          onPressed: () => controller.isSearchUserTags = true,
+        ),
       ],
     );
   }
@@ -131,14 +124,14 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           ? _searchTrailing(context)
           : _normalTrailing(context);
 
-      return AnimatedCrossFade(
-        firstChild: _normalTrailing(context),
-        secondChild: _searchTrailing(context),
-        crossFadeState: controller.isSearchUserTags
-            ? CrossFadeState.showSecond
-            : CrossFadeState.showFirst,
-        duration: 300.milliseconds,
-      );
+      // return AnimatedCrossFade(
+      //   firstChild: _normalTrailing(context),
+      //   secondChild: _searchTrailing(context),
+      //   crossFadeState: controller.isSearchUserTags
+      //       ? CrossFadeState.showSecond
+      //       : CrossFadeState.showFirst,
+      //   duration: 300.milliseconds,
+      // );
     });
   }
 
@@ -162,14 +155,14 @@ class _EhUserTagsPageState extends State<EhUserTagsPage> {
           ? _searchMiddle(context)
           : _normalMiddle(context);
 
-      return AnimatedCrossFade(
-        firstChild: _normalMiddle(context),
-        secondChild: _searchMiddle(context),
-        crossFadeState: controller.isSearchUserTags
-            ? CrossFadeState.showSecond
-            : CrossFadeState.showFirst,
-        duration: 200.milliseconds,
-      );
+      // return AnimatedCrossFade(
+      //   firstChild: _normalMiddle(context),
+      //   secondChild: _searchMiddle(context),
+      //   crossFadeState: controller.isSearchUserTags
+      //       ? CrossFadeState.showSecond
+      //       : CrossFadeState.showFirst,
+      //   duration: 200.milliseconds,
+      // );
     });
   }
 

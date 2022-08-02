@@ -332,7 +332,7 @@ class Api {
     final bool existFEhProfile = fepIndex > -1;
 
     if (ehProfiles.isNotEmpty)
-      logger.d('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
+      logger.v('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
 
     if (existFEhProfile) {
       // 存在名称为 FEhViewer 的配置
@@ -347,13 +347,11 @@ class Api {
       await cleanCookie('sp');
       // await operatorProfile(type: ProfileOpType.select, set: fEhProfile.value);
       await changeEhProfile('${fEhProfile.value}');
-      showCookie();
       return true;
     } else if (ehProfiles.isNotEmpty) {
       // create 完成后会自动set_cookie sp为新建的sp
       logger.d('create new profile');
       await createEhProfile(kProfileName);
-      showCookie();
       return true;
     }
     return null;
@@ -405,8 +403,7 @@ class Api {
       logger.d('exists $exists');
       if (!exists || file == null) {
         try {
-          final DefaultCacheManager manager = DefaultCacheManager();
-          file = await manager.getSingleFile(imageUrl,
+          file = await imageCacheManager.getSingleFile(imageUrl,
               headers: {'cookie': Global.profile.user.cookie});
         } catch (e, stack) {
           logger.e('$e\n$stack');

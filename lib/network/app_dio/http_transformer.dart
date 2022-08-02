@@ -6,7 +6,6 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/foundation.dart';
 
 import '../request.dart';
@@ -335,6 +334,7 @@ class UserLoginTransformer extends HttpTransformer {
   @override
   FutureOr<DioHttpResponse<User>> parse(Response<dynamic> response) async {
     final List<String> setcookie = response.headers['set-cookie'] ?? [];
+    logger.d('setcookie: $setcookie');
 
     final _cookies =
         setcookie.map((str) => Cookie.fromSetCookieValue(str)).toList();
@@ -371,7 +371,7 @@ class UserInfoPageTransformer extends HttpTransformer {
     final html = response.data as String;
     final User user = await compute(parseUserProfile, html);
 
-    logger.d('UserInfoPageTransformer ${user.toJson()}');
+    logger.v('UserInfoPageTransformer user ${user.toJson()}');
 
     return DioHttpResponse<User>.success(user);
   }

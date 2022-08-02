@@ -1,4 +1,3 @@
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 
 class EhNavigatorObserver extends NavigatorObserver {

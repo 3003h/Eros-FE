@@ -4,6 +4,7 @@ import 'simple_tag.dart';
 import 'tag_group.dart';
 import 'gallery_comment.dart';
 import 'gallery_image.dart';
+import 'chapter.dart';
 
 @immutable
 class GalleryProvider {
@@ -45,6 +46,7 @@ class GalleryProvider {
     this.tagGroup,
     this.galleryComment,
     this.galleryImages,
+    this.chapter,
     this.apikey,
     this.apiuid,
     this.isRatinged,
@@ -53,6 +55,7 @@ class GalleryProvider {
     this.torrentLink,
     this.lastViewTime,
     this.pageOfList,
+    this.favNote,
   });
 
   final String? gid;
@@ -91,6 +94,7 @@ class GalleryProvider {
   final List<TagGroup>? tagGroup;
   final List<GalleryComment>? galleryComment;
   final List<GalleryImage>? galleryImages;
+  final List<Chapter>? chapter;
   final String? apikey;
   final String? apiuid;
   final bool? isRatinged;
@@ -99,6 +103,7 @@ class GalleryProvider {
   final String? torrentLink;
   final int? lastViewTime;
   final int? pageOfList;
+  final String? favNote;
 
   factory GalleryProvider.fromJson(Map<String,dynamic> json) => GalleryProvider(
     gid: json['gid'] != null ? json['gid'] as String : null,
@@ -137,6 +142,7 @@ class GalleryProvider {
     tagGroup: json['tagGroup'] != null ? (json['tagGroup'] as List? ?? []).map((e) => TagGroup.fromJson(e as Map<String, dynamic>)).toList() : null,
     galleryComment: json['galleryComment'] != null ? (json['galleryComment'] as List? ?? []).map((e) => GalleryComment.fromJson(e as Map<String, dynamic>)).toList() : null,
     galleryImages: json['galleryImages'] != null ? (json['galleryImages'] as List? ?? []).map((e) => GalleryImage.fromJson(e as Map<String, dynamic>)).toList() : null,
+    chapter: json['chapter'] != null ? (json['chapter'] as List? ?? []).map((e) => Chapter.fromJson(e as Map<String, dynamic>)).toList() : null,
     apikey: json['apikey'] != null ? json['apikey'] as String : null,
     apiuid: json['apiuid'] != null ? json['apiuid'] as String : null,
     isRatinged: json['isRatinged'] != null ? json['isRatinged'] as bool : null,
@@ -144,7 +150,8 @@ class GalleryProvider {
     archiverLink: json['archiverLink'] != null ? json['archiverLink'] as String : null,
     torrentLink: json['torrentLink'] != null ? json['torrentLink'] as String : null,
     lastViewTime: json['lastViewTime'] != null ? json['lastViewTime'] as int : null,
-    pageOfList: json['pageOfList'] != null ? json['pageOfList'] as int : null
+    pageOfList: json['pageOfList'] != null ? json['pageOfList'] as int : null,
+    favNote: json['favNote'] != null ? json['favNote'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -184,6 +191,7 @@ class GalleryProvider {
     'tagGroup': tagGroup?.map((e) => e.toJson()).toList(),
     'galleryComment': galleryComment?.map((e) => e.toJson()).toList(),
     'galleryImages': galleryImages?.map((e) => e.toJson()).toList(),
+    'chapter': chapter?.map((e) => e.toJson()).toList(),
     'apikey': apikey,
     'apiuid': apiuid,
     'isRatinged': isRatinged,
@@ -191,7 +199,8 @@ class GalleryProvider {
     'archiverLink': archiverLink,
     'torrentLink': torrentLink,
     'lastViewTime': lastViewTime,
-    'pageOfList': pageOfList
+    'pageOfList': pageOfList,
+    'favNote': favNote
   };
 
   GalleryProvider clone() => GalleryProvider(
@@ -231,6 +240,7 @@ class GalleryProvider {
     tagGroup: tagGroup?.map((e) => e.clone()).toList(),
     galleryComment: galleryComment?.map((e) => e.clone()).toList(),
     galleryImages: galleryImages?.map((e) => e.clone()).toList(),
+    chapter: chapter?.map((e) => e.clone()).toList(),
     apikey: apikey,
     apiuid: apiuid,
     isRatinged: isRatinged,
@@ -238,7 +248,8 @@ class GalleryProvider {
     archiverLink: archiverLink,
     torrentLink: torrentLink,
     lastViewTime: lastViewTime,
-    pageOfList: pageOfList
+    pageOfList: pageOfList,
+    favNote: favNote
   );
 
     
@@ -279,6 +290,7 @@ class GalleryProvider {
     List<TagGroup>? tagGroup,
     List<GalleryComment>? galleryComment,
     List<GalleryImage>? galleryImages,
+    List<Chapter>? chapter,
     String? apikey,
     String? apiuid,
     bool? isRatinged,
@@ -286,7 +298,8 @@ class GalleryProvider {
     String? archiverLink,
     String? torrentLink,
     int? lastViewTime,
-    int? pageOfList
+    int? pageOfList,
+    String? favNote
   }) => GalleryProvider(
     gid: gid ?? this.gid,
     token: token ?? this.token,
@@ -324,6 +337,7 @@ class GalleryProvider {
     tagGroup: tagGroup ?? this.tagGroup,
     galleryComment: galleryComment ?? this.galleryComment,
     galleryImages: galleryImages ?? this.galleryImages,
+    chapter: chapter ?? this.chapter,
     apikey: apikey ?? this.apikey,
     apiuid: apiuid ?? this.apiuid,
     isRatinged: isRatinged ?? this.isRatinged,
@@ -332,12 +346,13 @@ class GalleryProvider {
     torrentLink: torrentLink ?? this.torrentLink,
     lastViewTime: lastViewTime ?? this.lastViewTime,
     pageOfList: pageOfList ?? this.pageOfList,
+    favNote: favNote ?? this.favNote,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryProvider && gid == other.gid && token == other.token && showKey == other.showKey && url == other.url && imgUrl == other.imgUrl && imgUrlL == other.imgUrlL && imgHeight == other.imgHeight && imgWidth == other.imgWidth && japaneseTitle == other.japaneseTitle && englishTitle == other.englishTitle && category == other.category && uploader == other.uploader && posted == other.posted && language == other.language && filecount == other.filecount && rating == other.rating && ratingCount == other.ratingCount && torrentcount == other.torrentcount && torrents == other.torrents && filesize == other.filesize && filesizeText == other.filesizeText && visible == other.visible && parent == other.parent && ratingFallBack == other.ratingFallBack && numberOfReviews == other.numberOfReviews && postTime == other.postTime && favoritedCount == other.favoritedCount && favTitle == other.favTitle && favcat == other.favcat && localFav == other.localFav && simpleTags == other.simpleTags && tagsFromApi == other.tagsFromApi && translated == other.translated && tagGroup == other.tagGroup && galleryComment == other.galleryComment && galleryImages == other.galleryImages && apikey == other.apikey && apiuid == other.apiuid && isRatinged == other.isRatinged && colorRating == other.colorRating && archiverLink == other.archiverLink && torrentLink == other.torrentLink && lastViewTime == other.lastViewTime && pageOfList == other.pageOfList;
+    || other is GalleryProvider && gid == other.gid && token == other.token && showKey == other.showKey && url == other.url && imgUrl == other.imgUrl && imgUrlL == other.imgUrlL && imgHeight == other.imgHeight && imgWidth == other.imgWidth && japaneseTitle == other.japaneseTitle && englishTitle == other.englishTitle && category == other.category && uploader == other.uploader && posted == other.posted && language == other.language && filecount == other.filecount && rating == other.rating && ratingCount == other.ratingCount && torrentcount == other.torrentcount && torrents == other.torrents && filesize == other.filesize && filesizeText == other.filesizeText && visible == other.visible && parent == other.parent && ratingFallBack == other.ratingFallBack && numberOfReviews == other.numberOfReviews && postTime == other.postTime && favoritedCount == other.favoritedCount && favTitle == other.favTitle && favcat == other.favcat && localFav == other.localFav && simpleTags == other.simpleTags && tagsFromApi == other.tagsFromApi && translated == other.translated && tagGroup == other.tagGroup && galleryComment == other.galleryComment && galleryImages == other.galleryImages && chapter == other.chapter && apikey == other.apikey && apiuid == other.apiuid && isRatinged == other.isRatinged && colorRating == other.colorRating && archiverLink == other.archiverLink && torrentLink == other.torrentLink && lastViewTime == other.lastViewTime && pageOfList == other.pageOfList && favNote == other.favNote;
 
   @override
-  int get hashCode => gid.hashCode ^ token.hashCode ^ showKey.hashCode ^ url.hashCode ^ imgUrl.hashCode ^ imgUrlL.hashCode ^ imgHeight.hashCode ^ imgWidth.hashCode ^ japaneseTitle.hashCode ^ englishTitle.hashCode ^ category.hashCode ^ uploader.hashCode ^ posted.hashCode ^ language.hashCode ^ filecount.hashCode ^ rating.hashCode ^ ratingCount.hashCode ^ torrentcount.hashCode ^ torrents.hashCode ^ filesize.hashCode ^ filesizeText.hashCode ^ visible.hashCode ^ parent.hashCode ^ ratingFallBack.hashCode ^ numberOfReviews.hashCode ^ postTime.hashCode ^ favoritedCount.hashCode ^ favTitle.hashCode ^ favcat.hashCode ^ localFav.hashCode ^ simpleTags.hashCode ^ tagsFromApi.hashCode ^ translated.hashCode ^ tagGroup.hashCode ^ galleryComment.hashCode ^ galleryImages.hashCode ^ apikey.hashCode ^ apiuid.hashCode ^ isRatinged.hashCode ^ colorRating.hashCode ^ archiverLink.hashCode ^ torrentLink.hashCode ^ lastViewTime.hashCode ^ pageOfList.hashCode;
+  int get hashCode => gid.hashCode ^ token.hashCode ^ showKey.hashCode ^ url.hashCode ^ imgUrl.hashCode ^ imgUrlL.hashCode ^ imgHeight.hashCode ^ imgWidth.hashCode ^ japaneseTitle.hashCode ^ englishTitle.hashCode ^ category.hashCode ^ uploader.hashCode ^ posted.hashCode ^ language.hashCode ^ filecount.hashCode ^ rating.hashCode ^ ratingCount.hashCode ^ torrentcount.hashCode ^ torrents.hashCode ^ filesize.hashCode ^ filesizeText.hashCode ^ visible.hashCode ^ parent.hashCode ^ ratingFallBack.hashCode ^ numberOfReviews.hashCode ^ postTime.hashCode ^ favoritedCount.hashCode ^ favTitle.hashCode ^ favcat.hashCode ^ localFav.hashCode ^ simpleTags.hashCode ^ tagsFromApi.hashCode ^ translated.hashCode ^ tagGroup.hashCode ^ galleryComment.hashCode ^ galleryImages.hashCode ^ chapter.hashCode ^ apikey.hashCode ^ apiuid.hashCode ^ isRatinged.hashCode ^ colorRating.hashCode ^ archiverLink.hashCode ^ torrentLink.hashCode ^ lastViewTime.hashCode ^ pageOfList.hashCode ^ favNote.hashCode;
 }

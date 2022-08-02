@@ -5,7 +5,6 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/pages/tab/controller/favorite_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +12,12 @@ import 'package:get/get.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class UserController extends ProfileController {
-  bool get isLogin => user.value.username?.isNotEmpty ?? false;
+  bool get isLogin =>
+      (user.value.memberId?.isNotEmpty ?? false) &&
+      (user.value.passHash?.isNotEmpty ?? false);
+
+  // bool get isLogin => user.value.username?.isNotEmpty ?? false;
+
   Rx<User> user = kDefUser.obs;
 
   final EhConfigService _ehConfigService = Get.find();

@@ -32,6 +32,18 @@ class EhDynamicColors {
     darkGrayColor: Color.fromARGB(255, 47, 47, 47),
   );
 
+  static const EhDynamicColor commentReplyBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 253, 253, 253),
+    darkColor: Color.fromARGB(255, 0, 0, 0),
+    darkGrayColor: Color.fromARGB(255, 28, 28, 28),
+  );
+
+  static const EhDynamicColor commentBackground = EhDynamicColor(
+    color: Color.fromARGB(255, 242, 242, 247),
+    darkColor: Color.fromARGB(255, 20, 20, 20),
+    darkGrayColor: Color.fromARGB(255, 40, 40, 40),
+  );
+
   static const EhDynamicColor favnoteTextFieldBackground = EhDynamicColor(
     color: Color.fromARGB(255, 250, 250, 250),
     darkColor: Color.fromARGB(255, 28, 28, 31),
@@ -42,6 +54,12 @@ class EhDynamicColors {
     color: Color.fromARGB(255, 255, 255, 255),
     darkColor: Color.fromARGB(255, 30, 30, 30),
     darkGrayColor: Color.fromARGB(255, 32, 32, 32),
+  );
+
+  static const EhDynamicColor commitIcon = EhDynamicColor(
+    color: Color.fromARGB(255, 120, 120, 122),
+    darkColor: Color.fromARGB(255, 142, 142, 147),
+    darkGrayColor: Color.fromARGB(255, 142, 142, 147),
   );
 }
 
@@ -72,7 +90,7 @@ class ThemeColors {
   static const CupertinoDynamicColor commitText =
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'commitText',
-    color: Colors.black87,
+    color: CupertinoColors.label,
     darkColor: CupertinoColors.systemGrey4,
   );
 
@@ -101,6 +119,8 @@ class ThemeColors {
     color: Color(0xCCF2F2F2),
     darkColor: Color(0xBF1E1E1E),
   );
+
+  static List<Color> get tagColorList => tagColorTagType.values.toList();
 
   /// 标签总分类颜色
   static const Map<String, Color> tagColorTagType = <String, Color>{
@@ -186,6 +206,11 @@ class ThemeColors {
     barBackgroundColor: navigationBarBackgroundGray,
     textTheme: ehTextTheme,
   );
+
+  static List<Color> get catColorList => catColor.entries
+      .where((e) => e.key != 'default')
+      .map((e) => e.value)
+      .toList();
 
   // 画廊类型主题色
   static const Map<String, Color> catColor = <String, Color>{

@@ -1,13 +1,14 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:get/get.dart';
 
 import '../../../fehviewer.dart';
 import '../../item/controller/galleryitem_controller.dart';
-import '../view/gallery_page.dart';
 
 class GalleryPageState {
-  GalleryPageState() {}
+  GalleryPageState();
 
   final EhConfigService _ehConfigService = Get.find();
   DownloadController get _downloadController => Get.find();
@@ -16,6 +17,9 @@ class GalleryPageState {
 
   /// 画廊数据对象
   GalleryProvider? galleryProvider;
+
+  String get url =>
+      '${galleryProvider!.url?.startsWith('http') ?? false ? '' : Api.getBaseUrl()}${galleryProvider!.url}';
 
   /// 画廊gid 唯一
   String get gid => galleryProvider?.gid ?? '0';
@@ -34,9 +38,10 @@ class GalleryPageState {
   int get lastIndex => _lastIndex.value;
   set lastIndex(int val) => _lastIndex.value = val;
 
-  List<GalleryImage> get images => galleryProvider?.galleryImages ?? [];
-  Map<int, GalleryImage> get imageMap => galleryProvider?.imageMap ?? {};
-  set imageMap(Map<int, GalleryImage> val) {}
+  final RxList<GalleryImage> images = <GalleryImage>[].obs;
+  Map<int, GalleryImage> get imageMap =>
+      {for (GalleryImage v in images) v.ser: v};
+
   int get filecount => int.parse(galleryProvider?.filecount ?? '0');
 
   // 阅读按钮开关
@@ -68,7 +73,7 @@ class GalleryPageState {
   // 正在获取href
   bool isImageInfoGeting = false;
 
-  /// 是否存在本地收藏中
+  /// 是否已经存在本地收藏中
   set localFav(bool value) {
     galleryProvider = galleryProvider?.copyWith(localFav: value);
   }
@@ -79,6 +84,7 @@ class GalleryPageState {
   // get topTitle => _topTitle.value;
   set topTitle(String val) => _topTitle.value = val;
 
+  // 经过序号排序处理的图片对象list
   List<GalleryImage> get imagesFromMap {
     List<MapEntry<int, GalleryImage>> list = imageMap.entries
         .map((MapEntry<int, GalleryImage> e) => MapEntry(e.key, e.value))
@@ -89,6 +95,8 @@ class GalleryPageState {
   }
 
   final Map<int, Future<List<GalleryImage>>> mapLoadImagesForSer = {};
+
+  final RxList<GalleryComment> comments = <GalleryComment>[].obs;
 
   // 另一个语言的标题
   String get topTitle {
@@ -113,13 +121,17 @@ class GalleryPageState {
   }
 
   GalleryItemController? get itemController {
-    try {
-      return Get.find(tag: gid);
-    } catch (_) {
-      return null;
+    if (Get.isRegistered<GalleryItemController>(tag: gid)) {
+      return Get.find<GalleryItemController>(tag: gid);
     }
+    return null;
   }
 
   TaskStatus get downloadState => TaskStatus(
       _downloadController.dState.galleryTaskMap[int.parse(gid)]?.status ?? 0);
+
+  double get downloadProcess {
+    final task = _downloadController.dState.galleryTaskMap[int.parse(gid)];
+    return (task?.completCount ?? 0) * 100.0 / (task?.fileCount ?? 1);
+  }
 }

@@ -53,7 +53,7 @@ app.*.map.json
 #/lib/models/*.dart
 /web/
 /linux/
-.fvm
+.fvm/flutter_sdk
 /assets/openl.json
 /assets/sentry.json
 
@@ -61,3 +61,4 @@ app.*.map.json
 #google-service.json
 /lib/firebase_options.dart
 
+#/pubspec.lock

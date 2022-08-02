@@ -37,11 +37,9 @@ def _storePassword = keystoreProperties.getProperty("storePassword")
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -54,7 +52,7 @@ android {
     defaultConfig {
         applicationId "com.honjow.fehviewer"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
 //        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -86,7 +84,7 @@ android {
             shrinkResources true
         }
         debug {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
             minifyEnabled true
             shrinkResources true
         }
@@ -99,8 +97,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.6'
-//    def multidex_version = "2.0.1"
-//    implementation "androidx.multidex:multidex:$multidex_version"
-    implementation "androidx.startup:startup-runtime:1.1.0"
+    implementation "androidx.startup:startup-runtime:1.1.1"
+    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
 }

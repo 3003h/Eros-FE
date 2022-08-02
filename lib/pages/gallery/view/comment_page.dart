@@ -4,9 +4,9 @@ import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
+import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -31,24 +31,38 @@ class CommentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 评论列表
-    Widget commentListView = controller.obx(
-      (List<GalleryComment>? state) => ListView.builder(
-        controller: controller.scrollController,
-        padding: EdgeInsets.only(bottom: 60 + context.mediaQueryPadding.bottom),
-        itemBuilder: (context, index) {
-          return CommentItem(
-            galleryComment: state![index],
-          ).autoCompressKeyboard(context);
-        },
-        itemCount: state?.length ?? 0,
-      ).paddingSymmetric(horizontal: 12),
-    );
+
+    Widget commentListView = Obx(() {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
+        child: ListView.builder(
+          controller: controller.scrollController,
+          padding:
+              EdgeInsets.only(bottom: 60 + context.mediaQueryPadding.bottom),
+          itemBuilder: (context, index) {
+            if (controller.comments == null || controller.comments!.isEmpty) {
+              return const SizedBox();
+            }
+
+            final comment = controller.comments?[index];
+            if (comment != null) {
+              return CommentItem(
+                galleryComment: comment,
+              ).autoCompressKeyboard(context);
+            } else {
+              return const SizedBox();
+            }
+          },
+          itemCount: controller.comments?.length ?? 0,
+        ),
+      );
+    });
 
     // 原始消息
     Widget _buildOriText() {
       return Obx(
         () {
-          if (controller.editState == EditState.editComment) {
+          if (controller.editState != EditState.newComment) {
             return Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
@@ -58,17 +72,42 @@ class CommentPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          L10n.of(context).edit_comment,
-                          style: const TextStyle(
-                            color: CupertinoColors.activeBlue,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
+                        if (controller.isEditStat)
+                          Text(
+                            L10n.of(context).edit_comment,
+                            style: const TextStyle(
+                              color: CupertinoColors.activeBlue,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          )
+                        else
+                          Row(
+                            children: [
+                              Text(
+                                L10n.of(context).reply_to_comment,
+                                style: const TextStyle(
+                                  color: CupertinoColors.activeOrange,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                '${controller.reptyUser}:',
+                                style: const TextStyle(
+                                  color: CupertinoColors.activeBlue,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
                         const SizedBox(height: 8),
                         Text(
-                          controller.oriComment,
+                          controller.isEditStat
+                              ? controller.oriComment
+                              : controller.reptyCommentText,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -97,7 +136,7 @@ class CommentPage extends StatelessWidget {
               ],
             );
           } else {
-            return Container();
+            return const SizedBox.shrink();
           }
         },
       );
@@ -129,13 +168,12 @@ class CommentPage extends StatelessWidget {
                   color: CupertinoDynamicColor.resolve(
                           ehTheme.themeData!.barBackgroundColor, context)
                       .withOpacity(1),
-                  // color: Colors.transparent,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // 编辑原消息时的显示
+                    // 编辑原消息 或者回复消息 时的显示
                     _buildOriText(),
                     // 输入框
                     Row(
@@ -157,6 +195,7 @@ class CommentPage extends StatelessWidget {
                               controller: controller.commentTextController,
                               focusNode: controller.focusNode,
                               placeholder: L10n.of(context).new_comment,
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ),
                         ),
@@ -178,14 +217,15 @@ class CommentPage extends StatelessWidget {
                                     //     scale: animation, child: child),
                                     FadeTransition(
                                         child: child, opacity: animation),
-                                child: controller.isEditStat
+                                child: controller.isEditStat ||
+                                        controller.isReptyStat
                                     ? Icon(
-                                        FontAwesomeIcons.solidCheckCircle,
+                                        FontAwesomeIcons.solidCircleCheck,
                                         key: UniqueKey(),
                                         size: 32,
                                       )
                                     : Icon(
-                                        FontAwesomeIcons.arrowCircleUp,
+                                        FontAwesomeIcons.circleArrowUp,
                                         key: UniqueKey(),
                                         size: 32,
                                       ),

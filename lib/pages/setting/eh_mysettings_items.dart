@@ -87,6 +87,7 @@ Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
       title: L10n.of(context).uc_name_display,
       hideDivider: hideLine,
       actionMap: actionMap,
+      valueFlex: 1,
       initVal: _controller.ehSetting.galleryNameDisplay ?? '',
       onValueChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(galleryNameDisplay: val),
@@ -119,6 +120,8 @@ Widget _buildArchiverSettingsItem(BuildContext context,
       hideDivider: hideLine,
       actionMap: actionMap,
       // simpleActionMap: sActionMap,
+      titleFlex: 1,
+      valueFlex: 1,
       initVal: _controller.ehSetting.archiverSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(archiverSettings: val),
@@ -161,6 +164,7 @@ Widget _buildFavoritesSortItem(BuildContext context, {bool hideLine = false}) {
       title: L10n.of(context).uc_fav_sort,
       hideDivider: hideLine,
       actionMap: actionMap,
+      valueFlex: 1,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(frontPageSettings: val),
@@ -321,7 +325,7 @@ Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
 
   return TextSwitchItem(
     L10n.of(context).uc_show_page_num,
-    hideLine: hideLine,
+    hideDivider: hideLine,
     intValue: _controller.ehSetting.showGalleryPageNumbers == '0',
     onChanged: (val) => _controller.ehSetting =
         _controller.ehSetting.copyWith(showGalleryPageNumbers: val ? '0' : '1'),
@@ -350,7 +354,7 @@ Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
     () {
       return TextSwitchItem(
         L10n.of(context).uc_ori_image,
-        hideLine: true,
+        hideDivider: true,
         intValue: _controller.ehSetting.originalImages == '1',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),
@@ -427,6 +431,7 @@ Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
       hideDivider: hideLine,
       actionMap: actionMap,
       // simpleActionMap: sActionMap,
+      valueFlex: 1,
       initVal: _controller.ehSetting.mpvStyle ?? '',
       onValueChanged: (val) =>
           _controller.ehSetting = _controller.ehSetting.copyWith(mpvStyle: val),

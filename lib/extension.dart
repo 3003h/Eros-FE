@@ -10,9 +10,13 @@ import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/store/floor/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 
 import 'common/controller/tag_trans_controller.dart';
+import 'common/controller/webdav_controller.dart';
 import 'common/enum.dart';
+import 'common/global.dart';
 import 'models/index.dart';
 import 'network/api.dart';
 
@@ -61,6 +65,8 @@ extension ExtComment on GalleryComment {
         }
         return e.translate ?? '';
       }).join();
+
+  DateTime get dateTime => DateFormat('yyyy-MM-dd HH:mm').parse(time);
 }
 
 extension ExtCommentSpan on GalleryCommentSpan {
@@ -68,15 +74,11 @@ extension ExtCommentSpan on GalleryCommentSpan {
       EnumToString.fromString(CommentSpanType.values, type ?? '') ??
       CommentSpanType.text;
 
-  // set sType(CommentSpanType val) => type = EnumToString.convertToString(val);
   GalleryCommentSpan copyWithSpanType(CommentSpanType val) =>
       copyWith(type: EnumToString.convertToString(val));
 }
 
 extension ExtGalleryProvider on GalleryProvider {
-  Map<int, GalleryImage> get imageMap =>
-      {for (GalleryImage v in galleryImages ?? []) v.ser: v};
-
   GalleryProvider copyWithAll(GalleryProvider item) {
     return copyWith(
         token: item.token,
@@ -121,42 +123,29 @@ extension ExtGalleryProvider on GalleryProvider {
         archiverLink: item.archiverLink,
         torrentLink: item.torrentLink,
         lastViewTime: item.lastViewTime,
-        pageOfList: item.pageOfList);
+        pageOfList: item.pageOfList,
+        favNote: item.favNote,
+        chapter: item.chapter);
   }
 }
 
 extension ExtUser on User {
   String get cookie {
-    return 'ipb_member_id=$memberId; '
-        'ipb_pass_hash=$passHash; '
-        'igneous=${igneous ?? ''}';
+    final _list = <Cookie>[
+      Cookie('ipb_member_id', memberId ?? ''),
+      Cookie('ipb_pass_hash', passHash ?? ''),
+      Cookie('igneous', igneous ?? ''),
+      Cookie('sk', sk ?? ''),
+      Cookie('hath_perks', hathPerks ?? ''),
+      Cookie('star', star ?? ''),
+      Cookie('yay', yay ?? ''),
+    ];
+
+    return _list
+        .whereNot((e) => e.value.isEmpty)
+        .map((e) => '${e.name}=${e.value}')
+        .join('; ');
   }
-
-  List<String> get _cookieStrList => cookie.split(';');
-
-  List<Cookie> get _cookiesFromStr =>
-      _cookieStrList.map((e) => Cookie.fromSetCookieValue(e)).toList();
-
-  String get memberIdFromCookieStr => _cookiesFromStr
-      .where((Cookie element) => element.name == 'ipb_member_id')
-      .first
-      .value;
-
-  String get passHashFromCookieStr => _cookiesFromStr
-      .where((Cookie element) => element.name == 'ipb_pass_hash')
-      .first
-      .value;
-
-  String get igneousFromCookie => _cookiesFromStr
-      .where((Cookie element) => element.name == 'igneous')
-      .first
-      .value;
-
-  String get memberIdFB => memberId ?? memberIdFromCookieStr;
-
-  String get passHashFB => passHash ?? passHashFromCookieStr;
-
-  String get igneousFB => igneous ?? igneousFromCookie;
 }
 
 extension ExtTagTranlat on TagTranslat {
@@ -251,6 +240,25 @@ extension ExtString on String {
             .firstWhereOrNull((e) => e.value == trim().toLowerCase())
             ?.key ??
         this;
+  }
+
+  String get realDownloadPath {
+    if (GetPlatform.isIOS) {
+      final List<String> pathList = path.split(this).reversed.toList();
+      return path.join(Global.appDocPath, pathList[1], pathList[0]);
+    } else {
+      return this;
+    }
+  }
+
+  String get realArchiverPath {
+    if (GetPlatform.isIOS) {
+      final List<String> pathList = path.split(this).reversed.toList();
+      return path.join(
+          Global.appDocPath, pathList[2], pathList[1], pathList[0]);
+    } else {
+      return this;
+    }
   }
 }
 
@@ -488,8 +496,8 @@ extension ExtAdvanceSearch on AdvanceSearch {
       if (searchWithminRating) 'f_sr': 'on',
       if (searchWithminRating) 'f_srdd': minRating,
       if (searchBetweenpage) 'f_sp': 'on',
-      if (startPage.isNotEmpty) 'f_spf': startPage,
-      if (endPage.isNotEmpty) 'f_spt': endPage,
+      if (searchBetweenpage && startPage.isNotEmpty) 'f_spf': startPage,
+      if (searchBetweenpage && endPage.isNotEmpty) 'f_spt': endPage,
       if (disableDFLanguage) 'f_sfl': 'on',
       if (disableDFUploader) 'f_sfu': 'on',
       if (disableDFTags) 'f_sft': 'on',
@@ -517,6 +525,9 @@ extension ExtCustomProfile on CustomProfile {
   ListModeEnum get listMode =>
       EnumToString.fromString(ListModeEnum.values, listModeValue ?? '') ??
       ListModeEnum.global;
+
+  String get syncFileName =>
+      '$name$kGroupSeparator$uuid$kGroupSeparator${lastEditTime ?? '0'}';
 }
 
 extension EhIterableExtension<T> on Iterable<T> {
@@ -544,5 +555,9 @@ extension EhIterableExtension<T> on Iterable<T> {
 extension ExtGalleryTag on GalleryTag {
   GalleryTag setColor() {
     return Get.find<TagController>().getColorCode(this);
+  }
+
+  bool get needHide {
+    return Get.find<TagController>().hideTags.contains(this);
   }
 }

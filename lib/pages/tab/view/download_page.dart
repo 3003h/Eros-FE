@@ -7,11 +7,8 @@ import 'package:fehviewer/store/floor/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-import 'donwload_labels_page.dart';
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
 
@@ -33,9 +30,8 @@ class DownloadTab extends StatefulWidget {
 class _DownloadTabState extends State<DownloadTab> {
   final DownloadViewController controller = Get.find();
   late PageController pageController;
-  DownloadType viewType = DownloadType.gallery;
 
-  int get currIndex => controller.pageList.indexOf(viewType);
+  int get currIndex => controller.pageList.indexOf(controller.viewType);
 
   @override
   void initState() {
@@ -64,7 +60,7 @@ class _DownloadTabState extends State<DownloadTab> {
                 style: const TextStyle(fontSize: 14),
               ).marginSymmetric(horizontal: 6),
             },
-            groupValue: viewType,
+            groupValue: controller.viewType,
             onValueChanged: (DownloadType? value) {
               final toIndex =
                   controller.pageList.indexOf(value ?? DownloadType.gallery);
@@ -93,24 +89,6 @@ class _DownloadTabState extends State<DownloadTab> {
               ),
               onPressed: _showExportDialog,
             ),
-            // CupertinoButton(
-            //   minSize: 40,
-            //   padding: const EdgeInsets.all(0),
-            //   child: const Icon(
-            //     LineIcons.layerGroup,
-            //     size: 26,
-            //   ),
-            //   onPressed: () {
-            //     modal.CupertinoScaffold.showCupertinoModalBottomSheet(
-            //       context: context,
-            //       animationCurve: Curves.easeOutQuart,
-            //       // previousRouteAnimationCurve: Curves.easeInOutBack,
-            //       duration: const Duration(milliseconds: 400),
-            //       useRootNavigator: true,
-            //       builder: (context) => const DownloadLabelsView(),
-            //     );
-            //   },
-            // ),
           ],
         ),
       ),
@@ -119,7 +97,7 @@ class _DownloadTabState extends State<DownloadTab> {
         children: viewList,
         onPageChanged: (index) {
           setState(() {
-            viewType = controller.pageList[index];
+            controller.viewType = controller.pageList[index];
           });
         },
       ),
@@ -335,12 +313,8 @@ Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
             logic.onLongPress(_taskIndex, type: DownloadType.archiver),
         behavior: HitTestBehavior.opaque,
         child: DownloadArchiverItem(
-          title: _taskInfo.title ?? '',
-          progress: _taskInfo.progress ?? 0,
-          status: DownloadTaskStatus(_taskInfo.status ?? 0),
+          archiverTaskInfo: _taskInfo,
           index: _taskIndex,
-          coverUrl: _taskInfo.imgUrl,
-          galleryUrl: _taskInfo.galleryUrl,
         ),
       );
     },

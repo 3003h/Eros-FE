@@ -88,6 +88,14 @@ class EHTheme {
   Color? get commentTextFieldBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.commentTextFieldBackground);
 
+  /// 评论回复框颜色
+  Color? get commentReplyBackgroundColor =>
+      _getColorWithTheme(EhDynamicColors.commentReplyBackground);
+
+  /// 评论背景颜色
+  Color? get commentBackgroundColor =>
+      _getColorWithTheme(EhDynamicColors.commentBackground);
+
   // 收藏备注输入框颜色
   Color? get favnoteTextFieldBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.favnoteTextFieldBackground);
@@ -95,6 +103,8 @@ class EHTheme {
   /// item 背景色
   Color? get itemBackgroundColor =>
       _getColorWithTheme(EhDynamicColors.itemBackground);
+
+  Color? get commitIconColor => _getColorWithTheme(EhDynamicColors.commitIcon);
 
   bool get _isSeldark => _themeService.themeModel == ThemesModeEnum.darkMode;
   bool get _isSelLigth => _themeService.themeModel == ThemesModeEnum.ligthMode;

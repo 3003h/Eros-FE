@@ -51,17 +51,8 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
     super.build(context);
     return CustomScrollView(
       slivers: [
-        SliverPadding(
-            padding: EdgeInsets.only(
-                top: context.mediaQueryPadding.top + kTopTabbarHeight),
-            sliver: EhCupertinoSliverRefreshControl(
-              onRefresh: _favoriteSubListController.onRefresh,
-            )),
-        SliverSafeArea(
-          top: false,
-          bottom: false,
-          sliver: _getGallerySliverList(),
-        ),
+        _buildRefresh(context),
+        _buildListView(),
         Obx(() {
           return EndIndicator(
             pageState: _favoriteSubListController.pageState,
@@ -72,57 +63,81 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
     );
   }
 
-  Widget _getGallerySliverList() {
-    return _favoriteSubListController.obx(
-        (List<GalleryProvider>? state) {
-          if (state == null || state.isEmpty) {
+  Widget _buildRefresh(BuildContext context) {
+    return SliverPadding(
+        padding: EdgeInsets.only(
+            top: context.mediaQueryPadding.top + kTopTabbarHeight),
+        sliver: EhCupertinoSliverRefreshControl(
+          onRefresh: _favoriteSubListController.onRefresh,
+        ));
+  }
+
+  Widget _buildListView() {
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      sliver: GetBuilder<FavoriteSubListController>(
+        global: false,
+        init: _favoriteSubListController,
+        id: _favoriteSubListController.listViewId,
+        builder: (logic) {
+          final status = logic.status;
+
+          if (status.isLoading) {
             return SliverFillRemaining(
               child: Container(
                 alignment: Alignment.center,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.hippo,
-                      size: 100,
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemGrey, context),
-                    ),
-                    Text(''),
-                  ],
+                padding: const EdgeInsets.only(bottom: 50),
+                child: const CupertinoActivityIndicator(
+                  radius: 14.0,
                 ),
-              ).autoCompressKeyboard(Get.context!),
+              ),
             );
           }
-          return getGallerySliverList(
-            state,
-            _favoriteSubListController.heroTag,
-            maxPage: _favoriteSubListController.maxPage,
-            curPage: _favoriteSubListController.curPage,
-            lastComplete: _favoriteSubListController.lastComplete,
-            key: _favoriteSubListController.sliverAnimatedListKey,
-          );
-        },
-        onLoading: SliverFillRemaining(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 50),
-            child: const CupertinoActivityIndicator(
-              radius: 14.0,
-            ),
-          ),
-        ),
-        onError: (err) {
-          logger.e(' $err');
+
+          if (status.isError) {
+            SliverFillRemaining(
+              child: Container(
+                padding: const EdgeInsets.only(bottom: 50),
+                child: GalleryErrorPage(
+                  onTap: _favoriteSubListController.reLoadDataFirst,
+                  error: status.errorMessage,
+                ),
+              ),
+            );
+          }
+
+          if (status.isSuccess) {
+            return getGallerySliverList(
+              _favoriteSubListController.state,
+              _favoriteSubListController.heroTag,
+              maxPage: _favoriteSubListController.maxPage,
+              curPage: _favoriteSubListController.curPage,
+              lastComplete: _favoriteSubListController.lastComplete,
+              key: _favoriteSubListController.sliverAnimatedListKey,
+            );
+          }
+
           return SliverFillRemaining(
             child: Container(
-              padding: const EdgeInsets.only(bottom: 50),
-              child: GalleryErrorPage(
-                onTap: _favoriteSubListController.reLoadDataFirst,
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.hippo,
+                    size: 100,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.systemGrey, context),
+                  ),
+                  Text(''),
+                ],
               ),
-            ),
+            ).autoCompressKeyboard(Get.context!),
           );
-        });
+        },
+      ),
+    );
   }
 
   @override

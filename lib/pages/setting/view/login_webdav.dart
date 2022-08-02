@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/controller/webdav_controller.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
@@ -90,10 +91,17 @@ class LoginWebDAV extends GetView<WebdavController> {
                           children: [
                             const Spacer(),
                             GestureDetector(
+                              child: const Icon(
+                                FontAwesomeIcons.clipboard,
+                                size: 30,
+                              ).paddingOnly(bottom: 30, right: 28, top: 8),
+                              onTap: controller.readFromClipboard,
+                            ),
+                            GestureDetector(
                               child: Icon(controller.obscurePasswd
                                       ? FontAwesomeIcons.eyeSlash
                                       : FontAwesomeIcons.eye)
-                                  .paddingOnly(bottom: 30, right: 28),
+                                  .paddingOnly(bottom: 30, right: 28, top: 8),
                               onTap: controller.switchObscure,
                             ),
                           ],
@@ -102,41 +110,22 @@ class LoginWebDAV extends GetView<WebdavController> {
                     ),
                     SizedBox(
                       height: 50,
-                      child: GetBuilder<WebdavController>(
-                        builder: (logic) {
-                          return CupertinoButton(
-                            child: logic.loadingLogin
-                                ? const CupertinoActivityIndicator()
-                                : Text(L10n.of(context).login),
-                            color: CupertinoColors.activeBlue,
-                            onPressed: logic.loadingLogin
-                                ? null
-                                : () async {
-                                    final rult = await logic.pressLoginWebDAV();
-                                    if (rult != null && rult) {
-                                      logic.passwdController.text = '';
-                                      Get.back();
-                                    }
-                                  },
-                          );
-                        },
+                      child: CupertinoButton(
+                        child: controller.loadingLogin
+                            ? const CupertinoActivityIndicator()
+                            : Text(L10n.of(context).login),
+                        color: CupertinoColors.activeBlue,
+                        onPressed: controller.loadingLogin
+                            ? null
+                            : () async {
+                                final rult =
+                                    await controller.pressLoginWebDAV();
+                                if (rult != null && rult) {
+                                  Get.back(id: isLayoutLarge ? 2 : null);
+                                }
+                              },
                       ),
                     ),
-                    // CupertinoButton(
-                    //   minSize: 50,
-                    //   padding: const EdgeInsets.all(20),
-                    //   child: Column(
-                    //     children: [
-                    //       const Icon(
-                    //         LineIcons.clipboardAlt,
-                    //         size: 30,
-                    //       ),
-                    //       Text(L10n.of(context).read_from_clipboard,
-                    //           textScaleFactor: 0.8),
-                    //     ],
-                    //   ),
-                    //   onPressed: controller.readCookieFromClipboard,
-                    // ),
                   ],
                 ),
               ),

@@ -22,9 +22,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(site) => "현재 ${site}";
 
-  static String m1(rating) => "${rating} ⭐";
+  static String m1(modelName) => "Model ${modelName}";
 
-  static String m2(tagNamespace) => "${Intl.select(tagNamespace, {
+  static String m2(rating) => "${rating} ⭐";
+
+  static String m3(tagNamespace) => "${Intl.select(tagNamespace, {
             'reclass': 'reclass',
             'language': 'language',
             'parody': 'parody',
@@ -42,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("안전하게 보관하세요!"),
+        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
         "about": MessageLookupByLibrary.simpleMessage("정보"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("빠른 검색 추가"),
         "add_tag_placeholder":
@@ -59,12 +62,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "always": MessageLookupByLibrary.simpleMessage("Always"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "ask_me": MessageLookupByLibrary.simpleMessage("Ask for me"),
+        "auth_biometricHint":
+            MessageLookupByLibrary.simpleMessage("Verify identity"),
+        "auth_signInTitle":
+            MessageLookupByLibrary.simpleMessage("Authentication required"),
+        "author": MessageLookupByLibrary.simpleMessage("Author"),
         "autoLock": MessageLookupByLibrary.simpleMessage("자동 잠금"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("뒤로"),
         "cancel": MessageLookupByLibrary.simpleMessage("취소"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨찾기 변경"),
+        "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("캐시 지우기"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("지우기"),
         "clear_search_history":
@@ -83,6 +93,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "custom_hosts": MessageLookupByLibrary.simpleMessage("사용자 지정 hosts"),
         "dark": MessageLookupByLibrary.simpleMessage("어둡게"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("다크 모드 효과"),
+        "default_avatar_style":
+            MessageLookupByLibrary.simpleMessage("Default avatar style"),
         "default_favorites": MessageLookupByLibrary.simpleMessage("기본 즐겨찾기"),
         "delete": MessageLookupByLibrary.simpleMessage("지우기"),
         "delete_task": MessageLookupByLibrary.simpleMessage("Delete Task"),
@@ -92,9 +104,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete task only"),
         "disabled": MessageLookupByLibrary.simpleMessage("비활성화 됨"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("도메인 프론팅"),
+        "donate": MessageLookupByLibrary.simpleMessage("Donate"),
         "done": MessageLookupByLibrary.simpleMessage("완료"),
         "double_click_back":
             MessageLookupByLibrary.simpleMessage("한번 더 누르면 종료됩니다."),
+        "double_page_model":
+            MessageLookupByLibrary.simpleMessage("Double page model"),
         "download": MessageLookupByLibrary.simpleMessage("다운로드"),
         "download_location": MessageLookupByLibrary.simpleMessage("다운로드 경로"),
         "download_ori_image":
@@ -119,6 +134,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "fixed_height_of_list_items":
             MessageLookupByLibrary.simpleMessage("Fixed height of list items"),
         "follow_system": MessageLookupByLibrary.simpleMessage("시스템 기본값"),
+        "fullscreen": MessageLookupByLibrary.simpleMessage("Fullscreen"),
         "galery_site": MessageLookupByLibrary.simpleMessage("갤러리 사이트"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("갤러리 댓글"),
         "global_setting":
@@ -131,6 +147,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
+        "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
+        "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "input_empty": MessageLookupByLibrary.simpleMessage("인풋 비어있음"),
         "input_error": MessageLookupByLibrary.simpleMessage("인풋 에러"),
         "instantly": MessageLookupByLibrary.simpleMessage("즉시"),
@@ -139,6 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "최근 즐겨찾기, 길게 눌러 수동으로 선택할 수 있습니다."),
         "left_to_right": MessageLookupByLibrary.simpleMessage("왼쪽에서 오른쪽으로"),
+        "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("밝게"),
         "link_redirect": MessageLookupByLibrary.simpleMessage("Link redirect"),
         "link_redirect_summary": MessageLookupByLibrary.simpleMessage(
@@ -156,10 +175,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("로컬 즐겨찾기"),
         "login": MessageLookupByLibrary.simpleMessage("로그인"),
         "login_web": MessageLookupByLibrary.simpleMessage("웹 로그인"),
+        "mange_hidden_images":
+            MessageLookupByLibrary.simpleMessage("Manage Hidden Images"),
         "manually_sel_favorites":
             MessageLookupByLibrary.simpleMessage("수동으로 즐겨찾기 선택"),
         "max_history": MessageLookupByLibrary.simpleMessage("최대 방문 기록"),
         "min": MessageLookupByLibrary.simpleMessage("분"),
+        "model": m1,
         "morePreviews": MessageLookupByLibrary.simpleMessage("미리 보기 더 보기"),
         "multi_download": MessageLookupByLibrary.simpleMessage("다중 다운로드"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("사이트에서 설정하기"),
@@ -175,6 +197,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "on": MessageLookupByLibrary.simpleMessage("켜짐"),
         "open_supported_links":
             MessageLookupByLibrary.simpleMessage("Open supported links"),
+        "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(
+            "Starting with Android 12, apps can only be used as web link handling apps if they are approved. Otherwise it will be processed using the default browser. You can manually approve it here"),
         "open_with_other_apps":
             MessageLookupByLibrary.simpleMessage("Open with other apps"),
         "orientation_auto": MessageLookupByLibrary.simpleMessage("자동"),
@@ -193,6 +217,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error": MessageLookupByLibrary.simpleMessage("페이지 범위 오류"),
         "passwd": MessageLookupByLibrary.simpleMessage("비밀번호"),
         "paused": MessageLookupByLibrary.simpleMessage("Paused"),
+        "phash_check":
+            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("비밀번호를 입력하여 주세요."),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("사용자 이름을 입력하여 주세요."),
@@ -212,7 +238,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),
+        "reply_to_comment": MessageLookupByLibrary.simpleMessage("Reply"),
         "resample_image": MessageLookupByLibrary.simpleMessage("Resample"),
+        "reset_cost": MessageLookupByLibrary.simpleMessage("Reset Cost"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("오른쪽에서 왼쪽으로"),
@@ -242,7 +270,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Expunged 갤러리 표시"),
         "s_and": MessageLookupByLibrary.simpleMessage("그리고"),
         "s_pages": MessageLookupByLibrary.simpleMessage("페이지"),
-        "s_stars": m1,
+        "s_stars": m2,
         "save_into_album": MessageLookupByLibrary.simpleMessage("앨범에 저장"),
         "saved_successfully": MessageLookupByLibrary.simpleMessage("저장 완료"),
         "screen_orientation": MessageLookupByLibrary.simpleMessage("화면 방향"),
@@ -258,11 +286,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("사이트에서 설정하기"),
         "share": MessageLookupByLibrary.simpleMessage("공유"),
         "share_image": MessageLookupByLibrary.simpleMessage("이미지 공유"),
+        "show_comment_avatar":
+            MessageLookupByLibrary.simpleMessage("Show comment avatar"),
         "show_filter": MessageLookupByLibrary.simpleMessage("필터 표시"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("일본어 제목 표시"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("페이지 간격 표시"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
+        "sync_group": MessageLookupByLibrary.simpleMessage("Sync group"),
         "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
+        "sync_quick_search":
+            MessageLookupByLibrary.simpleMessage("Sync quick search"),
         "sync_read_progress":
             MessageLookupByLibrary.simpleMessage("Sync read progress"),
         "system_share": MessageLookupByLibrary.simpleMessage("시스템 공유"),
@@ -279,7 +312,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_watched": MessageLookupByLibrary.simpleMessage("Watched"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("탭바 설정"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
-        "tagNamespace": m2,
+        "tagNamespace": m3,
         "tag_add_to_mytag":
             MessageLookupByLibrary.simpleMessage("Add to mytags"),
         "tag_dialog_Default_color":
@@ -502,6 +535,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploader": MessageLookupByLibrary.simpleMessage("업로더"),
         "user_login": MessageLookupByLibrary.simpleMessage("로그인"),
         "user_name": MessageLookupByLibrary.simpleMessage("사용자 이름"),
+        "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("진동 피드백"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("비추천 성공"),

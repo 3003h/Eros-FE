@@ -21,44 +21,52 @@ class GalleryCacheController extends GetxController {
   // final thrSync = Throttling(duration: const Duration(seconds: 10));
   final debSync = Debouncing(duration: const Duration(seconds: 5));
 
-  Future<GalleryCache?> getGalleryCache(String gid, {bool sync = true}) async {
+  Stream<GalleryCache?> listenGalleryCache(
+    String gid, {
+    bool sync = true,
+  }) async* {
     final _localCache = gStore.getCache(gid);
 
     if (!gCacheMap.containsKey(gid) && _localCache != null) {
-      logger.v('get from store');
+      logger.d('get from store');
       gCacheMap[gid] = _localCache;
     }
 
-    if (!sync || !webdavController.syncReadProgress) {
-      return gCacheMap[gid];
-    } else {
+    yield gCacheMap[gid];
+
+    if (sync && webdavController.syncReadProgress) {
       try {
         final remotelist = await webdavController.getRemotReadList();
         logger.v('remotelist $remotelist');
         if (remotelist.contains(gid)) {
           final remote = await webdavController.downloadRead(gid);
-          logger.d('remote ${remote?.toJson()}');
+          logger.v('远程 ${remote?.toJson()}');
           if (_localCache == null && remote != null) {
-            logger.d('local null');
+            logger.v('local null');
             gCacheMap[gid] = GalleryCache(lastIndex: remote.lastIndex);
+            yield gCacheMap[gid];
           } else if (_localCache != null && remote != null) {
-            logger.d('both not null');
+            logger.v('both not null');
             if ((remote.time ?? 0) > (_localCache.time ?? 0)) {
               gCacheMap[gid] = _localCache.copyWith(
                   lastIndex: remote.lastIndex, time: remote.time);
+              yield gCacheMap[gid];
             }
           }
         }
       } catch (e) {
-        return gCacheMap[gid];
+        logger.e('$e');
       }
     }
-    return gCacheMap[gid];
   }
 
-  Future<void> setIndex(String gid, int index,
-      {bool saveToStore = false}) async {
-    final GalleryCache? _ori = await getGalleryCache(gid, sync: false);
+  Future<void> setIndex(
+    String gid,
+    int index, {
+    bool saveToStore = false,
+  }) async {
+    final GalleryCache? _ori = await listenGalleryCache(gid, sync: false).first;
+    // logger.d('_ori ${_ori?.toJson()}');
     final _time = DateTime.now().millisecondsSinceEpoch;
     if (_ori == null) {
       final _newCache = GalleryCache(gid: gid, lastIndex: index, time: _time);
@@ -90,7 +98,7 @@ class GalleryCacheController extends GetxController {
   }
 
   Future<void> setColumnMode(String gid, ViewColumnMode columnMode) async {
-    final GalleryCache? _ori = await getGalleryCache(gid, sync: false);
+    final GalleryCache? _ori = await listenGalleryCache(gid, sync: false).first;
     if (_ori == null) {
       gCacheMap[gid] = GalleryCache(gid: gid).copyWithMode(columnMode);
       gStore.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));

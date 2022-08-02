@@ -63,21 +63,25 @@ class ArchiverController extends GetxController
     required String dltype,
     required String dlcheck,
   }) async {
-    final String _url = await postArchiverLocalDownload(
-      _archiverLink,
-      dltype: dltype,
-      dlcheck: dlcheck,
-    );
     Get.back();
-    logger.d('archiver downloadLoacal $_url');
-    _downloadController.downloadArchiverFile(
-      gid: _pageState.galleryProvider?.gid ?? '0',
-      title: _pageState.title,
-      dlType: dltype,
-      url: _url,
-      imgUrl: _pageState.galleryProvider?.imgUrl,
-      galleryUrl: _pageState.galleryProvider?.url,
-    );
+    try {
+      final String _url = await postArchiverLocalDownload(
+        _archiverLink,
+        dltype: dltype,
+        dlcheck: dlcheck,
+      );
+      logger.d('archiver downloadLoacal $_url');
+      _downloadController.downloadArchiverFile(
+        gid: _pageState.galleryProvider?.gid ?? '0',
+        title: _pageState.title,
+        dlType: dltype,
+        url: _url,
+        imgUrl: _pageState.galleryProvider?.imgUrl,
+        galleryUrl: _pageState.galleryProvider?.url,
+      );
+    } catch (e) {
+      showToast('$e');
+    }
   }
 }
 

@@ -16,6 +16,8 @@ class EHRoutes {
   static const String securitySetting = '/setting/securitySetting';
   static const String readSeting = '/setting/readSetting';
   static const String about = '/setting/about';
+  static const String avatarSetting = '/setting/avatarSetting';
+  static const String license = '/setting/about/license';
 
   static const String quickSearch = '/quickSearch';
   static const String customHosts = '/customHosts';
@@ -25,6 +27,9 @@ class EHRoutes {
   static const String myTags = '/myTags';
   static const String userTags = '/userTags';
   static const String tagTranslat = '/tagTranslat';
+
+  static const String imageHide = '/imageHide';
+  static const String mangaHidedImage = '/imageHide/mangaHidedImage';
 
   static const String login = '/login';
   static const String webLogin = '/webLogin';

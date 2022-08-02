@@ -163,17 +163,6 @@ class GalleryItemFlowLarge extends StatelessWidget {
             Hero(
               tag: '${galleryProvider.gid}_cover_$tabTag',
               child: Container(
-                decoration: BoxDecoration(
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: CupertinoDynamicColor.resolve(
-                    //             CupertinoColors.systemGrey5, Get.context!)
-                    //         .withOpacity(1.0),
-                    //     blurRadius: 8,
-                    //     offset: const Offset(0, 4),
-                    //   ),
-                    // ],
-                    ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(kRadius),
@@ -198,9 +187,6 @@ class GalleryItemFlowLarge extends StatelessWidget {
                           color: _colorCategory.withOpacity(0.8),
                         ),
                       ),
-                      // Positioned(
-                      //     bottom: 4, right: 4, child: _buildFavcatIcon()),
-                      // Positioned(bottom: 4, left: 4, child: _buildRating()),
                       Positioned(
                         bottom: 4,
                         right: 4,

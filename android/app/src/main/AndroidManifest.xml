@@ -33,39 +33,15 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                        android:scheme="https"
-                        android:host="e-hentai.org"
-                        android:pathPrefix="/g/"/>
-                <data
-                        android:scheme="https"
-                        android:host="exhentai.org"
-                        android:pathPrefix="/g/"/>
-                <data
-                        android:scheme="https"
-                        android:host="e-hentai.org"
-                        android:pathPrefix="/s/"/>
-                <data
-                        android:scheme="https"
-                        android:host="exhentai.org"
-                        android:pathPrefix="/s/"/>
-                <data
-                        android:scheme="https"
-                        android:host="e-hentai.org"
-                        android:pathPrefix="/tag/"/>
-                <data
-                        android:scheme="https"
-                        android:host="exhentai.org"
-                        android:pathPrefix="/tag/"/>
-                <data
-                        android:scheme="https"
-                        android:host="e-hentai.org"
-                        android:pathPrefix="/uploader/"/>
-                <data
-                        android:scheme="https"
-                        android:host="exhentai.org"
-                        android:pathPrefix="/uploader/"/>
-
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="exhentai.org" />
+                <data android:host="e-hentai.org" />
+                <data android:pathPrefix="/g/" />
+                <data android:pathPrefix="/s/" />
+                <data android:pathPrefix="/uploader/" />
+                <data android:pathPrefix="/tag/" />
+                <data android:pathPrefix="/" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
@@ -119,9 +95,9 @@
     </application>
 
     <!-- 访问电话状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:ignore="ManifestOrder"/>
+<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:ignore="ManifestOrder"/>-->
     <!-- 允许全部网络访问 -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" tools:ignore="ManifestOrder"/>
     <!-- 获取网络信息状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!-- 获取当前WiFi接入的状态以及WLAN热点的信息 -->
