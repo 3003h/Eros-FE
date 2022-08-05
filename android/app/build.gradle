@@ -56,7 +56,7 @@ android {
 //        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        archivesBaseName = "feh-by-flutter2-v$versionName+$versionCode"
+        archivesBaseName = "feh_v${versionName}+${versionCode}_flutter2"
     }
     signingConfigs {
         debug {
