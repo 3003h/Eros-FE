@@ -197,7 +197,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                                           ),
                                         ]))
                                     .toList()
-                                : [LinkTabItem(title: 'Empty')],
+                                : [LinkTabItem(title: '+++')],
                             initIndex: controller.index,
                             onItemChange: (index) => controller.pageController
                                 .animateToPage(index,

@@ -72,7 +72,7 @@ packages:
       name: basic_utils
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.4.3"
+    version: "4.5.2"
   bitsdojo_window:
     dependency: "direct main"
     description:
@@ -676,7 +676,7 @@ packages:
       name: flutter_smart_dialog
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.5.3+7"
+    version: "4.5.3+8"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -812,7 +812,7 @@ packages:
       name: http
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.13.4"
+    version: "0.13.5"
   http_client_helper:
     dependency: transitive
     description:
@@ -889,7 +889,7 @@ packages:
       name: image_picker_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.6.0"
+    version: "2.6.1"
   intl:
     dependency: "direct main"
     description:
@@ -1008,14 +1008,14 @@ packages:
       name: local_auth
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   local_auth_android:
     dependency: transitive
     description:
       name: local_auth_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.8"
+    version: "1.0.9"
   local_auth_ios:
     dependency: transitive
     description:
@@ -1911,7 +1911,7 @@ packages:
       name: worker_manager
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.4.5"
+    version: "4.4.6"
   xdg_directories:
     dependency: transitive
     description:
