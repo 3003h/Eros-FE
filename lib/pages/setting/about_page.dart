@@ -81,18 +81,25 @@ class ListViewAbout extends StatelessWidget {
             TextItem(
               'Github',
               desc: 'https://github.com/honjow/FEhViewer',
-              onTap: () =>
-                  launchUrlString('https://github.com/honjow/FEhViewer'),
+              onTap: () => launchUrlString(
+                'https://github.com/honjow/FEhViewer',
+                mode: LaunchMode.externalApplication,
+              ),
             ),
           TextItem(
             'Telegram',
-            onTap: () =>
-                launchUrlString('https://t.me/joinchat/AEj27KMQe0JiMmUx'),
+            onTap: () => launchUrlString(
+              'https://t.me/joinchat/AEj27KMQe0JiMmUx',
+              mode: LaunchMode.externalApplication,
+            ),
           ),
           TextItem(
             'Telegram Channel',
             desc: 'https://t.me/fehviewer',
-            onTap: () => launchUrlString('https://t.me/fehviewer'),
+            onTap: () => launchUrlString(
+              'https://t.me/fehviewer',
+              mode: LaunchMode.externalApplication,
+            ),
           ),
           TextItem(
             L10n.of(context).license,
@@ -130,7 +137,10 @@ class ListViewAbout extends StatelessWidget {
                                 ],
                               ),
                               onPressed: () {
-                                launchUrlString('https://afdian.net/@honjow');
+                                launchUrlString(
+                                  'https://afdian.net/@honjow',
+                                  mode: LaunchMode.externalApplication,
+                                );
                               }),
                           CupertinoButton(
                             child: Column(
@@ -147,7 +157,9 @@ class ListViewAbout extends StatelessWidget {
                             ),
                             onPressed: () {
                               launchUrlString(
-                                  'https://dun.mianbaoduo.com/@honjow');
+                                'https://dun.mianbaoduo.com/@honjow',
+                                mode: LaunchMode.externalApplication,
+                              );
                             },
                           ),
                         ],

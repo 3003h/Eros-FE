@@ -296,7 +296,10 @@ class _TagDialogViewState extends State<TagDialogView> {
           url: _realUrl,
         );
       } else {
-        await launchUrlString(_openUrl);
+        await launchUrlString(
+          _openUrl,
+          mode: LaunchMode.externalApplication,
+        );
       }
     } else {
       throw 'Could not launch $_openUrl';
