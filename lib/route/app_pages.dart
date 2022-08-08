@@ -180,7 +180,6 @@ class AppPages {
       // page: () => const GalleryListTab(),
       page: () => const CustomTabbarList(),
     ),
-
     GetPage(
       name: EHRoutes.galleryViewExt,
       page: () => const ViewPage(),
@@ -189,17 +188,14 @@ class AppPages {
       }),
       // opaque: kDebugMode,
       opaque: false,
-      showCupertinoParallax: false,
+      // showCupertinoParallax: false,
     ),
-
-    // 使用命名路由跳转 EHRoutes.galleryPage
     GetPage(
       name: EHRoutes.galleryPage,
       // page: () => GalleryMainPage(),
       page: () => GallerySliverPage(),
       preventDuplicates: false,
     ),
-
     GetPage(
       name: EHRoutes.search,
       page: () => const GallerySearchPage(),
@@ -207,7 +203,6 @@ class AppPages {
       // page: () => const EmptyPage(),
       preventDuplicates: false,
     ),
-
     GetPage(
       name: EHRoutes.quickSearch,
       page: () => QuickSearchListPage(),

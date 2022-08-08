@@ -82,10 +82,10 @@ class ViewExtController extends GetxController {
   late PageController pageController;
   late ExtendedPageController extendedPageController;
 
-  GalleryPageController get _galleryPageController =>
+  GalleryPageController? get _galleryPageController =>
       vState.galleryPageController;
 
-  GalleryPageState get _galleryPageStat => vState.pageState;
+  GalleryPageState? get _galleryPageStat => vState.pageState;
 
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
@@ -197,7 +197,7 @@ class ViewExtController extends GetxController {
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          _galleryPageController.uptImageBySer(
+          _galleryPageController?.uptImageBySer(
               ser: event.ser, imageCallback: (image) => event);
         }
       });
@@ -219,14 +219,13 @@ class ViewExtController extends GetxController {
 
   @override
   void onClose() {
-    super.onClose();
     cancelAutoRead();
     autoNextTimer?.cancel();
     autoNextTimer = null;
 
     vState.speedTimer?.cancel();
     Get.find<GalleryCacheController>().saveAll();
-    vState.saveLastIndex(saveToStore: true);
+    // vState.saveLastIndex(saveToStore: true);
     pageController.dispose();
     extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();
@@ -238,6 +237,8 @@ class ViewExtController extends GetxController {
     OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
 
     vState.asyncInputStreamMap.values.map((e) => e.close());
+
+    super.onClose();
   }
 
   Future<void> initArchiveFuture(int ser, {AsyncArchiveFile? asyncFile}) async {
@@ -307,13 +308,13 @@ class ViewExtController extends GetxController {
       // logger.v('页码切换时的回调 预载图片');
       GalleryPara.instance
           .ehPrecacheImages(
-        imageMap: _galleryPageStat.imageMap,
+        imageMap: _galleryPageStat?.imageMap,
         itemSer: vState.currentItemIndex,
         max: _ehConfigService.preloadImage.value,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          _galleryPageController.uptImageBySer(
+          _galleryPageController?.uptImageBySer(
               ser: event.ser, imageCallback: (val) => event);
         }
       });
@@ -378,7 +379,7 @@ class ViewExtController extends GetxController {
     update([idShowThumbListIcon, idViewBottomBar, idThumbnailListView]);
   }
 
-  final Map<int, Future<void>> _mapFetchGalleryPriviewPage = {};
+  final Map<int, Future<void>?> _mapFetchGalleryPriviewPage = {};
 
   /// 拉取图片信息
   Future<GalleryImage?> fetchThumb(
@@ -386,17 +387,17 @@ class ViewExtController extends GetxController {
     bool refresh = false,
     bool changeSource = false,
   }) async {
-    final GalleryImage? tImage = _galleryPageStat.imageMap[itemSer];
+    final GalleryImage? tImage = _galleryPageStat?.imageMap[itemSer];
     if (tImage == null) {
       logger.d('fetchThumb ser:$itemSer 所在页尚未获取， 开始获取');
       _mapFetchGalleryPriviewPage.putIfAbsent(
-          itemSer, () => _galleryPageController.loadImagesForSer(itemSer));
+          itemSer, () => _galleryPageController?.loadImagesForSer(itemSer));
 
       // 直接获取需要的ser所在页
       await _mapFetchGalleryPriviewPage[itemSer];
     }
 
-    final GalleryImage? image = _galleryPageStat.imageMap[itemSer];
+    final GalleryImage? image = _galleryPageStat?.imageMap[itemSer];
 
     return image;
   }
@@ -411,8 +412,8 @@ class ViewExtController extends GetxController {
     }
 
     if (reLoadDB) {
-      vState.imageTasks = (await vState.imageTaskDao
-              ?.findAllTaskByGid(int.parse(_galleryPageStat.gid))) ??
+      vState.imageTasks = (await vState.imageTaskDao?.findAllTaskByGid(
+              int.tryParse(_galleryPageStat?.gid ?? '') ?? 0)) ??
           [];
     }
 
@@ -445,7 +446,8 @@ class ViewExtController extends GetxController {
     // 首先检查下载记录中是否有记录
     vState.imageTaskDao ??= Get.find<DownloadController>().imageTaskDao;
     vState.galleryTaskDao ??= Get.find<DownloadController>().galleryTaskDao;
-    vState.dirPath ??= await _getTaskDirPath(int.parse(_galleryPageStat.gid));
+    vState.dirPath ??=
+        await _getTaskDirPath(int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
 
     late GalleryImage? image;
 
@@ -459,28 +461,28 @@ class ViewExtController extends GetxController {
 
     // 请求页面 解析为 [GalleryImage]
     if (image == null) {
-      final tImage = _galleryPageStat.imageMap[itemSer];
+      final tImage = _galleryPageStat?.imageMap[itemSer];
       if (tImage == null) {
         logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
 
         // 直接获取所在页数据
-        await _galleryPageController.loadImagesForSer(itemSer);
+        await _galleryPageController?.loadImagesForSer(itemSer);
       }
 
       GalleryPara.instance
           .ehPrecacheImages(
-        imageMap: _galleryPageStat.imageMap,
+        imageMap: _galleryPageStat?.imageMap,
         itemSer: itemSer,
         max: _ehConfigService.preloadImage.value,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
-          _galleryPageController.uptImageBySer(
+          _galleryPageController?.uptImageBySer(
               ser: event.ser, imageCallback: (val) => val = event);
         }
       });
 
-      image = await _galleryPageController.fetchAndParserImageInfo(
+      image = await _galleryPageController?.fetchAndParserImageInfo(
         itemSer,
         cancelToken: vState.getMoreCancelToken,
         changeSource: changeSource,
@@ -500,7 +502,7 @@ class ViewExtController extends GetxController {
       final task = archiverTaskMap.values
           .sorted((t1, t2) => (t1.type ?? '').compareTo(t2.type ?? ''))
           .where((element) =>
-              element.gid == _galleryPageStat.gid &&
+              element.gid == _galleryPageStat?.gid &&
               element.status == DownloadTaskStatus.complete.value)
           .toList()
           .firstOrNull;
@@ -527,12 +529,12 @@ class ViewExtController extends GetxController {
         await getArchiveFile(vState.gid, asyncArchive.files[itemSer - 1]);
 
     return GalleryImage(
-        ser: itemSer, gid: _galleryPageStat.gid, tempPath: file.path);
+        ser: itemSer, gid: _galleryPageStat?.gid, tempPath: file.path);
   }
 
   /// 重载图片数据，重构部件
   Future<void> reloadImage(int itemSer, {bool changeSource = true}) async {
-    final GalleryImage? _currentImage = _galleryPageStat.imageMap[itemSer];
+    final GalleryImage? _currentImage = _galleryPageStat?.imageMap[itemSer];
     // 清除CachedNetworkImage的缓存
     try {
       // CachedNetworkImage 清除指定缓存
@@ -545,7 +547,7 @@ class ViewExtController extends GetxController {
     if (_currentImage == null) {
       return;
     }
-    _galleryPageController.uptImageBySer(
+    _galleryPageController?.uptImageBySer(
       ser: itemSer,
       imageCallback: (image) => image.copyWith(
         imageUrl: '',
@@ -758,7 +760,7 @@ class ViewExtController extends GetxController {
   void tapShare(BuildContext context) {
     if (vState.loadFrom == LoadFrom.gallery) {
       logger.d('share networkFile ${vState.currentItemIndex + 1}');
-      final GalleryImage? p = vState.imageMap[vState.currentItemIndex + 1];
+      final GalleryImage? p = vState.imageMap?[vState.currentItemIndex + 1];
       logger.d('p:\n${p?.toJson()}');
       showShareActionSheet(
         context,
@@ -1191,7 +1193,7 @@ class ViewExtController extends GetxController {
           final process = count / total;
           // loggerSimple.d('ViewTemp download file, $ser $process');
           // _galleryPageController.uptImageProcess(ser, process);
-          _galleryPageController.uptImageBySer(
+          _galleryPageController?.uptImageBySer(
               ser: ser,
               imageCallback: (image) {
                 return image.copyWith(downloadProcess: process);
@@ -1199,7 +1201,7 @@ class ViewExtController extends GetxController {
           update(['${idProcess}_$ser']);
         },
         onDownloadComplete: () {
-          _galleryPageController.uptImageBySer(
+          _galleryPageController?.uptImageBySer(
               ser: ser,
               imageCallback: (image) => image.copyWith(
                     tempPath: savePath,

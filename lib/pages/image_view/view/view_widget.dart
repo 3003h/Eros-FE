@@ -541,9 +541,9 @@ class _ImageWithHideState extends State<ImageWithHide> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data ?? false) {
-              final GalleryImage? _tmpImage = vState.imageMap[widget.ser];
+              final GalleryImage? _tmpImage = vState.imageMap?[widget.ser];
               if (_tmpImage != null) {
-                vState.galleryPageController.uptImageBySer(
+                vState.galleryPageController?.uptImageBySer(
                   ser: widget.ser,
                   imageCallback: (image) => image.copyWith(hide: true),
                 );
@@ -1003,8 +1003,11 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
 class ThumbnailListView extends GetView<ViewExtController> {
   const ThumbnailListView({Key? key}) : super(key: key);
 
-  GalleryPageController get galleryPageController =>
+  GalleryPageController? get galleryPageController =>
       controller.vState.galleryPageController;
+
+  static const kBorderWidth = 2.0;
+  static const kRadius = 4.0;
 
   @override
   Widget build(BuildContext context) {
@@ -1067,14 +1070,18 @@ class ThumbnailListView extends GetView<ViewExtController> {
                                 alignment: Alignment.center,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: CupertinoColors.systemGrey6,
-                                      width: isCurrent ? 2 : 0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(6),
+                                    border: isCurrent
+                                        ? Border.all(
+                                            color: CupertinoColors.systemTeal,
+                                            width: kBorderWidth,
+                                          )
+                                        : null,
+                                    borderRadius: BorderRadius.circular(
+                                        kRadius + kBorderWidth),
                                   ),
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius:
+                                        BorderRadius.circular(kRadius),
                                     child: Container(
                                       child: MouseRegionClick(child: thumb),
                                     ),
