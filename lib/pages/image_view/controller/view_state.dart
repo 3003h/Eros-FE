@@ -66,12 +66,12 @@ class ViewExtState {
   late final String? gid;
 
   /// 当前的index
-  int _currentItemIndex = 0;
+  final _currentItemIndex = 0.obs;
 
-  int get currentItemIndex => _currentItemIndex;
+  int get currentItemIndex => _currentItemIndex.value;
 
   set currentItemIndex(int val) {
-    _currentItemIndex = val;
+    _currentItemIndex.value = val;
 
     // 防抖
     vDebounce(() => saveLastIndex(),
