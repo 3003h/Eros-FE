@@ -170,6 +170,7 @@ class CustomSubListController extends TabViewController {
 
   @override
   Future<void> loadFromPage(int page, {bool previous = false}) async {
+    logger.v('loadFromPage $page');
     await super.loadFromPage(page);
     canLoadMore = false;
     pageState = PageState.Loading;
@@ -201,8 +202,16 @@ class CustomSubListController extends TabViewController {
 
       if (rult != null) {
         if (previous) {
-          state?.insertAll(0, rult.gallerys ?? []);
-          change(state, status: RxStatus.success());
+          final allIn = rult.gallerys
+              ?.map((e) => e.gid)
+              .every((gid) => state?.map((e) => e.gid).contains(gid) ?? false);
+          if (allIn ?? false) {
+            logger.v('${rult.gallerys?.length}  $prevPage');
+            await loadPrevious();
+          } else {
+            state?.insertAll(0, rult.gallerys ?? []);
+            change(state, status: RxStatus.success());
+          }
         } else {
           change(rult.gallerys, status: RxStatus.success());
         }
