@@ -146,7 +146,10 @@ class TorrentItem extends StatelessWidget {
                         '${EHConst.EH_TORRENT_URL}/$token/${torrent.hash}.torrent';
                     logger.d('${torrent.name}\n${torrent.hash}\ntorrentUrl');
                     if (await canLaunchUrlString(torrentUrl)) {
-                      await launchUrlString(torrentUrl);
+                      await launchUrlString(
+                        torrentUrl,
+                        mode: LaunchMode.externalApplication,
+                      );
                     } else {
                       throw 'Could not launch $torrentUrl';
                     }
