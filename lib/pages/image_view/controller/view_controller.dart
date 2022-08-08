@@ -49,7 +49,8 @@ const double kTopBarHeight = 44.0;
 const double kTopBarButtonHeight = 44.0;
 
 // 缩略图栏高度
-const double kThumbListViewHeight = 120.0;
+const double kThumbListViewHeight = 140.0;
+const double kThumbImageWidth = kThumbListViewHeight / 2 - 10;
 
 const String idViewTopBar = 'ViewTopBar';
 const String idViewBottomBar = 'ViewBottomBar';
