@@ -72,7 +72,7 @@ packages:
       name: basic_utils
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.5.0"
+    version: "4.5.2"
   bitsdojo_window:
     dependency: "direct main"
     description:
@@ -289,14 +289,14 @@ packages:
       name: copy_with_extension
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.2"
+    version: "4.0.3"
   copy_with_extension_gen:
     dependency: "direct dev"
     description:
       name: copy_with_extension_gen
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.2"
+    version: "4.0.3"
   cross_file:
     dependency: transitive
     description:
@@ -814,7 +814,7 @@ packages:
       name: http
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.13.4"
+    version: "0.13.5"
   http_client_helper:
     dependency: transitive
     description:
@@ -870,7 +870,7 @@ packages:
       name: image_picker_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.8.5+1"
+    version: "0.8.5+2"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -891,7 +891,7 @@ packages:
       name: image_picker_platform_interface
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.6.0"
+    version: "2.6.1"
   intl:
     dependency: "direct main"
     description:
@@ -1010,21 +1010,21 @@ packages:
       name: local_auth
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.2"
   local_auth_android:
     dependency: transitive
     description:
       name: local_auth_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.8"
+    version: "1.0.11"
   local_auth_ios:
     dependency: transitive
     description:
       name: local_auth_ios
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.7"
+    version: "1.0.9"
   local_auth_platform_interface:
     dependency: transitive
     description:
@@ -1038,7 +1038,7 @@ packages:
       name: local_auth_windows
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.3"
   logger:
     dependency: "direct main"
     description:
@@ -1780,7 +1780,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.12"
+    version: "2.0.13"
   url_launcher_windows:
     dependency: transitive
     description:

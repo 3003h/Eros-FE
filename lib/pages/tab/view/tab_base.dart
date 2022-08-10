@@ -513,7 +513,7 @@ Widget buildGallerySliverListSimpleView(
           if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
             // 加载完成最后一项的回调
             SchedulerBinding.instance
-                .addPostFrameCallback((_) => lastComplete?.call());
+                ?.addPostFrameCallback((_) => lastComplete?.call());
           }
         }
 
