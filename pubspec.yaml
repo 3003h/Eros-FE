@@ -123,7 +123,7 @@ dependencies:
   open_file: ^3.2.1
   flustars: ^2.0.1
   dio_smart_retry: ^1.0.3
-  flutter_smart_dialog: ^4.1.0+2
+  flutter_smart_dialog: ^4.5.4
   system_proxy: ^0.1.0
   sqflite_common_ffi: ^2.1.0
   easy_animated_tabbar: ^0.0.1

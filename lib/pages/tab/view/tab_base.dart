@@ -417,6 +417,11 @@ Widget buildGallerySliverListView(
           fenix: true,
         );
 
+        // return GalleryItemWidget(
+        //   galleryProvider: _provider,
+        //   tabTag: tabTag,
+        // );
+
         return FrameSeparateWidget(
           index: index,
           placeHolder: const GalleryItemPlaceHolder(),

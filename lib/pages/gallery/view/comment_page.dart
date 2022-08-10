@@ -31,7 +31,6 @@ class CommentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 评论列表
-
     Widget commentListView = Obx(() {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: kPadding),
@@ -184,7 +183,7 @@ class CommentPage extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(8, 8, 0, 8),
                             child: CupertinoTextField(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 14.0, vertical: 6.0),
+                                  horizontal: 18.0, vertical: 8.0),
                               maxLines: null,
                               keyboardType: TextInputType.multiline,
                               decoration: BoxDecoration(
@@ -195,7 +194,10 @@ class CommentPage extends StatelessWidget {
                               controller: controller.commentTextController,
                               focusNode: controller.focusNode,
                               placeholder: L10n.of(context).new_comment,
-                              style: const TextStyle(fontSize: 16),
+                              strutStyle: const StrutStyle(height: 1.25),
+                              // placeholderStyle: const TextStyle(fontSize: 16),
+                              style:
+                                  const TextStyle(fontSize: 16, height: 1.25),
                             ),
                           ),
                         ),
@@ -222,12 +224,12 @@ class CommentPage extends StatelessWidget {
                                     ? Icon(
                                         FontAwesomeIcons.solidCircleCheck,
                                         key: UniqueKey(),
-                                        size: 32,
+                                        size: 34,
                                       )
                                     : Icon(
                                         FontAwesomeIcons.circleArrowUp,
                                         key: UniqueKey(),
-                                        size: 32,
+                                        size: 34,
                                       ),
                               ),
                             ),
