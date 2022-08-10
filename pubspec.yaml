@@ -3,7 +3,7 @@ description: fehviewer
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.58+418
+version: 1.2.59+419
 
 environment:
   sdk: '>=2.13.0 <3.0.0'
