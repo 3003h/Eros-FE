@@ -55,11 +55,14 @@ class GalleryPara {
 
   /// 一个很傻的预载功能 需要优化
   Stream<GalleryImage?> ehPrecacheImages({
-    required Map<int, GalleryImage> imageMap,
+    required Map<int, GalleryImage>? imageMap,
     required int itemSer,
     required int max,
   }) async* {
-    // logger.d('当前index $index');
+    if (imageMap == null) {
+      return;
+    }
+
     for (int add = 1; add < max + 1; add++) {
       final int _ser = itemSer + add;
 

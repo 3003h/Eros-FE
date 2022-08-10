@@ -135,6 +135,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: widget.items[i].actinos!
                           .map((e) => GestureDetector(
                                 onTap: () {

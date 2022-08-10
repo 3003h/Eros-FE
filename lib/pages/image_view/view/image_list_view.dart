@@ -73,7 +73,7 @@ class ImageListView extends GetView<ViewExtController> {
               double? _height = () {
                 // 从已下载进入阅读的情况 imageMap 会未初始化
                 try {
-                  if (vState.imageMap[itemSer]?.hide ?? false) {
+                  if (vState.imageMap?[itemSer]?.hide ?? false) {
                     return 150.0;
                   }
                 } catch (_) {}
@@ -86,12 +86,12 @@ class ImageListView extends GetView<ViewExtController> {
 
                 // 不存在则根据大图进行计算
                 try {
-                  final _curImage = vState.imageMap[itemSer];
+                  final _curImage = vState.imageMap?[itemSer];
                   return _curImage!.imageHeight! *
                       (context.width / _curImage.imageWidth!);
                 } on Exception catch (_) {
                   // 根据缩略图进行计算
-                  final _curImage = vState.imageMap[itemSer];
+                  final _curImage = vState.imageMap?[itemSer];
                   return _curImage!.thumbHeight! *
                       (context.width / _curImage.thumbWidth!);
                 } catch (e) {
@@ -140,11 +140,11 @@ class ImageListView extends GetView<ViewExtController> {
                 final vState = logic.vState;
                 double? _height = () {
                   try {
-                    final _curImage = vState.imageMap[itemSer];
+                    final _curImage = vState.imageMap?[itemSer];
                     return _curImage!.imageHeight! *
                         (context.width / _curImage.imageWidth!);
                   } on Exception catch (_) {
-                    final _curImage = vState.imageMap[itemSer];
+                    final _curImage = vState.imageMap?[itemSer];
                     return _curImage!.thumbHeight! *
                         (context.width / _curImage.thumbWidth!);
                   } catch (e) {

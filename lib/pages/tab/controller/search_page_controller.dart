@@ -19,6 +19,7 @@ import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../fetch_list.dart';
 import 'default_tabview_controller.dart';
@@ -183,7 +184,7 @@ class SearchPageController extends DefaultTabViewController {
       listType = ListType.tag;
 
       // url 直接打开
-      if (await canLaunch(searchText)) {
+      if (await canLaunchUrlString(searchText)) {
         if (regGalleryUrl.hasMatch(searchText) ||
             regGalleryPageUrl.hasMatch(searchText)) {
           _jumpToUrl = regGalleryUrl.firstMatch(searchText)?.group(0) ??

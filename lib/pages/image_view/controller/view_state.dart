@@ -36,8 +36,9 @@ class ViewExtState {
           }
           break;
         case LoadFrom.gallery:
-          galleryPageController = Get.find(tag: pageCtrlTag);
-          gid = galleryPageController.gState.gid;
+          galleryPageController =
+              Get.find<GalleryPageController>(tag: pageCtrlTag);
+          gid = galleryPageController?.gState.gid;
           break;
         case LoadFrom.archiver:
           logger.d('LoadFrom.archiver');
@@ -49,29 +50,29 @@ class ViewExtState {
     }
   }
 
-  late final GalleryPageController galleryPageController;
+  GalleryPageController? galleryPageController;
 
-  GalleryPageState get pageState => galleryPageController.gState;
+  GalleryPageState? get pageState => galleryPageController?.gState;
 
   final EhConfigService ehConfigService = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
 
   final CancelToken getMoreCancelToken = CancelToken();
 
-  Map<int, GalleryImage> get imageMap => pageState.imageMap;
-  RxList<GalleryImage> get images => pageState.images;
+  Map<int, GalleryImage>? get imageMap => pageState?.imageMap;
+  RxList<GalleryImage>? get images => pageState?.images;
 
   LoadFrom loadFrom = LoadFrom.gallery;
 
   late final String? gid;
 
   /// 当前的index
-  int _currentItemIndex = 0;
+  final _currentItemIndex = 0.obs;
 
-  int get currentItemIndex => _currentItemIndex;
+  int get currentItemIndex => _currentItemIndex.value;
 
   set currentItemIndex(int val) {
-    _currentItemIndex = val;
+    _currentItemIndex.value = val;
 
     // 防抖
     vDebounce(() => saveLastIndex(),
@@ -83,11 +84,14 @@ class ViewExtState {
   }
 
   void saveLastIndex({bool saveToStore = false}) {
+    if (pageState == null) {
+      return;
+    }
     if (loadFrom == LoadFrom.gallery) {
-      if (pageState.galleryProvider?.gid != null && conditionItemIndex) {
-        pageState.lastIndex = currentItemIndex;
+      if (pageState?.galleryProvider?.gid != null && conditionItemIndex) {
+        pageState!.lastIndex = currentItemIndex;
         _galleryCacheController.setIndex(
-            pageState.galleryProvider?.gid ?? '0', currentItemIndex,
+            pageState!.galleryProvider?.gid ?? '0', currentItemIndex,
             saveToStore: saveToStore);
       }
     } else {
@@ -143,7 +147,7 @@ class ViewExtState {
     if (loadFrom == LoadFrom.download) {
       return imagePathList.length;
     } else if (loadFrom == LoadFrom.gallery) {
-      return int.parse(pageState.galleryProvider?.filecount ?? '0');
+      return int.parse(pageState?.galleryProvider?.filecount ?? '0');
     } else {
       return asyncArchiveFiles.length;
     }
