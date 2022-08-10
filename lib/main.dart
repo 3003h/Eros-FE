@@ -25,6 +25,7 @@ import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'firebase_options.dart';
 import 'get_init.dart';
 
 Future<void> main() async {
@@ -210,8 +211,8 @@ Future<void> _initializeFlutterFire() async {
     return;
   }
   final firebaseApp = await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   analytics = FirebaseAnalytics.instanceFor(app: firebaseApp);
   firestore = FirebaseFirestore.instance;
