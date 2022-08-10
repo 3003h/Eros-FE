@@ -55,7 +55,8 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    Get.delete<ViewExtController>();
+    // Get.delete<ViewExtController>();
+    400.milliseconds.delay(() => Get.delete<ViewExtController>());
   }
 
   @override
@@ -208,10 +209,10 @@ class DoublePageView extends GetView<ViewExtController> {
 
     double? _flexStart = () {
       try {
-        final _curImage = vState.imageMap[serStart];
+        final _curImage = vState.imageMap?[serStart];
         return _curImage!.imageWidth! / _curImage.imageHeight!;
       } on Exception catch (_) {
-        final _curImage = vState.imageMap[serStart];
+        final _curImage = vState.imageMap?[serStart];
         return _curImage!.thumbWidth! / _curImage.thumbHeight!;
       } catch (e) {
         return 1.0;
@@ -223,10 +224,10 @@ class DoublePageView extends GetView<ViewExtController> {
         return 0.0;
       }
       try {
-        final _curImage = vState.imageMap[serStart + 1];
+        final _curImage = vState.imageMap?[serStart + 1];
         return _curImage!.imageWidth! / _curImage.imageHeight!;
       } on Exception catch (_) {
-        final _curImage = vState.imageMap[serStart + 1];
+        final _curImage = vState.imageMap?[serStart + 1];
         return _curImage!.thumbWidth! / _curImage.thumbHeight!;
       } catch (e) {
         return 1.0;

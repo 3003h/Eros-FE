@@ -317,11 +317,26 @@ class DefaultTabViewController extends TabViewController {
 
   final TabHomeController _tabHomeController = Get.find();
 
-  bool get enablePopupMenu =>
-      _tabHomeController.tabMap.entries
-          .toList()
-          .indexWhere((MapEntry<String, bool> element) => !element.value) >
-      -1;
+  //
+  // bool get enablePopupMenu =>
+  //     _tabHomeController.tabMap.entries
+  //         .toList()
+  //         .indexWhere((MapEntry<String, bool> element) => !element.value) >
+  //     -1;
+
+  int get hidenTagCount => _tabHomeController.tabMap.entries
+      .where((MapEntry<String, bool> element) => !element.value)
+      .length;
+
+  // 至少收起两个的时候 使用PopupMenu
+  bool get enablePopupMenu => hidenTagCount >= 2;
+
+  bool get enableSingle => hidenTagCount == 1;
+
+  String get singleTabFlag => _tabHomeController.tabMap.entries
+      .where((MapEntry<String, bool> element) => !element.value)
+      .first
+      .key;
 
   final CustomPopupMenuController customPopupMenuController =
       CustomPopupMenuController();
@@ -382,6 +397,26 @@ class DefaultTabViewController extends TabViewController {
     );
   }
 
+  Widget buildLeadingSingle(BuildContext context) {
+    if (!enableSingle) {
+      return const SizedBox.shrink();
+    }
+
+    final tabFlag = singleTabFlag;
+
+    return CupertinoButton(
+        child: Icon(
+          tabPages.iconDatas[tabFlag],
+          size: 20,
+        ),
+        onPressed: () {
+          Get.toNamed(
+            tabFlag,
+            id: isLayoutLarge ? 1 : null,
+          );
+        });
+  }
+
   Widget buildLeadingCustomPopupMenu(BuildContext context) {
     return CupertinoTheme(
       data: ehTheme.themeData!,
@@ -418,11 +453,22 @@ class DefaultTabViewController extends TabViewController {
     );
   }
 
-  Widget? getLeading(BuildContext context) => Navigator.of(context).canPop()
-      ? null
-      : enablePopupMenu && (!Get.find<EhConfigService>().isSafeMode.value)
-          ? buildLeadingCustomPopupMenu(Get.context!)
-          : const SizedBox();
+  Widget? getLeading(BuildContext context) {
+    return Obx(() {
+      if (Navigator.of(context).canPop()) {
+        return const SizedBox.shrink();
+      }
+
+      if (enablePopupMenu && (!Get.find<EhConfigService>().isSafeMode.value)) {
+        return buildLeadingCustomPopupMenu(context);
+      }
+
+      if (enableSingle) {
+        return buildLeadingSingle(context);
+      }
+      return const SizedBox.shrink();
+    });
+  }
 
   void initStateForListPage({
     required BuildContext context,

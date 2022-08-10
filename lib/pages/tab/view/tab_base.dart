@@ -394,7 +394,6 @@ Widget buildGallerySliverListView(
   logger.v('buildGallerySliverListView');
 
   return FlutterSliverList(
-    key: centerKey,
     delegate: FlutterListViewDelegate(
       (context, index) {
         if (galleryProviders.length - 1 < index) {
@@ -418,9 +417,18 @@ Widget buildGallerySliverListView(
           fenix: true,
         );
 
-        return GalleryItemWidget(
-          galleryProvider: _provider,
-          tabTag: tabTag,
+        // return GalleryItemWidget(
+        //   galleryProvider: _provider,
+        //   tabTag: tabTag,
+        // );
+
+        return FrameSeparateWidget(
+          index: index,
+          placeHolder: const GalleryItemPlaceHolder(),
+          child: GalleryItemWidget(
+            galleryProvider: _provider,
+            tabTag: tabTag,
+          ),
         );
       },
       onItemKey: (index) => galleryProviders[index].gid ?? '',
@@ -465,9 +473,6 @@ Widget buildAnimatedGallerySliverListSimpleView(
               galleryProvider: Get.find(tag: _provider.gid)),
           tag: _provider.gid,
           fenix: true);
-      // if (index < 5) {
-      //   return const GalleryItemSimplePlaceHolder();
-      // }
       return FrameSeparateWidget(
         placeHolder: const GalleryItemSimplePlaceHolder(),
         child: buildGallerySliverListItem(
@@ -481,6 +486,59 @@ Widget buildAnimatedGallerySliverListSimpleView(
         ),
       );
     },
+  );
+}
+
+Widget buildGallerySliverListSimpleView(
+  List<GalleryProvider> galleryProviders,
+  dynamic tabTag, {
+  int? maxPage,
+  int curPage = 0,
+  VoidCallback? lastComplete,
+  Key? key,
+  Key? centerKey,
+  int? lastTopitemIndex,
+  bool keepPosition = false,
+}) {
+  logger.v('buildGallerySliverListSimpleView');
+
+  return FlutterSliverList(
+    delegate: FlutterListViewDelegate(
+      (context, index) {
+        if (galleryProviders.length - 1 < index) {
+          return const SizedBox.shrink();
+        }
+
+        if (maxPage != null) {
+          if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+            // 加载完成最后一项的回调
+            SchedulerBinding.instance
+                .addPostFrameCallback((_) => lastComplete?.call());
+          }
+        }
+
+        final GalleryProvider _provider = galleryProviders[index];
+        Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+        Get.lazyReplace(
+          () => GalleryItemController(
+              galleryProvider: Get.find(tag: _provider.gid)),
+          tag: _provider.gid,
+          fenix: true,
+        );
+
+        return FrameSeparateWidget(
+          index: index,
+          placeHolder: const GalleryItemSimplePlaceHolder(),
+          child: GalleryItemSimpleWidget(
+            galleryProvider: _provider,
+            tabTag: tabTag,
+          ),
+        );
+      },
+      onItemKey: (index) => galleryProviders[index].gid ?? '',
+      childCount: galleryProviders.length,
+      keepPosition: true,
+    ),
   );
 }
 
@@ -510,16 +568,6 @@ Widget getGallerySliverList(
 
     switch (mod) {
       case ListModeEnum.list:
-        // return buildAnimatedGallerySliverListView(
-        //   galleryProviders ?? [],
-        //   tabTag,
-        //   maxPage: maxPage,
-        //   curPage: curPage ?? 0,
-        //   lastComplete: lastComplete,
-        //   key: _key,
-        //   centerKey: centerKey,
-        //   lastTopitemIndex: lastTopitemIndex,
-        // );
         return buildGallerySliverListView(
           galleryProviders ?? [],
           tabTag,
@@ -555,7 +603,17 @@ Widget getGallerySliverList(
           lastTopitemIndex: lastTopitemIndex,
         );
       case ListModeEnum.simpleList:
-        return buildAnimatedGallerySliverListSimpleView(
+        // return buildAnimatedGallerySliverListSimpleView(
+        //   galleryProviders ?? [],
+        //   tabTag,
+        //   maxPage: maxPage,
+        //   curPage: curPage ?? 0,
+        //   lastComplete: lastComplete,
+        //   key: _key,
+        //   centerKey: centerKey,
+        //   lastTopitemIndex: lastTopitemIndex,
+        // );
+        return buildGallerySliverListSimpleView(
           galleryProviders ?? [],
           tabTag,
           maxPage: maxPage,
@@ -564,6 +622,7 @@ Widget getGallerySliverList(
           key: _key,
           centerKey: centerKey,
           lastTopitemIndex: lastTopitemIndex,
+          keepPosition: keepPosition,
         );
       case ListModeEnum.grid:
         return buildGridView(

@@ -391,7 +391,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               logger.v('long press');
               vibrateUtil.medium();
               final GalleryImage? _currentImage =
-                  vState.pageState.imageMap[widget.imageSer];
+                  vState.pageState?.imageMap[widget.imageSer];
               showImageSheet(
                   context,
                   () => controller.reloadImage(widget.imageSer,
@@ -399,7 +399,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   imageUrl: _currentImage?.imageUrl ?? '',
                   filePath: _currentImage?.filePath,
                   origImageUrl: _currentImage?.originImageUrl,
-                  title: '${vState.pageState.title} [${widget.imageSer}]');
+                  title: '${vState.pageState?.title} [${widget.imageSer}]');
             },
             child: _buildViewImageWidgetProvider(),
           );
@@ -407,7 +407,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   }
 
   Widget _buildViewImageWidget() {
-    final GalleryImage? _image = vState.pageState.imageMap[widget.imageSer];
+    final GalleryImage? _image = vState.pageState?.imageMap[widget.imageSer];
     logger.v('_image ${_image?.toJson()}');
 
     if (_image?.hide ?? false) {
@@ -480,7 +480,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   }
 
   Widget _buildViewImageWidgetProvider() {
-    final GalleryImage? _image = vState.pageState.imageMap[widget.imageSer];
+    final GalleryImage? _image = vState.pageState?.imageMap[widget.imageSer];
     logger.v('_image ${_image?.toJson()}');
 
     if (_image?.hide ?? false) {
@@ -516,9 +516,9 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               controller.setScale100(imageInfo!, context.mediaQuerySize);
 
               if (_image != null) {
-                final GalleryImage? _tmpImage = vState.imageMap[_image.ser];
+                final GalleryImage? _tmpImage = vState.imageMap?[_image.ser];
                 if (_tmpImage != null && !(_tmpImage.completeHeight ?? false)) {
-                  vState.galleryPageController.uptImageBySer(
+                  vState.galleryPageController?.uptImageBySer(
                     ser: _image.ser,
                     imageCallback: (image) =>
                         image.copyWith(completeHeight: true),
@@ -641,7 +641,10 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     return GetBuilder<ViewExtController>(
       id: '${idProcess}_${widget.imageSer}',
       builder: (controller) {
-        final _image = controller.vState.imageMap[widget.imageSer]!;
+        final _image = controller.vState.imageMap?[widget.imageSer];
+        if (_image == null) {
+          return const SizedBox.shrink();
+        }
 
         if (_image.errorInfo?.isNotEmpty ?? false) {
           return ViewError(
