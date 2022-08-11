@@ -127,7 +127,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       CupertinoThemeData? theme,
       Locale? locale,
     }) {
-      logger.d('isLayoutLarge $isLayoutLarge');
       return GetCupertinoApp(
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
@@ -136,8 +135,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           //   FirebaseAnalyticsObserver(analytics: analytics),
           // SentryNavigatorObserver(),
           // FlutterSmartDialog.observer,
-          // if (!isLayoutLarge) MainNavigatorObserver(),
-          // MainNavigatorObserver(),
+          MainNavigatorObserver(),
         ],
         builder: FlutterSmartDialog.init(
           styleBuilder: (child) => child,
