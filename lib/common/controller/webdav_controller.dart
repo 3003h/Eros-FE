@@ -36,7 +36,7 @@ const String kAESKey = 'fehviewer is very good!!';
 const String kAESIV = '0000000000000000';
 
 class WebdavController extends GetxController {
-  late webdav.Client? client;
+  webdav.Client? client;
 
   WebdavProfile get webdavProfile =>
       Global.profile.webdav ?? const WebdavProfile(url: '');
