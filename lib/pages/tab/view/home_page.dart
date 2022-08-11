@@ -17,7 +17,7 @@ class HomePage extends GetView<TabHomeController> {
     final EhConfigService _ehConfigService = Get.find();
 
     final WillPopScope willPopScope = WillPopScope(
-      onWillPop: controller.doubleClickBack,
+      onWillPop: controller.onWillPop,
       child: Obx(
         () {
           final tabletLayout = _ehConfigService.tabletLayout;
