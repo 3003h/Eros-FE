@@ -42,8 +42,10 @@ import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../../../route/first_observer.dart';
 import 'empty.dart';
 import 'home_page_small.dart';
 
@@ -84,9 +86,11 @@ class TabHomeLarge extends GetView<TabHomeController> {
           child: ClipRect(
             child: Navigator(
                 key: Get.nestedKey(1),
-                observers: mainNavigatorObserver.navigator != null
-                    ? []
-                    : [mainNavigatorObserver],
+                observers: [
+                  FirstNavigatorObserver(),
+                  if (mainNavigatorObserver.navigator != null)
+                    mainNavigatorObserver
+                ],
                 onGenerateRoute: (settings) {
                   final GetPage? _route = AppPages.routes
                       .firstWhereOrNull((GetPage e) => e.name == settings.name);
@@ -122,6 +126,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                     child: Navigator(
                       key: Get.nestedKey(2),
                       observers: [SecondNavigatorObserver()],
+                      // observers: [MainNavigatorObserver()],
                       initialRoute: EHRoutes.empty,
                       onGenerateRoute: (settings) {
                         switch (settings.name) {

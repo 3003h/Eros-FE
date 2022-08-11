@@ -454,11 +454,11 @@ class DefaultTabViewController extends TabViewController {
   }
 
   Widget? getLeading(BuildContext context) {
-    return Obx(() {
-      if (Navigator.of(context).canPop()) {
-        return const SizedBox.shrink();
-      }
+    if (Navigator.of(context).canPop()) {
+      return null;
+    }
 
+    return Obx(() {
       if (enablePopupMenu && (!Get.find<EhConfigService>().isSafeMode.value)) {
         return buildLeadingCustomPopupMenu(context);
       }

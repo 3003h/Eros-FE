@@ -21,6 +21,7 @@ import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'common/service/layout_service.dart';
 import 'get_init.dart';
 
 Future<void> main() async {
@@ -126,6 +127,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       CupertinoThemeData? theme,
       Locale? locale,
     }) {
+      logger.d('isLayoutLarge $isLayoutLarge');
       return GetCupertinoApp(
         debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
@@ -134,7 +136,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           //   FirebaseAnalyticsObserver(analytics: analytics),
           // SentryNavigatorObserver(),
           // FlutterSmartDialog.observer,
-          MainNavigatorObserver(),
+          // if (!isLayoutLarge) MainNavigatorObserver(),
+          // MainNavigatorObserver(),
         ],
         builder: FlutterSmartDialog.init(
           styleBuilder: (child) => child,
