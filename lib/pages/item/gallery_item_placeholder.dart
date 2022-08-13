@@ -33,7 +33,7 @@ class GalleryItemPlaceHolder extends StatelessWidget {
         color: ehTheme.itemBackgroundColor,
       ),
       padding: const EdgeInsets.only(right: kPaddingHorizontal),
-      margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+      margin: const EdgeInsets.fromLTRB(10, 8, 10, 4),
       child: IntrinsicHeight(
         child: Row(
           children: <Widget>[

@@ -172,7 +172,7 @@ class EhConfigService extends ProfileService {
   TabletLayout get tabletLayoutType => _tabletLayoutType.value;
   set tabletLayoutType(TabletLayout val) => _tabletLayoutType.value = val;
 
-  final _showCommentAvatar = true.obs;
+  final _showCommentAvatar = false.obs;
   bool get showCommentAvatar => _showCommentAvatar.value;
   set showCommentAvatar(bool val) => _showCommentAvatar.value = val;
 

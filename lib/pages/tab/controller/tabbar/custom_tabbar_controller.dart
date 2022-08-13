@@ -15,7 +15,7 @@ import '../default_tabview_controller.dart';
 import 'custom_sublist_controller.dart';
 
 final CustomProfile profileChinese = CustomProfile(
-    uuid: generateUuidv4(), name: '📕汉语', searchText: ['l:chinese']);
+    uuid: generateUuidv4(), name: '汉语', searchText: const ['l:chinese']);
 
 /// 控制所有自定义列表
 class CustomTabbarController extends DefaultTabViewController {
@@ -85,18 +85,22 @@ class CustomTabbarController extends DefaultTabViewController {
     profiles.value = customTabConfig?.profiles ??
         [
           CustomProfile(
-                  name: '🔥${L10n.of(Get.context!).tab_popular}',
+                  name: L10n.of(Get.context!).tab_popular,
                   uuid: generateUuidv4())
               .copyWithListType(GalleryListType.popular),
           CustomProfile(
-                  name: '🏠${L10n.of(Get.context!).tab_gallery}',
+                  name: L10n.of(Get.context!).tab_gallery,
                   uuid: generateUuidv4())
               .copyWithListType(GalleryListType.gallery),
           CustomProfile(
-                  name: '📮${L10n.of(Get.context!).tab_watched}',
+                  name: L10n.of(Get.context!).tab_watched,
                   uuid: generateUuidv4())
               .copyWithListType(GalleryListType.watched),
           if (Get.find<LocaleService>().isLanguageCodeZh) profileChinese,
+          CustomProfile(
+              uuid: generateUuidv4(),
+              name: 'Anthology',
+              searchText: const ['o:anthology'])
         ];
 
     ever<List<CustomProfile>>(profiles, (value) {
