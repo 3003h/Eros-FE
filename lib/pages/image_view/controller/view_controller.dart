@@ -225,7 +225,7 @@ class ViewExtController extends GetxController {
 
     vState.speedTimer?.cancel();
     Get.find<GalleryCacheController>().saveAll();
-    // vState.saveLastIndex(saveToStore: true);
+    vState.saveLastIndex(saveToStore: true);
     pageController.dispose();
     extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();

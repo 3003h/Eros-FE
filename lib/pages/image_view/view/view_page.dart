@@ -56,7 +56,7 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     // Get.delete<ViewExtController>();
-    400.milliseconds.delay(() => Get.delete<ViewExtController>());
+    // 400.milliseconds.delay(() => Get.delete<ViewExtController>());
   }
 
   @override
