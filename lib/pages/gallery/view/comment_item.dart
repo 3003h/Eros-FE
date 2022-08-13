@@ -279,7 +279,7 @@ class CommentItem extends StatelessWidget {
                   ),
                   constraints: const BoxConstraints(minWidth: 18),
                   height: 18,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 7),
                   margin:
                       const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                   child: Center(
@@ -338,7 +338,7 @@ class CommentItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               // 翻译
-              if (Get.find<EhConfigService>().commentTrans.value)
+              if (Get.find<EhConfigService>().commentTrans.value && !simple)
                 CupertinoTheme(
                   data: ehTheme.themeData!,
                   child: TranslateButton(
