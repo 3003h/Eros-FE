@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -59,6 +61,9 @@ class GalleryItemController extends GetxController {
     favCat = galleryProvider.favcat ?? '';
     logger.v('favCat=$favCat');
   }
+
+  int get tagLine =>
+      max(1, (galleryProvider.simpleTags?.length ?? 0) / 4).round();
 
   /// 设置收藏夹
   void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
