@@ -261,60 +261,191 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
         },
       ),
       middle: Obx(
-        () => pageState.hideNavigationBtn
-            ? const SizedBox()
-            : GetBuilder<GalleryPageController>(
-                id: GetIds.PAGE_VIEW_HEADER,
-                tag: pageCtrlTag,
-                builder: (logic) {
-                  return NavigationBarImage(
-                    imageUrl: logic.gState.galleryProvider?.imgUrl ?? '',
-                    scrollController: logic.scrollController,
-                  );
-                },
-              ),
+        () {
+          Widget coverOpacity = AnimatedOpacity(
+            opacity: pageState.hideNavigationBtn ? 0.0 : 1.0,
+            duration: 300.milliseconds,
+            child: GetBuilder<GalleryPageController>(
+              id: GetIds.PAGE_VIEW_HEADER,
+              tag: pageCtrlTag,
+              builder: (logic) {
+                return NavigationBarImage(
+                  imageUrl: logic.gState.galleryProvider?.imgUrl ?? '',
+                  scrollController: logic.scrollController,
+                );
+              },
+            ),
+            curve: Curves.ease,
+          );
+
+          return coverOpacity;
+        },
       ),
-      trailing: Obx(() => pageState.hideNavigationBtn
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  child: const MouseRegionClick(
-                    // child: Icon(
-                    //   FontAwesomeIcons.tags,
-                    //   size: 22,
-                    // ),
-                    child: Icon(CupertinoIcons.tags, size: 24),
-                  ),
-                  onPressed: () {
-                    _controller.addTag();
-                  },
-                ),
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 38,
-                  child: const MouseRegionClick(
-                    // child: Icon(
-                    //   FontAwesomeIcons.share,
-                    //   size: 22,
-                    // ),
-                    child: Icon(CupertinoIcons.share, size: 26),
-                  ),
-                  onPressed: () {
-                    if (provider == null) {
-                      return;
-                    }
-                    final String _url =
-                        '${Api.getBaseUrl()}/g/${provider.gid}/${provider.token}';
-                    logger.d('share $_url');
-                    Share.share(_url);
-                  },
-                ),
-              ],
-            )
-          : ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4)),
+      trailing: Obx(() {
+        Widget readButtonOpacity = AnimatedOpacity(
+          opacity: pageState.hideNavigationBtn ? 0.0 : 1.0,
+          duration: 300.milliseconds,
+          child: ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4),
+          curve: Curves.ease,
+        );
+
+        Widget buttons = Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              minSize: 40,
+              child: const MouseRegionClick(
+                child: Icon(CupertinoIcons.tags, size: 24),
+              ),
+              onPressed: () {
+                _controller.addTag();
+              },
+            ),
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              minSize: 38,
+              child: const MouseRegionClick(
+                child: Icon(CupertinoIcons.share, size: 26),
+              ),
+              onPressed: () {
+                if (provider == null) {
+                  return;
+                }
+                final String _url =
+                    '${Api.getBaseUrl()}/g/${provider.gid}/${provider.token}';
+                logger.d('share $_url');
+                Share.share(_url);
+              },
+            ),
+          ],
+        );
+
+        Widget trailingFade = AnimatedCrossFade(
+          firstChild: buttons,
+          secondChild: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4),
+            ],
+          ),
+          crossFadeState: pageState.hideNavigationBtn
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          duration: 300.milliseconds,
+        );
+
+        Widget gt = GalleryTrailing(
+          firstChild: buttons,
+          secondChild: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4),
+            ],
+          ),
+          crossFadeState: pageState.hideNavigationBtn
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          duration: 300.milliseconds,
+        );
+
+        return gt;
+      }),
+    );
+  }
+}
+
+class GalleryTrailing extends StatefulWidget {
+  const GalleryTrailing({
+    Key? key,
+    required this.firstChild,
+    required this.secondChild,
+    required this.crossFadeState,
+    required this.duration,
+    this.curve = Curves.linear,
+  }) : super(key: key);
+
+  final Widget firstChild;
+
+  final Widget secondChild;
+
+  final CrossFadeState crossFadeState;
+
+  final Duration duration;
+
+  final Curve curve;
+
+  @override
+  State<GalleryTrailing> createState() => _GalleryTrailingState();
+}
+
+class _GalleryTrailingState extends State<GalleryTrailing>
+    with SingleTickerProviderStateMixin {
+  late Animation<double> animation;
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: widget.duration,
+      vsync: this,
+    );
+    if (widget.crossFadeState == CrossFadeState.showSecond) {
+      _controller.value = 1.0;
+    }
+
+    animation = _controller.drive(CurveTween(curve: widget.curve));
+
+    _controller.addStatusListener((AnimationStatus status) {
+      setState(() {
+        // Trigger a rebuild because it depends on _isTransitioning, which
+        // changes its value together with animation status.
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(GalleryTrailing oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.crossFadeState != oldWidget.crossFadeState) {
+      switch (widget.crossFadeState) {
+        case CrossFadeState.showFirst:
+          _controller.reverse();
+          break;
+        case CrossFadeState.showSecond:
+          _controller.forward();
+          break;
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (BuildContext context, Widget? child) {
+        return Stack(
+          alignment: Alignment.centerRight,
+          children: [
+            FadeTransition(
+              opacity: animation,
+              child: widget.secondChild,
+            ),
+            FadeTransition(
+              opacity: animation.drive(Tween<double>(begin: 1.0, end: 0.0)),
+              child: widget.firstChild,
+            ),
+          ],
+        );
+      },
     );
   }
 }
