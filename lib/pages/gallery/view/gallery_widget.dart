@@ -174,8 +174,8 @@ class GalleryTitle extends StatelessWidget {
         style: const TextStyle(
           textBaseline: TextBaseline.alphabetic,
           // height: 1.2,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontSize: 17,
+          fontWeight: FontWeight.w700,
         ),
         strutStyle: const StrutStyle(
           height: 1.2,
@@ -705,19 +705,22 @@ class NavigationBarImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double _statusBarHeight = MediaQuery.of(Get.context!).padding.top;
+
+    Widget cover = imageUrl == null || (imageUrl?.isEmpty ?? true)
+        ? const SizedBox.expand()
+        : Container(
+            child: CoveTinyImage(
+              imgUrl: imageUrl!,
+              statusBarHeight: _statusBarHeight,
+            ),
+          );
+
     return GestureDetector(
       onTap: () {
         scrollController?.animateTo(0,
             duration: const Duration(milliseconds: 500), curve: Curves.ease);
       },
-      child: imageUrl == null || (imageUrl?.isEmpty ?? true)
-          ? const SizedBox.expand()
-          : Container(
-              child: CoveTinyImage(
-                imgUrl: imageUrl!,
-                statusBarHeight: _statusBarHeight,
-              ),
-            ),
+      child: cover,
     );
   }
 }

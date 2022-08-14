@@ -199,7 +199,7 @@ class CommentItem extends StatelessWidget {
             },
           ),
         // 点赞
-        if (galleryComment.canVote ?? false)
+        if ((galleryComment.canVote ?? false) && !simple)
           CupertinoButton(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             minSize: 0,
@@ -217,7 +217,7 @@ class CommentItem extends StatelessWidget {
             },
           ),
         // 点踩
-        if (galleryComment.canVote ?? false)
+        if ((galleryComment.canVote ?? false) && !simple)
           CupertinoButton(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             minSize: 0,
@@ -234,7 +234,7 @@ class CommentItem extends StatelessWidget {
               commentController.commitVoteDown(galleryComment.id!);
             },
           ),
-        if (showRepty)
+        if (showRepty && !simple)
           CupertinoButton(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             minSize: 0,
@@ -263,25 +263,7 @@ class CommentItem extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(child: _buildUserWidget()),
-        CupertinoTheme(
-          data: const CupertinoThemeData(primaryColor: ThemeColors.commitText),
-          child: Row(
-            children: <Widget>[
-              // 翻译
-              if (Get.find<EhConfigService>().commentTrans.value)
-                CupertinoTheme(
-                  data: ehTheme.themeData!,
-                  child: TranslateButton(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    galleryComment: galleryComment,
-                    commentController: commentController,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        if (galleryComment.id != '0')
+        if (galleryComment.id != '0' && !simple)
           GestureDetector(
             onTap: () => _showScoreDeatil(galleryComment.scoreDetails, context),
             child: Row(
@@ -297,9 +279,9 @@ class CommentItem extends StatelessWidget {
                   ),
                   constraints: const BoxConstraints(minWidth: 18),
                   height: 18,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 7),
                   margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                   child: Center(
                     child: Text(
                       galleryComment.score.startsWith('+')
@@ -320,6 +302,55 @@ class CommentItem extends StatelessWidget {
               ],
             ),
           )
+        else if (galleryComment.id == '0')
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          //   child: Icon(
+          //     FontAwesomeIcons.userNinja,
+          //     size: 15,
+          //     color: ehTheme.commitIconColor,
+          //   ),
+          // ),
+          Container(
+            decoration: BoxDecoration(
+              color: ehTheme.commitIconColor,
+              borderRadius: BorderRadius.circular(9),
+            ),
+            constraints: const BoxConstraints(minWidth: 18),
+            height: 18,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Center(
+              child: Text(
+                'UP',
+                style: TextStyle(
+                  fontSize: 10,
+                  height: 1.3,
+                  fontWeight: FontWeight.w600,
+                  // color: ehTheme.commitIconColor,
+                  color: ehTheme.commentBackgroundColor,
+                ),
+              ),
+            ),
+          ),
+        CupertinoTheme(
+          data: const CupertinoThemeData(primaryColor: ThemeColors.commitText),
+          child: Row(
+            children: <Widget>[
+              // 翻译
+              if (Get.find<EhConfigService>().commentTrans.value && !simple)
+                CupertinoTheme(
+                  data: ehTheme.themeData!,
+                  child: TranslateButton(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    galleryComment: galleryComment,
+                    commentController: commentController,
+                  ),
+                ),
+            ],
+          ),
+        ),
       ],
     );
   }

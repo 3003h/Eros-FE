@@ -97,7 +97,7 @@ class GalleryItemWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(kCardRadius),
           ),
           padding: const EdgeInsets.only(right: kPaddingHorizontal),
-          margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
+          margin: const EdgeInsets.fromLTRB(10, 8, 10, 4),
           child: IntrinsicHeight(
             child: Row(
               children: <Widget>[
@@ -144,7 +144,7 @@ class GalleryItemWidget extends StatelessWidget {
                         if (_ehConfigService.fixedHeightOfListItems)
                           TagWaterfallFlowViewBox(
                             simpleTags: galleryProvider.simpleTags,
-                            crossAxisCount: 3,
+                            crossAxisCount: itemController.tagLine,
                           )
                         else
                           TagBox(
@@ -372,9 +372,11 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maxLine = 5 - galleryItemController.tagLine;
+
     return Obx(() => Text(
           galleryItemController.title,
-          maxLines: _ehConfigService.fixedHeightOfListItems ? 2 : 4,
+          maxLines: _ehConfigService.fixedHeightOfListItems ? maxLine : 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: const TextStyle(
