@@ -447,36 +447,7 @@ class _ChapterGridViewState extends State<ChapterGridView> {
       childAspectRatio: 3,
     );
 
-    final _sgp = sliverGridDelegateWithMaxToCount(
-      context.width -
-          context.mediaQueryPadding.left -
-          context.mediaQueryPadding.right -
-          2 * kPadding,
-      _gridDelegateWithMaxCrossAxisExtent,
-    );
-
-    final gridDelegate = _sgp.gridDelegate;
-    final _crossAxisCount = gridDelegate.crossAxisCount;
-
-    Widget _full = getChapter(gridDelegate);
-    final limit = (widget.maxLine ?? 0) * _crossAxisCount;
-
-    if (limit > _chapter.length) {
-      logger.d('full _chapter');
-      return _full;
-    }
-
-    Widget _limit = getChapter(gridDelegate, limit: limit);
-
-    Widget _animate = AnimatedCrossFade(
-      firstChild: _limit,
-      secondChild: _full,
-      crossFadeState:
-          showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      duration: const Duration(milliseconds: 300),
-      firstCurve: Curves.ease,
-      secondCurve: Curves.ease,
-    );
+    // logger.d('context.width ${context.width}');
 
     Widget _icon = AnimatedCrossFade(
       firstChild: const Icon(CupertinoIcons.chevron_down),
@@ -486,22 +457,56 @@ class _ChapterGridViewState extends State<ChapterGridView> {
       duration: const Duration(milliseconds: 300),
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _animate,
-        CupertinoButton(
-          minSize: 0,
-          padding: const EdgeInsets.all(0),
-          child: Center(child: _icon),
-          onPressed: () {
-            setState(() {
-              showFull = !showFull;
-            });
-          },
-        ),
-      ],
-    );
+    return LayoutBuilder(builder: (context, c) {
+      final _sgp = sliverGridDelegateWithMaxToCount(
+        c.maxWidth -
+            context.mediaQueryPadding.left -
+            context.mediaQueryPadding.right -
+            2 * kPadding,
+        _gridDelegateWithMaxCrossAxisExtent,
+      );
+
+      final gridDelegate = _sgp.gridDelegate;
+      final _crossAxisCount = gridDelegate.crossAxisCount;
+
+      Widget _full = getChapter(gridDelegate);
+      final limit = (widget.maxLine ?? 0) * _crossAxisCount;
+
+      if (limit > _chapter.length) {
+        logger.d('full _chapter');
+        return _full;
+      }
+
+      Widget _limit = getChapter(gridDelegate, limit: limit);
+
+      Widget _animate = AnimatedCrossFade(
+        firstChild: _limit,
+        secondChild: _full,
+        crossFadeState:
+            showFull ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+        duration: const Duration(milliseconds: 300),
+        firstCurve: Curves.ease,
+        secondCurve: Curves.ease,
+        sizeCurve: Curves.ease,
+      );
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _animate,
+          CupertinoButton(
+            minSize: 0,
+            padding: const EdgeInsets.all(0),
+            child: Center(child: _icon),
+            onPressed: () {
+              setState(() {
+                showFull = !showFull;
+              });
+            },
+          ),
+        ],
+      );
+    });
   }
 
   Widget getChapter(SliverGridDelegate gridDelegate, {int? limit}) {
