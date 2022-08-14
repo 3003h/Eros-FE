@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -16,6 +18,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
+import '../../../common/service/layout_service.dart';
+import '../../../route/first_observer.dart';
+import '../../../route/main_observer.dart';
+import '../../../route/second_observer.dart';
 import '../comm.dart';
 import '../view/setting_page.dart';
 
@@ -286,5 +292,35 @@ class TabHomeController extends GetxController {
       return false;
     }
     return true;
+  }
+
+  Future<bool> onWillPop() async {
+    if (!isLayoutLarge) {
+      return await doubleClickBack();
+    }
+
+    logger.v(
+        'history first ${FirstNavigatorObserver().history.map((e) => e.settings.name).join(', ')} ');
+
+    logger.v(
+        'history second ${SecondNavigatorObserver().history.map((e) => e.settings.name).join(', ')} ');
+
+    logger.v(
+        '${FirstNavigatorObserver().history.length} ${SecondNavigatorObserver().history.length} ');
+
+    final history = SecondNavigatorObserver().history;
+    final prevSecondRoute = history[max(0, history.length - 2)].settings.name;
+    logger.v('prevSecondRoute $prevSecondRoute');
+
+    if (SecondNavigatorObserver().history.length > 1 &&
+        prevSecondRoute != EHRoutes.root) {
+      Get.back(id: 2);
+      return false;
+    } else if (FirstNavigatorObserver().history.length > 1) {
+      Get.back(id: 1);
+      return false;
+    } else {
+      return await doubleClickBack();
+    }
   }
 }

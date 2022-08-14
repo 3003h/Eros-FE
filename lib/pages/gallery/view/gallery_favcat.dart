@@ -21,8 +21,19 @@ class GalleryFavButton extends StatelessWidget {
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
       return MouseRegionClick(
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Container(
+              height: 14,
+              padding: const EdgeInsets.only(right: 4),
+              child: Text(
+                _favController.isFav ? _favController.favTitle : '',
+                style: const TextStyle(
+                  fontSize: 11,
+                ),
+              ),
+            ),
             if (_favController.isFav)
               Icon(
                 FontAwesomeIcons.solidHeart,
@@ -33,35 +44,26 @@ class GalleryFavButton extends StatelessWidget {
                 FontAwesomeIcons.heart,
                 color: CupertinoColors.systemGrey,
               ),
-            Container(
-              height: 14,
-              child: Text(
-                _favController.isFav
-                    ? _favController.favTitle
-                    : L10n.of(context).notFav,
-                style: const TextStyle(
-                  fontSize: 11,
-                ),
-              ),
-            ),
           ],
         ),
       );
     });
 
-    final Widget _loadIcon = Column(
+    final Widget _loadIcon = Row(
       children: <Widget>[
-        const CupertinoActivityIndicator(
-          radius: 10.0,
-        ),
         Container(
           height: 14,
+          padding: const EdgeInsets.only(right: 4),
           child: Text(
-            L10n.of(context).processing,
+            // L10n.of(context).processing,
+            '',
             style: const TextStyle(
               fontSize: 11,
             ),
           ),
+        ),
+        const CupertinoActivityIndicator(
+          radius: 10.0,
         ),
       ],
     );

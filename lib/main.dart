@@ -25,6 +25,7 @@ import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'common/service/layout_service.dart';
 import 'firebase_options.dart';
 import 'get_init.dart';
 

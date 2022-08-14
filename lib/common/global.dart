@@ -1,6 +1,5 @@
 import 'dart:io';
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
@@ -16,7 +15,6 @@ import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/http_override.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

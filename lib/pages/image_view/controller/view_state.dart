@@ -48,6 +48,10 @@ class ViewExtState {
 
       currentItemIndex = vr.index;
     }
+
+    ever(_currentItemIndex, (val) => saveLastIndex());
+    debounce(_currentItemIndex, (callback) => saveLastIndex(saveToStore: true),
+        time: 3.seconds);
   }
 
   GalleryPageController? galleryPageController;
@@ -68,27 +72,16 @@ class ViewExtState {
 
   /// 当前的index
   final _currentItemIndex = 0.obs;
-
   int get currentItemIndex => _currentItemIndex.value;
-
   set currentItemIndex(int val) {
     _currentItemIndex.value = val;
-
-    // 防抖
-    vDebounce(() => saveLastIndex(),
-        duration: const Duration(milliseconds: 500));
-    vDebounce(
-      () => saveLastIndex(saveToStore: true),
-      duration: const Duration(seconds: 5),
-    );
   }
 
   void saveLastIndex({bool saveToStore = false}) {
-    if (pageState == null) {
-      return;
-    }
     if (loadFrom == LoadFrom.gallery) {
-      if (pageState?.galleryProvider?.gid != null && conditionItemIndex) {
+      if (pageState != null &&
+          pageState?.galleryProvider?.gid != null &&
+          conditionItemIndex) {
         pageState!.lastIndex = currentItemIndex;
         _galleryCacheController.setIndex(
             pageState!.galleryProvider?.gid ?? '0', currentItemIndex,
