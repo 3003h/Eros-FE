@@ -42,7 +42,6 @@ import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../../route/first_observer.dart';
@@ -88,7 +87,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                 key: Get.nestedKey(1),
                 observers: [
                   FirstNavigatorObserver(),
-                  if (mainNavigatorObserver.navigator != null)
+                  if (mainNavigatorObserver.navigator == null)
                     mainNavigatorObserver
                 ],
                 onGenerateRoute: (settings) {
