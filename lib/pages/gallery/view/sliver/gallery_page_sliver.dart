@@ -162,11 +162,18 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
 
             // 最上面的部分评论 小标题
             SliverToBoxAdapter(
-              child: Row(
-                children: [
-                  MiniTitle(title: L10n.of(context).gallery_comments),
-                  const Spacer(),
-                ],
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Get.toNamed(
+                  EHRoutes.galleryComment,
+                  id: isLayoutLarge ? 2 : null,
+                ),
+                child: Row(
+                  children: [
+                    MiniTitle(title: L10n.of(context).gallery_comments),
+                    const Spacer(),
+                  ],
+                ),
               ),
             ),
             // 最上面的部分评论 评论内容 (一点点性能问题)
