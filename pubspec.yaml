@@ -113,6 +113,10 @@ dependencies:
   persistent_bottom_nav_bar: ^4.0.2
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
+  learning_language:
+    git:
+      url: https://github.com/honjow/learning.git
+      path: packages/learning_language
   encrypt: ^5.0.1
   wakelock: ^0.6.1+1
   jinja: ^0.3.4
@@ -148,9 +152,10 @@ dependencies:
   image_compare: ^1.1.2
   isolate: ^2.1.1
   octo_image: ^1.0.2
-  google_mlkit_barcode_scanning: ^0.3.0
+  google_mlkit_barcode_scanning: ^0.4.0
 #  google_mlkit_translation: ^0.3.0
-  google_mlkit_language_id: ^0.3.0
+  # google_mlkit_language_id 在iOS上有问题。会闪退或者应用卡死
+#  google_mlkit_language_id: 0.3.0
   flutter_custom_license_page:
     git:
       url: https://github.com/honjow/flutter_custom_license_page.git

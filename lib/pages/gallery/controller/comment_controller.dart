@@ -299,6 +299,7 @@ class CommentController extends GetxController with WidgetsBindingObserver {
             return;
           }
 
+          logger.d('11111');
           translate = await translatorHelper.translateText(spans[i].text ?? '');
 
           if (translate.trim().isEmpty) {

@@ -41,7 +41,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
       _controller.scrollController =
           PrimaryScrollController.of(context) ?? ScrollController();
       _controller.scrollController
-          .addListener(_controller.scrollControllerLister);
+          ?.addListener(_controller.scrollControllerLister);
     });
   }
 
