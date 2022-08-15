@@ -251,9 +251,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final headerMaxHeight = kMinInteractiveDimensionCupertino +
-        context.mediaQueryPadding.top +
-        kTopTabbarHeight;
+    final headerMaxHeight = context.mediaQueryPadding.top + kHeaderMaxHeight;
 
     final Widget scrollView = ExtendedNestedScrollView(
       floatHeaderSlivers: true,
