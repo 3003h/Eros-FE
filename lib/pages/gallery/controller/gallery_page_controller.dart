@@ -37,7 +37,7 @@ class GalleryPageController extends GetxController
   late final GalleryPageState gState;
 
   // 滚动控制器
-  late ScrollController scrollController;
+  ScrollController? scrollController;
 
   // eh设置
   final EhConfigService _ehConfigService = Get.find();
@@ -110,7 +110,7 @@ class GalleryPageController extends GetxController
 
   @override
   void onClose() {
-    scrollController.dispose();
+    scrollController?.dispose();
     logger.v('onClose GalleryPageController $pageCtrlTag');
     super.onClose();
     // _galleryCacheController.addGalleryPageState(gState);
@@ -407,10 +407,10 @@ class GalleryPageController extends GetxController
       return;
     }
     try {
-      if (scrollController.offset < kHeaderHeightOffset + kHeaderPaddingTop &&
+      if (scrollController!.offset < kHeaderHeightOffset + kHeaderPaddingTop &&
           !gState.hideNavigationBtn) {
         gState.hideNavigationBtn = true;
-      } else if (scrollController.offset >=
+      } else if (scrollController!.offset >=
               kHeaderHeightOffset + kHeaderPaddingTop &&
           gState.hideNavigationBtn) {
         gState.hideNavigationBtn = false;
