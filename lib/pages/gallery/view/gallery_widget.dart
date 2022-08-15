@@ -174,8 +174,8 @@ class GalleryTitle extends StatelessWidget {
         style: const TextStyle(
           textBaseline: TextBaseline.alphabetic,
           // height: 1.2,
-          fontSize: 17,
-          fontWeight: FontWeight.w700,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
         ),
         strutStyle: const StrutStyle(
           height: 1.2,
