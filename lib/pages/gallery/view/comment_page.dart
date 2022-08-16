@@ -26,7 +26,8 @@ const Border _kDefaultEditBorder = Border(
 );
 
 class CommentPage extends StatelessWidget {
-  final CommentController controller = Get.find(tag: pageCtrlTag);
+  final CommentController controller =
+      Get.put(CommentController(), tag: pageCtrlTag);
 
   @override
   Widget build(BuildContext context) {

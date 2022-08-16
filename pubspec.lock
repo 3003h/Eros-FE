@@ -65,7 +65,7 @@ packages:
       name: auto_animated
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.1"
+    version: "3.1.0"
   basic_utils:
     dependency: "direct main"
     description:
@@ -464,7 +464,7 @@ packages:
       name: extended_nested_scroll_view
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.1.2"
+    version: "5.1.3"
   extended_sliver:
     dependency: "direct main"
     description:
@@ -1619,7 +1619,7 @@ packages:
       name: sqlite3
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.7.2"
+    version: "1.8.0"
   stack_trace:
     dependency: transitive
     description:
@@ -1829,7 +1829,7 @@ packages:
       name: visibility_detector
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.2"
+    version: "0.3.3"
   wakelock:
     dependency: "direct main"
     description:
