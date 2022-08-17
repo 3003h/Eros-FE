@@ -1022,6 +1022,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
               // padding: EdgeInsets.symmetric(
               //     horizontal: context.width / 2 - kThumbImageWidth / 2 - 2),
               child: ScrollablePositionedList.builder(
+                // physics: const ClampingScrollPhysics(),
                 // padding: EdgeInsets.symmetric(
                 //     horizontal: context.width / 2 - kThumbImageWidth / 2 - 2),
                 itemScrollController: logic.thumbScrollController,
@@ -1068,24 +1069,14 @@ class ThumbnailListView extends GetView<ViewExtController> {
                               flex: (kThumbListViewHeight / 14).round(),
                               child: Container(
                                 alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: isCurrent
-                                        ? Border.all(
-                                            color: CupertinoColors.systemTeal,
-                                            width: kBorderWidth,
-                                          )
-                                        : null,
-                                    borderRadius: BorderRadius.circular(
-                                        kRadius + kBorderWidth),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(kRadius),
-                                    child: Container(
-                                      child: MouseRegionClick(child: thumb),
-                                    ),
-                                  ),
+                                // child: _buildThumb(isCurrent, thumb),
+                                child: AnimatedCrossFade(
+                                  firstChild: _buildThumb(false, thumb),
+                                  secondChild: _buildThumb(true, thumb),
+                                  duration: 400.milliseconds,
+                                  crossFadeState: isCurrent
+                                      ? CrossFadeState.showSecond
+                                      : CrossFadeState.showFirst,
                                 ),
                               ),
                             ),
@@ -1135,6 +1126,26 @@ class ThumbnailListView extends GetView<ViewExtController> {
           ],
         );
       },
+    );
+  }
+
+  Container _buildThumb(bool isCurrent, Widget thumb) {
+    return Container(
+      decoration: BoxDecoration(
+        border: isCurrent
+            ? Border.all(
+                color: CupertinoColors.systemTeal,
+                width: kBorderWidth,
+              )
+            : null,
+        borderRadius: BorderRadius.circular(kRadius + kBorderWidth),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(kRadius),
+        child: Container(
+          child: MouseRegionClick(child: thumb),
+        ),
+      ),
     );
   }
 }
