@@ -214,7 +214,8 @@ class ViewExtController extends GetxController {
 
     vState.sliderValue = vState.currentItemIndex / 1.0;
 
-    setFullscreen();
+    // setFullscreen();
+    400.milliseconds.delay(() => setFullscreen());
   }
 
   @override
@@ -230,7 +231,8 @@ class ViewExtController extends GetxController {
     extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();
 
-    unsetFullscreen();
+    // unsetFullscreen();
+    400.milliseconds.delay(() => unsetFullscreen());
 
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
@@ -593,7 +595,7 @@ class ViewExtController extends GetxController {
       } else {
         // hide
         vState.showBar = !vState.showBar;
-        setFullscreen();
+        400.milliseconds.delay(() => setFullscreen());
       }
     } else {
       vState.showBar = !vState.showBar;
