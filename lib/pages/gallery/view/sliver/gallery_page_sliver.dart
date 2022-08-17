@@ -297,6 +297,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
         );
 
         Widget buttons = Row(
+          key: ValueKey('buttons'),
           mainAxisSize: MainAxisSize.min,
           children: [
             CupertinoButton(
@@ -328,18 +329,14 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
           ],
         );
 
-        Widget trailingFade = AnimatedCrossFade(
-          firstChild: buttons,
-          secondChild: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4),
-            ],
-          ),
-          crossFadeState: pageState.hideNavigationBtn
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
-          duration: 300.milliseconds,
+        // todo error
+        Widget trailingSwitcher = TrailingSwitcher(
+          hideNavigationBtn: pageState.hideNavigationBtn,
+          firstChild: buttons.paddingOnly(right: 4),
+          secondChild:
+              ReadButton(key: ValueKey('ReadButton'), gid: provider?.gid ?? '0')
+                  .paddingOnly(right: 4),
+          duration: 3000.milliseconds,
         );
 
         Widget gt = GalleryTrailing(
@@ -358,6 +355,38 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
 
         return gt;
       }),
+    );
+  }
+}
+
+class TrailingSwitcher extends StatefulWidget {
+  const TrailingSwitcher(
+      {Key? key,
+      required this.hideNavigationBtn,
+      required this.firstChild,
+      required this.secondChild,
+      required this.duration,
+      this.curve})
+      : super(key: key);
+  final bool hideNavigationBtn;
+  final Widget firstChild;
+  final Widget secondChild;
+  final Duration duration;
+  final Curve? curve;
+
+  @override
+  State<TrailingSwitcher> createState() => _TrailingSwitcherState();
+}
+
+class _TrailingSwitcherState extends State<TrailingSwitcher> {
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      child: widget.hideNavigationBtn ? widget.firstChild : widget.secondChild,
+      duration: widget.duration,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(child: child, opacity: animation);
+      },
     );
   }
 }
