@@ -20,6 +20,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
@@ -79,6 +80,10 @@ class ViewExtController extends GetxController {
   // 使用 PhotoView
   final isPhotoView = false;
 
+  final _absorbing = false.obs;
+  bool get absorbing => _absorbing.value;
+  set absorbing(bool val) => _absorbing.value = val;
+
   late PageController pageController;
   late ExtendedPageController extendedPageController;
 
@@ -114,6 +119,9 @@ class ViewExtController extends GetxController {
 
   final AutoScrollController autoScrollController = AutoScrollController();
   final photoViewScaleStateController = PhotoViewScaleStateController();
+
+  final FlutterListViewController flutterListViewController =
+      FlutterListViewController();
 
   final PhotoViewController photoViewController = PhotoViewController();
 
@@ -175,7 +183,7 @@ class ViewExtController extends GetxController {
 
     photoViewScaleStateController.outputScaleStateStream.listen((state) {
       final prevScaleState = photoViewScaleStateController.prevScaleState;
-      logger.d('prevScaleState $prevScaleState , state $state');
+      logger.d('prevScaleState $prevScaleState , cur state $state');
     });
   }
 
@@ -227,6 +235,7 @@ class ViewExtController extends GetxController {
     vState.speedTimer?.cancel();
     Get.find<GalleryCacheController>().saveAll();
     vState.saveLastIndex(saveToStore: true);
+    flutterListViewController.dispose();
     pageController.dispose();
     extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();
