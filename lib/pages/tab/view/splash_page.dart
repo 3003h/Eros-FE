@@ -27,10 +27,6 @@ class SplashPage extends GetView<SplashController> {
                     size: 150.0,
                     color: Colors.grey,
                   ),
-                  // Text(
-                  //   L10n.of(context).welcome_text,
-                  //   style: const TextStyle(color: Colors.grey),
-                  // ),
                   Text(
                     L10n.of(context).app_title,
                     style: const TextStyle(color: Colors.grey),
