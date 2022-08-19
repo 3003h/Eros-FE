@@ -23,7 +23,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+// import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'common/service/layout_service.dart';
 import 'firebase_options.dart';
@@ -33,17 +33,17 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initializeFlutterFire();
   runZonedGuarded<Future<void>>(() async {
-    final dsn = await getSentryDsn();
-    if (dsn != null && dsn.isNotEmpty) {
-      await SentryFlutter.init(
-        (SentryFlutterOptions options) {
-          options
-            ..dsn = dsn
-            ..debug = false
-            ..diagnosticLevel = SentryLevel.warning;
-        },
-      );
-    }
+    // final dsn = await getSentryDsn();
+    // if (dsn != null && dsn.isNotEmpty) {
+    //   await SentryFlutter.init(
+    //     (SentryFlutterOptions options) {
+    //       options
+    //         ..dsn = dsn
+    //         ..debug = false
+    //         ..diagnosticLevel = SentryLevel.warning;
+    //     },
+    //   );
+    // }
 
     Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => GStore());
@@ -77,9 +77,9 @@ Future<void> main() async {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
     }
 
-    if (!kDebugMode) {
-      await Sentry.captureException(error, stackTrace: stackTrace);
-    }
+    // if (!kDebugMode) {
+    //   await Sentry.captureException(error, stackTrace: stackTrace);
+    // }
   });
 }
 

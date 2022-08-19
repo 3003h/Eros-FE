@@ -69,6 +69,9 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
         child: ImagePlugins(
           child: ImageGestureDetector(
             child: ImageView(),
+            // child: Container(
+            //   color: Colors.amber,
+            // ),
           ),
         ),
       ),
@@ -340,43 +343,40 @@ class ImageGestureDetector extends GetView<ViewExtController> {
   }) : super(key: key);
   final Widget child;
 
+  static const lrRatio = 1 / 3;
+  static const tbRatio = 1 / 5;
+
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        child,
-        // 两侧触摸区
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: controller.tapLeft,
-              ),
-            ),
-            SizedBox(
-              height: context.height,
-              width: context.width * 0.7,
-            ),
-            Expanded(
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: controller.tapRight,
-              ),
-            ),
-          ],
-        ),
-        // 中心触摸区
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          child: Container(
-            height: context.height * 0.8,
-            width: context.width * 0.7,
-          ),
-          onTap: controller.handOnTapCent,
-        ),
-      ],
+    return GestureDetector(
+      behavior: HitTestBehavior.deferToChild,
+      onTapUp: (details) {
+        // logger.d('${details.globalPosition} ${details.localPosition}');
+
+        final globalPosition = details.globalPosition;
+        if (globalPosition.dx < context.width * (1 - lrRatio) &&
+            globalPosition.dx > context.width * lrRatio) {
+          if (globalPosition.dy < context.height * tbRatio) {
+            controller.tapLeft();
+          } else if (globalPosition.dy > context.height * (1 - tbRatio)) {
+            controller.tapRight();
+          } else {
+            controller.handOnTapCent();
+          }
+        }
+
+        if (globalPosition.dx < context.width * lrRatio) {
+          controller.tapLeft();
+        }
+
+        if (globalPosition.dx > context.width * (1 - lrRatio)) {
+          controller.tapRight();
+        }
+      },
+      onDoubleTap: () {
+        logger.d('onDoubleTap');
+      },
+      child: child,
     );
   }
 }

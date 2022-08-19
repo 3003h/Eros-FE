@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
@@ -98,27 +99,29 @@ class AppDio with DioMixin implements Dio {
       final DnsService dnsServices = Get.find();
       final bool enableDoH = dnsServices.enableDoH;
 
-      final coutomHosts = dnsServices.hostMapMerge;
+      final customHosts = dnsServices.hostMapMerge;
 
       final domainFronting = DomainFronting(
-        hosts: coutomHosts,
-        dnsLookup: enableDoH
-            ? (String host) async {
-                final dc = await dnsServices.getDoHCache(host);
-                return dc?.addr ?? host;
-              }
-            : null,
+        hosts: customHosts,
+        // dnsLookup: enableDoH
+        //     ? (String host) async {
+        //         final dc = await dnsServices.getDoHCache(host);
+        //         return dc?.addr ?? host;
+        //       }
+        //     : null,
+        dnsLookup: dnsServices.getHost,
       );
 
       // 允许证书错误的地址/ip
-      final hostWhiteList = coutomHosts.values.toSet();
+      final hostWhiteList = customHosts.values.flattened.toSet();
 
       (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
           (client) {
         client
           ..badCertificateCallback =
               (X509Certificate cert, String host, int port) {
-            return hostWhiteList.contains(host);
+            // return hostWhiteList.contains(host);
+            return true;
           }
           ..maxConnectionsPerHost = dioConfig?.maxConnectionsPerHost
           ..idleTimeout = const Duration(seconds: 6);

@@ -8,7 +8,7 @@ typedef DomainFrontingDomainLookup = FutureOr<String?> Function(
 
 class DomainFronting {
   DomainFronting({
-    Map<String, String>? hosts,
+    Map<String, List<String>>? hosts,
     DomainFrontingDomainLookup? dnsLookup,
     this.noIpSkip = true,
     this.manual = false,
@@ -21,11 +21,11 @@ class DomainFronting {
 
   /// [hosts]: 设置固定域名解析
   ///
-  late Map<String, String> hosts;
+  late Map<String, List<String>> hosts;
   bool enable = true;
 
-  /// [dnsLookup]: 设置后如果hosts中没有找到，将通过改方法解析ip
   ///
+  /// [dnsLookup]: 优先使用外部方法解析ip
   late DomainFrontingDomainLookup? _dnsLookup;
 
   /// [lookupCache] 是否缓存[dnsLookup]返回的结果
@@ -57,15 +57,27 @@ class DomainFronting {
     return options.copyWith(extra: extra);
   }
 
+  //
   Future<String?> lookup(String hostname) async {
     logger.v('hostname: $hostname');
-    if (hosts.containsKey(hostname)) {
-      return Future.value(hosts[hostname]);
+
+    if (_dnsLookup == null) {
+      if (hosts.containsKey(hostname)) {
+        // 简单随机
+        final tempList = List<String>.from(hosts[hostname] ?? [hostname]);
+        tempList.shuffle();
+        logger.d('$tempList ');
+        logger.d('host $hostname: ${tempList.first}');
+        return Future.value(hosts[hostname]?.first);
+      }
+    } else {
+      final ip = await _dnsLookup!(hostname);
+      // if (lookupCache && ip != null) {
+      //   hosts[hostname]?.first = ip;
+      // }
+      return ip;
     }
-    if (_dnsLookup == null) return null;
-    final ip = await _dnsLookup!(hostname);
-    if (lookupCache && ip != null) hosts[hostname] = ip;
-    return ip;
+    return null;
   }
 
   void bind(Interceptors interceptors) {
@@ -99,7 +111,7 @@ class DomainFrontingInterceptorRequest extends Interceptor {
   final DomainFronting df;
 
   @override
-  void onRequest(
+  Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     if ((!df.enable) || options.uri.scheme.toLowerCase() != 'https') {
       handler.next(options);
