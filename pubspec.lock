@@ -492,7 +492,7 @@ packages:
       name: file
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.1.2"
+    version: "6.1.4"
   file_picker:
     dependency: "direct main"
     description:
@@ -758,7 +758,7 @@ packages:
       name: google_mlkit_barcode_scanning
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   google_mlkit_commons:
     dependency: transitive
     description:
@@ -766,13 +766,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.0"
-  google_mlkit_language_id:
-    dependency: "direct main"
-    description:
-      name: google_mlkit_language_id
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.0"
   graphs:
     dependency: transitive
     description:
@@ -962,6 +955,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.6"
+  learning_language:
+    dependency: "direct main"
+    description:
+      path: "packages/learning_language"
+      ref: HEAD
+      resolved-ref: "352613ceaa224a26cdc962ab12bd42b4b149c65c"
+      url: "https://github.com/honjow/learning.git"
+    source: git
+    version: "0.0.4"
   linked_scroll_controller:
     dependency: "direct main"
     description:
@@ -1160,48 +1162,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.2"
-  package_info_plus:
-    dependency: transitive
-    description:
-      name: package_info_plus
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.4.2"
-  package_info_plus_linux:
-    dependency: transitive
-    description:
-      name: package_info_plus_linux
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.5"
-  package_info_plus_macos:
-    dependency: transitive
-    description:
-      name: package_info_plus_macos
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.3.0"
-  package_info_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: package_info_plus_platform_interface
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.2"
-  package_info_plus_web:
-    dependency: transitive
-    description:
-      name: package_info_plus_web
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.5"
-  package_info_plus_windows:
-    dependency: transitive
-    description:
-      name: package_info_plus_windows
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.5"
   palette_generator:
     dependency: "direct main"
     description:
@@ -1229,7 +1189,7 @@ packages:
       name: path_provider_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.17"
+    version: "2.0.19"
   path_provider_ios:
     dependency: transitive
     description:
@@ -1356,6 +1316,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.1"
+  preload_page_view:
+    dependency: "direct main"
+    description:
+      name: preload_page_view
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.6"
   pretty_dio_logger:
     dependency: "direct main"
     description:
@@ -1390,7 +1357,7 @@ packages:
       name: pubspec_parse
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.1"
   quiver:
     dependency: transitive
     description:
@@ -1440,20 +1407,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.3"
-  sentry:
-    dependency: transitive
-    description:
-      name: sentry
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "6.9.0"
-  sentry_flutter:
-    dependency: "direct main"
-    description:
-      name: sentry_flutter
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "6.9.0"
   share:
     dependency: "direct main"
     description:
@@ -1584,7 +1537,7 @@ packages:
       name: sprintf
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.0"
+    version: "6.0.2"
   sqflite:
     dependency: "direct main"
     description:
