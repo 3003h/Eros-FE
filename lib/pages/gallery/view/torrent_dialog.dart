@@ -115,7 +115,7 @@ class TorrentItem extends StatelessWidget {
                       Icon(e.key,
                               size: 16,
                               color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.label, context))
+                                  CupertinoColors.secondaryLabel, context))
                           .paddingOnly(right: 3),
                       Text(e.value ?? ''),
                     ],
