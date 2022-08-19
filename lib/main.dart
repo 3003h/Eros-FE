@@ -19,7 +19,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
+// import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'common/service/layout_service.dart';
 import 'get_init.dart';
@@ -27,17 +27,17 @@ import 'get_init.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runZonedGuarded<Future<void>>(() async {
-    final dsn = await getSentryDsn();
-    if (dsn != null && dsn.isNotEmpty) {
-      await SentryFlutter.init(
-        (SentryFlutterOptions options) {
-          options
-            ..dsn = dsn
-            ..debug = false
-            ..diagnosticLevel = SentryLevel.warning;
-        },
-      );
-    }
+    // final dsn = await getSentryDsn();
+    // if (dsn != null && dsn.isNotEmpty) {
+    //   await SentryFlutter.init(
+    //     (SentryFlutterOptions options) {
+    //       options
+    //         ..dsn = dsn
+    //         ..debug = false
+    //         ..diagnosticLevel = SentryLevel.warning;
+    //     },
+    //   );
+    // }
 
     Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => GStore());
@@ -68,9 +68,9 @@ Future<void> main() async {
     debugPrint(
         'runZonedGuarded: Caught error in my root zone.\n$error\n$stackTrace');
 
-    if (!kDebugMode) {
-      await Sentry.captureException(error, stackTrace: stackTrace);
-    }
+    // if (!kDebugMode) {
+    //   await Sentry.captureException(error, stackTrace: stackTrace);
+    // }
   });
 }
 
@@ -137,9 +137,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // FlutterSmartDialog.observer,
           MainNavigatorObserver(),
         ],
-        builder: FlutterSmartDialog.init(
-          styleBuilder: (child) => child,
-        ),
+        // builder: FlutterSmartDialog.init(
+        //   styleBuilder: (child) => child,
+        // ),
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,

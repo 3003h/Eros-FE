@@ -1,6 +1,9 @@
+import 'package:english_words/english_words.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -8,57 +11,122 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../controller/view_controller.dart';
+import 'eh_flutter_list_view_delegate.dart';
 import 'view_image.dart';
 
-class ImageListView extends GetView<ViewExtController> {
+class ImageListView extends StatefulWidget {
   const ImageListView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    Widget imageListview = Container(
-      height: context.height,
-      width: context.width,
-      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
-      child: GetBuilder<ViewExtController>(
-        id: idImageListView,
-        builder: (logic) {
-          final vState = logic.vState;
+  State<ImageListView> createState() => _ImageListViewState();
+}
 
-          return ScrollablePositionedList.builder(
-            minCacheExtent: 0.0,
-            padding: EdgeInsets.only(
-              top: context.mediaQueryPadding.top,
-              bottom: context.mediaQueryPadding.bottom,
-            ),
-            itemScrollController: logic.itemScrollController,
-            itemPositionsListener: logic.itemPositionsListener,
-            itemCount: vState.filecount,
-            itemBuilder: itemBuilder(),
-          );
-        },
+class _ImageListViewState extends State<ImageListView> {
+  final ViewExtController controller = Get.find();
+
+  late Offset downPosition;
+
+  @override
+  Widget build(BuildContext context) {
+    final vState = controller.vState;
+
+    final words = generateWordPairs().take(500).toList();
+
+    Widget listView = ScrollablePositionedList.builder(
+      minCacheExtent: 0.0,
+      padding: EdgeInsets.only(
+        top: context.mediaQueryPadding.top,
+        bottom: context.mediaQueryPadding.bottom,
+      ),
+      itemScrollController: controller.itemScrollController,
+      itemPositionsListener: controller.itemPositionsListener,
+      itemCount: vState.filecount,
+      itemBuilder: itemBuilder(),
+    );
+
+    Widget listView2 = ListView.separated(
+      itemBuilder: itemBuilder(),
+      separatorBuilder: (context, index) {
+        return const Divider();
+      },
+      itemCount: vState.filecount,
+    );
+
+    Widget listView3 = FlutterListView(
+      // physics: const BouncingScrollPhysics(),
+      // cacheExtent: context.height + 1,
+      // controller: controller.flutterListViewController,
+      semanticChildCount: vState.filecount,
+      delegate: EhFlutterListViewDelegate(
+        itemBuilder(),
+        childCount: vState.filecount,
       ),
     );
+
+    Widget imageListview = Container(
+      // height: context.height,
+      // width: context.width,
+      color: CupertinoTheme.of(context).scaffoldBackgroundColor,
+      child: listView,
+    );
+
+    // return InteractiveViewer(
+    //   child: imageListview,
+    // );
+    //
+    // return imageListview;
 
     return PhotoViewGallery.builder(
       itemCount: 1,
       builder: (_, __) {
         return PhotoViewGalleryPageOptions.customChild(
           scaleStateController: controller.photoViewScaleStateController,
-          initialScale: 1.0,
+          initialScale: PhotoViewComputedScale.contained * 1.0,
           minScale: PhotoViewComputedScale.contained * 1.0,
-          maxScale: 5.0,
-          // scaleStateCycle: lisviewScaleStateCycle,
+          maxScale: PhotoViewComputedScale.contained * 3.0,
+          scaleStateCycle: lisviewScaleStateCycle,
+          // child: Center(
+          //   child: Container(
+          //     width: 100,
+          //     height: 100,
+          //     color: Colors.amber,
+          //     alignment: Alignment.center,
+          //     child: Text('AAAAA'),
+          //   ),
+          // ),
           child: imageListview,
+          // onTapDown: (context, details, controllerValue) {
+          //   logger.d('${controllerValue.scale}');
+          // },
         );
       },
     );
+  }
+
+  PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
+    logger.d('actual $actual');
+    switch (actual) {
+      case PhotoViewScaleState.initial:
+        return PhotoViewScaleState.originalSize;
+      default:
+        return PhotoViewScaleState.initial;
+    }
   }
 
   Widget Function(BuildContext context, int index) itemBuilder() {
     return (BuildContext context, int index) {
       final int itemSer = index + 1;
 
+      // return Padding(
+      //   padding: const EdgeInsets.symmetric(vertical: 100),
+      //   child: Text(
+      //     '$itemSer',
+      //     style: TextStyle(color: Colors.white),
+      //   ),
+      // );
+
       return ConstrainedBox(
+        key: ValueKey(itemSer),
         constraints: BoxConstraints(
           minWidth: context.width,
         ),

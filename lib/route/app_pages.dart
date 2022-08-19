@@ -51,6 +51,7 @@ import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:get/get.dart';
 
+import '../pages/tab/view/home_page_small.dart';
 import '../pages/tab/view/search_image_page.dart';
 import 'routes.dart';
 
@@ -78,6 +79,7 @@ class AppPages {
     GetPage(
       name: EHRoutes.home,
       page: () => HomePage(),
+      // page: () => TabHomeSmall(),
       transition: Transition.fadeIn,
     ),
     GetPage(

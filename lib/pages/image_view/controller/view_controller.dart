@@ -20,12 +20,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
 import 'package:photo_view/photo_view.dart';
-// import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:preload_page_view/preload_page_view.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:throttling/throttling.dart';
@@ -69,6 +71,12 @@ const String idProcess = 'Process';
 const int _speedMaxCount = 50;
 const int _speedInv = 10;
 
+enum PageViewType {
+  photoView,
+  preloadPageview,
+  extendedImageGesturePageView,
+}
+
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
   ViewExtController();
@@ -77,10 +85,16 @@ class ViewExtController extends GetxController {
   final ViewExtState vState = ViewExtState();
 
   // 使用 PhotoView
-  final isPhotoView = false;
+  final pageViewType = PageViewType.preloadPageview;
+
+  final _absorbing = false.obs;
+  bool get absorbing => _absorbing.value;
+  set absorbing(bool val) => _absorbing.value = val;
 
   late PageController pageController;
   late ExtendedPageController extendedPageController;
+
+  late PreloadPageController preloadPageController;
 
   GalleryPageController? get _galleryPageController =>
       vState.galleryPageController;
@@ -115,6 +129,9 @@ class ViewExtController extends GetxController {
   // final AutoScrollController autoScrollController = AutoScrollController();
   final photoViewScaleStateController = PhotoViewScaleStateController();
 
+  final FlutterListViewController flutterListViewController =
+      FlutterListViewController();
+
   final PhotoViewController photoViewController = PhotoViewController();
 
   final GlobalKey<ExtendedImageSlidePageState> slidePagekey =
@@ -130,6 +147,15 @@ class ViewExtController extends GetxController {
     pageController = PageController(
       initialPage: vState.pageIndex,
       viewportFraction: vState.showPageInterval ? 1.1 : 1.0,
+      // viewportFraction: 0.999999,
+    );
+
+    preloadPageController = PreloadPageController(
+      initialPage: vState.pageIndex,
+      // viewportFraction: vState.showPageInterval
+      //     ? (Get.context!.width + 10) / Get.context!.width
+      //     : 1.0,
+      // viewportFraction: vState.showPageInterval ? 1.1 : 1.0,
     );
 
     extendedPageController = ExtendedPageController(
@@ -175,7 +201,7 @@ class ViewExtController extends GetxController {
 
     photoViewScaleStateController.outputScaleStateStream.listen((state) {
       final prevScaleState = photoViewScaleStateController.prevScaleState;
-      logger.d('prevScaleState $prevScaleState , state $state');
+      logger.d('prevScaleState $prevScaleState , cur state $state');
     });
   }
 
@@ -214,7 +240,8 @@ class ViewExtController extends GetxController {
 
     vState.sliderValue = vState.currentItemIndex / 1.0;
 
-    setFullscreen();
+    // setFullscreen();
+    400.milliseconds.delay(() => setFullscreen());
   }
 
   @override
@@ -226,11 +253,13 @@ class ViewExtController extends GetxController {
     vState.speedTimer?.cancel();
     Get.find<GalleryCacheController>().saveAll();
     vState.saveLastIndex(saveToStore: true);
+    flutterListViewController.dispose();
     pageController.dispose();
     extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();
 
-    unsetFullscreen();
+    // unsetFullscreen();
+    400.milliseconds.delay(() => unsetFullscreen());
 
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
@@ -365,8 +394,9 @@ class ViewExtController extends GetxController {
     // pageController.jumpToPage(_toIndex);
     // extendedPageController.jumpToPage(_toIndex);
 
-    pageControllerCallBack(() => pageController.jumpToPage(_toIndex),
-        () => extendedPageController.jumpToPage(_toIndex));
+    // pageControllerCallBack(() => pageController.jumpToPage(_toIndex),
+    //     () => extendedPageController.jumpToPage(_toIndex));
+    changePage(_toIndex, animate: false);
   }
 
   Future<void> switchShowThumbList() async {
@@ -593,7 +623,7 @@ class ViewExtController extends GetxController {
       } else {
         // hide
         vState.showBar = !vState.showBar;
-        setFullscreen();
+        400.milliseconds.delay(() => setFullscreen());
       }
     } else {
       vState.showBar = !vState.showBar;
@@ -617,6 +647,50 @@ class ViewExtController extends GetxController {
     // ));
   }
 
+  void changePage(
+    int page, {
+    Duration duration = const Duration(milliseconds: 200),
+    bool? animate,
+  }) {
+    final enableAnimate = animate ?? _ehConfigService.tapToTurnPageAnimations;
+
+    if (enableAnimate) {
+      switch (pageViewType) {
+        case PageViewType.photoView:
+          pageController.animateToPage(
+            page,
+            duration: duration,
+            curve: Curves.ease,
+          );
+          break;
+        case PageViewType.preloadPageview:
+          preloadPageController.animateToPage(
+            page,
+            duration: duration,
+            curve: Curves.ease,
+          );
+          break;
+        default:
+          extendedPageController.animateToPage(
+            page,
+            duration: duration,
+            curve: Curves.ease,
+          );
+      }
+    } else {
+      switch (pageViewType) {
+        case PageViewType.photoView:
+          pageController.jumpToPage(page);
+          break;
+        case PageViewType.preloadPageview:
+          preloadPageController.jumpToPage(page);
+          break;
+        default:
+          extendedPageController.jumpToPage(page);
+      }
+    }
+  }
+
   Future<void> tapLeft() async {
     logger.v('${vState.viewMode} tap left');
     final enableAnimate = _ehConfigService.tapToTurnPageAnimations;
@@ -624,41 +698,11 @@ class ViewExtController extends GetxController {
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
       final toPage = vState.pageIndex - 1;
-      pageControllerCallBack(
-        () => enableAnimate
-            ? pageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : pageController.jumpToPage(toPage),
-        () => enableAnimate
-            ? extendedPageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : extendedPageController.jumpToPage(toPage),
-      );
+      changePage(toPage);
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex < vState.filecount) {
       final toPage = vState.pageIndex + 1;
-      pageControllerCallBack(
-        () => enableAnimate
-            ? pageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : pageController.jumpToPage(toPage),
-        () => enableAnimate
-            ? extendedPageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : extendedPageController.jumpToPage(toPage),
-      );
+      changePage(toPage);
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
@@ -673,49 +717,16 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> tapRight() async {
-    // logger.d('${vState.speedList}');
-    final enableAnimate = _ehConfigService.tapToTurnPageAnimations;
-
     logger.v('${vState.viewMode} tap right');
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight &&
         vState.pageIndex < vState.filecount) {
       final toPage = vState.pageIndex + 1;
-      pageControllerCallBack(
-        () => enableAnimate
-            ? pageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : pageController.jumpToPage(toPage),
-        () => enableAnimate
-            ? extendedPageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : extendedPageController.jumpToPage(toPage),
-      );
+      changePage(toPage);
     } else if (vState.viewMode == ViewMode.rightToLeft &&
         vState.pageIndex > 0) {
       final toPage = vState.pageIndex - 1;
-      pageControllerCallBack(
-        () => enableAnimate
-            ? pageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : pageController.jumpToPage(toPage),
-        () => enableAnimate
-            ? extendedPageController.animateToPage(
-                toPage,
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              )
-            : extendedPageController.jumpToPage(toPage),
-      );
+      changePage(toPage);
     } else if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
@@ -740,8 +751,9 @@ class ViewExtController extends GetxController {
   void jumpToPage(int index) {
     vState.currentItemIndex = index;
     if (vState.viewMode != ViewMode.topToBottom) {
-      pageControllerCallBack(() => pageController.jumpToPage(vState.pageIndex),
-          () => extendedPageController.jumpToPage(vState.pageIndex));
+      // pageControllerCallBack(() => pageController.jumpToPage(vState.pageIndex),
+      //     () => extendedPageController.jumpToPage(vState.pageIndex));
+      changePage(vState.pageIndex, animate: false);
     } else {
       itemScrollController.jumpTo(index: vState.currentItemIndex);
       update([idViewTopBar]);
@@ -1026,30 +1038,22 @@ class ViewExtController extends GetxController {
             autoNextTimer?.cancel();
           }
           // 翻页
-          // if (pageController.positions.isNotEmpty) {
-          //   pageController.nextPage(
-          //       duration: const Duration(milliseconds: 300),
-          //       curve: Curves.easeOut);
-          // }
-          // if (extendedPageController.positions.isNotEmpty) {
-          //   extendedPageController.nextPage(
-          //       duration: const Duration(milliseconds: 300),
-          //       curve: Curves.easeOut);
-          // }
-
-          pageControllerCallBack(() {
-            if (pageController.positions.isNotEmpty) {
-              pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut);
-            }
-          }, () {
-            if (extendedPageController.positions.isNotEmpty) {
-              extendedPageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut);
-            }
-          });
+          pageControllerCallBack(
+            () {
+              if (pageController.positions.isNotEmpty) {
+                pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut);
+              }
+            },
+            () {
+              if (extendedPageController.positions.isNotEmpty) {
+                extendedPageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut);
+              }
+            },
+          );
         } else {
           // 双页阅读
           final int serLeftNext = vState.serStart + 2;
@@ -1069,29 +1073,22 @@ class ViewExtController extends GetxController {
           if ((vState.loadCompleMap[serLeftCur] ?? false) &&
               (vState.loadCompleMap[serLeftCur + 1] ?? false)) {
             // 翻页
-            // if (pageController.positions.isNotEmpty) {
-            //   pageController.nextPage(
-            //       duration: const Duration(milliseconds: 300),
-            //       curve: Curves.easeOut);
-            // }
-            // if (extendedPageController.positions.isNotEmpty) {
-            //   extendedPageController.nextPage(
-            //       duration: const Duration(milliseconds: 300),
-            //       curve: Curves.easeOut);
-            // }
-            pageControllerCallBack(() {
-              if (pageController.positions.isNotEmpty) {
-                pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut);
-              }
-            }, () {
-              if (extendedPageController.positions.isNotEmpty) {
-                extendedPageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut);
-              }
-            });
+            pageControllerCallBack(
+              () {
+                if (pageController.positions.isNotEmpty) {
+                  pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut);
+                }
+              },
+              () {
+                if (extendedPageController.positions.isNotEmpty) {
+                  extendedPageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut);
+                }
+              },
+            );
           }
         }
       }
@@ -1132,8 +1129,9 @@ class ViewExtController extends GetxController {
       vState.currentItemIndex = itemIndex;
       // pageController.jumpToPage(vState.pageIndex);
       // extendedPageController.jumpToPage(vState.pageIndex);
-      pageControllerCallBack(() => pageController.jumpToPage(vState.pageIndex),
-          () => extendedPageController.jumpToPage(vState.pageIndex));
+      // pageControllerCallBack(() => pageController.jumpToPage(vState.pageIndex),
+      //     () => extendedPageController.jumpToPage(vState.pageIndex));
+      changePage(vState.pageIndex, animate: false);
     }
   }
 
@@ -1161,12 +1159,17 @@ class ViewExtController extends GetxController {
   }
 
   void pageControllerCallBack(
-      Function onPageController, Function onExtendedPageController) {
+    Function onPageController,
+    Function onExtendedPageController, {
+    Function? onPreviewPageController,
+  }) {
     // 暂时停用ExtendedPageController
-    if (vState.columnMode != ViewColumnMode.single || isPhotoView) {
+    if (vState.columnMode != ViewColumnMode.single ||
+        pageViewType == PageViewType.photoView) {
       onPageController.call();
     } else {
       onExtendedPageController.call();
+      onPreviewPageController?.call();
     }
   }
 
