@@ -255,7 +255,7 @@ class EHConst {
 
   static const String DB_NAME = 'feh.db';
 
-  static const int exMaxConnectionsPerHost = 5;
+  static const int exMaxConnectionsPerHost = 4;
 
   static String getBaseSite([bool isEx = false]) =>
       isEx ? EX_BASE_URL : EH_BASE_URL;
@@ -538,13 +538,42 @@ class EHConst {
     10000,
   ];
 
-  static const Map<String, String> internalHosts = {
-    'e-hentai.org': '104.20.134.21',
-    // 'api.e-hentai.org': '37.48.89.16',
-    'api.e-hentai.org': '178.162.147.246',
-    'forums.e-hentai.org': '172.67.0.127',
-    'ehgt.org': '178.162.140.212',
-    'exhentai.org': '178.175.129.252',
-    'api.exhentai.org': '178.175.128.252',
+  static const Map<String, List<String>> internalHosts = {
+    'e-hentai.org': [
+      '104.20.134.21',
+      '172.67.0.127',
+      '104.20.135.21',
+    ],
+    // 'api.e-hentai.org': ['37.48.89.16'],
+    'api.e-hentai.org': [
+      '178.162.147.246',
+      '37.48.89.16',
+      '178.162.139.18',
+      '81.171.10.55',
+    ],
+    'forums.e-hentai.org': [
+      '104.20.135.21',
+      '172.67.0.127',
+      '104.20.134.21',
+    ],
+    'ehgt.org': [
+      '178.162.140.212',
+      '178.162.139.24',
+      '37.48.89.44',
+      '81.171.10.48',
+    ],
+    'exhentai.org': [
+      '178.175.129.254',
+      '178.175.129.252',
+      '178.175.132.20',
+      '178.175.132.22',
+      '178.175.128.252',
+      '178.175.128.254',
+    ],
+    'api.exhentai.org': [
+      '178.175.128.252',
+      '178.175.129.252',
+      '178.175.132.20',
+    ],
   };
 }

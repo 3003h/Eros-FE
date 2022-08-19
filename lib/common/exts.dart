@@ -44,7 +44,7 @@ extension EhString on String {
       return this;
     }
     if (df) {
-      final realHost = dnsService.hostMapMerge[host] ?? host;
+      final realHost = dnsService.getHost(host);
       final String realUrl = replaceFirst(host, realHost);
       logger.v('realUrl: $realUrl');
       return realUrl;

@@ -306,6 +306,8 @@ class EhConfigService extends ProfileService {
       } else {
         ehDioConfig
           ..baseUrl = EHConst.EH_BASE_URL
+          ..receiveTimeout = ehDioConfig.receiveTimeout
+          ..connectTimeout = ehDioConfig.connectTimeout
           ..maxConnectionsPerHost = null;
       }
     });
