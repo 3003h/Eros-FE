@@ -1053,6 +1053,13 @@ class ViewExtController extends GetxController {
                     curve: Curves.easeOut);
               }
             },
+            onPreviewPageController: () {
+              if (preloadPageController.positions.isNotEmpty) {
+                preloadPageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut);
+              }
+            },
           );
         } else {
           // 双页阅读
@@ -1084,6 +1091,13 @@ class ViewExtController extends GetxController {
               () {
                 if (extendedPageController.positions.isNotEmpty) {
                   extendedPageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut);
+                }
+              },
+              onPreviewPageController: () {
+                if (preloadPageController.positions.isNotEmpty) {
+                  preloadPageController.nextPage(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeOut);
                 }
@@ -1163,13 +1177,19 @@ class ViewExtController extends GetxController {
     Function onExtendedPageController, {
     Function? onPreviewPageController,
   }) {
-    // 暂时停用ExtendedPageController
-    if (vState.columnMode != ViewColumnMode.single ||
-        pageViewType == PageViewType.photoView) {
-      onPageController.call();
-    } else {
-      onExtendedPageController.call();
-      onPreviewPageController?.call();
+    if (vState.columnMode != ViewColumnMode.single) {
+      return;
+    }
+
+    switch (pageViewType) {
+      case PageViewType.photoView:
+        onPageController.call();
+        break;
+      case PageViewType.preloadPageview:
+        onPreviewPageController?.call();
+        break;
+      default:
+        onExtendedPageController.call();
     }
   }
 
