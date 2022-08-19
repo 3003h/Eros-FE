@@ -70,6 +70,12 @@ class GalleryHeaderSliver extends StatelessWidget {
                             GalleryUploader(
                                 uploader:
                                     _pageState.galleryProvider?.uploader ?? ''),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            // Expanded(
+                            //     child: GalleryInfoGridView(
+                            //         pageController: _controller)),
                             const Spacer(),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -102,6 +108,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
   final GalleryPageController pageController;
 
   GalleryPageState get _pageState => pageController.gState;
+  static const paddingRight = 6.0;
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +116,160 @@ class GalleryInfoBarSliver extends StatelessWidget {
       fontSize: 13,
       color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
     );
+
+    Widget languageWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.language,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.language ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+
+    Widget imageCountWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidImages,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.filecount ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+    Widget fileSizeWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.fileArrowDown,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.filesizeText ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+    Widget favCountWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidHeart,
+              // color: CupertinoColors.systemRed,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(_pageState.galleryProvider?.favoritedCount ?? '',
+                style: _hearTextStyle),
+          ],
+        );
+    Widget rateCountWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidStar,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(_pageState.galleryProvider?.ratingCount ?? '',
+                style: _hearTextStyle),
+          ],
+        );
+    Widget potTimeWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidClock,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.postTime ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+
+    Widget infoWidget() => Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                languageWidget(),
+                imageCountWidget(),
+                fileSizeWidget(),
+              ],
+            ).marginSymmetric(vertical: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                favCountWidget(),
+                potTimeWidget(),
+              ],
+            ),
+          ],
+        );
+
+    Widget infoWidget2() => ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: SingleChildScrollView(
+            child: Container(
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondarySystemBackground, context),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 4,
+                    height: 48,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.secondaryLabel, context),
+                  ).paddingOnly(right: 8),
+                  Expanded(
+                    child: GridView(
+                      padding: const EdgeInsets.all(0),
+                      // alignment: WrapAlignment.spaceBetween,
+                      // spacing: 19,
+                      // runSpacing: 8,
+                      gridDelegate:
+                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                        mainAxisExtent: 20,
+                        maxCrossAxisExtent: 160,
+                      ),
+                      shrinkWrap: true,
+                      children: [
+                        languageWidget(),
+                        fileSizeWidget(),
+                        imageCountWidget(),
+                        favCountWidget(),
+                        rateCountWidget(),
+                        potTimeWidget(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -134,6 +295,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
                 final GalleryPageState _pageState = logic.gState;
                 return Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -170,59 +332,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Row(
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.language,
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.secondaryLabel, context),
-                          size: 13,
-                        ).paddingOnly(right: 8),
-                        Text(
-                          _pageState.galleryProvider?.language ?? '',
-                          style: _hearTextStyle,
-                        ),
-                        const Spacer(),
-                        Icon(
-                          FontAwesomeIcons.images,
-                          size: 13,
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.secondaryLabel, context),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          _pageState.galleryProvider?.filecount ?? '',
-                          style: _hearTextStyle,
-                        ),
-                        const Spacer(),
-                        Text(
-                          _pageState.galleryProvider?.filesizeText ?? '',
-                          style: _hearTextStyle,
-                        ),
-                      ],
-                    ).marginSymmetric(vertical: 4),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Icon(
-                          FontAwesomeIcons.solidHeart,
-                          color: CupertinoColors.systemRed,
-                          size: 13,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          child: Text(
-                              _pageState.galleryProvider?.favoritedCount ?? '',
-                              style: _hearTextStyle),
-                        ),
-                        const Spacer(),
-                        Text(
-                          _pageState.galleryProvider?.postTime ?? '',
-                          style: _hearTextStyle,
-                        ),
-                      ],
-                    ),
-                    // const Text('...'),
+                    infoWidget2(),
                   ],
                 );
               },
@@ -230,6 +340,147 @@ class GalleryInfoBarSliver extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class GalleryInfoGridView extends StatelessWidget {
+  const GalleryInfoGridView({Key? key, required this.pageController})
+      : super(key: key);
+  final GalleryPageController pageController;
+
+  GalleryPageState get _pageState => pageController.gState;
+  static const paddingRight = 6.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextStyle _hearTextStyle = TextStyle(
+      fontSize: 13,
+      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+    );
+
+    Widget languageWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.language,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.language ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+
+    Widget imageCountWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidImages,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.filecount ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+    Widget fileSizeWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.fileArrowDown,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.filesizeText ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+    Widget favCountWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidHeart,
+              // color: CupertinoColors.systemRed,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(_pageState.galleryProvider?.favoritedCount ?? '',
+                style: _hearTextStyle),
+          ],
+        );
+    Widget rateCountWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidStar,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(_pageState.galleryProvider?.ratingCount ?? '',
+                style: _hearTextStyle),
+          ],
+        );
+    Widget potTimeWidget() => Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidClock,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
+            Text(
+              _pageState.galleryProvider?.postTime ?? '',
+              style: _hearTextStyle,
+            ),
+          ],
+        );
+
+    Widget infoWidget() => ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            // color: CupertinoDynamicColor.resolve(
+            //     CupertinoColors.secondarySystemBackground, context),
+            child: GridView(
+              padding: const EdgeInsets.all(0),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                mainAxisExtent: 20,
+                maxCrossAxisExtent: 240,
+              ),
+              shrinkWrap: true,
+              children: [
+                languageWidget(),
+                fileSizeWidget(),
+                imageCountWidget(),
+                favCountWidget(),
+                rateCountWidget(),
+                potTimeWidget(),
+              ],
+            ),
+          ),
+        );
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Get.toNamed(
+          EHRoutes.galleryInfo,
+          id: isLayoutLarge ? 2 : null,
+        );
+      },
+      child: infoWidget(),
     );
   }
 }
