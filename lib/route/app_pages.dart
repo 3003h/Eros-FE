@@ -190,7 +190,7 @@ class AppPages {
       }),
       // opaque: kDebugMode,
       opaque: false,
-      // showCupertinoParallax: false,
+      showCupertinoParallax: false,
     ),
     GetPage(
       name: EHRoutes.galleryPage,
