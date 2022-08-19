@@ -31,18 +31,18 @@ class DnsService extends ProfileService {
   final RxList<DnsCache> _dohCache = <DnsCache>[].obs;
   RxList<DnsCache> get dohCache => _dohCache;
 
-  Map<String, String> get hostMap {
-    final _map = <String, String>{};
+  Map<String, List<String>> get hostMap {
+    final _map = <String, List<String>>{};
     for (final dc in hosts) {
       if (dc.host != null && dc.addr != null) {
-        _map.putIfAbsent(dc.host!, () => dc.addr!);
+        _map.putIfAbsent(dc.host!, () => [dc.addr!]);
       }
     }
     return _map;
   }
 
   /// 合并 内置host以及自定义host列表
-  Map<String, String> get hostMapMerge {
+  Map<String, List<String>> get hostMapMerge {
     final coutomHosts = hostMap;
 
     // 预置列表
@@ -55,6 +55,16 @@ class DnsService extends ProfileService {
     }
 
     return coutomHosts;
+  }
+
+  String getHost(String oriHost) {
+    if (hostMapMerge[oriHost] == null) {
+      return oriHost;
+    }
+    final tempList = List<String>.from(hostMapMerge[oriHost] ?? [oriHost]);
+    // tempList.shuffle();
+    // logger.d('host $oriHost: ${tempList.first}');
+    return tempList.first;
   }
 
   void removeCustomHostAt(int index) {
@@ -133,6 +143,7 @@ class DnsService extends ProfileService {
       // logger.d(_dc.toJson());
       return _dc;
     }
+    return null;
   }
 
   @override
