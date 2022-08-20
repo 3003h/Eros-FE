@@ -179,6 +179,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Последнее использованное избранное, долгий тап чтобы выбрать вручную"),
+        "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Слева направо"),
         "license": MessageLookupByLibrary.simpleMessage("Лицензии"),
         "light": MessageLookupByLibrary.simpleMessage("Светлая"),

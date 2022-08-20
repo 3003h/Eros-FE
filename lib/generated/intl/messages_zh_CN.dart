@@ -142,6 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "jump_to_page": MessageLookupByLibrary.simpleMessage("页面跳转"),
         "language": MessageLookupByLibrary.simpleMessage("语言设置"),
         "last_favorites": MessageLookupByLibrary.simpleMessage("使用上次选择，长按选择其他"),
+        "layout": MessageLookupByLibrary.simpleMessage("样式"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("从左到右"),
         "license": MessageLookupByLibrary.simpleMessage("开源许可"),
         "light": MessageLookupByLibrary.simpleMessage("浅色模式"),

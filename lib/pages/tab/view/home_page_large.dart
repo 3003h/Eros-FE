@@ -19,6 +19,7 @@ import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
 import 'package:fehviewer/pages/setting/image_hide_page.dart';
+import 'package:fehviewer/pages/setting/layout_setting_page.dart';
 import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
@@ -141,6 +142,13 @@ class TabHomeLarge extends GetView<TabHomeController> {
                             return GetPageRoute(
                               settings: settings,
                               page: () => const EhSettingPage(),
+                              transition: Transition.fadeIn,
+                              showCupertinoParallax: false,
+                            );
+                          case EHRoutes.layoutSeting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const LayoutSettingPage(),
                               transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                             );

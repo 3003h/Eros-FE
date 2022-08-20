@@ -382,5 +382,6 @@
   "version": "Версия",
   "donate": "Пожертвовать",
   "license": "Лицензии",
-  "fullscreen": "На полный экран"
+  "fullscreen": "На полный экран",
+  "layout": "Layout"
 }

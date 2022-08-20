@@ -382,5 +382,6 @@
   "version": "Version",
   "donate": "Donate",
   "license": "License",
-  "fullscreen": "Fullscreen"
+  "fullscreen": "Fullscreen",
+  "layout": "Layout"
 }

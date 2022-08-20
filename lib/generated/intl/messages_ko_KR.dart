@@ -156,6 +156,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("언어"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "최근 즐겨찾기, 길게 눌러 수동으로 선택할 수 있습니다."),
+        "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("왼쪽에서 오른쪽으로"),
         "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("밝게"),
