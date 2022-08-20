@@ -52,16 +52,9 @@ class ListViewLayoutSetting extends StatelessWidget {
     final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
     final bool _tagTranslat = _ehConfigService.isTagTranslat;
     final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
-    final bool _favLongTap = _ehConfigService.isFavLongTap.value;
-    final bool _isLogin = userController.isLogin;
-    final bool _isClipboar = _ehConfigService.isClipboardLink.value;
 
     void _handleJpnTitleChanged(bool newValue) {
       _ehConfigService.isJpnTitle(newValue);
-    }
-
-    void _handleTagTranslatCDNChanged(bool newValue) {
-      _ehConfigService.enableTagTranslateCDN = newValue;
     }
 
     void _handleGalleryListImgBlurChanged(bool newValue) {
@@ -131,10 +124,15 @@ class ListViewLayoutSetting extends StatelessWidget {
           // desc: '画廊列表封面模糊效果',
         ),
       const ItemSpace(),
+      _buildListModeItem(
+        context,
+      ),
       Obx(() {
-        return _buildListModeItem(
-          context,
-          hideLine: _ehConfigService.listMode.value != ListModeEnum.list,
+        return TextSwitchItem(
+          L10n.of(context).blurring_cover_background,
+          intValue: _ehConfigService.blurringOfCoverBackground,
+          onChanged: (val) => _ehConfigService.blurringOfCoverBackground = val,
+          hideDivider: _ehConfigService.listMode.value != ListModeEnum.list,
         );
       }),
       Obx(() {
