@@ -149,6 +149,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("語言設定"),
         "last_favorites":
             MessageLookupByLibrary.simpleMessage("最後的收藏夾（長按來手動選擇）"),
+        "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("從左至右"),
         "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("淺色模式"),

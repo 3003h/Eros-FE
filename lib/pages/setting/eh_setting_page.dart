@@ -8,7 +8,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/login/controller/login_controller.dart';
-import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -50,9 +49,6 @@ class ListViewEhSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
-    final bool _tagTranslat = _ehConfigService.isTagTranslat;
-    final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
     final bool _favLongTap = _ehConfigService.isFavLongTap.value;
     final bool _isLogin = userController.isLogin;
     final bool _isClipboar = _ehConfigService.isClipboardLink.value;
@@ -67,18 +63,6 @@ class ListViewEhSetting extends StatelessWidget {
       }
       Api.selEhProfile();
       loginController.asyncGetUserInfo();
-    }
-
-    void _handleJpnTitleChanged(bool newValue) {
-      _ehConfigService.isJpnTitle(newValue);
-    }
-
-    void _handleTagTranslatCDNChanged(bool newValue) {
-      _ehConfigService.enableTagTranslateCDN = newValue;
-    }
-
-    void _handleGalleryListImgBlurChanged(bool newValue) {
-      _ehConfigService.isGalleryImgBlur.value = newValue;
     }
 
     void _handleFavLongTapChanged(bool newValue) {
@@ -160,11 +144,6 @@ class ListViewEhSetting extends StatelessWidget {
           title: L10n.of(context).ehentai_my_tags,
           selector: L10n.of(context).mytags_on_website,
           onTap: () {
-            // if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-            //   Get.to(() => InWebMyTags());
-            // } else {
-            //   showToast('Not support');
-            // }
             Get.toNamed(
               EHRoutes.myTags,
               id: isLayoutLarge ? 2 : null,
@@ -235,60 +214,7 @@ class ListViewEhSetting extends StatelessWidget {
             return const SizedBox.shrink();
           }
         }),
-      const ItemSpace(),
-      if (localeService.isLanguageCodeZh)
-        Obx(() {
-          return SelectorSettingItem(
-            title: '标签翻译',
-            onTap: () {
-              Get.toNamed(
-                EHRoutes.tagTranslat,
-                id: isLayoutLarge ? 2 : null,
-              );
-            },
-            selector: _tagTranslat ? L10n.of(context).on : L10n.of(context).off,
-            desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
-          );
-        }),
-      TextSwitchItem(
-        L10n.of(context).show_jpn_title,
-        intValue: _jpnTitle,
-        onChanged: _handleJpnTitleChanged,
-        // desc: '如果该画廊有日文标题则优先显示',
-      ),
-      if (localeService.isLanguageCodeZh)
-        TextSwitchItem(
-          '画廊封面模糊',
-          intValue: _galleryImgBlur,
-          onChanged: _handleGalleryListImgBlurChanged,
-          hideDivider: true,
-          // desc: '画廊列表封面模糊效果',
-        ),
-      const ItemSpace(),
-      Obx(() {
-        return _buildListModeItem(
-          context,
-          hideLine: _ehConfigService.listMode.value != ListModeEnum.list,
-        );
-      }),
-      Obx(() {
-        return AnimatedCrossFade(
-          alignment: Alignment.center,
-          crossFadeState: _ehConfigService.listMode.value == ListModeEnum.list
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-          firstCurve: Curves.easeIn,
-          secondCurve: Curves.easeOut,
-          duration: const Duration(milliseconds: 200),
-          firstChild: const SizedBox(),
-          secondChild: TextSwitchItem(
-            L10n.of(context).fixed_height_of_list_items,
-            intValue: _ehConfigService.fixedHeightOfListItems,
-            onChanged: (val) => _ehConfigService.fixedHeightOfListItems = val,
-            hideDivider: true,
-          ),
-        );
-      }),
+
       const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).default_favorites,
@@ -297,37 +223,14 @@ class ListViewEhSetting extends StatelessWidget {
         desc: L10n.of(context).manually_sel_favorites,
         descOn: L10n.of(context).last_favorites,
       ),
-      Obx(() {
-        return SelectorSettingItem(
-          title: L10n.of(context).avatar,
-          onTap: () {
-            Get.toNamed(
-              EHRoutes.avatarSetting,
-              id: isLayoutLarge ? 2 : null,
-            );
-          },
-          selector: _ehConfigService.showCommentAvatar
-              ? L10n.of(context).on
-              : L10n.of(context).off,
-        );
-      }),
+
       TextSwitchItem(
         L10n.of(context).clipboard_detection,
         intValue: _isClipboar,
         onChanged: _handleClipboarLinkTapChange,
         desc: L10n.of(context).clipboard_detection_desc,
-        hideDivider: !localeService.isLanguageCodeZh,
+        hideDivider: true,
       ),
-      if (localeService.isLanguageCodeZh)
-        TextSwitchItem(
-          '评论机翻按钮',
-          intValue: _ehConfigService.commentTrans.value,
-          onChanged: (bool newValue) =>
-              _ehConfigService.commentTrans.value = newValue,
-          desc: '关闭',
-          descOn: '用机器翻译将评论翻译为简体中文',
-          hideDivider: true,
-        ),
     ];
 
     return ListView.builder(
@@ -337,29 +240,4 @@ class ListViewEhSetting extends StatelessWidget {
       },
     );
   }
-}
-
-/// 列表模式切换
-Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
-  final String _title = L10n.of(context).list_mode;
-  final EhConfigService ehConfigService = Get.find();
-
-  final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.list: L10n.of(context).listmode_medium,
-    ListModeEnum.simpleList: L10n.of(context).listmode_small,
-    ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
-    ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
-    ListModeEnum.grid: L10n.of(context).listmode_grid,
-    if (kDebugMode || ehConfigService.debugMode)
-      ListModeEnum.debugSimple: 'debugSimple',
-  };
-  return Obx(() {
-    return SelectorItem<ListModeEnum>(
-      title: _title,
-      hideDivider: hideLine,
-      actionMap: modeMap,
-      initVal: ehConfigService.listMode.value,
-      onValueChanged: (val) => ehConfigService.listMode.value = val,
-    );
-  });
 }

@@ -85,6 +85,7 @@ class SettingViewController extends GetxController
 
     _itemTitles = <String>[
       L10n.of(context).eh,
+      L10n.of(context).layout,
       L10n.of(context).read,
       L10n.of(context).download,
       L10n.of(context).search,
@@ -95,16 +96,18 @@ class SettingViewController extends GetxController
 
     _icons = <IconData>[
       FontAwesomeIcons.cookieBite,
+      FontAwesomeIcons.layerGroup,
       FontAwesomeIcons.bookOpen,
       FontAwesomeIcons.download,
-      FontAwesomeIcons.search,
-      FontAwesomeIcons.tools,
-      FontAwesomeIcons.shieldAlt,
-      FontAwesomeIcons.infoCircle,
+      FontAwesomeIcons.magnifyingGlass,
+      FontAwesomeIcons.screwdriverWrench,
+      FontAwesomeIcons.shieldHalved,
+      FontAwesomeIcons.circleInfo,
     ];
 
     _routes = <String>[
       EHRoutes.ehSetting,
+      EHRoutes.layoutSeting,
       EHRoutes.readSeting,
       EHRoutes.downloadSetting,
       EHRoutes.searchSetting,

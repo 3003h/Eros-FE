@@ -52,10 +52,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
     final DnsService _dnsService = Get.find();
     final CacheController _cacheController = Get.find();
 
-    void _handlePureDarkChanged(bool newValue) {
-      _ehConfigService.isPureDarkTheme.value = newValue;
-    }
-
     void _handleDoHChanged(bool newValue) {
       // if (!newValue && !_dnsService.enableCustomHosts) {
       //   /// 清除hosts 关闭代理
@@ -84,35 +80,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     final List<Widget> _list = <Widget>[
-      _buildLanguageItem(context, hideLine: true),
-      const ItemSpace(),
-      _buildThemeItem(context),
-      Obx(() => TextSwitchItem(
-            L10n.of(context).dark_mode_effect,
-            intValue: _ehConfigService.isPureDarkTheme.value,
-            onChanged: _handlePureDarkChanged,
-            desc: L10n.of(context).gray_black,
-            descOn: L10n.of(context).pure_black,
-          )),
-      if (context.isTablet)
-        Obx(() => TextSwitchItem(
-              L10n.of(context).tablet_layout,
-              intValue: _ehConfigService.tabletLayout,
-              onChanged: (bool val) => _ehConfigService.tabletLayout = val,
-            )),
-      if (!Get.find<EhConfigService>().isSafeMode.value)
-        SelectorSettingItem(
-          hideDivider: true,
-          title: L10n.of(context).tabbar_setting,
-          selector: '',
-          onTap: () {
-            Get.toNamed(
-              EHRoutes.pageSetting,
-              id: isLayoutLarge ? 2 : null,
-            );
-          },
-        ),
-      const ItemSpace(),
       SelectorSettingItem(
         hideDivider: true,
         title: L10n.of(context).image_hide,
@@ -209,49 +176,5 @@ class ListViewAdvancedSetting extends StatelessWidget {
         return _list[index];
       },
     );
-  }
-
-  /// 语言设置部件
-  Widget _buildLanguageItem(BuildContext context, {bool hideLine = false}) {
-    final LocaleService localeService = Get.find();
-    final String _title = L10n.of(context).language;
-
-    final Map<String, String> localeMap = <String, String>{
-      '': L10n.of(context).follow_system,
-    };
-
-    localeMap.addAll(languageMenu);
-
-    return Obx(() {
-      return SelectorItem<String>(
-        title: _title,
-        hideDivider: hideLine,
-        actionMap: localeMap,
-        initVal: localeService.localCode.value,
-        onValueChanged: (val) => localeService.localCode.value = val,
-      );
-    });
-  }
-
-  /// 主题设置部件
-  Widget _buildThemeItem(BuildContext context, {bool hideLine = false}) {
-    final String _title = L10n.of(context).theme;
-    final ThemeService themeService = Get.find();
-
-    final Map<ThemesModeEnum, String> themeMap = <ThemesModeEnum, String>{
-      ThemesModeEnum.system: L10n.of(context).follow_system,
-      ThemesModeEnum.ligthMode: L10n.of(context).light,
-      ThemesModeEnum.darkMode: L10n.of(context).dark,
-    };
-
-    return Obx(() {
-      return SelectorItem<ThemesModeEnum>(
-        title: _title,
-        hideDivider: hideLine,
-        actionMap: themeMap,
-        initVal: themeService.themeModel,
-        onValueChanged: (val) => themeService.themeModel = val,
-      );
-    });
   }
 }

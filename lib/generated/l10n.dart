@@ -3903,6 +3903,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Layout`
+  String get layout {
+    return Intl.message(
+      'Layout',
+      name: 'layout',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
