@@ -44,5 +44,6 @@
   "avatarBorderRadiusType?": "",
   "enablePHashCheck?": false,
   "enableQRCodeCheck?": false,
-  "viewFullscreen?": false
+  "viewFullscreen?": false,
+  "blurringOfCoverBackground?": false
 }

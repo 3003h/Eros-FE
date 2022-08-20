@@ -3913,6 +3913,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Blurring of cover background`
+  String get blurring_cover_background {
+    return Intl.message(
+      'Blurring of cover background',
+      name: 'blurring_cover_background',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

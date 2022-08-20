@@ -75,6 +75,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
+        "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
+            "Blurring of cover background"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "change_to_favorites":
             MessageLookupByLibrary.simpleMessage("Change to favorites"),
