@@ -55,10 +55,11 @@ class TranslatorHelper {
   }) async {
     logger.d('translateText');
 
-    final sourceLanguage = await _languageIdentifier.identify(sourceText);
+    String sourceLanguage = await _languageIdentifier.identify(sourceText);
     logger.d('sourceLanguage: $sourceLanguage');
-
-    // final sourceLanguage = 'en';
+    if (sourceLanguage == 'und') {
+      sourceLanguage = 'auto';
+    }
 
     bool useGoogleTranslate = false;
     String rultText = '';

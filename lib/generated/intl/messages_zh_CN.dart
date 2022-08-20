@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "auto_select_profile": MessageLookupByLibrary.simpleMessage("自动选择配置"),
         "avatar": MessageLookupByLibrary.simpleMessage("头像"),
         "back": MessageLookupByLibrary.simpleMessage("返回"),
+        "blurring_cover_background":
+            MessageLookupByLibrary.simpleMessage("封面背景模糊化"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("修改收藏夹"),
         "chapter": MessageLookupByLibrary.simpleMessage("章节"),
@@ -142,6 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "jump_to_page": MessageLookupByLibrary.simpleMessage("页面跳转"),
         "language": MessageLookupByLibrary.simpleMessage("语言设置"),
         "last_favorites": MessageLookupByLibrary.simpleMessage("使用上次选择，长按选择其他"),
+        "layout": MessageLookupByLibrary.simpleMessage("样式"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("从左到右"),
         "license": MessageLookupByLibrary.simpleMessage("开源许可"),
         "light": MessageLookupByLibrary.simpleMessage("浅色模式"),
@@ -284,15 +287,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("主页标签设置"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("平板布局"),
         "tagNamespace": m3,
-        "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("添加到我的标签"),
+        "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("管理标签"),
         "tag_dialog_Default_color":
             MessageLookupByLibrary.simpleMessage("默认颜色"),
         "tag_dialog_Hide": MessageLookupByLibrary.simpleMessage("隐藏"),
         "tag_dialog_TagColor": MessageLookupByLibrary.simpleMessage("标签颜色"),
         "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("订阅"),
         "tag_dialog_tagWeight": MessageLookupByLibrary.simpleMessage("标签权重"),
-        "tag_vote_down": MessageLookupByLibrary.simpleMessage("投反对票"),
-        "tag_vote_up": MessageLookupByLibrary.simpleMessage("投赞成票"),
+        "tag_vote_down": MessageLookupByLibrary.simpleMessage("反对标签"),
+        "tag_vote_up": MessageLookupByLibrary.simpleMessage("赞成标签"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("撤销投票"),
         "tags": MessageLookupByLibrary.simpleMessage("标签"),
         "tap_to_turn_page_anima":
@@ -470,9 +473,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_name": MessageLookupByLibrary.simpleMessage("用户名"),
         "version": MessageLookupByLibrary.simpleMessage("版本"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("震动反馈"),
-        "vote_down_successfully": MessageLookupByLibrary.simpleMessage("点踩成功"),
+        "vote_down_successfully": MessageLookupByLibrary.simpleMessage("反对成功"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("投票成功"),
-        "vote_up_successfully": MessageLookupByLibrary.simpleMessage("点赞成功"),
+        "vote_up_successfully": MessageLookupByLibrary.simpleMessage("赞成成功"),
         "webdav_Account": MessageLookupByLibrary.simpleMessage("WebDAV账户"),
         "welcome_text":
             MessageLookupByLibrary.simpleMessage("小撸怡情~大撸伤身~强撸灰飞烟灭~~")

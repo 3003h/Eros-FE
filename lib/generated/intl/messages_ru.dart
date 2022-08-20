@@ -77,6 +77,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Автоопределение профиля"),
         "avatar": MessageLookupByLibrary.simpleMessage("Аватар"),
         "back": MessageLookupByLibrary.simpleMessage("Назад"),
+        "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
+            "Blurring of cover background"),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
         "change_to_favorites":
             MessageLookupByLibrary.simpleMessage("Change to favorites"),
@@ -179,6 +181,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Последнее использованное избранное, долгий тап чтобы выбрать вручную"),
+        "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Слева направо"),
         "license": MessageLookupByLibrary.simpleMessage("Лицензии"),
         "light": MessageLookupByLibrary.simpleMessage("Светлая"),

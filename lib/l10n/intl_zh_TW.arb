@@ -380,5 +380,7 @@
   "version": "Version",
   "donate": "Donate",
   "license": "License",
-  "fullscreen": "Fullscreen"
+  "fullscreen": "Fullscreen",
+  "layout": "Layout",
+  "blurring_cover_background": "Blurring of cover background"
 }

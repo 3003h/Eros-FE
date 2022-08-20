@@ -227,6 +227,7 @@ class _CoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EhConfigService ehConfigService = Get.find();
     final GalleryProvider _item = galleryProviderController.galleryProvider;
 
     // 图片高宽比
@@ -299,6 +300,16 @@ class _CoverImage extends StatelessWidget {
       return imageBlureFittedBox;
     }
 
+    Widget coverBackground(BoxFit fit, bool blurringOfCoverBackground) {
+      if (_fit == BoxFit.contain && blurringOfCoverBackground) {
+        return getImageBlureFittedBox();
+      } else {
+        return Container(
+          color: CupertinoColors.systemGrey5,
+        );
+      }
+    }
+
     if (!cardType) {
       image = Container(
         child: HeroMode(
@@ -330,7 +341,12 @@ class _CoverImage extends StatelessWidget {
       image = Stack(
         fit: StackFit.passthrough,
         children: [
-          if (_fit == BoxFit.contain) getImageBlureFittedBox(),
+          Obx(() {
+            return coverBackground(
+              _fit,
+              ehConfigService.blurringOfCoverBackground,
+            );
+          }),
           Center(
             child: HeroMode(
               enabled: !isLayoutLarge,

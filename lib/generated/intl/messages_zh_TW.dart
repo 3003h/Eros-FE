@@ -70,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("退回"),
+        "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
+            "Blurring of cover background"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("更改為收藏夾"),
         "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
@@ -149,6 +151,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("語言設定"),
         "last_favorites":
             MessageLookupByLibrary.simpleMessage("最後的收藏夾（長按來手動選擇）"),
+        "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("從左至右"),
         "license": MessageLookupByLibrary.simpleMessage("License"),
         "light": MessageLookupByLibrary.simpleMessage("淺色模式"),
