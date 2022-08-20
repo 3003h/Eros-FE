@@ -199,9 +199,20 @@ class EhConfigService extends ProfileService {
   bool get viewFullscreen => _viewFullscreen.value;
   set viewFullscreen(bool val) => _viewFullscreen.value = val;
 
+  final _blurringOfCoverBackground = false.obs;
+  bool get blurringOfCoverBackground => _blurringOfCoverBackground.value;
+  set blurringOfCoverBackground(bool val) =>
+      _blurringOfCoverBackground.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    blurringOfCoverBackground =
+        ehConfig.blurringOfCoverBackground ?? blurringOfCoverBackground;
+    everProfile<bool>(_blurringOfCoverBackground, (value) {
+      ehConfig = ehConfig.copyWith(blurringOfCoverBackground: value);
+    });
 
     viewFullscreen = ehConfig.viewFullscreen ?? viewFullscreen;
     everProfile<bool>(_viewFullscreen, (value) {

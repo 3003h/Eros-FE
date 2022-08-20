@@ -20,6 +20,8 @@ Future<void> showTagInfoDialog(String text,
   Get.lazyPut(() => TagInfoController(), tag: pageCtrlTag);
   final TagInfoController controller = Get.find(tag: pageCtrlTag);
 
+  const bool showActionText = true;
+
   List<Widget> _getActions() {
     if (vote == 0) {
       return <Widget>[
@@ -28,7 +30,7 @@ Future<void> showTagInfoDialog(String text,
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(FontAwesomeIcons.thumbsUp).paddingOnly(right: 8),
-              Text(L10n.of(Get.context!).tag_vote_up),
+              if (showActionText) Text(L10n.of(Get.context!).tag_vote_up),
             ],
           ),
           onPressed: () {
@@ -41,7 +43,7 @@ Future<void> showTagInfoDialog(String text,
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(FontAwesomeIcons.thumbsDown).paddingOnly(right: 8),
-                Text(L10n.of(Get.context!).tag_vote_down),
+                if (showActionText) Text(L10n.of(Get.context!).tag_vote_down),
               ],
             ),
             onPressed: () {
@@ -57,7 +59,7 @@ Future<void> showTagInfoDialog(String text,
             children: [
               const Icon(FontAwesomeIcons.arrowRotateLeft)
                   .paddingOnly(right: 8),
-              Text(L10n.of(Get.context!).tag_withdraw_vote),
+              if (showActionText) Text(L10n.of(Get.context!).tag_withdraw_vote),
             ],
           ),
           onPressed: () {
@@ -74,7 +76,7 @@ Future<void> showTagInfoDialog(String text,
             children: [
               const Icon(FontAwesomeIcons.arrowRotateLeft)
                   .paddingOnly(right: 8),
-              Text(L10n.of(Get.context!).tag_withdraw_vote),
+              if (showActionText) Text(L10n.of(Get.context!).tag_withdraw_vote),
             ],
           ),
           onPressed: () {
@@ -125,10 +127,27 @@ Future<void> showTagInfoDialog(String text,
           }
         }
 
+        Future<void> _tapAddtoMytag() async {
+          Get.back();
+          final _mytagsController = Get.find<EhMyTagsController>();
+          await _mytagsController.showAddNewTagDialog(Get.context!,
+              userTag: EhUsertag(
+                title: '$type:$text',
+                defaultColor: true,
+                watch: true,
+                tagWeight: '10',
+              ));
+        }
+
         return CupertinoAlertDialog(
           title: _title(),
           content: Get.find<LocaleService>().isLanguageCodeZh
-              ? TagDialogView(text: text, type: type)
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TagDialogView(text: text, type: type),
+                  ],
+                )
               : const SizedBox.shrink(),
           actions: [
             ..._getActions(),
@@ -137,20 +156,11 @@ Future<void> showTagInfoDialog(String text,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Icon(FontAwesomeIcons.tags).paddingOnly(right: 8),
-                  Text(L10n.of(Get.context!).tag_add_to_mytag),
+                  if (showActionText)
+                    Text(L10n.of(Get.context!).tag_add_to_mytag),
                 ],
               ),
-              onPressed: () async {
-                Get.back();
-                final _mytagsController = Get.find<EhMyTagsController>();
-                await _mytagsController.showAddNewTagDialog(Get.context!,
-                    userTag: EhUsertag(
-                      title: '$type:$text',
-                      defaultColor: true,
-                      watch: true,
-                      tagWeight: '10',
-                    ));
-              },
+              onPressed: _tapAddtoMytag,
             ),
           ],
         );
