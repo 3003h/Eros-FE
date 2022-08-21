@@ -227,11 +227,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               ? Hero(
                   tag: '${widget.imageSer}',
                   child: state.completedWidget,
-                  createRectTween: (Rect? begin, Rect? end) {
-                    final tween =
-                        MaterialRectCenterArcTween(begin: begin, end: end);
-                    return tween;
-                  },
+                  createRectTween: (Rect? begin, Rect? end) =>
+                      MaterialRectCenterArcTween(begin: begin, end: end),
                 )
               : state.completedWidget;
         } else if (state.extendedImageLoadState == LoadState.loading) {
@@ -498,9 +495,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       return ViewAD(ser: widget.imageSer);
     }
 
-    final checkPHashHide = ehConfigService.enablePHashCheck;
-    final checkQRCodeHide = ehConfigService.enableQRCodeCheck;
-
     logger.v('return FutureBuilder ser:${widget.imageSer}');
     return FutureBuilder<GalleryImage?>(
         future: controller.imageFutureMap[widget.imageSer],
@@ -563,7 +557,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
             logger.v('ImageExtProvider');
             Widget image = ImageExtProvider(
-              // url: _image?.imageUrl ?? '',
               image: ExtendedResizeImage.resizeIfNeeded(
                 provider: ExtendedEHNetworkImageProvider(
                   _image?.imageUrl ?? '',
