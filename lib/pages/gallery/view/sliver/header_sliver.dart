@@ -68,18 +68,24 @@ class GalleryHeaderSliver extends StatelessWidget {
                             // 标题
                             GalleryTitle(
                               title: _pageState.title,
+                              // title: 'ceui',
+                              // title:
+                              //     '测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试',
                             ),
                             // 上传用户
                             GalleryUploader(
                                 uploader:
                                     _pageState.galleryProvider?.uploader ?? ''),
                             const SizedBox(
-                              height: 12,
+                              height: 8,
                             ),
-                            // Expanded(
-                            //     child: GalleryInfoGridView(
-                            //         pageController: _controller)),
-                            const Spacer(),
+                            Expanded(
+                                child: GalleryInfoView(
+                                    pageController: _controller)),
+                            // const Spacer(),
+                            const SizedBox(
+                              height: 8,
+                            ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
@@ -111,7 +117,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
   final GalleryPageController pageController;
 
   GalleryPageState get _pageState => pageController.gState;
-  static const paddingRight = 6.0;
+  static const paddingRight = 5.0;
 
   @override
   Widget build(BuildContext context) {
@@ -208,17 +214,20 @@ class GalleryInfoBarSliver extends StatelessWidget {
               color: CupertinoDynamicColor.resolve(
                   CupertinoColors.secondaryLabel, context),
             ).paddingOnly(right: paddingRight),
-            Text(
-              _pageState.galleryProvider?.postTime ?? '...',
-              style: _hearTextStyle,
+            Expanded(
+              child: Text(
+                _pageState.galleryProvider?.postTime ?? '...',
+                style: _hearTextStyle,
+              ),
             ),
           ],
         );
 
-    final postTimeTextSize =
-        getTextSize(_pageState.galleryProvider?.postTime ?? '', _hearTextStyle);
-    final _maxCrossAxisExtent = max(160.0, postTimeTextSize.width + 68.0);
-    logger.v('_maxCrossAxisExtent $_maxCrossAxisExtent  $postTimeTextSize');
+    // final postTimeTextSize =
+    //     getTextSize(_pageState.galleryProvider?.postTime ?? '', _hearTextStyle);
+    final postTimeTextSize = getTextSize('0000-00-00 00:00', _hearTextStyle);
+    final _maxCrossAxisExtent = max(160.0, postTimeTextSize.width + 50.0);
+    logger.d('_maxCrossAxisExtent $_maxCrossAxisExtent  $postTimeTextSize');
 
     Widget infoWidget() => ClipRRect(
           borderRadius: BorderRadius.circular(8),
@@ -236,7 +245,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
                       height: 48,
                       color: CupertinoDynamicColor.resolve(
                           CupertinoColors.secondaryLabel, context),
-                    ).paddingOnly(right: 8),
+                    ).paddingOnly(right: 6),
                   ),
                   Expanded(
                     child: GridView(
@@ -290,7 +299,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         // ignore: prefer_const_literals_to_create_immutables
@@ -324,7 +333,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
                         ],
                       ),
                     ),
-                    infoWidget(),
+                    // infoWidget(),
                   ],
                 );
               },
@@ -336,8 +345,8 @@ class GalleryInfoBarSliver extends StatelessWidget {
   }
 }
 
-class GalleryInfoGridView extends StatelessWidget {
-  const GalleryInfoGridView({Key? key, required this.pageController})
+class GalleryInfoView extends StatelessWidget {
+  const GalleryInfoView({Key? key, required this.pageController})
       : super(key: key);
   final GalleryPageController pageController;
 
@@ -347,8 +356,9 @@ class GalleryInfoGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle _hearTextStyle = TextStyle(
-      fontSize: 13,
-      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
+      fontSize: 12,
+      color: CupertinoDynamicColor.resolve(
+          CupertinoColors.secondaryLabel, context),
     );
 
     Widget languageWidget() => Row(
@@ -361,7 +371,7 @@ class GalleryInfoGridView extends StatelessWidget {
               size: 12,
             ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.language ?? '',
+              _pageState.galleryProvider?.language ?? '...',
               style: _hearTextStyle,
             ),
           ],
@@ -377,7 +387,7 @@ class GalleryInfoGridView extends StatelessWidget {
                   CupertinoColors.secondaryLabel, context),
             ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.filecount ?? '',
+              _pageState.galleryProvider?.filecount ?? '...',
               style: _hearTextStyle,
             ),
           ],
@@ -392,7 +402,7 @@ class GalleryInfoGridView extends StatelessWidget {
                   CupertinoColors.secondaryLabel, context),
             ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.filesizeText ?? '',
+              _pageState.galleryProvider?.filesizeText ?? '...',
               style: _hearTextStyle,
             ),
           ],
@@ -407,7 +417,7 @@ class GalleryInfoGridView extends StatelessWidget {
                   CupertinoColors.secondaryLabel, context),
               size: 12,
             ).paddingOnly(right: paddingRight),
-            Text(_pageState.galleryProvider?.favoritedCount ?? '',
+            Text(_pageState.galleryProvider?.favoritedCount ?? '...',
                 style: _hearTextStyle),
           ],
         );
@@ -420,7 +430,7 @@ class GalleryInfoGridView extends StatelessWidget {
                   CupertinoColors.secondaryLabel, context),
               size: 12,
             ).paddingOnly(right: paddingRight),
-            Text(_pageState.galleryProvider?.ratingCount ?? '',
+            Text(_pageState.galleryProvider?.ratingCount ?? '...',
                 style: _hearTextStyle),
           ],
         );
@@ -434,32 +444,37 @@ class GalleryInfoGridView extends StatelessWidget {
                   CupertinoColors.secondaryLabel, context),
             ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.postTime ?? '',
+              _pageState.galleryProvider?.postTime ?? '...',
               style: _hearTextStyle,
               maxLines: 2,
             ),
           ],
         );
 
-    Widget infoWidget() => ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
-            // color: CupertinoDynamicColor.resolve(
-            //     CupertinoColors.secondarySystemBackground, context),
-            child: GridView(
-              padding: const EdgeInsets.all(0),
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisExtent: 20,
-                maxCrossAxisExtent: 240,
-              ),
-              shrinkWrap: true,
+    Widget infoWidget() => UnconstrainedBox(
+          child: IntrinsicHeight(
+            child: Row(
               children: [
-                languageWidget(),
-                fileSizeWidget(),
-                imageCountWidget(),
-                favCountWidget(),
-                rateCountWidget(),
-                potTimeWidget(),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(2),
+                  child: Container(
+                    width: 2,
+                    color: CupertinoDynamicColor.resolve(
+                        CupertinoColors.secondaryLabel, context),
+                  ),
+                ).paddingOnly(right: 6),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    languageWidget(),
+                    favCountWidget(),
+                    // rateCountWidget(),
+                    imageCountWidget(),
+                    fileSizeWidget(),
+                    potTimeWidget(),
+                  ],
+                ),
               ],
             ),
           ),

@@ -166,7 +166,7 @@ class GalleryTitle extends StatelessWidget {
     return GestureDetector(
       child: SelectableText(
         title,
-        maxLines: 6,
+        maxLines: 4,
         minLines: 1,
         textAlign: TextAlign.left,
         // 对齐方式

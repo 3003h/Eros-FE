@@ -98,7 +98,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
 
             GalleryObxSliver(
               (state) => SliverToBoxAdapter(
-                child: GalleryAtions(
+                child: GalleryActions(
                   galleryProvider: state,
                   pageController: _controller,
                 ),
