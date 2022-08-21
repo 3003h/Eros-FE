@@ -30,8 +30,6 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
-
     /// 解析回复的评论
     final reptyComment = controller.parserCommentRepty(galleryComment);
     final reptyComments = controller.parserAllCommentRepty(galleryComment);
@@ -663,7 +661,7 @@ Future<void> _onOpen(
         regGalleryPageUrl.hasMatch(_openUrl)) {
       final String? _realUrl = regGalleryUrl.firstMatch(_openUrl)?.group(0) ??
           regGalleryPageUrl.firstMatch(_openUrl)?.group(0);
-      logger.d('in $_realUrl');
+      logger.v('in $_realUrl');
       NavigatorUtil.goGalleryPage(
         url: _realUrl,
       );
