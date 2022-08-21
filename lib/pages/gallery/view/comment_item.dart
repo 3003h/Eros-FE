@@ -6,6 +6,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
+import 'package:fehviewer/widget/text_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
@@ -387,13 +388,18 @@ class CommentItem extends StatelessWidget {
             ));
 
     final _placeHold = Obx(() {
-      return BoringAvatars(
-        name: _name,
-        // colors: ThemeColors.tagColorList,
-        colors: [...ThemeColors.catColorList],
-        type: _ehConfigService.boringAvatarsType,
-        square: true,
-      );
+      return _ehConfigService.avatarType == AvatarType.boringAvatar
+          ? BoringAvatars(
+              name: _name,
+              colors: [...ThemeColors.catColorList],
+              type: _ehConfigService.boringAvatarsType,
+              square: true,
+            )
+          : TextAvatar(
+              name: _name,
+              colors: [...ThemeColors.catColorList],
+              type: _ehConfigService.textAvatarsType,
+            );
     });
 
     void tapName() {

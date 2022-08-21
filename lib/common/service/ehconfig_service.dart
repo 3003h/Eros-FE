@@ -204,9 +204,33 @@ class EhConfigService extends ProfileService {
   set blurringOfCoverBackground(bool val) =>
       _blurringOfCoverBackground.value = val;
 
+  static const _kAvatarType = AvatarType.boringAvatar;
+  final _avatarType = _kAvatarType.obs;
+  AvatarType get avatarType => _avatarType.value;
+  set avatarType(AvatarType val) => _avatarType.value = val;
+
+  static const _kTextAvatarsType = TextAvatarsType.firstText;
+  final _textAvatarsType = _kTextAvatarsType.obs;
+  TextAvatarsType get textAvatarsType => _textAvatarsType.value;
+  set textAvatarsType(TextAvatarsType val) => _textAvatarsType.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    avatarType =
+        EnumToString.fromString(AvatarType.values, ehConfig.avatarType ?? '') ??
+            _kAvatarType;
+    everFromEunm(_avatarType, (String value) {
+      ehConfig = ehConfig.copyWith(avatarType: value);
+    });
+
+    textAvatarsType = EnumToString.fromString(
+            TextAvatarsType.values, ehConfig.textAvatarsType ?? '') ??
+        _kTextAvatarsType;
+    everFromEunm(_textAvatarsType, (String value) {
+      ehConfig = ehConfig.copyWith(textAvatarsType: value);
+    });
 
     blurringOfCoverBackground =
         ehConfig.blurringOfCoverBackground ?? blurringOfCoverBackground;
