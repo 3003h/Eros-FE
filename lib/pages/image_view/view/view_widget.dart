@@ -371,8 +371,6 @@ class ImageExtProvider extends GetView<ViewExtController> {
   }) : super(key: key);
 
   final ImageProvider image;
-
-  // final String url;
   final int ser;
   final AnimationController fadeAnimationController;
   final VoidCallback reloadImage;
@@ -410,24 +408,27 @@ class ImageExtProvider extends GetView<ViewExtController> {
 
             return _ViewLoading(progress: progress, ser: ser);
 
-          ///if you don't want override completed widget
-          ///please return null or state.completedWidget
-          //return null;
-          //return state.completedWidget;
           case LoadState.completed:
             fadeAnimationController.forward();
-
             onLoadCompleted?.call(state);
 
-            Widget image = FadeTransition(
+            Widget image = controller.vState.viewMode != ViewMode.topToBottom
+                ? Hero(
+                    tag: '$ser',
+                    child: state.completedWidget,
+                    createRectTween: (Rect? begin, Rect? end) =>
+                        MaterialRectCenterArcTween(begin: begin, end: end),
+                  )
+                : state.completedWidget;
+
+            image = FadeTransition(
               opacity: fadeAnimationController,
-              child: state.completedWidget,
+              child: image,
             );
 
             return image;
 
           case LoadState.failed:
-            // logger.d('Failed url: $url');
             fadeAnimationController.reset();
 
             // logger.d('Failed e: ${state.lastException}\n${state.lastStack}');
