@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/models/gallery_provider.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
@@ -120,15 +123,15 @@ class GalleryInfoBarSliver extends StatelessWidget {
     Widget languageWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_pageState.galleryProvider?.language != null)
-              Icon(
-                FontAwesomeIcons.language,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-                size: 12,
-              ).paddingOnly(right: paddingRight),
+            // if (_pageState.galleryProvider?.language != null)
+            Icon(
+              FontAwesomeIcons.language,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.language ?? '',
+              _pageState.galleryProvider?.language ?? '...',
               style: _hearTextStyle,
             ),
           ],
@@ -137,15 +140,15 @@ class GalleryInfoBarSliver extends StatelessWidget {
     Widget imageCountWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_pageState.galleryProvider?.filecount != null)
-              Icon(
-                FontAwesomeIcons.solidImages,
-                size: 12,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-              ).paddingOnly(right: paddingRight),
+            // if (_pageState.galleryProvider?.filecount != null)
+            Icon(
+              FontAwesomeIcons.solidImages,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.filecount ?? '',
+              _pageState.galleryProvider?.filecount ?? '...',
               style: _hearTextStyle,
             ),
           ],
@@ -153,15 +156,15 @@ class GalleryInfoBarSliver extends StatelessWidget {
     Widget fileSizeWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_pageState.galleryProvider?.filesizeText != null)
-              Icon(
-                FontAwesomeIcons.fileArrowDown,
-                size: 12,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-              ).paddingOnly(right: paddingRight),
+            // if (_pageState.galleryProvider?.filesizeText != null)
+            Icon(
+              FontAwesomeIcons.fileArrowDown,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.filesizeText ?? '',
+              _pageState.galleryProvider?.filesizeText ?? '...',
               style: _hearTextStyle,
             ),
           ],
@@ -169,48 +172,53 @@ class GalleryInfoBarSliver extends StatelessWidget {
     Widget favCountWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_pageState.galleryProvider?.favoritedCount != null)
-              Icon(
-                FontAwesomeIcons.solidHeart,
-                // color: CupertinoColors.systemRed,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-                size: 12,
-              ).paddingOnly(right: paddingRight),
-            Text(_pageState.galleryProvider?.favoritedCount ?? '',
+            // if (_pageState.galleryProvider?.favoritedCount != null)
+            Icon(
+              FontAwesomeIcons.solidHeart,
+              // color: CupertinoColors.systemRed,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(_pageState.galleryProvider?.favoritedCount ?? '...',
                 style: _hearTextStyle),
           ],
         );
     Widget rateCountWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_pageState.galleryProvider?.ratingCount != null)
-              Icon(
-                FontAwesomeIcons.solidStar,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-                size: 12,
-              ).paddingOnly(right: paddingRight),
-            Text(_pageState.galleryProvider?.ratingCount ?? '',
+            // if (_pageState.galleryProvider?.ratingCount != null)
+            Icon(
+              FontAwesomeIcons.solidStar,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+              size: 12,
+            ).paddingOnly(right: paddingRight),
+            Text(_pageState.galleryProvider?.ratingCount ?? '...',
                 style: _hearTextStyle),
           ],
         );
     Widget potTimeWidget() => Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_pageState.galleryProvider?.postTime != null)
-              Icon(
-                FontAwesomeIcons.solidClock,
-                size: 12,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-              ).paddingOnly(right: paddingRight),
+            // if (_pageState.galleryProvider?.postTime != null)
+            Icon(
+              FontAwesomeIcons.solidClock,
+              size: 12,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.secondaryLabel, context),
+            ).paddingOnly(right: paddingRight),
             Text(
-              _pageState.galleryProvider?.postTime ?? '',
+              _pageState.galleryProvider?.postTime ?? '...',
               style: _hearTextStyle,
             ),
           ],
         );
+
+    final postTimeTextSize =
+        getTextSize(_pageState.galleryProvider?.postTime ?? '', _hearTextStyle);
+    final _maxCrossAxisExtent = max(160.0, postTimeTextSize.width + 68.0);
+    logger.v('_maxCrossAxisExtent $_maxCrossAxisExtent  $postTimeTextSize');
 
     Widget infoWidget() => ClipRRect(
           borderRadius: BorderRadius.circular(8),
@@ -221,25 +229,28 @@ class GalleryInfoBarSliver extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 4,
-                    height: 48,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.secondaryLabel, context),
-                  ).paddingOnly(right: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Container(
+                      width: 4,
+                      height: 48,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.secondaryLabel, context),
+                    ).paddingOnly(right: 8),
+                  ),
                   Expanded(
                     child: GridView(
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.all(0),
-                      gridDelegate:
-                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         mainAxisExtent: 20,
-                        maxCrossAxisExtent: 160,
+                        maxCrossAxisExtent: _maxCrossAxisExtent,
                       ),
                       shrinkWrap: true,
                       children: [
                         languageWidget(),
-                        fileSizeWidget(),
                         imageCountWidget(),
+                        fileSizeWidget(),
                         favCountWidget(),
                         rateCountWidget(),
                         potTimeWidget(),
@@ -425,6 +436,7 @@ class GalleryInfoGridView extends StatelessWidget {
             Text(
               _pageState.galleryProvider?.postTime ?? '',
               style: _hearTextStyle,
+              maxLines: 2,
             ),
           ],
         );
