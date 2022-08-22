@@ -384,5 +384,7 @@
   "license": "Лицензии",
   "fullscreen": "На полный экран",
   "layout": "Layout",
-  "blurring_cover_background": "Blurring of cover background"
+  "blurring_cover_background": "Blurring of cover background",
+  "tag_limit": "Tag Limit",
+  "no_limit": "No Limit"
 }

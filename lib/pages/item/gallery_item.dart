@@ -593,27 +593,33 @@ class TagBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
-    return simpleTags != null && simpleTags!.isNotEmpty
-        ? Obx(() => Container(
-              padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
-              child: Wrap(
-                spacing: 4, //主轴上子控件的间距
-                runSpacing: 4, //交叉轴上子控件之间的间距
-                children:
-                    List<Widget>.from(simpleTags!.map((SimpleTag _simpleTag) {
-                  final String? _text = _ehConfigService.isTagTranslat
-                      ? _simpleTag.translat
-                      : _simpleTag.text;
-                  return TagItem(
-                    text: _text,
-                    color: ColorsUtil.getTagColor(_simpleTag.color),
-                    backgrondColor:
-                        ColorsUtil.getTagColor(_simpleTag.backgrondColor),
-                  );
-                }).toList()), //要显示的子控件集合
-              ),
-            ))
-        : Container();
+
+    return Obx(() {
+      List<SimpleTag>? _simpleTags =
+          getLimitSimpleTags(simpleTags, _ehConfigService.listViewTagLimit);
+
+      if (_simpleTags == null || (_simpleTags.isEmpty ?? true)) {
+        return const SizedBox.shrink();
+      }
+
+      return Container(
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 8),
+        child: Wrap(
+          spacing: 4, //主轴上子控件的间距
+          runSpacing: 4, //交叉轴上子控件之间的间距
+          children: List<Widget>.from(_simpleTags.map((SimpleTag _simpleTag) {
+            final String? _text = _ehConfigService.isTagTranslat
+                ? _simpleTag.translat
+                : _simpleTag.text;
+            return TagItem(
+              text: _text,
+              color: ColorsUtil.getTagColor(_simpleTag.color),
+              backgrondColor: ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+            );
+          }).toList()), //要显示的子控件集合
+        ),
+      );
+    });
   }
 }
 

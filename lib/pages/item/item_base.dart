@@ -59,57 +59,62 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
-    if (simpleTags == null || (simpleTags?.isEmpty ?? true)) {
-      return const SizedBox.shrink();
-    }
-
     ScrollController controller = ScrollController();
+    final EhConfigService _ehConfigService = Get.find();
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: SizedBox(
-        height: crossAxisCount * 22 - 4,
-        child: WaterfallFlow.builder(
-          shrinkWrap: true,
-          controller: controller,
-          primary: false,
-          scrollDirection: Axis.horizontal,
-          gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 4.0,
-            mainAxisSpacing: 4.0,
-          ),
-          itemCount: simpleTags?.length ?? 0,
-          itemBuilder: (BuildContext context, int index) {
-            return Obx(
-              () {
-                final _simpleTag = simpleTags![index];
-                final String? _text = _ehConfigService.isTagTranslat
-                    ? _simpleTag.translat
-                    : _simpleTag.text;
-                Widget _item = TagItem(
-                  text: _text,
-                  color: ColorsUtil.getTagColor(_simpleTag.color),
-                  backgrondColor:
-                      ColorsUtil.getTagColor(_simpleTag.backgrondColor),
-                );
+    return Obx(() {
+      List<SimpleTag>? _simpleTags =
+          getLimitSimpleTags(simpleTags, _ehConfigService.listViewTagLimit);
 
-                if (splitFrame) {
-                  _item = FrameSeparateWidget(
-                    placeHolder: const TagItem(text: '..'),
-                    index: -1,
-                    child: _item,
+      if (_simpleTags == null || _simpleTags.isEmpty) {
+        return const SizedBox.shrink();
+      }
+
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: SizedBox(
+          height: crossAxisCount * 22 - 4,
+          child: WaterfallFlow.builder(
+            shrinkWrap: true,
+            controller: controller,
+            primary: false,
+            scrollDirection: Axis.horizontal,
+            gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: 4.0,
+              mainAxisSpacing: 4.0,
+            ),
+            itemCount: _simpleTags.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              return Obx(
+                () {
+                  final _simpleTag = _simpleTags[index];
+                  final String? _text = _ehConfigService.isTagTranslat
+                      ? _simpleTag.translat
+                      : _simpleTag.text;
+                  Widget _item = TagItem(
+                    text: _text,
+                    color: ColorsUtil.getTagColor(_simpleTag.color),
+                    backgrondColor:
+                        ColorsUtil.getTagColor(_simpleTag.backgrondColor),
                   );
-                }
 
-                return _item;
-              },
-            );
-          },
+                  if (splitFrame) {
+                    _item = FrameSeparateWidget(
+                      placeHolder: const TagItem(text: '..'),
+                      index: -1,
+                      child: _item,
+                    );
+                  }
+
+                  return _item;
+                },
+              );
+            },
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -129,5 +134,13 @@ class PlaceHolderLine extends StatelessWidget {
         ),
       ).paddingSymmetric(vertical: 4, horizontal: 4),
     );
+  }
+}
+
+List<SimpleTag>? getLimitSimpleTags(List<SimpleTag>? simpleTags, int limit) {
+  if (limit > -1) {
+    return simpleTags?.take(limit).toList();
+  } else {
+    return simpleTags;
   }
 }

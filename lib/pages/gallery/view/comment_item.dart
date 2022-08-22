@@ -6,6 +6,7 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
+import 'package:fehviewer/widget/text_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
@@ -30,8 +31,6 @@ class CommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
-
     /// 解析回复的评论
     final reptyComment = controller.parserCommentRepty(galleryComment);
     final reptyComments = controller.parserAllCommentRepty(galleryComment);
@@ -368,34 +367,25 @@ class CommentItem extends StatelessWidget {
     final _commentId = comment?.id ?? galleryComment.id ?? '0';
     final _future = avatarController.getUser(_userId);
 
-    final _placeHoldOld = Builder(
-        builder: (context) => Container(
-              color: CupertinoDynamicColor.resolve(
-                  ThemeColors.catColorList[_userId.isNotEmpty
-                      ? int.parse(_userId.substring(_userId.length - 1))
-                      : int.parse(_commentId.substring(_commentId.length - 1))],
-                  context),
-              child: Center(
-                child: Text(
-                  _name.substring(0, 1).toUpperCase(),
-                  style: TextStyle(
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.secondarySystemBackground, context),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ));
-
     final _placeHold = Obx(() {
-      return BoringAvatars(
-        name: _name,
-        // colors: ThemeColors.tagColorList,
-        colors: [...ThemeColors.catColorList],
-        type: _ehConfigService.boringAvatarsType,
-        square: true,
-      );
+      final radius = _ehConfigService.avatarBorderRadiusType ==
+              AvatarBorderRadiusType.roundedRect
+          ? 8.0
+          : avatarSize / 2;
+
+      return _ehConfigService.avatarType == AvatarType.boringAvatar
+          ? BoringAvatars(
+              name: _name,
+              colors: [...ThemeColors.catColorList],
+              type: _ehConfigService.boringAvatarsType,
+              square: true,
+            )
+          : TextAvatar(
+              name: _name,
+              colors: [...ThemeColors.catColorList],
+              type: _ehConfigService.textAvatarsType,
+              radius: radius,
+            );
     });
 
     void tapName() {
@@ -405,6 +395,10 @@ class CommentItem extends StatelessWidget {
 
     return Obx(() {
       final avatarUrl = avatarController.getAvatarUrl(_userId);
+      final radius = _ehConfigService.avatarBorderRadiusType ==
+              AvatarBorderRadiusType.roundedRect
+          ? 8.0
+          : avatarSize / 2;
       return GestureDetector(
         onTap: tapName,
         child: Row(
@@ -416,11 +410,7 @@ class CommentItem extends StatelessWidget {
                 height: avatarSize,
                 margin: const EdgeInsets.only(right: 8),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                      _ehConfigService.avatarBorderRadiusType ==
-                              AvatarBorderRadiusType.roundedRect
-                          ? 8
-                          : avatarSize / 2),
+                  borderRadius: BorderRadius.circular(radius),
                   child: (avatarUrl != null && avatarUrl.isNotEmpty)
                       ? EhNetworkImage(
                           imageUrl: avatarUrl,
@@ -663,7 +653,7 @@ Future<void> _onOpen(
         regGalleryPageUrl.hasMatch(_openUrl)) {
       final String? _realUrl = regGalleryUrl.firstMatch(_openUrl)?.group(0) ??
           regGalleryPageUrl.firstMatch(_openUrl)?.group(0);
-      logger.d('in $_realUrl');
+      logger.v('in $_realUrl');
       NavigatorUtil.goGalleryPage(
         url: _realUrl,
       );

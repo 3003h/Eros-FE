@@ -6,6 +6,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
+import 'package:fehviewer/pages/item/item_base.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,8 +63,14 @@ class GalleryItemController extends GetxController {
     logger.v('favCat=$favCat');
   }
 
-  int get tagLine =>
-      max(1, (galleryProvider.simpleTags?.length ?? 0) / 4).round();
+  int get tagLine => max(
+          1,
+          (getLimitSimpleTags(galleryProvider.simpleTags,
+                          _ehConfigService.listViewTagLimit)
+                      ?.length ??
+                  0) /
+              4)
+      .round();
 
   /// 设置收藏夹
   void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {

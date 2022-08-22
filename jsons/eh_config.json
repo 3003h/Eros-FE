@@ -40,10 +40,13 @@
   "fixedHeightOfListItems?": true,
   "tagTranslateDataUpdateMode?": "",
   "showCommentAvatar?": false,
+  "avatarType?": "",
   "boringAvatarsType?": "",
+  "textAvatarsType?": "",
   "avatarBorderRadiusType?": "",
   "enablePHashCheck?": false,
   "enableQRCodeCheck?": false,
   "viewFullscreen?": false,
-  "blurringOfCoverBackground?": false
+  "blurringOfCoverBackground?": false,
+  "listViewTagLimit?": -1
 }

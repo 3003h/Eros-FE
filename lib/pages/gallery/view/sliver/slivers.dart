@@ -18,8 +18,8 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 import '../const.dart';
 
-class GalleryAtions extends StatelessWidget {
-  const GalleryAtions({
+class GalleryActions extends StatelessWidget {
+  const GalleryActions({
     Key? key,
     required this.galleryProvider,
     required this.pageController,
@@ -96,7 +96,7 @@ class GalleryAtions extends StatelessWidget {
     ];
 
     return Container(
-      padding: const EdgeInsets.only(top: 4, bottom: 14),
+      padding: const EdgeInsets.only(top: 0, bottom: 14),
       child: Row(
         children: _btns,
       ),

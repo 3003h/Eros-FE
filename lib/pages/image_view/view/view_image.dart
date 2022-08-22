@@ -169,19 +169,30 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    switch (vState.loadFrom) {
-      case LoadFrom.download:
-        // 从已下载查看
-        final path = vState.imagePathList[widget.imageSer - 1];
-        return fileImage(path);
-      case LoadFrom.gallery:
-        // 从画廊页查看
-        return getViewImage();
-      case LoadFrom.archiver:
-        return archiverImage();
-      default:
-        return const Text('None');
-    }
+    Widget _image = () {
+      switch (vState.loadFrom) {
+        case LoadFrom.download:
+          // 从已下载查看
+          final path = vState.imagePathList[widget.imageSer - 1];
+          return fileImage(path);
+        case LoadFrom.gallery:
+          // 从画廊页查看
+          return getViewImage();
+        case LoadFrom.archiver:
+          return archiverImage();
+        default:
+          return const Text('None');
+      }
+    }();
+
+    // return _image();
+
+    return Obx(() {
+      return HeroMode(
+        child: _image,
+        enabled: widget.imageSer == controller.vState.currentItemIndex + 1,
+      );
+    });
   }
 
   /// 本地图片文件 构建Widget
@@ -216,11 +227,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               ? Hero(
                   tag: '${widget.imageSer}',
                   child: state.completedWidget,
-                  createRectTween: (Rect? begin, Rect? end) {
-                    final tween =
-                        MaterialRectCenterArcTween(begin: begin, end: end);
-                    return tween;
-                  },
+                  createRectTween: (Rect? begin, Rect? end) =>
+                      MaterialRectCenterArcTween(begin: begin, end: end),
                 )
               : state.completedWidget;
         } else if (state.extendedImageLoadState == LoadState.loading) {
@@ -487,9 +495,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       return ViewAD(ser: widget.imageSer);
     }
 
-    final checkPHashHide = ehConfigService.enablePHashCheck;
-    final checkQRCodeHide = ehConfigService.enableQRCodeCheck;
-
     logger.v('return FutureBuilder ser:${widget.imageSer}');
     return FutureBuilder<GalleryImage?>(
         future: controller.imageFutureMap[widget.imageSer],
@@ -552,7 +557,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
             logger.v('ImageExtProvider');
             Widget image = ImageExtProvider(
-              // url: _image?.imageUrl ?? '',
               image: ExtendedResizeImage.resizeIfNeeded(
                 provider: ExtendedEHNetworkImageProvider(
                   _image?.imageUrl ?? '',
