@@ -24,6 +24,23 @@ class GallerySliverPage extends StatefulWidget {
   _GallerySliverPageState createState() => _GallerySliverPageState();
 }
 
+class _GallerySliverSafeArea extends StatelessWidget {
+  const _GallerySliverSafeArea({Key? key, required this.child})
+      : super(key: key);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverSafeArea(
+      top: false,
+      bottom: false,
+      left: !isLayoutLarge,
+      sliver: child,
+    );
+  }
+}
+
 class _GallerySliverPageState extends State<GallerySliverPage> {
   late final GalleryPageController _controller;
   final _tag = pageCtrlTag;
@@ -83,50 +100,56 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
             ),
             // 头部
             if (pageState.fromUrl)
-              GalleryObxSliver(
-                (state) => GalleryHeaderSliver(
-                  initGalleryProvider: state,
-                  tabTag: tabTag,
+              _GallerySliverSafeArea(
+                child: GalleryObxSliver(
+                  (state) => GalleryHeaderSliver(
+                    initGalleryProvider: state,
+                    tabTag: tabTag,
+                  ),
+                  pageController: _controller,
                 ),
-                pageController: _controller,
               )
             else if (galleryProvider != null)
-              GalleryHeaderSliver(
-                initGalleryProvider: galleryProvider,
-                tabTag: tabTag,
+              _GallerySliverSafeArea(
+                child: GalleryHeaderSliver(
+                  initGalleryProvider: galleryProvider,
+                  tabTag: tabTag,
+                ),
               ),
 
             GalleryObxSliver(
-              (state) => SliverToBoxAdapter(
-                child: GalleryAtions(
-                  galleryProvider: state,
-                  pageController: _controller,
+              (state) => _GallerySliverSafeArea(
+                child: SliverToBoxAdapter(
+                  child: GalleryActions(
+                    galleryProvider: state,
+                    pageController: _controller,
+                  ),
                 ),
               ),
               pageController: _controller,
               showLoading: true,
             ),
             // tag 标题
-            SliverToBoxAdapter(child: MiniTitle(title: L10n.of(context).tags)),
+            _GallerySliverSafeArea(
+                child: SliverToBoxAdapter(
+                    child: MiniTitle(title: L10n.of(context).tags))),
             // tag
             GalleryObxSliver(
-              (state) => SliverPadding(
-                padding: const EdgeInsets.only(
-                    left: kPadding, right: kPadding, bottom: 20),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      return TagGroupItem(
-                          tagGroupData: (state.tagGroup ?? [])[index]);
-                      // return FrameSeparateWidget(
-                      //   index: index,
-                      //   placeHolder: const TagGroupPpaceHolder(),
-                      //   child: TagGroupItem(
-                      //       tagGroupData: (state.tagGroup ?? [])[index]),
-                      //   // child: TagGroupPpaceHolder(),
-                      // );
-                    },
-                    childCount: (state.tagGroup ?? []).length,
+              (state) => _GallerySliverSafeArea(
+                child: SliverPadding(
+                  padding: const EdgeInsets.only(
+                    left: kPadding,
+                    right: kPadding,
+                    bottom: 20,
+                  ),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return TagGroupItem(
+                            tagGroupData: (state.tagGroup ?? [])[index]);
+                      },
+                      childCount: (state.tagGroup ?? []).length,
+                    ),
                   ),
                 ),
               ),
@@ -134,10 +157,12 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
             ),
             // 章节 小标题
             GalleryObxSliver(
-              (state) => SliverToBoxAdapter(
-                child: (state.chapter?.isNotEmpty ?? false)
-                    ? MiniTitle(title: L10n.of(context).chapter)
-                    : const SizedBox.shrink(),
+              (state) => _GallerySliverSafeArea(
+                child: SliverToBoxAdapter(
+                  child: (state.chapter?.isNotEmpty ?? false)
+                      ? MiniTitle(title: L10n.of(context).chapter)
+                      : const SizedBox.shrink(),
+                ),
               ),
               pageController: _controller,
             ),
@@ -145,59 +170,65 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
             // 章节
             GalleryObxSliver(
               (state) {
-                return SliverToBoxAdapter(
-                  child: ChapterGridView(
-                    controller: _controller,
-                    chapter: state.chapter,
-                    maxLine: 3,
-                  ).paddingOnly(
-                      bottom:
-                          (state.chapter != null && state.chapter!.isNotEmpty)
-                              ? 20
-                              : 0),
+                return _GallerySliverSafeArea(
+                  child: SliverToBoxAdapter(
+                    child: ChapterGridView(
+                      controller: _controller,
+                      chapter: state.chapter,
+                      maxLine: 3,
+                    ).paddingOnly(
+                        bottom:
+                            (state.chapter != null && state.chapter!.isNotEmpty)
+                                ? 20
+                                : 0),
+                  ),
                 );
               },
               pageController: _controller,
             ),
 
             // 最上面的部分评论 小标题
-            SliverToBoxAdapter(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => Get.toNamed(
-                  EHRoutes.galleryComment,
-                  id: isLayoutLarge ? 2 : null,
-                ),
-                child: Row(
-                  children: [
-                    MiniTitle(title: L10n.of(context).gallery_comments),
-                    const Spacer(),
-                  ],
+            _GallerySliverSafeArea(
+              child: SliverToBoxAdapter(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => Get.toNamed(
+                    EHRoutes.galleryComment,
+                    id: isLayoutLarge ? 2 : null,
+                  ),
+                  child: Row(
+                    children: [
+                      MiniTitle(title: L10n.of(context).gallery_comments),
+                      const Spacer(),
+                    ],
+                  ),
                 ),
               ),
             ),
             // 最上面的部分评论 评论内容 (一点点性能问题)
             GalleryObxSliver(
               (state) {
-                return SliverPadding(
-                  padding: const EdgeInsets.only(
-                      left: kPadding, right: kPadding, bottom: 20),
-                  sliver: SliverToBoxAdapter(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.deferToChild,
-                      onTap: () => Get.toNamed(
-                        EHRoutes.galleryComment,
-                        id: isLayoutLarge ? 2 : null,
+                return _GallerySliverSafeArea(
+                  child: SliverPadding(
+                    padding: const EdgeInsets.only(
+                        left: kPadding, right: kPadding, bottom: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.deferToChild,
+                        onTap: () => Get.toNamed(
+                          EHRoutes.galleryComment,
+                          id: isLayoutLarge ? 2 : null,
+                        ),
+                        // child: const TopComment(showBtn: false),
+                        child: Obx(() {
+                          return TopCommentEx(
+                            key: ValueKey(_controller.gState.comments
+                                .map((e) => e.id)
+                                .join('')),
+                            comments: _controller.gState.comments,
+                          );
+                        }),
                       ),
-                      // child: const TopComment(showBtn: false),
-                      child: Obx(() {
-                        return TopCommentEx(
-                          key: ValueKey(_controller.gState.comments
-                              .map((e) => e.id)
-                              .join('')),
-                          comments: _controller.gState.comments,
-                        );
-                      }),
                     ),
                   ),
                 );
@@ -206,26 +237,30 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
             ),
             // 缩略图
             GalleryObxSliver(
-              (state) => SliverPadding(
-                padding: const EdgeInsets.only(
-                  bottom: 20,
-                  left: kPadding,
-                  right: kPadding,
-                ),
-                sliver: PreviewSliverGrid(
-                  images: pageState.firstPageImage,
-                  gid: state.gid ?? '',
-                  referer: _controller.gState.url,
+              (state) => _GallerySliverSafeArea(
+                child: SliverPadding(
+                  padding: const EdgeInsets.only(
+                    bottom: 20,
+                    left: kPadding,
+                    right: kPadding,
+                  ),
+                  sliver: PreviewSliverGrid(
+                    images: pageState.firstPageImage,
+                    gid: state.gid ?? '',
+                    referer: _controller.gState.url,
+                  ),
                 ),
               ),
               pageController: _controller,
             ),
             GalleryObxSliver(
-              (state) => SliverPadding(
-                padding: const EdgeInsets.only(bottom: 20),
-                sliver: SliverToBoxAdapter(
-                  child:
-                      MorePreviewButton(hasMorePreview: pageState.hasMoreImage),
+              (state) => _GallerySliverSafeArea(
+                child: SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  sliver: SliverToBoxAdapter(
+                    child: MorePreviewButton(
+                        hasMorePreview: pageState.hasMoreImage),
+                  ),
                 ),
               ),
               pageController: _controller,

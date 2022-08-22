@@ -384,5 +384,7 @@
   "license": "开源许可",
   "fullscreen": "全屏",
   "layout": "样式",
-  "blurring_cover_background": "封面背景模糊化"
+  "blurring_cover_background": "封面背景模糊化",
+  "tag_limit": "标签上限",
+  "no_limit": "无限制"
 }

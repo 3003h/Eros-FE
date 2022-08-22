@@ -211,6 +211,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "no": MessageLookupByLibrary.simpleMessage("No"),
         "noMorePreviews":
             MessageLookupByLibrary.simpleMessage("No more previews"),
+        "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
         "notFav": MessageLookupByLibrary.simpleMessage("Not Favorited"),
         "not_login": MessageLookupByLibrary.simpleMessage("Not Login"),
         "off": MessageLookupByLibrary.simpleMessage("Off"),
@@ -363,6 +364,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("Watch"),
         "tag_dialog_tagWeight":
             MessageLookupByLibrary.simpleMessage("Tag Weight"),
+        "tag_limit": MessageLookupByLibrary.simpleMessage("Tag Limit"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("Vote Down"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("Vote Up"),
         "tag_withdraw_vote":

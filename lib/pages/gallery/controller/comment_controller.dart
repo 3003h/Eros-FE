@@ -21,15 +21,13 @@ enum EditState {
   reptyComment,
 }
 
-class CommentController extends GetxController with WidgetsBindingObserver {
+class CommentController extends GetxController {
   CommentController();
 
   GalleryPageController get pageController {
     logger.v('CommentController -> pageCtrlDepth: $pageCtrlTag');
     return Get.find(tag: pageCtrlTag);
   }
-
-  // MorseCode get morseCode => MorseCode(di: '·', dah: '-');
 
   BCDCode get bcdCode => BCDCode(code0: '·', code1: '-');
 
@@ -48,15 +46,9 @@ class CommentController extends GetxController with WidgetsBindingObserver {
   late String oriComment;
   String? commentId;
   FocusNode focusNode = FocusNode();
-  ScrollController scrollController = ScrollController();
 
   late String reptyCommentText;
   late String reptyUser;
-
-  final WidgetsBinding? _widgetsBinding = WidgetsBinding.instance;
-  double _preBottomInset = 0;
-  double _bottomInset = 0;
-  bool _didChangeMetrics = false;
 
   final Rx<EditState> _editState = EditState.newComment.obs;
 
@@ -71,30 +63,11 @@ class CommentController extends GetxController with WidgetsBindingObserver {
   void onInit() {
     super.onInit();
     logger.v('CommentController onInit');
-
-    _bottomInset = _mediaQueryBottomInset();
-    _preBottomInset = _bottomInset;
-    _widgetsBinding?.addObserver(this);
-  }
-
-  @override
-  void didChangeMetrics() {
-    _didChangeMetrics = true;
-    super.didChangeMetrics();
-    _widgetsBinding?.addPostFrameCallback((Duration timeStamp) {
-      _bottomInset = _mediaQueryBottomInset();
-      if (_preBottomInset != _bottomInset) {
-        final double _offset = _bottomInset - _preBottomInset;
-        _preBottomInset = _bottomInset;
-      }
-    });
   }
 
   @override
   void onClose() {
     _tgr.forEach((element) => element.dispose());
-    scrollController.dispose();
-    _widgetsBinding?.removeObserver(this);
     super.onClose();
   }
 
@@ -103,10 +76,6 @@ class CommentController extends GetxController with WidgetsBindingObserver {
   TapGestureRecognizer genTapGestureRecognizer() {
     _tgr.add(TapGestureRecognizer());
     return _tgr.last;
-  }
-
-  double _mediaQueryBottomInset() {
-    return MediaQueryData.fromWindow(_widgetsBinding!.window).viewInsets.bottom;
   }
 
   GalleryComment? parserCommentRepty(GalleryComment comment) {
@@ -507,58 +476,6 @@ class CommentController extends GetxController with WidgetsBindingObserver {
     editState = EditState.reptyComment;
     FocusScope.of(Get.context!).requestFocus(focusNode);
     // _scrollToBottom();
-  }
-
-  // 滚动到列表底部
-  void _scrollToBottom() {
-    Future.delayed(const Duration(milliseconds: 400), () {
-      logger.d('${scrollController.position.maxScrollExtent}');
-      // scrollController.jumpTo(scrollController.position.maxScrollExtent);
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 400),
-        curve: Curves.linear,
-      );
-    });
-  }
-
-  void _scrollView() {
-    _bottomInset = _mediaQueryBottomInset();
-    if (_preBottomInset != _bottomInset) {
-      final double _offset = _bottomInset - _preBottomInset;
-      _preBottomInset = _bottomInset;
-      logger.d(' ${_bottomInset} $_offset  ${scrollController.offset}');
-
-      final double _viewHeigth = Get.context!.height -
-          Get.context!.mediaQueryViewPadding.top -
-          Get.context!.mediaQueryViewPadding.bottom -
-          60 -
-          44;
-
-      logger.d('_viewHeigth $_viewHeigth,  ${Get.context!.height} '
-          ' ${Get.context!.mediaQueryViewPadding.top}  '
-          '${Get.context!.mediaQueryViewPadding.bottom}');
-
-      if (scrollController.position.maxScrollExtent > _viewHeigth) {
-        if (scrollController.offset > _bottomInset && _offset < 0) {
-          scrollController.animateTo(
-            scrollController.offset + _offset,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeIn,
-          );
-        } else if (_offset > 0) {
-          scrollController.animateTo(
-            scrollController.offset + _offset,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeIn,
-          );
-        }
-      } else {
-        final double _o =
-            _viewHeigth - scrollController.position.maxScrollExtent;
-        logger.d('_o $_o');
-      }
-    }
   }
 }
 

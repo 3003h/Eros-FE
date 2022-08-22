@@ -3923,6 +3923,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Tag Limit`
+  String get tag_limit {
+    return Intl.message(
+      'Tag Limit',
+      name: 'tag_limit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Limit`
+  String get no_limit {
+    return Intl.message(
+      'No Limit',
+      name: 'no_limit',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

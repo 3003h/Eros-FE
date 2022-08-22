@@ -135,7 +135,7 @@ Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
         selector: _getTimeText(ehConfigService.autoLockTimeOut.value),
         onTap: () async {
           final int? _result = await _showActionSheet(context);
-          if (_result != null && _result is int) {
+          if (_result != null) {
             _setAutoLockTimeOut(_result);
           }
         },

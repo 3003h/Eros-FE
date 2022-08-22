@@ -128,7 +128,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       Locale? locale,
     }) {
       return GetCupertinoApp(
-        debugShowCheckedModeBanner: false,
+        // debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
           // if (GetPlatform.isMobile)

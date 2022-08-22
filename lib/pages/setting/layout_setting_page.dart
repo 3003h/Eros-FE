@@ -127,12 +127,24 @@ class ListViewLayoutSetting extends StatelessWidget {
       _buildListModeItem(
         context,
       ),
+      _buildTagLimitItem(context),
       Obx(() {
-        return TextSwitchItem(
-          L10n.of(context).blurring_cover_background,
-          intValue: _ehConfigService.blurringOfCoverBackground,
-          onChanged: (val) => _ehConfigService.blurringOfCoverBackground = val,
-          hideDivider: _ehConfigService.listMode.value != ListModeEnum.list,
+        return AnimatedCrossFade(
+          alignment: Alignment.center,
+          crossFadeState: _ehConfigService.listMode.value == ListModeEnum.list
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          firstCurve: Curves.easeIn,
+          secondCurve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+          firstChild: const SizedBox(),
+          secondChild: TextSwitchItem(
+            L10n.of(context).blurring_cover_background,
+            intValue: _ehConfigService.blurringOfCoverBackground,
+            onChanged: (val) =>
+                _ehConfigService.blurringOfCoverBackground = val,
+            hideDivider: _ehConfigService.listMode.value != ListModeEnum.list,
+          ),
         );
       }),
       Obx(() {
@@ -235,7 +247,7 @@ Widget _buildThemeItem(BuildContext context, {bool hideLine = false}) {
 }
 
 /// 列表模式切换
-Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildListModeItem(BuildContext context, {bool hideDivider = false}) {
   final String _title = L10n.of(context).list_mode;
   final EhConfigService ehConfigService = Get.find();
 
@@ -251,10 +263,33 @@ Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() {
     return SelectorItem<ListModeEnum>(
       title: _title,
-      hideDivider: hideLine,
+      hideDivider: hideDivider,
       actionMap: modeMap,
       initVal: ehConfigService.listMode.value,
       onValueChanged: (val) => ehConfigService.listMode.value = val,
+    );
+  });
+}
+
+/// tag上限
+Widget _buildTagLimitItem(BuildContext context, {bool hideDivider = false}) {
+  final String _title = L10n.of(context).tag_limit;
+  final EhConfigService ehConfigService = Get.find();
+
+  Map<int, String> modeMap = {};
+
+  for (final lim in EHConst.tagLimit) {
+    modeMap.putIfAbsent(
+        lim, () => lim == -1 ? L10n.of(context).no_limit : '$lim');
+  }
+
+  return Obx(() {
+    return SelectorItem<int>(
+      title: _title,
+      hideDivider: hideDivider,
+      actionMap: modeMap,
+      initVal: ehConfigService.listViewTagLimit,
+      onValueChanged: (val) => ehConfigService.listViewTagLimit = val,
     );
   });
 }
