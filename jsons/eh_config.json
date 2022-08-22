@@ -47,5 +47,6 @@
   "enablePHashCheck?": false,
   "enableQRCodeCheck?": false,
   "viewFullscreen?": false,
-  "blurringOfCoverBackground?": false
+  "blurringOfCoverBackground?": false,
+  "listViewTagLimit?": -1
 }

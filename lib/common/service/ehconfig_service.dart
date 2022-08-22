@@ -214,9 +214,18 @@ class EhConfigService extends ProfileService {
   TextAvatarsType get textAvatarsType => _textAvatarsType.value;
   set textAvatarsType(TextAvatarsType val) => _textAvatarsType.value = val;
 
+  final _listViewTagLimit = (-1).obs;
+  int get listViewTagLimit => _listViewTagLimit.value;
+  set listViewTagLimit(int val) => _listViewTagLimit.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    listViewTagLimit = ehConfig.listViewTagLimit ?? listViewTagLimit;
+    everProfile<int>(_listViewTagLimit, (value) {
+      ehConfig = ehConfig.copyWith(listViewTagLimit: value);
+    });
 
     avatarType =
         EnumToString.fromString(AvatarType.values, ehConfig.avatarType ?? '') ??
