@@ -86,10 +86,10 @@ class _ListView extends StatelessWidget {
     final _username = name ?? _word;
     final _borderRadiusType =
         borderRadiusType ?? _ehConfigService.avatarBorderRadiusType;
-    final borderRadius = BorderRadius.circular(
-        _borderRadiusType == AvatarBorderRadiusType.roundedRect
-            ? 8
-            : avatarSize / 2);
+    final radius = _borderRadiusType == AvatarBorderRadiusType.roundedRect
+        ? 8.0
+        : avatarSize / 2;
+    final borderRadius = BorderRadius.circular(radius);
 
     return Container(
       width: avatarSize,
@@ -102,6 +102,7 @@ class _ListView extends StatelessWidget {
           name: _username,
           colors: ThemeColors.catColorList,
           type: type,
+          radius: radius,
         ),
       ),
       // child: SizedBox.shrink(),
@@ -296,6 +297,21 @@ class _ListView extends StatelessWidget {
                         ),
                         TextAvatarsType.noText: textAvatar(
                           TextAvatarsType.noText,
+                          borderRadiusType:
+                              _ehConfigService.avatarBorderRadiusType,
+                        ),
+                        TextAvatarsType.borderFirstText: textAvatar(
+                          TextAvatarsType.borderFirstText,
+                          borderRadiusType:
+                              _ehConfigService.avatarBorderRadiusType,
+                        ),
+                        TextAvatarsType.borderFirstTowText: textAvatar(
+                          TextAvatarsType.borderFirstTowText,
+                          borderRadiusType:
+                              _ehConfigService.avatarBorderRadiusType,
+                        ),
+                        TextAvatarsType.onlyBorder: textAvatar(
+                          TextAvatarsType.onlyBorder,
                           borderRadiusType:
                               _ehConfigService.avatarBorderRadiusType,
                         ),

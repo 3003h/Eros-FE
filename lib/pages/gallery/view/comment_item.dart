@@ -367,27 +367,12 @@ class CommentItem extends StatelessWidget {
     final _commentId = comment?.id ?? galleryComment.id ?? '0';
     final _future = avatarController.getUser(_userId);
 
-    final _placeHoldOld = Builder(
-        builder: (context) => Container(
-              color: CupertinoDynamicColor.resolve(
-                  ThemeColors.catColorList[_userId.isNotEmpty
-                      ? int.parse(_userId.substring(_userId.length - 1))
-                      : int.parse(_commentId.substring(_commentId.length - 1))],
-                  context),
-              child: Center(
-                child: Text(
-                  _name.substring(0, 1).toUpperCase(),
-                  style: TextStyle(
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.secondarySystemBackground, context),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ));
-
     final _placeHold = Obx(() {
+      final radius = _ehConfigService.avatarBorderRadiusType ==
+              AvatarBorderRadiusType.roundedRect
+          ? 8.0
+          : avatarSize / 2;
+
       return _ehConfigService.avatarType == AvatarType.boringAvatar
           ? BoringAvatars(
               name: _name,
@@ -399,6 +384,7 @@ class CommentItem extends StatelessWidget {
               name: _name,
               colors: [...ThemeColors.catColorList],
               type: _ehConfigService.textAvatarsType,
+              radius: radius,
             );
     });
 
@@ -409,6 +395,10 @@ class CommentItem extends StatelessWidget {
 
     return Obx(() {
       final avatarUrl = avatarController.getAvatarUrl(_userId);
+      final radius = _ehConfigService.avatarBorderRadiusType ==
+              AvatarBorderRadiusType.roundedRect
+          ? 8.0
+          : avatarSize / 2;
       return GestureDetector(
         onTap: tapName,
         child: Row(
@@ -420,11 +410,7 @@ class CommentItem extends StatelessWidget {
                 height: avatarSize,
                 margin: const EdgeInsets.only(right: 8),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                      _ehConfigService.avatarBorderRadiusType ==
-                              AvatarBorderRadiusType.roundedRect
-                          ? 8
-                          : avatarSize / 2),
+                  borderRadius: BorderRadius.circular(radius),
                   child: (avatarUrl != null && avatarUrl.isNotEmpty)
                       ? EhNetworkImage(
                           imageUrl: avatarUrl,

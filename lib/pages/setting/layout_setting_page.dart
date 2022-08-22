@@ -273,13 +273,14 @@ Widget _buildListModeItem(BuildContext context, {bool hideDivider = false}) {
 
 /// tag上限
 Widget _buildTagLimitItem(BuildContext context, {bool hideDivider = false}) {
-  final String _title = 'Tag Limit';
+  final String _title = L10n.of(context).tag_limit;
   final EhConfigService ehConfigService = Get.find();
 
   Map<int, String> modeMap = {};
 
   for (final lim in EHConst.tagLimit) {
-    modeMap.putIfAbsent(lim, () => lim == -1 ? 'No Limit' : '$lim');
+    modeMap.putIfAbsent(
+        lim, () => lim == -1 ? L10n.of(context).no_limit : '$lim');
   }
 
   return Obx(() {

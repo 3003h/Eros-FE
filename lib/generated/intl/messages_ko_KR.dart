@@ -193,6 +193,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "no": MessageLookupByLibrary.simpleMessage("No"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("미리 보기가 더 없음"),
+        "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
         "notFav": MessageLookupByLibrary.simpleMessage("즐겨찾기에 없음"),
         "not_login": MessageLookupByLibrary.simpleMessage("로그인하지 않음"),
         "off": MessageLookupByLibrary.simpleMessage("꺼짐"),
@@ -325,6 +326,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("Watch"),
         "tag_dialog_tagWeight":
             MessageLookupByLibrary.simpleMessage("Tag Weight"),
+        "tag_limit": MessageLookupByLibrary.simpleMessage("Tag Limit"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("비추천"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("추천"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("추천 취소"),
