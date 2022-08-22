@@ -31,4 +31,8 @@ enum TextAvatarsType {
   noText,
   firstText,
   firstTowText,
+  onlyBorder,
+  borderFirstText,
+  borderFirstTowText,
+  transparent,
 }

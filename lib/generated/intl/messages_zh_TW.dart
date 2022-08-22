@@ -186,6 +186,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "no": MessageLookupByLibrary.simpleMessage("永遠不要"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("沒有更多預覽"),
+        "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
         "notFav": MessageLookupByLibrary.simpleMessage("未收藏"),
         "not_login": MessageLookupByLibrary.simpleMessage("未登入"),
         "off": MessageLookupByLibrary.simpleMessage("關閉"),
@@ -310,6 +311,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tag_dialog_Watch": MessageLookupByLibrary.simpleMessage("Watch"),
         "tag_dialog_tagWeight":
             MessageLookupByLibrary.simpleMessage("Tag Weight"),
+        "tag_limit": MessageLookupByLibrary.simpleMessage("Tag Limit"),
         "tag_vote_down": MessageLookupByLibrary.simpleMessage("差評"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("好評"),
         "tag_withdraw_vote": MessageLookupByLibrary.simpleMessage("撤回評價"),

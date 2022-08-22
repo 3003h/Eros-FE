@@ -224,6 +224,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Новый комментарий"),
         "no": MessageLookupByLibrary.simpleMessage("Нет"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("Конец списка"),
+        "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
         "notFav": MessageLookupByLibrary.simpleMessage("Добавить в избранное"),
         "not_login": MessageLookupByLibrary.simpleMessage("Not Login"),
         "off": MessageLookupByLibrary.simpleMessage("Выключены"),
@@ -385,6 +386,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Показывать материалы с тегом"),
         "tag_dialog_tagWeight":
             MessageLookupByLibrary.simpleMessage("Значимость тега"),
+        "tag_limit": MessageLookupByLibrary.simpleMessage("Tag Limit"),
         "tag_vote_down":
             MessageLookupByLibrary.simpleMessage("Дизлайкнуть тег"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("Лайкнуть тег"),
