@@ -10,7 +10,8 @@
             android:name="${applicationName}"
             android:requestLegacyExternalStorage="true"
             android:label="FEhViewer"
-            android:icon="@mipmap/ic_launcher">
+            android:icon="@mipmap/ic_launcher"
+            android:localeConfig="@xml/locales_config">
         <activity
                 android:name=".MainActivity"
                 android:exported="true"
