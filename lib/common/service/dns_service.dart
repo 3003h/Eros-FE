@@ -171,11 +171,12 @@ class DnsService extends ProfileService {
     });
 
     enableDomainFronting = dnsConfig.enableDomainFronting ?? false;
-    ehDioConfig.domainFronting = enableDomainFronting;
+    globalDioConfig =
+        globalDioConfig.copyWith(domainFronting: enableDomainFronting);
     everProfile<bool>(_enableDomainFronting, (bool value) {
       logger.d('everProfile _enableDomainFronting:$value');
       dnsConfig = dnsConfig.copyWith(enableDomainFronting: value);
-      ehDioConfig.domainFronting = value;
+      globalDioConfig = globalDioConfig.copyWith(domainFronting: value);
     });
   }
 }

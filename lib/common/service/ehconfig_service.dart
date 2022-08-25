@@ -334,26 +334,15 @@ class EhConfigService extends ProfileService {
 
     isSiteEx.value = ehConfig.siteEx ?? isSiteEx.value;
     // 初始化
-    ehDioConfig = isSiteEx.value ? exDioConfig : ehDioConfig;
+    switchGlobalDioConfig(isSiteEx.value);
     everProfile(isSiteEx, (value) {
       logger.d('everProfile isSiteEx');
       ehConfig = ehConfig.copyWith(siteEx: value as bool);
-      if (value) {
-        // 切换ex后
-        Global.initImageHttpClient(
-            maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost);
-        ehDioConfig
-          ..baseUrl = exDioConfig.baseUrl
-          ..receiveTimeout = exDioConfig.receiveTimeout
-          ..connectTimeout = exDioConfig.connectTimeout
-          ..maxConnectionsPerHost = exDioConfig.maxConnectionsPerHost;
-      } else {
-        ehDioConfig
-          ..baseUrl = EHConst.EH_BASE_URL
-          ..receiveTimeout = ehDioConfig.receiveTimeout
-          ..connectTimeout = ehDioConfig.connectTimeout
-          ..maxConnectionsPerHost = null;
-      }
+      switchGlobalDioConfig(value);
+      // 切换ex后
+      Global.initImageHttpClient(
+        maxConnectionsPerHost: globalDioConfig.maxConnectionsPerHost,
+      );
     });
 
     isFavLongTap.value = ehConfig.favLongTap ?? isFavLongTap.value;

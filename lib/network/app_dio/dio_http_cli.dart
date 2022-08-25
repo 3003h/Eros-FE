@@ -6,8 +6,13 @@ import 'http_response.dart';
 import 'http_transformer.dart';
 
 class DioHttpClient {
-  DioHttpClient({BaseOptions? options, DioHttpConfig? dioConfig})
+  factory DioHttpClient({DioHttpConfig? dioConfig}) => _clientMap.putIfAbsent(
+      dioConfig, () => DioHttpClient._(dioConfig: dioConfig));
+
+  DioHttpClient._({BaseOptions? options, DioHttpConfig? dioConfig})
       : _dio = AppDio(options: options, dioConfig: dioConfig);
+
+  static final _clientMap = <DioHttpConfig?, DioHttpClient>{};
 
   late final AppDio _dio;
 
