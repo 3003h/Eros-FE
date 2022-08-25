@@ -305,7 +305,8 @@ class _CoverImage extends StatelessWidget {
         return getImageBlureFittedBox();
       } else {
         return Container(
-          color: CupertinoColors.systemGrey5,
+          color: CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey5, context),
         );
       }
     }
