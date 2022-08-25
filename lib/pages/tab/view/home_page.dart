@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +27,9 @@ class HomePage extends GetView<TabHomeController> {
           return LayoutBuilder(
             builder: (context, constraints) {
               logger.v('${constraints.maxWidth}');
-              if (context.width > 700 && context.isTablet && tabletLayout) {
+              if (context.width >= kThresholdTabletWidth &&
+                  context.isTablet &&
+                  tabletLayout) {
                 layoutServices.layoutMode = LayoutMode.large;
                 // layoutServices.layoutMode = LayoutMode.small;
               } else {
@@ -37,7 +40,7 @@ class HomePage extends GetView<TabHomeController> {
                 return const TabHomeSmall();
               }
 
-              if (context.width > 700) {
+              if (context.width >= kThresholdTabletWidth) {
                 // return const TabHomeSmall();
                 return TabHomeLarge(
                   sideProportion: vOffset,
