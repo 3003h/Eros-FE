@@ -82,13 +82,13 @@ class AppDio with DioMixin implements Dio {
       setProxy(dioConfig!.proxy!);
     }
 
-    (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
+    (httpClientAdapter as DefaultHttpClientAdapter)
+        .addOnHttpClientCreate((client) {
       client
         ..maxConnectionsPerHost = dioConfig?.maxConnectionsPerHost
         ..idleTimeout = const Duration(seconds: 6);
       ;
-    };
+    });
 
     if (dioConfig?.domainFronting ?? false) {
       final DnsService dnsServices = Get.find();
@@ -110,17 +110,14 @@ class AppDio with DioMixin implements Dio {
       // 允许证书错误的地址/ip
       final hostWhiteList = customHosts.values.flattened.toSet();
 
-      (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-          (client) {
-        client
-          ..badCertificateCallback =
-              (X509Certificate cert, String host, int port) {
-            // return hostWhiteList.contains(host);
-            return true;
-          }
-          ..maxConnectionsPerHost = dioConfig?.maxConnectionsPerHost
-          ..idleTimeout = const Duration(seconds: 6);
-      };
+      (httpClientAdapter as DefaultHttpClientAdapter)
+          .addOnHttpClientCreate((client) {
+        client.badCertificateCallback =
+            (X509Certificate cert, String host, int port) {
+          // return hostWhiteList.contains(host);
+          return true;
+        };
+      });
 
       // 在其他插件添加完毕后再添加，以确保执行顺序正确
       domainFronting.bind(interceptors);
@@ -129,8 +126,8 @@ class AppDio with DioMixin implements Dio {
 
   void setProxy(String proxy) {
     logger.d('setProxy $proxy');
-    (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
+    (httpClientAdapter as DefaultHttpClientAdapter)
+        .addOnHttpClientCreate((client) {
       // config the http client
       client.findProxy = (uri) {
         // proxy all request to localhost:8888
@@ -139,7 +136,7 @@ class AppDio with DioMixin implements Dio {
       };
       // you can also create a HttpClient to dio
       // return HttpClient();
-    };
+    });
   }
 
   /// DioMixin 没有实现下载
@@ -342,5 +339,15 @@ class AppDio with DioMixin implements Dio {
       data: data,
       options: options,
     );
+  }
+}
+
+extension DefaultHttpClientAdapterExt on DefaultHttpClientAdapter {
+  void addOnHttpClientCreate(void Function(HttpClient client) onCreate) {
+    final old = onHttpClientCreate;
+    onHttpClientCreate = (client) {
+      old?.call(client);
+      onCreate(client);
+    };
   }
 }
