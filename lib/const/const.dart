@@ -101,6 +101,8 @@ LoadStateChanged defLoadStateChanged = (ExtendedImageState state) {
   }
 };
 
+const double kThresholdTabletWidth = 700.0;
+
 const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
   searchGalleryName: true,
   searchGalleryTags: true,
