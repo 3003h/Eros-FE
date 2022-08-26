@@ -94,7 +94,7 @@ class CoverImage extends StatelessWidget {
                     child: const CupertinoActivityIndicator(),
                   );
                 },
-                imageUrl: (imageUrl ?? '').dfUrl,
+                imageUrl: (imageUrl ?? '').handleUrl,
                 fit: BoxFit.cover,
               ),
             ),

@@ -43,7 +43,7 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
   Widget build(BuildContext context) {
     if (Get.find<EhConfigService>().isSiteEx.value && false) {
       return NetworkExtendedImage(
-        url: widget.imageUrl.dfUrl,
+        url: widget.imageUrl.handleUrl,
         width: widget.width,
         height: widget.height,
         fit: widget.fit,
@@ -58,7 +58,7 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
       width: widget.width,
       height: widget.height,
       fit: widget.fit,
-      imageUrl: widget.imageUrl.dfUrl,
+      imageUrl: widget.imageUrl.handleUrl,
       httpHeaders: widget.httpHeaders,
       placeholder: widget.placeholder,
       errorWidget: widget.errorWidget,

@@ -45,7 +45,7 @@ void switchGlobalDioConfig(bool isSiteEx) {
     baseUrl: dioConfig.baseUrl,
     receiveTimeout: dioConfig.receiveTimeout,
     connectTimeout: dioConfig.connectTimeout,
-    maxConnectionsPerHost: Optional(dioConfig.maxConnectionsPerHost),
+    maxConnectionsPerHost: dioConfig.maxConnectionsPerHost,
   );
 }
 

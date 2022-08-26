@@ -36,7 +36,7 @@ class DioHttpConfig {
     int? sendTimeout,
     int? receiveTimeout,
     bool? domainFronting,
-    Optional<int>? maxConnectionsPerHost,
+    int? maxConnectionsPerHost,
     String? contentType,
   }) {
     return DioHttpConfig(
@@ -48,9 +48,8 @@ class DioHttpConfig {
       sendTimeout: sendTimeout ?? this.sendTimeout,
       receiveTimeout: receiveTimeout ?? this.receiveTimeout,
       domainFronting: domainFronting ?? this.domainFronting,
-      maxConnectionsPerHost: maxConnectionsPerHost == null
-          ? this.maxConnectionsPerHost
-          : maxConnectionsPerHost.value,
+      maxConnectionsPerHost:
+          maxConnectionsPerHost ?? this.maxConnectionsPerHost,
       contentType: contentType ?? this.contentType,
     );
   }

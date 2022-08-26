@@ -656,7 +656,7 @@ class CoverImg extends StatelessWidget {
           width: width,
           height: height,
           // httpHeaders: _httpHeaders,
-          imageUrl: imgUrl.dfUrl,
+          imageUrl: imgUrl.handleUrl,
           fit: fit, //
         );
       } else {
