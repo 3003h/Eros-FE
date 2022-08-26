@@ -119,7 +119,7 @@ class AllPreviewsPageController extends GetxController
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
     isLoadingNext = true;
-    update();
+    // update();
 
     final List<GalleryImage> _nextGalleryImageList = await getGalleryImage(
       _pageState.galleryProvider?.url ?? '',

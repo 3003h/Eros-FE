@@ -41,7 +41,7 @@ Future<GalleryList?> getGallery({
   AdvanceSearch? advanceSearch,
 }) async {
   final AdvanceSearchController _searchController = Get.find();
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   late final String _url;
   switch (galleryListType) {
@@ -184,7 +184,7 @@ Future<GalleryProvider?> getGalleryDetail({
   bool refresh = false,
   CancelToken? cancelToken,
 }) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     httpTransformer: GalleryHttpTransformer(),
@@ -224,7 +224,7 @@ Future<GalleryImage?> fetchImageInfo(
 
   logger.v('url $href  isMpv:$isMpv');
 
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     href,
     queryParameters: _params,
@@ -252,7 +252,7 @@ Future<List<GalleryImage>> getGalleryImage(
   final Map<String, dynamic> _params = {
     if (page != null) 'p': page,
   };
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     inUrl,
@@ -273,7 +273,7 @@ Future<List<GalleryImage>> getGalleryImage(
 //   String url, {
 //   bool refresh = true,
 // }) async {
-//   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+//   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: dioConfig);
 //
 //   DioHttpResponse httpResponse = await dioHttpClient.get(
 //     url,
@@ -292,7 +292,7 @@ Future<String> postArchiverRemoteDownload(
   String url,
   String resolution,
 ) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   final formData = FormData.fromMap({
     'hathdl_xres': resolution.trim(),
@@ -321,7 +321,7 @@ Future<String> postArchiverLocalDownload(
     if (dltype != null) 'dltype': dltype.trim(),
     if (dlcheck != null) 'dlcheck': dlcheck.trim(),
   });
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
@@ -340,7 +340,7 @@ Future<String> postArchiverLocalDownload(
 Future<EhSettings?> getEhSettings(
     {bool refresh = false, String? selectProfile}) async {
   logger.v('getEhSettings ${ehDioConfig.baseUrl}');
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   const String url = '/uconfig.php';
 
   late DioHttpResponse httpResponse;
@@ -371,7 +371,7 @@ Future<EhSettings?> getEhSettings(
 
 Future<EhMytags?> getMyTags(
     {bool refresh = false, String? selectTagset}) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   final String url = '${Api.getBaseUrl()}/mytags';
 
   final Map<String, dynamic> _params = {
@@ -490,7 +490,7 @@ Future<bool> actionMytags({
 
   final formData = FormData.fromMap(dataMap);
 
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
@@ -523,7 +523,7 @@ Future<EhSettings?> postEhProfile({
   };
 
   final formData = FormData.fromMap(paramMap ?? dataMap);
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   const String url = '/uconfig.php';
 
   DioHttpResponse httpResponse = await dioHttpClient.post(
@@ -600,7 +600,7 @@ Future<T?> getEhApi<T>({
   HttpTransformer? httpTransformer,
 }) async {
   const String url = '/api.php';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
@@ -648,7 +648,7 @@ Future<void> ehDownload({
   ProgressCallback? progressCallback,
 }) async {
   late final String downloadUrl;
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   if (!url.startsWith(RegExp(r'https?://'))) {
     downloadUrl = '${Api.getBaseUrl()}/$url';
   } else {
@@ -678,7 +678,7 @@ Future<void> ehDownload({
 Future<User?> userLogin(String username, String passwd) async {
   const String url = 'https://forums.e-hentai.org/index.php';
 
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   final FormData formData = FormData.fromMap({
     'UserName': username,
@@ -708,7 +708,7 @@ Future<User?> userLogin(String username, String passwd) async {
 Future<User?> getUserInfo(String userId, {bool forceRefresh = true}) async {
   const String url = 'https://forums.e-hentai.org/index.php';
 
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
@@ -739,7 +739,7 @@ Future<bool?> postComment({
   }
 
   final String url = '/g/$gid/$token';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   final data = FormData.fromMap({
     isEdit ? 'commenttext_edit' : 'commenttext_new': comment,
@@ -774,7 +774,7 @@ Future<void> galleryAddFavorite(
   String favnote = '',
 }) async {
   const String url = '/gallerypopups.php';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   final Map<String, dynamic> _params = {
     'gid': gid,
@@ -801,7 +801,7 @@ Future<FavAdd> galleryGetFavorite(
   String token,
 ) async {
   const String url = '/gallerypopups.php';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   final Map<String, dynamic> _params = {
     'gid': gid,
@@ -829,7 +829,7 @@ Future<FavAdd> galleryGetFavorite(
 }
 
 Future<Map> getTranslateTagDBInfo(String url) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(url);
   if (httpResponse.ok && httpResponse.data is Map) {
     return httpResponse.data as Map;
@@ -841,7 +841,7 @@ Future<Map> getTranslateTagDBInfo(String url) async {
 /// 获取里站cookie
 Future<void> getExIgneous() async {
   const String url = '${EHConst.EX_BASE_URL}/uconfig.php';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     options: getCacheOptions(forceRefresh: true),
@@ -856,7 +856,7 @@ Future<String> getTorrentToken(
   String gtoken, {
   bool refresh = false,
 }) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   const url = '/gallerytorrents.php';
   final Map<String, dynamic> _params = {
     'gid': gid,
@@ -889,7 +889,7 @@ Future<TorrentProvider> getTorrent(
   String url, {
   bool refresh = true,
 }) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     options: getCacheOptions(forceRefresh: refresh),
@@ -912,7 +912,7 @@ Future<ArchiverProvider> getArchiver(
   String url, {
   bool refresh = true,
 }) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     options: getCacheOptions(forceRefresh: refresh),
@@ -936,7 +936,7 @@ Future<String> postEhApi(
   bool forceRefresh = true,
 }) async {
   const String url = '/api.php';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
     data: data,
@@ -957,7 +957,7 @@ Future<GalleryList?> searchImage(
   CancelToken? cancelToken,
 }) async {
   final String url = 'https://upld.${Api.getBaseHost()}/image_lookup.php';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   final FormData formData = FormData.fromMap({
     'sfile': await MultipartFile.fromFile(imageFilepath,
@@ -1012,7 +1012,7 @@ Future<GalleryList?> searchImage(
 }
 
 Future<EhHome?> getEhHome({bool refresh = false}) async {
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: ehDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   const String url = '${EHConst.EH_BASE_URL}/home.php';
 
   final DioHttpResponse httpResponse = await dioHttpClient.get(

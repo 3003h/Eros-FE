@@ -146,9 +146,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // FlutterSmartDialog.observer,
           MainNavigatorObserver(),
         ],
-        builder: FlutterSmartDialog.init(
-          styleBuilder: (child) => child,
-        ),
+        // builder: FlutterSmartDialog.init(
+        //   styleBuilder: (child) => child,
+        // ),
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,

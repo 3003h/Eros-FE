@@ -80,7 +80,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
   @override
   Widget build(BuildContext context) {
     return ExtendedImage.network(
-      widget.url.dfUrl,
+      widget.url.handleUrl,
       width: widget.width,
       height: widget.height,
       headers: _httpHeaders,
@@ -93,7 +93,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return widget.placeholder?.call(context, widget.url.dfUrl) ??
+            return widget.placeholder?.call(context, widget.url.handleUrl) ??
                 Container(
                   alignment: Alignment.center,
                   child: const CupertinoActivityIndicator(),
@@ -120,14 +120,15 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
               Future<bool> _future() async {
                 if (!widget.checkQRCodeHide) {
                   return await imageHideController
-                      .checkPHashHide(widget.url.dfUrl);
+                      .checkPHashHide(widget.url.handleUrl);
                 } else if (!widget.checkPHashHide) {
                   return await imageHideController
-                      .checkQRCodeHide(widget.url.dfUrl);
+                      .checkQRCodeHide(widget.url.handleUrl);
                 }
                 return await imageHideController
-                        .checkPHashHide(widget.url.dfUrl) ||
-                    await imageHideController.checkQRCodeHide(widget.url.dfUrl);
+                        .checkPHashHide(widget.url.handleUrl) ||
+                    await imageHideController
+                        .checkQRCodeHide(widget.url.handleUrl);
               }
 
               return FutureBuilder<bool>(
@@ -142,7 +143,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
                     } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {
                       return widget.placeholder
-                              ?.call(context, widget.url.dfUrl) ??
+                              ?.call(context, widget.url.handleUrl) ??
                           Container(
                             alignment: Alignment.center,
                             child: const CupertinoActivityIndicator(),
@@ -222,7 +223,7 @@ class _ExtendedImageRectState extends State<ExtendedImageRect>
   @override
   Widget build(BuildContext context) {
     return ExtendedImage.network(
-      widget.url.dfUrl,
+      widget.url.handleUrl,
       width: widget.width,
       height: widget.height,
       headers: _httpHeaders,
