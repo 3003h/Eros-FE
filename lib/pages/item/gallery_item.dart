@@ -599,7 +599,7 @@ class TagBox extends StatelessWidget {
       List<SimpleTag>? _simpleTags =
           getLimitSimpleTags(simpleTags, _ehConfigService.listViewTagLimit);
 
-      if (_simpleTags == null || (_simpleTags.isEmpty ?? true)) {
+      if (_simpleTags == null || _simpleTags.isEmpty) {
         return const SizedBox.shrink();
       }
 
@@ -656,7 +656,7 @@ class CoverImg extends StatelessWidget {
           width: width,
           height: height,
           // httpHeaders: _httpHeaders,
-          imageUrl: imgUrl.dfUrl,
+          imageUrl: imgUrl.handleUrl,
           fit: fit, //
         );
       } else {

@@ -1,6 +1,8 @@
 // import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:linkfy_text/linkfy_text.dart';
 import 'package:linkify/linkify.dart'
     show
         LinkifyElement,
@@ -13,6 +15,8 @@ import 'package:linkify/linkify.dart'
         EmailElement,
         defaultLinkifiers,
         EmailLinkifier;
+
+import 'eh_linkify_text.dart';
 
 const Duration _kExpandDuration = Duration(milliseconds: 200);
 
@@ -49,7 +53,7 @@ class ExpandableLinkify extends StatefulWidget {
   final List<Linkifier> linkifiers;
 
   /// Callback for tapping a link
-  final LinkCallback? onOpen;
+  final ValueChanged<String?>? onOpen;
 
   /// linkify's options.
   final LinkifyOptions options;
@@ -127,57 +131,39 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify>
 
         textPainter.layout(maxWidth: size.maxWidth);
 
-        // Widget _getLinkify() {
-        //   if (_isExpanded) {
-        //     return Container(
-        //       child: Linkify(
-        //         text: widget.text,
-        //         style: widget.style,
-        //         onOpen: widget.onOpen,
-        //         options: widget.options,
-        //         softWrap: widget.softWrap,
-        //         textAlign: widget.textAlign,
-        //       ),
-        //     );
-        //   } else {
-        //     return Container(
-        //       child: Linkify(
-        //         text: widget.text,
-        //         maxLines: widget.maxLines,
-        //         overflow: widget.overflow,
-        //         style: widget.style,
-        //         onOpen: widget.onOpen,
-        //         options: widget.options,
-        //         softWrap: widget.softWrap,
-        //         textAlign: widget.textAlign,
-        //       ),
-        //     );
-        //   }
-        // }
+        Widget getLinkifyText({required bool isExpanded}) {
+          return Linkify(
+            text: widget.text,
+            maxLines: isExpanded ? null : widget.maxLines,
+            overflow: isExpanded ? TextOverflow.clip : widget.overflow,
+            style: widget.style,
+            onOpen: (link) => widget.onOpen?.call(link.url),
+            options: widget.options,
+            softWrap: widget.softWrap,
+            textAlign: widget.textAlign,
+          );
+        }
+
+        Widget getLinkifyText2({required bool isExpanded}) {
+          return EhLinkifyText(
+            widget.text,
+            maxLines: isExpanded ? null : widget.maxLines,
+            overflow: isExpanded ? TextOverflow.clip : widget.overflow,
+            textStyle: widget.style,
+            onTap: (link) => widget.onOpen?.call(link.value),
+            softWrap: widget.softWrap,
+            textAlign: widget.textAlign,
+            selectable: true,
+          );
+        }
 
         Widget _getLinkify() {
           return AnimatedCrossFade(
             duration: const Duration(milliseconds: 200),
             firstCurve: Curves.easeIn,
             secondCurve: Curves.easeOut,
-            firstChild: Linkify(
-              text: widget.text,
-              style: widget.style,
-              onOpen: widget.onOpen,
-              options: widget.options,
-              softWrap: widget.softWrap,
-              textAlign: widget.textAlign,
-            ),
-            secondChild: Linkify(
-              text: widget.text,
-              maxLines: widget.maxLines,
-              overflow: widget.overflow,
-              style: widget.style,
-              onOpen: widget.onOpen,
-              options: widget.options,
-              softWrap: widget.softWrap,
-              textAlign: widget.textAlign,
-            ),
+            firstChild: getLinkifyText2(isExpanded: true),
+            secondChild: getLinkifyText2(isExpanded: false),
             crossFadeState: _isExpanded
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
@@ -201,15 +187,18 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify>
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
                       _isExpanded ? widget.collapseText : widget.expandText,
-                      style: TextStyle(
-                          fontSize: widget.style?.fontSize,
-                          color: widget.colorExpandText)),
+                      style: widget.style
+                          ?.copyWith(color: widget.colorExpandText)),
                 ),
               ),
             ],
           );
         } else {
-          return Linkify(text: widget.text, style: widget.style);
+          return EhLinkifyText(
+            widget.text,
+            textStyle: widget.style,
+            onTap: (link) => widget.onOpen?.call(link.value),
+          );
         }
       },
     );

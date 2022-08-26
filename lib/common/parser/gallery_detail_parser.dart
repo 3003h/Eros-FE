@@ -7,6 +7,8 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
+import '../../utils/logger.dart';
+
 String parseErrGallery(String response) {
   final Document document = parse(response);
   const String msgSelect = 'div > p';
@@ -138,7 +140,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
             continue;
           }
 
-          // span带a href
+          // span 带 href
           if (node.localName == 'span' && node.children.isNotEmpty) {
             final Element? _nodeElm = node.children.first;
             final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
@@ -156,6 +158,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
             final Element? _nodeElm = node;
 
             final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
+            logger.d('_nodeHref $_nodeHref');
 
             if (_nodeElm?.children.isNotEmpty ?? false) {
               final Element? _imgElm = _nodeElm?.children
@@ -171,15 +174,25 @@ List<GalleryComment> parseGalleryComment(Document document) {
               continue;
             } else {
               // 如果数组最后一个是纯文本 直接追加文本
-              if (commentSpansf.isNotEmpty &&
+              if (_nodeHref.isEmpty &&
+                  commentSpansf.isNotEmpty &&
                   (commentSpansf.last.sType == CommentSpanType.text)) {
-                // commentSpansf.last.text += _nodeElm.text;
                 commentSpansf.last = commentSpansf.last.copyWith(
                     text: '${commentSpansf.last.text}${_nodeElm?.text ?? ''}');
               } else {
-                commentSpansf.add(
-                    GalleryCommentSpan(text: _nodeElm?.text ?? _nodeHref)
-                        .copyWithSpanType(CommentSpanType.text));
+                // 文本和href相同的情况，添加为普通文本内容，靠linkedText组件自动识别区分
+                if (_nodeElm?.text == _nodeHref) {
+                  commentSpansf.add(GalleryCommentSpan(
+                    text: _nodeElm?.text ?? _nodeHref,
+                    href: _nodeHref,
+                  ).copyWithSpanType(CommentSpanType.text));
+                } else {
+                  // 文本和href不同 才添加linkText类型
+                  commentSpansf.add(GalleryCommentSpan(
+                    text: _nodeElm?.text ?? _nodeHref,
+                    href: _nodeHref,
+                  ).copyWithSpanType(CommentSpanType.linkText));
+                }
               }
             }
           }

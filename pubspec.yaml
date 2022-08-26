@@ -163,6 +163,10 @@ dependencies:
   flutter_list_view: ^1.1.18
   fullscreen: ^1.0.3
   preload_page_view: ^0.1.6
+  linkfy_text:
+    git:
+      url: https://github.com/honjow/linkfy_text.git
+      ref: url_identifing
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

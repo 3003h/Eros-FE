@@ -12,6 +12,7 @@ import 'package:fehviewer/store/floor/database.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/http_override.dart';
+import 'package:fehviewer/utils/optional.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -36,15 +37,28 @@ final HiveHelper hiveHelper = HiveHelper();
 
 final Global global = Global();
 
-DioHttpConfig ehDioConfig = DioHttpConfig(
+var globalDioConfig = ehDioConfig;
+
+void switchGlobalDioConfig(bool isSiteEx) {
+  DioHttpConfig dioConfig = isSiteEx ? exDioConfig : ehDioConfig;
+  globalDioConfig = globalDioConfig.copyWith(
+    baseUrl: dioConfig.baseUrl,
+    receiveTimeout: dioConfig.receiveTimeout,
+    connectTimeout: dioConfig.connectTimeout,
+    maxConnectionsPerHost: dioConfig.maxConnectionsPerHost,
+  );
+}
+
+final DioHttpConfig ehDioConfig = DioHttpConfig(
   baseUrl: EHConst.EH_BASE_URL,
   cookiesPath: Global.appSupportPath,
   connectTimeout: 10000,
   sendTimeout: 8000,
   receiveTimeout: 20000,
+  maxConnectionsPerHost: null,
 );
 
-DioHttpConfig exDioConfig = DioHttpConfig(
+final DioHttpConfig exDioConfig = DioHttpConfig(
   baseUrl: EHConst.EX_BASE_URL,
   cookiesPath: Global.appSupportPath,
   connectTimeout: 15000,
@@ -124,6 +138,9 @@ class Global {
       // the systemProxy value likes:  {port: 8899, host: 127.0.0.1}
       Map<String, String>? systemProxy = await SystemProxy.getProxySettings();
       if (systemProxy != null) {
+        globalDioConfig = globalDioConfig.copyWith(
+          proxy: 'PROXY ${systemProxy['host']}:${systemProxy['port']}',
+        );
         print('systemProxy $systemProxy');
       }
     }

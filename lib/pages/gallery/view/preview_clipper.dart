@@ -54,7 +54,7 @@ class PreviewImageClipper extends StatelessWidget {
     };
 
     final ImageStream imageStream = ExtendedNetworkImageProvider(
-      imgUrl.dfUrl,
+      imgUrl.handleUrl,
       scale: kScale,
       headers: _httpHeaders,
     ).resolve(const ImageConfiguration());

@@ -84,7 +84,7 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
               crossAxisSpacing: 4.0,
               mainAxisSpacing: 4.0,
             ),
-            itemCount: _simpleTags.length ?? 0,
+            itemCount: _simpleTags.length,
             itemBuilder: (BuildContext context, int index) {
               return Obx(
                 () {

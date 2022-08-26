@@ -13,8 +13,11 @@ import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
 import 'package:flutter_linkify/flutter_linkify.dart' as clif;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:linkfy_text/linkfy_text.dart';
 import 'package:linkify/linkify.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../widget/eh_linkify_text.dart';
 
 const int kMaxline = 4;
 const double kSizeVote = 15.0;
@@ -84,14 +87,14 @@ class CommentItem extends StatelessWidget {
   }
 
   /// 简单布局 可展开 带链接文字
-  ExpandableLinkify _buildSimpleExpTextLinkify({
+  Widget _buildSimpleExpTextLinkify({
     bool showTranslate = false,
     TextStyle? style,
     required BuildContext context,
   }) {
     return ExpandableLinkify(
       text: showTranslate ? galleryComment.textTranslate : galleryComment.text,
-      onOpen: (link) => _onOpen(context, link: link),
+      onOpen: (link) => _onOpen(context, url: link),
       options: const LinkifyOptions(humanize: false),
       maxLines: kMaxline,
       softWrap: true,
@@ -105,7 +108,6 @@ class CommentItem extends StatelessWidget {
             height: 1.2,
             color:
                 CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-            fontFamilyFallback: EHConst.fontFamilyFallback,
           ),
       expandText: L10n.of(context).expand,
       collapseText: L10n.of(context).collapse,
@@ -488,7 +490,7 @@ class CommentItem extends StatelessWidget {
 
   Widget _fullText(BuildContext context) {
     return clif.SelectableLinkify(
-      onOpen: (link) => _onOpen(context, link: link),
+      onOpen: (link) => _onOpen(context, url: link.url),
       text: galleryComment.text,
 //      softWrap: true,
       textAlign: TextAlign.left,
@@ -540,7 +542,7 @@ class CommentItem extends StatelessWidget {
           return clif.buildTextSpan(
             elements,
             style: Theme.of(context).textTheme.bodyText2!.merge(_custStyle),
-            onOpen: (link) => _onOpen(context, link: link),
+            onOpen: (link) => _onOpen(context, url: link.url),
             linkStyle: Theme.of(context)
                 .textTheme
                 .bodyText2!
@@ -615,7 +617,7 @@ class CommentItem extends StatelessWidget {
               );
             } else {
               return clif.SelectableLinkify(
-                onOpen: (link) => _onOpen(context, link: link),
+                onOpen: (link) => _onOpen(context, url: link.url),
                 text: e.text ?? '',
                 textAlign: TextAlign.left,
                 // 对齐方式
@@ -638,12 +640,11 @@ class CommentItem extends StatelessWidget {
 /// 打开url
 Future<void> _onOpen(
   BuildContext context, {
-  LinkableElement? link,
   String? url,
 }) async {
   vibrateUtil.light();
 
-  final String? _openUrl = url ?? link?.url;
+  final String? _openUrl = url;
   final RegExp regGalleryUrl =
       RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
   final RegExp regGalleryPageUrl =
@@ -725,7 +726,6 @@ class _TranslateButtonState extends State<TranslateButton> {
 
 typedef OnOpenUrlCallback = void Function(
   BuildContext context, {
-  LinkableElement? link,
   String? url,
 });
 
@@ -766,7 +766,7 @@ class FullTextCustMergeText extends StatelessWidget {
       final bool _preOthType = (_span.imageUrl?.isEmpty ?? true) !=
           (_preSpan?.imageUrl?.isEmpty ?? true);
 
-      // 下一个是不同类型
+      // 后一个是不同类型
       final bool _nextOthType = (_span.imageUrl?.isEmpty ?? true) !=
           (_nextSpan?.imageUrl?.isEmpty ?? true);
 
@@ -803,7 +803,6 @@ class FullTextCustMergeText extends StatelessWidget {
       fontSize: 13,
       height: 1.2,
       color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-      fontFamilyFallback: EHConst.fontFamilyFallback,
     );
 
     return Column(
@@ -843,14 +842,27 @@ class FullTextCustMergeText extends StatelessWidget {
 
                 _text = _text.startsWith('\n') ? _text.substring(1) : _text;
 
-                return clif.SelectableLinkify(
-                  onOpen: (link) => onOpenUrl(context, link: link),
-                  text: _text,
+                return EhLinkifyText(
+                  _text,
+                  textStyle: _commentTextStyle,
+                  onTap: (link) => onOpenUrl(context, url: link.value),
                   textAlign: TextAlign.start,
-                  // 对齐方式
-                  style: _commentTextStyle,
-                  options: const LinkifyOptions(humanize: false),
+                  selectable: true,
                 );
+
+              // return Text(_text, style: _commentTextStyle);
+
+              // return clif.SelectableLinkify(
+              //   onOpen: (link) => onOpenUrl(context, url: link.url),
+              //   text: _text,
+              //   textAlign: TextAlign.start,
+              //   // 对齐方式
+              //   // style: CupertinoTheme.of(context)
+              //   //     .textTheme
+              //   //     .actionTextStyle
+              //   //     .merge(_commentTextStyle),
+              //   options: const LinkifyOptions(humanize: false),
+              // );
               case CommentSpanType.image: // 图片
               case CommentSpanType.linkImage: // 带链接图片
 
