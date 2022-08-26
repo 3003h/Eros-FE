@@ -3,23 +3,25 @@ import 'package:linkfy_text/linkfy_text.dart';
 import 'package:linkfy_text/src/model/link.dart';
 
 class EhLinkifyText extends StatelessWidget {
-  const EhLinkifyText(this.text,
-      {this.textStyle,
-      this.linkStyle,
-      this.linkTypes,
-      this.onTap,
-      this.strutStyle,
-      this.textAlign,
-      this.textDirection,
-      this.locale,
-      this.softWrap,
-      this.overflow,
-      this.textScaleFactor,
-      this.maxLines,
-      this.semanticsLabel,
-      this.textWidthBasis,
-      Key? key})
-      : super(key: key);
+  const EhLinkifyText(
+    this.text, {
+    this.textStyle,
+    this.linkStyle,
+    this.linkTypes,
+    this.onTap,
+    this.strutStyle,
+    this.textAlign,
+    this.textDirection,
+    this.locale,
+    this.softWrap,
+    this.overflow,
+    this.textScaleFactor,
+    this.maxLines,
+    this.semanticsLabel,
+    this.textWidthBasis,
+    this.selectable,
+    Key? key,
+  }) : super(key: key);
 
   final String text;
 
@@ -51,6 +53,8 @@ class EhLinkifyText extends StatelessWidget {
 
   final TextWidthBasis? textWidthBasis;
 
+  final bool? selectable;
+
   @override
   Widget build(BuildContext context) {
     return LinkifyText(
@@ -72,6 +76,7 @@ class EhLinkifyText extends StatelessWidget {
       maxLines: maxLines,
       semanticsLabel: semanticsLabel,
       textWidthBasis: textWidthBasis,
+      selectable: selectable,
     );
   }
 }

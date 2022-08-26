@@ -847,6 +847,7 @@ class FullTextCustMergeText extends StatelessWidget {
                   textStyle: _commentTextStyle,
                   onTap: (link) => onOpenUrl(context, url: link.value),
                   textAlign: TextAlign.start,
+                  selectable: true,
                 );
 
               // return Text(_text, style: _commentTextStyle);
