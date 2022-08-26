@@ -116,7 +116,7 @@ class EhCachedNetworkImage extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
-      imageUrl: imageUrl.dfUrl,
+      imageUrl: imageUrl.handleUrl,
       placeholder: placeholder,
       errorWidget: errorWidget,
       progressIndicatorBuilder: progressIndicatorBuilder,
