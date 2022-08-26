@@ -599,7 +599,7 @@ class TagBox extends StatelessWidget {
       List<SimpleTag>? _simpleTags =
           getLimitSimpleTags(simpleTags, _ehConfigService.listViewTagLimit);
 
-      if (_simpleTags == null || (_simpleTags.isEmpty ?? true)) {
+      if (_simpleTags == null || _simpleTags.isEmpty) {
         return const SizedBox.shrink();
       }
 
