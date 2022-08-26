@@ -972,11 +972,9 @@ packages:
   linkfy_text:
     dependency: "direct main"
     description:
-      path: "."
-      ref: url_identifing
-      resolved-ref: "54020aa843ac2dbc7ca0302946cb1f31ae157044"
-      url: "https://github.com/honjow/linkfy_text.git"
-    source: git
+      path: "/Users/honjow/git/linkfy_text"
+      relative: false
+    source: path
     version: "1.1.5"
   linkify:
     dependency: transitive
