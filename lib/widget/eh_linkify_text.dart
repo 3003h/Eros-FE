@@ -57,26 +57,46 @@ class EhLinkifyText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LinkifyText(
-      text,
-      textStyle: textStyle,
-      linkStyle: linkStyle ??
-          textStyle?.copyWith(
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.activeBlue, context)),
-      linkTypes: linkTypes,
-      onTap: onTap,
-      strutStyle: strutStyle,
-      textAlign: textAlign,
-      textDirection: textDirection,
-      locale: locale,
-      softWrap: softWrap,
-      overflow: overflow,
-      textScaleFactor: textScaleFactor,
-      maxLines: maxLines,
-      semanticsLabel: semanticsLabel,
-      textWidthBasis: textWidthBasis,
-      selectable: selectable,
-    );
+    if (selectable ?? false) {
+      return LinkifySelectableText(
+        text,
+        textStyle: textStyle,
+        linkStyle: linkStyle ??
+            textStyle?.copyWith(
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.activeBlue, context)),
+        linkTypes: linkTypes,
+        onTap: onTap,
+        strutStyle: strutStyle,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        textScaleFactor: textScaleFactor,
+        maxLines: maxLines,
+        semanticsLabel: semanticsLabel,
+        textWidthBasis: textWidthBasis,
+        scrollPhysics: const NeverScrollableScrollPhysics(),
+      );
+    } else {
+      return LinkifyText(
+        text,
+        textStyle: textStyle,
+        linkStyle: linkStyle ??
+            textStyle?.copyWith(
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.activeBlue, context)),
+        linkTypes: linkTypes,
+        onTap: onTap,
+        strutStyle: strutStyle,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        locale: locale,
+        softWrap: softWrap,
+        overflow: overflow,
+        textScaleFactor: textScaleFactor,
+        maxLines: maxLines,
+        semanticsLabel: semanticsLabel,
+        textWidthBasis: textWidthBasis,
+      );
+    }
   }
 }
