@@ -473,7 +473,7 @@ class _ChapterGridViewState extends State<ChapterGridView> {
       final limit = (widget.maxLine ?? 0) * _crossAxisCount;
 
       if (limit > _chapter.length) {
-        logger.d('full _chapter');
+        // logger.d('full _chapter');
         return _full;
       }
 

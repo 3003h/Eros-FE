@@ -206,7 +206,7 @@ class EhConfigService extends ProfileService {
   set blurringOfCoverBackground(bool val) =>
       _blurringOfCoverBackground.value = val;
 
-  static const _kAvatarType = AvatarType.boringAvatar;
+  static const _kAvatarType = AvatarType.textAvatar;
   final _avatarType = _kAvatarType.obs;
   AvatarType get avatarType => _avatarType.value;
   set avatarType(AvatarType val) => _avatarType.value = val;

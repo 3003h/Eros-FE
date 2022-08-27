@@ -7,6 +7,8 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
+import '../../utils/logger.dart';
+
 /// 检查返回结果是否是l视图
 bool isGalleryListDmL(String response) {
   final dom.Document document = parse(response);
@@ -199,11 +201,16 @@ GalleryList parseGalleryList(
 
 // logger.i('ratingFB $ratingFB');
 
-    final String postTime =
-        tr.querySelector('td.gl2c > div:nth-child(2) > div')?.text.trim() ?? '';
+    // 发布时间
+    bool expunged = false;
+    final elmPostTime = tr.querySelector('td.gl2c > div:nth-child(2) > div');
+    if (elmPostTime?.children.isNotEmpty ?? false) {
+      // logger.d('${elmPostTime?.outerHtml}');
+      expunged = true;
+    }
+    final String postTime = elmPostTime?.text.trim() ?? '';
     final DateTime time =
         DateFormat('yyyy-MM-dd HH:mm').parseUtc(postTime).toLocal();
-
     final String postTimeLocal = DateFormat('yyyy-MM-dd HH:mm').format(time);
 
 // 收藏标志
@@ -280,6 +287,7 @@ GalleryList parseGalleryList(
         filecount: _filecount,
         translated: _translated,
         favNote: favNote,
+        expunged: expunged,
       ));
     }
 
