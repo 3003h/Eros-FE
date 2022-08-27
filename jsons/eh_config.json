@@ -48,5 +48,6 @@
   "enableQRCodeCheck?": false,
   "viewFullscreen?": false,
   "blurringOfCoverBackground?": false,
-  "listViewTagLimit?": -1
+  "listViewTagLimit?": -1,
+  "redirectThumbLink?": true
 }

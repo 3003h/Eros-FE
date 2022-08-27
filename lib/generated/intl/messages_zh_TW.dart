@@ -230,6 +230,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "read_setting": MessageLookupByLibrary.simpleMessage("閱讀設置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("閱讀方向"),
         "rebuild_tasks_data": MessageLookupByLibrary.simpleMessage("重建數據"),
+        "redirect_thumb_link":
+            MessageLookupByLibrary.simpleMessage("Redirect Thumb Link"),
+        "redirect_thumb_link_summary": MessageLookupByLibrary.simpleMessage(
+            "Redirect Thumb Link To ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新載入圖片"),
         "remove_from_favorites": MessageLookupByLibrary.simpleMessage("從收藏中刪除"),

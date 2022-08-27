@@ -218,9 +218,18 @@ class EhConfigService extends ProfileService {
   int get listViewTagLimit => _listViewTagLimit.value;
   set listViewTagLimit(int val) => _listViewTagLimit.value = val;
 
+  final _redirectThumbLink = true.obs;
+  bool get redirectThumbLink => _redirectThumbLink.value;
+  set redirectThumbLink(bool val) => _redirectThumbLink.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    redirectThumbLink = ehConfig.redirectThumbLink ?? redirectThumbLink;
+    everProfile<bool>(_redirectThumbLink, (value) {
+      ehConfig = ehConfig.copyWith(redirectThumbLink: value);
+    });
 
     listViewTagLimit = ehConfig.listViewTagLimit ?? listViewTagLimit;
     everProfile<int>(_listViewTagLimit, (value) {
