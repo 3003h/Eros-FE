@@ -254,6 +254,10 @@ class ThemeColors {
       color: Color(0xfff06292),
       darkColor: Color.fromARGB(255, 188, 91, 123),
     ),
+    'Private': CupertinoDynamicColor.withBrightness(
+      color: Color.fromARGB(255, 48, 48, 46),
+      darkColor: Color.fromARGB(255, 70, 70, 73),
+    ),
     'default': CupertinoColors.systemBackground
   };
 
