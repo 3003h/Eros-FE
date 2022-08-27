@@ -159,7 +159,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify>
 
         Widget _getLinkify() {
           return AnimatedCrossFade(
-            duration: const Duration(milliseconds: 200),
+            duration: _kExpandDuration,
             firstCurve: Curves.easeIn,
             secondCurve: Curves.easeOut,
             firstChild: getLinkifyText2(isExpanded: true),

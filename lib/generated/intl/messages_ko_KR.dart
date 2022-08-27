@@ -238,6 +238,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "reading_direction": MessageLookupByLibrary.simpleMessage("읽기 방향"),
         "rebuild_tasks_data":
             MessageLookupByLibrary.simpleMessage("Rebuild tasks data"),
+        "redirect_thumb_link":
+            MessageLookupByLibrary.simpleMessage("Redirect Thumb Link"),
+        "redirect_thumb_link_summary": MessageLookupByLibrary.simpleMessage(
+            "Redirect Thumb Link To ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),
         "remove_from_favorites":

@@ -69,7 +69,7 @@ class CommentItem extends StatelessWidget {
                               span: galleryComment.span,
                               showTranslate:
                                   galleryComment.showTranslate ?? false,
-                              onOpenUrl: _onOpen,
+                              onOpenUrl: onOpenUrl,
                               controller: controller,
                             ),
                     ),
@@ -94,7 +94,7 @@ class CommentItem extends StatelessWidget {
   }) {
     return ExpandableLinkify(
       text: showTranslate ? galleryComment.textTranslate : galleryComment.text,
-      onOpen: (link) => _onOpen(context, url: link),
+      onOpen: (link) => onOpenUrl(context, url: link),
       options: const LinkifyOptions(humanize: false),
       maxLines: kMaxline,
       softWrap: true,
@@ -490,7 +490,7 @@ class CommentItem extends StatelessWidget {
 
   Widget _fullText(BuildContext context) {
     return clif.SelectableLinkify(
-      onOpen: (link) => _onOpen(context, url: link.url),
+      onOpen: (link) => onOpenUrl(context, url: link.url),
       text: galleryComment.text,
 //      softWrap: true,
       textAlign: TextAlign.left,
@@ -512,7 +512,7 @@ class CommentItem extends StatelessWidget {
         if (e.imageUrl != null) {
           return WidgetSpan(
             child: GestureDetector(
-              onTap: () => _onOpen(context, url: e.href!),
+              onTap: () => onOpenUrl(context, url: e.href!),
               child: Container(
                 constraints:
                     const BoxConstraints(maxWidth: 100, maxHeight: 140),
@@ -542,7 +542,7 @@ class CommentItem extends StatelessWidget {
           return clif.buildTextSpan(
             elements,
             style: Theme.of(context).textTheme.bodyText2!.merge(_custStyle),
-            onOpen: (link) => _onOpen(context, url: link.url),
+            onOpen: (link) => onOpenUrl(context, url: link.url),
             linkStyle: Theme.of(context)
                 .textTheme
                 .bodyText2!
@@ -605,7 +605,7 @@ class CommentItem extends StatelessWidget {
           children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
             if (e.imageUrl != null) {
               return GestureDetector(
-                onTap: () => _onOpen(context, url: e.href!),
+                onTap: () => onOpenUrl(context, url: e.href!),
                 child: Container(
                   constraints:
                       const BoxConstraints(maxWidth: 100, maxHeight: 140),
@@ -617,7 +617,7 @@ class CommentItem extends StatelessWidget {
               );
             } else {
               return clif.SelectableLinkify(
-                onOpen: (link) => _onOpen(context, url: link.url),
+                onOpen: (link) => onOpenUrl(context, url: link.url),
                 text: e.text ?? '',
                 textAlign: TextAlign.left,
                 // 对齐方式
@@ -634,38 +634,6 @@ class CommentItem extends StatelessWidget {
         );
       }).toList()),
     );
-  }
-}
-
-/// 打开url
-Future<void> _onOpen(
-  BuildContext context, {
-  String? url,
-}) async {
-  vibrateUtil.light();
-
-  final String? _openUrl = url;
-  final RegExp regGalleryUrl =
-      RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
-  final RegExp regGalleryPageUrl =
-      RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
-  if (await canLaunchUrlString(_openUrl!)) {
-    if (regGalleryUrl.hasMatch(_openUrl) ||
-        regGalleryPageUrl.hasMatch(_openUrl)) {
-      final String? _realUrl = regGalleryUrl.firstMatch(_openUrl)?.group(0) ??
-          regGalleryPageUrl.firstMatch(_openUrl)?.group(0);
-      logger.v('in $_realUrl');
-      NavigatorUtil.goGalleryPage(
-        url: _realUrl,
-      );
-    } else {
-      await launchUrlString(
-        _openUrl,
-        mode: LaunchMode.externalApplication,
-      );
-    }
-  } else {
-    throw 'Could not launch $_openUrl';
   }
 }
 

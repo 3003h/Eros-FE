@@ -18,6 +18,7 @@ import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:uuid/uuid.dart';
 
 import '../fehviewer.dart';
@@ -209,6 +210,35 @@ String renderSize(int inValue) {
   }
   final String size = value.toStringAsFixed(2);
   return '$size ${unitArr[index]}';
+}
+
+Future<void> onOpenUrl(BuildContext context, {String? url}) async {
+  vibrateUtil.light();
+
+  final String? _openUrl = Uri.encodeFull(url ?? '');
+
+  if (!await _launchEhUrl(url)) {
+    throw 'Could not launch $_openUrl';
+  }
+}
+
+Future<bool> _launchEhUrl(String? url) async {
+  final String? _openUrl = Uri.encodeFull(url ?? '');
+  final RegExp regExp =
+      RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
+  if (regExp.hasMatch(_openUrl!)) {
+    final String? _realUrl = regExp.firstMatch(_openUrl)?.group(0);
+    logger.v('in $_realUrl');
+    NavigatorUtil.goGalleryPage(
+      url: _realUrl,
+    );
+    return true;
+  } else {
+    return await launchUrlString(
+      _openUrl,
+      mode: LaunchMode.externalApplication,
+    );
+  }
 }
 
 class EHUtils {
