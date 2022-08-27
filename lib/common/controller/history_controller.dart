@@ -117,6 +117,7 @@ class HistoryController extends GetxController {
           _index,
           (context, Animation<double> animation) =>
               buildDelGallerySliverListItem(_item, _index, animation));
+      update();
     } else {
       update();
     }
