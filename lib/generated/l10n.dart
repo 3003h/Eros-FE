@@ -3943,6 +3943,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Redirect Thumb Link`
+  String get redirect_thumb_link {
+    return Intl.message(
+      'Redirect Thumb Link',
+      name: 'redirect_thumb_link',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redirect Thumb Link To ehgt.org`
+  String get redirect_thumb_link_summary {
+    return Intl.message(
+      'Redirect Thumb Link To ehgt.org',
+      name: 'redirect_thumb_link_summary',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

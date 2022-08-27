@@ -386,5 +386,7 @@
   "layout": "Layout",
   "blurring_cover_background": "Blurring of cover background",
   "tag_limit": "Tag Limit",
-  "no_limit": "No Limit"
+  "no_limit": "No Limit",
+  "redirect_thumb_link": "Redirect Thumb Link",
+  "redirect_thumb_link_summary": "Redirect Thumb Link To ehgt.org"
 }

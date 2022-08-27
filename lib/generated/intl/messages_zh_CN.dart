@@ -217,6 +217,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
         "rebuild_tasks_data": MessageLookupByLibrary.simpleMessage("重建下载任务数据"),
+        "redirect_thumb_link": MessageLookupByLibrary.simpleMessage("重定向缩略图链接"),
+        "redirect_thumb_link_summary":
+            MessageLookupByLibrary.simpleMessage("重定向缩略图链接为ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("重新下载"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites":
