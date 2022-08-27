@@ -971,6 +971,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.0"
+  linkfy_text:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: url_identifing
+      resolved-ref: "22df7b552d14b9527844b5b74f90947c59c9feec"
+      url: "https://github.com/honjow/linkfy_text.git"
+    source: git
+    version: "1.1.5"
   linkify:
     dependency: transitive
     description:
@@ -1189,7 +1198,7 @@ packages:
       name: path_provider_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.19"
+    version: "2.0.20"
   path_provider_ios:
     dependency: transitive
     description:
@@ -1866,7 +1875,7 @@ packages:
       name: xdg_directories
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.0+1"
+    version: "0.2.0+2"
   xml:
     dependency: transitive
     description:

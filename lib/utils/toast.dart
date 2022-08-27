@@ -98,15 +98,15 @@ void show509Toast() {
 }
 
 void showActionToast(String msg, {IconData? icon, VoidCallback? onPressed}) {
+  const showActionToastTag = 'showActionToast';
   SmartDialog.show(
-    alignment: Alignment.bottomCenter,
-    useAnimation: true,
-    displayTime: 5.seconds,
-    // consumeEvent: true,
-    usePenetrate: true,
-    clickMaskDismiss: false,
-    maskColor: Colors.transparent,
-    builder: (_) => Container(
+    tag: showActionToastTag,
+    alignmentTemp: Alignment.bottomCenter,
+    isUseAnimationTemp: true,
+    isPenetrateTemp: true,
+    clickBgDismissTemp: false,
+    maskColorTemp: Colors.transparent,
+    widget: Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 100),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
@@ -144,7 +144,7 @@ void showActionToast(String msg, {IconData? icon, VoidCallback? onPressed}) {
                     ),
                     padding: const EdgeInsets.only(left: 28),
                     onPressed: () {
-                      SmartDialog.dismiss();
+                      SmartDialog.dismiss(tag: showActionToastTag);
                       onPressed?.call();
                     },
                   ),
@@ -156,4 +156,7 @@ void showActionToast(String msg, {IconData? icon, VoidCallback? onPressed}) {
       ),
     ),
   );
+
+  // 自动关闭
+  5.seconds.delay(() => SmartDialog.dismiss(tag: showActionToastTag));
 }
