@@ -974,7 +974,7 @@ packages:
     description:
       path: "."
       ref: url_identifing
-      resolved-ref: "844808b6a3e2116512cd50902e2f8076a0d001d6"
+      resolved-ref: "22df7b552d14b9527844b5b74f90947c59c9feec"
       url: "https://github.com/honjow/linkfy_text.git"
     source: git
     version: "1.1.5"
