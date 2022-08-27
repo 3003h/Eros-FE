@@ -13,6 +13,7 @@ import '../../widget/rating_bar.dart';
 import 'controller/galleryitem_controller.dart';
 import 'gallery_clipper.dart';
 import 'gallery_item.dart';
+import 'item_base.dart';
 
 const int kTitleMaxLines = 2;
 const double kRadius = 6.0;
@@ -145,10 +146,13 @@ class GalleryItemGrid extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    _PostTime(
+                    PostTime(
                       postTime:
-                          galleryProviderController.galleryProvider.postTime,
-                    )
+                          galleryProviderController.galleryProvider.postTime ??
+                              '',
+                      expunged:
+                          galleryProviderController.galleryProvider.expunged,
+                    ),
                   ],
                 ).paddingSymmetric(horizontal: 4, vertical: 2),
               ),
