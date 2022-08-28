@@ -244,7 +244,7 @@ class ReadButton extends StatelessWidget {
               style: const TextStyle(fontSize: 15, height: 1.2),
             ),
             minSize: 24,
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
             borderRadius: BorderRadius.circular(20),
             color: CupertinoColors.activeBlue,
             onPressed: _pageState.enableRead
