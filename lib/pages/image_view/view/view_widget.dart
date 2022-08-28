@@ -182,7 +182,7 @@ class ViewLoading extends StatelessWidget {
     if (debugLable != null && kDebugMode) {
       logger.v('build ViewLoading $debugLable');
     }
-    final _loadWidget = _ViewLoading(
+    final _loadWidget = _ViewLoadingCupertion(
       ser: ser,
       progress: progress,
       animationEnabled: animationEnabled ?? true,
@@ -264,7 +264,7 @@ class ImageExt extends GetView<ViewExtController> {
                     (loadingProgress?.expectedTotalBytes ?? 1)
                 : null;
 
-            return _ViewLoading(progress: progress, ser: ser);
+            return _ViewLoadingCupertion(progress: progress, ser: ser);
 
           ///if you don't want override completed widget
           ///please return null or state.completedWidget
@@ -308,7 +308,7 @@ class ImageExt extends GetView<ViewExtController> {
 
             if (reload) {
               // return const SizedBox.shrink();
-              return _ViewLoading(ser: ser);
+              return _ViewLoadingCupertion(ser: ser);
             } else {
               return Container(
                 alignment: Alignment.center,
@@ -407,7 +407,7 @@ class ImageExtProvider extends GetView<ViewExtController> {
                     (loadingProgress?.expectedTotalBytes ?? 1)
                 : null;
 
-            return _ViewLoading(progress: progress, ser: ser);
+            return _ViewLoadingCupertion(progress: progress, ser: ser);
 
           case LoadState.completed:
             fadeAnimationController.forward();
@@ -446,7 +446,7 @@ class ImageExtProvider extends GetView<ViewExtController> {
 
             if (reload) {
               // return const SizedBox.shrink();
-              return _ViewLoading(ser: ser);
+              return _ViewLoadingCupertion(ser: ser);
             } else {
               return Container(
                 alignment: Alignment.center,
@@ -566,6 +566,73 @@ class _ImageWithHideState extends State<ImageWithHide> {
             );
           }
         });
+  }
+}
+
+class _ViewLoadingCupertion extends StatelessWidget {
+  const _ViewLoadingCupertion({
+    Key? key,
+    this.progress,
+    required this.ser,
+    this.animationEnabled = true,
+  }) : super(key: key);
+
+  final double? progress;
+  final int ser;
+  final bool animationEnabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: context.mediaQueryShortestSide,
+        minWidth: context.width / 2 - kPageViewPadding,
+      ),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                constraints: const BoxConstraints(
+                  maxHeight: 100,
+                  maxWidth: 100,
+                ),
+                child: const CupertinoActivityIndicator(
+                  radius: 30,
+                ),
+              ),
+              Text(
+                progress != null ? '${((progress ?? 0) * 100).round()}' : '',
+                style: const TextStyle(
+                  color: CupertinoColors.systemGrey6,
+                  height: 1,
+                  fontSize: 10,
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '$ser',
+                  style: const TextStyle(
+                    color: CupertinoColors.systemGrey6,
+                    height: 1,
+                  ),
+                ).paddingSymmetric(horizontal: 4),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
