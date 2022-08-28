@@ -77,13 +77,14 @@ class GalleryHeaderSliver extends StatelessWidget {
                             //         pageController: _controller)),
                             const Spacer(),
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                // 阅读按钮
-                                ReadButton(gid: initGalleryProvider.gid ?? ''),
                                 const Spacer(),
                                 // 收藏按钮
                                 const GalleryFavButton(),
+                                // 阅读按钮
+                                ReadButton(gid: initGalleryProvider.gid ?? '')
+                                    .paddingOnly(right: 6),
                               ],
                             ).marginOnly(top: 10),
                           ],
@@ -217,7 +218,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.only(top: 8.0, right: 6),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         // ignore: prefer_const_literals_to_create_immutables

@@ -18,6 +18,8 @@ class GalleryCacheController extends GetxController {
   final WebdavController webdavController = Get.find();
   LinkedHashMap<String, GalleryCache> gCacheMap = LinkedHashMap();
 
+  final Map<String, GalleryProvider?> galleryProviderCache = {};
+
   // final thrSync = Throttling(duration: const Duration(seconds: 10));
   final debSync = Debouncing(duration: const Duration(seconds: 5));
 

@@ -141,7 +141,6 @@ class GalleryPageController extends GetxController
 
   /// 请求数据
   Future<GalleryProvider?> _fetchData({bool refresh = false}) async {
-    await Future<void>.delayed(const Duration(milliseconds: 100));
     try {
       gState.hideNavigationBtn = true;
 
@@ -164,10 +163,31 @@ class GalleryPageController extends GetxController
       final bool? _oriIsRatinged = gState.galleryProvider?.isRatinged;
 
       time.showTime('start get galleryProvider');
-      final fetchedGalleryProvider = await getGalleryDetail(
-        url: gState.galleryProvider?.url ?? '',
-        refresh: refresh,
-      );
+
+      late final GalleryProvider? fetchedGalleryProvider;
+      // 从内存缓存中加载
+      final providerCache = _galleryCacheController
+          .galleryProviderCache[gState.galleryProvider?.gid ?? ''];
+
+      if (!refresh && providerCache != null) {
+        fetchedGalleryProvider = providerCache;
+      } else {
+        fetchedGalleryProvider = await getGalleryDetail(
+          url: gState.galleryProvider?.url ?? '',
+          refresh: refresh,
+        );
+        _galleryCacheController
+                .galleryProviderCache[gState.galleryProvider?.gid ?? ''] =
+            fetchedGalleryProvider;
+      }
+
+      await 200.milliseconds.delay();
+
+      // // 网络请求画廊数据
+      // final fetchedGalleryProvider = await getGalleryDetail(
+      //   url: gState.galleryProvider?.url ?? '',
+      //   refresh: refresh,
+      // );
       time.showTime('fetch galleryProvider end');
 
       if (fetchedGalleryProvider != null) {

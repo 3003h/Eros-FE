@@ -18,6 +18,7 @@ class GalleryFavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double iconSize = 28.0;
     // 收藏按钮图标
     final Widget favIcon = Obx(() {
       return MouseRegionClick(
@@ -38,11 +39,13 @@ class GalleryFavButton extends StatelessWidget {
               Icon(
                 FontAwesomeIcons.solidHeart,
                 color: ThemeColors.favColor[_favController.favcat],
+                size: iconSize,
               )
             else
               const Icon(
                 FontAwesomeIcons.heart,
                 color: CupertinoColors.systemGrey,
+                size: iconSize,
               ),
           ],
         ),
@@ -52,7 +55,7 @@ class GalleryFavButton extends StatelessWidget {
     final Widget _loadIcon = Row(
       children: <Widget>[
         Container(
-          height: 14,
+          height: 16,
           padding: const EdgeInsets.only(right: 4),
           child: Text(
             // L10n.of(context).processing,
