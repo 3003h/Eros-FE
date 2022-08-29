@@ -190,8 +190,11 @@ class ViewExtController extends GetxController {
       handItemPositionsChange(positions);
     });
 
-    Future.delayed(const Duration(milliseconds: 200)).then((value) =>
-        thumbScrollController.jumpTo(index: vState.currentItemIndex));
+    Future.delayed(const Duration(milliseconds: 200)).then((value) {
+      if (thumbScrollController.isAttached) {
+        thumbScrollController.jumpTo(index: vState.currentItemIndex);
+      }
+    });
 
     // 缩略图滚动组件监听
     thumbPositionsListener.itemPositions.addListener(() {
@@ -1025,7 +1028,7 @@ class ViewExtController extends GetxController {
           );
         }
       } else {
-        logger.d('ltr or rtl next page ${vState.pageIndex + 1}');
+        logger.d('horizontal next page ${vState.pageIndex + 1}');
 
         if (vState.columnMode == ViewColumnMode.single) {
           // 下一张图片的加载完成标志 如果没有完成 取消翻页定时器
@@ -1063,6 +1066,7 @@ class ViewExtController extends GetxController {
           );
         } else {
           // 双页阅读
+          logger.d('双页阅读 自动翻页');
           final int serLeftNext = vState.serStart + 2;
           if (vState.filecount > serLeftNext) {
             if (serLeftNext > 0 &&
@@ -1177,10 +1181,6 @@ class ViewExtController extends GetxController {
     Function onExtendedPageController, {
     Function? onPreviewPageController,
   }) {
-    if (vState.columnMode != ViewColumnMode.single) {
-      return;
-    }
-
     switch (pageViewType) {
       case PageViewType.photoView:
         onPageController.call();

@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:preload_page_view/preload_page_view.dart';
+import 'package:zoom_widget/zoom_widget.dart';
 
 import '../common.dart';
 import '../controller/view_controller.dart';
@@ -24,31 +25,87 @@ class ImagePageView extends GetView<ViewExtController> {
       id: idSlidePage,
       builder: (logic) {
         if (logic.vState.columnMode != ViewColumnMode.single) {
-          // 双页
-          return PhotoViewGallery.builder(
-              backgroundDecoration:
-                  const BoxDecoration(color: Colors.transparent),
-              pageController: logic.pageController,
-              itemCount: logic.vState.pageCount,
-              onPageChanged: (pageIndex) =>
-                  controller.handOnPageChanged(pageIndex),
-              scrollDirection: Axis.horizontal,
-              customSize: context.mediaQuery.size,
-              scrollPhysics: const CustomScrollPhysics(),
-              reverse: reverse,
-              builder: (BuildContext context, int pageIndex) {
-                // 双页
-                return PhotoViewGalleryPageOptions.customChild(
-                  initialScale: PhotoViewComputedScale.contained,
-                  minScale: PhotoViewComputedScale.contained,
-                  maxScale: PhotoViewComputedScale.covered * 5,
-                  // scaleStateCycle: lisviewScaleStateCycle,
-                  controller: logic.photoViewController,
-                  // scaleStateController: logic.photoViewScaleStateController,
-                  // disableGestures: true,
+          switch (controller.pageViewType) {
+            case PageViewType.preloadPageview:
+              Widget doubleView(int pageIndex) {
+                return PhotoViewGallery.builder(
+                  backgroundDecoration:
+                      const BoxDecoration(color: Colors.transparent),
+                  itemCount: 1,
+                  builder: (_, __) {
+                    return PhotoViewGalleryPageOptions.customChild(
+                      scaleStateController:
+                          controller.photoViewScaleStateController,
+                      initialScale: PhotoViewComputedScale.contained * 1.0,
+                      minScale: PhotoViewComputedScale.contained * 1.0,
+                      maxScale: PhotoViewComputedScale.contained * 3.0,
+                      scaleStateCycle: lisviewScaleStateCycle,
+                      child: DoublePageView(pageIndex: pageIndex),
+                    );
+                  },
+                );
+              }
+
+              Widget doubleView2(int pageIndex) {
+                return Zoom(
+                  maxZoomWidth: context.width * 2,
+                  maxZoomHeight: context.height,
                   child: DoublePageView(pageIndex: pageIndex),
                 );
-              });
+              }
+
+              //
+              return PreloadPageView.builder(
+                controller: logic.preloadPageController,
+                physics: const CustomScrollPhysics(),
+                reverse: reverse,
+                itemCount: logic.vState.pageCount,
+                scrollDirection: Axis.horizontal,
+                preloadPagesCount: max(
+                    0, logic.vState.ehConfigService.preloadImage.value ~/ 2),
+                onPageChanged: (pageIndex) =>
+                    controller.handOnPageChanged(pageIndex),
+                itemBuilder: (BuildContext context, int pageIndex) {
+                  return Obx(() {
+                    logic.vState.showPageInterval;
+                    return AnimatedContainer(
+                      duration: 200.milliseconds,
+                      padding: logic.vState.showPageInterval
+                          ? const EdgeInsets.symmetric(horizontal: 2)
+                          : null,
+                      child: doubleView(pageIndex),
+                    );
+                  });
+                },
+              );
+
+            default:
+              // 双页
+              return PhotoViewGallery.builder(
+                  backgroundDecoration:
+                      const BoxDecoration(color: Colors.transparent),
+                  pageController: logic.pageController,
+                  itemCount: logic.vState.pageCount,
+                  onPageChanged: (pageIndex) =>
+                      controller.handOnPageChanged(pageIndex),
+                  scrollDirection: Axis.horizontal,
+                  customSize: context.mediaQuery.size,
+                  scrollPhysics: const CustomScrollPhysics(),
+                  reverse: reverse,
+                  builder: (BuildContext context, int pageIndex) {
+                    // 双页
+                    return PhotoViewGalleryPageOptions.customChild(
+                      initialScale: PhotoViewComputedScale.contained,
+                      minScale: PhotoViewComputedScale.contained,
+                      maxScale: PhotoViewComputedScale.covered * 5,
+                      // scaleStateCycle: lisviewScaleStateCycle,
+                      controller: logic.photoViewController,
+                      // scaleStateController: logic.photoViewScaleStateController,
+                      // disableGestures: true,
+                      child: DoublePageView(pageIndex: pageIndex),
+                    );
+                  });
+          }
         } else {
           switch (controller.pageViewType) {
             case PageViewType.photoView:
@@ -91,7 +148,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 itemCount: logic.vState.pageCount,
                 scrollDirection: Axis.horizontal,
                 preloadPagesCount:
-                    max(1, logic.vState.ehConfigService.preloadImage.value),
+                    max(0, logic.vState.ehConfigService.preloadImage.value),
                 onPageChanged: (pageIndex) =>
                     controller.handOnPageChanged(pageIndex),
                 itemBuilder: (BuildContext context, int index) {
