@@ -280,9 +280,9 @@ class GalleryCategory extends StatelessWidget {
     //     ThemeColors.catColor[category ?? 'default']!, context);
     return GestureDetector(
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(6),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
           color: _colorCategory,
           child: Text(
             category ?? '',
