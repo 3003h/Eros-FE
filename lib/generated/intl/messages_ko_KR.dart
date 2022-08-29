@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
             'temp': 'temp',
           })}";
 
+  static String m4(version) => "Update to ${version}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("안전하게 보관하세요!"),
@@ -77,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("취소"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨찾기 변경"),
         "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
+        "check_for_update":
+            MessageLookupByLibrary.simpleMessage("Check for Update"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("캐시 지우기"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("지우기"),
         "clear_search_history":
@@ -158,6 +162,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("언어"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "최근 즐겨찾기, 길게 눌러 수동으로 선택할 수 있습니다."),
+        "latest_version":
+            MessageLookupByLibrary.simpleMessage("Latest version"),
         "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("왼쪽에서 오른쪽으로"),
         "license": MessageLookupByLibrary.simpleMessage("License"),
@@ -541,6 +547,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_xt_desc": MessageLookupByLibrary.simpleMessage(
             "If you want to exclude certain namespaces from a default tag search, you can check those abover. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces."),
         "unlimited": MessageLookupByLibrary.simpleMessage("제한 없음"),
+        "update_to_version": m4,
         "uploader": MessageLookupByLibrary.simpleMessage("업로더"),
         "user_login": MessageLookupByLibrary.simpleMessage("로그인"),
         "user_name": MessageLookupByLibrary.simpleMessage("사용자 이름"),

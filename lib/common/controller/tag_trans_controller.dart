@@ -52,7 +52,7 @@ class TagTransController extends GetxController {
       return true;
     }
 
-    final _urlJson = await getTranslateTagDBInfo(kUrl);
+    final _urlJson = await getGithubApi(kUrl);
     // 获取发布时间 作为远程版本号
     _remoteVer =
         (_urlJson != null ? _urlJson['published_at']?.trim() : '') as String;
