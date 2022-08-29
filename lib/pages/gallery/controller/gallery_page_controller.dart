@@ -167,27 +167,21 @@ class GalleryPageController extends GetxController
       late final GalleryProvider? fetchedGalleryProvider;
       // 从内存缓存中加载
       final providerCache = _galleryCacheController
-          .galleryProviderCache[gState.galleryProvider?.gid ?? ''];
+          .getGalleryProviderCache(gState.galleryProvider?.gid);
 
       if (!refresh && providerCache != null) {
         fetchedGalleryProvider = providerCache;
       } else {
+        // 网络请求画廊数据
         fetchedGalleryProvider = await getGalleryDetail(
           url: gState.galleryProvider?.url ?? '',
           refresh: refresh,
         );
-        _galleryCacheController
-                .galleryProviderCache[gState.galleryProvider?.gid ?? ''] =
-            fetchedGalleryProvider;
+        _galleryCacheController.setGalleryProviderCache(
+            gState.galleryProvider?.gid, fetchedGalleryProvider);
+        await 200.milliseconds.delay();
       }
 
-      await 200.milliseconds.delay();
-
-      // // 网络请求画廊数据
-      // final fetchedGalleryProvider = await getGalleryDetail(
-      //   url: gState.galleryProvider?.url ?? '',
-      //   refresh: refresh,
-      // );
       time.showTime('fetch galleryProvider end');
 
       if (fetchedGalleryProvider != null) {
