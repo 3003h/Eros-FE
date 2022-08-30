@@ -1,0 +1,58 @@
+# 自动构建 Apk
+name: Test, Build and Release apk
+
+# 工作流程触发的时机，这里是当一个版本标签推送到仓库时触发
+on:
+  push:
+    branches:
+      - 'build'
+    tags:
+      - v*
+
+# 这个工作流程需要执行的任务
+jobs:
+  process:
+    name: Build process
+    runs-on: ubuntu-latest
+    # 这个任务的步骤
+    steps:
+      # 拉取项目代码
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Unlock secrets
+        uses: sliteteam/github-action-git-crypt-unlock@1.2.0
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+      # 建立 java 环境
+      - name: Setup Java JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      # 建立 Flutter 环境
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      # 下载项目依赖
+      - name: Flutter pub get
+        run: mv lib/config/config.dart.sample lib/config/config.dart | flutter pub get
+      - run: |
+          echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+      # 打包 APK
+      - name: Collect Apks
+        run: flutter build apk --release --split-per-abi
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
+      # 发布到 Release
+      - name: Release apk
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/release/*.apk"
+          token: ${{ secrets.RELEASE_TOKEN }}
