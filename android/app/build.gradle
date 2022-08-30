@@ -21,17 +21,23 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-if (keystorePropertiesFile.exists()) {
-    keystorePropertiesFile.withReader('UTF-8') { reader ->
-        keystoreProperties.load(reader)
-    }
-}
-def _keyAlias = keystoreProperties.getProperty("keyAlias")
-def _keyPassword = keystoreProperties.getProperty("keyPassword")
-def _storeFile = keystoreProperties.getProperty("storeFile")
-def _storePassword = keystoreProperties.getProperty("storePassword")
+//def keystorePropertiesFile = rootProject.file("keystore.properties")
+//def keystoreProperties = new Properties()
+//if (keystorePropertiesFile.exists()) {
+//    keystorePropertiesFile.withReader('UTF-8') { reader ->
+//        keystoreProperties.load(reader)
+//    }
+//}
+//def _keyAlias = keystoreProperties.getProperty("keyAlias")
+//def _keyPassword = keystoreProperties.getProperty("keyPassword")
+//def _storeFile = file(keystoreProperties.getProperty("storeFile"))
+//def _storePassword = keystoreProperties.getProperty("storePassword")
+
+def _keyAlias = System.getenv("KEY_ALIAS")
+def _keyPassword = System.getenv("KEY_PASSWORD")
+def _storeFile = file(System.getenv("KEYSTORE") ?:"keystore.jks")
+def _storePassword = System.getenv("KEYSTORE_PASSWORD")
+
 
 
 apply plugin: 'com.android.application'
@@ -60,7 +66,7 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file(_storeFile)
+            storeFile _storeFile
             storePassword _storePassword
             keyAlias _keyAlias
             keyPassword _keyPassword
@@ -68,7 +74,7 @@ android {
             v2SigningEnabled true
         }
         release {
-            storeFile file(_storeFile)
+            storeFile _storeFile
             storePassword _storePassword
             keyAlias _keyAlias
             keyPassword _keyPassword
