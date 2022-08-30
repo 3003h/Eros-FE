@@ -144,3 +144,30 @@ List<SimpleTag>? getLimitSimpleTags(List<SimpleTag>? simpleTags, int limit) {
     return simpleTags;
   }
 }
+
+class PostTime extends StatelessWidget {
+  const PostTime({
+    Key? key,
+    this.postTime,
+    this.expunged = false,
+    this.fontSize = 12,
+  }) : super(key: key);
+  final String? postTime;
+  final bool? expunged;
+  final double? fontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      postTime ?? '',
+      textAlign: TextAlign.right,
+      style: TextStyle(
+        fontSize: fontSize,
+        color: CupertinoColors.systemGrey,
+        decoration: (expunged ?? false)
+            ? TextDecoration.lineThrough
+            : TextDecoration.none,
+      ),
+    );
+  }
+}

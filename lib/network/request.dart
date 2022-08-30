@@ -828,7 +828,7 @@ Future<FavAdd> galleryGetFavorite(
   }
 }
 
-Future<Map> getTranslateTagDBInfo(String url) async {
+Future<Map> getGithubApi(String url) async {
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(url);
   if (httpResponse.ok && httpResponse.data is Map) {

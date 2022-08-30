@@ -195,9 +195,7 @@ class ViewExtState {
 
   /// 阅读模式
   Rx<ViewMode> get _viewMode => ehConfigService.viewMode;
-
   ViewMode get viewMode => _viewMode.value;
-
   set viewMode(ViewMode val) => _viewMode.value = val;
 
   bool fade = true;

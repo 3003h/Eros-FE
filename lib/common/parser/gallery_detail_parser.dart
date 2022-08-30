@@ -158,7 +158,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
             final Element? _nodeElm = node;
 
             final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
-            logger.d('_nodeHref $_nodeHref');
+            // logger.d('_nodeHref $_nodeHref');
 
             if (_nodeElm?.children.isNotEmpty ?? false) {
               final Element? _imgElm = _nodeElm?.children
@@ -212,10 +212,15 @@ List<GalleryComment> parseGalleryComment(Document document) {
         }
       }
 
-      // 解析评论评分
+      // 解析评论评分详情
       final Element? scoresElem = comment.querySelector('div.c7');
       final spanElms = scoresElem?.querySelectorAll('span') ?? [];
-      final _scoreDetails = spanElms.map((e) => e.text).toList();
+
+      final _scoreDetails = [
+        (scoresElem?.nodes.first.text ?? '').replaceFirstMapped(
+            RegExp(r'(.+),\s+'), (match) => match.group(1) ?? ''),
+        ...spanElms.map((e) => e.text).toList()
+      ];
       // print('$_scoreDetails');
 
       _galleryComment.add(GalleryComment(

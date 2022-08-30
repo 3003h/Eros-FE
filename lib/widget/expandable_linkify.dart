@@ -153,7 +153,7 @@ class _ExpandableLinkifyState extends State<ExpandableLinkify>
             onTap: (link) => widget.onOpen?.call(link.value),
             softWrap: widget.softWrap,
             textAlign: widget.textAlign,
-            selectable: true,
+            selectable: false,
           );
         }
 

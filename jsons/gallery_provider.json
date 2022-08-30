@@ -44,5 +44,6 @@
   "torrentLink?": "",
   "lastViewTime?": 123,
   "pageOfList?": 1,
-  "favNote?": ""
+  "favNote?": "",
+  "expunged?": false
 }

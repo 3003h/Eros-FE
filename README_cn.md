@@ -12,6 +12,11 @@
 
 一个 flutter 编写的 e-hentai app
 
+## iOS 安装
+1. 下载最新 ipa 文件 [Releases](https://github.com/honjow/FEhViewer/releases/latest).
+2. 使用 [AltStore](https://altstore.io) 之类的 app 安装到设备上. 或者直接使用 [AltStore.json](https://config-feh.vercel.app/AltStore.json)
+
+
 ## 说明
 
 其实主要是想写给自己用，因为用的 ios，感觉现有的几个项目感觉不能满足自己的使用 \

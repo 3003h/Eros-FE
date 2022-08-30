@@ -388,5 +388,8 @@
   "tag_limit": "标签上限",
   "no_limit": "无限制",
   "redirect_thumb_link": "重定向缩略图链接",
-  "redirect_thumb_link_summary": "重定向缩略图链接为ehgt.org"
+  "redirect_thumb_link_summary": "重定向缩略图链接为ehgt.org",
+  "check_for_update": "检查更新",
+  "latest_version": "最新版本",
+  "update_to_version": "可更新到 {version}"
 }

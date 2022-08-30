@@ -3963,6 +3963,36 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Check for Update`
+  String get check_for_update {
+    return Intl.message(
+      'Check for Update',
+      name: 'check_for_update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Latest version`
+  String get latest_version {
+    return Intl.message(
+      'Latest version',
+      name: 'latest_version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update to {version}`
+  String update_to_version(Object version) {
+    return Intl.message(
+      'Update to $version',
+      name: 'update_to_version',
+      desc: '',
+      args: [version],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

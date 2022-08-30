@@ -386,5 +386,8 @@
   "tag_limit": "Tag Limit",
   "no_limit": "No Limit",
   "redirect_thumb_link": "Redirect Thumb Link",
-  "redirect_thumb_link_summary": "Redirect Thumb Link To ehgt.org"
+  "redirect_thumb_link_summary": "Redirect Thumb Link To ehgt.org",
+  "check_for_update": "Check for Update",
+  "latest_version": "Latest version",
+  "update_to_version": "Update to {version}"
 }

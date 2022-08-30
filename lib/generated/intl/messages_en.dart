@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
             'temp': 'temp',
           })}";
 
+  static String m4(version) => "Update to ${version}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("KEEP IT SAFE"),
@@ -81,6 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_to_favorites":
             MessageLookupByLibrary.simpleMessage("Change to favorites"),
         "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
+        "check_for_update":
+            MessageLookupByLibrary.simpleMessage("Check for Update"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("Clear cache"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("Clear"),
         "clear_search_history":
@@ -171,6 +175,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Last Favorites, long press to manually select"),
+        "latest_version":
+            MessageLookupByLibrary.simpleMessage("Latest version"),
         "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Left to right"),
         "license": MessageLookupByLibrary.simpleMessage("License"),
@@ -580,6 +586,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_xt_desc": MessageLookupByLibrary.simpleMessage(
             "If you want to exclude certain namespaces from a default tag search, you can check those abover. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces."),
         "unlimited": MessageLookupByLibrary.simpleMessage("Unlimited"),
+        "update_to_version": m4,
         "uploader": MessageLookupByLibrary.simpleMessage("Uploader"),
         "user_login": MessageLookupByLibrary.simpleMessage("User Sign"),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),

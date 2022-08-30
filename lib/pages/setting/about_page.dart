@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/controller/update_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
@@ -37,34 +38,42 @@ class AboutPage extends StatelessWidget {
 }
 
 class ListViewAbout extends StatelessWidget {
+  ListViewAbout({Key? key}) : super(key: key);
+
+  final EhConfigService _ehConfigService = Get.find();
+  final UpdateController _updateController = Get.put(UpdateController());
+
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
-
     return Container(
       child: ListView(
         children: <Widget>[
-          Egg(
-            child: TextItem(
-              '${Global.packageInfo.appName} ',
-              desc: 'an unofficial e-hentai app',
-              onTap: null,
-            ),
-            onTrigger: (int tapNum, int neededNum) {
-              if (Platform.isIOS) {
-                if (_ehConfigService.isSafeMode.value) {
-                  // showToast('你发现了不得了的东西');
-                  logger.v('safeMode off');
-                  _ehConfigService.isSafeMode.value = false;
-                  Vibrate.feedback(FeedbackType.success);
-                } else {
-                  // showToast('ヾ(￣▽￣)Bye~Bye~');
-                  logger.v('safeMode on');
-                  _ehConfigService.isSafeMode.value = true;
-                  Vibrate.feedback(FeedbackType.error);
-                }
-              }
-            },
+          // Egg(
+          //   child: TextItem(
+          //     '${Global.packageInfo.appName} ',
+          //     desc: 'an unofficial e-hentai app',
+          //     onTap: null,
+          //   ),
+          //   onTrigger: (int tapNum, int neededNum) {
+          //     if (Platform.isIOS) {
+          //       if (_ehConfigService.isSafeMode.value) {
+          //         // showToast('你发现了不得了的东西');
+          //         logger.v('safeMode off');
+          //         _ehConfigService.isSafeMode.value = false;
+          //         Vibrate.feedback(FeedbackType.success);
+          //       } else {
+          //         // showToast('ヾ(￣▽￣)Bye~Bye~');
+          //         logger.v('safeMode on');
+          //         _ehConfigService.isSafeMode.value = true;
+          //         Vibrate.feedback(FeedbackType.error);
+          //       }
+          //     }
+          //   },
+          // ),
+          TextItem(
+            '${Global.packageInfo.appName} ',
+            desc: 'An unofficial e-hentai app',
+            onTap: null,
           ),
           TextItem(
             L10n.of(context).version,
@@ -72,6 +81,16 @@ class ListViewAbout extends StatelessWidget {
                 '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
             onTap: null,
           ),
+          Obx(() {
+            return TextItem(
+              L10n.of(context).check_for_update,
+              desc: _updateController.canUpdate
+                  ? L10n.of(context)
+                      .update_to_version(_updateController.lastVersion ?? '')
+                  : L10n.of(context).latest_version,
+              onTap: () => _updateController.checkUpdate(showDialog: true),
+            );
+          }),
           TextItem(
             L10n.of(context).author,
             desc: 'honjow  <honjow311@gmail.com>',

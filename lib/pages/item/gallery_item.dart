@@ -196,8 +196,9 @@ class GalleryItemWidget extends StatelessWidget {
 
                             // 上传时间
                             Expanded(
-                                child: _PostTime(
+                                child: PostTime(
                               postTime: galleryProvider.postTime,
+                              expunged: galleryProvider.expunged,
                             )),
                           ],
                         ),
@@ -499,20 +500,6 @@ class _Rating extends StatelessWidget {
         // ),
       ],
     ).paddingOnly(right: 4);
-  }
-}
-
-class _PostTime extends StatelessWidget {
-  const _PostTime({Key? key, this.postTime}) : super(key: key);
-  final String? postTime;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      postTime ?? '',
-      textAlign: TextAlign.right,
-      style: const TextStyle(fontSize: 12, color: CupertinoColors.systemGrey),
-    ).paddingOnly(left: 8);
   }
 }
 
