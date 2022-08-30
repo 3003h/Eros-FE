@@ -19,7 +19,7 @@ App Strings: `lib/l10n/{lang}.arb`
 
 ## Installation for iOS
 1. Get the ipa file from [Releases](https://github.com/honjow/FEhViewer/releases/latest).
-1. Use some software like [AltStore](https://altstore.io) to install the ipa file on your device.
+2. Use some software like [AltStore](https://altstore.io) to install the ipa file on your device. Or [AltStore.json](https://config-feh.vercel.app/AltStore.json)
 
 ## Descriptions
 
