@@ -40,7 +40,7 @@ class UpdateController extends GetxController {
     logger.d('remoteVersion $remoteVersion  , currentVersion $currentVersion');
     final compare = versionStringCompare(
         preVersion: currentVersion, lastVersion: remoteVersion);
-    if (kDebugMode ? compare <= 0 : compare < 0) {
+    if (!kReleaseMode ? compare <= 0 : compare < 0) {
       lastVersion = remoteVersion;
       canUpdate = true;
 

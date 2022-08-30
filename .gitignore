@@ -60,6 +60,7 @@ app.*.map.json
 GoogleService-Info.plist
 google-service.json
 /lib/firebase_options.dart
+android/app/keystore.jks
 
 #/pubspec.lock
 
