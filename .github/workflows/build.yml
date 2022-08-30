@@ -10,14 +10,17 @@ on:
 # 这个工作流程需要执行的任务
 jobs:
   process:
-    name: all process
+    name: Build process
     runs-on: ubuntu-latest
     # 这个任务的步骤
     steps:
       # 拉取项目代码
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
       # 建立 java 环境
-      - name: Setup Java JDK
+      - name: Setup Java JDK 11
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
@@ -28,12 +31,14 @@ jobs:
         with:
           channel: "stable"
       # 下载项目依赖
-      - run: flutter pub get
+      - name: Flutter pub get
+        run: mv lib/config/config.dart.sample lib/config/config.dart | flutter pub get
       - run: echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
         env:
           ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
       # 打包 APK
-      - run: flutter build apk --release --split-per-abi
+      - name: Collect Apks
+        run: flutter build apk --release --split-per-abi
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
