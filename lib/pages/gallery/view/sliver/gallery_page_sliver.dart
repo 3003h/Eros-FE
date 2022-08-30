@@ -324,15 +324,8 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
         },
       ),
       trailing: Obx(() {
-        Widget readButtonOpacity = AnimatedOpacity(
-          opacity: pageState.hideNavigationBtn ? 0.0 : 1.0,
-          duration: 300.milliseconds,
-          child: ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4),
-          curve: Curves.ease,
-        );
-
         Widget buttons = Row(
-          key: ValueKey('buttons'),
+          key: const ValueKey('buttons'),
           mainAxisSize: MainAxisSize.min,
           children: [
             CupertinoButton(
@@ -364,19 +357,33 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
           ],
         );
 
+        Widget readButtonOpacity = AnimatedOpacity(
+          opacity: pageState.hideNavigationBtn ? 0.0 : 1.0,
+          duration: 300.milliseconds,
+          child: ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4),
+          curve: Curves.ease,
+        );
+        Widget buttonsOpacity = AnimatedOpacity(
+          opacity: pageState.hideNavigationBtn ? 1.0 : 0.0,
+          duration: 300.milliseconds,
+          child: buttons,
+          curve: Curves.ease,
+        );
+
         // todo error
         Widget trailingSwitcher = TrailingSwitcher(
           hideNavigationBtn: pageState.hideNavigationBtn,
           firstChild: buttons.paddingOnly(right: 4),
-          secondChild:
-              ReadButton(key: ValueKey('ReadButton'), gid: provider?.gid ?? '0')
-                  .paddingOnly(right: 4),
-          duration: 3000.milliseconds,
+          secondChild: ReadButton(
+                  key: const ValueKey('ReadButton'), gid: provider?.gid ?? '0')
+              .paddingOnly(right: 4),
+          duration: 300.milliseconds,
         );
 
         Widget gt = GalleryTrailing(
           firstChild: buttons,
           secondChild: Row(
+            key: const ValueKey('ReadButton'),
             mainAxisSize: MainAxisSize.min,
             children: [
               ReadButton(gid: provider?.gid ?? '0').paddingOnly(right: 4),
@@ -506,13 +513,19 @@ class _GalleryTrailingState extends State<GalleryTrailing>
         return Stack(
           alignment: Alignment.centerRight,
           children: [
-            FadeTransition(
-              opacity: animation,
-              child: widget.secondChild,
+            IgnorePointer(
+              ignoring: widget.crossFadeState != CrossFadeState.showSecond,
+              child: FadeTransition(
+                opacity: animation,
+                child: widget.secondChild,
+              ),
             ),
-            FadeTransition(
-              opacity: animation.drive(Tween<double>(begin: 1.0, end: 0.0)),
-              child: widget.firstChild,
+            IgnorePointer(
+              ignoring: widget.crossFadeState != CrossFadeState.showFirst,
+              child: FadeTransition(
+                opacity: animation.drive(Tween<double>(begin: 1.0, end: 0.0)),
+                child: widget.firstChild,
+              ),
             ),
           ],
         );
