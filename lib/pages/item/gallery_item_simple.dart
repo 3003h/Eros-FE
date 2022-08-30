@@ -98,7 +98,14 @@ class GalleryItemSimpleWidget extends StatelessWidget {
                   _buildCategory(),
                   const Spacer(),
                   // 上传时间
-                  _buildPostTime(),
+                  PostTime(
+                    postTime:
+                        galleryProviderController.galleryProvider.postTime ??
+                            '',
+                    expunged:
+                        galleryProviderController.galleryProvider.expunged,
+                    fontSize: 11,
+                  ),
                 ],
               ),
             ],

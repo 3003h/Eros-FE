@@ -77,13 +77,14 @@ class GalleryHeaderSliver extends StatelessWidget {
                             //         pageController: _controller)),
                             const Spacer(),
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                // 阅读按钮
-                                ReadButton(gid: initGalleryProvider.gid ?? ''),
                                 const Spacer(),
                                 // 收藏按钮
                                 const GalleryFavButton(),
+                                // 阅读按钮
+                                ReadButton(gid: initGalleryProvider.gid ?? '')
+                                    .paddingOnly(right: 6),
                               ],
                             ).marginOnly(top: 10),
                           ],
@@ -146,7 +147,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
     //     getTextSize(_pageState.galleryProvider?.postTime ?? '', _hearTextStyle);
     final postTimeTextSize = getTextSize('0000-00-00 00:00', _hearTextStyle);
     final _maxCrossAxisExtent = max(160.0, postTimeTextSize.width + 60.0);
-    logger.d('_maxCrossAxisExtent $_maxCrossAxisExtent  $postTimeTextSize');
+    logger.v('_maxCrossAxisExtent $_maxCrossAxisExtent  $postTimeTextSize');
 
     Widget infoWidget() => Container(
           // constraints: const BoxConstraints(maxHeight: 50),
@@ -217,7 +218,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.only(top: 8.0, right: 6),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         // ignore: prefer_const_literals_to_create_immutables

@@ -125,6 +125,7 @@ extension ExtGalleryProvider on GalleryProvider {
         lastViewTime: item.lastViewTime,
         pageOfList: item.pageOfList,
         favNote: item.favNote,
+        expunged: expunged,
         chapter: item.chapter);
   }
 }

@@ -185,12 +185,6 @@ class _ListView extends StatelessWidget {
                 }),
               ],
             ).paddingSymmetric(vertical: 4),
-            // Divider(
-            //   // indent: 20.0,
-            //   height: kDividerHeight,
-            //   color: CupertinoDynamicColor.resolve(
-            //       CupertinoColors.systemGrey4, context),
-            // ),
           ],
         ),
       ),
@@ -346,16 +340,16 @@ class _ListView extends StatelessWidget {
       }),
     ];
 
-    // return ListView.builder(
-    //   itemCount: _list.length,
-    //   // shrinkWrap: true,
-    //   itemBuilder: (BuildContext context, int index) {
-    //     return _list[index];
-    //   },
-    // );
-
-    return Column(
-      children: _list,
+    return ListView.builder(
+      itemCount: _list.length,
+      // shrinkWrap: true,
+      itemBuilder: (BuildContext context, int index) {
+        return _list[index];
+      },
     );
+
+    // return Column(
+    //   children: _list,
+    // );
   }
 }

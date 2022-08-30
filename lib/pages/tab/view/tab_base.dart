@@ -433,7 +433,7 @@ Widget buildGallerySliverListView(
       },
       onItemKey: (index) => galleryProviders[index].gid ?? '',
       childCount: galleryProviders.length,
-      keepPosition: true,
+      keepPosition: keepPosition,
     ),
   );
 }
@@ -537,7 +537,7 @@ Widget buildGallerySliverListSimpleView(
       },
       onItemKey: (index) => galleryProviders[index].gid ?? '',
       childCount: galleryProviders.length,
-      keepPosition: true,
+      keepPosition: keepPosition,
     ),
   );
 }

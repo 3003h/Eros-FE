@@ -243,8 +243,8 @@ class ReadButton extends StatelessWidget {
                   : L10n.of(context).read.toUpperCase(),
               style: const TextStyle(fontSize: 15, height: 1.2),
             ),
-            minSize: 20,
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+            minSize: 24,
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
             borderRadius: BorderRadius.circular(20),
             color: CupertinoColors.activeBlue,
             onPressed: _pageState.enableRead
@@ -280,9 +280,9 @@ class GalleryCategory extends StatelessWidget {
     //     ThemeColors.catColor[category ?? 'default']!, context);
     return GestureDetector(
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.circular(6),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
           color: _colorCategory,
           child: Text(
             category ?? '',

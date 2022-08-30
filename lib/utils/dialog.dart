@@ -7,13 +7,17 @@ Future<T?> showSimpleEhDiglog<T>({
   VoidCallback? onOk,
   String? title,
   String? contentText,
+  TextAlign textAlign = TextAlign.start,
 }) async {
   return await showCupertinoDialog<T>(
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
           title: title != null ? Text(title) : null,
-          content: Text(contentText ?? ''),
+          content: Text(
+            contentText ?? '',
+            textAlign: textAlign,
+          ),
           actions: [
             CupertinoDialogAction(
               child: Text(L10n.of(context).cancel),

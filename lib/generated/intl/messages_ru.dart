@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
             'temp': 'temp',
           })}";
 
+  static String m4(version) => "Update to ${version}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE":
@@ -83,6 +85,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_to_favorites":
             MessageLookupByLibrary.simpleMessage("Change to favorites"),
         "chapter": MessageLookupByLibrary.simpleMessage("Глава"),
+        "check_for_update":
+            MessageLookupByLibrary.simpleMessage("Check for Update"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("Очистить кэш"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("Очистить"),
         "clear_search_history":
@@ -181,6 +185,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Последнее использованное избранное, долгий тап чтобы выбрать вручную"),
+        "latest_version":
+            MessageLookupByLibrary.simpleMessage("Latest version"),
         "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Слева направо"),
         "license": MessageLookupByLibrary.simpleMessage("Лицензии"),
@@ -617,6 +623,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_xt_desc": MessageLookupByLibrary.simpleMessage(
             "Если вы хотите исключить определенные группы тегов из поиска по тегам по умолчанию, вы можете отметить их выше. Обратите внимание, что это не препятствует появлению галерей с тегами из этих групп, это просто делает так, что при поиске тегов он упустит их"),
         "unlimited": MessageLookupByLibrary.simpleMessage("Без ограничения"),
+        "update_to_version": m4,
         "uploader": MessageLookupByLibrary.simpleMessage("Загрузчик"),
         "user_login": MessageLookupByLibrary.simpleMessage("Вход в аккаунт"),
         "user_name": MessageLookupByLibrary.simpleMessage("Логин"),

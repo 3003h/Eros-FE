@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
             'temp': '',
           })}";
 
+  static String m4(version) => "Update to ${version}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意數據安全"),
@@ -75,6 +77,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("更改為收藏夾"),
         "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
+        "check_for_update":
+            MessageLookupByLibrary.simpleMessage("Check for Update"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("清除緩存"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history": MessageLookupByLibrary.simpleMessage("清除搜尋紀錄"),
@@ -151,6 +155,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "language": MessageLookupByLibrary.simpleMessage("語言設定"),
         "last_favorites":
             MessageLookupByLibrary.simpleMessage("最後的收藏夾（長按來手動選擇）"),
+        "latest_version":
+            MessageLookupByLibrary.simpleMessage("Latest version"),
         "layout": MessageLookupByLibrary.simpleMessage("Layout"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("從左至右"),
         "license": MessageLookupByLibrary.simpleMessage("License"),
@@ -512,6 +518,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_xt_desc": MessageLookupByLibrary.simpleMessage(
             "If you want to exclude certain namespaces from a default tag search, you can check those abover. Note that this does not prevent galleries with tags in these namespaces from appearing, it just makes it so that when searching tags, it will forego those namespaces."),
         "unlimited": MessageLookupByLibrary.simpleMessage("無限制"),
+        "update_to_version": m4,
         "uploader": MessageLookupByLibrary.simpleMessage("上傳者"),
         "user_login": MessageLookupByLibrary.simpleMessage("用戶登入"),
         "user_name": MessageLookupByLibrary.simpleMessage("用戶名"),

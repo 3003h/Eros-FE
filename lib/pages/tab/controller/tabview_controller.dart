@@ -35,7 +35,7 @@ abstract class TabViewController extends GetxController {
 
   bool canLoadMore = false;
 
-  bool keepPosition = false;
+  bool get keepPosition => curPage > -1;
 
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
@@ -128,6 +128,8 @@ abstract class TabViewController extends GetxController {
     }
   }
 
+  int? lastNextPage;
+
   // 加载更多
   Future<void> loadDataMore() async {
     await Future.delayed(100.milliseconds);
@@ -141,11 +143,17 @@ abstract class TabViewController extends GetxController {
       return;
     }
 
+    if (lastNextPage == nextPage) {
+      logger.v('lastNextPage == nextPage  $nextPage');
+      return;
+    }
+
     logger.v('loadDataMore .....');
     pageState = PageState.LoadingMore;
 
     logger.d('load page: $nextPage');
-    final lastNextPage = nextPage;
+
+    lastNextPage = nextPage;
 
     try {
       final GalleryList? rult = await fetchMoreData();
@@ -185,12 +193,9 @@ abstract class TabViewController extends GetxController {
 
   // 加载上一页
   Future<void> loadPrevious() async {
-    keepPosition = true;
-    try {
-      await loadFromPage(prevPage ?? 0, previous: true);
-    } finally {
-      keepPosition = false;
-    }
+    // keepPosition = true;
+
+    await loadFromPage(prevPage ?? 0, previous: true);
   }
 
   // 跳转到指定页加载

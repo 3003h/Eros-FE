@@ -18,7 +18,18 @@ class GalleryCacheController extends GetxController {
   final WebdavController webdavController = Get.find();
   LinkedHashMap<String, GalleryCache> gCacheMap = LinkedHashMap();
 
-  // final thrSync = Throttling(duration: const Duration(seconds: 10));
+  final Map<String, GalleryProvider?> _galleryProviderCache = {};
+
+  GalleryProvider? getGalleryProviderCache(String? gid) {
+    return _galleryProviderCache[gid ?? ''];
+  }
+
+  void setGalleryProviderCache(String? gid, GalleryProvider? galleryProvider) {
+    logger.d('setGalleryProviderCache');
+    // clone一个新的对象 避免后续加载更多image影响
+    _galleryProviderCache[gid ?? ''] = galleryProvider?.clone();
+  }
+
   final debSync = Debouncing(duration: const Duration(seconds: 5));
 
   Stream<GalleryCache?> listenGalleryCache(

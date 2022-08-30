@@ -62,3 +62,7 @@ google-service.json
 /lib/firebase_options.dart
 
 #/pubspec.lock
+
+fonts/AppleColorEmoji.ttf
+fonts/NotoColorEmoji.ttf
+fonts/OpenMoji-Color.ttf

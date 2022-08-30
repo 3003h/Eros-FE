@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
             'temp': '临时',
           })}";
 
+  static String m4(version) => "可更新到 ${version}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意数据安全"),
@@ -73,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("修改收藏夹"),
         "chapter": MessageLookupByLibrary.simpleMessage("章节"),
+        "check_for_update": MessageLookupByLibrary.simpleMessage("检查更新"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("清除缓存"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history": MessageLookupByLibrary.simpleMessage("清空搜索历史"),
@@ -144,6 +147,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "jump_to_page": MessageLookupByLibrary.simpleMessage("页面跳转"),
         "language": MessageLookupByLibrary.simpleMessage("语言设置"),
         "last_favorites": MessageLookupByLibrary.simpleMessage("使用上次选择，长按选择其他"),
+        "latest_version": MessageLookupByLibrary.simpleMessage("最新版本"),
         "layout": MessageLookupByLibrary.simpleMessage("样式"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("从左到右"),
         "license": MessageLookupByLibrary.simpleMessage("开源许可"),
@@ -473,6 +477,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_xt_desc": MessageLookupByLibrary.simpleMessage(
             "如果要从默认标签搜索中排除某些标签组，可以检查以下内容。请注意，这不会阻止在这些标签组中的标签的展示区出现，它只是在搜索标签时排除这些标签组。"),
         "unlimited": MessageLookupByLibrary.simpleMessage("不限制"),
+        "update_to_version": m4,
         "uploader": MessageLookupByLibrary.simpleMessage("上传者"),
         "user_login": MessageLookupByLibrary.simpleMessage("用户登录"),
         "user_name": MessageLookupByLibrary.simpleMessage("用户名"),
