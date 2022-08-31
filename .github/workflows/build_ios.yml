@@ -1,17 +1,17 @@
 # 自动构建 Apk
-name: Test, Build and Release apk
+name: Build ios
 
 # 工作流程触发的时机，这里是当一个版本标签推送到仓库时触发
 on:
   push:
     tags:
-      - v*
+      - v*i
 
 # 这个工作流程需要执行的任务
 jobs:
   process:
     name: Build process
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     # 这个任务的步骤
     steps:
       # 拉取项目代码
