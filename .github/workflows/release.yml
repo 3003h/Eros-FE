@@ -3,7 +3,7 @@ name: Build Release
 on:
   push:
     tags:
-      - v*!i
+      - v*
 env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 
@@ -63,6 +63,7 @@ jobs:
           PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
 
       - name: Decode keystore
+        if: matrix.os == 'ubuntu-latest'
         run: |
           echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
         env:
