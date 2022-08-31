@@ -5,7 +5,6 @@ name: Test, Build and Release apk
 on:
   push:
     tags:
-      - v*
 
 # 这个工作流程需要执行的任务
 jobs:
