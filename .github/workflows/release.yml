@@ -8,7 +8,7 @@ env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 
 jobs:
-  process:
+  build_and_upload:
     name: Build releases
     strategy:
       fail-fast: false
@@ -71,10 +71,12 @@ jobs:
 
       # 安装 JDK
       - name: Setup Java JDK 11
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '11'
+          cache: gradle
 
       # 安装 Flutter
       - name: Flutter action
