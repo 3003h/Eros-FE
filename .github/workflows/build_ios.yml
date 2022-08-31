@@ -1,0 +1,80 @@
+# 自动构建 Apk
+name: Build ios
+
+# 工作流程触发的时机，这里是当一个版本标签推送到仓库时触发
+on:
+  push:
+    tags:
+      -v*ios
+env:
+  APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
+# 这个工作流程需要执行的任务
+jobs:
+  process:
+    name: Build process
+    runs-on: macos-latest
+    # 这个任务的步骤
+    steps:
+      # 拉取项目代码
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Unlock secrets
+        run: |
+          brew install git-crypt
+          echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
+          git-crypt unlock grypt.key
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+      # 建立 java 环境
+      - name: Setup Java JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - name: Install Apple Certificate
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.P12_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
+      - name: Install the provisioning profile
+        run: |
+          echo $PROVISIONING_CERTIFICATE_BASE64 | base64 -d -o $APP_DEV_PROVISION_PATH
+          app_dev_uuid=`grep UUID -A1 -a $APP_DEV_PROVISION_PATH | grep -io "[-A-F0-9]\{36\}"`
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $APP_DEV_PROVISION_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$app_dev_uuid.mobileprovision
+          ls ~/Library/MobileDevice/Provisioning\ Profiles
+        env:
+          PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+
+      # 建立 Flutter 环境
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+      # 下载项目依赖
+      - name: Flutter pub get
+        run: |
+          mv lib/config/config.dart.sample lib/config/config.dart
+          flutter pub get
+
+      - name: Build resolve Swift dependencies
+        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
+
+      - name: Build ios
+        run: flutter build ios --release --no-codesign
+
+      - name: Build xArchive
+        run: |
+          app_dev_uuid=`grep UUID -A1 -a $APP_DEV_PROVISION_PATH | grep -io "[-A-F0-9]\{36\}"`
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release DEVELOPMENT_TEAM=XUATSMX576 -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$app_dev_uuid clean archive CODE_SIGN_IDENTITY="Apple Development: quanming dai"
+
+      - name: Export ipa
+        run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ExportOptions.plist
+
+      - name: Publish iOS Artefacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-ios
+          path: build-output/ios

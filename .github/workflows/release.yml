@@ -1,0 +1,110 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - v*
+env:
+  APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
+
+jobs:
+  process:
+    name: Build releases
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: release-apk
+            artifact_path: build/app/outputs/apk/release/*
+          - os: macos-latest
+            artifact_name: release-ios
+            artifact_path: build/ios/ipa/*.ipa
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      # git-crypt unlock
+      - name: Unlock secrets MacOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install git-crypt
+          echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
+          git-crypt unlock grypt.key
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+      - name: Unlock secrets Linux
+        if: matrix.os == 'ubuntu-latest'
+        uses: sliteteam/github-action-git-crypt-unlock@1.2.0
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+
+      # 安装证书
+      - name: Install Apple Certificate
+        if: matrix.os == 'macos-latest'
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.P12_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
+
+      # 安装描述文件
+      - name: Install the provisioning profile
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo $PROVISIONING_CERTIFICATE_BASE64 | base64 -d -o $APP_DEV_PROVISION_PATH
+          app_dev_uuid=`grep UUID -A1 -a $APP_DEV_PROVISION_PATH | grep -io "[-A-F0-9]\{36\}"`
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $APP_DEV_PROVISION_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$app_dev_uuid.mobileprovision
+          ls ~/Library/MobileDevice/Provisioning\ Profiles
+        env:
+          PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+
+      - name: Decode keystore
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+
+      # 安装 JDK
+      - name: Setup Java JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      # 安装 Flutter
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Build resolve Swift dependencies
+        if: matrix.os == 'macos-latest'
+        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
+
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      # 打包 APK
+      - name: Collect Apks
+        if: matrix.os == 'ubuntu-latest'
+        run: flutter build apk --release --split-per-abi
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
+
+
+      - name: Build ipa
+        if: matrix.os == 'macos-latest'
+        run: flutter build ipa --export-options-plist=ExportOptions.plist
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}

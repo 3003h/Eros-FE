@@ -5,7 +5,7 @@ name: Build Release
 on:
   push:
     tags:
-      - v*
+      - v*apk
 
 # 这个工作流程需要执行的任务
 jobs:
@@ -36,7 +36,9 @@ jobs:
           channel: "stable"
       # 下载项目依赖
       - name: Flutter pub get
-        run: mv lib/config/config.dart.sample lib/config/config.dart | flutter pub get
+        run: |
+          mv lib/config/config.dart.sample lib/config/config.dart
+          flutter pub get
       - run: |
           echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
         env:
