@@ -5,6 +5,7 @@ name: Build ios
 on:
   push:
     tags:
+      -v*ios
 env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 # 这个工作流程需要执行的任务
