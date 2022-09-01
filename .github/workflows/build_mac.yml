@@ -36,20 +36,14 @@ jobs:
       - name: Build macos
         run: flutter build macos --release
 
-      # 打包 dmg
-      - name: Build dmg
+      - name: Build App zip
         run: |
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
-          APP_TEMP_DIR_PATH=build/macos/fehviewer
-          mkdir $APP_TEMP_DIR_PATH
-          cp -a $APP_PATH $APP_TEMP_DIR_PATH
-          echo "hdiutil create -fs HFS+ -srcfolder $APP_TEMP_DIR_PATH -volname fehviewer build/macos/fehviewer.dmg"
-          hdiutil create -fs HFS+ -srcfolder $APP_TEMP_DIR_PATH -volname fehviewer build/macos/fehviewer.dmg
+          cp -a $APP_PATH ./build
+          cd build && zip -qroy macos/fehviewer.zip fehviewer.app
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: release-mac
-          path: |
-            build/macos/*.dmg
-            build/macos/Build/Products/Release/fehviewer.app
+          path: build/macos/*.zip
