@@ -1,14 +1,13 @@
-name: Build ios nosign
+name: Build mac
 
 on:
   push:
     tags:
-      - v*ios
-
+      - v*mac
 
 jobs:
-  Build_ios_nosign:
-    name: Build ios nosign
+  build:
+    name: Build mac
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -28,28 +27,23 @@ jobs:
         with:
           channel: "stable"
 
-
       - name: Flutter pub get
         run: flutter pub get
 
       - name: Build resolve Swift dependencies
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
 
-      - name: Build ios
-        run: flutter build ios --release --no-codesign
+      - name: Build macos
+        run: flutter build macos --release
 
-      - name: Thin app
-        run: sh scripts/thin-payload.sh build/ios/iphoneos/FEhViewer.app
-
-      - name: Build ipa
+      - name: Build App zip
         run: |
-          cd build
-          mkdir -p Payload
-          mv ios/iphoneos/FEhViewer.app Payload
-          zip -9 FEhViewer.ipa -r Payload
+          APP_PATH=build/macos/Build/Products/Release/fehviewer.app
+          cp -a $APP_PATH ./build
+          cd build && zip -qroy macos/fehviewer.zip fehviewer.app
 
-      - name: Publish iOS Artifacts
+      - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: release-ios-nosign
-          path: build/FEhViewer.ipa
+          name: release-mac
+          path: build/macos/*.zip

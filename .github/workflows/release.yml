@@ -4,6 +4,10 @@ on:
   push:
     tags:
       - v*
+      - '!v*ios'
+      - '!v*apk'
+      - '!v*mac'
+      - '!v*win'
 env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 
@@ -20,6 +24,12 @@ jobs:
           - os: macos-latest
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
+          - os: macos-latest
+            artifact_name: release-mac
+            artifact_path: build/macos/*.zip
+#          - os: windows-latest
+#            artifact_name: release-windows
+#            artifact_path: build/windows/*.zip
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -92,7 +102,7 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
-      # 打包 APK
+      # 打包 apk
       - name: Collect Apks
         if: matrix.os == 'ubuntu-latest'
         run: flutter build apk --release --split-per-abi
@@ -101,11 +111,19 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
 
-
+      # 打包 ipa
       - name: Build ipa
-        if: matrix.os == 'macos-latest'
+        if: matrix.artifact_name == 'release-ios'
         run: flutter build ipa --export-options-plist=ExportOptions.plist
 
+      # 打包 mac
+      - name: Build mac app
+        if: matrix.artifact_name == 'release-mac'
+        run: |
+          flutter build macos --release
+          APP_PATH=build/macos/Build/Products/Release/fehviewer.app
+          cp -a $APP_PATH ./build
+          cd build && zip -qroy macos/fehviewer.zip fehviewer.app
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.artifact_name }}

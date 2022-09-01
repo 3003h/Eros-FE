@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
@@ -11,8 +10,6 @@ import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/widget/image/eh_check_hide_image_provider.dart';
-import 'package:fehviewer/widget/image/extended_eh_image_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -558,7 +555,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             logger.v('ImageExtProvider');
             Widget image = ImageExtProvider(
               image: ExtendedResizeImage.resizeIfNeeded(
-                provider: ExtendedEHNetworkImageProvider(
+                provider: ExtendedNetworkImageProvider(
                   _image?.imageUrl ?? '',
                   timeLimit: const Duration(seconds: 10),
                   cache: true,

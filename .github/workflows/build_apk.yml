@@ -1,5 +1,5 @@
 # 自动构建 Apk
-name: Build Release
+name: Build apk
 
 # 工作流程触发的时机，这里是当一个版本标签推送到仓库时触发
 on:
@@ -34,15 +34,29 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-      # 下载项目依赖
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-gradle
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+
+      - name: Cache Flutter packages
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-flutter
+          path: /opt/hostedtoolcache/flutter
+
       - name: Flutter pub get
-        run: |
-          mv lib/config/config.dart.sample lib/config/config.dart
-          flutter pub get
-      - run: |
-          echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
+        run: flutter pub get
+
+      - name: Decode keystore
+        run: echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
         env:
           ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+
       # 打包 APK
       - name: Collect Apks
         run: flutter build apk --release --split-per-abi
@@ -50,9 +64,9 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
-      # 发布到 Release
-      - name: Release apk
-        uses: ncipollo/release-action@v1
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v3
         with:
-          artifacts: "build/app/outputs/apk/release/*.apk"
-          token: ${{ secrets.RELEASE_TOKEN }}
+          name: release-apk
+          path: build/app/outputs/apk/release/*.apk
