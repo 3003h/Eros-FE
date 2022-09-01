@@ -21,4 +21,8 @@ foreachThin(){
   done
 }
 
-foreachThin $1
+if [ $# eq 0 ]; then
+  ehco "no argument"
+else
+  foreachThin $1
+fi
