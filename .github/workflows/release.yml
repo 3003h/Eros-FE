@@ -6,6 +6,8 @@ on:
       - v*
       - '!v*ios'
       - '!v*apk'
+      - '!v*mac'
+      - '!v*win'
 env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 

@@ -1,5 +1,5 @@
 # 自动构建 Apk
-name: Test, Build and Release apk
+name: Build apk
 
 # 工作流程触发的时机，这里是当一个版本标签推送到仓库时触发
 on:
