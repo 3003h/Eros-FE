@@ -97,7 +97,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' ||
         uses: subosito/flutter-action@v2
         with:
-          channel: matrix.lutter_version
+          version: matrix.flutter_version
 
       - name: Build resolve Swift dependencies
         if: matrix.os == 'macos-latest'
