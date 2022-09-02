@@ -18,18 +18,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - target: android
+            os: ubuntu-latest
+            flutter_version: '3.3.0'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/*
-          - os: macos-latest
+          - target: ios
+            os: macos-latest
+            flutter_version: '3.3.0'
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
-          - os: macos-latest
+          - target: macos
+            os: macos-latest
+            flutter_version: '3.0.5'
             artifact_name: release-mac
             artifact_path: build/macos/*.zip
-#          - os: windows-latest
-#            artifact_name: release-windows
-#            artifact_path: build/windows/*.zip
+
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -90,14 +94,14 @@ jobs:
 
       # 安装 Flutter
       - name: Flutter action
+        if: matrix.os == 'ubuntu-latest' ||
         uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
+          channel: matrix.lutter_version
 
       - name: Build resolve Swift dependencies
         if: matrix.os == 'macos-latest'
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
-
 
       - name: Flutter pub get
         run: flutter pub get

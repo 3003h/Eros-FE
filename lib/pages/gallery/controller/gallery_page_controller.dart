@@ -402,6 +402,7 @@ class GalleryPageController extends GetxController
     return index >= 0;
   }
 
+  // 滚动控制器监听
   void scrollControllerLister() {
     if (scrollController == null) {
       return;
