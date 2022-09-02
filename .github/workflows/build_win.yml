@@ -14,18 +14,24 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: 'recursive'
+
       - name: Unlock secrets
-        uses: a-morrison/windows-git-crypt-unlock@1.0.0
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+        run: |
+          Invoke-WebRequest -Uri https://github.com/AGWA/git-crypt/releases/download/0.7.0/git-crypt-0.7.0-x86_64.exe -OutFile git-crypt.exe
+          echo "${{ secrets.ENCODED_GIT_CRYPT }}" | openssl base64 -d -out git-crypt.key
+          openssl md5 git-crypt.key
+          openssl sha1 git-crypt.key
+          .\git-crypt.exe unlock .\git-crypt.key
 
       - name: Flutter action
         uses: subosito/flutter-action@v2
         with:
-          channel: "3.0.5"
+          version: "3.0.5"
 
       - name: Flutter pub get
-        run: flutter pub get
+        run: |
+          git config --global core.longpaths true
+          flutter pub get
 
       - name: Build windows
         run: flutter build windows --release
