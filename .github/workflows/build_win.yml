@@ -19,8 +19,6 @@ jobs:
         run: |
           Invoke-WebRequest -Uri https://github.com/AGWA/git-crypt/releases/download/0.7.0/git-crypt-0.7.0-x86_64.exe -OutFile git-crypt.exe
           echo "${{ secrets.ENCODED_GIT_CRYPT }}" | openssl base64 -d -out git-crypt.key
-          openssl md5 git-crypt.key
-          openssl sha1 git-crypt.key
           .\git-crypt.exe unlock .\git-crypt.key
 
       - name: Flutter action
