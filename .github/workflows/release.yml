@@ -117,7 +117,7 @@ jobs:
 
       - name: Flutter pub get
         run: |
-          git config core.longpaths true
+          git config --global core.longpaths true
           flutter pub get
 
       # 打包 apk
