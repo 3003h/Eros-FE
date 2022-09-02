@@ -103,7 +103,7 @@ class ViewExtController extends GetxController {
 
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
-  final ArchiverDownloadController archiverDownloadController = Get.find();
+  late final ArchiverDownloadController archiverDownloadController;
 
   Map<String, DownloadArchiverTaskInfo> get archiverTaskMap =>
       archiverDownloadController.archiverTaskMap;
@@ -142,6 +142,10 @@ class ViewExtController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    if (Get.isRegistered<ArchiverDownloadController>()) {
+      archiverDownloadController = Get.find();
+    }
 
     // 横屏模式pageview控制器初始化
     pageController = PageController(
@@ -490,7 +494,9 @@ class ViewExtController extends GetxController {
         await _getImageFromImageTasks(itemSer, vState.dirPath, reLoadDB: true);
 
     // 检查是否已下载archive
-    image ??= await getFromArchiverTask(itemSer);
+    if (GetPlatform.isMobile) {
+      image ??= await getFromArchiverTask(itemSer);
+    }
 
     // 请求页面 解析为 [GalleryImage]
     if (image == null) {

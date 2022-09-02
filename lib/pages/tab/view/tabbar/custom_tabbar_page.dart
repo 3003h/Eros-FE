@@ -72,7 +72,6 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
               // physics: const CustomScrollPhysics(),
               key: ValueKey(
                   controller.profiles.map((e) => '${e.uuid}${e.name}').join()),
-              // key: UniqueKey(),
               controller: controller.pageController,
               children: controller.profiles.isNotEmpty
                   ? [
@@ -82,12 +81,6 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                                 key: ValueKey(e.uuid),
                               ))
                           .toList(),
-                      // ...controller.profiles
-                      //     .map((e) => Container(
-                      //           child: Text(e.uuid),
-                      //           alignment: Alignment.center,
-                      //         ))
-                      //     .toList(),
                     ]
                   : [
                       const Center(
@@ -204,14 +197,40 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                           );
                         }),
                       ),
-                      CupertinoButton(
-                        minSize: 40,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: const Icon(
-                          FontAwesomeIcons.bars,
-                          size: 20,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (GetPlatform.isDesktop)
+                              Obx(() {
+                                return CupertinoButton(
+                                  minSize: 40,
+                                  padding: const EdgeInsets.all(0),
+                                  child: const Icon(
+                                    FontAwesomeIcons.rotateRight,
+                                    size: 20,
+                                  ),
+                                  onPressed: controller
+                                          .currSubController?.reloadData ??
+                                      () {
+                                        controller.update();
+                                        controller.currSubController
+                                            ?.reloadData();
+                                      },
+                                );
+                              }),
+                            CupertinoButton(
+                              minSize: 40,
+                              padding: const EdgeInsets.all(0),
+                              child: const Icon(
+                                FontAwesomeIcons.bars,
+                                size: 20,
+                              ),
+                              onPressed: controller.pressedBar,
+                            ),
+                          ],
                         ),
-                        onPressed: controller.pressedBar,
                       ),
                     ],
                   ),
@@ -263,7 +282,6 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             minSize: 40,
             padding: const EdgeInsets.all(0),
             child: const Icon(
-              // FontAwesomeIcons.magnifyingGlass,
               CupertinoIcons.search,
               size: 28,
             ),

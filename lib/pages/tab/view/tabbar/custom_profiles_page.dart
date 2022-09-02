@@ -118,7 +118,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
                       minSize: 40,
                       padding: const EdgeInsets.symmetric(horizontal: 18),
                       child: const Icon(
-                        FontAwesomeIcons.rotate,
+                        FontAwesomeIcons.repeat,
                         size: 20,
                       ),
                       onPressed: () async {
