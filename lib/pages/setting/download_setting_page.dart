@@ -44,7 +44,7 @@ class ListViewDownloadSetting extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> _list = <Widget>[
       // 下载路径
-      if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
+      if (!GetPlatform.isIOS)
         Obx(() {
           ehConfigService.downloadLocatino;
           return FutureBuilder<String>(

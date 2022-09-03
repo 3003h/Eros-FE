@@ -36,7 +36,9 @@ const int _kDefNameLen = 4;
 
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
-    : path.join(Global.appDocPath, 'Download');
+    : (GetPlatform.isDesktop
+        ? path.join((await getDownloadsDirectory())!.path, 'fehviewer')
+        : path.join(Global.appDocPath, 'Download'));
 
 class TaskStatus {
   const TaskStatus(this.value);
@@ -701,16 +703,16 @@ class DownloadController extends GetxController {
   Future<String> _getGalleryDownloadPath({String custpath = ''}) async {
     late final String _dirPath;
     late final Directory savedDir;
-    if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
+
+    if (!GetPlatform.isIOS && ehConfigService.downloadLocatino.isNotEmpty) {
       // 自定义路径
       logger.d('自定义下载路径');
       await requestManageExternalStoragePermission();
       _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
       savedDir = Directory(_dirPath);
-    } else if (GetPlatform.isAndroid) {
+    } else if (!GetPlatform.isIOS) {
       logger.d('无自定义下载路径');
-      _dirPath = path.join(
-          (await getExternalStorageDirectory())!.path, 'Download', custpath);
+      _dirPath = path.join(await defDownloadPath, custpath);
       savedDir = Directory(_dirPath);
     } else {
       logger.d('iOS');
