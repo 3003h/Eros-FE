@@ -4,7 +4,7 @@ name: Build apk on flutter2
 on:
   push:
     tags:
-      - v*flutter2
+      - v*.flutter2
 
 # 这个工作流程需要执行的任务
 jobs:
@@ -69,3 +69,12 @@ jobs:
         with:
           name: release-apk-flutter2
           path: build/app/outputs/apk/release/*.apk
+
+      - name: Upload to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.RELEASE_TOKEN }}
+          file: build/app/outputs/apk/release/*.apk
+          tag: ${{ github.ref }}
+          prerelease: true
+          overwrite: true
