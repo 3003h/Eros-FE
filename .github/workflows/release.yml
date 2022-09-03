@@ -62,7 +62,7 @@ jobs:
           path: /Users/runner/hostedtoolcache/flutter
 
       - name: Cache Flutter (Windows)
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'windows-latest'
         uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-flutter
