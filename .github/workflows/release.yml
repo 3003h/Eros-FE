@@ -8,6 +8,7 @@ on:
       - '!v*apk'
       - '!v*mac'
       - '!v*win'
+      - '!v*.flutter2'
 env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 
