@@ -1,0 +1,162 @@
+name: Build Release
+
+on:
+  push:
+    tags:
+      - v*
+      - '!v*ios'
+      - '!v*apk'
+      - '!v*mac'
+      - '!v*win'
+      - '!v*.flutter2'
+env:
+  APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
+
+jobs:
+  build_and_upload:
+    name: Build releases
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: android
+            os: ubuntu-latest
+            flutter_version: '3.3.0'
+            artifact_name: release-apk
+            artifact_path: build/app/outputs/apk/release/*
+          - target: ios
+            os: macos-latest
+            flutter_version: '3.3.0'
+            artifact_name: release-ios
+            artifact_path: build/ios/ipa/*.ipa
+          - target: macos
+            os: macos-latest
+            flutter_version: '3.0.5'
+            artifact_name: release-mac
+            artifact_path: build/macos/*.zip
+          - target: windows
+            os: windows-latest
+            flutter_version: '3.0.5'
+            artifact_name: release-windows
+            artifact_path: build/windows/*.zip
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      # git-crypt unlock
+      - name: Unlock secrets (MacOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install git-crypt
+          echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
+          git-crypt unlock grypt.key
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+
+      - name: Unlock secrets (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: sliteteam/github-action-git-crypt-unlock@1.2.0
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+
+      - name: Unlock secrets (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          Invoke-WebRequest -Uri https://github.com/AGWA/git-crypt/releases/download/0.7.0/git-crypt-0.7.0-x86_64.exe -OutFile git-crypt.exe
+          echo "${{ secrets.ENCODED_GIT_CRYPT }}" | openssl base64 -d -out git-crypt.key
+          .\git-crypt.exe unlock .\git-crypt.key
+
+      # 安装证书
+      - name: Install Apple Certificate
+        if: matrix.os == 'macos-latest'
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.P12_BASE64 }}
+          p12-password: ${{ secrets.P12_PASSWORD }}
+
+      # 安装描述文件
+      - name: Install the provisioning profile
+        if: matrix.os == 'macos-latest'
+        run: |
+          echo $PROVISIONING_CERTIFICATE_BASE64 | base64 -d -o $APP_DEV_PROVISION_PATH
+          app_dev_uuid=`grep UUID -A1 -a $APP_DEV_PROVISION_PATH | grep -io "[-A-F0-9]\{36\}"`
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $APP_DEV_PROVISION_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$app_dev_uuid.mobileprovision
+          ls ~/Library/MobileDevice/Provisioning\ Profiles
+        env:
+          PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
+
+      - name: Decode keystore
+        if: matrix.target == 'android'
+        run: |
+          echo $ENCODED_KEYSTORE | base64 -di > android/app/keystore.jks
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
+
+      # 安装 JDK
+      - name: Setup Java JDK 11 (Android)
+        if: matrix.target == 'android'
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+          cache: gradle
+
+      # 安装 Flutter
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ matrix.flutter_version }}
+
+      - name: Build resolve Swift dependencies
+        if: matrix.os == 'macos-latest'
+        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
+
+      - name: Flutter pub get
+        run: |
+          git config core.longpaths true
+          flutter pub get
+
+      # 打包 apk
+      - name: Collect Apks
+        if: matrix.target == 'android'
+        run: flutter build apk --release --split-per-abi
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
+
+      # 打包 ipa
+      - name: Build ipa
+        if: matrix.target == 'ios'
+        run: flutter build ipa --export-options-plist=ExportOptions.plist
+
+      # 打包 mac
+      - name: Build mac app
+        if: matrix.target == 'macos'
+        run: |
+          flutter build macos --release
+          APP_PATH=build/macos/Build/Products/Release/fehviewer.app
+          cp -a $APP_PATH ./build
+          cd build && zip -qroy macos/fehviewer.zip fehviewer.app
+
+      - name: Build windows
+        if: matrix.target == 'windows'
+        run: |
+          flutter build windows --release
+          $DestDir = "build\windows\FEhViewer"
+          $SrcDir = "build\windows\runner\Release"
+          New-Item -Path $DestDir -ItemType Directory
+          Copy-Item $SrcDir\* -Recurse $DestDir
+          Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
+          Compress-Archive $DestDir build\windows\FEhViewer.zip
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}

@@ -1,0 +1,49 @@
+name: Build mac
+
+on:
+  push:
+    tags:
+      - v*mac
+
+jobs:
+  build:
+    name: Build mac
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Unlock secrets
+        run: |
+          brew install git-crypt
+          echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
+          git-crypt unlock grypt.key
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          version: "3.0.5"
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build resolve Swift dependencies
+        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
+
+      - name: Build macos
+        run: flutter build macos --release
+
+      - name: Build App zip
+        run: |
+          APP_PATH=build/macos/Build/Products/Release/fehviewer.app
+          cp -a $APP_PATH ./build
+          cd build && zip -qroy macos/fehviewer.zip fehviewer.app
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-mac
+          path: build/macos/*.zip

@@ -1,0 +1,55 @@
+name: Build ios nosign
+
+on:
+  push:
+    tags:
+      - v*ios
+
+
+jobs:
+  Build_ios_nosign:
+    name: Build ios nosign
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Unlock secrets
+        run: |
+          brew install git-crypt
+          echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
+          git-crypt unlock grypt.key
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build resolve Swift dependencies
+        run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
+
+      - name: Build ios
+        run: flutter build ios --release --no-codesign
+
+      - name: Thin app
+        run: sh scripts/thin-payload.sh build/ios/iphoneos/FEhViewer.app
+
+      - name: Build ipa
+        run: |
+          cd build
+          mkdir -p Payload
+          mv ios/iphoneos/FEhViewer.app Payload
+          zip -9 FEhViewer.ipa -r Payload
+
+      - name: Publish iOS Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-ios-nosign
+          path: build/FEhViewer.ipa
