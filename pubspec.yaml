@@ -164,6 +164,10 @@ dependencies:
     git:
       url: https://github.com/honjow/linkfy_text.git
       ref: url_identifing
+  window_size:
+    git:
+      url: https://github.com/google/flutter-desktop-embedding.git
+      path: plugins/window_size
 
 dev_dependencies:
   # flutter packages pub run build_runner build --delete-conflicting-outputs

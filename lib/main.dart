@@ -20,6 +20,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:window_size/window_size.dart';
 
 import 'get_init.dart';
 
@@ -61,14 +62,18 @@ Future<void> main() async {
     runApp(MyApp());
 
     doWhenWindowReady(() {
-      const initialSize = Size(960, 720);
-      const minSize = Size(720, 480);
+      // const initialSize = Size(960, 720);
+      const minSize = Size(400, 400);
       appWindow.minSize = minSize;
-      appWindow.size = initialSize;
+      // appWindow.size = initialSize;
       appWindow.alignment = Alignment.center;
       appWindow.title = L10n.current.app_title;
       appWindow.show();
     });
+
+    if (GetPlatform.isDesktop) {
+      setWindowTitle(L10n.current.app_title);
+    }
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
