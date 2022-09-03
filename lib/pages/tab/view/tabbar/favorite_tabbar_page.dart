@@ -95,29 +95,54 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                                     curve: Curves.ease),
                           ),
                         ),
-                        if (controller.showBarsBtn)
-                          CupertinoButton(
-                            minSize: 40,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: const Icon(
-                              FontAwesomeIcons.bars,
-                              size: 20,
-                            ),
-                            onPressed: () async {
-                              // 跳转收藏夹选择页
-                              final result = await Get.toNamed(
-                                EHRoutes.selFavorie,
-                                id: isLayoutLarge ? 1 : null,
-                              );
-                              if (result != null && result is Favcat) {
-                                final index = controller.favcatList.indexWhere(
-                                    (element) => element.favId == result.favId);
-                                pageController.jumpToPage(index);
-                              }
-                            },
-                          )
-                        else
-                          const SizedBox.shrink(),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (GetPlatform.isDesktop)
+                                Obx(() {
+                                  return CupertinoButton(
+                                    minSize: 40,
+                                    padding: const EdgeInsets.all(0),
+                                    child: const Icon(
+                                      FontAwesomeIcons.rotateRight,
+                                      size: 20,
+                                    ),
+                                    onPressed: controller
+                                            .currSubController?.reloadData ??
+                                        () {
+                                          controller.update();
+                                          controller.currSubController
+                                              ?.reloadData();
+                                        },
+                                  );
+                                }),
+                              if (controller.showBarsBtn)
+                                CupertinoButton(
+                                  minSize: 40,
+                                  padding: const EdgeInsets.all(0),
+                                  child: const Icon(
+                                    FontAwesomeIcons.bars,
+                                    size: 20,
+                                  ),
+                                  onPressed: () async {
+                                    // 跳转收藏夹选择页
+                                    final result = await Get.toNamed(
+                                      EHRoutes.selFavorie,
+                                      id: isLayoutLarge ? 1 : null,
+                                    );
+                                    if (result != null && result is Favcat) {
+                                      final index = controller.favcatList
+                                          .indexWhere((element) =>
+                                              element.favId == result.favId);
+                                      pageController.jumpToPage(index);
+                                    }
+                                  },
+                                ),
+                            ],
+                          ),
+                        ),
                       ],
                     );
                   }),

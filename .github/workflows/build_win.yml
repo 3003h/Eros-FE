@@ -1,0 +1,50 @@
+name: Build windows
+
+on:
+  push:
+    tags:
+      - v*win
+
+jobs:
+  build:
+    name: Build windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Unlock secrets
+        run: |
+          Invoke-WebRequest -Uri https://github.com/AGWA/git-crypt/releases/download/0.7.0/git-crypt-0.7.0-x86_64.exe -OutFile git-crypt.exe
+          echo "${{ secrets.ENCODED_GIT_CRYPT }}" | openssl base64 -d -out git-crypt.key
+          .\git-crypt.exe unlock .\git-crypt.key
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.0.5"
+
+      - name: Flutter pub get
+        run: |
+          git config --global core.longpaths true
+          flutter pub get
+
+      - name: Build windows
+        run: flutter build windows --release
+
+      - name: Build App zip
+        run: |
+          $DestDir = "build\windows\FEhViewer"
+          $SrcDir = "build\windows\runner\Release"
+          New-Item -Path $DestDir -ItemType Directory
+          Copy-Item $SrcDir\* -Recurse $DestDir
+          Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
+          Compress-Archive $DestDir build\windows\FEhViewer.zip
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-windows
+          path: build/windows/*.zip
