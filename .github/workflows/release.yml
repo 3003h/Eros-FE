@@ -166,23 +166,19 @@ jobs:
     needs: Build_and_upload
     runs-on: ubuntu-latest
     steps:
-      - run: mkdir /temp/artifacts
+      - run: mkdir /tmp/artifacts
       - name: Download all Artifacts
         uses: actions/download-artifact@v3
         with:
-          path: /temp/artifacts
+          path: /tmp/artifacts
 
-      - name: Decompress Artifacts
-        run: |
-          ls -R /temp/artifacts
-          cd /temp/artifacts
-          unzip 'release*.zip' -d unzip
-          
+      - run: ls -R /tmp/artifacts
+
       - name: Upload to release
-        uses: svenstaro/upload-release-action@v2
+        uses: ncipollo/release-action@v1
         with:
-          repo_token: ${{ secrets.RELEASE_TOKEN }}
-          file: /temp/artifacts/unzip/*
+          artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
           tag: ${{ github.ref }}
           prerelease: true
-          overwrite: true
+          allowUpdates: true
+          token: ${{ secrets.RELEASE_TOKEN }}
