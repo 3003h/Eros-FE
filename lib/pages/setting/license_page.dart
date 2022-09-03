@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_license_page/flutter_custom_license_page.dart';
 import 'package:get/get.dart';
 
+import '../../common/service/layout_service.dart';
+
 final Widget customLicensePage = CustomLicensePage((context, licenseData) {
   return Obx(() {
     return CupertinoPageScaffold(
@@ -77,6 +79,7 @@ Widget body(
                         ),
                       );
                     }),
+                    id: isLayoutLarge ? 2 : null,
                   );
                 },
               );

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/update_controller.dart';
 import 'package:fehviewer/common/global.dart';
@@ -9,10 +7,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/utils/cust_lib/flutter_egg.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -71,26 +66,28 @@ class ListViewAbout extends StatelessWidget {
           //   },
           // ),
           TextItem(
-            '${Global.packageInfo.appName} ',
+            L10n.of(context).app_title,
             desc: 'An unofficial e-hentai app',
             onTap: null,
           ),
-          TextItem(
-            L10n.of(context).version,
-            desc:
-                '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
-            onTap: null,
-          ),
-          Obx(() {
-            return TextItem(
-              L10n.of(context).check_for_update,
-              desc: _updateController.canUpdate
-                  ? L10n.of(context)
-                      .update_to_version(_updateController.lastVersion ?? '')
-                  : L10n.of(context).latest_version,
-              onTap: () => _updateController.checkUpdate(showDialog: true),
-            );
-          }),
+          if (!GetPlatform.isWindows)
+            TextItem(
+              L10n.of(context).version,
+              desc:
+                  '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
+              onTap: null,
+            ),
+          if (!GetPlatform.isWindows)
+            Obx(() {
+              return TextItem(
+                L10n.of(context).check_for_update,
+                desc: _updateController.canUpdate
+                    ? L10n.of(context)
+                        .update_to_version(_updateController.lastVersion ?? '')
+                    : L10n.of(context).latest_version,
+                onTap: () => _updateController.checkUpdate(showDialog: true),
+              );
+            }),
           TextItem(
             L10n.of(context).author,
             desc: 'honjow  <honjow311@gmail.com>',

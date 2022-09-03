@@ -13,7 +13,7 @@ env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 
 jobs:
-  build_and_upload:
+  Build_and_upload:
     name: Build releases
     strategy:
       fail-fast: false
@@ -23,7 +23,7 @@ jobs:
             os: ubuntu-latest
             flutter_version: '3.3.0'
             artifact_name: release-apk
-            artifact_path: build/app/outputs/apk/release/*
+            artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
             os: macos-latest
             flutter_version: '3.3.0'
@@ -46,6 +46,49 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: 'recursive'
+
+      - name: Cache Flutter (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-flutter
+          path: /opt/hostedtoolcache/flutter
+
+      - name: Cache Flutter (MacOS)
+        if: matrix.os == 'macos-latest'
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-flutter
+          path: /Users/runner/hostedtoolcache/flutter
+
+      - name: Cache Flutter (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-flutter
+          path: 'C:\hostedtoolcache\windows\flutter'
+
+      - name: Cache Gradle packages (Android)
+        if: matrix.target == 'android'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Cache Pods
+        uses: actions/cache@v3
+        if: matrix.os == 'macos-latest'
+        with:
+          path: |
+            ios/Pods
+            macos/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-            
 
       # git-crypt unlock
       - name: Unlock secrets (MacOS)
@@ -118,7 +161,7 @@ jobs:
 
       - name: Flutter pub get
         run: |
-          git config core.longpaths true
+          git config --global core.longpaths true
           flutter pub get
 
       # 打包 apk
@@ -142,7 +185,7 @@ jobs:
           flutter build macos --release
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
           cp -a $APP_PATH ./build
-          cd build && zip -qroy macos/fehviewer.zip fehviewer.app
+          cd build && zip -qroy macos/FEhViewer_macos.zip fehviewer.app
 
       - name: Build windows
         if: matrix.target == 'windows'
@@ -153,10 +196,32 @@ jobs:
           New-Item -Path $DestDir -ItemType Directory
           Copy-Item $SrcDir\* -Recurse $DestDir
           Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
-          Compress-Archive $DestDir build\windows\FEhViewer.zip
+          Compress-Archive $DestDir build\windows\FEhViewer_windows.zip
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_path }}
+
+  Publish_releases:
+    name: Publish releases
+    needs: Build_and_upload
+    runs-on: ubuntu-latest
+    steps:
+      - run: mkdir /tmp/artifacts
+      - name: Download all Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: /tmp/artifacts
+
+      - run: ls -R /tmp/artifacts
+
+      - name: Upload to release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
+          tag: ${{ github.ref_name }}
+          prerelease: true
+          allowUpdates: true
+          token: ${{ secrets.RELEASE_TOKEN }}

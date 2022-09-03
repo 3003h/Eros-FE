@@ -1,10 +1,10 @@
 
-name: Build apk
+name: Build apk on flutter2
 
 on:
   push:
     tags:
-      - v*flutter2
+      - v*.flutter2
 
 # 这个工作流程需要执行的任务
 jobs:
@@ -13,6 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     # 这个任务的步骤
     steps:
+      # 拉取项目代码
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
@@ -27,11 +33,6 @@ jobs:
           key: ${{ runner.os }}-flutter
           path: /opt/hostedtoolcache/flutter
 
-      # 拉取项目代码
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: 'recursive'
       - name: Unlock secrets
         uses: sliteteam/github-action-git-crypt-unlock@1.2.0
         env:
@@ -69,3 +70,12 @@ jobs:
         with:
           name: release-apk-flutter2
           path: build/app/outputs/apk/release/*.apk
+
+      - name: Upload to release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/release/*.apk"
+          tag: ${{ github.ref_name }}
+          prerelease: true
+          allowUpdates: true
+          token: ${{ secrets.RELEASE_TOKEN }}
