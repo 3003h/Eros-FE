@@ -13,7 +13,7 @@ env:
   APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
 
 jobs:
-  build_and_upload:
+  Build_and_upload:
     name: Build releases
     strategy:
       fail-fast: false
@@ -23,7 +23,7 @@ jobs:
             os: ubuntu-latest
             flutter_version: '3.3.0'
             artifact_name: release-apk
-            artifact_path: build/app/outputs/apk/release/*
+            artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
             os: macos-latest
             flutter_version: '3.3.0'
@@ -142,7 +142,7 @@ jobs:
           flutter build macos --release
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
           cp -a $APP_PATH ./build
-          cd build && zip -qroy macos/fehviewer.zip fehviewer.app
+          cd build && zip -qroy macos/FEhViewer_macos.zip fehviewer.app
 
       - name: Build windows
         if: matrix.target == 'windows'
@@ -153,10 +153,36 @@ jobs:
           New-Item -Path $DestDir -ItemType Directory
           Copy-Item $SrcDir\* -Recurse $DestDir
           Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
-          Compress-Archive $DestDir build\windows\FEhViewer.zip
+          Compress-Archive $DestDir build\windows\FEhViewer_windows.zip
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_path }}
+
+  Publish_releases:
+    name: Publish releases
+    needs: Build_and_upload
+    runs-on: ubuntu-latest
+    steps:
+      - run: mkdir /temp/artifacts
+      - name: Download all Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: /temp/artifacts
+
+      - name: Decompress Artifacts
+        run: |
+          ls -R /temp/artifacts
+          cd /temp/artifacts
+          unzip 'release*.zip' -d unzip
+          
+      - name: Upload to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.RELEASE_TOKEN }}
+          file: /temp/artifacts/unzip/*
+          tag: ${{ github.ref }}
+          prerelease: true
+          overwrite: true
