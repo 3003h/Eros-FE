@@ -71,7 +71,7 @@ class ListViewAbout extends StatelessWidget {
           //   },
           // ),
           TextItem(
-            '${Global.packageInfo.appName} ',
+            L10n.of(context).app_title,
             desc: 'An unofficial e-hentai app',
             onTap: null,
           ),
