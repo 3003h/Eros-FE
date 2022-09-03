@@ -1,5 +1,5 @@
 
-name: Build apk
+name: Build apk on flutter2
 
 on:
   push:
