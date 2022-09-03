@@ -47,6 +47,49 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Cache Flutter (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-flutter
+          path: /opt/hostedtoolcache/flutter
+
+      - name: Cache Flutter (MacOS)
+        if: matrix.os == 'macos-latest'
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-flutter
+          path: /Users/runner/hostedtoolcache/flutter
+
+      - name: Cache Flutter (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-flutter
+          path: 'C:\hostedtoolcache\windows\flutter'
+
+      - name: Cache Gradle packages (Android)
+        if: matrix.target == 'android'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Cache Pods
+        uses: actions/cache@v3
+        if: matrix.os == 'macos-latest'
+        with:
+          path: |
+            ios/Pods
+            macos/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-            
+
       # git-crypt unlock
       - name: Unlock secrets (MacOS)
         if: matrix.os == 'macos-latest'
@@ -172,17 +215,13 @@ jobs:
         with:
           path: /tmp/artifacts
 
-      - name: Decompress Artifacts
-        run: |
-          ls -R /tmp/artifacts
-          cd /tmp/artifacts
-          unzip 'release*.zip' -d unzip
-          
+      - run: ls -R /tmp/artifacts
+
       - name: Upload to release
-        uses: svenstaro/upload-release-action@v2
+        uses: ncipollo/release-action@v1
         with:
-          repo_token: ${{ secrets.RELEASE_TOKEN }}
-          file: /tmp/artifacts/unzip/*
-          tag: ${{ github.ref }}
+          artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
+          tag: ${{ github.ref_name }}
           prerelease: true
-          overwrite: true
+          allowUpdates: true
+          token: ${{ secrets.RELEASE_TOKEN }}
