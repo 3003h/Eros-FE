@@ -13,6 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
 
+import '../../store/floor/dao/view_history_dao.dart';
+
 class HistoryController extends GetxController {
   final List<GalleryProvider> _historys = <GalleryProvider>[];
   List<GalleryProvider> get historys {
@@ -35,6 +37,12 @@ class HistoryController extends GetxController {
   bool get isListView =>
       _ehConfigService.listMode.value == ListModeEnum.list ||
       _ehConfigService.listMode.value == ListModeEnum.simpleList;
+
+  late final ViewHistoryDao viewHistoryDao;
+
+  Future<void> initviewHistoryDao() async {
+    viewHistoryDao = (await Global.getDatabase()).viewHistoryDao;
+  }
 
   void addHistory(
     GalleryProvider galleryProvider, {
@@ -70,23 +78,23 @@ class HistoryController extends GetxController {
                 buildDelGallerySliverListItem(_item, _curIndex, animation));
       }
 
-      // historys.insert(0, _item);
       _historys.add(_item);
       if (_curIndex > 0 && isListView) {
         // insertItem 动画
         _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
       }
 
-      hiveHelper.addHistory(_item);
+      // hiveHelper.addHistory(_item);
+      floorHelper.addHistory(_item);
     } else {
-      // historys.insert(0, _item);
       _historys.add(_item);
       final insertIndex = historys.indexOf(_item);
       if (isListView) {
         _hisViewController.sliverAnimatedListKey.currentState
             ?.insertItem(insertIndex);
       }
-      hiveHelper.addHistory(_item);
+      // hiveHelper.addHistory(_item);
+      floorHelper.addHistory(_item);
     }
 
     logger.v('add ${galleryProvider.gid} update1');
@@ -122,7 +130,8 @@ class HistoryController extends GetxController {
       update();
     }
 
-    hiveHelper.removeHistory(gid);
+    // hiveHelper.removeHistory(gid);
+    floorHelper.removeHistory(gid);
     _addHistoryDelFlg(gid);
 
     if (sync) {
@@ -151,14 +160,17 @@ class HistoryController extends GetxController {
   void cleanHistory() {
     historys.clear();
     update();
-    hiveHelper.cleanHistory();
+    // hiveHelper.cleanHistory();
+    floorHelper.cleanHistory();
   }
 
   @override
   void onInit() {
     super.onInit();
 
-    _historys.addAll(hiveHelper.getAllHistory());
+    // _historys.addAll(hiveHelper.getAllHistory());
+
+    floorHelper.getAllHistory().then((value) => _historys.addAll(value));
     _delHistorys.addAll(hiveHelper.getAllHistoryDel());
   }
 

@@ -127,7 +127,8 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
 }
 
 extension $GalleryImageTaskCopyWith on GalleryImageTask {
-  /// Returns a callable class that can be used as follows: `instanceOfclass GalleryImageTask.name.copyWith(...)` or like so:`instanceOfclass GalleryImageTask.name.copyWith.fieldName(...)`.
+  /// Returns a callable class that can be used as follows: `instanceOfGalleryImageTask.copyWith(...)` or like so:`instanceOfGalleryImageTask.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
   _$GalleryImageTaskCWProxy get copyWith => _$GalleryImageTaskCWProxyImpl(this);
 }
 

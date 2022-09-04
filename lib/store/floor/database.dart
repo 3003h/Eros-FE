@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fehviewer/store/floor/dao/view_history_dao.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:floor/floor.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
@@ -10,16 +11,27 @@ import 'dao/tag_translat_dao.dart';
 import 'entity/gallery_image_task.dart';
 import 'entity/gallery_task.dart';
 import 'entity/tag_translat.dart';
+import 'entity/view_history.dart';
 
 part 'database.g.dart';
 
-@Database(version: 10, entities: [GalleryTask, GalleryImageTask, TagTranslat])
+@Database(
+  version: 11,
+  entities: [
+    GalleryTask,
+    GalleryImageTask,
+    TagTranslat,
+    ViewHistory,
+  ],
+)
 abstract class EhDatabase extends FloorDatabase {
   GalleryTaskDao get galleryTaskDao;
 
   ImageTaskDao get imageTaskDao;
 
   TagTranslatDao get tagTranslatDao;
+
+  ViewHistoryDao get viewHistoryDao;
 }
 
 final ehMigrations = [
@@ -32,7 +44,13 @@ final ehMigrations = [
   migration7to8,
   migration8to9,
   migration9to10,
+  migration10to11,
 ];
+
+final migration10to11 = Migration(10, 11, (database) async {
+  await database.execute(
+      'CREATE TABLE IF NOT EXISTS `ViewHistory` (`gid` INTEGER NOT NULL, `lastViewTime` INTEGER NOT NULL, `galleryProviderText` TEXT NOT NULL, PRIMARY KEY (`gid`))');
+});
 
 // create migration
 final migration1to2 = Migration(1, 2, (database) async {

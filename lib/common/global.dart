@@ -28,12 +28,15 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_proxy/system_proxy.dart';
 
+import '../store/floor/floor_helper.dart';
+
 const int kProxyPort = 4041;
 
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
 final HiveHelper hiveHelper = HiveHelper();
+final FloorHelper floorHelper = FloorHelper();
 
 final Global global = Global();
 
@@ -203,6 +206,8 @@ class Global {
     // await dataUpdate();
 
     initImageHttpClient();
+
+    floorHelper.initviewHistoryDao();
   }
 
   static void creatDirs() {

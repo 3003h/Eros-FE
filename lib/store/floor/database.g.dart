@@ -67,10 +67,12 @@ class _$EhDatabase extends EhDatabase {
 
   TagTranslatDao? _tagTranslatDaoInstance;
 
+  ViewHistoryDao? _viewHistoryDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 10,
+      version: 11,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -91,6 +93,8 @@ class _$EhDatabase extends EhDatabase {
             'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `TagTranslat` (`namespace` TEXT NOT NULL, `key` TEXT NOT NULL, `name` TEXT, `intro` TEXT, `links` TEXT, PRIMARY KEY (`namespace`, `key`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `ViewHistory` (`gid` INTEGER NOT NULL, `lastViewTime` INTEGER NOT NULL, `galleryProviderText` TEXT NOT NULL, PRIMARY KEY (`gid`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -113,6 +117,12 @@ class _$EhDatabase extends EhDatabase {
   TagTranslatDao get tagTranslatDao {
     return _tagTranslatDaoInstance ??=
         _$TagTranslatDao(database, changeListener);
+  }
+
+  @override
+  ViewHistoryDao get viewHistoryDao {
+    return _viewHistoryDaoInstance ??=
+        _$ViewHistoryDao(database, changeListener);
   }
 }
 
@@ -564,5 +574,84 @@ class _$TagTranslatDao extends TagTranslatDao {
   Future<void> updateTagTranslat(TagTranslat tagTranslat) async {
     await _tagTranslatUpdateAdapter.update(
         tagTranslat, OnConflictStrategy.abort);
+  }
+}
+
+class _$ViewHistoryDao extends ViewHistoryDao {
+  _$ViewHistoryDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _viewHistoryInsertionAdapter = InsertionAdapter(
+            database,
+            'ViewHistory',
+            (ViewHistory item) => <String, Object?>{
+                  'gid': item.gid,
+                  'lastViewTime': item.lastViewTime,
+                  'galleryProviderText': item.galleryProviderText
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<ViewHistory> _viewHistoryInsertionAdapter;
+
+  @override
+  Future<ViewHistory?> findViewHistory(int gid) async {
+    return _queryAdapter.query('SELECT * FROM ViewHistory WHERE gid = ?1',
+        mapper: (Map<String, Object?> row) => ViewHistory(
+            gid: row['gid'] as int,
+            lastViewTime: row['lastViewTime'] as int,
+            galleryProviderText: row['galleryProviderText'] as String),
+        arguments: [gid]);
+  }
+
+  @override
+  Future<List<ViewHistory>> findAllViewHistorys() async {
+    return _queryAdapter.queryList('SELECT * FROM ViewHistory',
+        mapper: (Map<String, Object?> row) => ViewHistory(
+            gid: row['gid'] as int,
+            lastViewTime: row['lastViewTime'] as int,
+            galleryProviderText: row['galleryProviderText'] as String));
+  }
+
+  @override
+  Future<List<ViewHistory>?> findViewHistorysByPage(
+      int page, int maxInPage) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM ViewHistory Limit ?2 offset ?1 order by lastViewTime desc',
+        mapper: (Map<String, Object?> row) => ViewHistory(gid: row['gid'] as int, lastViewTime: row['lastViewTime'] as int, galleryProviderText: row['galleryProviderText'] as String),
+        arguments: [page, maxInPage]);
+  }
+
+  @override
+  Future<void> deleteViewHistory(int gid) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE ViewHistory WHERE gid = ?1', arguments: [gid]);
+  }
+
+  @override
+  Future<void> deleteAllViewHistory() async {
+    await _queryAdapter.queryNoReturn('DELETE ViewHistory');
+  }
+
+  @override
+  Future<void> insertOrReplaceHistory(ViewHistory viewHistory) async {
+    await _viewHistoryInsertionAdapter.insert(
+        viewHistory, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> insertHistorys(List<ViewHistory> viewHistorys) async {
+    await _viewHistoryInsertionAdapter.insertList(
+        viewHistorys, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertOrReplaceViewHistorys(
+      List<ViewHistory> viewHistorys) async {
+    await _viewHistoryInsertionAdapter.insertList(
+        viewHistorys, OnConflictStrategy.replace);
   }
 }
