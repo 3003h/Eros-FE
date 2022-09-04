@@ -74,7 +74,7 @@ class HiveHelper {
 
     logger.v('${_historyBox.keys}');
     // _historyBox.compact();
-    logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
+    // logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
   }
 
   Future<void> removeHistory(String gid) async {

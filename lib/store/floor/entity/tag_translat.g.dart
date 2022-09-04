@@ -94,6 +94,7 @@ class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
 }
 
 extension $TagTranslatCopyWith on TagTranslat {
-  /// Returns a callable class that can be used as follows: `instanceOfclass TagTranslat.name.copyWith(...)` or like so:`instanceOfclass TagTranslat.name.copyWith.fieldName(...)`.
+  /// Returns a callable class that can be used as follows: `instanceOfTagTranslat.copyWith(...)` or like so:`instanceOfTagTranslat.copyWith.fieldName(...)`.
+  // ignore: library_private_types_in_public_api
   _$TagTranslatCWProxy get copyWith => _$TagTranslatCWProxyImpl(this);
 }

@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "47.0.0"
   analyzer:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: analyzer
       url: "https://pub.flutter-io.cn"
@@ -339,6 +339,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.3"
+  dartx:
+    dependency: transitive
+    description:
+      name: dartx
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   decimal:
     dependency: transitive
     description:
@@ -911,6 +918,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.3"
+  isar:
+    dependency: "direct main"
+    description:
+      name: isar
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.5.0"
+  isar_flutter_libs:
+    dependency: "direct main"
+    description:
+      name: isar_flutter_libs
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.5.0"
+  isar_generator:
+    dependency: "direct dev"
+    description:
+      name: isar_generator
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.5.0"
   isolate:
     dependency: "direct main"
     description:
@@ -1664,6 +1692,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  time:
+    dependency: transitive
+    description:
+      name: time
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.3"
   timing:
     dependency: transitive
     description:
