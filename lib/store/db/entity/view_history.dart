@@ -1,5 +1,6 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:floor/floor.dart';
+import 'package:floor/floor.dart' hide Index;
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'view_history.g.dart';
@@ -7,6 +8,7 @@ part 'view_history.g.dart';
 @CopyWith()
 @Entity(tableName: 'ViewHistory', primaryKeys: ['gid'])
 @JsonSerializable()
+@Collection()
 class ViewHistory {
   ViewHistory({
     required this.gid,
@@ -19,7 +21,9 @@ class ViewHistory {
 
   Map<String, dynamic> toJson() => _$ViewHistoryToJson(this);
 
+  @Id()
   final int gid;
+  @Index()
   final int lastViewTime;
   final String galleryProviderText;
 

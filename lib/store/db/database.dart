@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fehviewer/store/floor/dao/view_history_dao.dart';
+import 'package:fehviewer/store/db/dao/view_history_dao.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:floor/floor.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
@@ -16,7 +16,7 @@ import 'entity/view_history.dart';
 part 'database.g.dart';
 
 @Database(
-  version: 11,
+  version: 12,
   entities: [
     GalleryTask,
     GalleryImageTask,
@@ -45,7 +45,24 @@ final ehMigrations = [
   migration8to9,
   migration9to10,
   migration10to11,
+  migration11to12,
 ];
+
+final migration11to12 = Migration(11, 12, (database) async {
+  await _addColumn(
+    database,
+    tabName: 'GalleryImageTask',
+    columnName: 'id',
+    type: 'INTEGER',
+  );
+
+  await _addColumn(
+    database,
+    tabName: 'TagTranslat',
+    columnName: 'id',
+    type: 'INTEGER',
+  );
+});
 
 final migration10to11 = Migration(10, 11, (database) async {
   await database.execute(

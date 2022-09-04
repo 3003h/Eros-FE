@@ -1,5 +1,6 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:floor/floor.dart';
+import 'package:floor/floor.dart' hide Index;
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'gallery_image_task.g.dart';
@@ -7,6 +8,7 @@ part 'gallery_image_task.g.dart';
 @CopyWith()
 @Entity(tableName: 'GalleryImageTask', primaryKeys: ['gid', 'ser'])
 @JsonSerializable()
+@Collection()
 class GalleryImageTask {
   GalleryImageTask({
     required this.gid,
@@ -24,6 +26,9 @@ class GalleryImageTask {
 
   Map<String, dynamic> toJson() => _$GalleryImageTaskToJson(this);
 
+  int? id;
+
+  @Index(composite: [CompositeIndex('ser')], unique: true)
   final int gid;
   final int ser;
   final String token;

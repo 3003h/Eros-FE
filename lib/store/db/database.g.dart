@@ -72,7 +72,7 @@ class _$EhDatabase extends EhDatabase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 11,
+      version: 12,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -90,9 +90,9 @@ class _$EhDatabase extends EhDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `GalleryTask` (`gid` INTEGER NOT NULL, `token` TEXT NOT NULL, `url` TEXT, `title` TEXT NOT NULL, `dirPath` TEXT, `fileCount` INTEGER NOT NULL, `completCount` INTEGER, `status` INTEGER, `coverImage` TEXT, `addTime` INTEGER, `coverUrl` TEXT, `rating` REAL, `category` TEXT, `uploader` TEXT, `jsonString` TEXT, `tag` TEXT, `downloadOrigImage` INTEGER, PRIMARY KEY (`gid`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
+            'CREATE TABLE IF NOT EXISTS `GalleryImageTask` (`id` INTEGER, `gid` INTEGER NOT NULL, `ser` INTEGER NOT NULL, `token` TEXT NOT NULL, `href` TEXT, `sourceId` TEXT, `imageUrl` TEXT, `filePath` TEXT, `status` INTEGER, PRIMARY KEY (`gid`, `ser`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `TagTranslat` (`namespace` TEXT NOT NULL, `key` TEXT NOT NULL, `name` TEXT, `intro` TEXT, `links` TEXT, PRIMARY KEY (`namespace`, `key`))');
+            'CREATE TABLE IF NOT EXISTS `TagTranslat` (`id` INTEGER, `namespace` TEXT NOT NULL, `key` TEXT NOT NULL, `name` TEXT, `intro` TEXT, `links` TEXT, PRIMARY KEY (`namespace`, `key`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `ViewHistory` (`gid` INTEGER NOT NULL, `lastViewTime` INTEGER NOT NULL, `galleryProviderText` TEXT NOT NULL, PRIMARY KEY (`gid`))');
 
@@ -320,6 +320,7 @@ class _$ImageTaskDao extends ImageTaskDao {
             database,
             'GalleryImageTask',
             (GalleryImageTask item) => <String, Object?>{
+                  'id': item.id,
                   'gid': item.gid,
                   'ser': item.ser,
                   'token': item.token,
@@ -334,6 +335,7 @@ class _$ImageTaskDao extends ImageTaskDao {
             'GalleryImageTask',
             ['gid', 'ser'],
             (GalleryImageTask item) => <String, Object?>{
+                  'id': item.id,
                   'gid': item.gid,
                   'ser': item.ser,
                   'token': item.token,
@@ -472,6 +474,7 @@ class _$TagTranslatDao extends TagTranslatDao {
             database,
             'TagTranslat',
             (TagTranslat item) => <String, Object?>{
+                  'id': item.id,
                   'namespace': item.namespace,
                   'key': item.key,
                   'name': item.name,
@@ -483,6 +486,7 @@ class _$TagTranslatDao extends TagTranslatDao {
             'TagTranslat',
             ['namespace', 'key'],
             (TagTranslat item) => <String, Object?>{
+                  'id': item.id,
                   'namespace': item.namespace,
                   'key': item.key,
                   'name': item.name,
