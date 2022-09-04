@@ -2,6 +2,8 @@ name: Build Release
 
 on:
   push:
+    branches:
+      - 'master'
     tags:
       - v*
       - '!v*ios'
@@ -205,6 +207,7 @@ jobs:
           path: ${{ matrix.artifact_path }}
 
   Publish_releases:
+    if: startsWith(github.ref, 'refs/tag/')
     name: Publish releases
     needs: Build_and_upload
     runs-on: ubuntu-latest
