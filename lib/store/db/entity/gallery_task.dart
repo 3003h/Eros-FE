@@ -1,7 +1,8 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:floor/floor.dart';
+import 'package:floor/floor.dart' hide Index;
 import 'package:get/get.dart';
+import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:path/path.dart' as path;
 
@@ -18,6 +19,7 @@ part 'gallery_task.g.dart';
 @CopyWith()
 @Entity(tableName: 'GalleryTask')
 @JsonSerializable()
+@Collection()
 class GalleryTask {
   GalleryTask({
     required this.gid,
@@ -45,6 +47,7 @@ class GalleryTask {
   Map<String, dynamic> toJson() => _$GalleryTaskToJson(this);
 
   @primaryKey
+  @Id()
   final int gid;
   final String token;
   final String? url;

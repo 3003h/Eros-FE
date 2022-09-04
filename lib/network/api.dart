@@ -9,7 +9,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
-import 'package:fehviewer/store/floor/entity/tag_translat.dart';
+import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart' hide Response, FormData;

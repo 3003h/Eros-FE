@@ -172,8 +172,8 @@ dependencies:
   isar_flutter_libs: ^2.5.0
 
 dev_dependencies:
-  # flutter packages pub run build_runner build --delete-conflicting-outputs
-  # flutter packages pub run build_runner watch
+  # flutter pub run build_runner build --delete-conflicting-outputs
+  # flutter pub run build_runner watch
 
   # flutter pub run intl_utils:generate
   intl_utils: ^2.5.1

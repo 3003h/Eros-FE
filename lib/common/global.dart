@@ -8,11 +8,11 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
-import 'package:fehviewer/store/floor/database.dart';
+import 'package:fehviewer/store/db/database.dart';
+import 'package:fehviewer/store/db/isar_helper.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/http_override.dart';
-import 'package:fehviewer/utils/optional.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,15 +28,13 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_proxy/system_proxy.dart';
 
-import '../store/floor/floor_helper.dart';
-
 const int kProxyPort = 4041;
 
 final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
 final HiveHelper hiveHelper = HiveHelper();
-final FloorHelper floorHelper = FloorHelper();
+final IsarHelper isarHelper = IsarHelper();
 
 final Global global = Global();
 
@@ -207,7 +205,7 @@ class Global {
 
     initImageHttpClient();
 
-    floorHelper.initviewHistoryDao();
+    isarHelper.initIsar();
   }
 
   static void creatDirs() {

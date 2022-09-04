@@ -8,12 +8,11 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/store/db/dao/view_history_dao.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
-
-import '../../store/floor/dao/view_history_dao.dart';
 
 class HistoryController extends GetxController {
   final List<GalleryProvider> _historys = <GalleryProvider>[];
@@ -85,7 +84,7 @@ class HistoryController extends GetxController {
       }
 
       // hiveHelper.addHistory(_item);
-      floorHelper.addHistory(_item);
+      isarHelper.addHistory(_item);
     } else {
       _historys.add(_item);
       final insertIndex = historys.indexOf(_item);
@@ -94,7 +93,7 @@ class HistoryController extends GetxController {
             ?.insertItem(insertIndex);
       }
       // hiveHelper.addHistory(_item);
-      floorHelper.addHistory(_item);
+      isarHelper.addHistory(_item);
     }
 
     logger.v('add ${galleryProvider.gid} update1');
@@ -131,7 +130,7 @@ class HistoryController extends GetxController {
     }
 
     // hiveHelper.removeHistory(gid);
-    floorHelper.removeHistory(gid);
+    isarHelper.removeHistory(gid);
     _addHistoryDelFlg(gid);
 
     if (sync) {
@@ -161,7 +160,7 @@ class HistoryController extends GetxController {
     historys.clear();
     update();
     // hiveHelper.cleanHistory();
-    floorHelper.cleanHistory();
+    isarHelper.cleanHistory();
   }
 
   @override
@@ -169,9 +168,26 @@ class HistoryController extends GetxController {
     super.onInit();
 
     // _historys.addAll(hiveHelper.getAllHistory());
+    // _delHistorys.addAll(hiveHelper.getAllHistoryDel());
+    initHistorys();
+  }
 
-    floorHelper.getAllHistory().then((value) => _historys.addAll(value));
-    _delHistorys.addAll(hiveHelper.getAllHistoryDel());
+  Future<void> initHistorys() async {
+    // 历史迁移
+    await historyMigration();
+    final historys = await isarHelper.getAllHistory();
+    _historys.addAll(historys);
+  }
+
+  Future<void> historyMigration() async {
+    final isMigrationed = hiveHelper.getViewHistoryMigration();
+    logger.d('isMigrationed $isMigrationed');
+    if (!isMigrationed) {
+      logger.d('start history Migration');
+      await isarHelper.addHistorys(hiveHelper.getAllHistory(),
+          replaceOnConflict: false);
+      hiveHelper.setViewHistoryMigration(true);
+    }
   }
 
   // Future<void> removeRemoteHistory(String gid) async {

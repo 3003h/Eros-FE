@@ -18,6 +18,7 @@ const String qsLastTimeKey = 'quick_search_last_edit_time';
 const String customImageHideKey = 'custom_image_hide';
 
 const String ehHomeKey = 'eh_home';
+const String viewHistoryMigrationKey = 'viewHistoryMigration';
 
 class HiveHelper {
   HiveHelper();
@@ -195,5 +196,13 @@ class HiveHelper {
 
   Future<void> setString(String key, String value) async {
     await _configBox.put(key, value);
+  }
+
+  bool getViewHistoryMigration() {
+    return _configBox.get(viewHistoryMigrationKey) == 'true';
+  }
+
+  Future<void> setViewHistoryMigration(bool value) async {
+    await _configBox.put(viewHistoryMigrationKey, '$value');
   }
 }

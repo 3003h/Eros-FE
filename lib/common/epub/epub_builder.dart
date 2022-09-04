@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/store/floor/entity/gallery_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
