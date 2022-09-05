@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'build'
     tags:
       - v*
       - '!v*ios'
