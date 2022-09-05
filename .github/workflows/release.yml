@@ -194,12 +194,15 @@ jobs:
       # 打包 ipa
       - name: Build ipa
         if: matrix.target == 'ios'
-        run: flutter build ipa --export-options-plist=ExportOptions.plist
+        run: |
+          cd ios && pod update && pod install && cd ..
+          flutter build ipa --export-options-plist=ExportOptions.plist
 
       # 打包 mac
       - name: Build mac app
         if: matrix.target == 'macos'
         run: |
+          cd macos && pod update && pod install && cd ..
           flutter build macos --release
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
           cp -a $APP_PATH ./build
