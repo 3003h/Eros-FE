@@ -89,7 +89,7 @@ jobs:
 
       - name: Cache Pods (build macos)
         uses: actions/cache@v3
-        if: matrix.os == 'macos-latest'
+        if: matrix.target == 'macos'
         with:
           path: |
             macos/Pods
@@ -99,7 +99,7 @@ jobs:
 
       - name: Cache Pods (build ios)
         uses: actions/cache@v3
-        if: matrix.os == 'macos-latest'
+        if: matrix.target == 'ios'
         with:
           path: |
             ios/Pods

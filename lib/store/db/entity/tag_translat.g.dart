@@ -112,13 +112,17 @@ extension GetTagTranslatCollection on Isar {
 const TagTranslatSchema = CollectionSchema(
   name: 'TagTranslat',
   schema:
-      '{"name":"TagTranslat","idName":"id","properties":[{"name":"intro","type":"String"},{"name":"key","type":"String"},{"name":"links","type":"String"},{"name":"name","type":"String"},{"name":"namespace","type":"String"}],"indexes":[{"name":"key","unique":false,"properties":[{"name":"key","type":"Hash","caseSensitive":true}]},{"name":"name","unique":false,"properties":[{"name":"name","type":"Hash","caseSensitive":true}]},{"name":"namespace","unique":false,"properties":[{"name":"namespace","type":"Hash","caseSensitive":true}]}],"links":[]}',
+      '{"name":"TagTranslat","idName":"id","properties":[{"name":"intro","type":"String"},{"name":"key","type":"String"},{"name":"links","type":"String"},{"name":"name","type":"String"},{"name":"namespace","type":"String"}],"indexes":[{"name":"key","unique":false,"properties":[{"name":"key","type":"Hash","caseSensitive":true}]},{"name":"key_namespace","unique":true,"properties":[{"name":"key","type":"Hash","caseSensitive":true},{"name":"namespace","type":"Hash","caseSensitive":true}]},{"name":"name","unique":false,"properties":[{"name":"name","type":"Hash","caseSensitive":true}]},{"name":"namespace","unique":false,"properties":[{"name":"namespace","type":"Hash","caseSensitive":true}]}],"links":[]}',
   idName: 'id',
   propertyIds: {'intro': 0, 'key': 1, 'links': 2, 'name': 3, 'namespace': 4},
   listProperties: {},
-  indexIds: {'key': 0, 'name': 1, 'namespace': 2},
+  indexIds: {'key': 0, 'key_namespace': 1, 'name': 2, 'namespace': 3},
   indexValueTypes: {
     'key': [
+      IndexValueType.stringHash,
+    ],
+    'key_namespace': [
+      IndexValueType.stringHash,
       IndexValueType.stringHash,
     ],
     'name': [
@@ -286,6 +290,76 @@ P _tagTranslatDeserializePropWeb<P>(Object jsObj, String propertyName) {
 
 void _tagTranslatAttachLinks(IsarCollection col, int id, TagTranslat object) {}
 
+extension TagTranslatByIndex on IsarCollection<TagTranslat> {
+  Future<TagTranslat?> getByKeyNamespace(String key, String namespace) {
+    return getByIndex('key_namespace', [key, namespace]);
+  }
+
+  TagTranslat? getByKeyNamespaceSync(String key, String namespace) {
+    return getByIndexSync('key_namespace', [key, namespace]);
+  }
+
+  Future<bool> deleteByKeyNamespace(String key, String namespace) {
+    return deleteByIndex('key_namespace', [key, namespace]);
+  }
+
+  bool deleteByKeyNamespaceSync(String key, String namespace) {
+    return deleteByIndexSync('key_namespace', [key, namespace]);
+  }
+
+  Future<List<TagTranslat?>> getAllByKeyNamespace(
+      List<String> keyValues, List<String> namespaceValues) {
+    final len = keyValues.length;
+    assert(namespaceValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([keyValues[i], namespaceValues[i]]);
+    }
+
+    return getAllByIndex('key_namespace', values);
+  }
+
+  List<TagTranslat?> getAllByKeyNamespaceSync(
+      List<String> keyValues, List<String> namespaceValues) {
+    final len = keyValues.length;
+    assert(namespaceValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([keyValues[i], namespaceValues[i]]);
+    }
+
+    return getAllByIndexSync('key_namespace', values);
+  }
+
+  Future<int> deleteAllByKeyNamespace(
+      List<String> keyValues, List<String> namespaceValues) {
+    final len = keyValues.length;
+    assert(namespaceValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([keyValues[i], namespaceValues[i]]);
+    }
+
+    return deleteAllByIndex('key_namespace', values);
+  }
+
+  int deleteAllByKeyNamespaceSync(
+      List<String> keyValues, List<String> namespaceValues) {
+    final len = keyValues.length;
+    assert(namespaceValues.length == len,
+        'All index values must have the same length');
+    final values = <List<dynamic>>[];
+    for (var i = 0; i < len; i++) {
+      values.add([keyValues[i], namespaceValues[i]]);
+    }
+
+    return deleteAllByIndexSync('key_namespace', values);
+  }
+}
+
 extension TagTranslatQueryWhereSort
     on QueryBuilder<TagTranslat, TagTranslat, QWhere> {
   QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyId() {
@@ -294,6 +368,11 @@ extension TagTranslatQueryWhereSort
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyKey() {
     return addWhereClauseInternal(const IndexWhereClause.any(indexName: 'key'));
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyKeyNamespace() {
+    return addWhereClauseInternal(
+        const IndexWhereClause.any(indexName: 'key_namespace'));
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyName() {
@@ -392,6 +471,39 @@ extension TagTranslatQueryWhere
       )).addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'key',
         upper: [key],
+        includeUpper: false,
+      ));
+    }
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> keyNamespaceEqualTo(
+      String key, String namespace) {
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
+      indexName: 'key_namespace',
+      value: [key, namespace],
+    ));
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause>
+      keyNamespaceNotEqualTo(String key, String namespace) {
+    if (whereSortInternal == Sort.asc) {
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'key_namespace',
+        upper: [key, namespace],
+        includeUpper: false,
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'key_namespace',
+        lower: [key, namespace],
+        includeLower: false,
+      ));
+    } else {
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'key_namespace',
+        lower: [key, namespace],
+        includeLower: false,
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'key_namespace',
+        upper: [key, namespace],
         includeUpper: false,
       ));
     }

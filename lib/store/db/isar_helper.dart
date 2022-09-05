@@ -77,11 +77,12 @@ class IsarHelper {
     });
   }
 
-  Future<void> addAllTagTranslate(List<TagTranslat> tagTranslates,
+  Future<void> putAllTagTranslate(List<TagTranslat> tagTranslates,
       {bool replaceOnConflict = true}) async {
     await isar.writeTxn((isar) async {
-      await isar.tagTranslats
+      final count = await isar.tagTranslats
           .putAll(tagTranslates, replaceOnConflict: replaceOnConflict);
+      // logger.d('add count $count');
     });
   }
 
@@ -111,13 +112,24 @@ class IsarHelper {
 
   Future<List<TagTranslat>> findTagTranslateContains(
       String text, int limit) async {
-    return await isar.tagTranslats
+    final rult = await isar.tagTranslats
         .filter()
         .keyContains(text)
         .or()
         .nameContains(text)
         .limit(limit)
         .findAll();
+
+    logger.d('rult.len ${rult.length}');
+
+    return rult;
+  }
+
+  Future<void> removeAllTagTranslate() async {
+    await isar.writeTxn((isar) async {
+      final count = await isar.tagTranslats.where().deleteAll();
+      logger.d('delete count $count');
+    });
   }
 
   Future<List<GalleryTask>> findAllGalleryTasks() async {
