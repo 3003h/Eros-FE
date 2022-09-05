@@ -6,7 +6,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_edit_dialog.dart';
-import 'package:fehviewer/store/floor/entity/tag_translat.dart';
+import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

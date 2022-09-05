@@ -68,17 +68,17 @@ Future<void> main() async {
 
     runApp(MyApp());
 
-    doWhenWindowReady(() {
-      // const initialSize = Size(960, 720);
-      const minSize = Size(400, 400);
-      appWindow.minSize = minSize;
-      // appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.title = L10n.current.app_title;
-      appWindow.show();
-    });
-
     if (GetPlatform.isDesktop) {
+      doWhenWindowReady(() {
+        // const initialSize = Size(960, 720);
+        const minSize = Size(400, 400);
+        appWindow.minSize = minSize;
+        // appWindow.size = initialSize;
+        appWindow.alignment = Alignment.center;
+        appWindow.title = L10n.current.app_title;
+        appWindow.show();
+      });
+
       setWindowTitle(L10n.current.app_title);
     }
   }, (Object error, StackTrace stackTrace) async {

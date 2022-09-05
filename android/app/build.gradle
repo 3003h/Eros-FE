@@ -21,24 +21,18 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-//def keystorePropertiesFile = rootProject.file("keystore.properties")
-//def keystoreProperties = new Properties()
-//if (keystorePropertiesFile.exists()) {
-//    keystorePropertiesFile.withReader('UTF-8') { reader ->
-//        keystoreProperties.load(reader)
-//    }
-//}
-//def _keyAlias = keystoreProperties.getProperty("keyAlias")
-//def _keyPassword = keystoreProperties.getProperty("keyPassword")
-//def _storeFile = file(keystoreProperties.getProperty("storeFile"))
-//def _storePassword = keystoreProperties.getProperty("storePassword")
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
 
-def _keyAlias = System.getenv("KEY_ALIAS")
-def _keyPassword = System.getenv("KEY_PASSWORD")
-def _storeFile = file(System.getenv("KEYSTORE") ?:"keystore.jks")
-def _storePassword = System.getenv("KEYSTORE_PASSWORD")
-
-
+def _keyAlias = System.getenv("KEY_ALIAS") ?: keystoreProperties.getProperty("keyAlias")
+def _keyPassword = System.getenv("KEY_PASSWORD") ?: keystoreProperties.getProperty("keyPassword")
+def _storeFile = file(System.getenv("KEYSTORE") ?: keystoreProperties.getProperty("storeFile") ?: "keystore.jks")
+def _storePassword = System.getenv("KEYSTORE_PASSWORD") ?: keystoreProperties.getProperty("storePassword")
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -88,12 +82,16 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (signingConfigs.release.storePassword != null){
+                signingConfig signingConfigs.release
+            }
             minifyEnabled true
             shrinkResources true
         }
         debug {
-            signingConfig signingConfigs.debug
+            if (signingConfigs.debug.storePassword != null){
+                signingConfig signingConfigs.debug
+            }
             minifyEnabled true
             shrinkResources true
         }

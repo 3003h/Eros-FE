@@ -2,6 +2,9 @@ name: Build Release
 
 on:
   push:
+    branches:
+      - 'master'
+      - 'build'
     tags:
       - v*
       - '!v*ios'
@@ -10,7 +13,7 @@ on:
       - '!v*win'
       - '!v*.flutter2'
 env:
-  APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
+  APP_DEV_PROVISION_PATH: '/tmp/app_dev.mobileprovision'
 
 jobs:
   Build_and_upload:
@@ -51,22 +54,28 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
           path: /opt/hostedtoolcache/flutter
+          restore-keys: |
+            ${{ runner.os }}-flutter-
 
       - name: Cache Flutter (MacOS)
         if: matrix.os == 'macos-latest'
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
           path: /Users/runner/hostedtoolcache/flutter
+          restore-keys: |
+            ${{ runner.os }}-flutter-
 
       - name: Cache Flutter (Windows)
         if: matrix.os == 'windows-latest'
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
           path: 'C:\hostedtoolcache\windows\flutter'
+          restore-keys: |
+            ${{ runner.os }}-flutter-
 
       - name: Cache Gradle packages (Android)
         if: matrix.target == 'android'
@@ -79,14 +88,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Cache Pods
+      - name: Cache Pods (build macos)
         uses: actions/cache@v3
-        if: matrix.os == 'macos-latest'
+        if: matrix.target == 'macos'
+        with:
+          path: |
+            macos/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('macos/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Cache Pods (build ios)
+        uses: actions/cache@v3
+        if: matrix.target == 'ios'
         with:
           path: |
             ios/Pods
-            macos/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-            
 
@@ -205,6 +223,7 @@ jobs:
           path: ${{ matrix.artifact_path }}
 
   Publish_releases:
+    if: startsWith(github.ref, 'refs/tag/')
     name: Publish releases
     needs: Build_and_upload
     runs-on: ubuntu-latest

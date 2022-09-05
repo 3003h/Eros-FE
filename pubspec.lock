@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "47.0.0"
   analyzer:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: analyzer
       url: "https://pub.flutter-io.cn"
@@ -360,6 +360,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.3"
+  dartx:
+    dependency: transitive
+    description:
+      name: dartx
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   decimal:
     dependency: transitive
     description:
@@ -633,27 +640,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1"
-  floor:
-    dependency: "direct main"
-    description:
-      name: floor
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.3.0"
-  floor_annotation:
-    dependency: transitive
-    description:
-      name: floor_annotation
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.3.0"
-  floor_generator:
-    dependency: "direct dev"
-    description:
-      name: floor_generator
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.3.0"
   flustars:
     dependency: "direct main"
     description:
@@ -795,7 +781,7 @@ packages:
       name: flutter_smart_dialog
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.5.5+1"
+    version: "4.5.5+2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -1023,6 +1009,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.3"
+  isar:
+    dependency: "direct main"
+    description:
+      name: isar
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.5.0"
+  isar_flutter_libs:
+    dependency: "direct main"
+    description:
+      name: isar_flutter_libs
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.5.0"
+  isar_generator:
+    dependency: "direct dev"
+    description:
+      name: isar_generator
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.5.0"
   isolate:
     dependency: "direct main"
     description:
@@ -1125,13 +1132,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
-  lists:
-    dependency: transitive
-    description:
-      name: lists
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.0.1"
   local_auth:
     dependency: "direct main"
     description:
@@ -1672,7 +1672,7 @@ packages:
     source: hosted
     version: "6.0.2"
   sqflite:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: sqflite
       url: "https://pub.flutter-io.cn"
@@ -1685,13 +1685,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.1+1"
-  sqflite_common_ffi:
-    dependency: "direct main"
-    description:
-      name: sqflite_common_ffi
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.1.1+1"
   sqlite3:
     dependency: transitive
     description:
@@ -1727,13 +1720,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.1"
-  strings:
-    dependency: transitive
-    description:
-      name: strings
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.2"
   svg_path_parser:
     dependency: transitive
     description:
@@ -1776,6 +1762,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  time:
+    dependency: transitive
+    description:
+      name: time
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.3"
   timing:
     dependency: transitive
     description:
@@ -1804,13 +1797,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.3.1"
-  unicode:
-    dependency: transitive
-    description:
-      name: unicode
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.3.1"
   universal_io:
     dependency: transitive
     description:

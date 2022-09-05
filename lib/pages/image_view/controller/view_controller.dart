@@ -449,9 +449,11 @@ class ViewExtController extends GetxController {
     }
 
     if (reLoadDB) {
-      vState.imageTasks = (await vState.imageTaskDao?.findAllTaskByGid(
-              int.tryParse(_galleryPageStat?.gid ?? '') ?? 0)) ??
-          [];
+      // vState.imageTasks = (await vState.imageTaskDao?.findAllTaskByGid(
+      //         int.tryParse(_galleryPageStat?.gid ?? '') ?? 0)) ??
+      //     [];
+      vState.imageTasks = await isarHelper.findImageTaskAllByGid(
+          int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
     }
 
     final imageTask = vState.imageTasks
@@ -471,7 +473,8 @@ class ViewExtController extends GetxController {
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
-    final gtask = await vState.galleryTaskDao!.findGalleryTaskByGid(gid);
+    // final gtask = await vState.galleryTaskDao!.findGalleryTaskByGid(gid);
+    final gtask = await isarHelper.findGalleryTaskByGid(gid);
     return gtask?.realDirPath;
   }
 
@@ -481,8 +484,6 @@ class ViewExtController extends GetxController {
     bool changeSource = false,
   }) async {
     // 首先检查下载记录中是否有记录
-    vState.imageTaskDao ??= Get.find<DownloadController>().imageTaskDao;
-    vState.galleryTaskDao ??= Get.find<DownloadController>().galleryTaskDao;
     vState.dirPath ??=
         await _getTaskDirPath(int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
 

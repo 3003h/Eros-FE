@@ -6,8 +6,6 @@ import 'package:collection/collection.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
-import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
@@ -32,14 +30,6 @@ class ArchiverDownloadController extends GetxController {
   Map<String, DownloadArchiverTaskInfo> get archiverTaskMap => _archiverTaskMap;
 
   final GStore _gStore = Get.find();
-
-  static Future<GalleryTaskDao> getGalleryTaskDao() async {
-    return (await Global.getDatabase()).galleryTaskDao;
-  }
-
-  static Future<ImageTaskDao> getImageTaskDao() async {
-    return (await Global.getDatabase()).imageTaskDao;
-  }
 
   final EhConfigService ehConfigService = Get.find();
 

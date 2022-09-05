@@ -6,7 +6,7 @@ import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
-import 'package:fehviewer/store/floor/entity/tag_translat.dart';
+import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

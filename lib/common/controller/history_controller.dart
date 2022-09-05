@@ -70,23 +70,23 @@ class HistoryController extends GetxController {
                 buildDelGallerySliverListItem(_item, _curIndex, animation));
       }
 
-      // historys.insert(0, _item);
       _historys.add(_item);
       if (_curIndex > 0 && isListView) {
         // insertItem 动画
         _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
       }
 
-      hiveHelper.addHistory(_item);
+      // hiveHelper.addHistory(_item);
+      isarHelper.addHistory(_item);
     } else {
-      // historys.insert(0, _item);
       _historys.add(_item);
       final insertIndex = historys.indexOf(_item);
       if (isListView) {
         _hisViewController.sliverAnimatedListKey.currentState
             ?.insertItem(insertIndex);
       }
-      hiveHelper.addHistory(_item);
+      // hiveHelper.addHistory(_item);
+      isarHelper.addHistory(_item);
     }
 
     logger.v('add ${galleryProvider.gid} update1');
@@ -122,7 +122,8 @@ class HistoryController extends GetxController {
       update();
     }
 
-    hiveHelper.removeHistory(gid);
+    // hiveHelper.removeHistory(gid);
+    isarHelper.removeHistory(gid);
     _addHistoryDelFlg(gid);
 
     if (sync) {
@@ -151,15 +152,35 @@ class HistoryController extends GetxController {
   void cleanHistory() {
     historys.clear();
     update();
-    hiveHelper.cleanHistory();
+    // hiveHelper.cleanHistory();
+    isarHelper.cleanHistory();
   }
 
   @override
   void onInit() {
     super.onInit();
 
-    _historys.addAll(hiveHelper.getAllHistory());
-    _delHistorys.addAll(hiveHelper.getAllHistoryDel());
+    // _historys.addAll(hiveHelper.getAllHistory());
+    // _delHistorys.addAll(hiveHelper.getAllHistoryDel());
+    initHistorys();
+  }
+
+  Future<void> initHistorys() async {
+    // 历史迁移
+    await historyMigration();
+    final historys = await isarHelper.getAllHistory();
+    _historys.addAll(historys);
+  }
+
+  Future<void> historyMigration() async {
+    final isMigrationed = hiveHelper.getViewHistoryMigration();
+    logger.d('historyMigration $isMigrationed');
+    if (!isMigrationed) {
+      logger.d('start history Migration');
+      await isarHelper.addHistorys(hiveHelper.getAllHistory(),
+          replaceOnConflict: false);
+      hiveHelper.setViewHistoryMigration(true);
+    }
   }
 
   // Future<void> removeRemoteHistory(String gid) async {

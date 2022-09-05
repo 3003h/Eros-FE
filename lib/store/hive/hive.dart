@@ -18,6 +18,8 @@ const String qsLastTimeKey = 'quick_search_last_edit_time';
 const String customImageHideKey = 'custom_image_hide';
 
 const String ehHomeKey = 'eh_home';
+const String viewHistoryMigrationKey = 'viewHistoryMigration';
+const String downloadTaskMigrationKey = 'downloadTaskMigration';
 
 class HiveHelper {
   HiveHelper();
@@ -74,7 +76,7 @@ class HiveHelper {
 
     logger.v('${_historyBox.keys}');
     // _historyBox.compact();
-    logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
+    // logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
   }
 
   Future<void> removeHistory(String gid) async {
@@ -195,5 +197,21 @@ class HiveHelper {
 
   Future<void> setString(String key, String value) async {
     await _configBox.put(key, value);
+  }
+
+  bool getViewHistoryMigration() {
+    return _configBox.get(viewHistoryMigrationKey) == 'true';
+  }
+
+  Future<void> setViewHistoryMigration(bool value) async {
+    await _configBox.put(viewHistoryMigrationKey, '$value');
+  }
+
+  bool getDownloadTaskMigration() {
+    return _configBox.get(downloadTaskMigrationKey) == 'true';
+  }
+
+  Future<void> setDownloadTaskMigration(bool value) async {
+    await _configBox.put(downloadTaskMigrationKey, '$value');
   }
 }

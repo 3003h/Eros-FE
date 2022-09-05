@@ -11,8 +11,8 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
-import 'package:fehviewer/store/floor/entity/gallery_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -508,6 +508,8 @@ class DownloadViewController extends GetxController {
   }
 
   Future<String?> _writeTaskInfoFile() async {
+    throw UnimplementedError();
+    /*
     // 创建zip文件
     final encoder = ZipFileEncoder();
     final _zipPath = _getLocalFilePath();
@@ -527,7 +529,7 @@ class DownloadViewController extends GetxController {
     // 导出任务数据表到临时db中
     final tempDB = await Global.getDatabase(path: tempDBPath);
     await tempDB.imageTaskDao.insertOrReplaceImageTasks(allImageTasks);
-    await tempDB.galleryTaskDao.insertOrReplaceTasks(allTasks);
+    // await tempDB.galleryTaskDao.insertOrReplaceTasks(allTasks);
     tempDB.close();
 
     // 添加文件
@@ -535,9 +537,12 @@ class DownloadViewController extends GetxController {
 
     encoder.close();
     return _zipPath;
+    */
   }
 
   Future<void> _readTaskInfoFile(File importFile) async {
+    throw UnimplementedError();
+    /*
     final decoder = ZipDecoder();
     final archive = decoder.decodeBytes(importFile.readAsBytesSync());
     final archivePath = path.join(Global.tempPath, 'archive');
@@ -618,11 +623,12 @@ class DownloadViewController extends GetxController {
           completCount: taskCompletMap[task.gid] ?? 0,
         );
         logger.d('insert ${_task.toString()}');
-        await ehDB.galleryTaskDao.insertTask(_task);
+        // await ehDB.galleryTaskDao.insertTask(_task);
+        await isarHelper.putGalleryTask(_task, replaceOnConflict: false);
         _downloadController.dState.galleryTaskMap[_task.gid] = _task;
         animateGalleryListAddTask();
       }
-    }
+    }*/
   }
 
   String _getLocalFilePath() {
