@@ -275,13 +275,15 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
       ),
     );
 
-    body = CupertinoPageScaffold(
-      child: CupertinoScrollbar(
-        controller:
-            PrimaryScrollController.of(context) ?? _controller.scrollController,
-        child: body,
-      ),
-    );
+    body = CupertinoPageScaffold(child: body);
+
+    // body = CupertinoPageScaffold(
+    //   child: CupertinoScrollbar(
+    //     controller:
+    //         PrimaryScrollController.of(context) ?? _controller.scrollController,
+    //     child: body,
+    //   ),
+    // );
 
     return body;
   }
