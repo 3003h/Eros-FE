@@ -19,6 +19,7 @@ class TagTranslat {
   @Index()
   final String namespace;
   @Index()
+  @Index(composite: [CompositeIndex('namespace')], unique: true)
   final String key;
   @Index()
   final String? name;

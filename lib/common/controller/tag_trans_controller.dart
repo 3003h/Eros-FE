@@ -139,7 +139,9 @@ class TagTransController extends GetxController {
     // loggerNoStack.d('tag中文翻译数量 ${tagTranslats.length}');
 
     // tagTranslatDao.insertAllTagTranslats(tagTranslats);
-    isarHelper.addAllTagTranslate(tagTranslats);
+
+    // await isarHelper.removeAllTagTranslate();
+    await isarHelper.putAllTagTranslate(tagTranslats);
     ehConfigService.tagTranslatVer.value = _remoteVer ?? '';
   }
 
