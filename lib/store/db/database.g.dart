@@ -276,13 +276,6 @@ class _$GalleryTaskDao extends GalleryTaskDao {
   }
 
   @override
-  Future<void> updateStatusByGid(int status, int gid) async {
-    await _queryAdapter.queryNoReturn(
-        'UPDATE GalleryImageTask set status = ?1 WHERE gid = ?2',
-        arguments: [status, gid]);
-  }
-
-  @override
   Future<void> insertTask(GalleryTask galleryTask) async {
     await _galleryTaskInsertionAdapter.insert(
         galleryTask, OnConflictStrategy.abort);

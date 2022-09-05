@@ -155,8 +155,10 @@ class DownloadController extends GetxController {
     }
 
     // 先查询任务是否已存在
+    // final GalleryTask? _oriTask =
+    //     await galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
     final GalleryTask? _oriTask =
-        await galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
+        await isarHelper.findGalleryTaskByGid(gid ?? -1);
     if (_oriTask != null) {
       showToast('Download task existed');
       logger.i('$gid 任务已存在');
@@ -187,7 +189,8 @@ class DownloadController extends GetxController {
     );
 
     logger.d('add NewTask ${galleryTask.toString()}');
-    galleryTaskDao.insertTask(galleryTask);
+    // galleryTaskDao.insertTask(galleryTask);
+    isarHelper.putGalleryTask(galleryTask, replaceOnConflict: false);
     dState.galleryTaskMap[galleryTask.gid] = galleryTask;
     _downloadViewAnimateListAdd();
     showToast('${galleryTask.gid} Download task start');
@@ -231,9 +234,13 @@ class DownloadController extends GetxController {
       return;
     }
 
-    final imageTaskList = (await imageTaskDao.findAllTaskByGid(galleryTask.gid))
-        .map((e) => e.copyWith(imageUrl: ''))
-        .toList();
+    // final imageTaskList = (await imageTaskDao.findAllTaskByGid(galleryTask.gid))
+    //     .map((e) => e.copyWith(imageUrl: ''))
+    //     .toList();
+    final imageTaskList =
+        (await isarHelper.findImageTaskAllByGid(galleryTask.gid))
+            .map((e) => e.copyWith(imageUrl: ''))
+            .toList();
 
     String jsonImageTaskList = jsonEncode(imageTaskList);
 
@@ -266,8 +273,9 @@ class DownloadController extends GetxController {
 
   /// 恢复任务
   Future<void> galleryTaskResume(int gid) async {
-    final GalleryTask? galleryTask =
-        await galleryTaskDao.findGalleryTaskByGid(gid);
+    // final GalleryTask? galleryTask =
+    //     await galleryTaskDao.findGalleryTaskByGid(gid);
+    final GalleryTask? galleryTask = await isarHelper.findGalleryTaskByGid(gid);
     if (galleryTask != null) {
       logger.d('恢复任务 $gid');
       _addGalleryTask(galleryTask);
@@ -276,9 +284,10 @@ class DownloadController extends GetxController {
 
   /// 重下任务
   Future<void> galleryTaskRestart(int gid) async {
-    await imageTaskDao.deleteImageTaskByGid(gid);
-    final GalleryTask? galleryTask =
-        await galleryTaskDao.findGalleryTaskByGid(gid);
+    // await imageTaskDao.deleteImageTaskByGid(gid);
+    isarHelper.removeImageTask(gid);
+
+    final GalleryTask? galleryTask = await isarHelper.findGalleryTaskByGid(gid);
     if (galleryTask != null) {
       logger.d('重下任务 $gid ${galleryTask.url}');
       cacheController.clearDioCache(
@@ -318,7 +327,8 @@ class DownloadController extends GetxController {
 
       final _task = dState.galleryTaskMap[gid];
       if (_task != null) {
-        galleryTaskDao.updateTask(_task);
+        // galleryTaskDao.updateTask(_task);
+        isarHelper.putGalleryTask(_task);
       }
     }
 
@@ -327,8 +337,10 @@ class DownloadController extends GetxController {
 
   /// 根据gid获取任务
   Future<List<GalleryImageTask>> getImageTasks(int gid) async {
+    // final List<GalleryImageTask> tasks =
+    //     await imageTaskDao.findAllTaskByGid(gid);
     final List<GalleryImageTask> tasks =
-        await imageTaskDao.findAllTaskByGid(gid);
+        await isarHelper.findImageTaskAllByGid(gid);
     return tasks;
   }
 
@@ -353,8 +365,11 @@ class DownloadController extends GetxController {
     }
 
     // 删除数据库记录
-    imageTaskDao.deleteImageTaskByGid(_task.gid);
-    galleryTaskDao.deleteTaskByGid(_task.gid);
+    // imageTaskDao.deleteImageTaskByGid(_task.gid);
+    // galleryTaskDao.deleteTaskByGid(_task.gid);
+
+    isarHelper.removeImageTask(_task.gid);
+    isarHelper.removeGalleryTask(_task.gid);
 
     dState.galleryTaskMap.remove(gid);
   }
@@ -766,7 +781,9 @@ class DownloadController extends GetxController {
 
   // 初始化任务列表
   Future<void> initGalleryTasks() async {
-    final _tasks = await galleryTaskDao.findAllGalleryTasks();
+    // final _tasks = await galleryTaskDao.findAllGalleryTasks();
+    await downloadTaskMigration();
+    final _tasks = await isarHelper.findAllGalleryTasks();
 
     // 添加到map中
     for (final _task in _tasks) {
@@ -779,6 +796,16 @@ class DownloadController extends GetxController {
         logger.d('继续未完成的任务');
         _addGalleryTask(task);
       }
+    }
+  }
+
+  Future<void> downloadTaskMigration() async {
+    final isMigrationed = hiveHelper.getDownloadTaskMigration();
+    logger.d('downloadTaskMigration $isMigrationed');
+    if (!isMigrationed) {
+      logger.d('start download task Migration');
+      await restoreGalleryTasks();
+      hiveHelper.setDownloadTaskMigration(true);
     }
   }
 
@@ -818,8 +845,10 @@ class DownloadController extends GetxController {
             galleryImageTaskList.add(galleryImageTask);
           }
 
-          await imageTaskDao.insertOrReplaceImageTasks(galleryImageTaskList);
-          await galleryTaskDao.insertOrReplaceTask(galleryTask);
+          // await imageTaskDao.insertOrReplaceImageTasks(galleryImageTaskList);
+          await isarHelper.putAllImageTask(galleryImageTaskList);
+          // await galleryTaskDao.insertOrReplaceTask(galleryTask);
+          await isarHelper.putGalleryTask(galleryTask);
         } catch (e, stack) {
           logger.e('$e\n$stack');
           continue;
@@ -831,7 +860,8 @@ class DownloadController extends GetxController {
   }
 
   Future<void> rebuildGalleryTasks() async {
-    final _tasks = await galleryTaskDao.findAllGalleryTasks();
+    // final _tasks = await galleryTaskDao.findAllGalleryTasks();
+    final _tasks = await isarHelper.findAllGalleryTasks();
 
     _tasks.forEach((task) => _writeTaskInfoFile(task));
   }
@@ -857,8 +887,10 @@ class DownloadController extends GetxController {
     // 初始化下载计时控制
     _initDownloadStateChkTimer(galleryTask.gid);
 
+    // final List<GalleryImageTask> imageTasksOri =
+    //     await imageTaskDao.findAllTaskByGid(galleryTask.gid);
     final List<GalleryImageTask> imageTasksOri =
-        await imageTaskDao.findAllTaskByGid(galleryTask.gid);
+        await isarHelper.findImageTaskAllByGid(galleryTask.gid);
 
     logger.v(
         '${imageTasksOri.where((element) => element.status != TaskStatus.complete.value).map((e) => e.toString()).join('\n')} ');
@@ -953,7 +985,12 @@ class DownloadController extends GetxController {
 
     // 下载完成 更新数据库明细
     logger.v('下载完成 更新数据库明细');
-    await imageTaskDao.updateImageTaskStatus(
+    // await imageTaskDao.updateImageTaskStatus(
+    //   gid,
+    //   itemSer,
+    //   TaskStatus.complete.value,
+    // );
+    await isarHelper.updateImageTaskStatus(
       gid,
       itemSer,
       TaskStatus.complete.value,
@@ -961,7 +998,9 @@ class DownloadController extends GetxController {
 
     // 更新ui
     // logger.v('更新ui');
-    final List<GalleryImageTask> listComplete = await imageTaskDao
+    // final List<GalleryImageTask> listComplete = await imageTaskDao
+    //     .finaAllTaskByGidAndStatus(gid, TaskStatus.complete.value);
+    final List<GalleryImageTask> listComplete = await isarHelper
         .finaAllTaskByGidAndStatus(gid, TaskStatus.complete.value);
 
     final GalleryTask? _task = galleryTaskUpdate(
@@ -974,7 +1013,8 @@ class DownloadController extends GetxController {
     }
 
     if (_task != null) {
-      await galleryTaskDao.updateTask(_task);
+      // await galleryTaskDao.updateTask(_task);
+      await isarHelper.putGalleryTask(_task);
     }
     _updateDownloadView(['DownloadGalleryItem_$gid']);
   }
@@ -1058,7 +1098,8 @@ class DownloadController extends GetxController {
       filePath: fileName,
     );
 
-    await imageTaskDao.insertOrReplaceImageTasks([_imageTask]);
+    // await imageTaskDao.insertOrReplaceImageTasks([_imageTask]);
+    await isarHelper.putImageTask(_imageTask);
   }
 
   Future _updateImageTasksByGid(int gid, {List<GalleryImage>? images}) async {
@@ -1079,7 +1120,8 @@ class DownloadController extends GetxController {
     //     '_updateImageTasksByGid $gid\n${_galleryImageTasks?.map((e) => e.toString()).join('\n')}');
 
     if (_galleryImageTasks != null) {
-      imageTaskDao.insertOrReplaceImageTasks(_galleryImageTasks);
+      // imageTaskDao.insertOrReplaceImageTasks(_galleryImageTasks);
+      isarHelper.putAllImageTask(_galleryImageTasks);
     }
   }
 }

@@ -185,6 +185,7 @@ class Global {
     await GStore.init();
 
     await HiveHelper.init();
+    await isarHelper.initIsar();
 
     _profileInit();
 
@@ -204,8 +205,6 @@ class Global {
     // await dataUpdate();
 
     initImageHttpClient();
-
-    isarHelper.initIsar();
   }
 
   static void creatDirs() {

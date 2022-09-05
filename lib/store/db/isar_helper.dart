@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/store/db/entity/view_history.dart';
 import 'package:fehviewer/store/db/isar.dart';
 import 'package:isar/isar.dart';
 
 import '../../fehviewer.dart';
+import 'entity/gallery_image_task.dart';
 import 'entity/tag_translat.dart';
 
 class IsarHelper {
@@ -115,6 +117,83 @@ class IsarHelper {
         .or()
         .nameContains(text)
         .limit(limit)
+        .findAll();
+  }
+
+  Future<List<GalleryTask>> findAllGalleryTasks() async {
+    final taks = await isar.galleryTasks.where().findAll();
+    return taks;
+  }
+
+  Future<GalleryTask?> findGalleryTaskByGid(int gid) async {
+    return await isar.galleryTasks.get(gid);
+  }
+
+  Future<void> putGalleryTask(GalleryTask galleryTask,
+      {bool replaceOnConflict = true}) async {
+    await isar.writeTxn((isar) async {
+      await isar.galleryTasks
+          .put(galleryTask, replaceOnConflict: replaceOnConflict);
+    });
+  }
+
+  Future<void> putAllGalleryTasks(List<GalleryTask> galleryTasks,
+      {bool replaceOnConflict = true}) async {
+    await isar.writeTxn((isar) async {
+      await isar.galleryTasks
+          .putAll(galleryTasks, replaceOnConflict: replaceOnConflict);
+    });
+  }
+
+  Future<void> removeGalleryTask(int gid) async {
+    await isar.writeTxn((isar) async {
+      await isar.galleryTasks.delete(gid);
+    });
+  }
+
+  Future<List<GalleryImageTask>> findImageTaskAllByGid(int gid) async {
+    return await isar.galleryImageTasks.where().findAll();
+  }
+
+  Future<void> putImageTask(GalleryImageTask imageTask,
+      {bool replaceOnConflict = true}) async {
+    await isar.writeTxn((isar) async {
+      await isar.galleryImageTasks
+          .put(imageTask, replaceOnConflict: replaceOnConflict);
+    });
+  }
+
+  Future<void> putAllImageTask(List<GalleryImageTask> imageTasks,
+      {bool replaceOnConflict = true}) async {
+    await isar.writeTxn((isar) async {
+      await isar.galleryImageTasks
+          .putAll(imageTasks, replaceOnConflict: replaceOnConflict);
+    });
+  }
+
+  Future<void> removeImageTask(int gid) async {
+    await isar.writeTxn((isar) async {
+      await isar.galleryImageTasks.where().anyGid().deleteAll();
+    });
+  }
+
+  Future<void> updateImageTaskStatus(int gid, int ser, int status) async {
+    await isar.writeTxn((isar) async {
+      final tasks = await isar.galleryImageTasks.getByGidSer(gid, ser);
+      if (tasks != null) {
+        await isar.galleryImageTasks
+            .put(tasks.copyWith(status: status), replaceOnConflict: true);
+      }
+    });
+  }
+
+  Future<List<GalleryImageTask>> finaAllTaskByGidAndStatus(
+      int gid, int status) async {
+    return await isar.galleryImageTasks
+        .where()
+        .gidEqualTo(gid)
+        .filter()
+        .statusEqualTo(status)
         .findAll();
   }
 }

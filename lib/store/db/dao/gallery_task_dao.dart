@@ -30,7 +30,4 @@ abstract class GalleryTaskDao {
 
   @update
   Future<void> updateTask(GalleryTask galleryTask);
-
-  @Query('UPDATE GalleryImageTask set status = :status WHERE gid = :gid')
-  Future<void> updateStatusByGid(int status, int gid);
 }

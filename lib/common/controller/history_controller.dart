@@ -181,7 +181,7 @@ class HistoryController extends GetxController {
 
   Future<void> historyMigration() async {
     final isMigrationed = hiveHelper.getViewHistoryMigration();
-    logger.d('isMigrationed $isMigrationed');
+    logger.d('historyMigration $isMigrationed');
     if (!isMigrationed) {
       logger.d('start history Migration');
       await isarHelper.addHistorys(hiveHelper.getAllHistory(),

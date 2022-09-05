@@ -145,7 +145,7 @@ extension GetGalleryImageTaskCollection on Isar {
 const GalleryImageTaskSchema = CollectionSchema(
   name: 'GalleryImageTask',
   schema:
-      '{"name":"GalleryImageTask","idName":"id","properties":[{"name":"filePath","type":"String"},{"name":"gid","type":"Long"},{"name":"href","type":"String"},{"name":"imageUrl","type":"String"},{"name":"ser","type":"Long"},{"name":"sourceId","type":"String"},{"name":"status","type":"Long"},{"name":"token","type":"String"}],"indexes":[{"name":"gid_ser","unique":true,"properties":[{"name":"gid","type":"Value","caseSensitive":false},{"name":"ser","type":"Value","caseSensitive":false}]}],"links":[]}',
+      '{"name":"GalleryImageTask","idName":"id","properties":[{"name":"filePath","type":"String"},{"name":"gid","type":"Long"},{"name":"href","type":"String"},{"name":"imageUrl","type":"String"},{"name":"ser","type":"Long"},{"name":"sourceId","type":"String"},{"name":"status","type":"Long"},{"name":"token","type":"String"}],"indexes":[{"name":"gid","unique":false,"properties":[{"name":"gid","type":"Value","caseSensitive":false}]},{"name":"gid_ser","unique":true,"properties":[{"name":"gid","type":"Value","caseSensitive":false},{"name":"ser","type":"Value","caseSensitive":false}]}],"links":[]}',
   idName: 'id',
   propertyIds: {
     'filePath': 0,
@@ -158,8 +158,11 @@ const GalleryImageTaskSchema = CollectionSchema(
     'token': 7
   },
   listProperties: {},
-  indexIds: {'gid_ser': 0},
+  indexIds: {'gid': 0, 'gid_ser': 1},
   indexValueTypes: {
+    'gid': [
+      IndexValueType.long,
+    ],
     'gid_ser': [
       IndexValueType.long,
       IndexValueType.long,
@@ -433,6 +436,10 @@ extension GalleryImageTaskQueryWhereSort
     return addWhereClauseInternal(const IdWhereClause.any());
   }
 
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhere> anyGid() {
+    return addWhereClauseInternal(const IndexWhereClause.any(indexName: 'gid'));
+  }
+
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhere> anyGidSer() {
     return addWhereClauseInternal(
         const IndexWhereClause.any(indexName: 'gid_ser'));
@@ -499,7 +506,7 @@ extension GalleryImageTaskQueryWhere
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
       gidEqualTo(int gid) {
     return addWhereClauseInternal(IndexWhereClause.equalTo(
-      indexName: 'gid_ser',
+      indexName: 'gid',
       value: [gid],
     ));
   }
@@ -508,21 +515,21 @@ extension GalleryImageTaskQueryWhere
       gidNotEqualTo(int gid) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(IndexWhereClause.lessThan(
-        indexName: 'gid_ser',
+        indexName: 'gid',
         upper: [gid],
         includeUpper: false,
       )).addWhereClauseInternal(IndexWhereClause.greaterThan(
-        indexName: 'gid_ser',
+        indexName: 'gid',
         lower: [gid],
         includeLower: false,
       ));
     } else {
       return addWhereClauseInternal(IndexWhereClause.greaterThan(
-        indexName: 'gid_ser',
+        indexName: 'gid',
         lower: [gid],
         includeLower: false,
       )).addWhereClauseInternal(IndexWhereClause.lessThan(
-        indexName: 'gid_ser',
+        indexName: 'gid',
         upper: [gid],
         includeUpper: false,
       ));
@@ -535,7 +542,7 @@ extension GalleryImageTaskQueryWhere
     bool include = false,
   }) {
     return addWhereClauseInternal(IndexWhereClause.greaterThan(
-      indexName: 'gid_ser',
+      indexName: 'gid',
       lower: [gid],
       includeLower: include,
     ));
@@ -547,7 +554,7 @@ extension GalleryImageTaskQueryWhere
     bool include = false,
   }) {
     return addWhereClauseInternal(IndexWhereClause.lessThan(
-      indexName: 'gid_ser',
+      indexName: 'gid',
       upper: [gid],
       includeUpper: include,
     ));
@@ -561,7 +568,7 @@ extension GalleryImageTaskQueryWhere
     bool includeUpper = true,
   }) {
     return addWhereClauseInternal(IndexWhereClause.between(
-      indexName: 'gid_ser',
+      indexName: 'gid',
       lower: [lowerGid],
       includeLower: includeLower,
       upper: [upperGid],
