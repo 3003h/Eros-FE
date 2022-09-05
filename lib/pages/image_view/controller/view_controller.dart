@@ -449,9 +449,11 @@ class ViewExtController extends GetxController {
     }
 
     if (reLoadDB) {
-      vState.imageTasks = (await vState.imageTaskDao?.findAllTaskByGid(
-              int.tryParse(_galleryPageStat?.gid ?? '') ?? 0)) ??
-          [];
+      // vState.imageTasks = (await vState.imageTaskDao?.findAllTaskByGid(
+      //         int.tryParse(_galleryPageStat?.gid ?? '') ?? 0)) ??
+      //     [];
+      vState.imageTasks = await isarHelper.findImageTaskAllByGid(
+          int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
     }
 
     final imageTask = vState.imageTasks
@@ -471,7 +473,8 @@ class ViewExtController extends GetxController {
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
-    final gtask = await vState.galleryTaskDao!.findGalleryTaskByGid(gid);
+    // final gtask = await vState.galleryTaskDao!.findGalleryTaskByGid(gid);
+    final gtask = await isarHelper.findGalleryTaskByGid(gid);
     return gtask?.realDirPath;
   }
 

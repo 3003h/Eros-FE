@@ -29,6 +29,7 @@ class GalleryImageTask {
   int? id;
 
   @Index(composite: [CompositeIndex('ser')], unique: true)
+  @Index()
   final int gid;
   final int ser;
   final String token;

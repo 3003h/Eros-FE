@@ -19,6 +19,7 @@ const String customImageHideKey = 'custom_image_hide';
 
 const String ehHomeKey = 'eh_home';
 const String viewHistoryMigrationKey = 'viewHistoryMigration';
+const String downloadTaskMigrationKey = 'downloadTaskMigration';
 
 class HiveHelper {
   HiveHelper();
@@ -204,5 +205,13 @@ class HiveHelper {
 
   Future<void> setViewHistoryMigration(bool value) async {
     await _configBox.put(viewHistoryMigrationKey, '$value');
+  }
+
+  bool getDownloadTaskMigration() {
+    return _configBox.get(downloadTaskMigrationKey) == 'true';
+  }
+
+  Future<void> setDownloadTaskMigration(bool value) async {
+    await _configBox.put(downloadTaskMigrationKey, '$value');
   }
 }
