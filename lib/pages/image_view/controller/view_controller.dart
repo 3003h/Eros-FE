@@ -484,8 +484,6 @@ class ViewExtController extends GetxController {
     bool changeSource = false,
   }) async {
     // 首先检查下载记录中是否有记录
-    vState.imageTaskDao ??= Get.find<DownloadController>().imageTaskDao;
-    vState.galleryTaskDao ??= Get.find<DownloadController>().galleryTaskDao;
     vState.dirPath ??=
         await _getTaskDirPath(int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
 

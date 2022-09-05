@@ -1,12 +1,12 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:floor/floor.dart' hide Index;
+// import 'package:floor/floor.dart' hide Index;
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'gallery_image_task.g.dart';
 
 @CopyWith()
-@Entity(tableName: 'GalleryImageTask', primaryKeys: ['gid', 'ser'])
+// @Entity(tableName: 'GalleryImageTask', primaryKeys: ['gid', 'ser'])
 @JsonSerializable()
 @Collection()
 class GalleryImageTask {

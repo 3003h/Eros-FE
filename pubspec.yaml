@@ -31,7 +31,7 @@ dependencies:
   webview_cookie_manager: ^2.0.6
   shared_preferences: ^2.0.5
   oktoast: ^3.0.0
-  sqflite: ^2.0.0+3
+#  sqflite: ^2.0.0+3
   html_unescape: ^2.0.0
   enum_to_string: ^2.0.1
   flutter_inappwebview: ^5.3.2
@@ -79,7 +79,7 @@ dependencies:
     git:
       url: https://github.com/honjow/flutter_downloader.git
       ref: dev
-  floor: ^1.1.0
+#  floor: ^1.1.0
   copy_with_extension: ^4.0.0
   package_info: ^2.0.0
 
@@ -129,7 +129,7 @@ dependencies:
   dio_smart_retry: ^1.0.3
   flutter_smart_dialog: ^4.5.4
   system_proxy: ^0.1.0
-  sqflite_common_ffi: ^2.1.0
+#  sqflite_common_ffi: ^2.1.0
   easy_animated_tabbar: ^0.0.1
   contained_tab_bar_view: ^0.8.0
   buttons_tabbar: ^1.3.2
@@ -183,7 +183,7 @@ dev_dependencies:
   json_serializable: ^6.0.1
   json_annotation: ^4.3.0
 
-  floor_generator: ^1.1.0
+#  floor_generator: ^1.1.0
   copy_with_extension_gen: ^4.0.0
 
   # git hook 相关

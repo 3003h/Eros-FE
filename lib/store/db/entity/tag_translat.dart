@@ -1,11 +1,9 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:floor/floor.dart' hide Index;
 import 'package:isar/isar.dart';
 
 part 'tag_translat.g.dart';
 
 @CopyWith()
-@Entity(tableName: 'TagTranslat', primaryKeys: ['namespace', 'key'])
 @Collection()
 class TagTranslat {
   TagTranslat({
