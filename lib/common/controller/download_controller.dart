@@ -16,8 +16,6 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/store/db/dao/gallery_task_dao.dart';
-import 'package:fehviewer/store/db/dao/image_task_dao.dart';
 import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -78,9 +76,6 @@ class DownloadController extends GetxController {
   final EhConfigService ehConfigService = Get.find();
   final CacheController cacheController = Get.find();
 
-  late GalleryTaskDao galleryTaskDao;
-  late ImageTaskDao imageTaskDao;
-
   @override
   void onInit() {
     super.onInit();
@@ -88,18 +83,13 @@ class DownloadController extends GetxController {
     //     'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
     dState.executor = Executor(concurrency: ehConfigService.multiDownload);
     allowMediaScan(ehConfigService.allowMediaScan);
-    initDao().then((_) => initGalleryTasks());
+    initGalleryTasks();
   }
 
   @override
   void onClose() {
     _cancelDownloadStateChkTimer();
     super.onClose();
-  }
-
-  Future<void> initDao() async {
-    galleryTaskDao = (await Global.getDatabase()).galleryTaskDao;
-    imageTaskDao = (await Global.getDatabase()).imageTaskDao;
   }
 
   /// 允许媒体扫描

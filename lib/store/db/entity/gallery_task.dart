@@ -1,6 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:floor/floor.dart' hide Index;
 import 'package:get/get.dart';
 import 'package:isar/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -8,16 +7,7 @@ import 'package:path/path.dart' as path;
 
 part 'gallery_task.g.dart';
 
-/// 1to2 update entity with new 'dirPath' field
-/// 2to3 update entity with new 'coverImage' field
-/// 3to4 update entity with new 'addTime' field
-/// 4to5 update entity with new 'coverUrl' field
-/// 5to6 update entity with new 'rating', 'category', 'uploader' field
-/// 6to7 8 update entity with new 'jsonString' field
-/// 8to9 update entity with new 'tag' field
-/// 9to10 update entity with new 'downloadOrigImage' field
 @CopyWith()
-@Entity(tableName: 'GalleryTask')
 @JsonSerializable()
 @Collection()
 class GalleryTask {
@@ -46,7 +36,7 @@ class GalleryTask {
 
   Map<String, dynamic> toJson() => _$GalleryTaskToJson(this);
 
-  @primaryKey
+  // @primaryKey
   @Id()
   final int gid;
   final String token;

@@ -8,7 +8,6 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
-import 'package:fehviewer/store/db/dao/view_history_dao.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -36,12 +35,6 @@ class HistoryController extends GetxController {
   bool get isListView =>
       _ehConfigService.listMode.value == ListModeEnum.list ||
       _ehConfigService.listMode.value == ListModeEnum.simpleList;
-
-  late final ViewHistoryDao viewHistoryDao;
-
-  Future<void> initviewHistoryDao() async {
-    viewHistoryDao = (await Global.getDatabase()).viewHistoryDao;
-  }
 
   void addHistory(
     GalleryProvider galleryProvider, {

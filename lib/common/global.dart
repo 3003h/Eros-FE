@@ -8,7 +8,6 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
-import 'package:fehviewer/store/db/database.dart';
 import 'package:fehviewer/store/db/isar_helper.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
@@ -25,7 +24,7 @@ import 'package:package_info/package_info.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
@@ -108,13 +107,6 @@ class Global {
   User get user => profile.user;
   set user(User val) => profile = profile.copyWith(user: val);
 
-  static Future<EhDatabase> getDatabase({String? path}) async {
-    return await $FloorEhDatabase
-        .databaseBuilder(path ?? Global.dbPath)
-        .addMigrations(ehMigrations)
-        .build();
-  }
-
   // init
   static Future<void> init() async {
     // 判断是否debug模式
@@ -128,12 +120,12 @@ class Global {
       canCheckBiometrics = await localAuth.canCheckBiometrics;
     }
 
-    if (Platform.isWindows || Platform.isLinux) {
-      // Initialize FFI
-      sqfliteFfiInit();
-      // Change the default factory
-      databaseFactory = databaseFactoryFfi;
-    }
+    // if (Platform.isWindows || Platform.isLinux) {
+    //   // Initialize FFI
+    //   sqfliteFfiInit();
+    //   // Change the default factory
+    //   databaseFactory = databaseFactoryFfi;
+    // }
 
     if (GetPlatform.isMobile) {
       // the systemProxy value likes:  {port: 8899, host: 127.0.0.1}
