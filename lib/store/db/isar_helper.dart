@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:fehviewer/store/db/entity/view_history.dart';
 import 'package:fehviewer/store/db/isar.dart';
 import 'package:isar/isar.dart';
 
 import '../../fehviewer.dart';
+import 'entity/tag_translat.dart';
 
 class IsarHelper {
   late final Isar isar;
@@ -71,5 +73,48 @@ class IsarHelper {
       await isar.viewHistorys
           .putAll(viewHistorys, replaceOnConflict: replaceOnConflict);
     });
+  }
+
+  Future<void> addAllTagTranslate(List<TagTranslat> tagTranslates,
+      {bool replaceOnConflict = true}) async {
+    await isar.writeTxn((isar) async {
+      await isar.tagTranslats
+          .putAll(tagTranslates, replaceOnConflict: replaceOnConflict);
+    });
+  }
+
+  Future<List<String?>> findAllTagNamespace() async {
+    final rult = await isar.tagTranslats
+        .where()
+        .distinctByNamespace()
+        .nameProperty()
+        .findAll();
+    return rult;
+  }
+
+  Future<TagTranslat?> findTagTranslate(String key, {String? namespace}) async {
+    if (namespace != null && namespace.isNotEmpty) {
+      final rult = await isar.tagTranslats
+          .where()
+          .keyEqualTo(key)
+          .filter()
+          .namespaceEqualTo(namespace)
+          .findAll();
+      return rult.lastOrNull;
+    } else {
+      final rult = await isar.tagTranslats.where().keyEqualTo(key).findAll();
+      return rult.lastOrNull;
+    }
+  }
+
+  Future<List<TagTranslat>> findTagTranslateContains(
+      String text, int limit) async {
+    return await isar.tagTranslats
+        .filter()
+        .keyContains(text)
+        .or()
+        .nameContains(text)
+        .limit(limit)
+        .findAll();
   }
 }

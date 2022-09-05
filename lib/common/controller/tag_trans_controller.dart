@@ -27,7 +27,7 @@ class TagTransController extends GetxController {
   String? _dbUrl;
   String? _remoteVer;
 
-  List<String> _namespaces = [];
+  List<String?> _namespaces = [];
 
   @override
   void onInit() {
@@ -35,15 +35,17 @@ class TagTransController extends GetxController {
     getNamespace().then((value) => _namespaces = value);
   }
 
-  Future<List<String>> getNamespace() async {
-    final dao = await _getTagTranslatDao();
-    final _list = await dao.findAllTagTranslats();
-    return _list?.map((e) => e.namespace).toSet().toList() ?? [];
+  Future<List<String?>> getNamespace() async {
+    // final dao = await _getTagTranslatDao();
+    // final _list = await dao.findAllTagTranslats();
+    // final _list = await isarHelper.findAllTagNamespace();
+    // return _list.map((e) => e.namespace).toSet().toList();
+    return await isarHelper.findAllTagNamespace();
   }
 
-  Future<TagTranslatDao> _getTagTranslatDao() async {
-    return (await Global.getDatabase()).tagTranslatDao;
-  }
+  // Future<TagTranslatDao> _getTagTranslatDao() async {
+  //   return (await Global.getDatabase()).tagTranslatDao;
+  // }
 
   /// 检查更新
   Future<bool> checkUpdate({bool force = false}) async {
@@ -106,7 +108,7 @@ class TagTransController extends GetxController {
 
   /// 更新数据库数据
   Future<void> updateDB({bool silence = false}) async {
-    final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
+    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
 
     List listData = await _fetchData();
     if (listData.isEmpty) {
@@ -136,25 +138,27 @@ class TagTransController extends GetxController {
 
     // loggerNoStack.d('tag中文翻译数量 ${tagTranslats.length}');
 
-    tagTranslatDao.insertAllTagTranslats(tagTranslats);
-
+    // tagTranslatDao.insertAllTagTranslats(tagTranslats);
+    isarHelper.addAllTagTranslate(tagTranslats);
     ehConfigService.tagTranslatVer.value = _remoteVer ?? '';
   }
 
   /// 获取翻译结果
   Future<String?> _getTagTransStr(String key, {String? namespace}) async {
-    final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
-    TagTranslat? tr;
-    if (namespace != null && namespace.isNotEmpty) {
-      tr = await tagTranslatDao.findTagTranslatByKey(
-          key.trim(), namespace.trim());
-    } else {
-      final List<TagTranslat> trans =
-          await tagTranslatDao.findAllTagTranslatsByKey(key);
-      if (trans.isNotEmpty) {
-        tr = trans.last;
-      }
-    }
+    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
+    // TagTranslat? tr;
+    // if (namespace != null && namespace.isNotEmpty) {
+    //   tr = await tagTranslatDao.findTagTranslatByKey(
+    //       key.trim(), namespace.trim());
+    // } else {
+    //   final List<TagTranslat> trans =
+    //       await tagTranslatDao.findAllTagTranslatsByKey(key);
+    //   if (trans.isNotEmpty) {
+    //     tr = trans.last;
+    //   }
+    // }
+    TagTranslat? tr =
+        await isarHelper.findTagTranslate(key, namespace: namespace);
 
     return tr?.nameNotMD ?? key;
   }
@@ -237,9 +241,12 @@ class TagTransController extends GetxController {
   }
 
   Future<TagTranslat?> getTagTranslate(String text, String namespace) async {
-    final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
+    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
+    // final TagTranslat? _translates =
+    //     await tagTranslatDao.findTagTranslatByKey(text, namespace);
+
     final TagTranslat? _translates =
-        await tagTranslatDao.findTagTranslatByKey(text, namespace);
+        await isarHelper.findTagTranslate(text, namespace: namespace);
 
     logger.v(_translates?.intro);
     // 查询code字段
@@ -268,10 +275,14 @@ class TagTransController extends GetxController {
     if (text.isEmpty) {
       return [];
     }
-    final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
+    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
 
-    final List<TagTranslat> _translates = await tagTranslatDao
-        .findTagTranslatsWithLike('%$text%', '%$text%', '%$text%', limit);
+    // final List<TagTranslat> _translates = await tagTranslatDao
+    //     .findTagTranslatsWithLike('%$text%', '%$text%', '%$text%', limit);
+
+    final List<TagTranslat> _translates =
+        await isarHelper.findTagTranslateContains(text, limit);
+
     return _translates;
   }
 }
