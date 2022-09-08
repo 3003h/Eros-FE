@@ -164,11 +164,13 @@ class IsarHelper {
   }
 
   Future<List<GalleryImageTask>> findImageTaskAllByGid(int gid) async {
-    return await isar.galleryImageTasks.where().findAll();
+    return await isar.galleryImageTasks.where().gidEqualTo(gid).findAll();
   }
 
-  Future<void> putImageTask(GalleryImageTask imageTask,
-      {bool replaceOnConflict = true}) async {
+  Future<void> putImageTask(
+    GalleryImageTask imageTask, {
+    bool replaceOnConflict = true,
+  }) async {
     await isar.writeTxn((isar) async {
       await isar.galleryImageTasks
           .put(imageTask, replaceOnConflict: replaceOnConflict);
@@ -185,7 +187,7 @@ class IsarHelper {
 
   Future<void> removeImageTask(int gid) async {
     await isar.writeTxn((isar) async {
-      await isar.galleryImageTasks.where().anyGid().deleteAll();
+      await isar.galleryImageTasks.where().gidEqualTo(gid).deleteAll();
     });
   }
 
