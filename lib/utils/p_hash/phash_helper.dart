@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/isolate.dart';
-import 'package:flutter/foundation.dart';
 
 import 'phash_base.dart';
 

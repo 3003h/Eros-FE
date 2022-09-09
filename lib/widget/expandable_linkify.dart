@@ -2,7 +2,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:linkfy_text/linkfy_text.dart';
 import 'package:linkify/linkify.dart'
     show
         LinkifyElement,

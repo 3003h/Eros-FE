@@ -7,8 +7,6 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
-import '../../utils/logger.dart';
-
 /// 检查返回结果是否是l视图
 bool isGalleryListDmL(String response) {
   final dom.Document document = parse(response);

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -14,7 +13,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -44,10 +42,6 @@ Future<void> main() async {
     await Global.init();
 
     getinit();
-
-    if (Platform.isAndroid) {
-      await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-    }
 
     if (Get.find<EhConfigService>().debugMode || kDebugMode) {
       Logger.level = Level.debug;
@@ -142,7 +136,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       Locale? locale,
     }) {
       return GetCupertinoApp(
-        // debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
           // if (GetPlatform.isMobile)
@@ -151,14 +145,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // FlutterSmartDialog.observer,
           MainNavigatorObserver(),
         ],
-        builder: kReleaseMode
-            ? FlutterSmartDialog.init(
-                styleBuilder: (child) => child,
-              )
-            : null,
-        // builder: FlutterSmartDialog.init(
-        //   styleBuilder: (child) => child,
-        // ),
+        // builder: kReleaseMode
+        //     ? FlutterSmartDialog.init(
+        //         styleBuilder: (child) => child,
+        //       )
+        //     : null,
+        builder: FlutterSmartDialog.init(
+          styleBuilder: (child) => child,
+        ),
         getPages: AppPages.routes,
         defaultTransition: Transition.cupertino,
         initialRoute: EHRoutes.root,

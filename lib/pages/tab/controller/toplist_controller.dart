@@ -1,4 +1,3 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/default_tabview_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
