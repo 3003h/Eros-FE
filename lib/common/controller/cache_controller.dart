@@ -1,8 +1,9 @@
 import 'dart:io' as io;
 
-import 'package:dio_http_cache/dio_http_cache.dart';
+// import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fehviewer/common/controller/avatar_controller.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -24,8 +25,9 @@ class CacheController extends GetxController with StateMixin<String> {
   }
 
   Future<void> clearAllCache() async {
-    DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
-        .clearAll();
+    // DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
+    //     .clearAll();
+    Api.cacheOption.store?.clean();
     DefaultCacheManager().emptyCache();
     _dnsConfigController.dohCache.clear();
 
@@ -41,10 +43,12 @@ class CacheController extends GetxController with StateMixin<String> {
   }
 
   Future<void> clearDioCache({required String path}) async {
-    DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
-        .deleteByPrimaryKey(path, requestMethod: 'GET');
-    DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
-        .deleteByPrimaryKey(path, requestMethod: 'POST');
+    // DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
+    //     .deleteByPrimaryKey(path, requestMethod: 'GET');
+    // DioCacheManager(CacheConfig(databasePath: Global.appSupportPath))
+    //     .deleteByPrimaryKey(path, requestMethod: 'POST');
+
+    Api.cacheOption.store?.deleteFromPath(RegExp(path));
   }
 
   Future<String> getTotCacheSize() async {

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -18,13 +18,21 @@ import 'package:http_parser/http_parser.dart' as http_parser;
 import 'api.dart';
 import 'app_dio/pdio.dart';
 
-Options getCacheOptions({bool forceRefresh = false, Options? options}) {
-  return buildCacheOptions(
-    const Duration(days: 5),
-    maxStale: const Duration(days: 7),
-    forceRefresh: forceRefresh,
-    options: options,
-  );
+Options getCacheOptions({bool forceRefresh = false}) {
+  // return buildCacheOptions(
+  //   const Duration(days: 5),
+  //   maxStale: const Duration(days: 7),
+  //   forceRefresh: forceRefresh,
+  //   // options: options,
+  // );
+
+  final options = Api.cacheOption
+      .copyWith(
+        policy: forceRefresh ? CachePolicy.refresh : null,
+      )
+      .toOptions();
+
+  return options;
 }
 
 Future<GalleryList?> getGallery({
@@ -982,11 +990,9 @@ Future<GalleryList?> searchImage(
     ),
     options: getCacheOptions(
       forceRefresh: true,
-      options: Options(
-        followRedirects: false,
-        validateStatus: (status) => (status ?? 0) < 500,
-      ),
-    ),
+    )
+      ..followRedirects = false
+      ..validateStatus = (status) => (status ?? 0) < 500,
   );
 
   late String location;
