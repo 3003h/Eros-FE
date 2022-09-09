@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as iaw;
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
@@ -191,6 +192,11 @@ class Global {
     }
 
     isDBinappSupportPath = StorageUtil().getBool(IS_DB_IN_SUPPORT_DIR);
+
+    if (Platform.isAndroid) {
+      await iaw.AndroidInAppWebViewController.setWebContentsDebuggingEnabled(
+          true);
+    }
 
     // 数据更新
     // await dataUpdate();

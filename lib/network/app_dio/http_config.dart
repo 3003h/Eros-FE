@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fehviewer/utils/optional.dart';
 
 // dio 配置项
 class DioHttpConfig {

@@ -20,7 +20,6 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../../../common/service/layout_service.dart';
 import '../../../route/first_observer.dart';
-import '../../../route/main_observer.dart';
 import '../../../route/second_observer.dart';
 import '../comm.dart';
 import '../view/setting_page.dart';

@@ -13,9 +13,7 @@ import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
 import 'package:flutter_linkify/flutter_linkify.dart' as clif;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:linkfy_text/linkfy_text.dart';
 import 'package:linkify/linkify.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../widget/eh_linkify_text.dart';
 
