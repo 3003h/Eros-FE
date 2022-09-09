@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -11,7 +13,6 @@ import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
 import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -36,6 +37,20 @@ class Api {
         PersistCookieJar(storage: FileStorage(Global.appSupportPath));
     return _cookieJar!;
   }
+
+  static CacheOptions cacheOption = CacheOptions(
+    store: BackupCacheStore(
+      primary: MemCacheStore(),
+      secondary: HiveCacheStore(Global.appSupportPath),
+    ),
+    policy: CachePolicy.request,
+    hitCacheOnErrorExcept: [401, 403, 304, 503],
+    maxStale: const Duration(days: 7),
+    priority: CachePriority.normal,
+    cipher: null,
+    keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+    allowPostMethod: false,
+  );
 
   static String getBaseUrl({bool? isSiteEx}) {
     return EHConst.getBaseSite(
