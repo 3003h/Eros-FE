@@ -1,8 +1,3 @@
-GoogleService-Info.plist filter=git-crypt diff=git-crypt
-google-service.json filter=git-crypt diff=git-crypt
-/lib/firebase_options.dart filter=git-crypt diff=git-crypt
-/lib/config/config.dart filter=git-crypt diff=git-crypt
-
 # Auto detect text files and perform LF normalization
 *                 text=auto
 
@@ -39,3 +34,9 @@ google-service.json filter=git-crypt diff=git-crypt
 *.zip             binary
 *.ttf             binary
 *.otf             binary
+
+
+GoogleService-Info.plist   filter=git-crypt diff=git-crypt binary
+google-service.json        filter=git-crypt diff=git-crypt binary
+/lib/firebase_options.dart filter=git-crypt diff=git-crypt binary
+/lib/config/config.dart    filter=git-crypt diff=git-crypt binary
