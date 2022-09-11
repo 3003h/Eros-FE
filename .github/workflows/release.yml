@@ -165,7 +165,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
-          cache: gradle
+#          cache: gradle
 
       # 安装 Flutter
       - name: Flutter action
