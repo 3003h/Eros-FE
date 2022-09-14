@@ -90,7 +90,7 @@ dependencies:
   moor_flutter: ^4.0.0
   device_info: ^2.0.1
   flutter_easyrefresh: ^2.2.1
-  flutter_markdown: ^0.6.2
+  flutter_markdown: ^0.6.11
   archive: ^3.1.2
   hive: ^2.0.4
   hive_flutter: ^1.0.0
