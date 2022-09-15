@@ -15,6 +15,10 @@ on:
 env:
   APP_DEV_PROVISION_PATH: '/tmp/app_dev.mobileprovision'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   Build_and_upload:
     name: Build releases
