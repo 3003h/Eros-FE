@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - 'master'
-      - 'build'
-#    tags:
-#      - v*
-#      - '!v*ios'
-#      - '!v*apk'
-#      - '!v*mac'
-#      - '!v*win'
-#      - '!v*.flutter2'
+#      - 'build'
+    tags:
+      - v*
+      - '!v*ios'
+      - '!v*apk'
+      - '!v*mac'
+      - '!v*win'
+      - '!v*.flutter2'
 env:
   APP_DEV_PROVISION_PATH: '/tmp/app_dev.mobileprovision'
 
