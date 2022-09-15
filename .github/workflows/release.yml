@@ -5,13 +5,13 @@ on:
     branches:
       - 'master'
       - 'build'
-    tags:
-      - v*
-      - '!v*ios'
-      - '!v*apk'
-      - '!v*mac'
-      - '!v*win'
-      - '!v*.flutter2'
+#    tags:
+#      - v*
+#      - '!v*ios'
+#      - '!v*apk'
+#      - '!v*mac'
+#      - '!v*win'
+#      - '!v*.flutter2'
 env:
   APP_DEV_PROVISION_PATH: '/tmp/app_dev.mobileprovision'
 
@@ -235,7 +235,7 @@ jobs:
           path: ${{ matrix.artifact_path }}
 
   Publish_releases:
-    if: startsWith(github.ref, 'refs/tag/')
+    if: startsWith(github.ref, 'refs/tags/')
     name: Publish releases
     needs: Build_and_upload
     runs-on: ubuntu-latest
