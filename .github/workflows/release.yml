@@ -260,4 +260,4 @@ jobs:
           allowUpdates: true
           artifactErrorsFailBuild: true
           replacesArtifacts: true
-          token: ${{ secrets.RELEASE_TOKEN }}
+#          token: ${{ secrets.RELEASE_TOKEN }}
