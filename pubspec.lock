@@ -234,6 +234,27 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.1"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.4.7"
+  cloud_firestore_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.7.4"
+  cloud_firestore_web:
+    dependency: transitive
+    description:
+      name: cloud_firestore_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.8.7"
   code_builder:
     dependency: transitive
     description:
@@ -395,6 +416,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.0"
+  dio_firebase_performance:
+    dependency: "direct main"
+    description:
+      name: dio_firebase_performance
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.1-dev.3"
   dio_smart_retry:
     dependency: "direct main"
     description:
@@ -514,6 +542,90 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.6.1"
+  firebase:
+    dependency: transitive
+    description:
+      name: firebase
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "9.0.3"
+  firebase_analytics:
+    dependency: "direct main"
+    description:
+      name: firebase_analytics
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "9.3.4"
+  firebase_analytics_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_analytics_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.3.4"
+  firebase_analytics_web:
+    dependency: transitive
+    description:
+      name: firebase_analytics_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.4.2+4"
+  firebase_core:
+    dependency: transitive
+    description:
+      name: firebase_core
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.22.0"
+  firebase_core_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_core_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.5.1"
+  firebase_core_web:
+    dependency: transitive
+    description:
+      name: firebase_core_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.7.2"
+  firebase_crashlytics:
+    dependency: "direct main"
+    description:
+      name: firebase_crashlytics
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.8.10"
+  firebase_crashlytics_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_crashlytics_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.16"
+  firebase_performance:
+    dependency: "direct main"
+    description:
+      name: firebase_performance
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.8.3"
+  firebase_performance_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_performance_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.1+16"
+  firebase_performance_web:
+    dependency: transitive
+    description:
+      name: firebase_performance_web
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.1+5"
   fixnum:
     dependency: transitive
     description:
