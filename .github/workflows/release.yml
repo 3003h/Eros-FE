@@ -204,7 +204,7 @@ jobs:
         run: |
           cd ios && pod update && pod install && cd ..
           flutter build ipa --export-options-plist=ExportOptions.plist
-          cd build/app/outputs/apk/release/
+          cd build/ios/ipa/
           mv FEhViewer.ipa FEhViewer_${{ steps.get_version.outputs.version }}.ipa
 
       # 打包 mac
