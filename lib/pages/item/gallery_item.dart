@@ -24,7 +24,7 @@ const double kPaddingVertical = 18.0;
 
 const double kCardRadius = 12.0;
 
-const double kFixedHeight = 200.0;
+const double kFixedHeight = 204.0;
 
 final EhConfigService _ehConfigService = Get.find();
 
