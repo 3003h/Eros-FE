@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_firebase_performance/dio_firebase_performance.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -17,6 +18,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import '../api.dart';
 import 'http_config.dart';
 
 export 'http_config.dart';
@@ -40,12 +42,14 @@ class AppDio with DioMixin implements Dio {
     logger.v('dioConfig ${dioConfig?.toString()}');
 
     // DioCacheManager
-    final cacheOptions = CacheConfig(
-      databasePath: Global.appSupportPath,
-      baseUrl: dioConfig?.baseUrl,
-      defaultRequestMethod: 'GET',
-    );
-    interceptors.add(DioCacheManager(cacheOptions).interceptor as Interceptor);
+    // final cacheOptions = CacheConfig(
+    //   databasePath: Global.appSupportPath,
+    //   baseUrl: dioConfig?.baseUrl,
+    //   defaultRequestMethod: 'GET',
+    // );
+    // interceptors.add(DioCacheManager(cacheOptions).interceptor as Interceptor);
+
+    interceptors.add(DioCacheInterceptor(options: Api.cacheOption));
 
     // Cookie管理
     if (dioConfig?.cookiesPath?.isNotEmpty ?? false) {

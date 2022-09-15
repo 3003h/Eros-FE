@@ -24,12 +24,12 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: '3.3.0'
+            flutter_version: '3.3.1'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
             os: macos-latest
-            flutter_version: '3.3.0'
+            flutter_version: '3.3.1'
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
           - target: macos
@@ -165,7 +165,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
-          cache: gradle
+#          cache: gradle
 
       # 安装 Flutter
       - name: Flutter action
@@ -182,6 +182,13 @@ jobs:
           git config --global core.longpaths true
           flutter pub get
 
+      # Get app version
+      - name: Get app version
+        id: get_version
+        shell: bash
+        run: |
+          echo "::set-output name=version::$(head -n 5 pubspec.yaml | tail -n 1 | cut -d ' ' -f 2)"
+
       # 打包 apk
       - name: Collect Apks
         if: matrix.target == 'android'
@@ -194,16 +201,21 @@ jobs:
       # 打包 ipa
       - name: Build ipa
         if: matrix.target == 'ios'
-        run: flutter build ipa --export-options-plist=ExportOptions.plist
+        run: |
+          cd ios && pod update && pod install && cd ..
+          flutter build ipa --export-options-plist=ExportOptions.plist
+          cd build/app/outputs/apk/release/
+          mv FEhViewer.ipa FEhViewer_${{ steps.get_version.outputs.version }}.ipa
 
       # 打包 mac
       - name: Build mac app
         if: matrix.target == 'macos'
         run: |
+          cd macos && pod update && pod install && cd ..
           flutter build macos --release
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
           cp -a $APP_PATH ./build
-          cd build && zip -qroy macos/FEhViewer_macos.zip fehviewer.app
+          cd build && zip -qroy macos/FEhViewer_${{ steps.get_version.outputs.version }}_macos.zip fehviewer.app
 
       - name: Build windows
         if: matrix.target == 'windows'
@@ -214,7 +226,7 @@ jobs:
           New-Item -Path $DestDir -ItemType Directory
           Copy-Item $SrcDir\* -Recurse $DestDir
           Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
-          Compress-Archive $DestDir build\windows\FEhViewer_windows.zip
+          Compress-Archive $DestDir build\windows\FEhViewer_${{ steps.get_version.outputs.version }}_windows.zip
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
@@ -241,6 +253,9 @@ jobs:
         with:
           artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
           tag: ${{ github.ref_name }}
+          bodyFile: changelog/${{ github.ref_name }}.md
           prerelease: true
           allowUpdates: true
+          artifactErrorsFailBuild: true
+          replacesArtifacts: true
           token: ${{ secrets.RELEASE_TOKEN }}

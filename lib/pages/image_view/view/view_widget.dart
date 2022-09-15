@@ -7,7 +7,6 @@ import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -762,7 +761,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (context.width >= kThresholdTabletWidth)
+                        if (context.isTablet)
                           ControllerButtonBar(
                             controller: controller,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -832,7 +831,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
       id: idViewBottomBar,
       builder: (logic) {
         logic.vState.bottomBarHeight = context.mediaQueryPadding.bottom +
-            (context.width < kThresholdTabletWidth ? kBottomBarHeight : 0) +
+            (!context.isTablet ? kBottomBarHeight : 0) +
             kSliderBarHeight +
             (logic.vState.showThumbList ? kThumbListViewHeight : 0);
 
@@ -903,7 +902,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                 },
               ),
               // 按钮栏
-              if (context.width < kThresholdTabletWidth)
+              if (!context.isTablet)
                 ControllerButtonBar(
                   controller: logic,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

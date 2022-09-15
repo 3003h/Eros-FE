@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:fehviewer/component/exception/error.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 

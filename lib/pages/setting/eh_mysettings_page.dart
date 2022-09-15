@@ -12,7 +12,6 @@ import 'package:get/get.dart';
 import '../../component/setting_base.dart';
 import 'const.dart';
 import 'controller/eh_mysettings_controller.dart';
-import 'setting_items/multi_selector.dart';
 import 'setting_items/single_input_item.dart';
 import 'webview/web_mysetting_in.dart';
 

@@ -3,7 +3,7 @@ description: An unofficial e-hentai app
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.2.65+465
+version: 1.2.66+466
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -24,7 +24,7 @@ dependencies:
 
   # 网络请求
   dio: ^4.0.6
-  dio_http_cache: any
+#  dio_http_cache: any
 
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
@@ -63,10 +63,10 @@ dependencies:
   # 图片保存
   image_gallery_saver: any
   # 滑动删除
-  flutter_slidable: ^1.0.0
+  flutter_slidable: ^2.0.0
   scrollable_positioned_list: ^0.3.2
   reorderables: ^0.5.0
-  basic_utils: ^4.0.1
+  basic_utils: ^5.2.2
   # 震动
   flutter_vibrate: ^1.3.0
   # 文件选择
@@ -176,6 +176,8 @@ dependencies:
       path: plugins/window_size
   isar: ^2.5.0
   isar_flutter_libs: ^2.5.0
+  dio_cache_interceptor: ^3.3.1
+  dio_cache_interceptor_hive_store: ^3.2.0
 
 dev_dependencies:
   # flutter pub run build_runner build --delete-conflicting-outputs

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,7 +17,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -51,10 +49,6 @@ Future<void> main() async {
     await Global.init();
 
     getinit();
-
-    if (Platform.isAndroid) {
-      await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-    }
 
     if (Get.find<EhConfigService>().debugMode || kDebugMode) {
       Logger.level = Level.debug;
@@ -152,7 +146,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       Locale? locale,
     }) {
       return GetCupertinoApp(
-        // debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
           // if (GetPlatform.isMobile)

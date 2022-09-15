@@ -14,7 +14,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
