@@ -761,7 +761,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (context.width >= kThresholdTabletWidth)
+                        if (context.isTablet)
                           ControllerButtonBar(
                             controller: controller,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -831,7 +831,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
       id: idViewBottomBar,
       builder: (logic) {
         logic.vState.bottomBarHeight = context.mediaQueryPadding.bottom +
-            (context.width < kThresholdTabletWidth ? kBottomBarHeight : 0) +
+            (!context.isTablet ? kBottomBarHeight : 0) +
             kSliderBarHeight +
             (logic.vState.showThumbList ? kThumbListViewHeight : 0);
 
@@ -902,7 +902,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                 },
               ),
               // 按钮栏
-              if (context.width < kThresholdTabletWidth)
+              if (!context.isTablet)
                 ControllerButtonBar(
                   controller: logic,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
