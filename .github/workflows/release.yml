@@ -240,6 +240,8 @@ jobs:
     needs: Build_and_upload
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - run: mkdir /tmp/artifacts
       - name: Download all Artifacts
         uses: actions/download-artifact@v3
