@@ -388,6 +388,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("Top to bottom"),
+        "turn_page_anima":
+            MessageLookupByLibrary.simpleMessage("Turn page animations"),
         "uc_Chinese": MessageLookupByLibrary.simpleMessage("Chinese"),
         "uc_Dutch": MessageLookupByLibrary.simpleMessage("Dutch"),
         "uc_English": MessageLookupByLibrary.simpleMessage("English"),

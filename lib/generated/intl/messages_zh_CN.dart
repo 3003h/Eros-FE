@@ -315,6 +315,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("年排行"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("日排行"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("从上到下"),
+        "turn_page_anima": MessageLookupByLibrary.simpleMessage("翻页动画"),
         "uc_Chinese": MessageLookupByLibrary.simpleMessage("汉语"),
         "uc_Dutch": MessageLookupByLibrary.simpleMessage("荷兰语"),
         "uc_English": MessageLookupByLibrary.simpleMessage("英语"),

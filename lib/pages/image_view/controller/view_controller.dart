@@ -662,7 +662,7 @@ class ViewExtController extends GetxController {
     Duration duration = const Duration(milliseconds: 200),
     bool? animate,
   }) {
-    final enableAnimate = animate ?? _ehConfigService.tapToTurnPageAnimations;
+    final enableAnimate = animate ?? _ehConfigService.turnPageAnimations;
 
     if (enableAnimate) {
       switch (pageViewType) {
@@ -703,7 +703,7 @@ class ViewExtController extends GetxController {
 
   Future<void> tapLeft() async {
     logger.v('${vState.viewMode} tap left');
-    final enableAnimate = _ehConfigService.tapToTurnPageAnimations;
+    final enableAnimate = _ehConfigService.turnPageAnimations;
 
     vState.fade = false;
     if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
@@ -909,7 +909,7 @@ class ViewExtController extends GetxController {
     Wakelock.enable();
     final duration = Duration(milliseconds: _ehConfigService.turnPageInv);
     autoNextTimer = Timer.periodic(duration, (timer) {
-      _toPage();
+      _autoTunToPage();
     });
   }
 
@@ -1007,7 +1007,7 @@ class ViewExtController extends GetxController {
     }
   }
 
-  Future<void> _toPage() async {
+  Future<void> _autoTunToPage() async {
     if (vState.pageIndex >= vState.pageCount - 1) {
       return;
     }
@@ -1028,11 +1028,41 @@ class ViewExtController extends GetxController {
         }
 
         if (vState.loadCompleMap[_minImageSer] ?? false) {
-          itemScrollController.scrollTo(
-            index: _minIndex + 1,
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.ease,
-          );
+          changePage(_minIndex + 1);
+        }
+      } else {
+        changePage(vState.pageIndex + 1);
+      }
+    }
+  }
+
+  Future<void> _autoTunToPage_Old() async {
+    if (vState.pageIndex >= vState.pageCount - 1) {
+      return;
+    }
+
+    if (vState.autoRead) {
+      if (vState.viewMode == ViewMode.topToBottom &&
+          itemScrollController.isAttached) {
+        logger.d('trd minImageIndex:${vState.minImageIndex + 1}');
+        final _minIndex = vState.minImageIndex;
+        final _minImageSer = _minIndex + 1;
+        if (!(vState.loadCompleMap[_minImageSer] ?? false)) {
+          autoNextTimer?.cancel();
+        }
+
+        vState.lastAutoNextSer = _minImageSer + 1;
+        if (!(vState.loadCompleMap[vState.lastAutoNextSer] ?? false)) {
+          autoNextTimer?.cancel();
+        }
+
+        if (vState.loadCompleMap[_minImageSer] ?? false) {
+          // itemScrollController.scrollTo(
+          //   index: _minIndex + 1,
+          //   duration: const Duration(milliseconds: 200),
+          //   curve: Curves.ease,
+          // );
+          changePage(_minIndex + 1);
         }
       } else {
         logger.d('horizontal next page ${vState.pageIndex + 1}');

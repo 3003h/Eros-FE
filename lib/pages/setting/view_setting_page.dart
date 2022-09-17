@@ -87,10 +87,10 @@ class ViewSettingList extends StatelessWidget {
         },
       ),
       TextSwitchItem(
-        L10n.of(context).tap_to_turn_page_anima,
-        intValue: ehConfigService.tapToTurnPageAnimations,
+        L10n.of(context).turn_page_anima,
+        intValue: ehConfigService.turnPageAnimations,
         onChanged: (bool val) {
-          ehConfigService.tapToTurnPageAnimations = val;
+          ehConfigService.turnPageAnimations = val;
         },
       ),
       TextSwitchItem(

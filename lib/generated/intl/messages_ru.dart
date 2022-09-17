@@ -412,6 +412,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_yesterday":
             MessageLookupByLibrary.simpleMessage("За вчерашний день"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("Вертикально"),
+        "turn_page_anima": MessageLookupByLibrary.simpleMessage(
+            "Анимированные переходы страниц"),
         "uc_Chinese": MessageLookupByLibrary.simpleMessage("Китайский"),
         "uc_Dutch": MessageLookupByLibrary.simpleMessage("Голландский"),
         "uc_English": MessageLookupByLibrary.simpleMessage("Английский"),
