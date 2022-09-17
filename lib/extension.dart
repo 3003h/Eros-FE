@@ -147,6 +147,20 @@ extension ExtUser on User {
         .map((e) => '${e.name}=${e.value}')
         .join('; ');
   }
+
+  List<Cookie> get cookies {
+    final _list = <Cookie>[
+      Cookie('ipb_member_id', memberId ?? ''),
+      Cookie('ipb_pass_hash', passHash ?? ''),
+      Cookie('igneous', igneous ?? ''),
+      Cookie('sk', sk ?? ''),
+      Cookie('hath_perks', hathPerks ?? ''),
+      Cookie('star', star ?? ''),
+      Cookie('yay', yay ?? ''),
+    ];
+
+    return _list.whereNot((e) => e.value.isEmpty).toList();
+  }
 }
 
 extension ExtTagTranlat on TagTranslat {
