@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -3296,6 +3295,16 @@ class L10n {
     return Intl.message(
       'Tap to turn page animations',
       name: 'tap_to_turn_page_anima',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turn page animations`
+  String get turn_page_anima {
+    return Intl.message(
+      'Turn page animations',
+      name: 'turn_page_anima',
       desc: '',
       args: [],
     );

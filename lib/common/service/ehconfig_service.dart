@@ -139,9 +139,9 @@ class EhConfigService extends ProfileService {
   bool get autoSelectProfile => _autoSelectProfile.value;
   set autoSelectProfile(bool val) => _autoSelectProfile.value = val;
 
-  final _tapToTurnPageAnimations = true.obs;
-  bool get tapToTurnPageAnimations => _tapToTurnPageAnimations.value;
-  set tapToTurnPageAnimations(bool val) => _tapToTurnPageAnimations.value = val;
+  final _turnPageAnimations = true.obs;
+  bool get turnPageAnimations => _turnPageAnimations.value;
+  set turnPageAnimations(bool val) => _turnPageAnimations.value = val;
 
   final _downloadOrigImage = false.obs;
   bool get downloadOrigImage => _downloadOrigImage.value;
@@ -503,12 +503,12 @@ class EhConfigService extends ProfileService {
         (bool value) => ehConfig = ehConfig.copyWith(autoSelectProfile: value));
 
     // tapToTurnPageAnimations
-    tapToTurnPageAnimations =
-        ehConfig.tapToTurnPageAnimations ?? tapToTurnPageAnimations;
+    turnPageAnimations =
+        ehConfig.turnPageAnimations ?? turnPageAnimations;
     everProfile<bool>(
-        _tapToTurnPageAnimations,
+        _turnPageAnimations,
         (bool value) =>
-            ehConfig = ehConfig.copyWith(tapToTurnPageAnimations: value));
+            ehConfig = ehConfig.copyWith(turnPageAnimations: value));
 
     // downloadOrigImage
     downloadOrigImage = downloadConfig.downloadOrigImage ?? downloadOrigImage;

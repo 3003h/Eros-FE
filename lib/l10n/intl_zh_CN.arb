@@ -324,6 +324,7 @@
   "uc_mt_1": "隐藏",
   "auto_select_profile": "自动选择配置",
   "tap_to_turn_page_anima": "点击翻页动画",
+  "turn_page_anima": "翻页动画",
   "download_ori_image": "下载原图",
   "download_ori_image_summary": "危险! 会导致下载配额迅速流失, 出现 509 错误",
   "redownload": "重新下载",
