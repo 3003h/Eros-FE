@@ -25,9 +25,10 @@ jobs:
       - name: Post release notes
         run: |
           changelog=$(cat changelog/v${{ steps.get_version.outputs.version }}.md)
-          curl --location --request POST 'https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage' \
+          curl 'https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage' \
           --header 'Content-Type: application/x-www-form-urlencoded' \
-          --data-urlencode 'parse_mode=markdown' \
-          --data-urlencode 'chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}' \
-          --data-urlencode 'disable_web_page_preview=true' \
-          --data-urlencode "text=[${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})%0A%0A$changelog"
+          -d parse_mode=markdown \
+          -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
+          --data-urlencode text="[${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})
+          $changelog" \
+          -d disable_web_page_preview=true
