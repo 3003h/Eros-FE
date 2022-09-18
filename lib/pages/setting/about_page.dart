@@ -81,10 +81,10 @@ class ListViewAbout extends StatelessWidget {
             Obx(() {
               return TextItem(
                 L10n.of(context).check_for_update,
-                desc: _updateController.canUpdate
+                desc: !_updateController.isLastVersion
                     ? L10n.of(context)
                         .update_to_version(_updateController.lastVersion ?? '')
-                    : L10n.of(context).latest_version,
+                    : '${L10n.of(context).latest_version} ${_updateController.lastVersion ?? ''}',
                 onTap: () => _updateController.checkUpdate(showDialog: true),
               );
             }),

@@ -838,7 +838,8 @@ Future<FavAdd> galleryGetFavorite(
 
 Future<Map> getGithubApi(String url) async {
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
-  DioHttpResponse httpResponse = await dioHttpClient.get(url);
+  DioHttpResponse httpResponse = await dioHttpClient.get(url,
+      options: getCacheOptions(forceRefresh: true));
   if (httpResponse.ok && httpResponse.data is Map) {
     return httpResponse.data as Map;
   } else {
