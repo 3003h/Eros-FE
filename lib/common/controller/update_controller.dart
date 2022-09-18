@@ -15,6 +15,11 @@ class UpdateController extends GetxController {
   bool get canUpdate => _canUpdate.value;
   set canUpdate(bool val) => _canUpdate.value = val;
 
+
+  final _isLastVersion = true.obs;
+  bool get isLastVersion => _isLastVersion.value;
+  set isLastVersion(bool val) => _isLastVersion.value = val;
+
   String? lastVersion;
 
   @override
@@ -40,23 +45,24 @@ class UpdateController extends GetxController {
     logger.d('remoteVersion $remoteVersion  , currentVersion $currentVersion');
     final compare = versionStringCompare(
         preVersion: currentVersion, lastVersion: remoteVersion);
-    if (!kReleaseMode ? compare <= 0 : compare < 0) {
-      lastVersion = remoteVersion;
-      canUpdate = true;
+    lastVersion = remoteVersion;
 
-      if (showDialog) {
-        showSimpleEhDiglog(
-          context: Get.context!,
-          title: remoteVersion,
-          contentText: body,
-          onOk: () {
-            launchUrlString(
-              htmUrl,
-              mode: LaunchMode.externalApplication,
-            );
-          },
-        );
-      }
+    if (compare >= 0) {
+      isLastVersion = true;
+    }
+
+    if (showDialog) {
+      showSimpleEhDiglog(
+        context: Get.context!,
+        title: remoteVersion,
+        contentText: body,
+        onOk: () {
+          launchUrlString(
+            htmUrl,
+            mode: LaunchMode.externalApplication,
+          );
+        },
+      );
     }
   }
 }
