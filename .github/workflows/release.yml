@@ -268,8 +268,18 @@ jobs:
           artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
           tag: ${{ github.ref_name }}
           bodyFile: changelog/v${{ steps.get_version.outputs.version }}.md
-          prerelease: true
+#          prerelease: true
           allowUpdates: true
           artifactErrorsFailBuild: true
           replacesArtifacts: true
-#          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Post release notes
+        run: |
+          changelog=$(cat changelog/v${{ steps.get_version.outputs.version }}.md)
+          curl 'https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage' \
+          --header 'Content-Type: application/x-www-form-urlencoded' \
+          -d parse_mode=markdown \
+          -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
+          --data-urlencode text="[${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})
+          $changelog" \
+          -d disable_web_page_preview=true
