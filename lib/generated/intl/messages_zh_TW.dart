@@ -525,6 +525,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_name": MessageLookupByLibrary.simpleMessage("用戶名"),
         "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("震動"),
+        "volume_key_turn_page": MessageLookupByLibrary.simpleMessage("音量键翻页"),
         "vote_down_successfully": MessageLookupByLibrary.simpleMessage("已送出負評"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("評價成功"),
         "vote_up_successfully": MessageLookupByLibrary.simpleMessage("已送出好評"),

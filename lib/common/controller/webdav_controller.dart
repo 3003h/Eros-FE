@@ -346,6 +346,12 @@ class WebdavController extends GetxController {
     if (client == null) {
       return;
     }
+
+    if (read.gid == null || read.gid!.isEmpty) {
+      logger.e('uploadRead gid is null');
+      return;
+    }
+
     logger.v('upload Read [${read.toJson()}] ');
     chkTempDir(kLocalReadDirPath);
 

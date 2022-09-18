@@ -19,6 +19,7 @@ import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_android_volume_keydown/flutter_android_volume_keydown.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:fullscreen/fullscreen.dart';
@@ -140,6 +141,8 @@ class ViewExtController extends GetxController {
 
   Timer? autoNextTimer;
 
+  StreamSubscription? _volumeKeyDownSubscription;
+
   @override
   void onInit() {
     super.onInit();
@@ -211,11 +214,15 @@ class ViewExtController extends GetxController {
       final prevScaleState = photoViewScaleStateController.prevScaleState;
       logger.d('prevScaleState $prevScaleState , cur state $state');
     });
+
+    addVolumeKeydownListen();
   }
 
   @override
   void onReady() {
     super.onReady();
+
+    logger.d('Read onReady');
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
@@ -266,6 +273,8 @@ class ViewExtController extends GetxController {
     extendedPageController.dispose();
     vState.getMoreCancelToken.cancel();
 
+    cancelVolumeKeydownListen();
+
     // unsetFullscreen();
     400.milliseconds.delay(() => unsetFullscreen());
 
@@ -276,6 +285,24 @@ class ViewExtController extends GetxController {
     vState.asyncInputStreamMap.values.map((e) => e.close());
 
     super.onClose();
+  }
+
+  void addVolumeKeydownListen() {
+    if (_ehConfigService.volumnTurnPage) {
+      _volumeKeyDownSubscription = FlutterAndroidVolumeKeydown.stream.listen((event) {
+        if (event == HardwareButton.volume_down) {
+          // logger.d('Volume down received');
+          toNext();
+        } else if (event == HardwareButton.volume_up) {
+          // logger.d('Volume up received');
+          toPrev();
+        }
+      });
+    }
+  }
+
+  void cancelVolumeKeydownListen() {
+    _volumeKeyDownSubscription?.cancel();
   }
 
   Future<void> initArchiveFuture(int ser, {AsyncArchiveFile? asyncFile}) async {
@@ -440,20 +467,17 @@ class ViewExtController extends GetxController {
     return image;
   }
 
-  Future<GalleryImage?> _getImageFromImageTasks(
+  GalleryImage? _getImageFromImageTasks(
     int itemSer,
     String? dir, {
-    bool reLoadDB = false,
-  }) async {
+    bool reloadDB = false,
+  }) {
     if (dir == null) {
       return null;
     }
 
-    if (reLoadDB) {
-      // vState.imageTasks = (await vState.imageTaskDao?.findAllTaskByGid(
-      //         int.tryParse(_galleryPageStat?.gid ?? '') ?? 0)) ??
-      //     [];
-      vState.imageTasks = await isarHelper.findImageTaskAllByGid(
+    if (reloadDB) {
+      vState.imageTasks = isarHelper.findImageTaskAllByGidSync(
           int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
     }
 
@@ -491,9 +515,12 @@ class ViewExtController extends GetxController {
     late GalleryImage? image;
 
     // 检查是否已下载
-    image = await _getImageFromImageTasks(itemSer, vState.dirPath);
-    image ??=
-        await _getImageFromImageTasks(itemSer, vState.dirPath, reLoadDB: true);
+    image = _getImageFromImageTasks(itemSer, vState.dirPath);
+    image ??= _getImageFromImageTasks(itemSer, vState.dirPath, reloadDB: true);
+    if (image != null) {
+      logger.v('fetchImage ser:$itemSer 从下载记录中获取');
+      return image;
+    }
 
     // 检查是否已下载archive
     if (GetPlatform.isMobile) {
@@ -705,40 +732,74 @@ class ViewExtController extends GetxController {
   Future<void> tapLeft() async {
     logger.v('${vState.viewMode} tap left');
     final enableAnimate = _ehConfigService.turnPageAnimations;
-
     vState.fade = false;
-    if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
-      final toPage = vState.pageIndex - 1;
-      changePage(toPage);
-    } else if (vState.viewMode == ViewMode.rightToLeft &&
-        vState.pageIndex < vState.filecount) {
-      final toPage = vState.pageIndex + 1;
-      changePage(toPage);
-    } else if (vState.viewMode == ViewMode.topToBottom &&
-        itemScrollController.isAttached &&
-        !vState.isScrolling &&
-        vState.pageIndex > 0) {
-      logger.v('${vState.minImageIndex}');
-      itemScrollController.scrollTo(
-        index: vState.minImageIndex - 1,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.ease,
-      );
+
+    // if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
+    //   final toPage = vState.pageIndex - 1;
+    //   changePage(toPage);
+    // } else if (vState.viewMode == ViewMode.rightToLeft &&
+    //     vState.pageIndex < vState.filecount) {
+    //   final toPage = vState.pageIndex + 1;
+    //   changePage(toPage);
+    // } else if (vState.viewMode == ViewMode.topToBottom &&
+    //     itemScrollController.isAttached &&
+    //     !vState.isScrolling &&
+    //     vState.pageIndex > 0) {
+    //   logger.v('${vState.minImageIndex}');
+    //   itemScrollController.scrollTo(
+    //     index: vState.minImageIndex - 1,
+    //     duration: const Duration(milliseconds: 200),
+    //     curve: Curves.ease,
+    //   );
+    // }
+
+    if (vState.viewMode == ViewMode.LeftToRight) {
+      toPrev();
+    } else if (vState.viewMode == ViewMode.rightToLeft) {
+      toNext();
+    } else if (vState.viewMode == ViewMode.topToBottom) {
+      if (itemScrollController.isAttached &&
+          !vState.isScrolling ) {
+        toPrev();
+      }
     }
   }
 
   Future<void> tapRight() async {
     logger.v('${vState.viewMode} tap right');
     vState.fade = false;
-    if (vState.viewMode == ViewMode.LeftToRight &&
-        vState.pageIndex < vState.filecount) {
-      final toPage = vState.pageIndex + 1;
-      changePage(toPage);
-    } else if (vState.viewMode == ViewMode.rightToLeft &&
-        vState.pageIndex > 0) {
-      final toPage = vState.pageIndex - 1;
-      changePage(toPage);
+    // if (vState.viewMode == ViewMode.LeftToRight &&
+    //     vState.pageIndex < vState.filecount) {
+    //   final toPage = vState.pageIndex + 1;
+    //   changePage(toPage);
+    // } else if (vState.viewMode == ViewMode.rightToLeft &&
+    //     vState.pageIndex > 0) {
+    //   final toPage = vState.pageIndex - 1;
+    //   changePage(toPage);
+    // } else if (vState.viewMode == ViewMode.topToBottom &&
+    //     itemScrollController.isAttached &&
+    //     !vState.isScrolling &&
+    //     vState.pageIndex < vState.filecount) {
+    //   itemScrollController.scrollTo(
+    //     index: vState.minImageIndex + 1,
+    //     duration: const Duration(milliseconds: 200),
+    //     curve: Curves.ease,
+    //   );
+    // }
+
+    if (vState.viewMode == ViewMode.LeftToRight) {
+      toNext();
+    } else if (vState.viewMode == ViewMode.rightToLeft) {
+      toPrev();
     } else if (vState.viewMode == ViewMode.topToBottom &&
+        itemScrollController.isAttached &&
+        !vState.isScrolling) {
+      toNext();
+    }
+  }
+
+  void toNext() {
+    if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
         vState.pageIndex < vState.filecount) {
@@ -747,7 +808,28 @@ class ViewExtController extends GetxController {
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
       );
-    }
+
+    } else if (vState.pageIndex < vState.filecount) {
+        final toPage = vState.pageIndex + 1;
+        changePage(toPage);
+      }
+  }
+
+  void toPrev() {
+    if (vState.viewMode == ViewMode.topToBottom &&
+        itemScrollController.isAttached &&
+        !vState.isScrolling &&
+        vState.pageIndex > 0) {
+      itemScrollController.scrollTo(
+        index: vState.minImageIndex - 1,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.ease,
+      );
+    } else if (vState.pageIndex > 0) {
+        final toPage = vState.pageIndex - 1;
+        changePage(toPage);
+      }
+
   }
 
   void handOnSliderChangedEnd(double value) {

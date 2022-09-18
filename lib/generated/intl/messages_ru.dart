@@ -631,6 +631,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_name": MessageLookupByLibrary.simpleMessage("Логин"),
         "version": MessageLookupByLibrary.simpleMessage("Версия"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("Вибрация"),
+        "volume_key_turn_page":
+            MessageLookupByLibrary.simpleMessage("Volume key to turn page"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("Дизлайк успешно поставлен"),
         "vote_successfully":

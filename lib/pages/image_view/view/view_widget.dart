@@ -769,18 +769,21 @@ class ViewTopBar extends GetView<ViewExtController> {
                             showLable: false,
                             // showLable: false,
                           ),
+                        // 菜单页面入口
                         MouseRegionClick(
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              Get.toNamed(EHRoutes.readSeting);
+                            onTap: () async {
+                              controller.cancelVolumeKeydownListen();
+                              await Get.toNamed(EHRoutes.readSeting);
+                              controller.addVolumeKeydownListen();
                             },
                             child: Container(
                               width: 40,
                               margin: const EdgeInsets.only(right: 8.0),
                               height: kTopBarButtonHeight,
                               child: const Icon(
-                                FontAwesomeIcons.ellipsisH,
+                                FontAwesomeIcons.ellipsis,
                                 color: CupertinoColors.systemGrey6,
                                 // size: 24,
                               ),

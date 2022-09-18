@@ -540,6 +540,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_android_volume_keydown:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: dev
+      resolved-ref: db2453edc7edfbab0c50a58f551a8aa89d0b9e69
+      url: "https://github.com/honjow/flutter_android_volume_keydown.git"
+    source: git
+    version: "1.0.0"
   flutter_blurhash:
     dependency: transitive
     description:
