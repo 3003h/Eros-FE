@@ -49,13 +49,13 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    logger.d('ViewPage initState');
+    logger.v('ViewPage initState');
   }
 
   @override
   void dispose() {
     super.dispose();
-    logger.d('ViewPage dispose');
+    logger.v('ViewPage dispose');
     // Get.delete<ViewExtController>();
     // 400.milliseconds.delay(() => Get.delete<ViewExtController>());
   }

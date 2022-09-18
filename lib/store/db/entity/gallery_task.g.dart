@@ -238,164 +238,212 @@ extension $GalleryTaskCopyWith on GalleryTask {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names,
-// constant_identifier_names, invalid_use_of_protected_member,
-// unnecessary_cast, unused_local_variable,
-// no_leading_underscores_for_local_identifiers,
-// inference_failure_on_function_invocation, prefer_const_constructors
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
 extension GetGalleryTaskCollection on Isar {
-  IsarCollection<GalleryTask> get galleryTasks => getCollection();
+  IsarCollection<GalleryTask> get galleryTasks => this.collection();
 }
 
 const GalleryTaskSchema = CollectionSchema(
-  name: 'GalleryTask',
-  schema:
-      '{"name":"GalleryTask","idName":"gid","properties":[{"name":"addTime","type":"Long"},{"name":"category","type":"String"},{"name":"completCount","type":"Long"},{"name":"coverImage","type":"String"},{"name":"coverUrl","type":"String"},{"name":"dirPath","type":"String"},{"name":"downloadOrigImage","type":"Bool"},{"name":"fileCount","type":"Long"},{"name":"jsonString","type":"String"},{"name":"rating","type":"Double"},{"name":"realDirPath","type":"String"},{"name":"status","type":"Long"},{"name":"tag","type":"String"},{"name":"title","type":"String"},{"name":"token","type":"String"},{"name":"uploader","type":"String"},{"name":"url","type":"String"}],"indexes":[],"links":[]}',
-  idName: 'gid',
-  propertyIds: {
-    'addTime': 0,
-    'category': 1,
-    'completCount': 2,
-    'coverImage': 3,
-    'coverUrl': 4,
-    'dirPath': 5,
-    'downloadOrigImage': 6,
-    'fileCount': 7,
-    'jsonString': 8,
-    'rating': 9,
-    'realDirPath': 10,
-    'status': 11,
-    'tag': 12,
-    'title': 13,
-    'token': 14,
-    'uploader': 15,
-    'url': 16
+  name: r'GalleryTask',
+  id: -4908171080635452003,
+  properties: {
+    r'addTime': PropertySchema(
+      id: 0,
+      name: r'addTime',
+      type: IsarType.long,
+    ),
+    r'category': PropertySchema(
+      id: 1,
+      name: r'category',
+      type: IsarType.string,
+    ),
+    r'completCount': PropertySchema(
+      id: 2,
+      name: r'completCount',
+      type: IsarType.long,
+    ),
+    r'coverImage': PropertySchema(
+      id: 3,
+      name: r'coverImage',
+      type: IsarType.string,
+    ),
+    r'coverUrl': PropertySchema(
+      id: 4,
+      name: r'coverUrl',
+      type: IsarType.string,
+    ),
+    r'dirPath': PropertySchema(
+      id: 5,
+      name: r'dirPath',
+      type: IsarType.string,
+    ),
+    r'downloadOrigImage': PropertySchema(
+      id: 6,
+      name: r'downloadOrigImage',
+      type: IsarType.bool,
+    ),
+    r'fileCount': PropertySchema(
+      id: 7,
+      name: r'fileCount',
+      type: IsarType.long,
+    ),
+    r'jsonString': PropertySchema(
+      id: 8,
+      name: r'jsonString',
+      type: IsarType.string,
+    ),
+    r'rating': PropertySchema(
+      id: 9,
+      name: r'rating',
+      type: IsarType.double,
+    ),
+    r'realDirPath': PropertySchema(
+      id: 10,
+      name: r'realDirPath',
+      type: IsarType.string,
+    ),
+    r'status': PropertySchema(
+      id: 11,
+      name: r'status',
+      type: IsarType.long,
+    ),
+    r'tag': PropertySchema(
+      id: 12,
+      name: r'tag',
+      type: IsarType.string,
+    ),
+    r'title': PropertySchema(
+      id: 13,
+      name: r'title',
+      type: IsarType.string,
+    ),
+    r'token': PropertySchema(
+      id: 14,
+      name: r'token',
+      type: IsarType.string,
+    ),
+    r'uploader': PropertySchema(
+      id: 15,
+      name: r'uploader',
+      type: IsarType.string,
+    ),
+    r'url': PropertySchema(
+      id: 16,
+      name: r'url',
+      type: IsarType.string,
+    )
   },
-  listProperties: {},
-  indexIds: {},
-  indexValueTypes: {},
-  linkIds: {},
-  backlinkLinkNames: {},
+  estimateSize: _galleryTaskEstimateSize,
+  serialize: _galleryTaskSerialize,
+  deserialize: _galleryTaskDeserialize,
+  deserializeProp: _galleryTaskDeserializeProp,
+  idName: r'gid',
+  indexes: {},
+  links: {},
+  embeddedSchemas: {},
   getId: _galleryTaskGetId,
   getLinks: _galleryTaskGetLinks,
-  attachLinks: _galleryTaskAttachLinks,
-  serializeNative: _galleryTaskSerializeNative,
-  deserializeNative: _galleryTaskDeserializeNative,
-  deserializePropNative: _galleryTaskDeserializePropNative,
-  serializeWeb: _galleryTaskSerializeWeb,
-  deserializeWeb: _galleryTaskDeserializeWeb,
-  deserializePropWeb: _galleryTaskDeserializePropWeb,
-  version: 4,
+  attach: _galleryTaskAttach,
+  version: '3.0.0',
 );
 
-int? _galleryTaskGetId(GalleryTask object) {
-  if (object.gid == Isar.autoIncrement) {
-    return null;
-  } else {
-    return object.gid;
+int _galleryTaskEstimateSize(
+  GalleryTask object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  {
+    final value = object.category;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
   }
+  {
+    final value = object.coverImage;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.coverUrl;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.dirPath;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.jsonString;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.realDirPath;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.tag;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.title.length * 3;
+  bytesCount += 3 + object.token.length * 3;
+  {
+    final value = object.uploader;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.url;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  return bytesCount;
 }
 
-List<IsarLinkBase<dynamic>> _galleryTaskGetLinks(GalleryTask object) {
-  return [];
-}
-
-void _galleryTaskSerializeNative(
-    IsarCollection<GalleryTask> collection,
-    IsarCObject cObj,
-    GalleryTask object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
-  IsarUint8List? category$Bytes;
-  final category$Value = object.category;
-  if (category$Value != null) {
-    category$Bytes = IsarBinaryWriter.utf8Encoder.convert(category$Value);
-  }
-  IsarUint8List? coverImage$Bytes;
-  final coverImage$Value = object.coverImage;
-  if (coverImage$Value != null) {
-    coverImage$Bytes = IsarBinaryWriter.utf8Encoder.convert(coverImage$Value);
-  }
-  IsarUint8List? coverUrl$Bytes;
-  final coverUrl$Value = object.coverUrl;
-  if (coverUrl$Value != null) {
-    coverUrl$Bytes = IsarBinaryWriter.utf8Encoder.convert(coverUrl$Value);
-  }
-  IsarUint8List? dirPath$Bytes;
-  final dirPath$Value = object.dirPath;
-  if (dirPath$Value != null) {
-    dirPath$Bytes = IsarBinaryWriter.utf8Encoder.convert(dirPath$Value);
-  }
-  IsarUint8List? jsonString$Bytes;
-  final jsonString$Value = object.jsonString;
-  if (jsonString$Value != null) {
-    jsonString$Bytes = IsarBinaryWriter.utf8Encoder.convert(jsonString$Value);
-  }
-  IsarUint8List? realDirPath$Bytes;
-  final realDirPath$Value = object.realDirPath;
-  if (realDirPath$Value != null) {
-    realDirPath$Bytes = IsarBinaryWriter.utf8Encoder.convert(realDirPath$Value);
-  }
-  IsarUint8List? tag$Bytes;
-  final tag$Value = object.tag;
-  if (tag$Value != null) {
-    tag$Bytes = IsarBinaryWriter.utf8Encoder.convert(tag$Value);
-  }
-  final title$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.title);
-  final token$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.token);
-  IsarUint8List? uploader$Bytes;
-  final uploader$Value = object.uploader;
-  if (uploader$Value != null) {
-    uploader$Bytes = IsarBinaryWriter.utf8Encoder.convert(uploader$Value);
-  }
-  IsarUint8List? url$Bytes;
-  final url$Value = object.url;
-  if (url$Value != null) {
-    url$Bytes = IsarBinaryWriter.utf8Encoder.convert(url$Value);
-  }
-  final size = (staticSize +
-      (category$Bytes?.length ?? 0) +
-      (coverImage$Bytes?.length ?? 0) +
-      (coverUrl$Bytes?.length ?? 0) +
-      (dirPath$Bytes?.length ?? 0) +
-      (jsonString$Bytes?.length ?? 0) +
-      (realDirPath$Bytes?.length ?? 0) +
-      (tag$Bytes?.length ?? 0) +
-      (title$Bytes.length) +
-      (token$Bytes.length) +
-      (uploader$Bytes?.length ?? 0) +
-      (url$Bytes?.length ?? 0)) as int;
-  cObj.buffer = alloc(size);
-  cObj.buffer_length = size;
-
-  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
-  final writer = IsarBinaryWriter(buffer, staticSize);
+void _galleryTaskSerialize(
+  GalleryTask object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   writer.writeLong(offsets[0], object.addTime);
-  writer.writeBytes(offsets[1], category$Bytes);
+  writer.writeString(offsets[1], object.category);
   writer.writeLong(offsets[2], object.completCount);
-  writer.writeBytes(offsets[3], coverImage$Bytes);
-  writer.writeBytes(offsets[4], coverUrl$Bytes);
-  writer.writeBytes(offsets[5], dirPath$Bytes);
+  writer.writeString(offsets[3], object.coverImage);
+  writer.writeString(offsets[4], object.coverUrl);
+  writer.writeString(offsets[5], object.dirPath);
   writer.writeBool(offsets[6], object.downloadOrigImage);
   writer.writeLong(offsets[7], object.fileCount);
-  writer.writeBytes(offsets[8], jsonString$Bytes);
+  writer.writeString(offsets[8], object.jsonString);
   writer.writeDouble(offsets[9], object.rating);
-  writer.writeBytes(offsets[10], realDirPath$Bytes);
+  writer.writeString(offsets[10], object.realDirPath);
   writer.writeLong(offsets[11], object.status);
-  writer.writeBytes(offsets[12], tag$Bytes);
-  writer.writeBytes(offsets[13], title$Bytes);
-  writer.writeBytes(offsets[14], token$Bytes);
-  writer.writeBytes(offsets[15], uploader$Bytes);
-  writer.writeBytes(offsets[16], url$Bytes);
+  writer.writeString(offsets[12], object.tag);
+  writer.writeString(offsets[13], object.title);
+  writer.writeString(offsets[14], object.token);
+  writer.writeString(offsets[15], object.uploader);
+  writer.writeString(offsets[16], object.url);
 }
 
-GalleryTask _galleryTaskDeserializeNative(
-    IsarCollection<GalleryTask> collection,
-    int id,
-    IsarBinaryReader reader,
-    List<int> offsets) {
+GalleryTask _galleryTaskDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = GalleryTask(
     addTime: reader.readLongOrNull(offsets[0]),
     category: reader.readStringOrNull(offsets[1]),
@@ -418,11 +466,13 @@ GalleryTask _galleryTaskDeserializeNative(
   return object;
 }
 
-P _galleryTaskDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
-  switch (propertyIndex) {
-    case -1:
-      return id as P;
+P _galleryTaskDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
@@ -458,107 +508,20 @@ P _galleryTaskDeserializePropNative<P>(
     case 16:
       return (reader.readStringOrNull(offset)) as P;
     default:
-      throw 'Illegal propertyIndex';
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Object _galleryTaskSerializeWeb(
-    IsarCollection<GalleryTask> collection, GalleryTask object) {
-  final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(jsObj, 'addTime', object.addTime);
-  IsarNative.jsObjectSet(jsObj, 'category', object.category);
-  IsarNative.jsObjectSet(jsObj, 'completCount', object.completCount);
-  IsarNative.jsObjectSet(jsObj, 'coverImage', object.coverImage);
-  IsarNative.jsObjectSet(jsObj, 'coverUrl', object.coverUrl);
-  IsarNative.jsObjectSet(jsObj, 'dirPath', object.dirPath);
-  IsarNative.jsObjectSet(jsObj, 'downloadOrigImage', object.downloadOrigImage);
-  IsarNative.jsObjectSet(jsObj, 'fileCount', object.fileCount);
-  IsarNative.jsObjectSet(jsObj, 'gid', object.gid);
-  IsarNative.jsObjectSet(jsObj, 'jsonString', object.jsonString);
-  IsarNative.jsObjectSet(jsObj, 'rating', object.rating);
-  IsarNative.jsObjectSet(jsObj, 'realDirPath', object.realDirPath);
-  IsarNative.jsObjectSet(jsObj, 'status', object.status);
-  IsarNative.jsObjectSet(jsObj, 'tag', object.tag);
-  IsarNative.jsObjectSet(jsObj, 'title', object.title);
-  IsarNative.jsObjectSet(jsObj, 'token', object.token);
-  IsarNative.jsObjectSet(jsObj, 'uploader', object.uploader);
-  IsarNative.jsObjectSet(jsObj, 'url', object.url);
-  return jsObj;
+Id _galleryTaskGetId(GalleryTask object) {
+  return object.gid;
 }
 
-GalleryTask _galleryTaskDeserializeWeb(
-    IsarCollection<GalleryTask> collection, Object jsObj) {
-  final object = GalleryTask(
-    addTime: IsarNative.jsObjectGet(jsObj, 'addTime'),
-    category: IsarNative.jsObjectGet(jsObj, 'category'),
-    completCount: IsarNative.jsObjectGet(jsObj, 'completCount'),
-    coverImage: IsarNative.jsObjectGet(jsObj, 'coverImage'),
-    coverUrl: IsarNative.jsObjectGet(jsObj, 'coverUrl'),
-    dirPath: IsarNative.jsObjectGet(jsObj, 'dirPath'),
-    downloadOrigImage: IsarNative.jsObjectGet(jsObj, 'downloadOrigImage'),
-    fileCount: IsarNative.jsObjectGet(jsObj, 'fileCount') ??
-        (double.negativeInfinity as int),
-    gid: IsarNative.jsObjectGet(jsObj, 'gid') ??
-        (double.negativeInfinity as int),
-    jsonString: IsarNative.jsObjectGet(jsObj, 'jsonString'),
-    rating: IsarNative.jsObjectGet(jsObj, 'rating'),
-    status: IsarNative.jsObjectGet(jsObj, 'status'),
-    tag: IsarNative.jsObjectGet(jsObj, 'tag'),
-    title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
-    token: IsarNative.jsObjectGet(jsObj, 'token') ?? '',
-    uploader: IsarNative.jsObjectGet(jsObj, 'uploader'),
-    url: IsarNative.jsObjectGet(jsObj, 'url'),
-  );
-  return object;
+List<IsarLinkBase<dynamic>> _galleryTaskGetLinks(GalleryTask object) {
+  return [];
 }
 
-P _galleryTaskDeserializePropWeb<P>(Object jsObj, String propertyName) {
-  switch (propertyName) {
-    case 'addTime':
-      return (IsarNative.jsObjectGet(jsObj, 'addTime')) as P;
-    case 'category':
-      return (IsarNative.jsObjectGet(jsObj, 'category')) as P;
-    case 'completCount':
-      return (IsarNative.jsObjectGet(jsObj, 'completCount')) as P;
-    case 'coverImage':
-      return (IsarNative.jsObjectGet(jsObj, 'coverImage')) as P;
-    case 'coverUrl':
-      return (IsarNative.jsObjectGet(jsObj, 'coverUrl')) as P;
-    case 'dirPath':
-      return (IsarNative.jsObjectGet(jsObj, 'dirPath')) as P;
-    case 'downloadOrigImage':
-      return (IsarNative.jsObjectGet(jsObj, 'downloadOrigImage')) as P;
-    case 'fileCount':
-      return (IsarNative.jsObjectGet(jsObj, 'fileCount') ??
-          (double.negativeInfinity as int)) as P;
-    case 'gid':
-      return (IsarNative.jsObjectGet(jsObj, 'gid') ??
-          (double.negativeInfinity as int)) as P;
-    case 'jsonString':
-      return (IsarNative.jsObjectGet(jsObj, 'jsonString')) as P;
-    case 'rating':
-      return (IsarNative.jsObjectGet(jsObj, 'rating')) as P;
-    case 'realDirPath':
-      return (IsarNative.jsObjectGet(jsObj, 'realDirPath')) as P;
-    case 'status':
-      return (IsarNative.jsObjectGet(jsObj, 'status')) as P;
-    case 'tag':
-      return (IsarNative.jsObjectGet(jsObj, 'tag')) as P;
-    case 'title':
-      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
-    case 'token':
-      return (IsarNative.jsObjectGet(jsObj, 'token') ?? '') as P;
-    case 'uploader':
-      return (IsarNative.jsObjectGet(jsObj, 'uploader')) as P;
-    case 'url':
-      return (IsarNative.jsObjectGet(jsObj, 'url')) as P;
-    default:
-      throw 'Illegal propertyName';
-  }
-}
-
-void _galleryTaskAttachLinks(
-    IsarCollection<dynamic> col, int id, GalleryTask object) {}
+void _galleryTaskAttach(
+    IsarCollection<dynamic> col, Id id, GalleryTask object) {}
 
 extension GalleryTaskQueryWhereSort
     on QueryBuilder<GalleryTask, GalleryTask, QWhere> {
@@ -571,20 +534,17 @@ extension GalleryTaskQueryWhereSort
 
 extension GalleryTaskQueryWhere
     on QueryBuilder<GalleryTask, GalleryTask, QWhereClause> {
-  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidEqualTo(
-      int gid) {
+  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidEqualTo(Id gid) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: gid,
-        includeLower: true,
         upper: gid,
-        includeUpper: true,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidNotEqualTo(
-      int gid) {
+      Id gid) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -607,7 +567,7 @@ extension GalleryTaskQueryWhere
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidGreaterThan(
-      int gid,
+      Id gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -616,7 +576,7 @@ extension GalleryTaskQueryWhere
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidLessThan(int gid,
+  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidLessThan(Id gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -626,8 +586,8 @@ extension GalleryTaskQueryWhere
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidBetween(
-    int lowerGid,
-    int upperGid, {
+    Id lowerGid,
+    Id upperGid, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -648,7 +608,16 @@ extension GalleryTaskQueryFilter
       addTimeIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'addTime',
+        property: r'addTime',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      addTimeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'addTime',
       ));
     });
   }
@@ -657,7 +626,7 @@ extension GalleryTaskQueryFilter
       int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'addTime',
+        property: r'addTime',
         value: value,
       ));
     });
@@ -671,7 +640,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'addTime',
+        property: r'addTime',
         value: value,
       ));
     });
@@ -684,7 +653,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'addTime',
+        property: r'addTime',
         value: value,
       ));
     });
@@ -698,7 +667,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'addTime',
+        property: r'addTime',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -711,7 +680,16 @@ extension GalleryTaskQueryFilter
       categoryIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'category',
+        property: r'category',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      categoryIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'category',
       ));
     });
   }
@@ -722,7 +700,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'category',
+        property: r'category',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -732,13 +710,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       categoryGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'category',
+        property: r'category',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -748,13 +726,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       categoryLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'category',
+        property: r'category',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -764,13 +742,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> categoryBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'category',
+        property: r'category',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -787,7 +765,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'category',
+        property: r'category',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -801,7 +779,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'category',
+        property: r'category',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -812,7 +790,7 @@ extension GalleryTaskQueryFilter
       categoryContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'category',
+        property: r'category',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -824,9 +802,29 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'category',
+        property: r'category',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      categoryIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'category',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      categoryIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'category',
+        value: '',
       ));
     });
   }
@@ -835,7 +833,16 @@ extension GalleryTaskQueryFilter
       completCountIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'completCount',
+        property: r'completCount',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      completCountIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'completCount',
       ));
     });
   }
@@ -844,7 +851,7 @@ extension GalleryTaskQueryFilter
       completCountEqualTo(int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'completCount',
+        property: r'completCount',
         value: value,
       ));
     });
@@ -858,7 +865,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'completCount',
+        property: r'completCount',
         value: value,
       ));
     });
@@ -872,7 +879,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'completCount',
+        property: r'completCount',
         value: value,
       ));
     });
@@ -887,7 +894,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'completCount',
+        property: r'completCount',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -900,7 +907,16 @@ extension GalleryTaskQueryFilter
       coverImageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'coverImage',
+        property: r'coverImage',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      coverImageIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'coverImage',
       ));
     });
   }
@@ -912,7 +928,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'coverImage',
+        property: r'coverImage',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -922,13 +938,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverImageGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'coverImage',
+        property: r'coverImage',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -938,13 +954,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverImageLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'coverImage',
+        property: r'coverImage',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -955,13 +971,13 @@ extension GalleryTaskQueryFilter
       coverImageBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'coverImage',
+        property: r'coverImage',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -978,7 +994,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'coverImage',
+        property: r'coverImage',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -992,7 +1008,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'coverImage',
+        property: r'coverImage',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1003,7 +1019,7 @@ extension GalleryTaskQueryFilter
       coverImageContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'coverImage',
+        property: r'coverImage',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1014,9 +1030,29 @@ extension GalleryTaskQueryFilter
       coverImageMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'coverImage',
+        property: r'coverImage',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      coverImageIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'coverImage',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      coverImageIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'coverImage',
+        value: '',
       ));
     });
   }
@@ -1025,7 +1061,16 @@ extension GalleryTaskQueryFilter
       coverUrlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'coverUrl',
+        property: r'coverUrl',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      coverUrlIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'coverUrl',
       ));
     });
   }
@@ -1036,7 +1081,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'coverUrl',
+        property: r'coverUrl',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1046,13 +1091,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverUrlGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'coverUrl',
+        property: r'coverUrl',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1062,13 +1107,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverUrlLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'coverUrl',
+        property: r'coverUrl',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1078,13 +1123,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> coverUrlBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'coverUrl',
+        property: r'coverUrl',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1101,7 +1146,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'coverUrl',
+        property: r'coverUrl',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1115,7 +1160,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'coverUrl',
+        property: r'coverUrl',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1126,7 +1171,7 @@ extension GalleryTaskQueryFilter
       coverUrlContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'coverUrl',
+        property: r'coverUrl',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1138,9 +1183,29 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'coverUrl',
+        property: r'coverUrl',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      coverUrlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'coverUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      coverUrlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'coverUrl',
+        value: '',
       ));
     });
   }
@@ -1149,7 +1214,16 @@ extension GalleryTaskQueryFilter
       dirPathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'dirPath',
+        property: r'dirPath',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      dirPathIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'dirPath',
       ));
     });
   }
@@ -1160,7 +1234,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'dirPath',
+        property: r'dirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1170,13 +1244,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       dirPathGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'dirPath',
+        property: r'dirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1185,13 +1259,13 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> dirPathLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'dirPath',
+        property: r'dirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1201,13 +1275,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> dirPathBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'dirPath',
+        property: r'dirPath',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1224,7 +1298,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'dirPath',
+        property: r'dirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1237,7 +1311,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'dirPath',
+        property: r'dirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1249,7 +1323,7 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'dirPath',
+        property: r'dirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1261,9 +1335,29 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'dirPath',
+        property: r'dirPath',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      dirPathIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'dirPath',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      dirPathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'dirPath',
+        value: '',
       ));
     });
   }
@@ -1272,7 +1366,16 @@ extension GalleryTaskQueryFilter
       downloadOrigImageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'downloadOrigImage',
+        property: r'downloadOrigImage',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      downloadOrigImageIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'downloadOrigImage',
       ));
     });
   }
@@ -1281,7 +1384,7 @@ extension GalleryTaskQueryFilter
       downloadOrigImageEqualTo(bool? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'downloadOrigImage',
+        property: r'downloadOrigImage',
         value: value,
       ));
     });
@@ -1291,7 +1394,7 @@ extension GalleryTaskQueryFilter
       fileCountEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'fileCount',
+        property: r'fileCount',
         value: value,
       ));
     });
@@ -1305,7 +1408,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'fileCount',
+        property: r'fileCount',
         value: value,
       ));
     });
@@ -1319,7 +1422,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'fileCount',
+        property: r'fileCount',
         value: value,
       ));
     });
@@ -1334,7 +1437,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'fileCount',
+        property: r'fileCount',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1344,50 +1447,50 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidEqualTo(
-      int value) {
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'gid',
+        property: r'gid',
         value: value,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidGreaterThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'gid',
+        property: r'gid',
         value: value,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidLessThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'gid',
+        property: r'gid',
         value: value,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidBetween(
-    int lower,
-    int upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'gid',
+        property: r'gid',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1400,7 +1503,16 @@ extension GalleryTaskQueryFilter
       jsonStringIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'jsonString',
+        property: r'jsonString',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      jsonStringIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'jsonString',
       ));
     });
   }
@@ -1412,7 +1524,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'jsonString',
+        property: r'jsonString',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1422,13 +1534,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       jsonStringGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'jsonString',
+        property: r'jsonString',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1438,13 +1550,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       jsonStringLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'jsonString',
+        property: r'jsonString',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1455,13 +1567,13 @@ extension GalleryTaskQueryFilter
       jsonStringBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'jsonString',
+        property: r'jsonString',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1478,7 +1590,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'jsonString',
+        property: r'jsonString',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1492,7 +1604,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'jsonString',
+        property: r'jsonString',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1503,7 +1615,7 @@ extension GalleryTaskQueryFilter
       jsonStringContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'jsonString',
+        property: r'jsonString',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1514,9 +1626,29 @@ extension GalleryTaskQueryFilter
       jsonStringMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'jsonString',
+        property: r'jsonString',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      jsonStringIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'jsonString',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      jsonStringIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'jsonString',
+        value: '',
       ));
     });
   }
@@ -1524,42 +1656,79 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'rating',
+        property: r'rating',
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      ratingGreaterThan(double? value) {
+      ratingIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'rating',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingEqualTo(
+    double? value, {
+    double epsilon = Query.epsilon,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'rating',
+        value: value,
+        epsilon: epsilon,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      ratingGreaterThan(
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        include: false,
-        property: 'rating',
+        include: include,
+        property: r'rating',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingLessThan(
-      double? value) {
+    double? value, {
+    bool include = false,
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
-        include: false,
-        property: 'rating',
+        include: include,
+        property: r'rating',
         value: value,
+        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingBetween(
-      double? lower, double? upper) {
+    double? lower,
+    double? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    double epsilon = Query.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'rating',
+        property: r'rating',
         lower: lower,
-        includeLower: false,
+        includeLower: includeLower,
         upper: upper,
-        includeUpper: false,
+        includeUpper: includeUpper,
+        epsilon: epsilon,
       ));
     });
   }
@@ -1568,7 +1737,16 @@ extension GalleryTaskQueryFilter
       realDirPathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'realDirPath',
+        property: r'realDirPath',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      realDirPathIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'realDirPath',
       ));
     });
   }
@@ -1580,7 +1758,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'realDirPath',
+        property: r'realDirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1590,13 +1768,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       realDirPathGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'realDirPath',
+        property: r'realDirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1606,13 +1784,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       realDirPathLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'realDirPath',
+        property: r'realDirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1623,13 +1801,13 @@ extension GalleryTaskQueryFilter
       realDirPathBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'realDirPath',
+        property: r'realDirPath',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1646,7 +1824,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'realDirPath',
+        property: r'realDirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1660,7 +1838,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'realDirPath',
+        property: r'realDirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1671,7 +1849,7 @@ extension GalleryTaskQueryFilter
       realDirPathContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'realDirPath',
+        property: r'realDirPath',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1682,9 +1860,29 @@ extension GalleryTaskQueryFilter
       realDirPathMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'realDirPath',
+        property: r'realDirPath',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      realDirPathIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'realDirPath',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      realDirPathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'realDirPath',
+        value: '',
       ));
     });
   }
@@ -1692,7 +1890,16 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> statusIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'status',
+        property: r'status',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      statusIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'status',
       ));
     });
   }
@@ -1701,7 +1908,7 @@ extension GalleryTaskQueryFilter
       int? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'status',
+        property: r'status',
         value: value,
       ));
     });
@@ -1715,7 +1922,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'status',
+        property: r'status',
         value: value,
       ));
     });
@@ -1728,7 +1935,7 @@ extension GalleryTaskQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'status',
+        property: r'status',
         value: value,
       ));
     });
@@ -1742,7 +1949,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'status',
+        property: r'status',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1754,7 +1961,15 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'tag',
+        property: r'tag',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'tag',
       ));
     });
   }
@@ -1765,7 +1980,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'tag',
+        property: r'tag',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1774,13 +1989,13 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'tag',
+        property: r'tag',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1789,13 +2004,13 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'tag',
+        property: r'tag',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1805,13 +2020,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'tag',
+        property: r'tag',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1827,7 +2042,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'tag',
+        property: r'tag',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1840,7 +2055,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'tag',
+        property: r'tag',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1852,7 +2067,7 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'tag',
+        property: r'tag',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1864,9 +2079,28 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'tag',
+        property: r'tag',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tag',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      tagIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'tag',
+        value: '',
       ));
     });
   }
@@ -1877,7 +2111,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'title',
+        property: r'title',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1887,13 +2121,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       titleGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'title',
+        property: r'title',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1902,13 +2136,13 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> titleLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'title',
+        property: r'title',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1918,13 +2152,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'title',
+        property: r'title',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1940,7 +2174,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'title',
+        property: r'title',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1953,7 +2187,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'title',
+        property: r'title',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1965,7 +2199,7 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'title',
+        property: r'title',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1977,9 +2211,28 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'title',
+        property: r'title',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> titleIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'title',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      titleIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'title',
+        value: '',
       ));
     });
   }
@@ -1990,7 +2243,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'token',
+        property: r'token',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2000,13 +2253,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       tokenGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'token',
+        property: r'token',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2015,13 +2268,13 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tokenLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'token',
+        property: r'token',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2031,13 +2284,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tokenBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'token',
+        property: r'token',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -2053,7 +2306,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'token',
+        property: r'token',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2066,7 +2319,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'token',
+        property: r'token',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2078,7 +2331,7 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'token',
+        property: r'token',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2090,9 +2343,28 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'token',
+        property: r'token',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tokenIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'token',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      tokenIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'token',
+        value: '',
       ));
     });
   }
@@ -2101,7 +2373,16 @@ extension GalleryTaskQueryFilter
       uploaderIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'uploader',
+        property: r'uploader',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      uploaderIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'uploader',
       ));
     });
   }
@@ -2112,7 +2393,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'uploader',
+        property: r'uploader',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2122,13 +2403,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       uploaderGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'uploader',
+        property: r'uploader',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2138,13 +2419,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       uploaderLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'uploader',
+        property: r'uploader',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2154,13 +2435,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> uploaderBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'uploader',
+        property: r'uploader',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -2177,7 +2458,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'uploader',
+        property: r'uploader',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2191,7 +2472,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'uploader',
+        property: r'uploader',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2202,7 +2483,7 @@ extension GalleryTaskQueryFilter
       uploaderContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'uploader',
+        property: r'uploader',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2214,9 +2495,29 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'uploader',
+        property: r'uploader',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      uploaderIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'uploader',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      uploaderIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'uploader',
+        value: '',
       ));
     });
   }
@@ -2224,7 +2525,15 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'url',
+        property: r'url',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'url',
       ));
     });
   }
@@ -2235,7 +2544,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'url',
+        property: r'url',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2244,13 +2553,13 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'url',
+        property: r'url',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2259,13 +2568,13 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'url',
+        property: r'url',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2275,13 +2584,13 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'url',
+        property: r'url',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -2297,7 +2606,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'url',
+        property: r'url',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2310,7 +2619,7 @@ extension GalleryTaskQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'url',
+        property: r'url',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2322,7 +2631,7 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'url',
+        property: r'url',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -2334,445 +2643,467 @@ extension GalleryTaskQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'url',
+        property: r'url',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'url',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      urlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'url',
+        value: '',
+      ));
+    });
+  }
 }
+
+extension GalleryTaskQueryObject
+    on QueryBuilder<GalleryTask, GalleryTask, QFilterCondition> {}
 
 extension GalleryTaskQueryLinks
     on QueryBuilder<GalleryTask, GalleryTask, QFilterCondition> {}
 
-extension GalleryTaskQueryWhereSortBy
+extension GalleryTaskQuerySortBy
     on QueryBuilder<GalleryTask, GalleryTask, QSortBy> {
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByAddTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('addTime', Sort.asc);
+      return query.addSortBy(r'addTime', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByAddTimeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('addTime', Sort.desc);
+      return query.addSortBy(r'addTime', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByCategory() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('category', Sort.asc);
+      return query.addSortBy(r'category', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByCategoryDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('category', Sort.desc);
+      return query.addSortBy(r'category', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByCompletCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('completCount', Sort.asc);
+      return query.addSortBy(r'completCount', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy>
       sortByCompletCountDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('completCount', Sort.desc);
+      return query.addSortBy(r'completCount', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByCoverImage() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverImage', Sort.asc);
+      return query.addSortBy(r'coverImage', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByCoverImageDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverImage', Sort.desc);
+      return query.addSortBy(r'coverImage', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByCoverUrl() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverUrl', Sort.asc);
+      return query.addSortBy(r'coverUrl', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByCoverUrlDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverUrl', Sort.desc);
+      return query.addSortBy(r'coverUrl', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByDirPath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('dirPath', Sort.asc);
+      return query.addSortBy(r'dirPath', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByDirPathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('dirPath', Sort.desc);
+      return query.addSortBy(r'dirPath', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy>
       sortByDownloadOrigImage() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('downloadOrigImage', Sort.asc);
+      return query.addSortBy(r'downloadOrigImage', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy>
       sortByDownloadOrigImageDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('downloadOrigImage', Sort.desc);
+      return query.addSortBy(r'downloadOrigImage', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByFileCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('fileCount', Sort.asc);
+      return query.addSortBy(r'fileCount', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByFileCountDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('fileCount', Sort.desc);
+      return query.addSortBy(r'fileCount', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByJsonString() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('jsonString', Sort.asc);
+      return query.addSortBy(r'jsonString', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByJsonStringDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('jsonString', Sort.desc);
+      return query.addSortBy(r'jsonString', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByRating() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('rating', Sort.asc);
+      return query.addSortBy(r'rating', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByRatingDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('rating', Sort.desc);
+      return query.addSortBy(r'rating', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByRealDirPath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('realDirPath', Sort.asc);
+      return query.addSortBy(r'realDirPath', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByRealDirPathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('realDirPath', Sort.desc);
+      return query.addSortBy(r'realDirPath', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByStatus() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('status', Sort.asc);
+      return query.addSortBy(r'status', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('status', Sort.desc);
+      return query.addSortBy(r'status', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByTag() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('tag', Sort.asc);
+      return query.addSortBy(r'tag', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByTagDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('tag', Sort.desc);
+      return query.addSortBy(r'tag', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByTitle() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('title', Sort.asc);
+      return query.addSortBy(r'title', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('title', Sort.desc);
+      return query.addSortBy(r'title', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByToken() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('token', Sort.asc);
+      return query.addSortBy(r'token', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByTokenDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('token', Sort.desc);
+      return query.addSortBy(r'token', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByUploader() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('uploader', Sort.asc);
+      return query.addSortBy(r'uploader', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByUploaderDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('uploader', Sort.desc);
+      return query.addSortBy(r'uploader', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByUrl() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('url', Sort.asc);
+      return query.addSortBy(r'url', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByUrlDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('url', Sort.desc);
+      return query.addSortBy(r'url', Sort.desc);
     });
   }
 }
 
-extension GalleryTaskQueryWhereSortThenBy
+extension GalleryTaskQuerySortThenBy
     on QueryBuilder<GalleryTask, GalleryTask, QSortThenBy> {
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByAddTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('addTime', Sort.asc);
+      return query.addSortBy(r'addTime', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByAddTimeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('addTime', Sort.desc);
+      return query.addSortBy(r'addTime', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByCategory() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('category', Sort.asc);
+      return query.addSortBy(r'category', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByCategoryDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('category', Sort.desc);
+      return query.addSortBy(r'category', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByCompletCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('completCount', Sort.asc);
+      return query.addSortBy(r'completCount', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy>
       thenByCompletCountDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('completCount', Sort.desc);
+      return query.addSortBy(r'completCount', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByCoverImage() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverImage', Sort.asc);
+      return query.addSortBy(r'coverImage', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByCoverImageDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverImage', Sort.desc);
+      return query.addSortBy(r'coverImage', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByCoverUrl() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverUrl', Sort.asc);
+      return query.addSortBy(r'coverUrl', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByCoverUrlDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('coverUrl', Sort.desc);
+      return query.addSortBy(r'coverUrl', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByDirPath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('dirPath', Sort.asc);
+      return query.addSortBy(r'dirPath', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByDirPathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('dirPath', Sort.desc);
+      return query.addSortBy(r'dirPath', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy>
       thenByDownloadOrigImage() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('downloadOrigImage', Sort.asc);
+      return query.addSortBy(r'downloadOrigImage', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy>
       thenByDownloadOrigImageDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('downloadOrigImage', Sort.desc);
+      return query.addSortBy(r'downloadOrigImage', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByFileCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('fileCount', Sort.asc);
+      return query.addSortBy(r'fileCount', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByFileCountDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('fileCount', Sort.desc);
+      return query.addSortBy(r'fileCount', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByGid() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('gid', Sort.asc);
+      return query.addSortBy(r'gid', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByGidDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('gid', Sort.desc);
+      return query.addSortBy(r'gid', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByJsonString() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('jsonString', Sort.asc);
+      return query.addSortBy(r'jsonString', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByJsonStringDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('jsonString', Sort.desc);
+      return query.addSortBy(r'jsonString', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByRating() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('rating', Sort.asc);
+      return query.addSortBy(r'rating', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByRatingDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('rating', Sort.desc);
+      return query.addSortBy(r'rating', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByRealDirPath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('realDirPath', Sort.asc);
+      return query.addSortBy(r'realDirPath', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByRealDirPathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('realDirPath', Sort.desc);
+      return query.addSortBy(r'realDirPath', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByStatus() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('status', Sort.asc);
+      return query.addSortBy(r'status', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByStatusDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('status', Sort.desc);
+      return query.addSortBy(r'status', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByTag() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('tag', Sort.asc);
+      return query.addSortBy(r'tag', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByTagDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('tag', Sort.desc);
+      return query.addSortBy(r'tag', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByTitle() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('title', Sort.asc);
+      return query.addSortBy(r'title', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByTitleDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('title', Sort.desc);
+      return query.addSortBy(r'title', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByToken() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('token', Sort.asc);
+      return query.addSortBy(r'token', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByTokenDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('token', Sort.desc);
+      return query.addSortBy(r'token', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByUploader() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('uploader', Sort.asc);
+      return query.addSortBy(r'uploader', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByUploaderDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('uploader', Sort.desc);
+      return query.addSortBy(r'uploader', Sort.desc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByUrl() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('url', Sort.asc);
+      return query.addSortBy(r'url', Sort.asc);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByUrlDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('url', Sort.desc);
+      return query.addSortBy(r'url', Sort.desc);
     });
   }
 }
@@ -2781,227 +3112,227 @@ extension GalleryTaskQueryWhereDistinct
     on QueryBuilder<GalleryTask, GalleryTask, QDistinct> {
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByAddTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('addTime');
+      return query.addDistinctBy(r'addTime');
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByCategory(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('category', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'category', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByCompletCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('completCount');
+      return query.addDistinctBy(r'completCount');
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByCoverImage(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('coverImage', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'coverImage', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByCoverUrl(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('coverUrl', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'coverUrl', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByDirPath(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('dirPath', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'dirPath', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct>
       distinctByDownloadOrigImage() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('downloadOrigImage');
+      return query.addDistinctBy(r'downloadOrigImage');
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByFileCount() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('fileCount');
+      return query.addDistinctBy(r'fileCount');
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByJsonString(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('jsonString', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'jsonString', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByRating() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('rating');
+      return query.addDistinctBy(r'rating');
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByRealDirPath(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('realDirPath', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'realDirPath', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByStatus() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('status');
+      return query.addDistinctBy(r'status');
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByTag(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('tag', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'tag', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('title', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByToken(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('token', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'token', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByUploader(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('uploader', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'uploader', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByUrl(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('url', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'url', caseSensitive: caseSensitive);
     });
   }
 }
 
 extension GalleryTaskQueryProperty
     on QueryBuilder<GalleryTask, GalleryTask, QQueryProperty> {
+  QueryBuilder<GalleryTask, int, QQueryOperations> gidProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'gid');
+    });
+  }
+
   QueryBuilder<GalleryTask, int?, QQueryOperations> addTimeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('addTime');
+      return query.addPropertyName(r'addTime');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> categoryProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('category');
+      return query.addPropertyName(r'category');
     });
   }
 
   QueryBuilder<GalleryTask, int?, QQueryOperations> completCountProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('completCount');
+      return query.addPropertyName(r'completCount');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> coverImageProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('coverImage');
+      return query.addPropertyName(r'coverImage');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> coverUrlProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('coverUrl');
+      return query.addPropertyName(r'coverUrl');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> dirPathProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('dirPath');
+      return query.addPropertyName(r'dirPath');
     });
   }
 
   QueryBuilder<GalleryTask, bool?, QQueryOperations>
       downloadOrigImageProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('downloadOrigImage');
+      return query.addPropertyName(r'downloadOrigImage');
     });
   }
 
   QueryBuilder<GalleryTask, int, QQueryOperations> fileCountProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('fileCount');
-    });
-  }
-
-  QueryBuilder<GalleryTask, int, QQueryOperations> gidProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('gid');
+      return query.addPropertyName(r'fileCount');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> jsonStringProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('jsonString');
+      return query.addPropertyName(r'jsonString');
     });
   }
 
   QueryBuilder<GalleryTask, double?, QQueryOperations> ratingProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('rating');
+      return query.addPropertyName(r'rating');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> realDirPathProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('realDirPath');
+      return query.addPropertyName(r'realDirPath');
     });
   }
 
   QueryBuilder<GalleryTask, int?, QQueryOperations> statusProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('status');
+      return query.addPropertyName(r'status');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> tagProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('tag');
+      return query.addPropertyName(r'tag');
     });
   }
 
   QueryBuilder<GalleryTask, String, QQueryOperations> titleProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('title');
+      return query.addPropertyName(r'title');
     });
   }
 
   QueryBuilder<GalleryTask, String, QQueryOperations> tokenProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('token');
+      return query.addPropertyName(r'token');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> uploaderProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('uploader');
+      return query.addPropertyName(r'uploader');
     });
   }
 
   QueryBuilder<GalleryTask, String?, QQueryOperations> urlProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('url');
+      return query.addPropertyName(r'url');
     });
   }
 }

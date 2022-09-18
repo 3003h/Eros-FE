@@ -12,12 +12,12 @@ class TagTranslat {
     this.name,
     this.intro,
     this.links,
-  });
-  int? id;
+  }) : id = Isar.autoIncrement;
+  Id id;
   @Index()
   final String namespace;
+  @Index(composite: [CompositeIndex('namespace')], unique: true, replace: true)
   @Index()
-  @Index(composite: [CompositeIndex('namespace')], unique: true)
   final String key;
   @Index()
   final String? name;

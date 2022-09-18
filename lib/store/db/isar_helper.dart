@@ -78,8 +78,9 @@ class IsarHelper {
 
   Future<void> putAllTagTranslate(List<TagTranslat> tagTranslates,
       {bool replaceOnConflict = true}) async {
+    final tagTranslats = isar.tagTranslats;
     await isar.writeTxn(() async {
-      await isar.tagTranslats.putAll(tagTranslates);
+      await tagTranslats.putAll(tagTranslates);
     });
   }
 

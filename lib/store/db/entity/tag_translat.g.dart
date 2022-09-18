@@ -104,118 +104,162 @@ extension $TagTranslatCopyWith on TagTranslat {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names,
-// constant_identifier_names, invalid_use_of_protected_member,
-// unnecessary_cast, unused_local_variable,
-// no_leading_underscores_for_local_identifiers,
-// inference_failure_on_function_invocation, prefer_const_constructors
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
 extension GetTagTranslatCollection on Isar {
-  IsarCollection<TagTranslat> get tagTranslats => getCollection();
+  IsarCollection<TagTranslat> get tagTranslats => this.collection();
 }
 
 const TagTranslatSchema = CollectionSchema(
-  name: 'TagTranslat',
-  schema:
-      '{"name":"TagTranslat","idName":"id","properties":[{"name":"intro","type":"String"},{"name":"key","type":"String"},{"name":"links","type":"String"},{"name":"name","type":"String"},{"name":"namespace","type":"String"}],"indexes":[{"name":"key","unique":false,"replace":false,"properties":[{"name":"key","type":"Hash","caseSensitive":true}]},{"name":"key_namespace","unique":true,"replace":false,"properties":[{"name":"key","type":"Hash","caseSensitive":true},{"name":"namespace","type":"Hash","caseSensitive":true}]},{"name":"name","unique":false,"replace":false,"properties":[{"name":"name","type":"Hash","caseSensitive":true}]},{"name":"namespace","unique":false,"replace":false,"properties":[{"name":"namespace","type":"Hash","caseSensitive":true}]}],"links":[]}',
-  idName: 'id',
-  propertyIds: {'intro': 0, 'key': 1, 'links': 2, 'name': 3, 'namespace': 4},
-  listProperties: {},
-  indexIds: {'key': 0, 'key_namespace': 1, 'name': 2, 'namespace': 3},
-  indexValueTypes: {
-    'key': [
-      IndexValueType.stringHash,
-    ],
-    'key_namespace': [
-      IndexValueType.stringHash,
-      IndexValueType.stringHash,
-    ],
-    'name': [
-      IndexValueType.stringHash,
-    ],
-    'namespace': [
-      IndexValueType.stringHash,
-    ]
+  name: r'TagTranslat',
+  id: 7186078114411385315,
+  properties: {
+    r'intro': PropertySchema(
+      id: 0,
+      name: r'intro',
+      type: IsarType.string,
+    ),
+    r'key': PropertySchema(
+      id: 1,
+      name: r'key',
+      type: IsarType.string,
+    ),
+    r'links': PropertySchema(
+      id: 2,
+      name: r'links',
+      type: IsarType.string,
+    ),
+    r'name': PropertySchema(
+      id: 3,
+      name: r'name',
+      type: IsarType.string,
+    ),
+    r'namespace': PropertySchema(
+      id: 4,
+      name: r'namespace',
+      type: IsarType.string,
+    )
   },
-  linkIds: {},
-  backlinkLinkNames: {},
+  estimateSize: _tagTranslatEstimateSize,
+  serialize: _tagTranslatSerialize,
+  deserialize: _tagTranslatDeserialize,
+  deserializeProp: _tagTranslatDeserializeProp,
+  idName: r'id',
+  indexes: {
+    r'namespace': IndexSchema(
+      id: 2334977328868235416,
+      name: r'namespace',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'namespace',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    ),
+    r'key_namespace': IndexSchema(
+      id: 237376802137125474,
+      name: r'key_namespace',
+      unique: true,
+      replace: true,
+      properties: [
+        IndexPropertySchema(
+          name: r'key',
+          type: IndexType.hash,
+          caseSensitive: true,
+        ),
+        IndexPropertySchema(
+          name: r'namespace',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    ),
+    r'key': IndexSchema(
+      id: -4906094122524121629,
+      name: r'key',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'key',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    ),
+    r'name': IndexSchema(
+      id: 879695947855722453,
+      name: r'name',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'name',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
+  links: {},
+  embeddedSchemas: {},
   getId: _tagTranslatGetId,
-  setId: _tagTranslatSetId,
   getLinks: _tagTranslatGetLinks,
-  attachLinks: _tagTranslatAttachLinks,
-  serializeNative: _tagTranslatSerializeNative,
-  deserializeNative: _tagTranslatDeserializeNative,
-  deserializePropNative: _tagTranslatDeserializePropNative,
-  serializeWeb: _tagTranslatSerializeWeb,
-  deserializeWeb: _tagTranslatDeserializeWeb,
-  deserializePropWeb: _tagTranslatDeserializePropWeb,
-  version: 4,
+  attach: _tagTranslatAttach,
+  version: '3.0.0',
 );
 
-int? _tagTranslatGetId(TagTranslat object) {
-  if (object.id == Isar.autoIncrement) {
-    return null;
-  } else {
-    return object.id;
+int _tagTranslatEstimateSize(
+  TagTranslat object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  {
+    final value = object.intro;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
   }
+  bytesCount += 3 + object.key.length * 3;
+  {
+    final value = object.links;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.name;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.namespace.length * 3;
+  return bytesCount;
 }
 
-void _tagTranslatSetId(TagTranslat object, int id) {
-  object.id = id;
+void _tagTranslatSerialize(
+  TagTranslat object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.intro);
+  writer.writeString(offsets[1], object.key);
+  writer.writeString(offsets[2], object.links);
+  writer.writeString(offsets[3], object.name);
+  writer.writeString(offsets[4], object.namespace);
 }
 
-List<IsarLinkBase<dynamic>> _tagTranslatGetLinks(TagTranslat object) {
-  return [];
-}
-
-void _tagTranslatSerializeNative(
-    IsarCollection<TagTranslat> collection,
-    IsarCObject cObj,
-    TagTranslat object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
-  IsarUint8List? intro$Bytes;
-  final intro$Value = object.intro;
-  if (intro$Value != null) {
-    intro$Bytes = IsarBinaryWriter.utf8Encoder.convert(intro$Value);
-  }
-  final key$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.key);
-  IsarUint8List? links$Bytes;
-  final links$Value = object.links;
-  if (links$Value != null) {
-    links$Bytes = IsarBinaryWriter.utf8Encoder.convert(links$Value);
-  }
-  IsarUint8List? name$Bytes;
-  final name$Value = object.name;
-  if (name$Value != null) {
-    name$Bytes = IsarBinaryWriter.utf8Encoder.convert(name$Value);
-  }
-  final namespace$Bytes =
-      IsarBinaryWriter.utf8Encoder.convert(object.namespace);
-  final size = (staticSize +
-      (intro$Bytes?.length ?? 0) +
-      (key$Bytes.length) +
-      (links$Bytes?.length ?? 0) +
-      (name$Bytes?.length ?? 0) +
-      (namespace$Bytes.length)) as int;
-  cObj.buffer = alloc(size);
-  cObj.buffer_length = size;
-
-  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
-  final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeBytes(offsets[0], intro$Bytes);
-  writer.writeBytes(offsets[1], key$Bytes);
-  writer.writeBytes(offsets[2], links$Bytes);
-  writer.writeBytes(offsets[3], name$Bytes);
-  writer.writeBytes(offsets[4], namespace$Bytes);
-}
-
-TagTranslat _tagTranslatDeserializeNative(
-    IsarCollection<TagTranslat> collection,
-    int id,
-    IsarBinaryReader reader,
-    List<int> offsets) {
+TagTranslat _tagTranslatDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = TagTranslat(
     intro: reader.readStringOrNull(offsets[0]),
     key: reader.readString(offsets[1]),
@@ -227,11 +271,13 @@ TagTranslat _tagTranslatDeserializeNative(
   return object;
 }
 
-P _tagTranslatDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
-  switch (propertyIndex) {
-    case -1:
-      return id as P;
+P _tagTranslatDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
@@ -243,72 +289,38 @@ P _tagTranslatDeserializePropNative<P>(
     case 4:
       return (reader.readString(offset)) as P;
     default:
-      throw 'Illegal propertyIndex';
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Object _tagTranslatSerializeWeb(
-    IsarCollection<TagTranslat> collection, TagTranslat object) {
-  final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(jsObj, 'id', object.id);
-  IsarNative.jsObjectSet(jsObj, 'intro', object.intro);
-  IsarNative.jsObjectSet(jsObj, 'key', object.key);
-  IsarNative.jsObjectSet(jsObj, 'links', object.links);
-  IsarNative.jsObjectSet(jsObj, 'name', object.name);
-  IsarNative.jsObjectSet(jsObj, 'namespace', object.namespace);
-  return jsObj;
+Id _tagTranslatGetId(TagTranslat object) {
+  return object.id;
 }
 
-TagTranslat _tagTranslatDeserializeWeb(
-    IsarCollection<TagTranslat> collection, Object jsObj) {
-  final object = TagTranslat(
-    intro: IsarNative.jsObjectGet(jsObj, 'intro'),
-    key: IsarNative.jsObjectGet(jsObj, 'key') ?? '',
-    links: IsarNative.jsObjectGet(jsObj, 'links'),
-    name: IsarNative.jsObjectGet(jsObj, 'name'),
-    namespace: IsarNative.jsObjectGet(jsObj, 'namespace') ?? '',
-  );
-  object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  return object;
+List<IsarLinkBase<dynamic>> _tagTranslatGetLinks(TagTranslat object) {
+  return [];
 }
 
-P _tagTranslatDeserializePropWeb<P>(Object jsObj, String propertyName) {
-  switch (propertyName) {
-    case 'id':
-      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
-    case 'intro':
-      return (IsarNative.jsObjectGet(jsObj, 'intro')) as P;
-    case 'key':
-      return (IsarNative.jsObjectGet(jsObj, 'key') ?? '') as P;
-    case 'links':
-      return (IsarNative.jsObjectGet(jsObj, 'links')) as P;
-    case 'name':
-      return (IsarNative.jsObjectGet(jsObj, 'name')) as P;
-    case 'namespace':
-      return (IsarNative.jsObjectGet(jsObj, 'namespace') ?? '') as P;
-    default:
-      throw 'Illegal propertyName';
-  }
+void _tagTranslatAttach(
+    IsarCollection<dynamic> col, Id id, TagTranslat object) {
+  object.id = id;
 }
-
-void _tagTranslatAttachLinks(
-    IsarCollection<dynamic> col, int id, TagTranslat object) {}
 
 extension TagTranslatByIndex on IsarCollection<TagTranslat> {
   Future<TagTranslat?> getByKeyNamespace(String key, String namespace) {
-    return getByIndex('key_namespace', [key, namespace]);
+    return getByIndex(r'key_namespace', [key, namespace]);
   }
 
   TagTranslat? getByKeyNamespaceSync(String key, String namespace) {
-    return getByIndexSync('key_namespace', [key, namespace]);
+    return getByIndexSync(r'key_namespace', [key, namespace]);
   }
 
   Future<bool> deleteByKeyNamespace(String key, String namespace) {
-    return deleteByIndex('key_namespace', [key, namespace]);
+    return deleteByIndex(r'key_namespace', [key, namespace]);
   }
 
   bool deleteByKeyNamespaceSync(String key, String namespace) {
-    return deleteByIndexSync('key_namespace', [key, namespace]);
+    return deleteByIndexSync(r'key_namespace', [key, namespace]);
   }
 
   Future<List<TagTranslat?>> getAllByKeyNamespace(
@@ -321,7 +333,7 @@ extension TagTranslatByIndex on IsarCollection<TagTranslat> {
       values.add([keyValues[i], namespaceValues[i]]);
     }
 
-    return getAllByIndex('key_namespace', values);
+    return getAllByIndex(r'key_namespace', values);
   }
 
   List<TagTranslat?> getAllByKeyNamespaceSync(
@@ -334,7 +346,7 @@ extension TagTranslatByIndex on IsarCollection<TagTranslat> {
       values.add([keyValues[i], namespaceValues[i]]);
     }
 
-    return getAllByIndexSync('key_namespace', values);
+    return getAllByIndexSync(r'key_namespace', values);
   }
 
   Future<int> deleteAllByKeyNamespace(
@@ -347,7 +359,7 @@ extension TagTranslatByIndex on IsarCollection<TagTranslat> {
       values.add([keyValues[i], namespaceValues[i]]);
     }
 
-    return deleteAllByIndex('key_namespace', values);
+    return deleteAllByIndex(r'key_namespace', values);
   }
 
   int deleteAllByKeyNamespaceSync(
@@ -360,24 +372,24 @@ extension TagTranslatByIndex on IsarCollection<TagTranslat> {
       values.add([keyValues[i], namespaceValues[i]]);
     }
 
-    return deleteAllByIndexSync('key_namespace', values);
+    return deleteAllByIndexSync(r'key_namespace', values);
   }
 
-  Future<int> putByKeyNamespace(TagTranslat object) {
-    return putByIndex('key_namespace', object);
+  Future<Id> putByKeyNamespace(TagTranslat object) {
+    return putByIndex(r'key_namespace', object);
   }
 
-  int putByKeyNamespaceSync(TagTranslat object, {bool saveLinks = false}) {
-    return putByIndexSync('key_namespace', object, saveLinks: saveLinks);
+  Id putByKeyNamespaceSync(TagTranslat object, {bool saveLinks = true}) {
+    return putByIndexSync(r'key_namespace', object, saveLinks: saveLinks);
   }
 
-  Future<List<int>> putAllByKeyNamespace(List<TagTranslat> objects) {
-    return putAllByIndex('key_namespace', objects);
+  Future<List<Id>> putAllByKeyNamespace(List<TagTranslat> objects) {
+    return putAllByIndex(r'key_namespace', objects);
   }
 
-  List<int> putAllByKeyNamespaceSync(List<TagTranslat> objects,
-      {bool saveLinks = false}) {
-    return putAllByIndexSync('key_namespace', objects, saveLinks: saveLinks);
+  List<Id> putAllByKeyNamespaceSync(List<TagTranslat> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'key_namespace', objects, saveLinks: saveLinks);
   }
 }
 
@@ -388,55 +400,21 @@ extension TagTranslatQueryWhereSort
       return query.addWhereClause(const IdWhereClause.any());
     });
   }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyKey() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: 'key'),
-      );
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyKeyNamespace() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: 'key_namespace'),
-      );
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyName() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: 'name'),
-      );
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhere> anyNamespace() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: 'namespace'),
-      );
-    });
-  }
 }
 
 extension TagTranslatQueryWhere
     on QueryBuilder<TagTranslat, TagTranslat, QWhereClause> {
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idEqualTo(int id) {
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
-        includeLower: true,
         upper: id,
-        includeUpper: true,
       ));
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idNotEqualTo(
-      int id) {
+      Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -458,8 +436,7 @@ extension TagTranslatQueryWhere
     });
   }
 
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idGreaterThan(
-      int id,
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -468,7 +445,7 @@ extension TagTranslatQueryWhere
     });
   }
 
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -478,8 +455,8 @@ extension TagTranslatQueryWhere
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> idBetween(
-    int lowerId,
-    int upperId, {
+    Id lowerId,
+    Id upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -493,228 +470,11 @@ extension TagTranslatQueryWhere
     });
   }
 
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> keyEqualTo(
-      String key) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: 'key',
-        value: [key],
-      ));
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> keyNotEqualTo(
-      String key) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key',
-              lower: [],
-              includeLower: true,
-              upper: [key],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key',
-              lower: [key],
-              includeLower: false,
-              upper: [],
-              includeUpper: true,
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key',
-              lower: [key],
-              includeLower: false,
-              upper: [],
-              includeUpper: true,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key',
-              lower: [],
-              includeLower: true,
-              upper: [key],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause>
-      keyEqualToAnyNamespace(String key) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: 'key_namespace',
-        value: [key],
-      ));
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause>
-      keyNotEqualToAnyNamespace(String key) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [],
-              includeLower: true,
-              upper: [key],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [key],
-              includeLower: false,
-              upper: [],
-              includeUpper: true,
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [key],
-              includeLower: false,
-              upper: [],
-              includeUpper: true,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [],
-              includeLower: true,
-              upper: [key],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> keyNamespaceEqualTo(
-      String key, String namespace) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: 'key_namespace',
-        value: [key, namespace],
-      ));
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause>
-      keyEqualToNamespaceNotEqualTo(String key, String namespace) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [key],
-              includeLower: true,
-              upper: [key, namespace],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [key, namespace],
-              includeLower: false,
-              upper: [key],
-              includeUpper: true,
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [key, namespace],
-              includeLower: false,
-              upper: [key],
-              includeUpper: true,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'key_namespace',
-              lower: [key],
-              includeLower: true,
-              upper: [key, namespace],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameEqualTo(
-      String? name) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: 'name',
-        value: [name],
-      ));
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameNotEqualTo(
-      String? name) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'name',
-              lower: [],
-              includeLower: true,
-              upper: [name],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'name',
-              lower: [name],
-              includeLower: false,
-              upper: [],
-              includeUpper: true,
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'name',
-              lower: [name],
-              includeLower: false,
-              upper: [],
-              includeUpper: true,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: 'name',
-              lower: [],
-              includeLower: true,
-              upper: [name],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: 'name',
-        value: [null],
-      ));
-    });
-  }
-
-  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: 'name',
-        lower: [null],
-        includeLower: false,
-        upper: [],
-        includeUpper: true,
-      ));
-    });
-  }
-
   QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> namespaceEqualTo(
       String namespace) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: 'namespace',
+        indexName: r'namespace',
         value: [namespace],
       ));
     });
@@ -726,33 +486,229 @@ extension TagTranslatQueryWhere
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'namespace',
+              indexName: r'namespace',
               lower: [],
-              includeLower: true,
               upper: [namespace],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'namespace',
+              indexName: r'namespace',
               lower: [namespace],
               includeLower: false,
               upper: [],
-              includeUpper: true,
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'namespace',
+              indexName: r'namespace',
               lower: [namespace],
               includeLower: false,
               upper: [],
-              includeUpper: true,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'namespace',
+              indexName: r'namespace',
               lower: [],
-              includeLower: true,
               upper: [namespace],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause>
+      keyEqualToAnyNamespace(String key) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'key_namespace',
+        value: [key],
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause>
+      keyNotEqualToAnyNamespace(String key) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [],
+              upper: [key],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [key],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [key],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [],
+              upper: [key],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> keyNamespaceEqualTo(
+      String key, String namespace) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'key_namespace',
+        value: [key, namespace],
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause>
+      keyEqualToNamespaceNotEqualTo(String key, String namespace) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [key],
+              upper: [key, namespace],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [key, namespace],
+              includeLower: false,
+              upper: [key],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [key, namespace],
+              includeLower: false,
+              upper: [key],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key_namespace',
+              lower: [key],
+              upper: [key, namespace],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> keyEqualTo(
+      String key) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'key',
+        value: [key],
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> keyNotEqualTo(
+      String key) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key',
+              lower: [],
+              upper: [key],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key',
+              lower: [key],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key',
+              lower: [key],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'key',
+              lower: [],
+              upper: [key],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'name',
+        value: [null],
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'name',
+        lower: [null],
+        includeLower: false,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameEqualTo(
+      String? name) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'name',
+        value: [name],
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterWhereClause> nameNotEqualTo(
+      String? name) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'name',
+              lower: [],
+              upper: [name],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'name',
+              lower: [name],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'name',
+              lower: [name],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'name',
+              lower: [],
+              upper: [name],
               includeUpper: false,
             ));
       }
@@ -762,59 +718,51 @@ extension TagTranslatQueryWhere
 
 extension TagTranslatQueryFilter
     on QueryBuilder<TagTranslat, TagTranslat, QFilterCondition> {
-  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> idIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'id',
-      ));
-    });
-  }
-
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> idEqualTo(
-      int value) {
+      Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'id',
+        property: r'id',
         value: value,
       ));
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> idGreaterThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'id',
+        property: r'id',
         value: value,
       ));
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> idLessThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'id',
+        property: r'id',
         value: value,
       ));
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> idBetween(
-    int lower,
-    int upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'id',
+        property: r'id',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -826,7 +774,16 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> introIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'intro',
+        property: r'intro',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      introIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'intro',
       ));
     });
   }
@@ -837,7 +794,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'intro',
+        property: r'intro',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -847,13 +804,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
       introGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'intro',
+        property: r'intro',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -862,13 +819,13 @@ extension TagTranslatQueryFilter
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> introLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'intro',
+        property: r'intro',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -878,13 +835,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> introBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'intro',
+        property: r'intro',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -900,7 +857,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'intro',
+        property: r'intro',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -913,7 +870,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'intro',
+        property: r'intro',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -925,7 +882,7 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'intro',
+        property: r'intro',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -937,9 +894,28 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'intro',
+        property: r'intro',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> introIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'intro',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      introIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'intro',
+        value: '',
       ));
     });
   }
@@ -950,7 +926,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'key',
+        property: r'key',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -959,13 +935,13 @@ extension TagTranslatQueryFilter
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> keyGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'key',
+        property: r'key',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -974,13 +950,13 @@ extension TagTranslatQueryFilter
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> keyLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'key',
+        property: r'key',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -990,13 +966,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> keyBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'key',
+        property: r'key',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1012,7 +988,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'key',
+        property: r'key',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1025,7 +1001,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'key',
+        property: r'key',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1037,7 +1013,7 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'key',
+        property: r'key',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1049,9 +1025,28 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'key',
+        property: r'key',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> keyIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'key',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      keyIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'key',
+        value: '',
       ));
     });
   }
@@ -1059,7 +1054,16 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> linksIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'links',
+        property: r'links',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      linksIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'links',
       ));
     });
   }
@@ -1070,7 +1074,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'links',
+        property: r'links',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1080,13 +1084,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
       linksGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'links',
+        property: r'links',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1095,13 +1099,13 @@ extension TagTranslatQueryFilter
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> linksLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'links',
+        property: r'links',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1111,13 +1115,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> linksBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'links',
+        property: r'links',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1133,7 +1137,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'links',
+        property: r'links',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1146,7 +1150,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'links',
+        property: r'links',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1158,7 +1162,7 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'links',
+        property: r'links',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1170,9 +1174,28 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'links',
+        property: r'links',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> linksIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'links',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      linksIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'links',
+        value: '',
       ));
     });
   }
@@ -1180,7 +1203,16 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> nameIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: 'name',
+        property: r'name',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      nameIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'name',
       ));
     });
   }
@@ -1191,7 +1223,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'name',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1200,13 +1232,13 @@ extension TagTranslatQueryFilter
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> nameGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'name',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1215,13 +1247,13 @@ extension TagTranslatQueryFilter
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> nameLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'name',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1231,13 +1263,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> nameBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'name',
+        property: r'name',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1253,7 +1285,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'name',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1266,7 +1298,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'name',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1278,7 +1310,7 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'name',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1290,9 +1322,28 @@ extension TagTranslatQueryFilter
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'name',
+        property: r'name',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition> nameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      nameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'name',
+        value: '',
       ));
     });
   }
@@ -1304,7 +1355,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'namespace',
+        property: r'namespace',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1314,13 +1365,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
       namespaceGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'namespace',
+        property: r'namespace',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1330,13 +1381,13 @@ extension TagTranslatQueryFilter
   QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
       namespaceLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'namespace',
+        property: r'namespace',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1347,13 +1398,13 @@ extension TagTranslatQueryFilter
       namespaceBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'namespace',
+        property: r'namespace',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1370,7 +1421,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'namespace',
+        property: r'namespace',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1384,7 +1435,7 @@ extension TagTranslatQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'namespace',
+        property: r'namespace',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1395,7 +1446,7 @@ extension TagTranslatQueryFilter
       namespaceContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'namespace',
+        property: r'namespace',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -1406,151 +1457,174 @@ extension TagTranslatQueryFilter
       namespaceMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'namespace',
+        property: r'namespace',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      namespaceIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'namespace',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<TagTranslat, TagTranslat, QAfterFilterCondition>
+      namespaceIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'namespace',
+        value: '',
+      ));
+    });
+  }
 }
+
+extension TagTranslatQueryObject
+    on QueryBuilder<TagTranslat, TagTranslat, QFilterCondition> {}
 
 extension TagTranslatQueryLinks
     on QueryBuilder<TagTranslat, TagTranslat, QFilterCondition> {}
 
-extension TagTranslatQueryWhereSortBy
+extension TagTranslatQuerySortBy
     on QueryBuilder<TagTranslat, TagTranslat, QSortBy> {
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByIntro() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('intro', Sort.asc);
+      return query.addSortBy(r'intro', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByIntroDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('intro', Sort.desc);
+      return query.addSortBy(r'intro', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByKey() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('key', Sort.asc);
+      return query.addSortBy(r'key', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByKeyDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('key', Sort.desc);
+      return query.addSortBy(r'key', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByLinks() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('links', Sort.asc);
+      return query.addSortBy(r'links', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByLinksDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('links', Sort.desc);
+      return query.addSortBy(r'links', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('name', Sort.asc);
+      return query.addSortBy(r'name', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('name', Sort.desc);
+      return query.addSortBy(r'name', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByNamespace() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('namespace', Sort.asc);
+      return query.addSortBy(r'namespace', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> sortByNamespaceDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('namespace', Sort.desc);
+      return query.addSortBy(r'namespace', Sort.desc);
     });
   }
 }
 
-extension TagTranslatQueryWhereSortThenBy
+extension TagTranslatQuerySortThenBy
     on QueryBuilder<TagTranslat, TagTranslat, QSortThenBy> {
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('id', Sort.asc);
+      return query.addSortBy(r'id', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('id', Sort.desc);
+      return query.addSortBy(r'id', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByIntro() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('intro', Sort.asc);
+      return query.addSortBy(r'intro', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByIntroDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('intro', Sort.desc);
+      return query.addSortBy(r'intro', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByKey() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('key', Sort.asc);
+      return query.addSortBy(r'key', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByKeyDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('key', Sort.desc);
+      return query.addSortBy(r'key', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByLinks() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('links', Sort.asc);
+      return query.addSortBy(r'links', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByLinksDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('links', Sort.desc);
+      return query.addSortBy(r'links', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('name', Sort.asc);
+      return query.addSortBy(r'name', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('name', Sort.desc);
+      return query.addSortBy(r'name', Sort.desc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByNamespace() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('namespace', Sort.asc);
+      return query.addSortBy(r'namespace', Sort.asc);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QAfterSortBy> thenByNamespaceDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('namespace', Sort.desc);
+      return query.addSortBy(r'namespace', Sort.desc);
     });
   }
 }
@@ -1560,74 +1634,74 @@ extension TagTranslatQueryWhereDistinct
   QueryBuilder<TagTranslat, TagTranslat, QDistinct> distinctByIntro(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('intro', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'intro', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QDistinct> distinctByKey(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('key', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'key', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QDistinct> distinctByLinks(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('links', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'links', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('name', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<TagTranslat, TagTranslat, QDistinct> distinctByNamespace(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('namespace', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'namespace', caseSensitive: caseSensitive);
     });
   }
 }
 
 extension TagTranslatQueryProperty
     on QueryBuilder<TagTranslat, TagTranslat, QQueryProperty> {
-  QueryBuilder<TagTranslat, int?, QQueryOperations> idProperty() {
+  QueryBuilder<TagTranslat, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('id');
+      return query.addPropertyName(r'id');
     });
   }
 
   QueryBuilder<TagTranslat, String?, QQueryOperations> introProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('intro');
+      return query.addPropertyName(r'intro');
     });
   }
 
   QueryBuilder<TagTranslat, String, QQueryOperations> keyProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('key');
+      return query.addPropertyName(r'key');
     });
   }
 
   QueryBuilder<TagTranslat, String?, QQueryOperations> linksProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('links');
+      return query.addPropertyName(r'links');
     });
   }
 
   QueryBuilder<TagTranslat, String?, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('name');
+      return query.addPropertyName(r'name');
     });
   }
 
   QueryBuilder<TagTranslat, String, QQueryOperations> namespaceProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('namespace');
+      return query.addPropertyName(r'namespace');
     });
   }
 }
