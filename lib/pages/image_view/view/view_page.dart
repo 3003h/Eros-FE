@@ -158,14 +158,6 @@ class ImageView extends StatelessWidget {
 
 PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
   logger.d('actual $actual');
-  // switch (actual) {
-  //   case PhotoViewScaleState.initial:
-  //   case PhotoViewScaleState.covering:
-  //   case PhotoViewScaleState.originalSize:
-  //     return PhotoViewScaleState.zoomedOut;
-  //   default:
-  //     return PhotoViewScaleState.initial;
-  // }
   switch (actual) {
     case PhotoViewScaleState.initial:
       return PhotoViewScaleState.covering;
