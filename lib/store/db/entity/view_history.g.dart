@@ -87,79 +87,81 @@ extension $ViewHistoryCopyWith on ViewHistory {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names,
-// constant_identifier_names, invalid_use_of_protected_member,
-// unnecessary_cast, unused_local_variable,
-// no_leading_underscores_for_local_identifiers,
-// inference_failure_on_function_invocation, prefer_const_constructors
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
 extension GetViewHistoryCollection on Isar {
-  IsarCollection<ViewHistory> get viewHistorys => getCollection();
+  IsarCollection<ViewHistory> get viewHistorys => this.collection();
 }
 
 const ViewHistorySchema = CollectionSchema(
-  name: 'ViewHistory',
-  schema:
-      '{"name":"ViewHistory","idName":"gid","properties":[{"name":"galleryProviderText","type":"String"},{"name":"lastViewTime","type":"Long"}],"indexes":[{"name":"lastViewTime","unique":false,"replace":false,"properties":[{"name":"lastViewTime","type":"Value","caseSensitive":false}]}],"links":[]}',
-  idName: 'gid',
-  propertyIds: {'galleryProviderText': 0, 'lastViewTime': 1},
-  listProperties: {},
-  indexIds: {'lastViewTime': 0},
-  indexValueTypes: {
-    'lastViewTime': [
-      IndexValueType.long,
-    ]
+  name: r'ViewHistory',
+  id: -689102202586410121,
+  properties: {
+    r'galleryProviderText': PropertySchema(
+      id: 0,
+      name: r'galleryProviderText',
+      type: IsarType.string,
+    ),
+    r'lastViewTime': PropertySchema(
+      id: 1,
+      name: r'lastViewTime',
+      type: IsarType.long,
+    )
   },
-  linkIds: {},
-  backlinkLinkNames: {},
+  estimateSize: _viewHistoryEstimateSize,
+  serialize: _viewHistorySerialize,
+  deserialize: _viewHistoryDeserialize,
+  deserializeProp: _viewHistoryDeserializeProp,
+  idName: r'gid',
+  indexes: {
+    r'lastViewTime': IndexSchema(
+      id: 9140181846964812605,
+      name: r'lastViewTime',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'lastViewTime',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
+  links: {},
+  embeddedSchemas: {},
   getId: _viewHistoryGetId,
   getLinks: _viewHistoryGetLinks,
-  attachLinks: _viewHistoryAttachLinks,
-  serializeNative: _viewHistorySerializeNative,
-  deserializeNative: _viewHistoryDeserializeNative,
-  deserializePropNative: _viewHistoryDeserializePropNative,
-  serializeWeb: _viewHistorySerializeWeb,
-  deserializeWeb: _viewHistoryDeserializeWeb,
-  deserializePropWeb: _viewHistoryDeserializePropWeb,
-  version: 4,
+  attach: _viewHistoryAttach,
+  version: '3.0.0',
 );
 
-int? _viewHistoryGetId(ViewHistory object) {
-  if (object.gid == Isar.autoIncrement) {
-    return null;
-  } else {
-    return object.gid;
-  }
+int _viewHistoryEstimateSize(
+  ViewHistory object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.galleryProviderText.length * 3;
+  return bytesCount;
 }
 
-List<IsarLinkBase<dynamic>> _viewHistoryGetLinks(ViewHistory object) {
-  return [];
-}
-
-void _viewHistorySerializeNative(
-    IsarCollection<ViewHistory> collection,
-    IsarCObject cObj,
-    ViewHistory object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
-  final galleryProviderText$Bytes =
-      IsarBinaryWriter.utf8Encoder.convert(object.galleryProviderText);
-  final size = (staticSize + (galleryProviderText$Bytes.length)) as int;
-  cObj.buffer = alloc(size);
-  cObj.buffer_length = size;
-
-  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
-  final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeBytes(offsets[0], galleryProviderText$Bytes);
+void _viewHistorySerialize(
+  ViewHistory object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.galleryProviderText);
   writer.writeLong(offsets[1], object.lastViewTime);
 }
 
-ViewHistory _viewHistoryDeserializeNative(
-    IsarCollection<ViewHistory> collection,
-    int id,
-    IsarBinaryReader reader,
-    List<int> offsets) {
+ViewHistory _viewHistoryDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = ViewHistory(
     galleryProviderText: reader.readString(offsets[0]),
     gid: id,
@@ -168,60 +170,32 @@ ViewHistory _viewHistoryDeserializeNative(
   return object;
 }
 
-P _viewHistoryDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
-  switch (propertyIndex) {
-    case -1:
-      return id as P;
+P _viewHistoryDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
       return (reader.readLong(offset)) as P;
     default:
-      throw 'Illegal propertyIndex';
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Object _viewHistorySerializeWeb(
-    IsarCollection<ViewHistory> collection, ViewHistory object) {
-  final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(
-      jsObj, 'galleryProviderText', object.galleryProviderText);
-  IsarNative.jsObjectSet(jsObj, 'gid', object.gid);
-  IsarNative.jsObjectSet(jsObj, 'lastViewTime', object.lastViewTime);
-  return jsObj;
+Id _viewHistoryGetId(ViewHistory object) {
+  return object.gid;
 }
 
-ViewHistory _viewHistoryDeserializeWeb(
-    IsarCollection<ViewHistory> collection, Object jsObj) {
-  final object = ViewHistory(
-    galleryProviderText:
-        IsarNative.jsObjectGet(jsObj, 'galleryProviderText') ?? '',
-    gid: IsarNative.jsObjectGet(jsObj, 'gid') ??
-        (double.negativeInfinity as int),
-    lastViewTime: IsarNative.jsObjectGet(jsObj, 'lastViewTime') ??
-        (double.negativeInfinity as int),
-  );
-  return object;
+List<IsarLinkBase<dynamic>> _viewHistoryGetLinks(ViewHistory object) {
+  return [];
 }
 
-P _viewHistoryDeserializePropWeb<P>(Object jsObj, String propertyName) {
-  switch (propertyName) {
-    case 'galleryProviderText':
-      return (IsarNative.jsObjectGet(jsObj, 'galleryProviderText') ?? '') as P;
-    case 'gid':
-      return (IsarNative.jsObjectGet(jsObj, 'gid') ??
-          (double.negativeInfinity as int)) as P;
-    case 'lastViewTime':
-      return (IsarNative.jsObjectGet(jsObj, 'lastViewTime') ??
-          (double.negativeInfinity as int)) as P;
-    default:
-      throw 'Illegal propertyName';
-  }
-}
-
-void _viewHistoryAttachLinks(
-    IsarCollection<dynamic> col, int id, ViewHistory object) {}
+void _viewHistoryAttach(
+    IsarCollection<dynamic> col, Id id, ViewHistory object) {}
 
 extension ViewHistoryQueryWhereSort
     on QueryBuilder<ViewHistory, ViewHistory, QWhere> {
@@ -234,7 +208,7 @@ extension ViewHistoryQueryWhereSort
   QueryBuilder<ViewHistory, ViewHistory, QAfterWhere> anyLastViewTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
-        const IndexWhereClause.any(indexName: 'lastViewTime'),
+        const IndexWhereClause.any(indexName: r'lastViewTime'),
       );
     });
   }
@@ -242,20 +216,17 @@ extension ViewHistoryQueryWhereSort
 
 extension ViewHistoryQueryWhere
     on QueryBuilder<ViewHistory, ViewHistory, QWhereClause> {
-  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidEqualTo(
-      int gid) {
+  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidEqualTo(Id gid) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: gid,
-        includeLower: true,
         upper: gid,
-        includeUpper: true,
       ));
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidNotEqualTo(
-      int gid) {
+      Id gid) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -278,7 +249,7 @@ extension ViewHistoryQueryWhere
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidGreaterThan(
-      int gid,
+      Id gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -287,7 +258,7 @@ extension ViewHistoryQueryWhere
     });
   }
 
-  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidLessThan(int gid,
+  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidLessThan(Id gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -297,8 +268,8 @@ extension ViewHistoryQueryWhere
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidBetween(
-    int lowerGid,
-    int upperGid, {
+    Id lowerGid,
+    Id upperGid, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -316,7 +287,7 @@ extension ViewHistoryQueryWhere
       int lastViewTime) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: 'lastViewTime',
+        indexName: r'lastViewTime',
         value: [lastViewTime],
       ));
     });
@@ -328,32 +299,28 @@ extension ViewHistoryQueryWhere
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'lastViewTime',
+              indexName: r'lastViewTime',
               lower: [],
-              includeLower: true,
               upper: [lastViewTime],
               includeUpper: false,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'lastViewTime',
+              indexName: r'lastViewTime',
               lower: [lastViewTime],
               includeLower: false,
               upper: [],
-              includeUpper: true,
             ));
       } else {
         return query
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'lastViewTime',
+              indexName: r'lastViewTime',
               lower: [lastViewTime],
               includeLower: false,
               upper: [],
-              includeUpper: true,
             ))
             .addWhereClause(IndexWhereClause.between(
-              indexName: 'lastViewTime',
+              indexName: r'lastViewTime',
               lower: [],
-              includeLower: true,
               upper: [lastViewTime],
               includeUpper: false,
             ));
@@ -368,11 +335,10 @@ extension ViewHistoryQueryWhere
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: 'lastViewTime',
+        indexName: r'lastViewTime',
         lower: [lastViewTime],
         includeLower: include,
         upper: [],
-        includeUpper: true,
       ));
     });
   }
@@ -384,9 +350,8 @@ extension ViewHistoryQueryWhere
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: 'lastViewTime',
+        indexName: r'lastViewTime',
         lower: [],
-        includeLower: true,
         upper: [lastViewTime],
         includeUpper: include,
       ));
@@ -401,7 +366,7 @@ extension ViewHistoryQueryWhere
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IndexWhereClause.between(
-        indexName: 'lastViewTime',
+        indexName: r'lastViewTime',
         lower: [lowerLastViewTime],
         includeLower: includeLower,
         upper: [upperLastViewTime],
@@ -420,7 +385,7 @@ extension ViewHistoryQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -430,13 +395,13 @@ extension ViewHistoryQueryFilter
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
       galleryProviderTextGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -446,13 +411,13 @@ extension ViewHistoryQueryFilter
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
       galleryProviderTextLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -463,13 +428,13 @@ extension ViewHistoryQueryFilter
       galleryProviderTextBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -486,7 +451,7 @@ extension ViewHistoryQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -500,7 +465,7 @@ extension ViewHistoryQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -511,7 +476,7 @@ extension ViewHistoryQueryFilter
       galleryProviderTextContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -522,58 +487,78 @@ extension ViewHistoryQueryFilter
       galleryProviderTextMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: 'galleryProviderText',
+        property: r'galleryProviderText',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidEqualTo(
-      int value) {
+  QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
+      galleryProviderTextIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'gid',
+        property: r'galleryProviderText',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
+      galleryProviderTextIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'galleryProviderText',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidEqualTo(
+      Id value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'gid',
         value: value,
       ));
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidGreaterThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'gid',
+        property: r'gid',
         value: value,
       ));
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidLessThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'gid',
+        property: r'gid',
         value: value,
       ));
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidBetween(
-    int lower,
-    int upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'gid',
+        property: r'gid',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -586,7 +571,7 @@ extension ViewHistoryQueryFilter
       lastViewTimeEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: 'lastViewTime',
+        property: r'lastViewTime',
         value: value,
       ));
     });
@@ -600,7 +585,7 @@ extension ViewHistoryQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: 'lastViewTime',
+        property: r'lastViewTime',
         value: value,
       ));
     });
@@ -614,7 +599,7 @@ extension ViewHistoryQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: 'lastViewTime',
+        property: r'lastViewTime',
         value: value,
       ));
     });
@@ -629,7 +614,7 @@ extension ViewHistoryQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: 'lastViewTime',
+        property: r'lastViewTime',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -639,77 +624,80 @@ extension ViewHistoryQueryFilter
   }
 }
 
+extension ViewHistoryQueryObject
+    on QueryBuilder<ViewHistory, ViewHistory, QFilterCondition> {}
+
 extension ViewHistoryQueryLinks
     on QueryBuilder<ViewHistory, ViewHistory, QFilterCondition> {}
 
-extension ViewHistoryQueryWhereSortBy
+extension ViewHistoryQuerySortBy
     on QueryBuilder<ViewHistory, ViewHistory, QSortBy> {
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       sortByGalleryProviderText() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('galleryProviderText', Sort.asc);
+      return query.addSortBy(r'galleryProviderText', Sort.asc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       sortByGalleryProviderTextDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('galleryProviderText', Sort.desc);
+      return query.addSortBy(r'galleryProviderText', Sort.desc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy> sortByLastViewTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('lastViewTime', Sort.asc);
+      return query.addSortBy(r'lastViewTime', Sort.asc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       sortByLastViewTimeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('lastViewTime', Sort.desc);
+      return query.addSortBy(r'lastViewTime', Sort.desc);
     });
   }
 }
 
-extension ViewHistoryQueryWhereSortThenBy
+extension ViewHistoryQuerySortThenBy
     on QueryBuilder<ViewHistory, ViewHistory, QSortThenBy> {
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       thenByGalleryProviderText() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('galleryProviderText', Sort.asc);
+      return query.addSortBy(r'galleryProviderText', Sort.asc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       thenByGalleryProviderTextDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('galleryProviderText', Sort.desc);
+      return query.addSortBy(r'galleryProviderText', Sort.desc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy> thenByGid() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('gid', Sort.asc);
+      return query.addSortBy(r'gid', Sort.asc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy> thenByGidDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('gid', Sort.desc);
+      return query.addSortBy(r'gid', Sort.desc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy> thenByLastViewTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('lastViewTime', Sort.asc);
+      return query.addSortBy(r'lastViewTime', Sort.asc);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       thenByLastViewTimeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy('lastViewTime', Sort.desc);
+      return query.addSortBy(r'lastViewTime', Sort.desc);
     });
   }
 }
@@ -719,36 +707,36 @@ extension ViewHistoryQueryWhereDistinct
   QueryBuilder<ViewHistory, ViewHistory, QDistinct>
       distinctByGalleryProviderText({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('galleryProviderText',
+      return query.addDistinctBy(r'galleryProviderText',
           caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QDistinct> distinctByLastViewTime() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy('lastViewTime');
+      return query.addDistinctBy(r'lastViewTime');
     });
   }
 }
 
 extension ViewHistoryQueryProperty
     on QueryBuilder<ViewHistory, ViewHistory, QQueryProperty> {
-  QueryBuilder<ViewHistory, String, QQueryOperations>
-      galleryProviderTextProperty() {
+  QueryBuilder<ViewHistory, int, QQueryOperations> gidProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('galleryProviderText');
+      return query.addPropertyName(r'gid');
     });
   }
 
-  QueryBuilder<ViewHistory, int, QQueryOperations> gidProperty() {
+  QueryBuilder<ViewHistory, String, QQueryOperations>
+      galleryProviderTextProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('gid');
+      return query.addPropertyName(r'galleryProviderText');
     });
   }
 
   QueryBuilder<ViewHistory, int, QQueryOperations> lastViewTimeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName('lastViewTime');
+      return query.addPropertyName(r'lastViewTime');
     });
   }
 }

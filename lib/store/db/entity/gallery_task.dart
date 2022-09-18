@@ -37,8 +37,8 @@ class GalleryTask {
   Map<String, dynamic> toJson() => _$GalleryTaskToJson(this);
 
   // @primaryKey
-  @Id()
-  final int gid;
+  @Index(unique: true, replace: true)
+  final Id gid;
   final String token;
   final String? url;
   final String title;

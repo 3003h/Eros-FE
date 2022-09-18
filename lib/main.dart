@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
@@ -56,17 +56,17 @@ Future<void> main() async {
     runApp(MyApp());
 
     if (GetPlatform.isDesktop) {
-      doWhenWindowReady(() {
-        // const initialSize = Size(960, 720);
-        const minSize = Size(400, 400);
-        appWindow.minSize = minSize;
-        // appWindow.size = initialSize;
-        appWindow.alignment = Alignment.center;
-        appWindow.title = L10n.current.app_title;
-        appWindow.show();
-      });
+      // doWhenWindowReady(() {
+      //   // const initialSize = Size(960, 720);
+      //   const minSize = Size(400, 400);
+      //   appWindow.minSize = minSize;
+      //   // appWindow.size = initialSize;
+      //   appWindow.alignment = Alignment.center;
+      //   appWindow.title = L10n.current.app_title;
+      //   appWindow.show();
+      // });
 
-      setWindowTitle(L10n.current.app_title);
+      // setWindowTitle(L10n.current.app_title);
     }
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
