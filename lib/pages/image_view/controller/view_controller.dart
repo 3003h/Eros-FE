@@ -73,6 +73,7 @@ const int _speedInv = 10;
 
 enum PageViewType {
   photoView,
+  preloadPhotoView,
   preloadPageview,
   extendedImageGesturePageView,
 }

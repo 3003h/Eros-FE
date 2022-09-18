@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/preload_photo_view_gallery.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class ImagePageView extends GetView<ViewExtController> {
       id: idSlidePage,
       builder: (logic) {
         if (logic.vState.columnMode != ViewColumnMode.single) {
+          /// 双页模式
           switch (controller.pageViewType) {
             case PageViewType.preloadPageview:
               Widget doubleView(int pageIndex) {
@@ -38,7 +40,8 @@ class ImagePageView extends GetView<ViewExtController> {
                           controller.photoViewScaleStateController,
                       initialScale: PhotoViewComputedScale.contained * 1.0,
                       minScale: PhotoViewComputedScale.contained * 1.0,
-                      maxScale: PhotoViewComputedScale.contained * 3.0,
+                      maxScale: PhotoViewComputedScale.contained * 2.0,
+                      childSize: MediaQuery.of(context).size * 2,
                       scaleStateCycle: lisviewScaleStateCycle,
                       child: DoublePageView(pageIndex: pageIndex),
                     );
@@ -107,6 +110,7 @@ class ImagePageView extends GetView<ViewExtController> {
                   });
           }
         } else {
+          /// 单页模式
           switch (controller.pageViewType) {
             case PageViewType.photoView:
 
@@ -133,6 +137,36 @@ class ImagePageView extends GetView<ViewExtController> {
                       controller: logic.photoViewController,
                       child: ViewImage(
                         imageSer: pageIndex + 1,
+                      ),
+                    );
+                  });
+            case PageViewType.preloadPhotoView:
+
+              /// PreloadPhotoView 的看图组件 有预加载功能
+              return PreloadPhotoViewGallery.builder(
+                  backgroundDecoration:
+                  const BoxDecoration(color: Colors.transparent),
+                  pageController: logic.preloadPageController,
+                  itemCount: logic.vState.pageCount,
+                  onPageChanged: (pageIndex) =>
+                      controller.handOnPageChanged(pageIndex),
+                  scrollDirection: Axis.horizontal,
+                  customSize: context.mediaQuery.size,
+                  scrollPhysics: const CustomScrollPhysics(),
+                  reverse: reverse,
+                  preloadPagesCount:
+                    max(0, logic.vState.ehConfigService.preloadImage.value),
+                  builder: (BuildContext context, int pageIndex) {
+                    return PhotoViewGalleryPageOptions.customChild(
+                      initialScale: PhotoViewComputedScale.contained,
+                      minScale: PhotoViewComputedScale.contained,
+                      maxScale: PhotoViewComputedScale.covered * 5,
+                      controller: logic.photoViewController,
+                      childSize: context.mediaQuery.size * 2,
+                      child: ViewImage(
+                        imageSer: pageIndex + 1,
+                        mode: ExtendedImageMode.none,
+                        enableSlideOutPage: !GetPlatform.isAndroid,
                       ),
                     );
                   });

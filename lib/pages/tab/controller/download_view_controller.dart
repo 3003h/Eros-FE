@@ -23,7 +23,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
-import 'package:restart_app/restart_app.dart';
 import 'package:share/share.dart';
 
 enum DownloadType {
@@ -681,34 +680,6 @@ class DownloadViewController extends GetxController {
   }
 }
 
-Future<void> _showRestartAppDialog() async {
-  return showCupertinoDialog<void>(
-    context: Get.overlayContext!,
-    barrierDismissible: true,
-    builder: (BuildContext context) {
-      return CupertinoAlertDialog(
-        title: const Text('Restart App'),
-        content: const Text('重启应用以生效?'),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () async {
-              Get.back();
-              await Restart.restartApp();
-              // await FlutterRestart.restartApp();
-            },
-            child: const Text('Restart Now'),
-          ),
-          CupertinoDialogAction(
-            onPressed: () async {
-              Get.back();
-            },
-            child: Text(L10n.of(context).cancel),
-          ),
-        ],
-      );
-    },
-  );
-}
 
 Future<String?> _exportGallery(
   BuildContext context,
