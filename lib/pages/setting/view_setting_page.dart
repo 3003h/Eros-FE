@@ -93,6 +93,14 @@ class ViewSettingList extends StatelessWidget {
           ehConfigService.turnPageAnimations = val;
         },
       ),
+      if (GetPlatform.isAndroid)
+        TextSwitchItem(
+          L10n.of(context).volume_key_turn_page,
+          intValue: ehConfigService.volumnTurnPage,
+          onChanged: (bool val) {
+            ehConfigService.volumnTurnPage = val;
+          },
+        ),
       TextSwitchItem(
         L10n.of(context).fullscreen,
         intValue: ehConfigService.viewFullscreen,

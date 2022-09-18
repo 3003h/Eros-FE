@@ -173,6 +173,10 @@ class IsarHelper {
     return await isar.galleryImageTasks.where().gidEqualTo(gid).findAll();
   }
 
+  List<GalleryImageTask> findImageTaskAllByGidSync(int gid) {
+    return isar.galleryImageTasks.where().gidEqualTo(gid).findAllSync();
+  }
+
   Future<void> putImageTask(
     GalleryImageTask imageTask, {
     bool replaceOnConflict = true,

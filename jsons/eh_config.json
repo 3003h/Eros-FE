@@ -49,5 +49,6 @@
   "viewFullscreen?": false,
   "blurringOfCoverBackground?": false,
   "listViewTagLimit?": -1,
-  "redirectThumbLink?": true
+  "redirectThumbLink?": true,
+  "volumnTurnPage?": false
 }

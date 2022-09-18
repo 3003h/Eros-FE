@@ -595,6 +595,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback":
             MessageLookupByLibrary.simpleMessage("Vibrate feedback"),
+        "volume_key_turn_page":
+            MessageLookupByLibrary.simpleMessage("Volume key to turn page"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("Vote down successfully"),
         "vote_successfully":

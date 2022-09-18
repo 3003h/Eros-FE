@@ -484,6 +484,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_name": MessageLookupByLibrary.simpleMessage("用户名"),
         "version": MessageLookupByLibrary.simpleMessage("版本"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("震动反馈"),
+        "volume_key_turn_page": MessageLookupByLibrary.simpleMessage("音量键翻页"),
         "vote_down_successfully": MessageLookupByLibrary.simpleMessage("反对成功"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("投票成功"),
         "vote_up_successfully": MessageLookupByLibrary.simpleMessage("赞成成功"),

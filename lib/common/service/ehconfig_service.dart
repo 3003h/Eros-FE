@@ -224,9 +224,18 @@ class EhConfigService extends ProfileService {
   bool get redirectThumbLink => _redirectThumbLink.value;
   set redirectThumbLink(bool val) => _redirectThumbLink.value = val;
 
+  final _volumnTurnPage = false.obs;
+  bool get volumnTurnPage => _volumnTurnPage.value;
+  set volumnTurnPage(bool val) => _volumnTurnPage.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    volumnTurnPage = ehConfig.volumnTurnPage ?? volumnTurnPage;
+    everProfile<bool>(_volumnTurnPage, (value) {
+      ehConfig = ehConfig.copyWith(volumnTurnPage: value);
+    });
 
     redirectThumbLink = ehConfig.redirectThumbLink ?? redirectThumbLink;
     everProfile<bool>(_redirectThumbLink, (value) {

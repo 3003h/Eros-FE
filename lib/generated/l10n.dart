@@ -4003,6 +4003,16 @@ class L10n {
       args: [version],
     );
   }
+
+  /// `Volume key to turn page`
+  String get volume_key_turn_page {
+    return Intl.message(
+      'Volume key to turn page',
+      name: 'volume_key_turn_page',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

@@ -555,6 +555,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_name": MessageLookupByLibrary.simpleMessage("사용자 이름"),
         "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("진동 피드백"),
+        "volume_key_turn_page":
+            MessageLookupByLibrary.simpleMessage("Volume key to turn page"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("비추천 성공"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("추천 성공"),

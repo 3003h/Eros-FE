@@ -76,6 +76,10 @@ class GalleryCacheController extends GetxController {
     int index, {
     bool saveToStore = false,
   }) async {
+    if (gid.isEmpty) {
+      logger.e('gid is empty');
+      return;
+    }
     final GalleryCache? _ori = await listenGalleryCache(gid, sync: false).first;
     // logger.d('_ori ${_ori?.toJson()}');
     final _time = DateTime.now().millisecondsSinceEpoch;
