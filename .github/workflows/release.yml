@@ -12,6 +12,7 @@ on:
       - '!v*mac'
       - '!v*win'
       - '!v*.flutter2'
+      - '!v*.bot'
 env:
   APP_DEV_PROVISION_PATH: '/tmp/app_dev.mobileprovision'
 
