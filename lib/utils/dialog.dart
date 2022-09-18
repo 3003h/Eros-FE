@@ -7,6 +7,7 @@ Future<T?> showSimpleEhDiglog<T>({
   VoidCallback? onOk,
   String? title,
   String? contentText,
+  Widget? content,
   TextAlign textAlign = TextAlign.start,
 }) async {
   return await showCupertinoDialog<T>(
@@ -14,10 +15,11 @@ Future<T?> showSimpleEhDiglog<T>({
       builder: (context) {
         return CupertinoAlertDialog(
           title: title != null ? Text(title) : null,
-          content: Text(
-            contentText ?? '',
-            textAlign: textAlign,
-          ),
+          content: content ??
+              Text(
+                contentText ?? '',
+                textAlign: textAlign,
+              ),
           actions: [
             CupertinoDialogAction(
               child: Text(L10n.of(context).cancel),
