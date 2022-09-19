@@ -1179,6 +1179,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                       thumb = ExtendedImage.file(
                         File(path),
                         fit: BoxFit.cover,
+                        filterQuality: FilterQuality.medium,
                       );
                       break;
                     case LoadFrom.gallery:
@@ -1189,8 +1190,9 @@ class ThumbnailListView extends GetView<ViewExtController> {
                           controller.vState.asyncArchiveFiles[index];
                       // thumb = Container(color: Colors.white);
                       thumb = FutureThumblArchive(
-                          gid: controller.vState.gid,
-                          asyncArchiveFile: asyncFile);
+                        gid: controller.vState.gid,
+                        asyncArchiveFile: asyncFile,
+                      );
                       break;
                   }
 
@@ -1326,6 +1328,7 @@ class _FutureThumblArchiveState extends State<FutureThumblArchive> {
               return ExtendedImage.file(
                 _data,
                 fit: BoxFit.cover,
+                filterQuality: FilterQuality.medium,
               );
             } else {
               logger.d('${snapshot.error} ${snapshot.stackTrace}');

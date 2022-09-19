@@ -19,7 +19,7 @@ class IsarHelper {
 
   Future<List<GalleryProvider>> getAllHistory() async {
     final viewHistorys =
-        await isar.viewHistorys.where().anyLastViewTime().findAll();
+        await isar.viewHistorys.where().sortByLastViewTimeDesc().findAll();
     final _historys = viewHistorys
         .map((e) => GalleryProvider.fromJson(
             jsonDecode(e.galleryProviderText) as Map<String, dynamic>))
@@ -131,7 +131,7 @@ class IsarHelper {
   }
 
   Future<List<GalleryTask>> findAllGalleryTasks() async {
-    final taks = await isar.galleryTasks.where().findAll();
+    final taks = await isar.galleryTasks.where().sortByAddTimeDesc().findAll();
     return taks;
   }
 
@@ -171,11 +171,11 @@ class IsarHelper {
   }
 
   Future<List<GalleryImageTask>> findImageTaskAllByGid(int gid) async {
-    return await isar.galleryImageTasks.where().gidEqualTo(gid).findAll();
+    return await isar.galleryImageTasks.where().gidEqualTo(gid).sortBySer().findAll();
   }
 
   List<GalleryImageTask> findImageTaskAllByGidSync(int gid) {
-    return isar.galleryImageTasks.where().gidEqualTo(gid).findAllSync();
+    return isar.galleryImageTasks.where().gidEqualTo(gid).sortBySer().findAllSync();
   }
 
   Future<void> putImageTask(
