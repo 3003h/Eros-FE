@@ -19,7 +19,7 @@ class WebSettingController extends GetxController {
 
     _cookieManager.deleteAllCookies();
 
-    for (final io.Cookie cookie in Global.profile.user.cookies ?? []) {
+    for (final io.Cookie cookie in Global.profile.user.cookies) {
       logger.v('name:${cookie.name} value:${cookie.value}');
       _cookieManager.setCookie(
           url: Uri.parse(Api.getBaseUrl()),

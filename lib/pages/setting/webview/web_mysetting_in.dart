@@ -25,7 +25,7 @@ class InWebMySetting extends StatelessWidget {
     final baseUrl = Api.getBaseUrl();
 
     final Map<String, String> _httpHeaders = {
-      'Cookie': Global.profile.user.cookie ?? '',
+      'Cookie': Global.profile.user.cookie,
       'host': Uri.parse(baseUrl).host,
     };
 
@@ -110,8 +110,8 @@ class InWebMySetting extends StatelessWidget {
                 .saveFromResponse(Uri.parse(Api.getBaseUrl()), ioCookies);
 
             ehConfigService.selectProfile = ioCookies
-                .firstWhereOrNull((element) => element.name == 'sp')
-                ?.value ??
+                    .firstWhereOrNull((element) => element.name == 'sp')
+                    ?.value ??
                 '';
 
             // _cookieManager.getCookies(url: url).then((value) {
