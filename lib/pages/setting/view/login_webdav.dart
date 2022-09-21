@@ -41,10 +41,11 @@ class LoginWebDAV extends GetView<WebdavController> {
                   children: [
                     const SizedBox(height: 50),
                     const Icon(
-                      FontAwesomeIcons.mixcloud,
+                      FontAwesomeIcons.cloud,
                       size: 120,
                       color: CupertinoColors.activeBlue,
                     ),
+                    const SizedBox(height: 30),
                     CupertinoFormSection.insetGrouped(
                       backgroundColor: Colors.transparent,
                       margin: const EdgeInsets.fromLTRB(16, 10, 16, 4),
@@ -110,20 +111,43 @@ class LoginWebDAV extends GetView<WebdavController> {
                     ),
                     SizedBox(
                       height: 50,
-                      child: CupertinoButton(
-                        child: controller.loadingLogin
-                            ? const CupertinoActivityIndicator()
-                            : Text(L10n.of(context).login),
-                        color: CupertinoColors.activeBlue,
-                        onPressed: controller.loadingLogin
-                            ? null
-                            : () async {
-                                final rult =
-                                    await controller.pressLoginWebDAV();
-                                if (rult != null && rult) {
-                                  Get.back(id: isLayoutLarge ? 2 : null);
-                                }
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Obx(() {
+                            return CupertinoButton(
+                              minSize: 100,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 10),
+                              child: controller.testingConnect
+                                  ? const CupertinoActivityIndicator()
+                                  : Text('Test'),
+                              color: CupertinoColors.activeOrange,
+                              onPressed: () async {
+                                // final rult = await controller.pressLoginWebDAV();
+                                await controller.testWebDav();
                               },
+                            );
+                          }),
+                          CupertinoButton(
+                            minSize: 100,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 10),
+                            child: controller.loadingLogin
+                                ? const CupertinoActivityIndicator()
+                                : Text(L10n.of(context).login),
+                            color: CupertinoColors.activeBlue,
+                            onPressed: controller.loadingLogin
+                                ? null
+                                : () async {
+                                    final rult =
+                                        await controller.pressLoginWebDAV();
+                                    if (rult != null && rult) {
+                                      Get.back(id: isLayoutLarge ? 2 : null);
+                                    }
+                                  },
+                          ),
+                        ],
                       ),
                     ),
                   ],
