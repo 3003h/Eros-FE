@@ -19,8 +19,9 @@ class ViewHistory {
 
   Map<String, dynamic> toJson() => _$ViewHistoryToJson(this);
 
-  @Index(unique: true, replace: true)
-  final Id gid;
+  @Index(unique: true)
+  @Id()
+  final int gid;
   @Index()
   final int lastViewTime;
   final String galleryProviderText;

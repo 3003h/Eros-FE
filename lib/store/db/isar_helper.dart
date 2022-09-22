@@ -41,7 +41,7 @@ class IsarHelper {
     final gid = int.tryParse(galleryProvider.gid ?? '0') ?? 0;
     final lastViewTime = galleryProvider.lastViewTime ?? 0;
 
-    await isar.writeTxn(() async {
+    await isar.writeTxn((isar) async {
       await isar.viewHistorys.put(ViewHistory(
           gid: gid,
           lastViewTime: lastViewTime,
@@ -51,13 +51,13 @@ class IsarHelper {
 
   Future<void> removeHistory(String gid) async {
     final _gid = int.tryParse(gid) ?? 0;
-    await isar.writeTxn(() async {
+    await isar.writeTxn((isar) async {
       await isar.viewHistorys.delete(_gid);
     });
   }
 
   Future<void> cleanHistory() async {
-    await isar.writeTxn(() async {
+    await isar.writeTxn((isar) async {
       await isar.viewHistorys.where().deleteAll();
     });
   }
@@ -71,16 +71,18 @@ class IsarHelper {
             galleryProviderText: jsonEncode(e)))
         .toList();
 
-    await isar.writeTxn(() async {
-      await isar.viewHistorys.putAll(viewHistorys);
+    await isar.writeTxn((isar) async {
+      await isar.viewHistorys
+          .putAll(viewHistorys, replaceOnConflict: replaceOnConflict);
     });
   }
 
   Future<void> putAllTagTranslate(List<TagTranslat> tagTranslates,
       {bool replaceOnConflict = true}) async {
     final tagTranslats = isar.tagTranslats;
-    await isar.writeTxn(() async {
-      await tagTranslats.putAll(tagTranslates);
+    await isar.writeTxn((isar) async {
+      await tagTranslats.putAll(tagTranslates,
+          replaceOnConflict: replaceOnConflict);
     });
   }
 
@@ -124,7 +126,7 @@ class IsarHelper {
   }
 
   Future<void> removeAllTagTranslate() async {
-    await isar.writeTxn(() async {
+    await isar.writeTxn((isar) async {
       final count = await isar.tagTranslats.where().deleteAll();
       logger.d('delete count $count');
     });
@@ -141,70 +143,88 @@ class IsarHelper {
 
   Future<void> putGalleryTask(GalleryTask galleryTask,
       {bool replaceOnConflict = true}) async {
-    final existGids = isar.galleryTasks.where().gidProperty().findAllSync();
-    final taskExist = existGids.contains(galleryTask.gid);
+    // final existGids = isar.galleryTasks.where().gidProperty().findAllSync();
+    // final taskExist = existGids.contains(galleryTask.gid);
 
-    if (replaceOnConflict) {
-      await isar.writeTxn(() async {
-        await isar.galleryTasks.put(galleryTask);
-      });
-    } else {
-      if (!taskExist) {
-        await isar.writeTxn(() async {
-          await isar.galleryTasks.put(galleryTask);
-        });
-      }
-    }
+    // if (replaceOnConflict) {
+    //   await isar.writeTxn((isar) async {
+    //     await isar.galleryTasks
+    //         .put(galleryTask, replaceOnConflict: replaceOnConflict);
+    //   });
+    // } else {
+    //   if (!taskExist) {
+    //     await isar.writeTxn((isar) async {
+    //       await isar.galleryTasks.put(galleryTask);
+    //     });
+    //   }
+    // }
+
+    await isar.writeTxn((isar) async {
+      await isar.galleryTasks
+          .put(galleryTask, replaceOnConflict: replaceOnConflict);
+    });
   }
 
   Future<void> putAllGalleryTasks(List<GalleryTask> galleryTasks,
       {bool replaceOnConflict = true}) async {
-    await isar.writeTxn(() async {
-      await isar.galleryTasks.putAll(galleryTasks);
+    await isar.writeTxn((isar) async {
+      await isar.galleryTasks
+          .putAll(galleryTasks, replaceOnConflict: replaceOnConflict);
     });
   }
 
   Future<void> removeGalleryTask(int gid) async {
-    await isar.writeTxn(() async {
+    await isar.writeTxn((isar) async {
       await isar.galleryTasks.delete(gid);
     });
   }
 
   Future<List<GalleryImageTask>> findImageTaskAllByGid(int gid) async {
-    return await isar.galleryImageTasks.where().gidEqualTo(gid).sortBySer().findAll();
+    return await isar.galleryImageTasks
+        .where()
+        .gidEqualTo(gid)
+        .sortBySer()
+        .findAll();
   }
 
   List<GalleryImageTask> findImageTaskAllByGidSync(int gid) {
-    return isar.galleryImageTasks.where().gidEqualTo(gid).sortBySer().findAllSync();
+    return isar.galleryImageTasks
+        .where()
+        .gidEqualTo(gid)
+        .sortBySer()
+        .findAllSync();
   }
 
   Future<void> putImageTask(
     GalleryImageTask imageTask, {
     bool replaceOnConflict = true,
   }) async {
-    await isar.writeTxn(() async {
-      await isar.galleryImageTasks.put(imageTask);
+    await isar.writeTxn((isar) async {
+      await isar.galleryImageTasks
+          .put(imageTask, replaceOnConflict: replaceOnConflict);
     });
   }
 
   Future<void> putAllImageTask(List<GalleryImageTask> imageTasks,
       {bool replaceOnConflict = true}) async {
-    await isar.writeTxn(() async {
-      await isar.galleryImageTasks.putAll(imageTasks);
+    await isar.writeTxn((isar) async {
+      await isar.galleryImageTasks
+          .putAll(imageTasks, replaceOnConflict: replaceOnConflict);
     });
   }
 
   Future<void> removeImageTask(int gid) async {
-    await isar.writeTxn(() async {
+    await isar.writeTxn((isar) async {
       await isar.galleryImageTasks.where().gidEqualTo(gid).deleteAll();
     });
   }
 
   Future<void> updateImageTaskStatus(int gid, int ser, int status) async {
-    await isar.writeTxn(() async {
+    await isar.writeTxn((isar) async {
       final tasks = await isar.galleryImageTasks.getByGidSer(gid, ser);
       if (tasks != null) {
-        await isar.galleryImageTasks.put(tasks.copyWith(status: status));
+        await isar.galleryImageTasks
+            .put(tasks.copyWith(status: status), replaceOnConflict: true);
       }
     });
   }

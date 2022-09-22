@@ -76,6 +76,5 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/release/*.apk"
           tag: ${{ github.ref_name }}
-          prerelease: true
+          prerelease: false
           allowUpdates: true
-          token: ${{ secrets.RELEASE_TOKEN }}

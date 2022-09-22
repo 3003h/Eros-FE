@@ -10,7 +10,7 @@ Future<Isar> openIsar() async {
   final dirPath = Global.appSupportPath;
 
   final isar = await Isar.open(
-     [
+    schemas: [
       ViewHistorySchema,
       TagTranslatSchema,
       GalleryTaskSchema,
