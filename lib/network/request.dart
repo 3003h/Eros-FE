@@ -28,7 +28,7 @@ Options getCacheOptions({bool forceRefresh = false}) {
 
   final options = Api.cacheOption
       .copyWith(
-        policy: forceRefresh ? CachePolicy.refresh : null,
+        policy: forceRefresh ? CachePolicy.refreshForceCache : null,
       )
       .toOptions();
 

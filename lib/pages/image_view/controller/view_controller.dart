@@ -289,7 +289,8 @@ class ViewExtController extends GetxController {
 
   void addVolumeKeydownListen() {
     if (_ehConfigService.volumnTurnPage) {
-      _volumeKeyDownSubscription = FlutterAndroidVolumeKeydown.stream.listen((event) {
+      _volumeKeyDownSubscription =
+          FlutterAndroidVolumeKeydown.stream.listen((event) {
         if (event == HardwareButton.volume_down) {
           // logger.d('Volume down received');
           toNext();
@@ -498,7 +499,6 @@ class ViewExtController extends GetxController {
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
-    // final gtask = await vState.galleryTaskDao!.findGalleryTaskByGid(gid);
     final gtask = await isarHelper.findGalleryTaskByGid(gid);
     return gtask?.realDirPath;
   }
@@ -758,8 +758,7 @@ class ViewExtController extends GetxController {
     } else if (vState.viewMode == ViewMode.rightToLeft) {
       toNext();
     } else if (vState.viewMode == ViewMode.topToBottom) {
-      if (itemScrollController.isAttached &&
-          !vState.isScrolling ) {
+      if (itemScrollController.isAttached && !vState.isScrolling) {
         toPrev();
       }
     }
@@ -808,11 +807,10 @@ class ViewExtController extends GetxController {
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
       );
-
     } else if (vState.pageIndex < vState.filecount) {
-        final toPage = vState.pageIndex + 1;
-        changePage(toPage);
-      }
+      final toPage = vState.pageIndex + 1;
+      changePage(toPage);
+    }
   }
 
   void toPrev() {
@@ -826,10 +824,9 @@ class ViewExtController extends GetxController {
         curve: Curves.ease,
       );
     } else if (vState.pageIndex > 0) {
-        final toPage = vState.pageIndex - 1;
-        changePage(toPage);
-      }
-
+      final toPage = vState.pageIndex - 1;
+      changePage(toPage);
+    }
   }
 
   void handOnSliderChangedEnd(double value) {
