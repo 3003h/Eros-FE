@@ -1,7 +1,11 @@
+// @dart=2.17
+
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'dart:ui' as ui show Codec, ImmutableBuffer;
 
+import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
@@ -64,33 +68,67 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
   }
 
   @override
-  ImageStreamCompleter loadBuffer(
-      EhImageProvider key, DecoderBufferCallback decode) {
+  ImageStreamCompleter load(EhImageProvider key, DecoderCallback decode) {
     final chunkEventsController = StreamController<EhImageChunkEvent>();
     return MultiFrameImageStreamCompleter(
-      codec: _loadBufferAsync(key, chunkEventsController),
-      scale: key.scale,
+      codec: _loadAsync(key, chunkEventsController, decode),
       chunkEvents: chunkEventsController.stream,
+      scale: key.scale,
       informationCollector: () sync* {
         yield ErrorDescription('PageInfo: $pageInfo');
       },
     );
   }
 
-  Future<ui.Codec> _loadBufferAsync(EhImageProvider key,
-      StreamController<ImageChunkEvent> chunkEvents) async {
+  // @override
+  // ImageStreamCompleter loadBuffer(
+  //     EhImageProvider key, DecoderBufferCallback decode) {
+  //   final chunkEventsController = StreamController<EhImageChunkEvent>();
+  //   return MultiFrameImageStreamCompleter(
+  //     codec: _loadBufferAsync(key, chunkEventsController),
+  //     scale: key.scale,
+  //     chunkEvents: chunkEventsController.stream,
+  //     informationCollector: () sync* {
+  //       yield ErrorDescription('PageInfo: $pageInfo');
+  //     },
+  //   );
+  // }
+
+  Future<ui.Codec> _loadAsync(
+      EhImageProvider key,
+      StreamController<ImageChunkEvent> chunkEvents,
+      DecoderCallback decode) async {
     assert(key == this);
 
+    final bytes = await getImageData(key, chunkEvents);
+
+    if (bytes.lengthInBytes == 0) {
+      throw 'bytes and loadedCallback is null';
+    }
+
+    return decode(bytes);
+  }
+
+  // Future<ui.Codec?> _loadBufferAsync(EhImageProvider key,
+  //     StreamController<ImageChunkEvent> chunkEvents) async {
+  //   assert(key == this);
+  //
+  //   final data = await getImageData(key, chunkEvents);
+  //
+  //   if (data.lengthInBytes == 0) {
+  //     throw 'bytes and loadedCallback is null';
+  //   }
+  //   final buff = await ui.ImmutableBuffer.fromUint8List(data);
+  //   return await PaintingBinding.instance.instantiateImageCodecFromBuffer(buff);
+  // }
+
+  Future<Uint8List> getImageData(EhImageProvider key,
+      StreamController<ImageChunkEvent> chunkEvents) async {
     Uint8List? bytes;
     final downloadOrigImage = Get.find<EhConfigService>().downloadOrigImage;
 
     chunkEvents.sink.add(EhImageChunkEvent(
-        stage: '加载画廊',
-        ser: key.pageInfo.ser,
-        cumulativeBytesLoaded: 0,
-        expectedTotalBytes: 0));
-    // chunkEvents.sink.add(EhImageChunkEvent(
-    //     stage: '获取图片地址', cumulativeBytesLoaded: 0, expectedTotalBytes: 0));
+        stage: '加载画廊', ser: key.pageInfo.ser, cumulativeBytesLoaded: 0));
 
     final ViewExtController viewExtController = Get.find();
     final galleryImage = await viewExtController.fetchImage(key.pageInfo.ser);
@@ -110,7 +148,7 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
 
     if (bytes == null) {
       final tempPath = path.join(Global.tempPath, 'temp_gallery_image',
-          'temp_${key.pageInfo.gid}_${galleryImage.ser}');
+          'temp_${key.pageInfo.gid}_${galleryImage.ser}_${downloadOrigImage ? 'ori' : 'res'}');
       // temp file exist
       if (File(tempPath).existsSync()) {
         logger.d('tempPath file... $tempPath');
@@ -121,28 +159,53 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
             ? galleryImage.originImageUrl
             : galleryImage.imageUrl;
         logger.d('imageUrl... $imageUrl');
-        await ehDownload(
-            url: '$imageUrl',
-            savePath: tempPath,
-            progressCallback: (int count, int total) {
-              chunkEvents.sink.add(EhImageChunkEvent(
-                  stage: '下载图片',
-                  ser: key.pageInfo.ser,
-                  cumulativeBytesLoaded: count,
-                  expectedTotalBytes: total));
-            });
+        try {
+          await ehDownload(
+              url: '$imageUrl',
+              savePath: tempPath,
+              progressCallback: (int count, int total) {
+                chunkEvents.sink.add(EhImageChunkEvent(
+                    stage: '下载图片',
+                    ser: key.pageInfo.ser,
+                    cumulativeBytesLoaded: count,
+                    expectedTotalBytes: total));
+              });
+        } on DioError catch (e) {
+          if (e.type == DioErrorType.response &&
+              e.response?.statusCode == 403) {
+            logger
+                .d('403 ${key.pageInfo.gid}.${key.pageInfo.ser}下载链接已经失效 需要更新');
+            final imageFetched = await _fetchImageInfo(galleryImage.href!,
+                itemSer: key.pageInfo.ser,
+                image: galleryImage,
+                gid: key.pageInfo.gid,
+                changeSource: true);
+            logger.d('imageFetched... ${imageFetched.toJson()}');
+            final imageUrl = downloadOrigImage
+                ? imageFetched.originImageUrl
+                : imageFetched.imageUrl;
+            if (imageUrl != null) {
+              await ehDownload(
+                  url: imageUrl,
+                  savePath: tempPath,
+                  progressCallback: (int count, int total) {
+                    chunkEvents.sink.add(EhImageChunkEvent(
+                        stage: '下载图片',
+                        ser: key.pageInfo.ser,
+                        cumulativeBytesLoaded: count,
+                        expectedTotalBytes: total));
+                  });
+            } else {
+              throw Exception('fetchImage error');
+            }
+          }
+        }
+
         bytes = await File(tempPath).readAsBytes();
       }
     }
 
-    // chunkEvents.sink.add(EhImageChunkEvent(
-    //     stage: '加载图片', cumulativeBytesLoaded: 0, expectedTotalBytes: 1000));
-
-    if (bytes.lengthInBytes == 0) {
-      throw 'bytes and loadedCallback is null';
-    }
-    final buff = await ui.ImmutableBuffer.fromUint8List(bytes);
-    return await PaintingBinding.instance.instantiateImageCodecFromBuffer(buff);
+    return bytes;
   }
 
   @override
@@ -160,4 +223,39 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
   String toString() {
     return 'EhImage{pageInfo: $pageInfo, scale: $scale}';
   }
+}
+
+Future<GalleryImage> _fetchImageInfo(
+  String href, {
+  required int itemSer,
+  required GalleryImage image,
+  required int gid,
+  bool changeSource = false,
+  String? sourceId,
+  CancelToken? cancelToken,
+}) async {
+  final String? _sourceId = changeSource ? sourceId : '';
+
+  final GalleryImage? _image = await fetchImageInfo(
+    href,
+    refresh: changeSource,
+    sourceId: _sourceId,
+    cancelToken: cancelToken,
+  );
+
+  logger.v('_image from fetch ${_image?.toJson()}');
+
+  if (_image == null) {
+    return image;
+  }
+
+  final GalleryImage _imageCopyWith = image.copyWith(
+    sourceId: _image.sourceId,
+    imageUrl: _image.imageUrl,
+    imageWidth: _image.imageWidth,
+    imageHeight: _image.imageHeight,
+    originImageUrl: _image.originImageUrl,
+  );
+
+  return _imageCopyWith;
 }

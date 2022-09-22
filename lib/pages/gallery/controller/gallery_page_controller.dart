@@ -542,7 +542,7 @@ class GalleryPageController extends GetxController
         final String? _sourceId =
             changeSource ? gState.imageMap[itemSer]?.sourceId : '';
 
-        logger.v(
+        logger.d(
             'ser:$itemSer ,href: ${gState.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
@@ -556,9 +556,10 @@ class GalleryPageController extends GetxController
           final GalleryImage? _image = await fetchImageInfo(
             gState.imageMap[itemSer]?.href ?? '',
             sourceId: _sourceId,
+            refresh: true,
           );
 
-          logger.v('fetch _image ${_image?.toJson()}');
+          logger.d('fetch _image ${_image?.toJson()}');
 
           // 换源加载
           if (changeSource) {
