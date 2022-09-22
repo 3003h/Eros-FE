@@ -7,6 +7,7 @@ import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
+import 'package:fehviewer/pages/tab/view/topliat_page_debug.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -31,7 +32,8 @@ class TabPages {
   Map<String, Widget> get tabViews => <String, Widget>{
         EHRoutes.gallery: const CustomTabbarList(),
         EHRoutes.favorite: const FavoriteTabTabBarPage(),
-        EHRoutes.toplist: const ToplistTab(),
+        // EHRoutes.toplist: const ToplistTab(),
+        EHRoutes.toplist: const ToplistTabDebug(),
         EHRoutes.history: const HistoryTab(),
         EHRoutes.download: const DownloadTab(),
         EHRoutes.setting: const SettingTab(),
@@ -99,6 +101,7 @@ List<String> kTabNameList = <String>[
 /// TabHome布局控制器
 class TabHomeController extends GetxController {
   TabHomeController();
+
   DateTime? lastPressedAt; //上次点击时间
 
   int currentIndex = 0;
