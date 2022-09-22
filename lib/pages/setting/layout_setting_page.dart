@@ -76,12 +76,12 @@ class ListViewLayoutSetting extends StatelessWidget {
             desc: L10n.of(context).gray_black,
             descOn: L10n.of(context).pure_black,
           )),
-      if (context.isTablet)
-        Obx(() => TextSwitchItem(
-              L10n.of(context).tablet_layout,
-              intValue: _ehConfigService.tabletLayout,
-              onChanged: (bool val) => _ehConfigService.tabletLayout = val,
-            )),
+      // if (context.isTablet)
+      //   Obx(() => TextSwitchItem(
+      //         L10n.of(context).tablet_layout,
+      //         intValue: _ehConfigService.tabletLayout,
+      //         onChanged: (bool val) => _ehConfigService.tabletLayout = val,
+      //       )),
       if (context.isTablet) _buildTableLayoutItem(context),
       if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
@@ -278,9 +278,9 @@ Widget _buildTableLayoutItem(BuildContext context, {bool hideLine = false}) {
   final EhConfigService ehConfigService = Get.find();
 
   final localeMap = <TabletLayout, String>{
-    TabletLayout.automatic: 'automatic',
-    TabletLayout.landscape: 'landscape',
-    TabletLayout.never: 'never',
+    TabletLayout.automatic: L10n.of(context).automatic,
+    TabletLayout.landscape: L10n.of(context).landscape,
+    TabletLayout.never: L10n.of(context).never,
   };
 
   return Obx(() {

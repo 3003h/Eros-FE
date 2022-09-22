@@ -75,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
@@ -172,6 +173,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("Instantly"),
         "jump_to_page": MessageLookupByLibrary.simpleMessage("Jump to Page"),
+        "landscape": MessageLookupByLibrary.simpleMessage("Landscape"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Last Favorites, long press to manually select"),
@@ -211,6 +213,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("My Tags on Website"),
+        "never": MessageLookupByLibrary.simpleMessage("Never"),
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
