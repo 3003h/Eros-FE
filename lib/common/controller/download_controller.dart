@@ -1088,7 +1088,6 @@ class DownloadController extends GetxController {
       filePath: fileName,
     );
 
-    // await imageTaskDao.insertOrReplaceImageTasks([_imageTask]);
     await isarHelper.putImageTask(_imageTask);
   }
 

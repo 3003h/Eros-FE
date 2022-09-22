@@ -17,9 +17,8 @@ class BlurImage extends StatelessWidget {
       fit: StackFit.loose,
       children: <Widget>[
         Container(child: child),
-        Offstage(
-          offstage: !isBlur,
-          child: BackdropFilter(
+        if (isBlur)
+          BackdropFilter(
             filter: ImageFilter.blur(
               sigmaX: sigma,
               sigmaY: sigma,
@@ -28,7 +27,6 @@ class BlurImage extends StatelessWidget {
                 // color: Colors.white.withOpacity(0.1),
                 ),
           ),
-        ),
       ],
     );
   }
