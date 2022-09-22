@@ -171,11 +171,23 @@ class IsarHelper {
   }
 
   Future<List<GalleryImageTask>> findImageTaskAllByGid(int gid) async {
-    return await isar.galleryImageTasks.where().gidEqualTo(gid).sortBySer().findAll();
+    return await isar.galleryImageTasks
+        .where()
+        .gidEqualTo(gid)
+        .sortBySer()
+        .findAll();
   }
 
   List<GalleryImageTask> findImageTaskAllByGidSync(int gid) {
-    return isar.galleryImageTasks.where().gidEqualTo(gid).sortBySer().findAllSync();
+    return isar.galleryImageTasks
+        .where()
+        .gidEqualTo(gid)
+        .sortBySer()
+        .findAllSync();
+  }
+
+  GalleryImageTask? findImageTaskAllByGidSerSync(int gid, int ser) {
+    return isar.galleryImageTasks.getByGidSerSync(gid, ser);
   }
 
   Future<void> putImageTask(

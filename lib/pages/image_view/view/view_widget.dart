@@ -164,13 +164,13 @@ class ViewError extends StatelessWidget {
 class ViewLoading extends StatelessWidget {
   const ViewLoading({
     Key? key,
-    required this.ser,
+    this.ser,
     this.duration,
     this.progress,
     this.animationEnabled,
     this.debugLable,
   }) : super(key: key);
-  final int ser;
+  final int? ser;
   final Duration? duration;
   final double? progress;
   final bool? animationEnabled;
@@ -572,12 +572,12 @@ class _ViewLoadingCupertion extends StatelessWidget {
   const _ViewLoadingCupertion({
     Key? key,
     this.progress,
-    required this.ser,
+    this.ser,
     this.animationEnabled = true,
   }) : super(key: key);
 
   final double? progress;
-  final int ser;
+  final int? ser;
   final bool animationEnabled;
 
   @override
@@ -620,7 +620,7 @@ class _ViewLoadingCupertion extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  '$ser',
+                  '${ser ?? ''}',
                   style: const TextStyle(
                     color: CupertinoColors.systemGrey6,
                     height: 1,

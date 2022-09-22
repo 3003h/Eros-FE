@@ -4,6 +4,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import '../controller/view_controller.dart';
 import '../controller/view_state.dart';
 import 'image_list_view.dart';
 import 'image_page_view.dart';
+import 'image_page_view_ex.dart';
 import 'view_image.dart';
 
 typedef DoubleClickAnimationListener = void Function();
@@ -146,11 +148,13 @@ class ImageView extends StatelessWidget {
           case ViewMode.topToBottom:
             return const ImageListView();
           case ViewMode.LeftToRight:
-            return const ImagePageView();
+            return kReleaseMode
+                ? const ImagePageView()
+                : const ImagePhotoView();
           case ViewMode.rightToLeft:
             return const ImagePageView(reverse: true);
           default:
-            return const ImagePageView();
+            return const ImagePhotoView();
         }
       },
     );
