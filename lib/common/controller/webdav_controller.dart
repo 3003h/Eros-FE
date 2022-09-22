@@ -88,6 +88,10 @@ class WebdavController extends GetxController {
   bool loadingLogin = false;
   bool obscurePasswd = true;
 
+  final _testingConnect = false.obs;
+  bool get testingConnect => _testingConnect.value;
+  set testingConnect(bool val) => _testingConnect.value = val;
+
   void switchObscure() {
     obscurePasswd = !obscurePasswd;
     update();
@@ -346,6 +350,12 @@ class WebdavController extends GetxController {
     if (client == null) {
       return;
     }
+
+    if (read.gid == null || read.gid!.isEmpty) {
+      logger.e('uploadRead gid is null');
+      return;
+    }
+
     logger.v('upload Read [${read.toJson()}] ');
     chkTempDir(kLocalReadDirPath);
 
@@ -632,6 +642,24 @@ class WebdavController extends GetxController {
     );
 
     await client.ping();
+  }
+
+  Future<void> testWebDav() async {
+    try {
+      testingConnect = true;
+      await _pingWebDAV(
+        urlController.text,
+        user: usernameController.text,
+        pwd: passwdController.text,
+      );
+      showToast('Connect Success');
+    } catch (err, stack) {
+      showToast('Connect error\n$err');
+      logger.e('$err');
+      rethrow;
+    } finally {
+      testingConnect = false;
+    }
   }
 
   Future<bool> addWebDAVProfile(String url, {String? user, String? pwd}) async {

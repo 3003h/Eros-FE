@@ -7,8 +7,6 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
-import '../../utils/logger.dart';
-
 String parseErrGallery(String response) {
   final Document document = parse(response);
   const String msgSelect = 'div > p';

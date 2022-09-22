@@ -45,6 +45,7 @@ analyzer:
     - "lib/generated/**"
     - "lib/src/http/**"
     - "lib/models/**"
+    - "**/*.g.dart"
 
 linter:
   rules:

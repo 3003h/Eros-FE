@@ -3,7 +3,7 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/download_archiver_item.dart';
 import 'package:fehviewer/pages/item/download_gallery_item.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/store/floor/entity/gallery_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -181,16 +181,14 @@ class _DownloadArchiverViewState extends State<DownloadArchiverView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return CupertinoScrollbar(
-      child: AnimatedList(
-        key: controller.animatedArchiverListKey,
-        padding: EdgeInsets.only(
-          top: context.mediaQueryPadding.top,
-          bottom: context.mediaQueryPadding.bottom,
-        ),
-        initialItemCount: controller.archiverTasks.length,
-        itemBuilder: downloadArchiverItemBuilder,
+    return AnimatedList(
+      key: controller.animatedArchiverListKey,
+      padding: EdgeInsets.only(
+        top: context.mediaQueryPadding.top,
+        bottom: context.mediaQueryPadding.bottom,
       ),
+      initialItemCount: controller.archiverTasks.length,
+      itemBuilder: downloadArchiverItemBuilder,
     );
   }
 
@@ -222,17 +220,14 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
       // controller.galleryTasks更新时，生成新的animatedGalleryListKey，确保列表能刷新
       // TODO: 会导致任务状态变化时， 列表重新回到顶部
       // controller.animatedGalleryListKey = GlobalKey<AnimatedListState>();
-      return CupertinoScrollbar(
-        controller: PrimaryScrollController.of(context),
-        child: AnimatedList(
-          key: controller.animatedGalleryListKey,
-          padding: EdgeInsets.only(
-            top: context.mediaQueryPadding.top,
-            bottom: context.mediaQueryPadding.bottom,
-          ),
-          initialItemCount: controller.galleryTasks.length,
-          itemBuilder: downloadItemBuilder,
+      return AnimatedList(
+        key: controller.animatedGalleryListKey,
+        padding: EdgeInsets.only(
+          top: context.mediaQueryPadding.top,
+          bottom: context.mediaQueryPadding.bottom,
         ),
+        initialItemCount: controller.galleryTasks.length,
+        itemBuilder: downloadItemBuilder,
       );
     });
   }

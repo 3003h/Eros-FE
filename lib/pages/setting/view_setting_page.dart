@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -88,12 +87,20 @@ class ViewSettingList extends StatelessWidget {
         },
       ),
       TextSwitchItem(
-        L10n.of(context).tap_to_turn_page_anima,
-        intValue: ehConfigService.tapToTurnPageAnimations,
+        L10n.of(context).turn_page_anima,
+        intValue: ehConfigService.turnPageAnimations,
         onChanged: (bool val) {
-          ehConfigService.tapToTurnPageAnimations = val;
+          ehConfigService.turnPageAnimations = val;
         },
       ),
+      if (GetPlatform.isAndroid)
+        TextSwitchItem(
+          L10n.of(context).volume_key_turn_page,
+          intValue: ehConfigService.volumnTurnPage,
+          onChanged: (bool val) {
+            ehConfigService.volumnTurnPage = val;
+          },
+        ),
       TextSwitchItem(
         L10n.of(context).fullscreen,
         intValue: ehConfigService.viewFullscreen,

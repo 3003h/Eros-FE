@@ -7,7 +7,6 @@ import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
-import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -762,7 +761,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (context.width >= kThresholdTabletWidth)
+                        if (context.isTablet)
                           ControllerButtonBar(
                             controller: controller,
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -770,18 +769,21 @@ class ViewTopBar extends GetView<ViewExtController> {
                             showLable: false,
                             // showLable: false,
                           ),
+                        // 菜单页面入口
                         MouseRegionClick(
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
-                            onTap: () {
-                              Get.toNamed(EHRoutes.readSeting);
+                            onTap: () async {
+                              controller.cancelVolumeKeydownListen();
+                              await Get.toNamed(EHRoutes.readSeting);
+                              controller.addVolumeKeydownListen();
                             },
                             child: Container(
                               width: 40,
                               margin: const EdgeInsets.only(right: 8.0),
                               height: kTopBarButtonHeight,
                               child: const Icon(
-                                FontAwesomeIcons.ellipsisH,
+                                FontAwesomeIcons.ellipsis,
                                 color: CupertinoColors.systemGrey6,
                                 // size: 24,
                               ),
@@ -832,7 +834,7 @@ class ViewBottomBar extends GetView<ViewExtController> {
       id: idViewBottomBar,
       builder: (logic) {
         logic.vState.bottomBarHeight = context.mediaQueryPadding.bottom +
-            (context.width < kThresholdTabletWidth ? kBottomBarHeight : 0) +
+            (!context.isTablet ? kBottomBarHeight : 0) +
             kSliderBarHeight +
             (logic.vState.showThumbList ? kThumbListViewHeight : 0);
 
@@ -903,7 +905,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                 },
               ),
               // 按钮栏
-              if (context.width < kThresholdTabletWidth)
+              if (!context.isTablet)
                 ControllerButtonBar(
                   controller: logic,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1177,6 +1179,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                       thumb = ExtendedImage.file(
                         File(path),
                         fit: BoxFit.cover,
+                        filterQuality: FilterQuality.medium,
                       );
                       break;
                     case LoadFrom.gallery:
@@ -1187,8 +1190,9 @@ class ThumbnailListView extends GetView<ViewExtController> {
                           controller.vState.asyncArchiveFiles[index];
                       // thumb = Container(color: Colors.white);
                       thumb = FutureThumblArchive(
-                          gid: controller.vState.gid,
-                          asyncArchiveFile: asyncFile);
+                        gid: controller.vState.gid,
+                        asyncArchiveFile: asyncFile,
+                      );
                       break;
                   }
 
@@ -1324,6 +1328,7 @@ class _FutureThumblArchiveState extends State<FutureThumblArchive> {
               return ExtendedImage.file(
                 _data,
                 fit: BoxFit.cover,
+                filterQuality: FilterQuality.medium,
               );
             } else {
               logger.d('${snapshot.error} ${snapshot.stackTrace}');

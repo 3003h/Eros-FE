@@ -324,6 +324,7 @@
   "uc_mt_1": "隐藏",
   "auto_select_profile": "自动选择配置",
   "tap_to_turn_page_anima": "点击翻页动画",
+  "turn_page_anima": "翻页动画",
   "download_ori_image": "下载原图",
   "download_ori_image_summary": "危险! 会导致下载配额迅速流失, 出现 509 错误",
   "redownload": "重新下载",
@@ -391,5 +392,9 @@
   "redirect_thumb_link_summary": "重定向缩略图链接为ehgt.org",
   "check_for_update": "检查更新",
   "latest_version": "最新版本",
-  "update_to_version": "可更新到 {version}"
+  "update_to_version": "可更新到 {version}",
+  "volume_key_turn_page": "音量键翻页",
+  "landscape": "横屏",
+  "automatic": "自动",
+  "never": "禁用"
 }

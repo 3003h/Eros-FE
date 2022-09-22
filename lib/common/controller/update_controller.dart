@@ -2,7 +2,10 @@ import 'dart:math';
 
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -14,6 +17,10 @@ class UpdateController extends GetxController {
   final _canUpdate = false.obs;
   bool get canUpdate => _canUpdate.value;
   set canUpdate(bool val) => _canUpdate.value = val;
+
+  final _isLastVersion = true.obs;
+  bool get isLastVersion => _isLastVersion.value;
+  set isLastVersion(bool val) => _isLastVersion.value = val;
 
   String? lastVersion;
 
@@ -40,23 +47,62 @@ class UpdateController extends GetxController {
     logger.d('remoteVersion $remoteVersion  , currentVersion $currentVersion');
     final compare = versionStringCompare(
         preVersion: currentVersion, lastVersion: remoteVersion);
-    if (!kReleaseMode ? compare <= 0 : compare < 0) {
-      lastVersion = remoteVersion;
-      canUpdate = true;
+    lastVersion = remoteVersion;
 
-      if (showDialog) {
-        showSimpleEhDiglog(
-          context: Get.context!,
-          title: remoteVersion,
-          contentText: body,
-          onOk: () {
-            launchUrlString(
-              htmUrl,
-              mode: LaunchMode.externalApplication,
-            );
-          },
-        );
-      }
+    if (compare >= 0) {
+      isLastVersion = true;
+    }
+
+    if (showDialog) {
+      showSimpleEhDiglog(
+        context: Get.context!,
+        title: remoteVersion,
+        // contentText: body,
+        content: IntrinsicHeight(
+          child: Container(
+            height: 300,
+            child: SingleChildScrollView(
+              child: MarkdownBody(
+                data: body,
+                selectable: true,
+                styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
+                styleSheet: MarkdownStyleSheet(
+                  a: const TextStyle(
+                    color: CupertinoColors.activeBlue,
+                    fontSize: 14,
+                  ),
+                  p: const TextStyle(
+                    fontSize: 14,
+                  ),
+                  em: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: 14,
+                  ),
+                  listBullet: const TextStyle(
+                    fontSize: 14,
+                    color: CupertinoColors.systemGrey,
+                  ),
+                  code: CupertinoTheme.of(Get.context!).textTheme.textStyle.copyWith(
+                      backgroundColor: Colors.transparent,
+                      color: CupertinoColors.systemPink,
+                      fontSize: CupertinoTheme.of(Get.context!)
+                              .textTheme
+                              .textStyle
+                              .fontSize! *
+                          0.8,
+                      fontFamilyFallback: EHConst.monoFontFamilyFallback),
+                ),
+              ),
+            ),
+          ),
+        ),
+        onOk: () {
+          launchUrlString(
+            htmUrl,
+            mode: LaunchMode.externalApplication,
+          );
+        },
+      );
     }
   }
 }

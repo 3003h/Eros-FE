@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
@@ -14,7 +13,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -45,10 +43,6 @@ Future<void> main() async {
 
     getinit();
 
-    if (Platform.isAndroid) {
-      await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
-    }
-
     if (Get.find<EhConfigService>().debugMode || kDebugMode) {
       Logger.level = Level.debug;
       logger.v('Level.debug');
@@ -61,18 +55,18 @@ Future<void> main() async {
 
     runApp(MyApp());
 
-    doWhenWindowReady(() {
-      // const initialSize = Size(960, 720);
-      const minSize = Size(400, 400);
-      appWindow.minSize = minSize;
-      // appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.title = L10n.current.app_title;
-      appWindow.show();
-    });
-
     if (GetPlatform.isDesktop) {
-      setWindowTitle(L10n.current.app_title);
+      // doWhenWindowReady(() {
+      //   // const initialSize = Size(960, 720);
+      //   const minSize = Size(400, 400);
+      //   appWindow.minSize = minSize;
+      //   // appWindow.size = initialSize;
+      //   appWindow.alignment = Alignment.center;
+      //   appWindow.title = L10n.current.app_title;
+      //   appWindow.show();
+      // });
+
+      // setWindowTitle(L10n.current.app_title);
     }
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
@@ -142,7 +136,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       Locale? locale,
     }) {
       return GetCupertinoApp(
-        // debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
         navigatorObservers: [
           // if (GetPlatform.isMobile)

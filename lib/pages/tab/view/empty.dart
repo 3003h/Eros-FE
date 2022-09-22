@@ -1,6 +1,7 @@
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -14,8 +15,16 @@ class EmptyPage extends StatelessWidget {
     return Obx(() {
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: ehTheme.isDarkMode
-            ? SystemUiOverlayStyle.light
-            : SystemUiOverlayStyle.dark,
+            ? SystemUiOverlayStyle.light.copyWith(
+                statusBarColor: Colors.transparent,
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarDividerColor: Colors.transparent,
+              )
+            : SystemUiOverlayStyle.dark.copyWith(
+                statusBarColor: Colors.transparent,
+                systemNavigationBarColor: Colors.transparent,
+                systemNavigationBarDividerColor: Colors.transparent,
+              ),
         child: CupertinoPageScaffold(
           backgroundColor: !ehTheme.isDarkMode
               ? CupertinoColors.secondarySystemBackground

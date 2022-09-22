@@ -13,14 +13,11 @@ import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../../../common/service/layout_service.dart';
 import '../../../route/first_observer.dart';
-import '../../../route/main_observer.dart';
 import '../../../route/second_observer.dart';
 import '../comm.dart';
 import '../view/setting_page.dart';
@@ -113,8 +110,6 @@ class TabHomeController extends GetxController {
   bool get isSafeMode => _ehConfigService.isSafeMode.value;
 
   final CupertinoTabController tabController = CupertinoTabController();
-  final PersistentTabController persistentTabController =
-      PersistentTabController();
 
   String get currRoute => _showTabs[currentIndex];
 

@@ -76,12 +76,13 @@ class ListViewLayoutSetting extends StatelessWidget {
             desc: L10n.of(context).gray_black,
             descOn: L10n.of(context).pure_black,
           )),
-      if (context.isTablet)
-        Obx(() => TextSwitchItem(
-              L10n.of(context).tablet_layout,
-              intValue: _ehConfigService.tabletLayout,
-              onChanged: (bool val) => _ehConfigService.tabletLayout = val,
-            )),
+      // if (context.isTablet)
+      //   Obx(() => TextSwitchItem(
+      //         L10n.of(context).tablet_layout,
+      //         intValue: _ehConfigService.tabletLayout,
+      //         onChanged: (bool val) => _ehConfigService.tabletLayout = val,
+      //       )),
+      if (context.isTablet) _buildTableLayoutItem(context),
       if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
           hideDivider: true,
@@ -200,28 +201,28 @@ class ListViewLayoutSetting extends StatelessWidget {
       },
     );
   }
+}
 
-  /// 语言设置部件
-  Widget _buildLanguageItem(BuildContext context, {bool hideLine = false}) {
-    final LocaleService localeService = Get.find();
-    final String _title = L10n.of(context).language;
+/// 语言设置部件
+Widget _buildLanguageItem(BuildContext context, {bool hideLine = false}) {
+  final LocaleService localeService = Get.find();
+  final String _title = L10n.of(context).language;
 
-    final Map<String, String> localeMap = <String, String>{
-      '': L10n.of(context).follow_system,
-    };
+  final Map<String, String> localeMap = <String, String>{
+    '': L10n.of(context).follow_system,
+  };
 
-    localeMap.addAll(languageMenu);
+  localeMap.addAll(languageMenu);
 
-    return Obx(() {
-      return SelectorItem<String>(
-        title: _title,
-        hideDivider: hideLine,
-        actionMap: localeMap,
-        initVal: localeService.localCode.value,
-        onValueChanged: (val) => localeService.localCode.value = val,
-      );
-    });
-  }
+  return Obx(() {
+    return SelectorItem<String>(
+      title: _title,
+      hideDivider: hideLine,
+      actionMap: localeMap,
+      initVal: localeService.localCode.value,
+      onValueChanged: (val) => localeService.localCode.value = val,
+    );
+  });
 }
 
 /// 主题设置部件
@@ -267,6 +268,28 @@ Widget _buildListModeItem(BuildContext context, {bool hideDivider = false}) {
       actionMap: modeMap,
       initVal: ehConfigService.listMode.value,
       onValueChanged: (val) => ehConfigService.listMode.value = val,
+    );
+  });
+}
+
+/// 平板布局
+Widget _buildTableLayoutItem(BuildContext context, {bool hideLine = false}) {
+  final String _title = L10n.of(context).tablet_layout;
+  final EhConfigService ehConfigService = Get.find();
+
+  final localeMap = <TabletLayout, String>{
+    TabletLayout.automatic: L10n.of(context).automatic,
+    TabletLayout.landscape: L10n.of(context).landscape,
+    TabletLayout.never: L10n.of(context).never,
+  };
+
+  return Obx(() {
+    return SelectorItem<TabletLayout>(
+      title: _title,
+      hideDivider: hideLine,
+      actionMap: localeMap,
+      initVal: ehConfigService.tabletLayoutType,
+      onValueChanged: (val) => ehConfigService.tabletLayoutType = val,
     );
   });
 }

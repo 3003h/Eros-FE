@@ -1,10 +1,10 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
-import 'package:floor/floor.dart';
+import 'package:isar/isar.dart';
 
 part 'tag_translat.g.dart';
 
 @CopyWith()
-@Entity(tableName: 'TagTranslat', primaryKeys: ['namespace', 'key'])
+@Collection()
 class TagTranslat {
   TagTranslat({
     required this.namespace,
@@ -12,10 +12,14 @@ class TagTranslat {
     this.name,
     this.intro,
     this.links,
-  });
-
+  }) : id = Isar.autoIncrement;
+  Id id;
+  @Index()
   final String namespace;
+  @Index(composite: [CompositeIndex('namespace')], unique: true, replace: true)
+  @Index()
   final String key;
+  @Index()
   final String? name;
   final String? intro;
   final String? links;

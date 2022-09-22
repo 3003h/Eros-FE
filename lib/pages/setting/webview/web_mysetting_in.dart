@@ -2,6 +2,7 @@ import 'dart:io' as io;
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/setting/controller/web_setting_controller.dart';
@@ -13,7 +14,6 @@ import 'package:get/get.dart';
 
 import 'eh_webview.dart';
 
-/// iOS使用
 class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
   final EhConfigService ehConfigService = Get.find();
@@ -25,7 +25,7 @@ class InWebMySetting extends StatelessWidget {
     final baseUrl = Api.getBaseUrl();
 
     final Map<String, String> _httpHeaders = {
-      // 'Cookie': Global.profile.user.cookie ?? '',
+      'Cookie': Global.profile.user.cookie,
       'host': Uri.parse(baseUrl).host,
     };
 
@@ -64,7 +64,6 @@ class InWebMySetting extends StatelessWidget {
       ),
       child: SafeArea(
         child: InAppWebView(
-          // initialUrl: '${Api.getBaseUrl()}/uconfig.php',
           initialUrlRequest: URLRequest(
             url: Uri.parse(
               '$baseUrl/uconfig.php',
@@ -75,19 +74,15 @@ class InWebMySetting extends StatelessWidget {
           onWebViewCreated: (InAppWebViewController controller) {
             _controller = controller;
           },
-          // onLoadStart: (InAppWebViewController controller, Uri? url) {
-          //   logger.d('Page started loading: $url');
-          //
-          //   if (!url.toString().endsWith('/uconfig.php')) {
-          //     logger.d('阻止打开 $url');
-          //     controller.stopLoading();
-          //   }
-          // },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             final uri = navigationAction.request.url!;
 
             logger.d('to $uri');
-            if (!(uri.path == '/uconfig.php')) {
+            // if (!(uri.path == '/uconfig.php')) {
+            //   logger.d('阻止打开 $uri');
+            //   return NavigationActionPolicy.CANCEL;
+            // }
+            if (uri.host != Api.getBaseHost()) {
               logger.d('阻止打开 $uri');
               return NavigationActionPolicy.CANCEL;
             }
@@ -101,24 +96,41 @@ class InWebMySetting extends StatelessWidget {
             }
 
             // 写入cookie到dio
-            _cookieManager.getCookies(url: url).then((value) {
-              // List<Cookie> _cookies = value.forEach((key, value) { });
-              final List<io.Cookie> _cookies = value
-                  .map((Cookie e) =>
-                      io.Cookie(e.name, e.value as String)..domain = e.domain)
-                  .toList();
+            final _cookies = await _cookieManager.getCookies(url: url);
 
-              logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');
+            final ioCookies = _cookies
+                .map((e) => io.Cookie(e.name, e.value as String)
+                  ..domain = e.domain
+                  ..path = e.path
+                  ..httpOnly = e.isHttpOnly ?? false
+                  ..secure = e.isSecure ?? false)
+                .toList();
 
-              Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
-              Global.cookieJar
-                  .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
+            Global.cookieJar
+                .saveFromResponse(Uri.parse(Api.getBaseUrl()), ioCookies);
 
-              ehConfigService.selectProfile = _cookies
-                      .firstWhereOrNull((element) => element.name == 'sp')
-                      ?.value ??
-                  '';
-            });
+            ehConfigService.selectProfile = ioCookies
+                    .firstWhereOrNull((element) => element.name == 'sp')
+                    ?.value ??
+                '';
+
+            // _cookieManager.getCookies(url: url).then((value) {
+            //   final List<io.Cookie> _cookies = value
+            //       .map((Cookie e) =>
+            //           io.Cookie(e.name, e.value as String)..domain = e.domain)
+            //       .toList();
+            //
+            //   logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');
+            //
+            //   Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
+            //   Global.cookieJar
+            //       .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
+            //
+            //   ehConfigService.selectProfile = _cookies
+            //           .firstWhereOrNull((element) => element.name == 'sp')
+            //           ?.value ??
+            //       '';
+            // });
           },
         ),
       ),

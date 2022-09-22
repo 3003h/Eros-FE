@@ -2,6 +2,9 @@ name: Build Release
 
 on:
   push:
+    branches:
+      - 'master'
+#      - 'build'
     tags:
       - v*
       - '!v*ios'
@@ -9,8 +12,13 @@ on:
       - '!v*mac'
       - '!v*win'
       - '!v*.flutter2'
+      - '!v*.bot'
 env:
-  APP_DEV_PROVISION_PATH: /tmp/app_dev.mobileprovision
+  APP_DEV_PROVISION_PATH: '/tmp/app_dev.mobileprovision'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   Build_and_upload:
@@ -21,12 +29,12 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: '3.3.0'
+            flutter_version: '3.3.2'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
             os: macos-latest
-            flutter_version: '3.3.0'
+            flutter_version: '3.3.2'
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
           - target: macos
@@ -51,22 +59,28 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
           path: /opt/hostedtoolcache/flutter
+          restore-keys: |
+            ${{ runner.os }}-flutter-
 
       - name: Cache Flutter (MacOS)
         if: matrix.os == 'macos-latest'
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
           path: /Users/runner/hostedtoolcache/flutter
+          restore-keys: |
+            ${{ runner.os }}-flutter-
 
       - name: Cache Flutter (Windows)
         if: matrix.os == 'windows-latest'
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
           path: 'C:\hostedtoolcache\windows\flutter'
+          restore-keys: |
+            ${{ runner.os }}-flutter-
 
       - name: Cache Gradle packages (Android)
         if: matrix.target == 'android'
@@ -79,14 +93,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Cache Pods
+      - name: Cache Pods (build macos)
         uses: actions/cache@v3
-        if: matrix.os == 'macos-latest'
+        if: matrix.target == 'macos'
+        with:
+          path: |
+            macos/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('macos/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Cache Pods (build ios)
+        uses: actions/cache@v3
+        if: matrix.target == 'ios'
         with:
           path: |
             ios/Pods
-            macos/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-            
 
@@ -147,7 +170,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
-          cache: gradle
+#          cache: gradle
 
       # 安装 Flutter
       - name: Flutter action
@@ -164,6 +187,13 @@ jobs:
           git config --global core.longpaths true
           flutter pub get
 
+      # Get app version
+      - name: Get app version
+        id: get_version
+        shell: bash
+        run: |
+          echo "::set-output name=version::$(head -n 5 pubspec.yaml | tail -n 1 | cut -d ' ' -f 2)"
+
       # 打包 apk
       - name: Collect Apks
         if: matrix.target == 'android'
@@ -176,16 +206,21 @@ jobs:
       # 打包 ipa
       - name: Build ipa
         if: matrix.target == 'ios'
-        run: flutter build ipa --export-options-plist=ExportOptions.plist
+        run: |
+          cd ios && pod update && pod install && cd ..
+          flutter build ipa --export-options-plist=ExportOptions.plist
+          cd build/ios/ipa/
+          mv FEhViewer.ipa FEhViewer_${{ steps.get_version.outputs.version }}.ipa
 
       # 打包 mac
       - name: Build mac app
         if: matrix.target == 'macos'
         run: |
+          cd macos && pod update && pod install && cd ..
           flutter build macos --release
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
           cp -a $APP_PATH ./build
-          cd build && zip -qroy macos/FEhViewer_macos.zip fehviewer.app
+          cd build && zip -qroy macos/FEhViewer_${{ steps.get_version.outputs.version }}_macos.zip fehviewer.app
 
       - name: Build windows
         if: matrix.target == 'windows'
@@ -196,7 +231,7 @@ jobs:
           New-Item -Path $DestDir -ItemType Directory
           Copy-Item $SrcDir\* -Recurse $DestDir
           Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
-          Compress-Archive $DestDir build\windows\FEhViewer_windows.zip
+          Compress-Archive $DestDir build\windows\FEhViewer_${{ steps.get_version.outputs.version }}_windows.zip
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
@@ -205,10 +240,13 @@ jobs:
           path: ${{ matrix.artifact_path }}
 
   Publish_releases:
+    if: startsWith(github.ref, 'refs/tags/')
     name: Publish releases
     needs: Build_and_upload
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - run: mkdir /tmp/artifacts
       - name: Download all Artifacts
         uses: actions/download-artifact@v3
@@ -217,11 +255,31 @@ jobs:
 
       - run: ls -R /tmp/artifacts
 
+      # Get app version
+      - name: Get app version
+        id: get_version
+        shell: bash
+        run: |
+          echo "::set-output name=version::$(head -n 5 pubspec.yaml | tail -n 1 | cut -d ' ' -f 2)"
+
       - name: Upload to release
         uses: ncipollo/release-action@v1
         with:
           artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
           tag: ${{ github.ref_name }}
-          prerelease: true
+          bodyFile: changelog/v${{ steps.get_version.outputs.version }}.md
+#          prerelease: true
           allowUpdates: true
-          token: ${{ secrets.RELEASE_TOKEN }}
+          artifactErrorsFailBuild: true
+          replacesArtifacts: true
+
+      - name: Post release notes
+        run: |
+          changelog=$(cat changelog/v${{ steps.get_version.outputs.version }}.md)
+          curl 'https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage' \
+          --header 'Content-Type: application/x-www-form-urlencoded' \
+          -d parse_mode=markdown \
+          -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
+          --data-urlencode text="[${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})
+          $changelog" \
+          -d disable_web_page_preview=true

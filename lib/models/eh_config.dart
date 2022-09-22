@@ -39,7 +39,7 @@ class EhConfig {
     this.tabletLayoutValue,
     this.enableTagTranslateCDN,
     this.autoSelectProfile,
-    this.tapToTurnPageAnimations,
+    this.turnPageAnimations,
     this.selectProfile,
     this.linkRedirect,
     this.viewColumnMode,
@@ -56,6 +56,7 @@ class EhConfig {
     this.blurringOfCoverBackground,
     this.listViewTagLimit,
     this.redirectThumbLink,
+    this.volumnTurnPage,
   });
 
   final bool jpnTitle;
@@ -92,7 +93,7 @@ class EhConfig {
   final String? tabletLayoutValue;
   final bool? enableTagTranslateCDN;
   final bool? autoSelectProfile;
-  final bool? tapToTurnPageAnimations;
+  final bool? turnPageAnimations;
   final String? selectProfile;
   final bool? linkRedirect;
   final String? viewColumnMode;
@@ -109,6 +110,7 @@ class EhConfig {
   final bool? blurringOfCoverBackground;
   final int? listViewTagLimit;
   final bool? redirectThumbLink;
+  final bool? volumnTurnPage;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => EhConfig(
     jpnTitle: json['jpnTitle'] as bool,
@@ -145,7 +147,7 @@ class EhConfig {
     tabletLayoutValue: json['tabletLayoutValue'] != null ? json['tabletLayoutValue'] as String : null,
     enableTagTranslateCDN: json['enableTagTranslateCDN'] != null ? json['enableTagTranslateCDN'] as bool : null,
     autoSelectProfile: json['autoSelectProfile'] != null ? json['autoSelectProfile'] as bool : null,
-    tapToTurnPageAnimations: json['tapToTurnPageAnimations'] != null ? json['tapToTurnPageAnimations'] as bool : null,
+    turnPageAnimations: json['turnPageAnimations'] != null ? json['turnPageAnimations'] as bool : null,
     selectProfile: json['selectProfile'] != null ? json['selectProfile'] as String : null,
     linkRedirect: json['linkRedirect'] != null ? json['linkRedirect'] as bool : null,
     viewColumnMode: json['viewColumnMode'] != null ? json['viewColumnMode'] as String : null,
@@ -161,7 +163,8 @@ class EhConfig {
     viewFullscreen: json['viewFullscreen'] != null ? json['viewFullscreen'] as bool : null,
     blurringOfCoverBackground: json['blurringOfCoverBackground'] != null ? json['blurringOfCoverBackground'] as bool : null,
     listViewTagLimit: json['listViewTagLimit'] != null ? json['listViewTagLimit'] as int : null,
-    redirectThumbLink: json['redirectThumbLink'] != null ? json['redirectThumbLink'] as bool : null
+    redirectThumbLink: json['redirectThumbLink'] != null ? json['redirectThumbLink'] as bool : null,
+    volumnTurnPage: json['volumnTurnPage'] != null ? json['volumnTurnPage'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -199,7 +202,7 @@ class EhConfig {
     'tabletLayoutValue': tabletLayoutValue,
     'enableTagTranslateCDN': enableTagTranslateCDN,
     'autoSelectProfile': autoSelectProfile,
-    'tapToTurnPageAnimations': tapToTurnPageAnimations,
+    'turnPageAnimations': turnPageAnimations,
     'selectProfile': selectProfile,
     'linkRedirect': linkRedirect,
     'viewColumnMode': viewColumnMode,
@@ -215,7 +218,8 @@ class EhConfig {
     'viewFullscreen': viewFullscreen,
     'blurringOfCoverBackground': blurringOfCoverBackground,
     'listViewTagLimit': listViewTagLimit,
-    'redirectThumbLink': redirectThumbLink
+    'redirectThumbLink': redirectThumbLink,
+    'volumnTurnPage': volumnTurnPage
   };
 
   EhConfig clone() => EhConfig(
@@ -253,7 +257,7 @@ class EhConfig {
     tabletLayoutValue: tabletLayoutValue,
     enableTagTranslateCDN: enableTagTranslateCDN,
     autoSelectProfile: autoSelectProfile,
-    tapToTurnPageAnimations: tapToTurnPageAnimations,
+    turnPageAnimations: turnPageAnimations,
     selectProfile: selectProfile,
     linkRedirect: linkRedirect,
     viewColumnMode: viewColumnMode,
@@ -269,7 +273,8 @@ class EhConfig {
     viewFullscreen: viewFullscreen,
     blurringOfCoverBackground: blurringOfCoverBackground,
     listViewTagLimit: listViewTagLimit,
-    redirectThumbLink: redirectThumbLink
+    redirectThumbLink: redirectThumbLink,
+    volumnTurnPage: volumnTurnPage
   );
 
     
@@ -308,7 +313,7 @@ class EhConfig {
     String? tabletLayoutValue,
     bool? enableTagTranslateCDN,
     bool? autoSelectProfile,
-    bool? tapToTurnPageAnimations,
+    bool? turnPageAnimations,
     String? selectProfile,
     bool? linkRedirect,
     String? viewColumnMode,
@@ -324,7 +329,8 @@ class EhConfig {
     bool? viewFullscreen,
     bool? blurringOfCoverBackground,
     int? listViewTagLimit,
-    bool? redirectThumbLink
+    bool? redirectThumbLink,
+    bool? volumnTurnPage
   }) => EhConfig(
     jpnTitle: jpnTitle ?? this.jpnTitle,
     tagTranslat: tagTranslat ?? this.tagTranslat,
@@ -360,7 +366,7 @@ class EhConfig {
     tabletLayoutValue: tabletLayoutValue ?? this.tabletLayoutValue,
     enableTagTranslateCDN: enableTagTranslateCDN ?? this.enableTagTranslateCDN,
     autoSelectProfile: autoSelectProfile ?? this.autoSelectProfile,
-    tapToTurnPageAnimations: tapToTurnPageAnimations ?? this.tapToTurnPageAnimations,
+    turnPageAnimations: turnPageAnimations ?? this.turnPageAnimations,
     selectProfile: selectProfile ?? this.selectProfile,
     linkRedirect: linkRedirect ?? this.linkRedirect,
     viewColumnMode: viewColumnMode ?? this.viewColumnMode,
@@ -377,12 +383,13 @@ class EhConfig {
     blurringOfCoverBackground: blurringOfCoverBackground ?? this.blurringOfCoverBackground,
     listViewTagLimit: listViewTagLimit ?? this.listViewTagLimit,
     redirectThumbLink: redirectThumbLink ?? this.redirectThumbLink,
+    volumnTurnPage: volumnTurnPage ?? this.volumnTurnPage,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && tabletLayoutValue == other.tabletLayoutValue && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && tapToTurnPageAnimations == other.tapToTurnPageAnimations && selectProfile == other.selectProfile && linkRedirect == other.linkRedirect && viewColumnMode == other.viewColumnMode && fixedHeightOfListItems == other.fixedHeightOfListItems && tagTranslateDataUpdateMode == other.tagTranslateDataUpdateMode && showCommentAvatar == other.showCommentAvatar && avatarType == other.avatarType && boringAvatarsType == other.boringAvatarsType && textAvatarsType == other.textAvatarsType && avatarBorderRadiusType == other.avatarBorderRadiusType && enablePHashCheck == other.enablePHashCheck && enableQRCodeCheck == other.enableQRCodeCheck && viewFullscreen == other.viewFullscreen && blurringOfCoverBackground == other.blurringOfCoverBackground && listViewTagLimit == other.listViewTagLimit && redirectThumbLink == other.redirectThumbLink;
+    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && tabletLayoutValue == other.tabletLayoutValue && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && turnPageAnimations == other.turnPageAnimations && selectProfile == other.selectProfile && linkRedirect == other.linkRedirect && viewColumnMode == other.viewColumnMode && fixedHeightOfListItems == other.fixedHeightOfListItems && tagTranslateDataUpdateMode == other.tagTranslateDataUpdateMode && showCommentAvatar == other.showCommentAvatar && avatarType == other.avatarType && boringAvatarsType == other.boringAvatarsType && textAvatarsType == other.textAvatarsType && avatarBorderRadiusType == other.avatarBorderRadiusType && enablePHashCheck == other.enablePHashCheck && enableQRCodeCheck == other.enableQRCodeCheck && viewFullscreen == other.viewFullscreen && blurringOfCoverBackground == other.blurringOfCoverBackground && listViewTagLimit == other.listViewTagLimit && redirectThumbLink == other.redirectThumbLink && volumnTurnPage == other.volumnTurnPage;
 
   @override
-  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ tabletLayoutValue.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ tapToTurnPageAnimations.hashCode ^ selectProfile.hashCode ^ linkRedirect.hashCode ^ viewColumnMode.hashCode ^ fixedHeightOfListItems.hashCode ^ tagTranslateDataUpdateMode.hashCode ^ showCommentAvatar.hashCode ^ avatarType.hashCode ^ boringAvatarsType.hashCode ^ textAvatarsType.hashCode ^ avatarBorderRadiusType.hashCode ^ enablePHashCheck.hashCode ^ enableQRCodeCheck.hashCode ^ viewFullscreen.hashCode ^ blurringOfCoverBackground.hashCode ^ listViewTagLimit.hashCode ^ redirectThumbLink.hashCode;
+  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ tabletLayoutValue.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ turnPageAnimations.hashCode ^ selectProfile.hashCode ^ linkRedirect.hashCode ^ viewColumnMode.hashCode ^ fixedHeightOfListItems.hashCode ^ tagTranslateDataUpdateMode.hashCode ^ showCommentAvatar.hashCode ^ avatarType.hashCode ^ boringAvatarsType.hashCode ^ textAvatarsType.hashCode ^ avatarBorderRadiusType.hashCode ^ enablePHashCheck.hashCode ^ enableQRCodeCheck.hashCode ^ viewFullscreen.hashCode ^ blurringOfCoverBackground.hashCode ^ listViewTagLimit.hashCode ^ redirectThumbLink.hashCode ^ volumnTurnPage.hashCode;
 }

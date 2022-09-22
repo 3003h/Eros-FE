@@ -62,7 +62,7 @@ void getinit() {
 
   Get.put(GalleryCacheController(), permanent: true);
 
-  Get.put(DownloadController());
+  Get.put(DownloadController(), permanent: true);
   if (GetPlatform.isMobile) {
     Get.put(ArchiverDownloadController());
   }

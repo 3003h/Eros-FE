@@ -75,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("Auto-lock"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
@@ -172,6 +173,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("Instantly"),
         "jump_to_page": MessageLookupByLibrary.simpleMessage("Jump to Page"),
+        "landscape": MessageLookupByLibrary.simpleMessage("Landscape"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Last Favorites, long press to manually select"),
@@ -211,6 +213,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("My Tags on Website"),
+        "never": MessageLookupByLibrary.simpleMessage("Never"),
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
@@ -388,6 +391,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("Top to bottom"),
+        "turn_page_anima":
+            MessageLookupByLibrary.simpleMessage("Turn page animations"),
         "uc_Chinese": MessageLookupByLibrary.simpleMessage("Chinese"),
         "uc_Dutch": MessageLookupByLibrary.simpleMessage("Dutch"),
         "uc_English": MessageLookupByLibrary.simpleMessage("English"),
@@ -593,6 +598,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback":
             MessageLookupByLibrary.simpleMessage("Vibrate feedback"),
+        "volume_key_turn_page":
+            MessageLookupByLibrary.simpleMessage("Volume key to turn page"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("Vote down successfully"),
         "vote_successfully":

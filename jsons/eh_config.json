@@ -33,7 +33,7 @@
   "tabletLayoutValue?": "automatic",
   "enableTagTranslateCDN?": false,
   "autoSelectProfile?": true,
-  "tapToTurnPageAnimations?": true,
+  "turnPageAnimations?": true,
   "selectProfile?": "1",
   "linkRedirect?": false,
   "viewColumnMode?": "",
@@ -49,5 +49,6 @@
   "viewFullscreen?": false,
   "blurringOfCoverBackground?": false,
   "listViewTagLimit?": -1,
-  "redirectThumbLink?": true
+  "redirectThumbLink?": true,
+  "volumnTurnPage?": false
 }

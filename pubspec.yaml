@@ -1,12 +1,11 @@
 name: fehviewer
 description: An unofficial e-hentai app
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
-version: 1.2.65+465
+publish_to: 'none'
+version: 1.2.69+469
 
 environment:
-  sdk: '>=2.13.0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -24,14 +23,12 @@ dependencies:
 
   # 网络请求
   dio: ^4.0.6
-  dio_http_cache: any
 
   cookie_jar: ^3.0.1
   dio_cookie_manager: ^2.0.0
   webview_cookie_manager: ^2.0.6
   shared_preferences: ^2.0.5
   oktoast: ^3.0.0
-  sqflite: ^2.0.0+3
   html_unescape: ^2.0.0
   enum_to_string: ^2.0.1
   flutter_inappwebview: ^5.3.2
@@ -74,20 +71,16 @@ dependencies:
   # 评星
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
-#  flutter_downloader: ^1.7.0
   flutter_downloader:
     git:
       url: https://github.com/honjow/flutter_downloader.git
       ref: flutter2
-  floor: ^1.1.0
   copy_with_extension: ^4.0.0
   package_info: ^2.0.0
-
   pretty_dio_logger: ^1.2.0-beta-1
   translator: ^0.1.7
   orientation: ^1.3.0
   vibration: ^1.7.4-nullsafety.0
-  moor_flutter: ^4.0.0
   device_info: ^2.0.1
   flutter_easyrefresh: ^2.2.1
   flutter_markdown: ^0.6.2
@@ -96,7 +89,6 @@ dependencies:
   hive_flutter: ^1.0.0
   extended_sliver: ^2.0.0
   blur: ^3.0.0
-#  extended_text: ^7.0.0
   sprintf: ^6.0.0
   keframe: ^2.0.1
   executor: ^2.2.2
@@ -106,11 +98,9 @@ dependencies:
   collection: ^1.15.0
   zoom_widget: ^0.2.1
   english_words: ^4.0.0
-#  scroll_to_index: ^3.0.1
   throttling: ^1.0.0
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
-  persistent_bottom_nav_bar: ^4.0.2
   webdav_client: ^1.1.0
   auto_animated: ^3.0.0
   learning_language:
@@ -120,7 +110,6 @@ dependencies:
   encrypt: ^5.0.1
   wakelock: ^0.6.1+1
   jinja: ^0.3.4
-  restart_app: ^1.1.0
   image: ^3.0.8
   palette_generator: ^0.3.2
   getwidget: ^2.1.1
@@ -129,7 +118,6 @@ dependencies:
   dio_smart_retry: ^1.0.3
   flutter_smart_dialog: ^3.0.11
   system_proxy: ^0.1.0
-  sqflite_common_ffi: ^2.1.0
   easy_animated_tabbar: ^0.0.1
   contained_tab_bar_view: ^0.8.0
   buttons_tabbar: ^1.3.2
@@ -140,7 +128,7 @@ dependencies:
     git:
       url: https://github.com/honjow/open_by_default.git
   flex_color_picker: ^2.3.0
-  bitsdojo_window: ^0.1.1+1
+  bitsdojo_window: ^0.1.1
   image_picker: ^0.8.5
   sliver_tools: ^0.2.6
   flutter_boring_avatars:
@@ -171,10 +159,19 @@ dependencies:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
+  isar: ^3.0.0
+  isar_flutter_libs: ^3.0.0
+  dio_cache_interceptor: ^3.3.1
+  dio_cache_interceptor_hive_store: ^3.2.0
+  flutter_android_volume_keydown: #^1.0.0
+    git:
+      url: https://github.com/honjow/flutter_android_volume_keydown.git
+      ref: dev
+
 
 dev_dependencies:
-  # flutter packages pub run build_runner build --delete-conflicting-outputs
-  # flutter packages pub run build_runner watch
+  # flutter pub run build_runner build --delete-conflicting-outputs
+  # flutter pub run build_runner watch --delete-conflicting-outputs
 
   # flutter pub run intl_utils:generate
   intl_utils: ^2.5.1
@@ -184,16 +181,17 @@ dev_dependencies:
   json_serializable: ^6.0.1
   json_annotation: ^4.3.0
 
-  floor_generator: ^1.1.0
   copy_with_extension_gen: ^4.0.0
 
   # git hook 相关
   process_run: ^0.12.1+1
   git_hooks: ^0.1.6
 
+  isar_generator: ^3.0.0
+
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 dependency_overrides:
   json_serializable: ^6.0.1

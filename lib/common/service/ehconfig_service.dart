@@ -131,17 +131,17 @@ class EhConfigService extends ProfileService {
 
   int debugCount = 3;
 
-  final _tabletLayout = true.obs;
-  bool get tabletLayout => _tabletLayout.value;
-  set tabletLayout(bool val) => _tabletLayout.value = val;
+  // final _tabletLayout = true.obs;
+  // bool get tabletLayout => _tabletLayout.value;
+  // set tabletLayout(bool val) => _tabletLayout.value = val;
 
   final _autoSelectProfile = true.obs;
   bool get autoSelectProfile => _autoSelectProfile.value;
   set autoSelectProfile(bool val) => _autoSelectProfile.value = val;
 
-  final _tapToTurnPageAnimations = true.obs;
-  bool get tapToTurnPageAnimations => _tapToTurnPageAnimations.value;
-  set tapToTurnPageAnimations(bool val) => _tapToTurnPageAnimations.value = val;
+  final _turnPageAnimations = true.obs;
+  bool get turnPageAnimations => _turnPageAnimations.value;
+  set turnPageAnimations(bool val) => _turnPageAnimations.value = val;
 
   final _downloadOrigImage = false.obs;
   bool get downloadOrigImage => _downloadOrigImage.value;
@@ -224,9 +224,18 @@ class EhConfigService extends ProfileService {
   bool get redirectThumbLink => _redirectThumbLink.value;
   set redirectThumbLink(bool val) => _redirectThumbLink.value = val;
 
+  final _volumnTurnPage = false.obs;
+  bool get volumnTurnPage => _volumnTurnPage.value;
+  set volumnTurnPage(bool val) => _volumnTurnPage.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    volumnTurnPage = ehConfig.volumnTurnPage ?? volumnTurnPage;
+    everProfile<bool>(_volumnTurnPage, (value) {
+      ehConfig = ehConfig.copyWith(volumnTurnPage: value);
+    });
 
     redirectThumbLink = ehConfig.redirectThumbLink ?? redirectThumbLink;
     everProfile<bool>(_redirectThumbLink, (value) {
@@ -486,9 +495,9 @@ class EhConfigService extends ProfileService {
     everFromEunm(_toplist,
         (String value) => ehConfig = ehConfig.copyWith(toplist: value));
 
-    tabletLayout = ehConfig.tabletLayout ?? tabletLayout;
-    everProfile<bool>(_tabletLayout,
-        (bool value) => ehConfig = ehConfig.copyWith(tabletLayout: value));
+    // tabletLayout = ehConfig.tabletLayout ?? tabletLayout;
+    // everProfile<bool>(_tabletLayout,
+    //     (bool value) => ehConfig = ehConfig.copyWith(tabletLayout: value));
 
     enableTagTranslateCDN =
         ehConfig.enableTagTranslateCDN ?? enableTagTranslateCDN;
@@ -503,12 +512,11 @@ class EhConfigService extends ProfileService {
         (bool value) => ehConfig = ehConfig.copyWith(autoSelectProfile: value));
 
     // tapToTurnPageAnimations
-    tapToTurnPageAnimations =
-        ehConfig.tapToTurnPageAnimations ?? tapToTurnPageAnimations;
+    turnPageAnimations = ehConfig.turnPageAnimations ?? turnPageAnimations;
     everProfile<bool>(
-        _tapToTurnPageAnimations,
+        _turnPageAnimations,
         (bool value) =>
-            ehConfig = ehConfig.copyWith(tapToTurnPageAnimations: value));
+            ehConfig = ehConfig.copyWith(turnPageAnimations: value));
 
     // downloadOrigImage
     downloadOrigImage = downloadConfig.downloadOrigImage ?? downloadOrigImage;
@@ -558,7 +566,7 @@ class EhConfigService extends ProfileService {
     // tabletLayoutType
     tabletLayoutType = EnumToString.fromString(
             TabletLayout.values, ehConfig.tabletLayoutValue ?? '') ??
-        (tabletLayout ? TabletLayout.automatic : TabletLayout.never);
+        tabletLayoutType;
     everFromEunm(
         _tabletLayoutType,
         (String value) =>

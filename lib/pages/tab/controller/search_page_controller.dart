@@ -13,12 +13,11 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/store/floor/entity/tag_translat.dart';
+import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../fetch_list.dart';

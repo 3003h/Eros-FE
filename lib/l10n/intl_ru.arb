@@ -324,6 +324,7 @@
   "uc_mt_1": "Скрыть",
   "auto_select_profile": "Автоопределение профиля",
   "tap_to_turn_page_anima": "Анимированные переходы страниц",
+  "turn_page_anima": "Анимированные переходы страниц",
   "download_ori_image": "Загружать изображения исходного качества",
   "download_ori_image_summary": "Это опасно! Вы можете получить ошибку 509",
   "redownload": "Скачать заново",
@@ -391,5 +392,9 @@
   "redirect_thumb_link_summary": "Redirect Thumb Link To ehgt.org",
   "check_for_update": "Check for Update",
   "latest_version": "Latest version",
-  "update_to_version": "Update to {version}"
+  "update_to_version": "Update to {version}",
+  "volume_key_turn_page": "Volume key to turn page",
+  "landscape": "Landscape",
+  "automatic": "Automatic",
+  "never": "Never"
 }

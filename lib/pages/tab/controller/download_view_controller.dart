@@ -6,13 +6,12 @@ import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/epub/epub_builder.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
-import 'package:fehviewer/store/floor/entity/gallery_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -24,7 +23,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
-import 'package:restart_app/restart_app.dart';
 import 'package:share/share.dart';
 
 enum DownloadType {
@@ -508,6 +506,8 @@ class DownloadViewController extends GetxController {
   }
 
   Future<String?> _writeTaskInfoFile() async {
+    throw UnimplementedError();
+    /*
     // 创建zip文件
     final encoder = ZipFileEncoder();
     final _zipPath = _getLocalFilePath();
@@ -527,7 +527,7 @@ class DownloadViewController extends GetxController {
     // 导出任务数据表到临时db中
     final tempDB = await Global.getDatabase(path: tempDBPath);
     await tempDB.imageTaskDao.insertOrReplaceImageTasks(allImageTasks);
-    await tempDB.galleryTaskDao.insertOrReplaceTasks(allTasks);
+    // await tempDB.galleryTaskDao.insertOrReplaceTasks(allTasks);
     tempDB.close();
 
     // 添加文件
@@ -535,9 +535,12 @@ class DownloadViewController extends GetxController {
 
     encoder.close();
     return _zipPath;
+    */
   }
 
   Future<void> _readTaskInfoFile(File importFile) async {
+    throw UnimplementedError();
+    /*
     final decoder = ZipDecoder();
     final archive = decoder.decodeBytes(importFile.readAsBytesSync());
     final archivePath = path.join(Global.tempPath, 'archive');
@@ -618,11 +621,12 @@ class DownloadViewController extends GetxController {
           completCount: taskCompletMap[task.gid] ?? 0,
         );
         logger.d('insert ${_task.toString()}');
-        await ehDB.galleryTaskDao.insertTask(_task);
+        // await ehDB.galleryTaskDao.insertTask(_task);
+        await isarHelper.putGalleryTask(_task, replaceOnConflict: false);
         _downloadController.dState.galleryTaskMap[_task.gid] = _task;
         animateGalleryListAddTask();
       }
-    }
+    }*/
   }
 
   String _getLocalFilePath() {
@@ -676,34 +680,6 @@ class DownloadViewController extends GetxController {
   }
 }
 
-Future<void> _showRestartAppDialog() async {
-  return showCupertinoDialog<void>(
-    context: Get.overlayContext!,
-    barrierDismissible: true,
-    builder: (BuildContext context) {
-      return CupertinoAlertDialog(
-        title: const Text('Restart App'),
-        content: const Text('重启应用以生效?'),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () async {
-              Get.back();
-              await Restart.restartApp();
-              // await FlutterRestart.restartApp();
-            },
-            child: const Text('Restart Now'),
-          ),
-          CupertinoDialogAction(
-            onPressed: () async {
-              Get.back();
-            },
-            child: Text(L10n.of(context).cancel),
-          ),
-        ],
-      );
-    },
-  );
-}
 
 Future<String?> _exportGallery(
   BuildContext context,

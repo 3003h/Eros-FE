@@ -49,12 +49,13 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    logger.v('initState');
+    logger.v('ViewPage initState');
   }
 
   @override
   void dispose() {
     super.dispose();
+    logger.v('ViewPage dispose');
     // Get.delete<ViewExtController>();
     // 400.milliseconds.delay(() => Get.delete<ViewExtController>());
   }
@@ -109,9 +110,9 @@ class ViewKeyboardListener extends GetView<ViewExtController> {
         // 按键对应的事件
         Map<LogicalKeyboardKey, Function> actionMap = {
           LogicalKeyboardKey.arrowLeft: controller.tapLeft,
-          LogicalKeyboardKey.arrowUp: controller.tapLeft,
+          LogicalKeyboardKey.arrowUp: controller.toPrev,
           LogicalKeyboardKey.arrowRight: controller.tapRight,
-          LogicalKeyboardKey.arrowDown: controller.tapRight,
+          LogicalKeyboardKey.arrowDown: controller.toNext,
           LogicalKeyboardKey.space: controller.handOnTapCent,
           LogicalKeyboardKey.enter: controller.handOnTapCent,
           LogicalKeyboardKey.escape: Get.back,
@@ -158,14 +159,6 @@ class ImageView extends StatelessWidget {
 
 PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
   logger.d('actual $actual');
-  // switch (actual) {
-  //   case PhotoViewScaleState.initial:
-  //   case PhotoViewScaleState.covering:
-  //   case PhotoViewScaleState.originalSize:
-  //     return PhotoViewScaleState.zoomedOut;
-  //   default:
-  //     return PhotoViewScaleState.initial;
-  // }
   switch (actual) {
     case PhotoViewScaleState.initial:
       return PhotoViewScaleState.covering;
@@ -359,9 +352,9 @@ class ImageGestureDetector extends GetView<ViewExtController> {
         if (globalPosition.dx < context.width * (1 - lrRatio) &&
             globalPosition.dx > context.width * lrRatio) {
           if (globalPosition.dy < context.height * tbRatio) {
-            controller.tapLeft();
+            controller.toPrev();
           } else if (globalPosition.dy > context.height * (1 - tbRatio)) {
-            controller.tapRight();
+            controller.toNext();
           } else {
             controller.handOnTapCent();
           }

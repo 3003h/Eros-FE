@@ -97,27 +97,23 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       navigationBar: GetPlatform.isAndroid || GetPlatform.isDesktop
           ? getNavigationBar(context)
           : null,
-      child: CupertinoScrollbar(
-        scrollbarOrientation: ScrollbarOrientation.right,
-        controller: PrimaryScrollController.of(context),
-        child: Column(
-          children: [
-            if (GetPlatform.isAndroid || GetPlatform.isDesktop)
-              SafeArea(
-                bottom: false,
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: _kDefaultNavBarBorder,
-                    color: CupertinoTheme.of(context).barBackgroundColor,
-                  ),
-                  child:
-                      const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
-                          .paddingSymmetric(horizontal: 12, vertical: 4),
+      child: Column(
+        children: [
+          if (GetPlatform.isAndroid || GetPlatform.isDesktop)
+            SafeArea(
+              bottom: false,
+              child: Container(
+                decoration: BoxDecoration(
+                  border: _kDefaultNavBarBorder,
+                  color: CupertinoTheme.of(context).barBackgroundColor,
                 ),
+                child:
+                    const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
+                        .paddingSymmetric(horizontal: 12, vertical: 4),
               ),
-            Expanded(child: _buildSearchRult(context)),
-          ],
-        ),
+            ),
+          Expanded(child: _buildSearchRult(context)),
+        ],
       ),
     );
 

@@ -1,16 +1,16 @@
 package com.honjow.fehviewer
 
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Build
 import android.os.Bundle
-import androidx.core.view.WindowCompat
 import androidx.annotation.NonNull
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.FlutterFragmentActivity;
+import androidx.core.view.WindowCompat
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import dev.darttools.flutter_android_volume_keydown.FlutterAndroidVolumeKeydownFragmentActivity
 
-class MainActivity: FlutterFragmentActivity() {
+class MainActivity: FlutterAndroidVolumeKeydownFragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         if (intent.getIntExtra("org.chromium.chrome.extra.TASK_ID", -1) == this.taskId) {

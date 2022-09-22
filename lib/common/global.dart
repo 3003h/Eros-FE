@@ -8,24 +8,23 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
-import 'package:fehviewer/store/floor/database.dart';
+import 'package:fehviewer/store/db/isar_helper.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/utils/http_override.dart';
-import 'package:fehviewer/utils/optional.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart' as iaw;
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
@@ -34,10 +33,11 @@ final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
 final HiveHelper hiveHelper = HiveHelper();
+final IsarHelper isarHelper = IsarHelper();
 
 final Global global = Global();
 
-var globalDioConfig = ehDioConfig;
+DioHttpConfig globalDioConfig = ehDioConfig;
 
 void switchGlobalDioConfig(bool isSiteEx) {
   DioHttpConfig dioConfig = isSiteEx ? exDioConfig : ehDioConfig;
@@ -107,13 +107,6 @@ class Global {
   User get user => profile.user;
   set user(User val) => profile = profile.copyWith(user: val);
 
-  static Future<EhDatabase> getDatabase({String? path}) async {
-    return await $FloorEhDatabase
-        .databaseBuilder(path ?? Global.dbPath)
-        .addMigrations(ehMigrations)
-        .build();
-  }
-
   // init
   static Future<void> init() async {
     // 判断是否debug模式
@@ -127,12 +120,12 @@ class Global {
       canCheckBiometrics = await localAuth.canCheckBiometrics;
     }
 
-    if (Platform.isWindows || Platform.isLinux) {
-      // Initialize FFI
-      sqfliteFfiInit();
-      // Change the default factory
-      databaseFactory = databaseFactoryFfi;
-    }
+    // if (Platform.isWindows || Platform.isLinux) {
+    //   // Initialize FFI
+    //   sqfliteFfiInit();
+    //   // Change the default factory
+    //   databaseFactory = databaseFactoryFfi;
+    // }
 
     if (GetPlatform.isMobile) {
       // the systemProxy value likes:  {port: 8899, host: 127.0.0.1}
@@ -184,6 +177,7 @@ class Global {
     await GStore.init();
 
     await HiveHelper.init();
+    await isarHelper.initIsar();
 
     _profileInit();
 
@@ -198,6 +192,11 @@ class Global {
     }
 
     isDBinappSupportPath = StorageUtil().getBool(IS_DB_IN_SUPPORT_DIR);
+
+    if (Platform.isAndroid) {
+      await iaw.AndroidInAppWebViewController.setWebContentsDebuggingEnabled(
+          true);
+    }
 
     // 数据更新
     // await dataUpdate();

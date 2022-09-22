@@ -10,9 +10,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
-import 'package:fehviewer/store/floor/dao/gallery_task_dao.dart';
-import 'package:fehviewer/store/floor/dao/image_task_dao.dart';
-import 'package:fehviewer/store/floor/entity/gallery_image_task.dart';
+import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
 import 'package:get/get.dart';
 
 import '../common.dart';
@@ -213,8 +211,6 @@ class ViewExtState {
   // 同步滚动底栏缩略图
   bool syncThumbList = true;
 
-  GalleryTaskDao? galleryTaskDao;
-  ImageTaskDao? imageTaskDao;
   List<GalleryImageTask> imageTasks = <GalleryImageTask>[];
   String? dirPath;
 

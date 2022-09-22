@@ -7,7 +7,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
-import 'package:fehviewer/store/floor/entity/tag_translat.dart';
+import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -146,6 +146,20 @@ extension ExtUser on User {
         .whereNot((e) => e.value.isEmpty)
         .map((e) => '${e.name}=${e.value}')
         .join('; ');
+  }
+
+  List<Cookie> get cookies {
+    final _list = <Cookie>[
+      Cookie('ipb_member_id', memberId ?? ''),
+      Cookie('ipb_pass_hash', passHash ?? ''),
+      Cookie('igneous', igneous ?? ''),
+      Cookie('sk', sk ?? ''),
+      Cookie('hath_perks', hathPerks ?? ''),
+      Cookie('star', star ?? ''),
+      Cookie('yay', yay ?? ''),
+    ];
+
+    return _list.whereNot((e) => e.value.isEmpty).toList();
   }
 }
 

@@ -324,6 +324,7 @@
   "uc_mt_1": "Hide",
   "auto_select_profile": "Auto select profile",
   "tap_to_turn_page_anima": "Tap to turn page animations",
+  "turn_page_anima": "Turn page animations",
   "download_ori_image": "Download original image",
   "download_ori_image_summary": "it is dangerous! You may get 509 error",
   "redownload": "Redownload",
@@ -391,5 +392,9 @@
   "redirect_thumb_link_summary": "Redirect Thumb Link To ehgt.org",
   "check_for_update": "Check for Update",
   "latest_version": "Latest version",
-  "update_to_version": "Update to {version}"
+  "update_to_version": "Update to {version}",
+  "volume_key_turn_page": "Volume key to turn page",
+  "landscape": "Landscape",
+  "automatic": "Automatic",
+  "never": "Never"
 }

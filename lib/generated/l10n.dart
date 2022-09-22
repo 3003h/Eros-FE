@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -3300,6 +3301,16 @@ class L10n {
     );
   }
 
+  /// `Turn page animations`
+  String get turn_page_anima {
+    return Intl.message(
+      'Turn page animations',
+      name: 'turn_page_anima',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Download original image`
   String get download_ori_image {
     return Intl.message(
@@ -3991,6 +4002,46 @@ class L10n {
       name: 'update_to_version',
       desc: '',
       args: [version],
+    );
+  }
+
+  /// `Volume key to turn page`
+  String get volume_key_turn_page {
+    return Intl.message(
+      'Volume key to turn page',
+      name: 'volume_key_turn_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Landscape`
+  String get landscape {
+    return Intl.message(
+      'Landscape',
+      name: 'landscape',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Automatic`
+  String get automatic {
+    return Intl.message(
+      'Automatic',
+      name: 'automatic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Never`
+  String get never {
+    return Intl.message(
+      'Never',
+      name: 'never',
+      desc: '',
+      args: [],
     );
   }
 }

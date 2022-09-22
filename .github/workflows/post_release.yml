@@ -1,0 +1,34 @@
+name: Post release notes
+
+on:
+  push:
+    tags:
+      - 'v*.bot'
+
+jobs:
+  post_notes:
+    name: Post release notes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      # Get app version
+      - name: Get app version
+        id: get_version
+        shell: bash
+        run: |
+          echo "::set-output name=version::$(head -n 5 pubspec.yaml | tail -n 1 | cut -d ' ' -f 2)"
+
+      - name: Post release notes
+        run: |
+          changelog=$(cat changelog/v${{ steps.get_version.outputs.version }}.md)
+          curl 'https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage' \
+          --header 'Content-Type: application/x-www-form-urlencoded' \
+          -d parse_mode=markdown \
+          -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
+          --data-urlencode text="[${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})
+          $changelog" \
+          -d disable_web_page_preview=true

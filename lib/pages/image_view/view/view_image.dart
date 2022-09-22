@@ -198,6 +198,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     return ExtendedImage.file(
       File(path),
       fit: BoxFit.contain,
+      filterQuality: FilterQuality.medium,
       enableSlideOutPage: widget.enableSlideOutPage,
       mode: widget.mode,
       initGestureConfigHandler: _initGestureConfigHandler,

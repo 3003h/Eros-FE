@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("자동 잠금"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("뒤로"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
@@ -159,6 +160,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "input_error": MessageLookupByLibrary.simpleMessage("인풋 에러"),
         "instantly": MessageLookupByLibrary.simpleMessage("즉시"),
         "jump_to_page": MessageLookupByLibrary.simpleMessage("페이지로 이동"),
+        "landscape": MessageLookupByLibrary.simpleMessage("Landscape"),
         "language": MessageLookupByLibrary.simpleMessage("언어"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "최근 즐겨찾기, 길게 눌러 수동으로 선택할 수 있습니다."),
@@ -194,6 +196,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "morePreviews": MessageLookupByLibrary.simpleMessage("미리 보기 더 보기"),
         "multi_download": MessageLookupByLibrary.simpleMessage("다중 다운로드"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("사이트에서 설정하기"),
+        "never": MessageLookupByLibrary.simpleMessage("Never"),
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
@@ -349,6 +352,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("Yesterday"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("위에서 아래로"),
+        "turn_page_anima":
+            MessageLookupByLibrary.simpleMessage("Turn page animations"),
         "uc_Chinese": MessageLookupByLibrary.simpleMessage("Chinese"),
         "uc_Dutch": MessageLookupByLibrary.simpleMessage("Dutch"),
         "uc_English": MessageLookupByLibrary.simpleMessage("English"),
@@ -553,6 +558,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_name": MessageLookupByLibrary.simpleMessage("사용자 이름"),
         "version": MessageLookupByLibrary.simpleMessage("Version"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("진동 피드백"),
+        "volume_key_turn_page":
+            MessageLookupByLibrary.simpleMessage("Volume key to turn page"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("비추천 성공"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("추천 성공"),

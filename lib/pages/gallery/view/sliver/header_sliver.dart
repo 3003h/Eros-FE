@@ -158,15 +158,16 @@ class GalleryInfoBarSliver extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: Container(
-                    width: 4,
-                    height: 48,
-                    color: CupertinoDynamicColor.resolve(
-                        CupertinoColors.secondaryLabel, context),
-                  ),
-                ).paddingOnly(right: 6),
+                if (!context.isTablet)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Container(
+                      width: 4,
+                      height: 48,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.secondaryLabel, context),
+                    ),
+                  ).paddingOnly(right: 6),
                 Expanded(
                   child: GridView(
                     physics: const NeverScrollableScrollPhysics(),
