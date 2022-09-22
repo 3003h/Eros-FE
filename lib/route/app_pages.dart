@@ -48,6 +48,7 @@ import 'package:fehviewer/pages/tab/view/tabbar/custom_profile_setting_page.dart
 import 'package:fehviewer/pages/tab/view/tabbar/custom_profiles_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
+import 'package:fehviewer/pages/tab/view/topliat_page_debug.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
 import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:get/get.dart';
@@ -175,7 +176,8 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.toplist,
-      page: () => const ToplistTab(),
+      // page: () => const ToplistTab(),
+      page: () => const ToplistTabDebug(),
     ),
     GetPage(
       name: EHRoutes.download,

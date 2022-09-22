@@ -70,25 +70,11 @@ class _ToplistTabState extends State<ToplistTab> {
               child: Stack(
                 alignment: Alignment.centerRight,
                 // mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  // const Icon(
-                  //   FontAwesomeIcons.arrowDownWideShort,
-                  //   size: 20,
-                  // ),
-                  const Icon(
+                children: const <Widget>[
+                  Icon(
                     CupertinoIcons.sort_down,
                     size: 28,
                   ),
-                  // Align(
-                  //   alignment: Alignment.centerLeft,
-                  //   child: Text(
-                  //     controller.toplistText,
-                  //     style: const TextStyle(
-                  //       fontSize: 10,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               onPressed: () => controller.setToplist(context),
@@ -128,7 +114,7 @@ class _ToplistTabState extends State<ToplistTab> {
     });
 
     final Widget customScrollView = CustomScrollView(
-      cacheExtent: kTabViewCacheExtent,
+      cacheExtent: context.height * 2,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,

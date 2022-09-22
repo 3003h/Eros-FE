@@ -50,6 +50,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
   Widget build(BuildContext context) {
     super.build(context);
     return CustomScrollView(
+      cacheExtent: context.height * 2,
       slivers: [
         _buildRefresh(context),
         _buildListView(),
