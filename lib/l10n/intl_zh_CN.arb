@@ -393,5 +393,8 @@
   "check_for_update": "检查更新",
   "latest_version": "最新版本",
   "update_to_version": "可更新到 {version}",
-  "volume_key_turn_page": "音量键翻页"
+  "volume_key_turn_page": "音量键翻页",
+  "landscape": "横屏",
+  "automatic": "自动",
+  "never": "禁用"
 }

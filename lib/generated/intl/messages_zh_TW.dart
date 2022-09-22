@@ -70,6 +70,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "autoLock": MessageLookupByLibrary.simpleMessage("自動上鎖"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
+        "automatic": MessageLookupByLibrary.simpleMessage("自动"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("退回"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
@@ -152,6 +153,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "input_error": MessageLookupByLibrary.simpleMessage("輸入錯誤"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
         "jump_to_page": MessageLookupByLibrary.simpleMessage("跳至該頁"),
+        "landscape": MessageLookupByLibrary.simpleMessage("横屏"),
         "language": MessageLookupByLibrary.simpleMessage("語言設定"),
         "last_favorites":
             MessageLookupByLibrary.simpleMessage("最後的收藏夾（長按來手動選擇）"),
@@ -187,6 +189,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "morePreviews": MessageLookupByLibrary.simpleMessage("更多預覽"),
         "multi_download": MessageLookupByLibrary.simpleMessage("多線程下載"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("網頁上的標籤設置"),
+        "never": MessageLookupByLibrary.simpleMessage("禁用"),
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),

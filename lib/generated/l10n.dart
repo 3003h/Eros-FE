@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -4009,6 +4010,36 @@ class L10n {
     return Intl.message(
       'Volume key to turn page',
       name: 'volume_key_turn_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Landscape`
+  String get landscape {
+    return Intl.message(
+      'Landscape',
+      name: 'landscape',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Automatic`
+  String get automatic {
+    return Intl.message(
+      'Automatic',
+      name: 'automatic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Never`
+  String get never {
+    return Intl.message(
+      'Never',
+      name: 'never',
       desc: '',
       args: [],
     );

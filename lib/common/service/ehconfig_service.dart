@@ -131,9 +131,9 @@ class EhConfigService extends ProfileService {
 
   int debugCount = 3;
 
-  final _tabletLayout = true.obs;
-  bool get tabletLayout => _tabletLayout.value;
-  set tabletLayout(bool val) => _tabletLayout.value = val;
+  // final _tabletLayout = true.obs;
+  // bool get tabletLayout => _tabletLayout.value;
+  // set tabletLayout(bool val) => _tabletLayout.value = val;
 
   final _autoSelectProfile = true.obs;
   bool get autoSelectProfile => _autoSelectProfile.value;
@@ -495,9 +495,9 @@ class EhConfigService extends ProfileService {
     everFromEunm(_toplist,
         (String value) => ehConfig = ehConfig.copyWith(toplist: value));
 
-    tabletLayout = ehConfig.tabletLayout ?? tabletLayout;
-    everProfile<bool>(_tabletLayout,
-        (bool value) => ehConfig = ehConfig.copyWith(tabletLayout: value));
+    // tabletLayout = ehConfig.tabletLayout ?? tabletLayout;
+    // everProfile<bool>(_tabletLayout,
+    //     (bool value) => ehConfig = ehConfig.copyWith(tabletLayout: value));
 
     enableTagTranslateCDN =
         ehConfig.enableTagTranslateCDN ?? enableTagTranslateCDN;
@@ -512,8 +512,7 @@ class EhConfigService extends ProfileService {
         (bool value) => ehConfig = ehConfig.copyWith(autoSelectProfile: value));
 
     // tapToTurnPageAnimations
-    turnPageAnimations =
-        ehConfig.turnPageAnimations ?? turnPageAnimations;
+    turnPageAnimations = ehConfig.turnPageAnimations ?? turnPageAnimations;
     everProfile<bool>(
         _turnPageAnimations,
         (bool value) =>
@@ -567,7 +566,7 @@ class EhConfigService extends ProfileService {
     // tabletLayoutType
     tabletLayoutType = EnumToString.fromString(
             TabletLayout.values, ehConfig.tabletLayoutValue ?? '') ??
-        (tabletLayout ? TabletLayout.automatic : TabletLayout.never);
+        tabletLayoutType;
     everFromEunm(
         _tabletLayoutType,
         (String value) =>

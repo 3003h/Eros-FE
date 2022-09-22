@@ -77,6 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Автоматическая блокировка"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Автоопределение профиля"),
+        "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Аватар"),
         "back": MessageLookupByLibrary.simpleMessage("Назад"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
@@ -182,6 +183,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "instantly": MessageLookupByLibrary.simpleMessage("Сразу"),
         "jump_to_page":
             MessageLookupByLibrary.simpleMessage("Перейти на страницу"),
+        "landscape": MessageLookupByLibrary.simpleMessage("Landscape"),
         "language": MessageLookupByLibrary.simpleMessage("Язык"),
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Последнее использованное избранное, долгий тап чтобы выбрать вручную"),
@@ -224,6 +226,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Многопоточная загрузка"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("Мои теги на сайте"),
+        "never": MessageLookupByLibrary.simpleMessage("Never"),
         "newGroup": MessageLookupByLibrary.simpleMessage("Новая категория"),
         "newText": MessageLookupByLibrary.simpleMessage("Новый тег"),
         "new_comment":
