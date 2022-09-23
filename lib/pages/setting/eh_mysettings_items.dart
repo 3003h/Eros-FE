@@ -476,7 +476,7 @@ Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {
     return TextInputItem(
       title: L10n.of(context).uc_rating,
       placeholder: 'RRGGB',
-      hideLine: hideLine,
+      hideDivider: hideLine,
       initValue: _controller.ehSetting.ratings ?? '',
       onChanged: (val) =>
           _controller.ehSetting = _controller.ehSetting.copyWith(ratings: val),
@@ -488,7 +488,7 @@ Widget _buildTagFilteringThreshold(BuildContext context) {
   return Obx(() {
     return TextInputItem(
       title: L10n.of(context).uc_tag_ft,
-      hideLine: true,
+      hideDivider: true,
       initValue: _controller.ehSetting.tagFilteringThreshold ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(tagFilteringThreshold: val),
@@ -500,7 +500,7 @@ Widget _buildTagWatchingThreshold(BuildContext context) {
   return Obx(() {
     return TextInputItem(
       title: L10n.of(context).uc_tag_wt,
-      hideLine: true,
+      hideDivider: true,
       initValue: _controller.ehSetting.tagWatchingThreshold ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(tagWatchingThreshold: val),
@@ -531,7 +531,7 @@ Widget _buildThumbnailScaling(BuildContext context) {
       title: L10n.of(context).uc_thumb_scaling,
       suffixText: '%',
       placeholder: '100',
-      hideLine: true,
+      hideDivider: true,
       initValue: _controller.ehSetting.thumbnailScaling ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(thumbnailScaling: val),
@@ -545,7 +545,7 @@ Widget _buildViewportOverride(BuildContext context) {
     return TextInputItem(
       title: L10n.of(context).uc_viewport_or,
       suffixText: 'px',
-      hideLine: true,
+      hideDivider: true,
       initValue: _controller.ehSetting.viewportOverride ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(viewportOverride: val),
@@ -558,7 +558,7 @@ Widget _buildHatHLocalNetworkHost(BuildContext context) {
   return Obx(() {
     return TextInputItem(
       title: 'IP Address:Port',
-      hideLine: true,
+      hideDivider: true,
       initValue: _controller.ehSetting.hentaiAtHomeLocalNetworkHost ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(hentaiAtHomeLocalNetworkHost: val),
@@ -571,7 +571,7 @@ Widget _buildSizeHorizontal(BuildContext context) {
     return TextInputItem(
       title: L10n.of(context).uc_img_horiz,
       suffixText: L10n.of(context).uc_pixels,
-      hideLine: false,
+      hideDivider: false,
       initValue: _controller.ehSetting.imageSizeHorizontal ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(imageSizeHorizontal: val),
@@ -584,7 +584,7 @@ Widget _buildSizeVertical(BuildContext context) {
     return TextInputItem(
       title: L10n.of(context).uc_img_vert,
       suffixText: L10n.of(context).uc_pixels,
-      hideLine: true,
+      hideDivider: true,
       initValue: _controller.ehSetting.imageSizeVertical ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(imageSizeVertical: val),

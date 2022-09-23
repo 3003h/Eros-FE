@@ -396,5 +396,11 @@
   "volume_key_turn_page": "音量键翻页",
   "landscape": "横屏",
   "automatic": "自动",
-  "never": "禁用"
+  "never": "禁用",
+  "proxy": "代理",
+  "system_proxy": "系统代理",
+  "proxy_type": "代理类型",
+  "host": "地址",
+  "port": "端口",
+  "direct": "直连"
 }

@@ -9,6 +9,7 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -20,6 +21,8 @@ import '../api.dart';
 import 'http_config.dart';
 
 export 'http_config.dart';
+
+typedef AppHttpAdapter = HttpProxyAdapter;
 
 class AppDio with DioMixin implements Dio {
   AppDio({BaseOptions? options, DioHttpConfig? dioConfig}) {
@@ -39,19 +42,10 @@ class AppDio with DioMixin implements Dio {
 
     logger.v('dioConfig ${dioConfig?.toString()}');
 
-    createProxyHttpClient();
-    httpClientAdapter = DefaultHttpClientAdapter()
-      ..onHttpClientCreate = (client) {
-        return createProxyHttpClient();
-      };
-
-    // DioCacheManager
-    // final cacheOptions = CacheConfig(
-    //   databasePath: Global.appSupportPath,
-    //   baseUrl: dioConfig?.baseUrl,
-    //   defaultRequestMethod: 'GET',
-    // );
-    // interceptors.add(DioCacheManager(cacheOptions).interceptor as Interceptor);
+    httpClientAdapter = AppHttpAdapter(
+      proxy: dioConfig?.proxy ?? '',
+      skipCertificate: dioConfig?.domainFronting,
+    );
 
     interceptors.add(DioCacheInterceptor(options: Api.cacheOption));
 
@@ -86,18 +80,6 @@ class AppDio with DioMixin implements Dio {
     if (dioConfig?.interceptors?.isNotEmpty ?? false) {
       interceptors.addAll(interceptors);
     }
-    httpClientAdapter = DefaultHttpClientAdapter();
-    if (dioConfig?.proxy?.isNotEmpty ?? false) {
-      setProxy(dioConfig!.proxy!);
-    }
-
-    (httpClientAdapter as DefaultHttpClientAdapter)
-        .addOnHttpClientCreate((client) {
-      client
-        ..maxConnectionsPerHost = dioConfig?.maxConnectionsPerHost
-        ..idleTimeout = const Duration(seconds: 6);
-      ;
-    });
 
     if (dioConfig?.domainFronting ?? false) {
       final DnsService dnsServices = Get.find();
@@ -107,40 +89,24 @@ class AppDio with DioMixin implements Dio {
 
       final domainFronting = DomainFronting(
         hosts: customHosts,
-        // dnsLookup: enableDoH
-        //     ? (String host) async {
-        //         final dc = await dnsServices.getDoHCache(host);
-        //         return dc?.addr ?? host;
-        //       }
-        //     : null,
         dnsLookup: dnsServices.getHost,
       );
 
       // 允许证书错误的地址/ip
       final hostWhiteList = customHosts.values.flattened.toSet();
 
-      (httpClientAdapter as DefaultHttpClientAdapter)
-          .addOnHttpClientCreate((client) {
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) {
-          // return hostWhiteList.contains(host);
-          return true;
-        };
-      });
+      // (httpClientAdapter as HttpProxyAdapter)
+      //     .addOnHttpClientCreate((client) {
+      //   client.badCertificateCallback =
+      //       (X509Certificate cert, String host, int port) {
+      //     // return hostWhiteList.contains(host);
+      //     return true;
+      //   };
+      // });
 
       // 在其他插件添加完毕后再添加，以确保执行顺序正确
       domainFronting.bind(interceptors);
     }
-  }
-
-  void setProxy(String proxy) {
-    logger.d('setProxy $proxy');
-    (httpClientAdapter as DefaultHttpClientAdapter)
-        .addOnHttpClientCreate((client) {
-      client.findProxy = (uri) {
-        return proxy;
-      };
-    });
   }
 
   /// DioMixin 没有实现下载

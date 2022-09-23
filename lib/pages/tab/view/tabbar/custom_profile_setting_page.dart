@@ -376,7 +376,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     initValue: customProfile.name,
                     maxLines: null,
                     textAlign: TextAlign.left,
-                    hideLine: true,
+                    hideDivider: true,
                     onChanged: (value) {
                       logger.d('onChanged name value $value');
                       customProfile = customProfile.copyWith(

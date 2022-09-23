@@ -396,5 +396,11 @@
   "volume_key_turn_page": "Volume key to turn page",
   "landscape": "Landscape",
   "automatic": "Automatic",
-  "never": "Never"
+  "never": "Never",
+  "proxy": "Proxy",
+  "system_proxy": "System Proxy",
+  "proxy_type": "Proxy Type",
+  "host": "Host",
+  "port": "Port",
+  "direct": "Direct"
 }

@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -4040,6 +4039,66 @@ class L10n {
     return Intl.message(
       'Never',
       name: 'never',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy`
+  String get proxy {
+    return Intl.message(
+      'Proxy',
+      name: 'proxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System Proxy`
+  String get system_proxy {
+    return Intl.message(
+      'System Proxy',
+      name: 'system_proxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy Type`
+  String get proxy_type {
+    return Intl.message(
+      'Proxy Type',
+      name: 'proxy_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Host`
+  String get host {
+    return Intl.message(
+      'Host',
+      name: 'host',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Port`
+  String get port {
+    return Intl.message(
+      'Port',
+      name: 'port',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Direct`
+  String get direct {
+    return Intl.message(
+      'Direct',
+      name: 'direct',
       desc: '',
       args: [],
     );
