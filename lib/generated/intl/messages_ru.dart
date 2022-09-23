@@ -122,6 +122,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Удалить задание и файлы"),
         "delete_task_only":
             MessageLookupByLibrary.simpleMessage("Удалить только задание"),
+        "direct": MessageLookupByLibrary.simpleMessage("Direct"),
         "disabled": MessageLookupByLibrary.simpleMessage("Выключено"),
         "domain_fronting":
             MessageLookupByLibrary.simpleMessage("Фронтинг домена"),
@@ -170,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Название категории"),
         "groupType": MessageLookupByLibrary.simpleMessage("Тип категории"),
         "hide": MessageLookupByLibrary.simpleMessage("Скрыть"),
+        "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("час(ов)"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Тип загрузки"),
@@ -271,10 +273,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Пожалуйста, введите пароль"),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("Пожалуйста, введите логин"),
+        "port": MessageLookupByLibrary.simpleMessage("Port"),
         "preload_image": MessageLookupByLibrary.simpleMessage(
             "Предварительная загрузка изображений"),
         "previews": MessageLookupByLibrary.simpleMessage("Превью"),
         "processing": MessageLookupByLibrary.simpleMessage("В процессе"),
+        "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
+        "proxy_type": MessageLookupByLibrary.simpleMessage("Proxy Type"),
         "pure_black": MessageLookupByLibrary.simpleMessage("Чёрная"),
         "quick_search": MessageLookupByLibrary.simpleMessage("Быстрый поиск"),
         "read": MessageLookupByLibrary.simpleMessage("Читалка"),
@@ -371,6 +376,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Синхронизация быстрого поиска"),
         "sync_read_progress": MessageLookupByLibrary.simpleMessage(
             "Синхронизация прогресса чтения"),
+        "system_proxy": MessageLookupByLibrary.simpleMessage("System Proxy"),
         "system_share":
             MessageLookupByLibrary.simpleMessage("Поделиться через...."),
         "t_Clear_all_history":

@@ -687,7 +687,7 @@ class TextInputItem extends StatefulWidget {
   const TextInputItem({
     this.title,
     Key? key,
-    this.hideLine = false,
+    this.hideDivider = false,
     this.maxLines = 1,
     this.onChanged,
     this.initValue,
@@ -697,11 +697,13 @@ class TextInputItem extends StatefulWidget {
     this.textAlign = TextAlign.right,
     this.textFieldPadding = const EdgeInsets.all(6.0),
     this.textController,
+    this.obscureText,
+    this.keyboardType,
   }) : super(key: key);
 
   final String? title;
   final String? initValue;
-  final bool hideLine;
+  final bool hideDivider;
   final ValueChanged<String>? onChanged;
   final String? suffixText;
   final String? placeholder;
@@ -710,6 +712,8 @@ class TextInputItem extends StatefulWidget {
   final TextAlign textAlign;
   final EdgeInsetsGeometry textFieldPadding;
   final TextEditingController? textController;
+  final bool? obscureText;
+  final TextInputType? keyboardType;
 
   @override
   State<TextInputItem> createState() => _TextInputItemState();
@@ -758,6 +762,8 @@ class _TextInputItemState extends State<TextInputItem> {
                       decoration: null,
                       padding: widget.textFieldPadding,
                       controller: textController,
+                      obscureText: widget.obscureText ?? false,
+                      keyboardType: widget.keyboardType,
                       textAlign: widget.textAlign,
                       maxLines: widget.maxLines,
                       suffix: widget.suffixText != null
@@ -780,7 +786,7 @@ class _TextInputItemState extends State<TextInputItem> {
                 ],
               ),
             ),
-            if (!widget.hideLine)
+            if (!widget.hideDivider)
               Divider(
                 indent: 20,
                 height: kDividerHeight,

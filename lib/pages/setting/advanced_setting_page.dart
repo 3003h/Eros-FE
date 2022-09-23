@@ -8,6 +8,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/setting/webview/mode.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -109,6 +110,16 @@ class ListViewAdvancedSetting extends StatelessWidget {
             },
           )),
       const ItemSpace(),
+      Obx(() => SelectorSettingItem(
+        title: L10n.of(context).proxy,
+        selector: getProxyTypeModeMap(context)[_ehConfigService.proxyType] ?? '',
+        onTap: () {
+          Get.toNamed(
+            EHRoutes.proxySeting,
+            id: isLayoutLarge ? 2 : null,
+          );
+        },
+      )),
       TextSwitchItem(
         L10n.of(context).domain_fronting,
         intValue: _dnsService.enableDomainFronting,

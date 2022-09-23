@@ -28,6 +28,7 @@ import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
+import 'package:fehviewer/pages/setting/proxy_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
 import 'package:fehviewer/pages/setting/tab_setting.dart';
@@ -217,6 +218,10 @@ class AppPages {
     GetPage(
       name: EHRoutes.customHosts,
       page: () => const CustomHostsPage(),
+    ),
+    GetPage(
+      name: EHRoutes.proxySeting,
+      page: () => const ProxyPage(),
     ),
     GetPage(
       name: EHRoutes.webDavSetting,

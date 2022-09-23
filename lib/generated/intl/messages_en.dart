@@ -117,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete task and content"),
         "delete_task_only":
             MessageLookupByLibrary.simpleMessage("Delete task only"),
+        "direct": MessageLookupByLibrary.simpleMessage("Direct"),
         "disabled": MessageLookupByLibrary.simpleMessage("Disabled"),
         "domain_fronting":
             MessageLookupByLibrary.simpleMessage("Domain fronting"),
@@ -164,6 +165,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group Name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group Type"),
         "hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download Type"),
@@ -258,9 +260,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter your password"),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("Please enter user name"),
+        "port": MessageLookupByLibrary.simpleMessage("Port"),
         "preload_image": MessageLookupByLibrary.simpleMessage("Preload Image"),
         "previews": MessageLookupByLibrary.simpleMessage("Previews"),
         "processing": MessageLookupByLibrary.simpleMessage("Processing"),
+        "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
+        "proxy_type": MessageLookupByLibrary.simpleMessage("Proxy Type"),
         "pure_black": MessageLookupByLibrary.simpleMessage("Pure black"),
         "quick_search": MessageLookupByLibrary.simpleMessage("Quick search"),
         "read": MessageLookupByLibrary.simpleMessage("Read"),
@@ -351,6 +356,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Sync quick search"),
         "sync_read_progress":
             MessageLookupByLibrary.simpleMessage("Sync read progress"),
+        "system_proxy": MessageLookupByLibrary.simpleMessage("System Proxy"),
         "system_share": MessageLookupByLibrary.simpleMessage("System share"),
         "t_Clear_all_history":
             MessageLookupByLibrary.simpleMessage("Clear All History"),

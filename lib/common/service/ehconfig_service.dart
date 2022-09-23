@@ -238,7 +238,7 @@ class EhConfigService extends ProfileService {
   String get proxyHost => _proxyHost.value;
   set proxyHost(String val) => _proxyHost.value = val;
 
-  final _proxyPort = 0.obs;
+  final _proxyPort = 1080.obs;
   int get proxyPort => _proxyPort.value;
   set proxyPort(int val) => _proxyPort.value = val;
 

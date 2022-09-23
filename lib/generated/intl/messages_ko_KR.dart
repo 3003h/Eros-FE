@@ -109,6 +109,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete task and content"),
         "delete_task_only":
             MessageLookupByLibrary.simpleMessage("Delete task only"),
+        "direct": MessageLookupByLibrary.simpleMessage("Direct"),
         "disabled": MessageLookupByLibrary.simpleMessage("비활성화 됨"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("도메인 프론팅"),
         "donate": MessageLookupByLibrary.simpleMessage("Donate"),
@@ -151,6 +152,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
@@ -235,9 +237,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("비밀번호를 입력하여 주세요."),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("사용자 이름을 입력하여 주세요."),
+        "port": MessageLookupByLibrary.simpleMessage("Port"),
         "preload_image": MessageLookupByLibrary.simpleMessage("이미지 미리 불러오기"),
         "previews": MessageLookupByLibrary.simpleMessage("미리 보기"),
         "processing": MessageLookupByLibrary.simpleMessage("처리 중"),
+        "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
+        "proxy_type": MessageLookupByLibrary.simpleMessage("Proxy Type"),
         "pure_black": MessageLookupByLibrary.simpleMessage("검정색 (Pure)"),
         "quick_search": MessageLookupByLibrary.simpleMessage("빠른 검색"),
         "read": MessageLookupByLibrary.simpleMessage("읽기"),
@@ -315,6 +320,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Sync quick search"),
         "sync_read_progress":
             MessageLookupByLibrary.simpleMessage("Sync read progress"),
+        "system_proxy": MessageLookupByLibrary.simpleMessage("System Proxy"),
         "system_share": MessageLookupByLibrary.simpleMessage("시스템 공유"),
         "t_Clear_all_history":
             MessageLookupByLibrary.simpleMessage("모든 기록 지우기"),
