@@ -211,6 +211,11 @@ class Global {
       final proxyEnable = await SystemNetworkProxy.getProxyEnable();
       final proxyServer = await SystemNetworkProxy.getProxyServer();
       logger.d('proxyEnable: $proxyEnable proxyServer: $proxyServer');
+      if (proxyEnable && proxyServer.isNotEmpty) {
+        globalDioConfig = globalDioConfig.copyWith(
+          proxy: 'PROXY $proxyServer',
+        );
+      }
 
     }
   }
