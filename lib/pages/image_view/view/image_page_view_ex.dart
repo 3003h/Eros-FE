@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/widget/eh_image.dart';
+import 'package:fehviewer/widget/preload_photo_view_gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
@@ -12,7 +15,6 @@ class ImagePhotoView extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
-    int page = controller.vState.currentItemIndex;
     return Container(
       color: Colors.black,
       child: GetBuilder<ViewExtController>(
@@ -20,21 +22,18 @@ class ImagePhotoView extends GetView<ViewExtController> {
         id: idSlidePage,
         builder: (logic) {
           final int gid = int.tryParse(logic.vState.gid ?? '') ?? 0;
-          return PhotoViewGallery.builder(
+          return PreloadPhotoViewGallery.builder(
             backgroundDecoration:
                 const BoxDecoration(color: Colors.transparent),
-            pageController: logic.pageController,
+            pageController: logic.preloadPageController,
             itemCount: logic.vState.pageCount,
-            onPageChanged: (pageIndex) {
-              controller.handOnPageChanged(pageIndex);
-              page = pageIndex;
-            },
+            onPageChanged: controller.handOnPageChanged,
             scrollDirection: Axis.horizontal,
             customSize: context.mediaQuery.size,
             // scrollPhysics: const CustomScrollPhysics(),
             reverse: reverse,
-            // preloadPagesCount:
-            //     max(0, logic.vState.ehConfigService.preloadImage.value),
+            preloadPagesCount:
+                max(0, logic.vState.ehConfigService.preloadImage.value),
             // preloadPagesCount: 0,
             // gaplessPlayback: true,
             // wantKeepAlive: true,
@@ -56,8 +55,10 @@ class ImagePhotoView extends GetView<ViewExtController> {
                 return Center(
                   child: ViewLoading(
                     ser: event.ser!,
-                    progress: (event.cumulativeBytesLoaded) /
-                        (event.expectedTotalBytes ?? 1),
+                    progress: event.cumulativeBytesLoaded > 0
+                        ? (event.cumulativeBytesLoaded) /
+                            (event.expectedTotalBytes ?? 1)
+                        : null,
                   ),
                 );
               } else {

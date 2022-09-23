@@ -158,7 +158,7 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
         final imageUrl = downloadOrigImage
             ? galleryImage.originImageUrl
             : galleryImage.imageUrl;
-        logger.d('imageUrl... $imageUrl');
+        logger.v('imageUrl... $imageUrl');
         try {
           await ehDownload(
               url: '$imageUrl',

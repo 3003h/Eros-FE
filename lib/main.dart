@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-// import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
@@ -18,24 +18,26 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:window_size/window_size.dart';
 
 import 'get_init.dart';
+import 'network/app_dio/pdio.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runZonedGuarded<Future<void>>(() async {
-    // final dsn = await getSentryDsn();
-    // if (dsn != null && dsn.isNotEmpty) {
-    //   await SentryFlutter.init(
-    //     (SentryFlutterOptions options) {
-    //       options
-    //         ..dsn = dsn
-    //         ..debug = false
-    //         ..diagnosticLevel = SentryLevel.warning;
-    //     },
-    //   );
-    // }
+    final dsn = await getSentryDsn();
+    if (dsn != null && dsn.isNotEmpty) {
+      await SentryFlutter.init(
+        (SentryFlutterOptions options) {
+          options
+            ..dsn = dsn
+            ..debug = false
+            ..diagnosticLevel = SentryLevel.warning;
+        },
+      );
+    }
 
     Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => GStore());
@@ -56,29 +58,33 @@ Future<void> main() async {
     runApp(MyApp());
 
     if (GetPlatform.isDesktop) {
-      // doWhenWindowReady(() {
-      //   // const initialSize = Size(960, 720);
-      //   const minSize = Size(400, 400);
-      //   appWindow.minSize = minSize;
-      //   // appWindow.size = initialSize;
-      //   appWindow.alignment = Alignment.center;
-      //   appWindow.title = L10n.current.app_title;
-      //   appWindow.show();
-      // });
+      doWhenWindowReady(() {
+        // const initialSize = Size(960, 720);
+        const minSize = Size(400, 400);
+        appWindow.minSize = minSize;
+        // appWindow.size = initialSize;
+        appWindow.alignment = Alignment.center;
+        appWindow.title = L10n.current.app_title;
+        appWindow.show();
+      });
 
-      // setWindowTitle(L10n.current.app_title);
+      setWindowTitle(L10n.current.app_title);
     }
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
       debugPrint('EhErrorType.image509');
       return;
     }
+    if (error is NetworkException) {
+      debugPrint('NetworkException');
+      return;
+    }
     debugPrint(
         'runZonedGuarded: Caught error in my root zone.\n$error\n$stackTrace');
 
-    // if (!kDebugMode) {
-    //   await Sentry.captureException(error, stackTrace: stackTrace);
-    // }
+    if (!kDebugMode) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+    }
   });
 }
 
@@ -141,8 +147,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         navigatorObservers: [
           // if (GetPlatform.isMobile)
           //   FirebaseAnalyticsObserver(analytics: analytics),
-          // SentryNavigatorObserver(),
-          // FlutterSmartDialog.observer,
+          SentryNavigatorObserver(),
+          FlutterSmartDialog.observer,
           MainNavigatorObserver(),
         ],
         // builder: kReleaseMode
