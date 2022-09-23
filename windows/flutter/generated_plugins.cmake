@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   isar_flutter_libs
   local_auth_windows
   permission_handler_windows
+  sentry_flutter
   url_launcher_windows
   window_size
 )
