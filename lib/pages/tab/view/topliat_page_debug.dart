@@ -1,8 +1,11 @@
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/tab/comm.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -18,6 +21,7 @@ class ToplistTabDebug extends StatefulWidget {
 class _ToplistTabDebugState extends State<ToplistTabDebug> {
   final controller = Get.find<TopListViewController>();
   final EhTabController ehTabController = EhTabController();
+  bool _isSliver = true;
 
   @override
   void initState() {
@@ -57,6 +61,22 @@ class _ToplistTabDebugState extends State<ToplistTabDebug> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            CupertinoSwitch(
+                value: _isSliver,
+                onChanged: (val) {
+                  setState(() {
+                    _isSliver = val;
+                  });
+                }),
+            CupertinoButton(
+              padding: const EdgeInsets.all(0.0),
+              minSize: 40,
+              child: const Icon(
+                CupertinoIcons.refresh,
+                size: 28,
+              ),
+              onPressed: () => controller.reloadData,
+            ),
             CupertinoButton(
               padding: const EdgeInsets.all(0.0),
               minSize: 40,
@@ -139,50 +159,70 @@ class _ToplistTabDebugState extends State<ToplistTabDebug> {
         }
 
         if (status.isSuccess) {
-          return CustomScrollView(
-            slivers: [
-              EhCupertinoSliverRefreshControl(
-                onRefresh: controller.onRefresh,
-              ),
-              SliverSafeArea(
-                top: true,
-                bottom: false,
-                sliver: Builder(
-                  builder: (_) {
-                    return getGallerySliverList(
-                      logic.state,
-                      controller.heroTag,
-                      maxPage: controller.maxPage,
-                      curPage: controller.curPage,
-                      lastComplete: controller.lastComplete,
-                      // key: controller.sliverAnimatedListKey,
-                      // lastTopitemIndex: controller.lastTopitemIndex,
-                    );
-                  },
+          if (_isSliver) {
+            return CustomScrollView(
+              slivers: [
+                EhCupertinoSliverRefreshControl(
+                  onRefresh: controller.onRefresh,
                 ),
-              ),
-              Obx(() {
-                return EndIndicator(
-                  pageState: controller.pageState,
-                  loadDataMore: controller.loadDataMore,
-                );
-              }),
-            ],
-          );
+                SliverSafeArea(
+                  top: true,
+                  bottom: false,
+                  sliver: Builder(
+                    builder: (_) {
+                      return getGallerySliverList(
+                        logic.state,
+                        controller.heroTag,
+                        maxPage: controller.maxPage,
+                        curPage: controller.curPage,
+                        lastComplete: controller.lastComplete,
+                        // key: controller.sliverAnimatedListKey,
+                        // lastTopitemIndex: controller.lastTopitemIndex,
+                      );
+                    },
+                  ),
+                ),
+                Obx(() {
+                  return EndIndicator(
+                    pageState: controller.pageState,
+                    loadDataMore: controller.loadDataMore,
+                  );
+                }),
+              ],
+            );
+          } else {
+            final gallerylist = logic.state ?? [];
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                if (gallerylist.length - 1 < index) {
+                  return const SizedBox.shrink();
+                }
 
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              final imageP = logic.state?[index];
-              if (imageP == null) {
-                return const SizedBox();
-              }
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(imageP.englishTitle ?? ''),
-              );
-            },
-            itemCount: logic.state?.length ?? 0,
-          );
+                if (index == gallerylist.length - 1 &&
+                    controller.curPage < controller.maxPage - 1) {
+                  // 加载完成最后一项的回调
+                  SchedulerBinding.instance.addPostFrameCallback(
+                      (_) => controller.lastComplete.call());
+                }
+
+                final GalleryProvider _provider = gallerylist[index];
+                Get.lazyReplace(() => _provider,
+                    tag: _provider.gid, fenix: true);
+                Get.lazyReplace(
+                  () => GalleryItemController(
+                      galleryProvider: Get.find(tag: _provider.gid)),
+                  tag: _provider.gid,
+                  fenix: true,
+                );
+
+                return GalleryItemWidget(
+                  galleryProvider: _provider,
+                  tabTag: controller.heroTag,
+                );
+              },
+              itemCount: logic.state?.length ?? 0,
+            );
+          }
         }
 
         return Container(

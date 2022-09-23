@@ -225,7 +225,9 @@ class DownloadViewController extends GetxController {
   }
 
   void animateGalleryListAddTask() {
-    animatedGalleryListKey.currentState?.insertItem(galleryTasks.length - 1);
+    if (galleryTasks.isNotEmpty) {
+      animatedGalleryListKey.currentState?.insertItem(galleryTasks.length - 1);
+    }
   }
 
   void animateArchiverListAddTask({int? index}) {
@@ -679,7 +681,6 @@ class DownloadViewController extends GetxController {
     }
   }
 }
-
 
 Future<String?> _exportGallery(
   BuildContext context,
