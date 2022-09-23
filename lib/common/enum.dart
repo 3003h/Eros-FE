@@ -36,3 +36,11 @@ enum TextAvatarsType {
   borderFirstTowText,
   transparent,
 }
+
+enum ProxyType {
+  system,
+  http,
+  socks5,
+  socks4,
+  direct,
+}

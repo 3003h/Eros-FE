@@ -57,6 +57,11 @@ class EhConfig {
     this.listViewTagLimit,
     this.redirectThumbLink,
     this.volumnTurnPage,
+    this.proxyType,
+    this.proxyHost,
+    this.proxyPort,
+    this.proxyUsername,
+    this.proxyPassword,
   });
 
   final bool jpnTitle;
@@ -111,6 +116,11 @@ class EhConfig {
   final int? listViewTagLimit;
   final bool? redirectThumbLink;
   final bool? volumnTurnPage;
+  final String? proxyType;
+  final String? proxyHost;
+  final int? proxyPort;
+  final String? proxyUsername;
+  final String? proxyPassword;
 
   factory EhConfig.fromJson(Map<String,dynamic> json) => EhConfig(
     jpnTitle: json['jpnTitle'] as bool,
@@ -164,7 +174,12 @@ class EhConfig {
     blurringOfCoverBackground: json['blurringOfCoverBackground'] != null ? json['blurringOfCoverBackground'] as bool : null,
     listViewTagLimit: json['listViewTagLimit'] != null ? json['listViewTagLimit'] as int : null,
     redirectThumbLink: json['redirectThumbLink'] != null ? json['redirectThumbLink'] as bool : null,
-    volumnTurnPage: json['volumnTurnPage'] != null ? json['volumnTurnPage'] as bool : null
+    volumnTurnPage: json['volumnTurnPage'] != null ? json['volumnTurnPage'] as bool : null,
+    proxyType: json['proxyType'] != null ? json['proxyType'] as String : null,
+    proxyHost: json['proxyHost'] != null ? json['proxyHost'] as String : null,
+    proxyPort: json['proxyPort'] != null ? json['proxyPort'] as int : null,
+    proxyUsername: json['proxyUsername'] != null ? json['proxyUsername'] as String : null,
+    proxyPassword: json['proxyPassword'] != null ? json['proxyPassword'] as String : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -219,7 +234,12 @@ class EhConfig {
     'blurringOfCoverBackground': blurringOfCoverBackground,
     'listViewTagLimit': listViewTagLimit,
     'redirectThumbLink': redirectThumbLink,
-    'volumnTurnPage': volumnTurnPage
+    'volumnTurnPage': volumnTurnPage,
+    'proxyType': proxyType,
+    'proxyHost': proxyHost,
+    'proxyPort': proxyPort,
+    'proxyUsername': proxyUsername,
+    'proxyPassword': proxyPassword
   };
 
   EhConfig clone() => EhConfig(
@@ -274,7 +294,12 @@ class EhConfig {
     blurringOfCoverBackground: blurringOfCoverBackground,
     listViewTagLimit: listViewTagLimit,
     redirectThumbLink: redirectThumbLink,
-    volumnTurnPage: volumnTurnPage
+    volumnTurnPage: volumnTurnPage,
+    proxyType: proxyType,
+    proxyHost: proxyHost,
+    proxyPort: proxyPort,
+    proxyUsername: proxyUsername,
+    proxyPassword: proxyPassword
   );
 
     
@@ -330,7 +355,12 @@ class EhConfig {
     bool? blurringOfCoverBackground,
     int? listViewTagLimit,
     bool? redirectThumbLink,
-    bool? volumnTurnPage
+    bool? volumnTurnPage,
+    String? proxyType,
+    String? proxyHost,
+    int? proxyPort,
+    String? proxyUsername,
+    String? proxyPassword
   }) => EhConfig(
     jpnTitle: jpnTitle ?? this.jpnTitle,
     tagTranslat: tagTranslat ?? this.tagTranslat,
@@ -384,12 +414,17 @@ class EhConfig {
     listViewTagLimit: listViewTagLimit ?? this.listViewTagLimit,
     redirectThumbLink: redirectThumbLink ?? this.redirectThumbLink,
     volumnTurnPage: volumnTurnPage ?? this.volumnTurnPage,
+    proxyType: proxyType ?? this.proxyType,
+    proxyHost: proxyHost ?? this.proxyHost,
+    proxyPort: proxyPort ?? this.proxyPort,
+    proxyUsername: proxyUsername ?? this.proxyUsername,
+    proxyPassword: proxyPassword ?? this.proxyPassword,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && tabletLayoutValue == other.tabletLayoutValue && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && turnPageAnimations == other.turnPageAnimations && selectProfile == other.selectProfile && linkRedirect == other.linkRedirect && viewColumnMode == other.viewColumnMode && fixedHeightOfListItems == other.fixedHeightOfListItems && tagTranslateDataUpdateMode == other.tagTranslateDataUpdateMode && showCommentAvatar == other.showCommentAvatar && avatarType == other.avatarType && boringAvatarsType == other.boringAvatarsType && textAvatarsType == other.textAvatarsType && avatarBorderRadiusType == other.avatarBorderRadiusType && enablePHashCheck == other.enablePHashCheck && enableQRCodeCheck == other.enableQRCodeCheck && viewFullscreen == other.viewFullscreen && blurringOfCoverBackground == other.blurringOfCoverBackground && listViewTagLimit == other.listViewTagLimit && redirectThumbLink == other.redirectThumbLink && volumnTurnPage == other.volumnTurnPage;
+    || other is EhConfig && jpnTitle == other.jpnTitle && tagTranslat == other.tagTranslat && tagTranslatVer == other.tagTranslatVer && favoritesOrder == other.favoritesOrder && siteEx == other.siteEx && galleryImgBlur == other.galleryImgBlur && favPicker == other.favPicker && favLongTap == other.favLongTap && lastFavcat == other.lastFavcat && lastShowFavcat == other.lastShowFavcat && lastShowFavTitle == other.lastShowFavTitle && listMode == other.listMode && safeMode == other.safeMode && catFilter == other.catFilter && maxHistory == other.maxHistory && searchBarComp == other.searchBarComp && pureDarkTheme == other.pureDarkTheme && viewModel == other.viewModel && clipboardLink == other.clipboardLink && commentTrans == other.commentTrans && autoLockTimeOut == other.autoLockTimeOut && showPageInterval == other.showPageInterval && orientation == other.orientation && vibrate == other.vibrate && tagIntroImgLv == other.tagIntroImgLv && debugMode == other.debugMode && debugCount == other.debugCount && autoRead == other.autoRead && turnPageInv == other.turnPageInv && toplist == other.toplist && tabletLayout == other.tabletLayout && tabletLayoutValue == other.tabletLayoutValue && enableTagTranslateCDN == other.enableTagTranslateCDN && autoSelectProfile == other.autoSelectProfile && turnPageAnimations == other.turnPageAnimations && selectProfile == other.selectProfile && linkRedirect == other.linkRedirect && viewColumnMode == other.viewColumnMode && fixedHeightOfListItems == other.fixedHeightOfListItems && tagTranslateDataUpdateMode == other.tagTranslateDataUpdateMode && showCommentAvatar == other.showCommentAvatar && avatarType == other.avatarType && boringAvatarsType == other.boringAvatarsType && textAvatarsType == other.textAvatarsType && avatarBorderRadiusType == other.avatarBorderRadiusType && enablePHashCheck == other.enablePHashCheck && enableQRCodeCheck == other.enableQRCodeCheck && viewFullscreen == other.viewFullscreen && blurringOfCoverBackground == other.blurringOfCoverBackground && listViewTagLimit == other.listViewTagLimit && redirectThumbLink == other.redirectThumbLink && volumnTurnPage == other.volumnTurnPage && proxyType == other.proxyType && proxyHost == other.proxyHost && proxyPort == other.proxyPort && proxyUsername == other.proxyUsername && proxyPassword == other.proxyPassword;
 
   @override
-  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ tabletLayoutValue.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ turnPageAnimations.hashCode ^ selectProfile.hashCode ^ linkRedirect.hashCode ^ viewColumnMode.hashCode ^ fixedHeightOfListItems.hashCode ^ tagTranslateDataUpdateMode.hashCode ^ showCommentAvatar.hashCode ^ avatarType.hashCode ^ boringAvatarsType.hashCode ^ textAvatarsType.hashCode ^ avatarBorderRadiusType.hashCode ^ enablePHashCheck.hashCode ^ enableQRCodeCheck.hashCode ^ viewFullscreen.hashCode ^ blurringOfCoverBackground.hashCode ^ listViewTagLimit.hashCode ^ redirectThumbLink.hashCode ^ volumnTurnPage.hashCode;
+  int get hashCode => jpnTitle.hashCode ^ tagTranslat.hashCode ^ tagTranslatVer.hashCode ^ favoritesOrder.hashCode ^ siteEx.hashCode ^ galleryImgBlur.hashCode ^ favPicker.hashCode ^ favLongTap.hashCode ^ lastFavcat.hashCode ^ lastShowFavcat.hashCode ^ lastShowFavTitle.hashCode ^ listMode.hashCode ^ safeMode.hashCode ^ catFilter.hashCode ^ maxHistory.hashCode ^ searchBarComp.hashCode ^ pureDarkTheme.hashCode ^ viewModel.hashCode ^ clipboardLink.hashCode ^ commentTrans.hashCode ^ autoLockTimeOut.hashCode ^ showPageInterval.hashCode ^ orientation.hashCode ^ vibrate.hashCode ^ tagIntroImgLv.hashCode ^ debugMode.hashCode ^ debugCount.hashCode ^ autoRead.hashCode ^ turnPageInv.hashCode ^ toplist.hashCode ^ tabletLayout.hashCode ^ tabletLayoutValue.hashCode ^ enableTagTranslateCDN.hashCode ^ autoSelectProfile.hashCode ^ turnPageAnimations.hashCode ^ selectProfile.hashCode ^ linkRedirect.hashCode ^ viewColumnMode.hashCode ^ fixedHeightOfListItems.hashCode ^ tagTranslateDataUpdateMode.hashCode ^ showCommentAvatar.hashCode ^ avatarType.hashCode ^ boringAvatarsType.hashCode ^ textAvatarsType.hashCode ^ avatarBorderRadiusType.hashCode ^ enablePHashCheck.hashCode ^ enableQRCodeCheck.hashCode ^ viewFullscreen.hashCode ^ blurringOfCoverBackground.hashCode ^ listViewTagLimit.hashCode ^ redirectThumbLink.hashCode ^ volumnTurnPage.hashCode ^ proxyType.hashCode ^ proxyHost.hashCode ^ proxyPort.hashCode ^ proxyUsername.hashCode ^ proxyPassword.hashCode;
 }

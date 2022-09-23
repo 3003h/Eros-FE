@@ -50,5 +50,10 @@
   "blurringOfCoverBackground?": false,
   "listViewTagLimit?": -1,
   "redirectThumbLink?": true,
-  "volumnTurnPage?": false
+  "volumnTurnPage?": false,
+  "proxyType?": "",
+  "proxyHost?": "",
+  "proxyPort?": 1080,
+  "proxyUsername?": "",
+  "proxyPassword?": ""
 }

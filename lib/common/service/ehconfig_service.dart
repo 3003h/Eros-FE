@@ -5,6 +5,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
@@ -228,9 +229,63 @@ class EhConfigService extends ProfileService {
   bool get volumnTurnPage => _volumnTurnPage.value;
   set volumnTurnPage(bool val) => _volumnTurnPage.value = val;
 
+
+  final _proxyType = ProxyType.system.obs;
+  ProxyType get proxyType => _proxyType.value;
+  set proxyType(ProxyType val) => _proxyType.value = val;
+
+  final _proxyHost = ''.obs;
+  String get proxyHost => _proxyHost.value;
+  set proxyHost(String val) => _proxyHost.value = val;
+
+  final _proxyPort = 0.obs;
+  int get proxyPort => _proxyPort.value;
+  set proxyPort(int val) => _proxyPort.value = val;
+
+  final _proxyUsername = ''.obs;
+  String get proxyUsername => _proxyUsername.value;
+  set proxyUsername(String val) => _proxyUsername.value = val;
+
+  final _proxyPassword = ''.obs;
+  String get proxyPassword => _proxyPassword.value;
+  set proxyPassword(String val) => _proxyPassword.value = val;
+
+
   @override
   void onInit() {
     super.onInit();
+
+    proxyType =
+        EnumToString.fromString(ProxyType.values, ehConfig.proxyType ?? '') ??
+            proxyType;
+    everFromEunm(_proxyType, (String value) {
+      ehConfig = ehConfig.copyWith(proxyType: value);
+      setProxy();
+    });
+
+    proxyHost = ehConfig.proxyHost ?? proxyHost;
+    everProfile<String>(_proxyHost, (value) {
+      ehConfig = ehConfig.copyWith(proxyHost: value);
+      setProxy();
+    });
+
+    proxyPort = ehConfig.proxyPort ?? proxyPort;
+    everProfile<int>(_proxyPort, (value) {
+      ehConfig = ehConfig.copyWith(proxyPort: value);
+      setProxy();
+    });
+
+    proxyUsername = ehConfig.proxyUsername ?? proxyUsername;
+    everProfile<String>(_proxyUsername, (value) {
+      ehConfig = ehConfig.copyWith(proxyUsername: value);
+      setProxy();
+    });
+
+    proxyPassword = ehConfig.proxyPassword ?? proxyPassword;
+    everProfile<String>(_proxyPassword, (value) {
+      ehConfig = ehConfig.copyWith(proxyPassword: value);
+      setProxy();
+    });
 
     volumnTurnPage = ehConfig.volumnTurnPage ?? volumnTurnPage;
     everProfile<bool>(_volumnTurnPage, (value) {
@@ -580,6 +635,20 @@ class EhConfigService extends ProfileService {
     everProfile<bool>(_showCommentAvatar, (value) {
       ehConfig = ehConfig.copyWith(showCommentAvatar: value);
     });
+  }
+
+  Future<void> setProxy() async {
+    final proxy = await getProxy(
+      proxyType: proxyType,
+      proxyHost: proxyHost,
+      proxyPort: proxyPort,
+      proxyUsername: proxyUsername,
+      proxyPassword: proxyPassword,
+    );
+
+    globalDioConfig = globalDioConfig.copyWith(
+      proxy: proxy,
+    );
   }
 
   /// 收藏排序 dialog

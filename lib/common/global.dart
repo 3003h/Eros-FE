@@ -4,10 +4,12 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
+import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/store/db/isar_helper.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
@@ -196,28 +198,14 @@ class Global {
   }
 
   static Future<void> proxyInit() async {
-    if (GetPlatform.isMobile) {
-      Map<String, String>? systemProxy = await SystemProxy.getProxySettings();
-      if (systemProxy != null) {
-        globalDioConfig = globalDioConfig.copyWith(
-          proxy: 'PROXY ${systemProxy['host']}:${systemProxy['port']}',
-        );
-        logger.d('systemProxy $systemProxy');
-      }
-    }
-
-    if (GetPlatform.isDesktop) {
-      SystemNetworkProxy.init();
-      final proxyEnable = await SystemNetworkProxy.getProxyEnable();
-      final proxyServer = await SystemNetworkProxy.getProxyServer();
-      logger.d('proxyEnable: $proxyEnable proxyServer: $proxyServer');
-      if (proxyEnable && proxyServer.isNotEmpty) {
-        globalDioConfig = globalDioConfig.copyWith(
-          proxy: 'PROXY $proxyServer',
-        );
-      }
-
-    }
+    SystemNetworkProxy.init();
+    // final proxy = await getProxy();
+    // // log proxy
+    // logger.d('proxy $proxy');
+    // globalDioConfig = globalDioConfig.copyWith(
+    //   proxy: proxy,
+    // );
+    Get.find<EhConfigService>().setProxy();
   }
 
   static void creatDirs() {

@@ -167,6 +167,7 @@ dependencies:
       ref: dev
   sentry_flutter: ^6.10.0
   system_network_proxy: ^1.0.2
+  flutter_socks_proxy: ^0.0.2
 
 
 dev_dependencies:

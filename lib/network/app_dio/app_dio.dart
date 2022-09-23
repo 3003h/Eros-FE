@@ -12,6 +12,7 @@ import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:flutter_socks_proxy/socks_proxy.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -37,6 +38,12 @@ class AppDio with DioMixin implements Dio {
     this.options = options;
 
     logger.v('dioConfig ${dioConfig?.toString()}');
+
+    createProxyHttpClient();
+    httpClientAdapter = DefaultHttpClientAdapter()
+      ..onHttpClientCreate = (client) {
+        return createProxyHttpClient();
+      };
 
     // DioCacheManager
     // final cacheOptions = CacheConfig(
@@ -130,14 +137,9 @@ class AppDio with DioMixin implements Dio {
     logger.d('setProxy $proxy');
     (httpClientAdapter as DefaultHttpClientAdapter)
         .addOnHttpClientCreate((client) {
-      // config the http client
       client.findProxy = (uri) {
-        // proxy all request to localhost:8888
         return proxy;
-        // return 'SOCKS5 127.0.0.1:6153';
       };
-      // you can also create a HttpClient to dio
-      // return HttpClient();
     });
   }
 
