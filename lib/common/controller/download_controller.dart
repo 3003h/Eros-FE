@@ -182,7 +182,7 @@ class DownloadController extends GetxController {
     // galleryTaskDao.insertTask(galleryTask);
     isarHelper.putGalleryTask(galleryTask, replaceOnConflict: false);
     dState.galleryTaskMap[galleryTask.gid] = galleryTask;
-    _downloadViewAnimateListAdd();
+    downloadViewAnimateListAdd();
     showToast('${galleryTask.gid} Download task start');
 
     _addGalleryTask(
@@ -194,7 +194,7 @@ class DownloadController extends GetxController {
     );
   }
 
-  void _downloadViewAnimateListAdd() {
+  void downloadViewAnimateListAdd() {
     if (Get.isRegistered<DownloadViewController>()) {
       Get.find<DownloadViewController>().animateGalleryListAddTask();
     }
@@ -791,7 +791,7 @@ class DownloadController extends GetxController {
 
   Future<void> downloadTaskMigration() async {
     final isMigrationed = hiveHelper.getDownloadTaskMigration();
-    logger.d('downloadTaskMigration $isMigrationed');
+    logger.v('downloadTaskMigration $isMigrationed');
     if (!isMigrationed) {
       logger.d('start download task Migration');
       await restoreGalleryTasks();
@@ -800,7 +800,7 @@ class DownloadController extends GetxController {
   }
 
   // 从当前下载目录恢复下载列表数据
-  Future<void> restoreGalleryTasks() async {
+  Future<void> restoreGalleryTasks({bool init = false}) async {
     final String _currentDownloadPath = await _getGalleryDownloadPath();
     logger.d('_currentDownloadPath: $_currentDownloadPath');
     final directory = Directory(GetPlatform.isIOS
@@ -846,7 +846,10 @@ class DownloadController extends GetxController {
       }
     }
 
-    onInit();
+    if (init) {
+      onInit();
+      resetDownloadViewAnimationKey();
+    }
   }
 
   Future<void> rebuildGalleryTasks() async {
@@ -1073,6 +1076,13 @@ class DownloadController extends GetxController {
   void _updateDownloadView([List<Object>? ids]) {
     if (Get.isRegistered<DownloadViewController>()) {
       Get.find<DownloadViewController>().update(ids);
+    }
+  }
+
+  void resetDownloadViewAnimationKey() {
+    if (Get.isRegistered<DownloadViewController>()) {
+      Get.find<DownloadViewController>().animatedGalleryListKey =
+          GlobalKey<AnimatedListState>();
     }
   }
 
