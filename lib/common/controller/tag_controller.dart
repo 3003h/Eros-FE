@@ -22,7 +22,7 @@ class TagController extends GetxController {
   }
 
   Future<void> initTags() async {
-    logger.d('initTags 初始化 请求mytag页面 全量更新tag');
+    logger.v('initTags 初始化 请求mytag页面 全量更新tag');
 
     await 5.seconds.delay();
     // 初始化 请求mytag页面 全量更新tag一次

@@ -166,6 +166,7 @@ dependencies:
       url: https://github.com/honjow/flutter_android_volume_keydown.git
       ref: dev
   sentry_flutter: ^6.10.0
+  system_network_proxy: ^1.0.2
 
 
 dev_dependencies:

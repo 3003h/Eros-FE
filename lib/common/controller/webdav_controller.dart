@@ -154,7 +154,7 @@ class WebdavController extends GetxController {
   }
 
   void initClient() {
-    logger.d('initClient');
+    logger.v('initClient');
     client = webdav.newClient(
       webdavProfile.url,
       user: webdavProfile.user ?? '',

@@ -35,16 +35,8 @@ class TagTransController extends GetxController {
   }
 
   Future<List<String?>> getNamespace() async {
-    // final dao = await _getTagTranslatDao();
-    // final _list = await dao.findAllTagTranslats();
-    // final _list = await isarHelper.findAllTagNamespace();
-    // return _list.map((e) => e.namespace).toSet().toList();
     return await isarHelper.findAllTagNamespace();
   }
-
-  // Future<TagTranslatDao> _getTagTranslatDao() async {
-  //   return (await Global.getDatabase()).tagTranslatDao;
-  // }
 
   /// 检查更新
   Future<bool> checkUpdate({bool force = false}) async {
@@ -55,8 +47,7 @@ class TagTransController extends GetxController {
 
     final _urlJson = await getGithubApi(kUrl);
     // 获取发布时间 作为远程版本号
-    _remoteVer =
-        (_urlJson != null ? _urlJson['published_at']?.trim() : '') as String;
+    _remoteVer = _urlJson['published_at']?.trim() as String;
 
     // 获取当前本地版本
     final String localVer = ehConfigService.tagTranslatVer.value;
@@ -107,8 +98,6 @@ class TagTransController extends GetxController {
 
   /// 更新数据库数据
   Future<void> updateDB({bool silence = false}) async {
-    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
-
     List listData = await _fetchData();
     if (listData.isEmpty) {
       return;

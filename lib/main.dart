@@ -42,8 +42,8 @@ Future<void> main() async {
     Get.lazyPut(() => LogService(), fenix: true);
     Get.lazyPut(() => GStore());
     await Global.init();
-
     getinit();
+    Global.proxyInit();
 
     if (Get.find<EhConfigService>().debugMode || kDebugMode) {
       Logger.level = Level.debug;
@@ -52,14 +52,12 @@ Future<void> main() async {
       Logger.level = Level.error;
     }
     resetLogLevel();
-
     updateTagTranslate();
 
     runApp(MyApp());
 
     if (GetPlatform.isDesktop) {
       doWhenWindowReady(() {
-        // const initialSize = Size(960, 720);
         const minSize = Size(400, 400);
         appWindow.minSize = minSize;
         // appWindow.size = initialSize;
@@ -68,7 +66,7 @@ Future<void> main() async {
         appWindow.show();
       });
 
-      setWindowTitle(L10n.current.app_title);
+      // setWindowTitle(L10n.of(Get.context!).app_title);
     }
   }, (Object error, StackTrace stackTrace) async {
     if (error is EhError && error.type == EhErrorType.image509) {
@@ -186,7 +184,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             //如果已经选定语言，则不跟随系统
             return locale;
           } else {
-            logger.d('语言跟随系统语言  $_locale');
+            logger.v('语言跟随系统语言  $_locale');
             return null;
           }
         },

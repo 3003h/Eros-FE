@@ -77,7 +77,7 @@ class CustomTabbarController extends DefaultTabViewController {
   void onInit() {
     super.onInit();
 
-    logger.d('CustomProfile onInit');
+    logger.v('CustomProfile onInit');
 
     heroTag = EHRoutes.gallery;
 

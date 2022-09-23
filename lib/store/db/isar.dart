@@ -4,17 +4,19 @@ import 'package:isar/isar.dart';
 import '../../fehviewer.dart';
 import 'entity/gallery_image_task.dart';
 import 'entity/tag_translat.dart';
+import 'entity/tag_translate_info.dart';
 import 'entity/view_history.dart';
 
 Future<Isar> openIsar() async {
   final dirPath = Global.appSupportPath;
 
   final isar = await Isar.open(
-     [
+    [
       ViewHistorySchema,
       TagTranslatSchema,
       GalleryTaskSchema,
       GalleryImageTaskSchema,
+      TagTranslateInfoSchema,
     ],
     directory: dirPath,
   );

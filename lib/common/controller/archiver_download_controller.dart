@@ -36,15 +36,15 @@ class ArchiverDownloadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.d('ArchiverDownloadController onInit');
+    logger.v('ArchiverDownloadController onInit');
     bindBackgroundIsolate(updateTask);
 
     // 从GS中初始化 archiverDlMap
     final _archiver =
         _gStore.archiverTaskMap ?? <String, DownloadArchiverTaskInfo>{};
 
-    logger.d(
-        '_archiver\n${_archiver.entries.map((e) => '${e.key}  ${e.value.toJson()}').join('\n')}');
+    // logger.d(
+    //     '_archiver\n${_archiver.entries.map((e) => '${e.key}  ${e.value.toJson()}').join('\n')}');
 
     _archiverTaskMap.clear();
     _archiverTaskMap.addAll(_archiver);
@@ -68,9 +68,9 @@ class ArchiverDownloadController extends GetxController {
       bindBackgroundIsolate(callback);
       return;
     }
-    logger.d('flutterDownloaderPort.listen');
+    // logger.v('flutterDownloaderPort.listen');
     _port.listen((dynamic data) {
-      logger.v('update listen');
+      // logger.v('update listen');
       final dataList = data as List<dynamic>;
       String taskId = dataList[0] as String;
       DownloadTaskStatus status = dataList[1] as DownloadTaskStatus;
@@ -81,7 +81,7 @@ class ArchiverDownloadController extends GetxController {
       // 更新任务状态
       callback(taskId, status, progress);
     });
-    logger.d('FlutterDownloader.registerCallback');
+    // logger.v('FlutterDownloader.registerCallback');
     FlutterDownloader.registerCallback(flutterDownloadCallback);
   }
 
@@ -243,7 +243,7 @@ class ArchiverDownloadController extends GetxController {
   /// 不在 archiverDlMap 中的任务
   Future<void> _getArchiverTask() async {
     final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
-    logger.d(
+    logger.v(
         'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
 
     for (final DownloadTask downloadTask in tasks) {
