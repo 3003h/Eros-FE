@@ -389,9 +389,12 @@ class EhConfigService extends ProfileService {
     everFromEunm(favoriteOrder,
         (String value) => ehConfig = ehConfig.copyWith(favoritesOrder: value));
 
-    tagTranslatVer.value = ehConfig.tagTranslatVer ?? tagTranslatVer.value;
+    tagTranslatVer.value = isarHelper.getTranslateVersion();
     everProfile<String>(tagTranslatVer,
-        (value) => ehConfig = ehConfig.copyWith(tagTranslatVer: value));
+        (value) {
+          // ehConfig = ehConfig.copyWith(tagTranslatVer: value);
+          isarHelper.putTagTranslateVersion(value);
+        });
 
     lastFavcat.value = ehConfig.lastFavcat ?? lastFavcat.value;
     everProfile<String>(

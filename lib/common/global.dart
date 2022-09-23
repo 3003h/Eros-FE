@@ -24,7 +24,8 @@ import 'package:logger/logger.dart';
 import 'package:package_info/package_info.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:system_network_proxy/system_network_proxy.dart';
+
 import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
@@ -105,6 +106,7 @@ class Global {
   static bool canCheckBiometrics = false;
 
   User get user => profile.user;
+
   set user(User val) => profile = profile.copyWith(user: val);
 
   // init
@@ -126,17 +128,6 @@ class Global {
     //   // Change the default factory
     //   databaseFactory = databaseFactoryFfi;
     // }
-
-    if (GetPlatform.isMobile) {
-      // the systemProxy value likes:  {port: 8899, host: 127.0.0.1}
-      Map<String, String>? systemProxy = await SystemProxy.getProxySettings();
-      if (systemProxy != null) {
-        globalDioConfig = globalDioConfig.copyWith(
-          proxy: 'PROXY ${systemProxy['host']}:${systemProxy['port']}',
-        );
-        print('systemProxy $systemProxy');
-      }
-    }
 
     //statusBar设置为透明，去除半透明遮罩
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -202,6 +193,26 @@ class Global {
     // await dataUpdate();
 
     initImageHttpClient();
+  }
+
+  static Future<void> proxyInit() async {
+    if (GetPlatform.isMobile) {
+      Map<String, String>? systemProxy = await SystemProxy.getProxySettings();
+      if (systemProxy != null) {
+        globalDioConfig = globalDioConfig.copyWith(
+          proxy: 'PROXY ${systemProxy['host']}:${systemProxy['port']}',
+        );
+        logger.d('systemProxy $systemProxy');
+      }
+    }
+
+    if (GetPlatform.isDesktop) {
+      SystemNetworkProxy.init();
+      final proxyEnable = await SystemNetworkProxy.getProxyEnable();
+      final proxyServer = await SystemNetworkProxy.getProxyServer();
+      logger.d('proxyEnable: $proxyEnable proxyServer: $proxyServer');
+
+    }
   }
 
   static void creatDirs() {

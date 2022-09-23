@@ -151,7 +151,7 @@ abstract class TabViewController extends GetxController {
     logger.v('loadDataMore .....');
     pageState = PageState.LoadingMore;
 
-    logger.d('load page: $nextPage');
+    logger.v('load page: $nextPage');
 
     lastNextPage = nextPage;
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
+import 'package:fehviewer/store/db/entity/tag_translate_info.dart';
 import 'package:fehviewer/store/db/entity/view_history.dart';
 import 'package:fehviewer/store/db/isar.dart';
 import 'package:isar/isar.dart';
@@ -229,5 +230,19 @@ class IsarHelper {
         .filter()
         .statusEqualTo(status)
         .findAll();
+  }
+
+  Future<void> putTagTranslateVersion(String version) async {
+    final tagTranslateInfo = isar.tagTranslateInfos.getSync(0) ??
+        TagTranslateInfo(localVersion: version);
+    await isar.writeTxn(() async {
+      await isar.tagTranslateInfos
+          .put(tagTranslateInfo.copyWith(localVersion: version));
+    });
+  }
+
+  String getTranslateVersion() {
+    final tagTranslateInfo = isar.tagTranslateInfos.getSync(0);
+    return tagTranslateInfo?.localVersion ?? '';
   }
 }
