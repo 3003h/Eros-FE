@@ -114,7 +114,7 @@ class _ToplistTabState extends State<ToplistTab> {
     });
 
     final Widget customScrollView = CustomScrollView(
-      cacheExtent: context.height * 2,
+      // cacheExtent: context.height * 2,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         // sliverNavigationBar,

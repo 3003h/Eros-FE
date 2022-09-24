@@ -124,7 +124,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     // logger.v('_buildSearchRult');
     return SizeCacheWidget(
       child: CustomScrollView(
-        cacheExtent: context.height * 2,
+        // cacheExtent: context.height * 2,
         slivers: <Widget>[
           // todo android上会有一次删除多个字符的问题
           if (GetPlatform.isIOS)
