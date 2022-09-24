@@ -95,7 +95,7 @@ class _HistoryTabState extends State<HistoryTab> {
       ),
     );
     final Widget customScrollView = CustomScrollView(
-      cacheExtent: 500,
+      // cacheExtent: 500,
       // controller: scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
