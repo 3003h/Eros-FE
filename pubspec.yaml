@@ -54,7 +54,7 @@ dependencies:
   # 分享
   share: ^2.0.1
   # 权限检查
-  permission_handler: ^10.0.0
+  permission_handler: ^10.0.2
   # 缓存
   flutter_cache_manager: ^3.0.2
   # 图片保存
