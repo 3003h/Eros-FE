@@ -975,7 +975,7 @@ packages:
       name: json_serializable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.4.0"
+    version: "6.4.1"
   keframe:
     dependency: "direct main"
     description:
