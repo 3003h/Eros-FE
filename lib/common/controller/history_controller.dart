@@ -177,8 +177,7 @@ class HistoryController extends GetxController {
     logger.v('historyMigration $isMigrationed');
     if (!isMigrationed) {
       logger.d('start history Migration');
-      await isarHelper.addHistorys(hiveHelper.getAllHistory(),
-          replaceOnConflict: false);
+      await isarHelper.addHistorys(hiveHelper.getAllHistory());
       hiveHelper.setViewHistoryMigration(true);
     }
   }

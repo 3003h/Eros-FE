@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.2.72+472
 
 environment:
-  sdk: '>=2.14.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -169,6 +169,7 @@ dependencies:
   system_network_proxy: ^1.0.2
   flutter_socks_proxy: ^0.0.2
   gesture_zoom_box: ^0.0.4
+  rotated_corner_decoration: ^2.0.0
 
 
 dev_dependencies:

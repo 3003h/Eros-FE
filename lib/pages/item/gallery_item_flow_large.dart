@@ -10,15 +10,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
-import 'gallery_clipper.dart';
 import 'gallery_item.dart';
 import 'item_base.dart';
 
 const int kTitleMaxLines = 3;
 const double kRadius = 12.0;
-const double kCategoryWidth = 32.0;
-const double kCategoryHeight = 20.0;
+const double kCategoryWidth = 38.0;
+const double kCategoryHeight = 28.0;
 
 class GalleryItemFlowLarge extends StatelessWidget {
   const GalleryItemFlowLarge(
@@ -168,44 +168,23 @@ class GalleryItemFlowLarge extends StatelessWidget {
                     topLeft: Radius.circular(kRadius),
                     topRight: Radius.circular(kRadius),
                   ),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        height: galleryProvider.imgWidth != null
-                            ? _getHeigth()
-                            : null,
-                        child: CoverImg(imgUrl: galleryProvider.imgUrl!),
+                  child: Container(
+                    foregroundDecoration: RotatedCornerDecoration(
+                      color: _colorCategory.withOpacity(0.8),
+                      labelInsets:
+                          const LabelInsets(baselineShift: 0.5, start: 2),
+                      geometry: const BadgeGeometry(
+                          width: kCategoryWidth, height: kCategoryHeight),
+                      textSpan: TextSpan(
+                        text: galleryProvider.translated ?? '',
+                        style: const TextStyle(
+                            fontSize: 10, fontWeight: FontWeight.bold),
                       ),
-                      ClipPath(
-                        clipper: CategoryClipper(
-                            width: kCategoryWidth, height: kCategoryHeight),
-                        child: Container(
-                          width: kCategoryWidth,
-                          height: kCategoryHeight,
-                          color: _colorCategory.withOpacity(0.8),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 4,
-                        right: 4,
-                        child: _buildCount(),
-                      ),
-                      Container(
-                        height: (kCategoryHeight + kRadius * 0.8) / 2,
-                        width: (kCategoryWidth + kRadius * 0.8) / 2,
-                        alignment: Alignment.center,
-                        child: Text(
-                          galleryProvider.translated ?? '',
-                          style: const TextStyle(
-                              fontSize: 8,
-                              color: CupertinoColors.white,
-                              fontWeight: FontWeight.bold,
-                              height: 1),
-                        ),
-                      ),
-                    ],
+                    ),
+                    alignment: Alignment.center,
+                    height:
+                        galleryProvider.imgWidth != null ? _getHeigth() : null,
+                    child: CoverImg(imgUrl: galleryProvider.imgUrl!),
                   ),
                 ),
               ),
