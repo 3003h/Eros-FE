@@ -96,7 +96,7 @@ dependencies:
   isolate_handler: ^1.0.0
   worker_manager: ^4.2.4
   collection: ^1.15.0
-  zoom_widget: ^0.2.1
+  zoom_widget: ^2.0.0
   english_words: ^4.0.0
   scroll_to_index: ^3.0.1
   throttling: ^1.0.0
