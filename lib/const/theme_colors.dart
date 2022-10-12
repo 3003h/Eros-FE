@@ -11,7 +11,7 @@ final ehTextTheme = const CupertinoTextThemeData().copyWith(
 
 enum ThemesModeEnum {
   system,
-  ligthMode,
+  lightMode,
   darkMode,
 }
 

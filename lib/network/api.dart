@@ -418,7 +418,7 @@ class Api {
       logger.d('exists $exists');
       if (!exists || file == null) {
         try {
-          file = await imageCacheManager.getSingleFile(imageUrl,
+          file = await imageCacheManager().getSingleFile(imageUrl,
               headers: {'cookie': Global.profile.user.cookie});
         } catch (e, stack) {
           logger.e('$e\n$stack');

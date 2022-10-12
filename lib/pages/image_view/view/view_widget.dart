@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math' as math;
-import 'dart:math';
 
 import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
@@ -895,7 +894,7 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                     height: kSliderBarHeight,
                     child: ViewPageSlider(
                       max: logic.vState.filecount - 1.0,
-                      sliderValue: min(logic.vState.sliderValue,
+                      sliderValue: math.min(logic.vState.sliderValue,
                           logic.vState.filecount - 1.0),
                       onChangedEnd: logic.handOnSliderChangedEnd,
                       onChanged: logic.handOnSliderChanged,

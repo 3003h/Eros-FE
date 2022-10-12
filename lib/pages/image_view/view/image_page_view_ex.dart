@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
+import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
+import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/eh_image.dart';
 import 'package:fehviewer/widget/preload_photo_view_gallery.dart';
 import 'package:flutter/material.dart';
@@ -13,63 +16,106 @@ class ImagePhotoView extends GetView<ViewExtController> {
   const ImagePhotoView({Key? key, this.reverse = false}) : super(key: key);
   final bool reverse;
 
+  ViewExtState get vState => controller.vState;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      child: GetBuilder<ViewExtController>(
-        assignId: true,
-        id: idSlidePage,
-        builder: (logic) {
-          final int gid = int.tryParse(logic.vState.gid ?? '') ?? 0;
-          return PreloadPhotoViewGallery.builder(
-            backgroundDecoration:
-                const BoxDecoration(color: Colors.transparent),
-            pageController: logic.preloadPageController,
-            itemCount: logic.vState.pageCount,
-            onPageChanged: controller.handOnPageChanged,
-            scrollDirection: Axis.horizontal,
-            customSize: context.mediaQuery.size,
-            // scrollPhysics: const CustomScrollPhysics(),
-            reverse: reverse,
-            preloadPagesCount:
-                max(0, logic.vState.ehConfigService.preloadImage.value),
-            // preloadPagesCount: 0,
-            // gaplessPlayback: true,
-            // wantKeepAlive: true,
+    return GetBuilder<ViewExtController>(
+      id: idImagePageView,
+      builder: (logic) {
+        logger.d('build ImagePhotoView...');
+        Widget imageView = Container(
+          color: Colors.black,
+          child: GetBuilder<ViewExtController>(
+            assignId: true,
+            id: idSlidePage,
+            builder: (logic) {
+              final int gid = int.tryParse(logic.vState.gid ?? '') ?? 0;
+              logger.d('gid $gid');
+              final itemSer = logic.vState.currentItemIndex + 1;
+              final galleryPageController = vState.galleryPageController;
+              final image = galleryPageController?.gState.imageMap[itemSer];
+              String key = '$gid/$itemSer/${image?.sourceId ?? ''}';
+              logger.d('key $key');
+              return PreloadPhotoViewGallery.builder(
+                key: ValueKey(key),
+                backgroundDecoration:
+                    const BoxDecoration(color: Colors.transparent),
+                pageController: logic.preloadPageController,
+                itemCount: logic.vState.pageCount,
+                onPageChanged: controller.handOnPageChanged,
+                scrollDirection: Axis.horizontal,
+                customSize: context.mediaQuery.size,
+                // scrollPhysics: const CustomScrollPhysics(),
+                reverse: reverse,
+                preloadPagesCount:
+                    max(0, logic.vState.ehConfigService.preloadImage.value),
+                // preloadPagesCount: 0,
+                // gaplessPlayback: true,
+                // wantKeepAlive: true,
 
-            builder: (BuildContext context, int pageIndex) {
-              final EhPageInfo pageInfo =
-                  EhPageInfo(gid: gid, ser: pageIndex + 1);
-              return PhotoViewGalleryPageOptions(
-                imageProvider: EhImageProvider(pageInfo),
-                filterQuality: FilterQuality.medium,
-                initialScale: PhotoViewComputedScale.contained,
-                minScale: PhotoViewComputedScale.contained * 0.8,
-                maxScale: 2.0,
-                // controller: logic.photoViewController,
+                builder: (BuildContext context, int pageIndex) {
+                  final EhPageInfo pageInfo =
+                      EhPageInfo(gid: gid, ser: pageIndex + 1);
+                  final ser = pageIndex + 1;
+                  return PhotoViewGalleryPageOptions(
+                    // imageProvider: EhImageProvider(pageInfo),
+                    imageProvider:
+                        getEhImageProvider('${gid}_${ser}_$key', ser: ser),
+                    filterQuality: FilterQuality.medium,
+                    initialScale: PhotoViewComputedScale.contained,
+                    minScale: PhotoViewComputedScale.contained * 0.8,
+                    maxScale: 2.0,
+                    // controller: logic.photoViewController,
+                  );
+                },
+                loadingBuilder: (context, event) {
+                  // logger.d('loadingBuilder ${event.runtimeType}');
+                  if (event is ImageChunkEvent) {
+                    return Center(
+                      child: ViewLoading(
+                        ser: event is EhImageChunkEvent ? event.ser! : null,
+                        progress: event.cumulativeBytesLoaded > 0
+                            ? (event.cumulativeBytesLoaded) /
+                                (event.expectedTotalBytes ?? 1)
+                            : null,
+                      ),
+                    );
+                  } else {
+                    return const Center(
+                      child: ViewLoading(),
+                    );
+                  }
+                },
               );
             },
-            loadingBuilder: (context, event) {
-              if (event is EhImageChunkEvent && event.ser != null) {
-                return Center(
-                  child: ViewLoading(
-                    ser: event.ser!,
-                    progress: event.cumulativeBytesLoaded > 0
-                        ? (event.cumulativeBytesLoaded) /
-                            (event.expectedTotalBytes ?? 1)
-                        : null,
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: ViewLoading(),
-                );
-              }
-            },
-          );
-        },
-      ),
+          ),
+        );
+
+        imageView = GestureDetector(
+          onLongPress: () async {
+            logger.v('long press');
+            vibrateUtil.medium();
+            final imageSer = vState.currentItemIndex + 1;
+            final GalleryImage? _currentImage =
+                vState.pageState?.imageMap[imageSer];
+            showImageSheet(
+              context,
+              () async {
+                await controller.reloadImage(imageSer, changeSource: true);
+                // controller.photoViewController.reset();
+              },
+              imageUrl: _currentImage?.imageUrl ?? '',
+              filePath: _currentImage?.filePath,
+              origImageUrl: _currentImage?.originImageUrl,
+              title: '${vState.pageState?.title} [$imageSer]',
+            );
+          },
+          child: imageView,
+        );
+
+        return imageView;
+      },
     );
   }
 }
