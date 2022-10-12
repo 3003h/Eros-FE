@@ -1404,6 +1404,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.0"
+  rotated_corner_decoration:
+    dependency: "direct main"
+    description:
+      name: rotated_corner_decoration
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.0"
   rxdart:
     dependency: transitive
     description:

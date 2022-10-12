@@ -63,8 +63,7 @@ class IsarHelper {
     });
   }
 
-  Future<void> addHistorys(List<GalleryProvider> allHistory,
-      {bool replaceOnConflict = true}) async {
+  Future<void> addHistorys(List<GalleryProvider> allHistory) async {
     final viewHistorys = allHistory
         .map((e) => ViewHistory(
             gid: int.tryParse(e.gid ?? '0') ?? 0,
@@ -77,8 +76,9 @@ class IsarHelper {
     });
   }
 
-  Future<void> putAllTagTranslate(List<TagTranslat> tagTranslates,
-      {bool replaceOnConflict = true}) async {
+  Future<void> putAllTagTranslate(
+    List<TagTranslat> tagTranslates,
+  ) async {
     final tagTranslats = isar.tagTranslats;
     await isar.writeTxn(() async {
       await tagTranslats.putAll(tagTranslates);
@@ -86,32 +86,39 @@ class IsarHelper {
   }
 
   Future<List<String?>> findAllTagNamespace() async {
-    final rult = await isar.tagTranslats
+    final result = await isar.tagTranslats
         .where()
         .distinctByNamespace()
         .nameProperty()
         .findAll();
-    return rult;
+    return result;
   }
 
   Future<TagTranslat?> findTagTranslate(String key, {String? namespace}) async {
     if (namespace != null && namespace.isNotEmpty) {
-      final rult = await isar.tagTranslats
+      final result = await isar.tagTranslats
           .where()
           .keyEqualTo(key)
           .filter()
           .namespaceEqualTo(namespace)
           .findAll();
-      return rult.lastOrNull;
+      return result.lastOrNull;
     } else {
-      final rult = await isar.tagTranslats.where().keyEqualTo(key).findAll();
-      return rult.lastOrNull;
+      final result = await isar.tagTranslats
+          .where()
+          .namespaceNotEqualTo('rows')
+          .filter()
+          .keyEqualTo(key)
+          .findAll();
+      return result.lastOrNull;
     }
   }
 
   Future<List<TagTranslat>> findTagTranslateContains(
       String text, int limit) async {
-    final rult = await isar.tagTranslats
+    final result = await isar.tagTranslats
+        .where()
+        .namespaceNotEqualTo('rows')
         .filter()
         .keyContains(text)
         .or()
@@ -119,9 +126,9 @@ class IsarHelper {
         .limit(limit)
         .findAll();
 
-    logger.d('rult.len ${rult.length}');
+    logger.d('result.len ${result.length}');
 
-    return rult;
+    return result;
   }
 
   Future<void> removeAllTagTranslate() async {

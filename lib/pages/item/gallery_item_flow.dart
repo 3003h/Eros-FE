@@ -4,16 +4,15 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
-import 'gallery_clipper.dart';
 import 'gallery_item.dart';
 
 const double kRadius = 6.0;
-const double kWidth = 28.0;
-const double kHeight = 18.0;
+const double kCategoryWidth = 28.0;
+const double kCategoryHeight = 22.0;
 
 class GalleryItemFlow extends StatelessWidget {
   const GalleryItemFlow(
@@ -87,41 +86,23 @@ class GalleryItemFlow extends StatelessWidget {
                     ]),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(kRadius),
-                  child: Stack(
-                    alignment: Alignment.topRight,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.center,
-                        height: galleryProvider.imgWidth != null
-                            ? _getHeigth()
-                            : null,
-                        child: CoverImg(imgUrl: galleryProvider.imgUrl!),
+                  child: Container(
+                    foregroundDecoration: RotatedCornerDecoration(
+                      color: _colorCategory.withOpacity(0.8),
+                      labelInsets:
+                          const LabelInsets(baselineShift: 0.2, start: 2),
+                      geometry: const BadgeGeometry(
+                          width: kCategoryWidth, height: kCategoryHeight),
+                      textSpan: TextSpan(
+                        text: galleryProvider.translated ?? '',
+                        style: const TextStyle(
+                            fontSize: 8, fontWeight: FontWeight.bold),
                       ),
-                      ClipPath(
-                        clipper:
-                            CategoryClipper(width: kWidth, height: kHeight),
-                        child: Container(
-                          width: kWidth,
-                          height: kHeight,
-                          color: _colorCategory,
-                        ),
-                      ),
-                      Positioned(
-                          bottom: 4, right: 4, child: _buildFavcatIcon()),
-                      Container(
-                        height: (kHeight + kRadius) / 2,
-                        width: (kWidth + kRadius) / 2,
-                        alignment: Alignment.center,
-                        child: Text(
-                          galleryProvider.translated ?? '',
-                          style: const TextStyle(
-                              fontSize: 8,
-                              color: CupertinoColors.white,
-                              fontWeight: FontWeight.bold,
-                              height: 1),
-                        ),
-                      ),
-                    ],
+                    ),
+                    alignment: Alignment.center,
+                    height:
+                        galleryProvider.imgWidth != null ? _getHeigth() : null,
+                    child: CoverImg(imgUrl: galleryProvider.imgUrl!),
                   ),
                 ),
               ),
