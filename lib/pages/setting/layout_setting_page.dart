@@ -232,7 +232,7 @@ Widget _buildThemeItem(BuildContext context, {bool hideLine = false}) {
 
   final Map<ThemesModeEnum, String> themeMap = <ThemesModeEnum, String>{
     ThemesModeEnum.system: L10n.of(context).follow_system,
-    ThemesModeEnum.ligthMode: L10n.of(context).light,
+    ThemesModeEnum.lightMode: L10n.of(context).light,
     ThemesModeEnum.darkMode: L10n.of(context).dark,
   };
 

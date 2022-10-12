@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/network/app_dio/dio_file_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,7 @@ class EhCachedNetworkImage extends StatelessWidget {
     this.checkPHashHide = false,
     this.checkQRCodeHide = false,
     this.onHideFlagChanged,
+    this.ser,
   }) : super(key: key);
 
   final String imageUrl;
@@ -38,6 +40,8 @@ class EhCachedNetworkImage extends StatelessWidget {
   final bool checkPHashHide;
   final bool checkQRCodeHide;
   final ValueChanged<bool>? onHideFlagChanged;
+
+  final int? ser;
 
   final ImageHideController imageHideController = Get.find();
 
@@ -109,7 +113,7 @@ class EhCachedNetworkImage extends StatelessWidget {
     }
 
     final image = CachedNetworkImage(
-      cacheManager: imageCacheManager,
+      cacheManager: imageCacheManager(ser: ser),
       imageBuilder: imageWidgetBuilder,
       httpHeaders: _httpHeaders,
       width: width,
@@ -129,11 +133,29 @@ final client = retry.RetryClient(
   http.Client(),
 );
 
-final imageCacheManager = CacheManager(
+final imageCacheManagerOld = CacheManager(
   Config(
     'CachedNetworkImage',
     fileService: HttpFileService(
       httpClient: client,
     ),
+    // fileService: DioFileService(),
   ),
 );
+
+CacheManager imageCacheManager({int? ser}) {
+  return CacheManager(
+    Config(
+      'CachedNetworkImage',
+      fileService: DioFileService(ser: ser),
+    ),
+  );
+}
+
+ImageProvider getEhImageProvider(String url, {int? ser}) {
+  return CachedNetworkImageProvider(
+    url,
+    cacheManager: imageCacheManager(ser: ser),
+    // cacheKey: buildImageCacheKey(url),
+  );
+}

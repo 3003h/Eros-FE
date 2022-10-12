@@ -32,7 +32,7 @@ class ThemeService extends ProfileService {
         return platformBrightness.value == Brightness.dark
             ? _getDarkTheme
             : ThemeColors.ligthTheme;
-      case ThemesModeEnum.ligthMode:
+      case ThemesModeEnum.lightMode:
         return ThemeColors.ligthTheme;
       case ThemesModeEnum.darkMode:
         return _getDarkTheme;
@@ -69,7 +69,7 @@ class EHTheme {
         return _themeService.platformBrightness.value == Brightness.dark
             ? effDarkColor
             : ehcolor.color;
-      case ThemesModeEnum.ligthMode:
+      case ThemesModeEnum.lightMode:
         return ehcolor.color;
       case ThemesModeEnum.darkMode:
         return effDarkColor;
@@ -107,7 +107,7 @@ class EHTheme {
   Color? get commitIconColor => _getColorWithTheme(EhDynamicColors.commitIcon);
 
   bool get _isSeldark => _themeService.themeModel == ThemesModeEnum.darkMode;
-  bool get _isSelLigth => _themeService.themeModel == ThemesModeEnum.ligthMode;
+  bool get _isSelLigth => _themeService.themeModel == ThemesModeEnum.lightMode;
 
   bool get isDarkMode {
     if (_isSelLigth) {

@@ -631,7 +631,7 @@ class ViewExtController extends GetxController {
     );
 
     // update();
-    update(['$idImageListView$itemSer']);
+    update(['$idImageListView$itemSer', idImagePageView]);
   }
 
   void setScale100(ImageInfo imageInfo, Size size) {

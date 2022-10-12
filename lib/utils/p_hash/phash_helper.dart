@@ -16,7 +16,7 @@ class PHashHelper {
       imageFile = await getCachedImageFile(imageUrl);
     }
 
-    imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
+    imageFile ??= await imageCacheManager().getSingleFile(imageUrl,
         headers: {'cookie': Global.profile.user.cookie});
 
     final data = imageFile.readAsBytesSync();
@@ -40,7 +40,7 @@ class PHashHelper {
       imageFile = await getCachedImageFile(imageUrl);
     }
 
-    imageFile ??= await imageCacheManager.getSingleFile(imageUrl,
+    imageFile ??= await imageCacheManager().getSingleFile(imageUrl,
         headers: {'cookie': Global.profile.user.cookie});
 
     final path = imageFile.path;
