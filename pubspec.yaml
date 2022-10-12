@@ -28,7 +28,7 @@ dependencies:
   dio_cookie_manager: ^2.0.0
   webview_cookie_manager: ^2.0.6
   shared_preferences: ^2.0.5
-  oktoast: ^3.0.0
+  oktoast: ^3.3.1
   html_unescape: ^2.0.0
   enum_to_string: ^2.0.1
   flutter_inappwebview: ^5.3.2
