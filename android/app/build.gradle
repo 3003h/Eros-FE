@@ -57,6 +57,14 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         archivesBaseName = "FEhViewer_$versionName+$versionCode"
+        splits {
+            abi {
+                enable true
+                reset()
+                universalApk true
+                include "armeabi-v7a", "arm64-v8a", "x86_64"
+            }
+        }
     }
     signingConfigs {
         debug {

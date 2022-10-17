@@ -2,7 +2,7 @@ name: fehviewer
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.2.71+471
+version: 1.2.72+472
 
 environment:
   sdk: '>=2.14.0 <3.0.0'
@@ -89,14 +89,14 @@ dependencies:
   hive_flutter: ^1.0.0
   extended_sliver: ^2.0.0
   blur: ^3.0.0
-  sprintf: ^6.0.0
+  sprintf: ^7.0.0
   keframe: ^3.0.0
   executor: ^2.2.2
   synchronized: ^3.0.0
   isolate_handler: ^1.0.0
   worker_manager: ^4.2.4
   collection: ^1.15.0
-  zoom_widget: ^0.2.1
+  zoom_widget: ^2.0.0
   english_words: ^4.0.0
   scroll_to_index: ^3.0.1
   throttling: ^1.0.0
