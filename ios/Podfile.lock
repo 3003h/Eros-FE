@@ -144,12 +144,14 @@ PODS:
   - nanopb/encode (2.30909.0)
   - open_by_default (0.0.1):
     - Flutter
-  - open_file (0.0.1):
+  - open_filex (0.0.2):
     - Flutter
   - OrderedSet (5.0.0)
   - orientation (0.0.1):
     - Flutter
   - package_info (0.0.1):
+    - Flutter
+  - package_info_plus (0.4.5):
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
@@ -162,6 +164,13 @@ PODS:
   - SDWebImage (5.13.2):
     - SDWebImage/Core (= 5.13.2)
   - SDWebImage/Core (5.13.2)
+  - Sentry (7.28.0):
+    - Sentry/Core (= 7.28.0)
+  - Sentry/Core (7.28.0)
+  - sentry_flutter (0.0.1):
+    - Flutter
+    - FlutterMacOS
+    - Sentry (~> 7.28.0)
   - share (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -170,6 +179,8 @@ PODS:
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.3)
+  - system_network_proxy (0.0.1):
+    - Flutter
   - system_proxy (0.0.1):
     - Flutter
   - url_launcher_ios (0.0.1):
@@ -198,15 +209,18 @@ DEPENDENCIES:
   - learning_language (from `.symlinks/plugins/learning_language/ios`)
   - local_auth_ios (from `.symlinks/plugins/local_auth_ios/ios`)
   - open_by_default (from `.symlinks/plugins/open_by_default/ios`)
-  - open_file (from `.symlinks/plugins/open_file/ios`)
+  - open_filex (from `.symlinks/plugins/open_filex/ios`)
   - orientation (from `.symlinks/plugins/orientation/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
+  - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - system_network_proxy (from `.symlinks/plugins/system_network_proxy/ios`)
   - system_proxy (from `.symlinks/plugins/system_proxy/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
@@ -235,6 +249,7 @@ SPEC REPOS:
     - PromisesObjC
     - Protobuf
     - SDWebImage
+    - Sentry
     - SwiftyGif
 
 EXTERNAL SOURCES:
@@ -270,24 +285,30 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/local_auth_ios/ios"
   open_by_default:
     :path: ".symlinks/plugins/open_by_default/ios"
-  open_file:
-    :path: ".symlinks/plugins/open_file/ios"
+  open_filex:
+    :path: ".symlinks/plugins/open_filex/ios"
   orientation:
     :path: ".symlinks/plugins/orientation/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   receive_sharing_intent:
     :path: ".symlinks/plugins/receive_sharing_intent/ios"
+  sentry_flutter:
+    :path: ".symlinks/plugins/sentry_flutter/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
+  system_network_proxy:
+    :path: ".symlinks/plugins/system_network_proxy/ios"
   system_proxy:
     :path: ".symlinks/plugins/system_proxy/ios"
   url_launcher_ios:
@@ -321,7 +342,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
-  isar_flutter_libs: 5a34aebdd82e388db81dad8dd26786a642bb5b90
+  isar_flutter_libs: bc88affa0adeeb8800ffd2ca0177669dc18cd201
   learning_language: 6484df8f93ad53c63134d8dc658bc39998c19b36
   local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
@@ -332,26 +353,30 @@ SPEC CHECKSUMS:
   MLKitVision: 639a171d937241f3fcf92bc1b3ef8f179f49916c
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   open_by_default: a696353e830a8f8b4b1df1a92e7122275675f983
-  open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
+  open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   orientation: 6c9203efe86ce4cff379756910f18b2d745628c3
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Protobuf: 7504b04fffcf6662ad629694db8231f5e744327f
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
   SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
+  Sentry: 2c6053e4cfe6dea6608135dea1928ffbb4ecfba5
+  sentry_flutter: fad3ef0917dc1afa7d242af0743696ed9a9a8864
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
+  system_network_proxy: 6f63fddb34a28776f091b1221a17850170c59e01
   system_proxy: bec1a5c5af67dd3e3ebf43979400a8756c04cc44
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_cookie_manager: eaf920722b493bd0f7611b5484771ca53fed03f7
 
-PODFILE CHECKSUM: 49873803cc18590ba96f7f71fe05346cb7dffdd8
+PODFILE CHECKSUM: e2948cfb174bc558a485a48ee218a9eb75baffba
 
 COCOAPODS: 1.11.3

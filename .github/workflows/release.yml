@@ -29,16 +29,16 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: '3.3.2'
+            flutter_version: '3.3.4'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
-            os: macos-latest
-            flutter_version: '3.3.2'
+            os: macos-12
+            flutter_version: '3.3.4'
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
           - target: macos
-            os: macos-latest
+            os: macos-12
             flutter_version: '3.0.5'
             artifact_name: release-mac
             artifact_path: build/macos/*.zip
@@ -55,43 +55,43 @@ jobs:
         with:
           submodules: 'recursive'
 
-      - name: Cache Flutter (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/cache@v3
-        with:
-          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
-          path: /opt/hostedtoolcache/flutter
-          restore-keys: |
-            ${{ runner.os }}-flutter-
+#      - name: Cache Flutter (Linux)
+#        if: matrix.os == 'ubuntu-latest'
+#        uses: actions/cache@v3
+#        with:
+#          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+#          path: /opt/hostedtoolcache/flutter
+#          restore-keys: |
+#            ${{ runner.os }}-flutter-
+#
+#      - name: Cache Flutter (MacOS)
+#        if: matrix.os == 'macos-12'
+#        uses: actions/cache@v3
+#        with:
+#          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+#          path: /Users/runner/hostedtoolcache/flutter
+#          restore-keys: |
+#            ${{ runner.os }}-flutter-
+#
+#      - name: Cache Flutter (Windows)
+#        if: matrix.os == 'windows-latest'
+#        uses: actions/cache@v3
+#        with:
+#          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+#          path: 'C:\hostedtoolcache\windows\flutter'
+#          restore-keys: |
+#            ${{ runner.os }}-flutter-
 
-      - name: Cache Flutter (MacOS)
-        if: matrix.os == 'macos-latest'
-        uses: actions/cache@v3
-        with:
-          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
-          path: /Users/runner/hostedtoolcache/flutter
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-
-      - name: Cache Flutter (Windows)
-        if: matrix.os == 'windows-latest'
-        uses: actions/cache@v3
-        with:
-          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
-          path: 'C:\hostedtoolcache\windows\flutter'
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-
-      - name: Cache Gradle packages (Android)
-        if: matrix.target == 'android'
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+#      - name: Cache Gradle packages (Android)
+#        if: matrix.target == 'android'
+#        uses: actions/cache@v3
+#        with:
+#          path: |
+#            ~/.gradle/caches
+#            ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-
 
       - name: Cache Pods (build macos)
         uses: actions/cache@v3
@@ -115,7 +115,7 @@ jobs:
 
       # git-crypt unlock
       - name: Unlock secrets (MacOS)
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-12'
         run: |
           brew install git-crypt
           echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
@@ -138,7 +138,7 @@ jobs:
 
       # 安装证书
       - name: Install Apple Certificate
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-12'
         uses: apple-actions/import-codesign-certs@v1
         with:
           p12-file-base64: ${{ secrets.P12_BASE64 }}
@@ -146,7 +146,7 @@ jobs:
 
       # 安装描述文件
       - name: Install the provisioning profile
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-12'
         run: |
           echo $PROVISIONING_CERTIFICATE_BASE64 | base64 -d -o $APP_DEV_PROVISION_PATH
           app_dev_uuid=`grep UUID -A1 -a $APP_DEV_PROVISION_PATH | grep -io "[-A-F0-9]\{36\}"`
@@ -179,7 +179,7 @@ jobs:
           flutter-version: ${{ matrix.flutter_version }}
 
       - name: Build resolve Swift dependencies
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-12'
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
 
       - name: Flutter pub get
@@ -197,7 +197,7 @@ jobs:
       # 打包 apk
       - name: Collect Apks
         if: matrix.target == 'android'
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
