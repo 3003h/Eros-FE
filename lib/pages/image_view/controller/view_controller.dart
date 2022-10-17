@@ -22,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_android_volume_keydown/flutter_android_volume_keydown.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
-import 'package:fullscreen/fullscreen.dart';
 import 'package:get/get.dart';
 import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
@@ -672,17 +671,16 @@ class ViewExtController extends GetxController {
 
   void setFullscreen() {
     if (_ehConfigService.viewFullscreen) {
-      FullScreen.enterFullScreen(FullScreenMode.EMERSIVE_STICKY);
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.immersiveSticky,
+      );
     }
   }
 
   Future<void> unsetFullscreen() async {
-    await FullScreen.exitFullScreen();
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //   systemNavigationBarColor: Colors.transparent,
-    //   systemNavigationBarDividerColor: Colors.transparent,
-    //   statusBarColor: Colors.transparent,
-    // ));
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+    );
   }
 
   void changePage(

@@ -58,7 +58,8 @@ dependencies:
   # 缓存
   flutter_cache_manager: ^3.0.2
   # 图片保存
-  image_gallery_saver: any
+  image_gallery_saver: #any
+    git: https://github.com/hui-z/image_gallery_saver.git
   # 滑动删除
   flutter_slidable: ^2.0.0
   scrollable_positioned_list: ^0.3.2
@@ -147,7 +148,6 @@ dependencies:
 #  google_mlkit_language_id: 0.3.0
   flutter_custom_license_page: ^0.0.3
   flutter_list_view: ^1.1.18
-  fullscreen: ^1.0.3
   preload_page_view: ^0.1.6
   linkfy_text:
     git:
