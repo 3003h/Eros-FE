@@ -1,9 +1,12 @@
 import 'package:english_words/english_words.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -11,7 +14,6 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../controller/view_controller.dart';
-import 'eh_flutter_list_view_delegate.dart';
 import 'view_image.dart';
 
 class ImageListView extends StatefulWidget {
@@ -44,28 +46,33 @@ class _ImageListViewState extends State<ImageListView> {
       itemBuilder: itemBuilder(),
     );
 
-    Widget listView2 = ListView.separated(
-      itemBuilder: itemBuilder(),
-      separatorBuilder: (context, index) {
-        return const Divider();
-      },
-      itemCount: vState.filecount,
-    );
+    // return Container(
+    //   color: CupertinoColors.black,
+    //   child: GestureZoomBox(
+    //     child: listView,
+    //   ),
+    // );
 
-    Widget listView3 = FlutterListView(
-      // physics: const BouncingScrollPhysics(),
-      // cacheExtent: context.height + 1,
-      // controller: controller.flutterListViewController,
-      semanticChildCount: vState.filecount,
-      delegate: EhFlutterListViewDelegate(
-        itemBuilder(),
-        childCount: vState.filecount,
-      ),
-    );
-
+    // Widget listView2 = ListView.separated(
+    //   itemBuilder: itemBuilder(),
+    //   separatorBuilder: (context, index) {
+    //     return const Divider();
+    //   },
+    //   itemCount: vState.filecount,
+    // );
+    //
+    // Widget listView3 = FlutterListView(
+    //   // physics: const BouncingScrollPhysics(),
+    //   // cacheExtent: context.height + 1,
+    //   // controller: controller.flutterListViewController,
+    //   semanticChildCount: vState.filecount,
+    //   delegate: EhFlutterListViewDelegate(
+    //     itemBuilder(),
+    //     childCount: vState.filecount,
+    //   ),
+    // );
+    //
     Widget imageListview = Container(
-      // height: context.height,
-      // width: context.width,
       color: CupertinoTheme.of(context).scaffoldBackgroundColor,
       child: listView,
     );
@@ -114,6 +121,7 @@ class _ImageListViewState extends State<ImageListView> {
   }
 
   Widget Function(BuildContext context, int index) itemBuilder() {
+    final Size size = MediaQuery.of(context).size;
     return (BuildContext context, int index) {
       final int itemSer = index + 1;
 
@@ -173,17 +181,76 @@ class _ImageListViewState extends State<ImageListView> {
 
               loggerSimple.v('builder itemBuilder $itemSer $_height');
 
+              final viewImage = ViewImage(
+                imageSer: itemSer,
+                enableDoubleTap: false,
+                mode: ExtendedImageMode.none,
+              );
+
+              final int gid = int.tryParse(logic.vState.gid ?? '') ?? 0;
+              final ser = index + 1;
+              final viewImage2 = ExtendedImage(
+                  image: getEhImageProvider('${gid}_${ser}_', ser: ser),
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.medium,
+                  mode: ExtendedImageMode.none,
+                  loadStateChanged: (ExtendedImageState state) {
+                    final ImageInfo? imageInfo = state.extendedImageInfo;
+                    if (state.extendedImageLoadState == LoadState.completed ||
+                        imageInfo != null) {
+                      // 加载完成 显示图片
+                      controller.setScale100(imageInfo!, size);
+
+                      // 重新设置图片容器大小
+                      if (vState.imageSizeMap[ser] == null) {
+                        vState.imageSizeMap[ser] = Size(
+                            imageInfo.image.width.toDouble(),
+                            imageInfo.image.height.toDouble());
+                        Future.delayed(const Duration(milliseconds: 100)).then(
+                            (value) =>
+                                controller.update(['$idImageListView${ser}']));
+                      }
+
+                      controller.onLoadCompleted(ser);
+
+                      return controller.vState.viewMode != ViewMode.topToBottom
+                          ? Hero(
+                              tag: '$ser',
+                              child: state.completedWidget,
+                              createRectTween: (Rect? begin, Rect? end) =>
+                                  MaterialRectCenterArcTween(
+                                      begin: begin, end: end),
+                            )
+                          : state.completedWidget;
+                    } else if (state.extendedImageLoadState ==
+                        LoadState.loading) {
+                      // 显示加载中
+                      final ImageChunkEvent? loadingProgress =
+                          state.loadingProgress;
+                      final double? progress =
+                          loadingProgress?.expectedTotalBytes != null
+                              ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
+                                  (loadingProgress?.expectedTotalBytes ?? 1)
+                              : null;
+
+                      return ViewLoading(
+                        ser: ser,
+                        // progress: progress,
+                        duration: vState.viewMode != ViewMode.topToBottom
+                            ? const Duration(milliseconds: 100)
+                            : null,
+                        debugLable: '### Widget fileImage 加载图片文件',
+                      );
+                    }
+                  });
+
               return AnimatedContainer(
                 padding:
                     EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
                 height: _height ?? context.mediaQueryShortestSide,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.ease,
-                child: ViewImage(
-                  imageSer: itemSer,
-                  enableDoubleTap: false,
-                  mode: ExtendedImageMode.none,
-                ),
+                child: kReleaseMode ? viewImage : viewImage2,
               );
             }),
       );
