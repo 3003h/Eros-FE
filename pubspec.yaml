@@ -168,6 +168,7 @@ dependencies:
   sentry_flutter: ^6.10.0
   system_network_proxy: ^1.0.2
   flutter_socks_proxy: ^0.0.2
+  gesture_zoom_box: ^0.0.4
 
 
 dev_dependencies:
