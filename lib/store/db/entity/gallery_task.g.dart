@@ -345,7 +345,7 @@ const GalleryTaskSchema = CollectionSchema(
   getId: _galleryTaskGetId,
   getLinks: _galleryTaskGetLinks,
   attach: _galleryTaskAttach,
-  version: '3.0.1',
+  version: '3.0.2',
 );
 
 int _galleryTaskEstimateSize(
