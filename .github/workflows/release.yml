@@ -29,12 +29,12 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: '3.3.4'
+            flutter_version: '3.3.5'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
             os: macos-12
-            flutter_version: '3.3.4'
+            flutter_version: '3.3.5'
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
           - target: macos

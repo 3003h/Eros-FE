@@ -867,11 +867,13 @@ class ViewExtController extends GetxController {
         imageUrl: p?.imageUrl,
         origImageUrl: p?.originImageUrl,
         filePath: p?.filePath,
+        gid: p?.gid,
       );
     } else {
       logger.d('share localFile');
       showShareActionSheet(
         context,
+        isLocal: true,
         filePath: vState.imagePathList[vState.currentItemIndex],
       );
     }

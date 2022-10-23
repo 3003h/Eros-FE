@@ -1545,6 +1545,8 @@ Future<void> showShareActionSheet(
   String? origImageUrl,
   String? filePath,
   LoadFrom loadType = LoadFrom.gallery,
+  String? gid,
+  bool isLocal = false,
 }) {
   return showCupertinoModalPopup<void>(
       context: context,
@@ -1560,12 +1562,13 @@ Future<void> showShareActionSheet(
               onPressed: () async {
                 logger.v('保存到手机');
                 Get.back();
-                final bool rult = await Api.saveImage(
+                final bool result = await Api.saveImage(
                   context: context,
                   imageUrl: imageUrl,
                   filePath: filePath,
+                  gid: gid,
                 );
-                if (rult) {
+                if (result) {
                   showToast(L10n.of(context).saved_successfully);
                 }
               },
@@ -1579,6 +1582,36 @@ Future<void> showShareActionSheet(
               },
               child: Text(L10n.of(context).system_share),
             ),
+            if (!isLocal)
+              CupertinoActionSheetAction(
+                onPressed: () async {
+                  logger.v('保存到手机 原图');
+                  Get.back();
+                  final bool result = await Api.saveImage(
+                    context: context,
+                    imageUrl: origImageUrl,
+                    gid: gid,
+                  );
+                  if (result) {
+                    showToast(L10n.of(context).saved_successfully);
+                  }
+                },
+                child: Text(
+                    '${L10n.of(context).save_into_album}(${L10n.of(context).original_image})'),
+              ),
+            if (!isLocal)
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  logger.v('系统分享 原图');
+                  Get.back();
+                  Api.shareImageExtended(
+                    imageUrl: origImageUrl,
+                    gid: gid,
+                  );
+                },
+                child: Text(
+                    '${L10n.of(context).system_share}(${L10n.of(context).original_image})'),
+              ),
           ],
         );
         return EhDarkCupertinoTheme(child: dialog);

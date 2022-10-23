@@ -19,7 +19,6 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:window_size/window_size.dart';
 
 import 'get_init.dart';
 import 'network/app_dio/pdio.dart';
@@ -174,20 +173,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           GlobalCupertinoLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
-        localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
-          final Locale _locale = window.locale;
-          logger.v(
-              'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
-          // logger.d('${_locale} ${supportedLocales}');
-          if (locale != null) {
-            // logger.d('sel $locale');
-            //如果已经选定语言，则不跟随系统
-            return locale;
-          } else {
-            logger.v('语言跟随系统语言  $_locale');
-            return null;
-          }
-        },
+        // localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
+        //   final Locale _locale = window.locale;
+        //   logger.v(
+        //       'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
+        //   // logger.d('${_locale} ${supportedLocales}');
+        //   if (locale != null) {
+        //     // logger.d('sel $locale');
+        //     //如果已经选定语言，则不跟随系统
+        //     return locale;
+        //   } else {
+        //     logger.v('语言跟随系统语言  $_locale');
+        //     return null;
+        //   }
+        // },
       );
     }
 

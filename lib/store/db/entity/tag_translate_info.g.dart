@@ -61,66 +61,80 @@ extension $TagTranslateInfoCopyWith on TagTranslateInfo {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings
 
 extension GetTagTranslateInfoCollection on Isar {
-  IsarCollection<TagTranslateInfo> get tagTranslateInfos => this.collection();
+  IsarCollection<TagTranslateInfo> get tagTranslateInfos => collection();
 }
 
 const TagTranslateInfoSchema = CollectionSchema(
   name: r'TagTranslateInfo',
-  id: -257380212034583058,
-  properties: {
-    r'localVersion': PropertySchema(
-      id: 0,
-      name: r'localVersion',
-      type: IsarType.string,
-    )
-  },
-  estimateSize: _tagTranslateInfoEstimateSize,
-  serialize: _tagTranslateInfoSerialize,
-  deserialize: _tagTranslateInfoDeserialize,
-  deserializeProp: _tagTranslateInfoDeserializeProp,
+  schema:
+      r'{"name":"TagTranslateInfo","idName":"id","properties":[{"name":"localVersion","type":"String"}],"indexes":[],"links":[]}',
   idName: r'id',
-  indexes: {},
-  links: {},
-  embeddedSchemas: {},
+  propertyIds: {r'localVersion': 0},
+  listProperties: {},
+  indexIds: {},
+  indexValueTypes: {},
+  linkIds: {},
+  backlinkLinkNames: {},
   getId: _tagTranslateInfoGetId,
+  setId: _tagTranslateInfoSetId,
   getLinks: _tagTranslateInfoGetLinks,
-  attach: _tagTranslateInfoAttach,
-  version: '3.0.2',
+  attachLinks: _tagTranslateInfoAttachLinks,
+  serializeNative: _tagTranslateInfoSerializeNative,
+  deserializeNative: _tagTranslateInfoDeserializeNative,
+  deserializePropNative: _tagTranslateInfoDeserializePropNative,
+  serializeWeb: _tagTranslateInfoSerializeWeb,
+  deserializeWeb: _tagTranslateInfoDeserializeWeb,
+  deserializePropWeb: _tagTranslateInfoDeserializePropWeb,
+  version: 4,
 );
 
-int _tagTranslateInfoEstimateSize(
-  TagTranslateInfo object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  {
-    final value = object.localVersion;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
+int? _tagTranslateInfoGetId(TagTranslateInfo object) {
+  if (object.id == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.id;
   }
-  return bytesCount;
 }
 
-void _tagTranslateInfoSerialize(
-  TagTranslateInfo object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  writer.writeString(offsets[0], object.localVersion);
+void _tagTranslateInfoSetId(TagTranslateInfo object, int id) {
+  object.id = id;
 }
 
-TagTranslateInfo _tagTranslateInfoDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+List<IsarLinkBase<dynamic>> _tagTranslateInfoGetLinks(TagTranslateInfo object) {
+  return [];
+}
+
+void _tagTranslateInfoSerializeNative(
+    IsarCollection<TagTranslateInfo> collection,
+    IsarCObject cObj,
+    TagTranslateInfo object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  IsarUint8List? localVersion$Bytes;
+  final localVersion$Value = object.localVersion;
+  if (localVersion$Value != null) {
+    localVersion$Bytes =
+        IsarBinaryWriter.utf8Encoder.convert(localVersion$Value);
+  }
+  final size = (staticSize + 3 + (localVersion$Bytes?.length ?? 0)) as int;
+  cObj.buffer = alloc(size);
+  cObj.buffer_length = size;
+
+  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeHeader();
+  writer.writeByteList(offsets[0], localVersion$Bytes);
+}
+
+TagTranslateInfo _tagTranslateInfoDeserializeNative(
+    IsarCollection<TagTranslateInfo> collection,
+    int id,
+    IsarBinaryReader reader,
+    List<int> offsets) {
   final object = TagTranslateInfo(
     localVersion: reader.readStringOrNull(offsets[0]),
   );
@@ -128,32 +142,48 @@ TagTranslateInfo _tagTranslateInfoDeserialize(
   return object;
 }
 
-P _tagTranslateInfoDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
+P _tagTranslateInfoDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     default:
-      throw IsarError('Unknown property with id $propertyId');
+      throw IsarError('Illegal propertyIndex');
   }
 }
 
-Id _tagTranslateInfoGetId(TagTranslateInfo object) {
-  return object.id;
+Object _tagTranslateInfoSerializeWeb(
+    IsarCollection<TagTranslateInfo> collection, TagTranslateInfo object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, r'id', object.id);
+  IsarNative.jsObjectSet(jsObj, r'localVersion', object.localVersion);
+  return jsObj;
 }
 
-List<IsarLinkBase<dynamic>> _tagTranslateInfoGetLinks(TagTranslateInfo object) {
-  return [];
+TagTranslateInfo _tagTranslateInfoDeserializeWeb(
+    IsarCollection<TagTranslateInfo> collection, Object jsObj) {
+  final object = TagTranslateInfo(
+    localVersion: IsarNative.jsObjectGet(jsObj, r'localVersion'),
+  );
+  object.id = IsarNative.jsObjectGet(jsObj, r'id');
+  return object;
 }
 
-void _tagTranslateInfoAttach(
-    IsarCollection<dynamic> col, Id id, TagTranslateInfo object) {
-  object.id = id;
+P _tagTranslateInfoDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case r'id':
+      return (IsarNative.jsObjectGet(jsObj, r'id')) as P;
+    case r'localVersion':
+      return (IsarNative.jsObjectGet(jsObj, r'localVersion')) as P;
+    default:
+      throw IsarError('Illegal propertyName');
+  }
 }
+
+void _tagTranslateInfoAttachLinks(
+    IsarCollection<dynamic> col, int id, TagTranslateInfo object) {}
 
 extension TagTranslateInfoQueryWhereSort
     on QueryBuilder<TagTranslateInfo, TagTranslateInfo, QWhere> {
@@ -167,7 +197,7 @@ extension TagTranslateInfoQueryWhereSort
 extension TagTranslateInfoQueryWhere
     on QueryBuilder<TagTranslateInfo, TagTranslateInfo, QWhereClause> {
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterWhereClause> idEqualTo(
-      Id id) {
+      int id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -177,7 +207,7 @@ extension TagTranslateInfoQueryWhere
   }
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterWhereClause>
-      idNotEqualTo(Id id) {
+      idNotEqualTo(int id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -200,7 +230,7 @@ extension TagTranslateInfoQueryWhere
   }
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterWhereClause>
-      idGreaterThan(Id id, {bool include = false}) {
+      idGreaterThan(int id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -209,7 +239,7 @@ extension TagTranslateInfoQueryWhere
   }
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterWhereClause>
-      idLessThan(Id id, {bool include = false}) {
+      idLessThan(int id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -218,8 +248,8 @@ extension TagTranslateInfoQueryWhere
   }
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterWhereClause> idBetween(
-    Id lowerId,
-    Id upperId, {
+    int lowerId,
+    int upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -237,7 +267,7 @@ extension TagTranslateInfoQueryWhere
 extension TagTranslateInfoQueryFilter
     on QueryBuilder<TagTranslateInfo, TagTranslateInfo, QFilterCondition> {
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
-      idEqualTo(Id value) {
+      idEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -248,7 +278,7 @@ extension TagTranslateInfoQueryFilter
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
       idGreaterThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -262,7 +292,7 @@ extension TagTranslateInfoQueryFilter
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
       idLessThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -276,8 +306,8 @@ extension TagTranslateInfoQueryFilter
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
       idBetween(
-    Id lower,
-    Id upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -302,15 +332,6 @@ extension TagTranslateInfoQueryFilter
   }
 
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
-      localVersionIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'localVersion',
-      ));
-    });
-  }
-
-  QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
       localVersionEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -327,8 +348,8 @@ extension TagTranslateInfoQueryFilter
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
       localVersionGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -343,8 +364,8 @@ extension TagTranslateInfoQueryFilter
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
       localVersionLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -360,9 +381,9 @@ extension TagTranslateInfoQueryFilter
       localVersionBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -425,35 +446,12 @@ extension TagTranslateInfoQueryFilter
       ));
     });
   }
-
-  QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
-      localVersionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'localVersion',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterFilterCondition>
-      localVersionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'localVersion',
-        value: '',
-      ));
-    });
-  }
 }
-
-extension TagTranslateInfoQueryObject
-    on QueryBuilder<TagTranslateInfo, TagTranslateInfo, QFilterCondition> {}
 
 extension TagTranslateInfoQueryLinks
     on QueryBuilder<TagTranslateInfo, TagTranslateInfo, QFilterCondition> {}
 
-extension TagTranslateInfoQuerySortBy
+extension TagTranslateInfoQueryWhereSortBy
     on QueryBuilder<TagTranslateInfo, TagTranslateInfo, QSortBy> {
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterSortBy>
       sortByLocalVersion() {
@@ -470,7 +468,7 @@ extension TagTranslateInfoQuerySortBy
   }
 }
 
-extension TagTranslateInfoQuerySortThenBy
+extension TagTranslateInfoQueryWhereSortThenBy
     on QueryBuilder<TagTranslateInfo, TagTranslateInfo, QSortThenBy> {
   QueryBuilder<TagTranslateInfo, TagTranslateInfo, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {

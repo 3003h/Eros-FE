@@ -238,212 +238,172 @@ extension $GalleryTaskCopyWith on GalleryTask {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings
 
 extension GetGalleryTaskCollection on Isar {
-  IsarCollection<GalleryTask> get galleryTasks => this.collection();
+  IsarCollection<GalleryTask> get galleryTasks => collection();
 }
 
 const GalleryTaskSchema = CollectionSchema(
   name: r'GalleryTask',
-  id: -4908171080635452003,
-  properties: {
-    r'addTime': PropertySchema(
-      id: 0,
-      name: r'addTime',
-      type: IsarType.long,
-    ),
-    r'category': PropertySchema(
-      id: 1,
-      name: r'category',
-      type: IsarType.string,
-    ),
-    r'completCount': PropertySchema(
-      id: 2,
-      name: r'completCount',
-      type: IsarType.long,
-    ),
-    r'coverImage': PropertySchema(
-      id: 3,
-      name: r'coverImage',
-      type: IsarType.string,
-    ),
-    r'coverUrl': PropertySchema(
-      id: 4,
-      name: r'coverUrl',
-      type: IsarType.string,
-    ),
-    r'dirPath': PropertySchema(
-      id: 5,
-      name: r'dirPath',
-      type: IsarType.string,
-    ),
-    r'downloadOrigImage': PropertySchema(
-      id: 6,
-      name: r'downloadOrigImage',
-      type: IsarType.bool,
-    ),
-    r'fileCount': PropertySchema(
-      id: 7,
-      name: r'fileCount',
-      type: IsarType.long,
-    ),
-    r'jsonString': PropertySchema(
-      id: 8,
-      name: r'jsonString',
-      type: IsarType.string,
-    ),
-    r'rating': PropertySchema(
-      id: 9,
-      name: r'rating',
-      type: IsarType.double,
-    ),
-    r'realDirPath': PropertySchema(
-      id: 10,
-      name: r'realDirPath',
-      type: IsarType.string,
-    ),
-    r'status': PropertySchema(
-      id: 11,
-      name: r'status',
-      type: IsarType.long,
-    ),
-    r'tag': PropertySchema(
-      id: 12,
-      name: r'tag',
-      type: IsarType.string,
-    ),
-    r'title': PropertySchema(
-      id: 13,
-      name: r'title',
-      type: IsarType.string,
-    ),
-    r'token': PropertySchema(
-      id: 14,
-      name: r'token',
-      type: IsarType.string,
-    ),
-    r'uploader': PropertySchema(
-      id: 15,
-      name: r'uploader',
-      type: IsarType.string,
-    ),
-    r'url': PropertySchema(
-      id: 16,
-      name: r'url',
-      type: IsarType.string,
-    )
-  },
-  estimateSize: _galleryTaskEstimateSize,
-  serialize: _galleryTaskSerialize,
-  deserialize: _galleryTaskDeserialize,
-  deserializeProp: _galleryTaskDeserializeProp,
+  schema:
+      r'{"name":"GalleryTask","idName":"gid","properties":[{"name":"addTime","type":"Long"},{"name":"category","type":"String"},{"name":"completCount","type":"Long"},{"name":"coverImage","type":"String"},{"name":"coverUrl","type":"String"},{"name":"dirPath","type":"String"},{"name":"downloadOrigImage","type":"Bool"},{"name":"fileCount","type":"Long"},{"name":"jsonString","type":"String"},{"name":"rating","type":"Double"},{"name":"realDirPath","type":"String"},{"name":"status","type":"Long"},{"name":"tag","type":"String"},{"name":"title","type":"String"},{"name":"token","type":"String"},{"name":"uploader","type":"String"},{"name":"url","type":"String"}],"indexes":[],"links":[]}',
   idName: r'gid',
-  indexes: {},
-  links: {},
-  embeddedSchemas: {},
+  propertyIds: {
+    r'addTime': 0,
+    r'category': 1,
+    r'completCount': 2,
+    r'coverImage': 3,
+    r'coverUrl': 4,
+    r'dirPath': 5,
+    r'downloadOrigImage': 6,
+    r'fileCount': 7,
+    r'jsonString': 8,
+    r'rating': 9,
+    r'realDirPath': 10,
+    r'status': 11,
+    r'tag': 12,
+    r'title': 13,
+    r'token': 14,
+    r'uploader': 15,
+    r'url': 16
+  },
+  listProperties: {},
+  indexIds: {},
+  indexValueTypes: {},
+  linkIds: {},
+  backlinkLinkNames: {},
   getId: _galleryTaskGetId,
   getLinks: _galleryTaskGetLinks,
-  attach: _galleryTaskAttach,
-  version: '3.0.2',
+  attachLinks: _galleryTaskAttachLinks,
+  serializeNative: _galleryTaskSerializeNative,
+  deserializeNative: _galleryTaskDeserializeNative,
+  deserializePropNative: _galleryTaskDeserializePropNative,
+  serializeWeb: _galleryTaskSerializeWeb,
+  deserializeWeb: _galleryTaskDeserializeWeb,
+  deserializePropWeb: _galleryTaskDeserializePropWeb,
+  version: 4,
 );
 
-int _galleryTaskEstimateSize(
-  GalleryTask object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  {
-    final value = object.category;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
+int? _galleryTaskGetId(GalleryTask object) {
+  if (object.gid == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.gid;
   }
-  {
-    final value = object.coverImage;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.coverUrl;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.dirPath;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.jsonString;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.realDirPath;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.tag;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.title.length * 3;
-  bytesCount += 3 + object.token.length * 3;
-  {
-    final value = object.uploader;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.url;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  return bytesCount;
 }
 
-void _galleryTaskSerialize(
-  GalleryTask object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+List<IsarLinkBase<dynamic>> _galleryTaskGetLinks(GalleryTask object) {
+  return [];
+}
+
+void _galleryTaskSerializeNative(
+    IsarCollection<GalleryTask> collection,
+    IsarCObject cObj,
+    GalleryTask object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  IsarUint8List? category$Bytes;
+  final category$Value = object.category;
+  if (category$Value != null) {
+    category$Bytes = IsarBinaryWriter.utf8Encoder.convert(category$Value);
+  }
+  IsarUint8List? coverImage$Bytes;
+  final coverImage$Value = object.coverImage;
+  if (coverImage$Value != null) {
+    coverImage$Bytes = IsarBinaryWriter.utf8Encoder.convert(coverImage$Value);
+  }
+  IsarUint8List? coverUrl$Bytes;
+  final coverUrl$Value = object.coverUrl;
+  if (coverUrl$Value != null) {
+    coverUrl$Bytes = IsarBinaryWriter.utf8Encoder.convert(coverUrl$Value);
+  }
+  IsarUint8List? dirPath$Bytes;
+  final dirPath$Value = object.dirPath;
+  if (dirPath$Value != null) {
+    dirPath$Bytes = IsarBinaryWriter.utf8Encoder.convert(dirPath$Value);
+  }
+  IsarUint8List? jsonString$Bytes;
+  final jsonString$Value = object.jsonString;
+  if (jsonString$Value != null) {
+    jsonString$Bytes = IsarBinaryWriter.utf8Encoder.convert(jsonString$Value);
+  }
+  IsarUint8List? realDirPath$Bytes;
+  final realDirPath$Value = object.realDirPath;
+  if (realDirPath$Value != null) {
+    realDirPath$Bytes = IsarBinaryWriter.utf8Encoder.convert(realDirPath$Value);
+  }
+  IsarUint8List? tag$Bytes;
+  final tag$Value = object.tag;
+  if (tag$Value != null) {
+    tag$Bytes = IsarBinaryWriter.utf8Encoder.convert(tag$Value);
+  }
+  final title$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.title);
+  final token$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.token);
+  IsarUint8List? uploader$Bytes;
+  final uploader$Value = object.uploader;
+  if (uploader$Value != null) {
+    uploader$Bytes = IsarBinaryWriter.utf8Encoder.convert(uploader$Value);
+  }
+  IsarUint8List? url$Bytes;
+  final url$Value = object.url;
+  if (url$Value != null) {
+    url$Bytes = IsarBinaryWriter.utf8Encoder.convert(url$Value);
+  }
+  final size = (staticSize +
+      3 +
+      (category$Bytes?.length ?? 0) +
+      3 +
+      (coverImage$Bytes?.length ?? 0) +
+      3 +
+      (coverUrl$Bytes?.length ?? 0) +
+      3 +
+      (dirPath$Bytes?.length ?? 0) +
+      3 +
+      (jsonString$Bytes?.length ?? 0) +
+      3 +
+      (realDirPath$Bytes?.length ?? 0) +
+      3 +
+      (tag$Bytes?.length ?? 0) +
+      3 +
+      (title$Bytes.length) +
+      3 +
+      (token$Bytes.length) +
+      3 +
+      (uploader$Bytes?.length ?? 0) +
+      3 +
+      (url$Bytes?.length ?? 0)) as int;
+  cObj.buffer = alloc(size);
+  cObj.buffer_length = size;
+
+  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeHeader();
   writer.writeLong(offsets[0], object.addTime);
-  writer.writeString(offsets[1], object.category);
+  writer.writeByteList(offsets[1], category$Bytes);
   writer.writeLong(offsets[2], object.completCount);
-  writer.writeString(offsets[3], object.coverImage);
-  writer.writeString(offsets[4], object.coverUrl);
-  writer.writeString(offsets[5], object.dirPath);
+  writer.writeByteList(offsets[3], coverImage$Bytes);
+  writer.writeByteList(offsets[4], coverUrl$Bytes);
+  writer.writeByteList(offsets[5], dirPath$Bytes);
   writer.writeBool(offsets[6], object.downloadOrigImage);
   writer.writeLong(offsets[7], object.fileCount);
-  writer.writeString(offsets[8], object.jsonString);
+  writer.writeByteList(offsets[8], jsonString$Bytes);
   writer.writeDouble(offsets[9], object.rating);
-  writer.writeString(offsets[10], object.realDirPath);
+  writer.writeByteList(offsets[10], realDirPath$Bytes);
   writer.writeLong(offsets[11], object.status);
-  writer.writeString(offsets[12], object.tag);
-  writer.writeString(offsets[13], object.title);
-  writer.writeString(offsets[14], object.token);
-  writer.writeString(offsets[15], object.uploader);
-  writer.writeString(offsets[16], object.url);
+  writer.writeByteList(offsets[12], tag$Bytes);
+  writer.writeByteList(offsets[13], title$Bytes);
+  writer.writeByteList(offsets[14], token$Bytes);
+  writer.writeByteList(offsets[15], uploader$Bytes);
+  writer.writeByteList(offsets[16], url$Bytes);
 }
 
-GalleryTask _galleryTaskDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+GalleryTask _galleryTaskDeserializeNative(
+    IsarCollection<GalleryTask> collection,
+    int id,
+    IsarBinaryReader reader,
+    List<int> offsets) {
   final object = GalleryTask(
     addTime: reader.readLongOrNull(offsets[0]),
     category: reader.readStringOrNull(offsets[1]),
@@ -466,13 +426,11 @@ GalleryTask _galleryTaskDeserialize(
   return object;
 }
 
-P _galleryTaskDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
+P _galleryTaskDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
@@ -508,20 +466,105 @@ P _galleryTaskDeserializeProp<P>(
     case 16:
       return (reader.readStringOrNull(offset)) as P;
     default:
-      throw IsarError('Unknown property with id $propertyId');
+      throw IsarError('Illegal propertyIndex');
   }
 }
 
-Id _galleryTaskGetId(GalleryTask object) {
-  return object.gid;
+Object _galleryTaskSerializeWeb(
+    IsarCollection<GalleryTask> collection, GalleryTask object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, r'addTime', object.addTime);
+  IsarNative.jsObjectSet(jsObj, r'category', object.category);
+  IsarNative.jsObjectSet(jsObj, r'completCount', object.completCount);
+  IsarNative.jsObjectSet(jsObj, r'coverImage', object.coverImage);
+  IsarNative.jsObjectSet(jsObj, r'coverUrl', object.coverUrl);
+  IsarNative.jsObjectSet(jsObj, r'dirPath', object.dirPath);
+  IsarNative.jsObjectSet(jsObj, r'downloadOrigImage', object.downloadOrigImage);
+  IsarNative.jsObjectSet(jsObj, r'fileCount', object.fileCount);
+  IsarNative.jsObjectSet(jsObj, r'gid', object.gid);
+  IsarNative.jsObjectSet(jsObj, r'jsonString', object.jsonString);
+  IsarNative.jsObjectSet(jsObj, r'rating', object.rating);
+  IsarNative.jsObjectSet(jsObj, r'realDirPath', object.realDirPath);
+  IsarNative.jsObjectSet(jsObj, r'status', object.status);
+  IsarNative.jsObjectSet(jsObj, r'tag', object.tag);
+  IsarNative.jsObjectSet(jsObj, r'title', object.title);
+  IsarNative.jsObjectSet(jsObj, r'token', object.token);
+  IsarNative.jsObjectSet(jsObj, r'uploader', object.uploader);
+  IsarNative.jsObjectSet(jsObj, r'url', object.url);
+  return jsObj;
 }
 
-List<IsarLinkBase<dynamic>> _galleryTaskGetLinks(GalleryTask object) {
-  return [];
+GalleryTask _galleryTaskDeserializeWeb(
+    IsarCollection<GalleryTask> collection, Object jsObj) {
+  final object = GalleryTask(
+    addTime: IsarNative.jsObjectGet(jsObj, r'addTime'),
+    category: IsarNative.jsObjectGet(jsObj, r'category'),
+    completCount: IsarNative.jsObjectGet(jsObj, r'completCount'),
+    coverImage: IsarNative.jsObjectGet(jsObj, r'coverImage'),
+    coverUrl: IsarNative.jsObjectGet(jsObj, r'coverUrl'),
+    dirPath: IsarNative.jsObjectGet(jsObj, r'dirPath'),
+    downloadOrigImage: IsarNative.jsObjectGet(jsObj, r'downloadOrigImage'),
+    fileCount: IsarNative.jsObjectGet(jsObj, r'fileCount') ??
+        (double.negativeInfinity as int),
+    gid: IsarNative.jsObjectGet(jsObj, r'gid'),
+    jsonString: IsarNative.jsObjectGet(jsObj, r'jsonString'),
+    rating: IsarNative.jsObjectGet(jsObj, r'rating'),
+    status: IsarNative.jsObjectGet(jsObj, r'status'),
+    tag: IsarNative.jsObjectGet(jsObj, r'tag'),
+    title: IsarNative.jsObjectGet(jsObj, r'title') ?? '',
+    token: IsarNative.jsObjectGet(jsObj, r'token') ?? '',
+    uploader: IsarNative.jsObjectGet(jsObj, r'uploader'),
+    url: IsarNative.jsObjectGet(jsObj, r'url'),
+  );
+  return object;
 }
 
-void _galleryTaskAttach(
-    IsarCollection<dynamic> col, Id id, GalleryTask object) {}
+P _galleryTaskDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case r'addTime':
+      return (IsarNative.jsObjectGet(jsObj, r'addTime')) as P;
+    case r'category':
+      return (IsarNative.jsObjectGet(jsObj, r'category')) as P;
+    case r'completCount':
+      return (IsarNative.jsObjectGet(jsObj, r'completCount')) as P;
+    case r'coverImage':
+      return (IsarNative.jsObjectGet(jsObj, r'coverImage')) as P;
+    case r'coverUrl':
+      return (IsarNative.jsObjectGet(jsObj, r'coverUrl')) as P;
+    case r'dirPath':
+      return (IsarNative.jsObjectGet(jsObj, r'dirPath')) as P;
+    case r'downloadOrigImage':
+      return (IsarNative.jsObjectGet(jsObj, r'downloadOrigImage')) as P;
+    case r'fileCount':
+      return (IsarNative.jsObjectGet(jsObj, r'fileCount') ??
+          (double.negativeInfinity as int)) as P;
+    case r'gid':
+      return (IsarNative.jsObjectGet(jsObj, r'gid')) as P;
+    case r'jsonString':
+      return (IsarNative.jsObjectGet(jsObj, r'jsonString')) as P;
+    case r'rating':
+      return (IsarNative.jsObjectGet(jsObj, r'rating')) as P;
+    case r'realDirPath':
+      return (IsarNative.jsObjectGet(jsObj, r'realDirPath')) as P;
+    case r'status':
+      return (IsarNative.jsObjectGet(jsObj, r'status')) as P;
+    case r'tag':
+      return (IsarNative.jsObjectGet(jsObj, r'tag')) as P;
+    case r'title':
+      return (IsarNative.jsObjectGet(jsObj, r'title') ?? '') as P;
+    case r'token':
+      return (IsarNative.jsObjectGet(jsObj, r'token') ?? '') as P;
+    case r'uploader':
+      return (IsarNative.jsObjectGet(jsObj, r'uploader')) as P;
+    case r'url':
+      return (IsarNative.jsObjectGet(jsObj, r'url')) as P;
+    default:
+      throw IsarError('Illegal propertyName');
+  }
+}
+
+void _galleryTaskAttachLinks(
+    IsarCollection<dynamic> col, int id, GalleryTask object) {}
 
 extension GalleryTaskQueryWhereSort
     on QueryBuilder<GalleryTask, GalleryTask, QWhere> {
@@ -534,7 +577,8 @@ extension GalleryTaskQueryWhereSort
 
 extension GalleryTaskQueryWhere
     on QueryBuilder<GalleryTask, GalleryTask, QWhereClause> {
-  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidEqualTo(Id gid) {
+  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidEqualTo(
+      int gid) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: gid,
@@ -544,7 +588,7 @@ extension GalleryTaskQueryWhere
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidNotEqualTo(
-      Id gid) {
+      int gid) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -567,7 +611,7 @@ extension GalleryTaskQueryWhere
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidGreaterThan(
-      Id gid,
+      int gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -576,7 +620,7 @@ extension GalleryTaskQueryWhere
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidLessThan(Id gid,
+  QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidLessThan(int gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -586,8 +630,8 @@ extension GalleryTaskQueryWhere
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterWhereClause> gidBetween(
-    Id lowerGid,
-    Id upperGid, {
+    int lowerGid,
+    int upperGid, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -608,15 +652,6 @@ extension GalleryTaskQueryFilter
       addTimeIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'addTime',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      addTimeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'addTime',
       ));
     });
@@ -685,15 +720,6 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      categoryIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'category',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> categoryEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -710,8 +736,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       categoryGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -726,8 +752,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       categoryLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -742,9 +768,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> categoryBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -810,38 +836,9 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      categoryIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'category',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      categoryIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'category',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       completCountIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'completCount',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      completCountIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'completCount',
       ));
     });
@@ -913,15 +910,6 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      coverImageIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'coverImage',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverImageEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -938,8 +926,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverImageGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -954,8 +942,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverImageLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -971,9 +959,9 @@ extension GalleryTaskQueryFilter
       coverImageBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1038,38 +1026,9 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      coverImageIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'coverImage',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      coverImageIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'coverImage',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverUrlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'coverUrl',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      coverUrlIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'coverUrl',
       ));
     });
@@ -1091,8 +1050,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverUrlGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1107,8 +1066,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       coverUrlLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1123,9 +1082,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> coverUrlBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1191,38 +1150,9 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      coverUrlIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'coverUrl',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      coverUrlIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'coverUrl',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       dirPathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'dirPath',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      dirPathIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'dirPath',
       ));
     });
@@ -1244,8 +1174,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       dirPathGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1259,8 +1189,8 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> dirPathLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1275,9 +1205,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> dirPathBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1343,38 +1273,9 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      dirPathIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'dirPath',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      dirPathIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'dirPath',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       downloadOrigImageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'downloadOrigImage',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      downloadOrigImageIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'downloadOrigImage',
       ));
     });
@@ -1447,7 +1348,7 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidEqualTo(
-      Id value) {
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'gid',
@@ -1457,7 +1358,7 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidGreaterThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1470,7 +1371,7 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidLessThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1483,8 +1384,8 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> gidBetween(
-    Id lower,
-    Id upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1509,15 +1410,6 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      jsonStringIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'jsonString',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       jsonStringEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -1534,8 +1426,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       jsonStringGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1550,8 +1442,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       jsonStringLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1567,9 +1459,9 @@ extension GalleryTaskQueryFilter
       jsonStringBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1633,26 +1525,6 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      jsonStringIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'jsonString',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      jsonStringIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'jsonString',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1662,73 +1534,34 @@ extension GalleryTaskQueryFilter
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      ratingIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'rating',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'rating',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      ratingGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
+      ratingGreaterThan(double? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
         property: r'rating',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
+      double? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
         property: r'rating',
         value: value,
-        epsilon: epsilon,
       ));
     });
   }
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> ratingBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
+      double? lower, double? upper) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'rating',
         lower: lower,
-        includeLower: includeLower,
+        includeLower: false,
         upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
+        includeUpper: false,
       ));
     });
   }
@@ -1737,15 +1570,6 @@ extension GalleryTaskQueryFilter
       realDirPathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'realDirPath',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      realDirPathIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'realDirPath',
       ));
     });
@@ -1768,8 +1592,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       realDirPathGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1784,8 +1608,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       realDirPathLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1801,9 +1625,9 @@ extension GalleryTaskQueryFilter
       realDirPathBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1867,38 +1691,9 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      realDirPathIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'realDirPath',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      realDirPathIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'realDirPath',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> statusIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'status',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      statusIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'status',
       ));
     });
@@ -1966,14 +1761,6 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'tag',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -1989,8 +1776,8 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2004,8 +1791,8 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -2020,9 +1807,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -2086,25 +1873,6 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tagIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'tag',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      tagIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'tag',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -2121,8 +1889,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       titleGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2136,8 +1904,8 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> titleLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -2152,9 +1920,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -2218,25 +1986,6 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> titleIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'title',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      titleIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'title',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tokenEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -2253,8 +2002,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       tokenGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2268,8 +2017,8 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tokenLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -2284,9 +2033,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tokenBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -2350,38 +2099,10 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> tokenIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'token',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      tokenIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'token',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       uploaderIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'uploader',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      uploaderIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'uploader',
       ));
     });
@@ -2403,8 +2124,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       uploaderGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2419,8 +2140,8 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
       uploaderLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -2435,9 +2156,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> uploaderBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -2502,37 +2223,9 @@ extension GalleryTaskQueryFilter
     });
   }
 
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      uploaderIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'uploader',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      uploaderIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'uploader',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'url',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'url',
       ));
     });
@@ -2553,8 +2246,8 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -2568,8 +2261,8 @@ extension GalleryTaskQueryFilter
 
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -2584,9 +2277,9 @@ extension GalleryTaskQueryFilter
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -2649,34 +2342,12 @@ extension GalleryTaskQueryFilter
       ));
     });
   }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> urlIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'url',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
-      urlIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'url',
-        value: '',
-      ));
-    });
-  }
 }
-
-extension GalleryTaskQueryObject
-    on QueryBuilder<GalleryTask, GalleryTask, QFilterCondition> {}
 
 extension GalleryTaskQueryLinks
     on QueryBuilder<GalleryTask, GalleryTask, QFilterCondition> {}
 
-extension GalleryTaskQuerySortBy
+extension GalleryTaskQueryWhereSortBy
     on QueryBuilder<GalleryTask, GalleryTask, QSortBy> {
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByAddTime() {
     return QueryBuilder.apply(this, (query) {
@@ -2886,7 +2557,7 @@ extension GalleryTaskQuerySortBy
   }
 }
 
-extension GalleryTaskQuerySortThenBy
+extension GalleryTaskQueryWhereSortThenBy
     on QueryBuilder<GalleryTask, GalleryTask, QSortThenBy> {
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByAddTime() {
     return QueryBuilder.apply(this, (query) {

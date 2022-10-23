@@ -87,81 +87,76 @@ extension $ViewHistoryCopyWith on ViewHistory {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings
 
 extension GetViewHistoryCollection on Isar {
-  IsarCollection<ViewHistory> get viewHistorys => this.collection();
+  IsarCollection<ViewHistory> get viewHistorys => collection();
 }
 
 const ViewHistorySchema = CollectionSchema(
   name: r'ViewHistory',
-  id: -689102202586410121,
-  properties: {
-    r'galleryProviderText': PropertySchema(
-      id: 0,
-      name: r'galleryProviderText',
-      type: IsarType.string,
-    ),
-    r'lastViewTime': PropertySchema(
-      id: 1,
-      name: r'lastViewTime',
-      type: IsarType.long,
-    )
-  },
-  estimateSize: _viewHistoryEstimateSize,
-  serialize: _viewHistorySerialize,
-  deserialize: _viewHistoryDeserialize,
-  deserializeProp: _viewHistoryDeserializeProp,
+  schema:
+      r'{"name":"ViewHistory","idName":"gid","properties":[{"name":"galleryProviderText","type":"String"},{"name":"lastViewTime","type":"Long"}],"indexes":[{"name":"lastViewTime","unique":false,"replace":false,"properties":[{"name":"lastViewTime","type":"Value","caseSensitive":false}]}],"links":[]}',
   idName: r'gid',
-  indexes: {
-    r'lastViewTime': IndexSchema(
-      id: 9140181846964812605,
-      name: r'lastViewTime',
-      unique: false,
-      replace: false,
-      properties: [
-        IndexPropertySchema(
-          name: r'lastViewTime',
-          type: IndexType.value,
-          caseSensitive: false,
-        )
-      ],
-    )
+  propertyIds: {r'galleryProviderText': 0, r'lastViewTime': 1},
+  listProperties: {},
+  indexIds: {r'lastViewTime': 0},
+  indexValueTypes: {
+    r'lastViewTime': [
+      IndexValueType.long,
+    ]
   },
-  links: {},
-  embeddedSchemas: {},
+  linkIds: {},
+  backlinkLinkNames: {},
   getId: _viewHistoryGetId,
   getLinks: _viewHistoryGetLinks,
-  attach: _viewHistoryAttach,
-  version: '3.0.2',
+  attachLinks: _viewHistoryAttachLinks,
+  serializeNative: _viewHistorySerializeNative,
+  deserializeNative: _viewHistoryDeserializeNative,
+  deserializePropNative: _viewHistoryDeserializePropNative,
+  serializeWeb: _viewHistorySerializeWeb,
+  deserializeWeb: _viewHistoryDeserializeWeb,
+  deserializePropWeb: _viewHistoryDeserializePropWeb,
+  version: 4,
 );
 
-int _viewHistoryEstimateSize(
-  ViewHistory object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  bytesCount += 3 + object.galleryProviderText.length * 3;
-  return bytesCount;
+int? _viewHistoryGetId(ViewHistory object) {
+  if (object.gid == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.gid;
+  }
 }
 
-void _viewHistorySerialize(
-  ViewHistory object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  writer.writeString(offsets[0], object.galleryProviderText);
+List<IsarLinkBase<dynamic>> _viewHistoryGetLinks(ViewHistory object) {
+  return [];
+}
+
+void _viewHistorySerializeNative(
+    IsarCollection<ViewHistory> collection,
+    IsarCObject cObj,
+    ViewHistory object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  final galleryProviderText$Bytes =
+      IsarBinaryWriter.utf8Encoder.convert(object.galleryProviderText);
+  final size = (staticSize + 3 + (galleryProviderText$Bytes.length)) as int;
+  cObj.buffer = alloc(size);
+  cObj.buffer_length = size;
+
+  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeHeader();
+  writer.writeByteList(offsets[0], galleryProviderText$Bytes);
   writer.writeLong(offsets[1], object.lastViewTime);
 }
 
-ViewHistory _viewHistoryDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+ViewHistory _viewHistoryDeserializeNative(
+    IsarCollection<ViewHistory> collection,
+    int id,
+    IsarBinaryReader reader,
+    List<int> offsets) {
   final object = ViewHistory(
     galleryProviderText: reader.readString(offsets[0]),
     gid: id,
@@ -170,32 +165,58 @@ ViewHistory _viewHistoryDeserialize(
   return object;
 }
 
-P _viewHistoryDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
+P _viewHistoryDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
       return (reader.readLong(offset)) as P;
     default:
-      throw IsarError('Unknown property with id $propertyId');
+      throw IsarError('Illegal propertyIndex');
   }
 }
 
-Id _viewHistoryGetId(ViewHistory object) {
-  return object.gid;
+Object _viewHistorySerializeWeb(
+    IsarCollection<ViewHistory> collection, ViewHistory object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(
+      jsObj, r'galleryProviderText', object.galleryProviderText);
+  IsarNative.jsObjectSet(jsObj, r'gid', object.gid);
+  IsarNative.jsObjectSet(jsObj, r'lastViewTime', object.lastViewTime);
+  return jsObj;
 }
 
-List<IsarLinkBase<dynamic>> _viewHistoryGetLinks(ViewHistory object) {
-  return [];
+ViewHistory _viewHistoryDeserializeWeb(
+    IsarCollection<ViewHistory> collection, Object jsObj) {
+  final object = ViewHistory(
+    galleryProviderText:
+        IsarNative.jsObjectGet(jsObj, r'galleryProviderText') ?? '',
+    gid: IsarNative.jsObjectGet(jsObj, r'gid'),
+    lastViewTime: IsarNative.jsObjectGet(jsObj, r'lastViewTime') ??
+        (double.negativeInfinity as int),
+  );
+  return object;
 }
 
-void _viewHistoryAttach(
-    IsarCollection<dynamic> col, Id id, ViewHistory object) {}
+P _viewHistoryDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case r'galleryProviderText':
+      return (IsarNative.jsObjectGet(jsObj, r'galleryProviderText') ?? '') as P;
+    case r'gid':
+      return (IsarNative.jsObjectGet(jsObj, r'gid')) as P;
+    case r'lastViewTime':
+      return (IsarNative.jsObjectGet(jsObj, r'lastViewTime') ??
+          (double.negativeInfinity as int)) as P;
+    default:
+      throw IsarError('Illegal propertyName');
+  }
+}
+
+void _viewHistoryAttachLinks(
+    IsarCollection<dynamic> col, int id, ViewHistory object) {}
 
 extension ViewHistoryQueryWhereSort
     on QueryBuilder<ViewHistory, ViewHistory, QWhere> {
@@ -216,7 +237,8 @@ extension ViewHistoryQueryWhereSort
 
 extension ViewHistoryQueryWhere
     on QueryBuilder<ViewHistory, ViewHistory, QWhereClause> {
-  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidEqualTo(Id gid) {
+  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidEqualTo(
+      int gid) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: gid,
@@ -226,7 +248,7 @@ extension ViewHistoryQueryWhere
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidNotEqualTo(
-      Id gid) {
+      int gid) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -249,7 +271,7 @@ extension ViewHistoryQueryWhere
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidGreaterThan(
-      Id gid,
+      int gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -258,7 +280,7 @@ extension ViewHistoryQueryWhere
     });
   }
 
-  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidLessThan(Id gid,
+  QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidLessThan(int gid,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -268,8 +290,8 @@ extension ViewHistoryQueryWhere
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterWhereClause> gidBetween(
-    Id lowerGid,
-    Id upperGid, {
+    int lowerGid,
+    int upperGid, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -395,8 +417,8 @@ extension ViewHistoryQueryFilter
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
       galleryProviderTextGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -411,8 +433,8 @@ extension ViewHistoryQueryFilter
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
       galleryProviderTextLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -428,9 +450,9 @@ extension ViewHistoryQueryFilter
       galleryProviderTextBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -494,28 +516,8 @@ extension ViewHistoryQueryFilter
     });
   }
 
-  QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
-      galleryProviderTextIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'galleryProviderText',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition>
-      galleryProviderTextIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'galleryProviderText',
-        value: '',
-      ));
-    });
-  }
-
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidEqualTo(
-      Id value) {
+      int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'gid',
@@ -525,7 +527,7 @@ extension ViewHistoryQueryFilter
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidGreaterThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -538,7 +540,7 @@ extension ViewHistoryQueryFilter
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidLessThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -551,8 +553,8 @@ extension ViewHistoryQueryFilter
   }
 
   QueryBuilder<ViewHistory, ViewHistory, QAfterFilterCondition> gidBetween(
-    Id lower,
-    Id upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -624,13 +626,10 @@ extension ViewHistoryQueryFilter
   }
 }
 
-extension ViewHistoryQueryObject
-    on QueryBuilder<ViewHistory, ViewHistory, QFilterCondition> {}
-
 extension ViewHistoryQueryLinks
     on QueryBuilder<ViewHistory, ViewHistory, QFilterCondition> {}
 
-extension ViewHistoryQuerySortBy
+extension ViewHistoryQueryWhereSortBy
     on QueryBuilder<ViewHistory, ViewHistory, QSortBy> {
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       sortByGalleryProviderText() {
@@ -660,7 +659,7 @@ extension ViewHistoryQuerySortBy
   }
 }
 
-extension ViewHistoryQuerySortThenBy
+extension ViewHistoryQueryWhereSortThenBy
     on QueryBuilder<ViewHistory, ViewHistory, QSortThenBy> {
   QueryBuilder<ViewHistory, ViewHistory, QAfterSortBy>
       thenByGalleryProviderText() {
