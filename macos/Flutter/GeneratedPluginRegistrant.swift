@@ -8,7 +8,7 @@ import Foundation
 import bitsdojo_window_macos
 import isar_flutter_libs
 import package_info
-import package_info_plus_macos
+import package_info_plus
 import path_provider_macos
 import sentry_flutter
 import shared_preferences_macos

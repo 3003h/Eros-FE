@@ -648,7 +648,7 @@ Future<GalleryImage?> mpvLoadImageDispatch({
 
 Future<void> ehDownload({
   required String url,
-  required String savePath,
+  required savePath,
   CancelToken? cancelToken,
   bool? errToast,
   bool deleteOnError = true,
