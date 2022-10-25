@@ -266,6 +266,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "s_and": MessageLookupByLibrary.simpleMessage("到"),
         "s_pages": MessageLookupByLibrary.simpleMessage("页数"),
         "s_stars": m2,
+        "save": MessageLookupByLibrary.simpleMessage("保存"),
         "save_into_album": MessageLookupByLibrary.simpleMessage("保存到相册"),
         "saved_successfully": MessageLookupByLibrary.simpleMessage("保存成功"),
         "screen_orientation": MessageLookupByLibrary.simpleMessage("屏幕方向"),

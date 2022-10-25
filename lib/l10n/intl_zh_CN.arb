@@ -402,5 +402,6 @@
   "proxy_type": "代理类型",
   "host": "地址",
   "port": "端口",
-  "direct": "直连"
+  "direct": "直连",
+  "save": "保存"
 }

@@ -402,5 +402,6 @@
   "proxy_type": "Тип прокси",
   "host": "Узел",
   "port": "Порт",
-  "direct": "Direct"
+  "direct": "Direct",
+  "save": "Сохранить"
 }

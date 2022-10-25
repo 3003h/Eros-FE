@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io' as io;
-import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' as dio;
@@ -9,6 +8,7 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
@@ -18,7 +18,6 @@ import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path/path.dart' as path;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 
 final Api api = Api();
@@ -396,115 +395,7 @@ class Api {
     return (await getMoreGalleryInfo(reqGalleryItems, refresh: refresh)).first;
   }
 
-  static Future<void> shareImageExtended({
-    String? imageUrl,
-    String? filePath,
-    String? gid,
-  }) async {
-    if (imageUrl == null && filePath == null) {
-      return;
-    }
-
-    logger.d('imageUrl:$imageUrl   filePath:$filePath');
-
-    io.File? file;
-    String? _name;
-
-    if (filePath != null) {
-      file = io.File(filePath);
-      _name = path.basename(filePath);
-    } else if (imageUrl != null && imageUrl.isNotEmpty) {
-      logger.d('imageUrl => $imageUrl');
-      final exists = await cachedImageExists(imageUrl);
-      file = await getCachedImageFile(imageUrl);
-      logger.d('exists $exists');
-      if (!exists || file == null) {
-        final savePath = await _downloadImage(imageUrl, gid: gid);
-        file = io.File(savePath);
-      }
-      _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-    }
-
-    if (file == null) {
-      throw 'get file error';
-    }
-
-    logger.v('_name $_name url $imageUrl');
-    // final io.File newFile = file.copySync(path.join(Global.tempPath, _name));
-    Share.shareFiles(<String>[file.path]);
-  }
-
-  /// 保存图片到相册
-  static Future<bool> saveImage({
-    BuildContext? context,
-    String? imageUrl,
-    String? filePath,
-    String? gid,
-  }) async {
-    /// 跳转权限设置
-    Future<bool?> _jumpToAppSettings(BuildContext context) async {
-      return await jumpToAppSettings(
-          context,
-          'You have disabled the necessary permissions for the application:'
-          '\nRead and write phone storage, is it allowed in the settings?');
-    }
-
-    if (io.Platform.isIOS) {
-      logger.v('check ios photos Permission');
-      final PermissionStatus statusPhotos = await Permission.photos.status;
-      final PermissionStatus statusPhotosAdd =
-          await Permission.photosAddOnly.status;
-
-      logger.d('statusPhotos $statusPhotos , photosAddOnly $statusPhotosAdd');
-
-      if (statusPhotos.isPermanentlyDenied &&
-          statusPhotosAdd.isPermanentlyDenied &&
-          context != null) {
-        _jumpToAppSettings(context);
-        return false;
-      } else {
-        final requestAddOnly =
-            () async => await Permission.photosAddOnly.request();
-        final requestAll = () async => await Permission.photos.request();
-
-        if (await requestAddOnly().isGranted ||
-            await requestAddOnly().isLimited ||
-            await requestAll().isGranted ||
-            await requestAll().isLimited) {
-          // return _saveImage(imageUrl);
-          return _saveImageExtended(
-              imageUrl: imageUrl, filePath: filePath, gid: gid);
-          // Either the permission was already granted before or the user just granted it.
-        } else {
-          throw 'Unable to save pictures, please authorize first~';
-        }
-      }
-    } else {
-      final PermissionStatus status = await Permission.storage.status;
-      logger.v(status);
-      if (status.isPermanentlyDenied) {
-        if (await Permission.storage.request().isGranted) {
-          // _saveImage(imageUrl);
-          return _saveImageExtended(
-              imageUrl: imageUrl, filePath: filePath, gid: gid);
-        } else if (context != null) {
-          await _jumpToAppSettings(context);
-          return false;
-        }
-        return false;
-      } else {
-        if (await Permission.storage.request().isGranted) {
-          // Either the permission was already granted before or the user just granted it.
-          // return _saveImage(imageUrl);
-          return _saveImageExtended(
-              imageUrl: imageUrl, filePath: filePath, gid: gid);
-        } else {
-          throw 'Unable to save pictures, please authorize first~';
-        }
-      }
-    }
-  }
-
+  // 从ExtendedImage缓存保存图片
   static Future<bool> saveImageFromExtendedCache({
     required String imageUrl,
     required String savePath,
@@ -526,80 +417,6 @@ class Api {
 
     final destFile = imageFile.copySync(savePath);
     return true;
-  }
-
-  static Future<bool> _saveImageExtended({
-    String? imageUrl,
-    String? filePath,
-    String? gid,
-  }) async {
-    try {
-      if (imageUrl == null && filePath == null) {
-        throw 'Save failed, picture does not exist!';
-      }
-
-      /// 保存的图片数据
-      Uint8List imageBytes;
-      io.File? file;
-      String? _name;
-
-      if (filePath != null) {
-        file = io.File(filePath);
-        if (!file.existsSync()) {
-          throw 'read file error';
-        }
-        imageBytes = await file.readAsBytes();
-        _name = path.basename(filePath);
-      } else if (imageUrl != null) {
-        /// 保存网络图片
-        logger.d('保存网络图片');
-
-        file = await getCachedImageFile(imageUrl);
-
-        if (file != null) {
-          _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-        } else {
-          final savePath = await _downloadImage(imageUrl, gid: gid);
-          file = io.File(savePath);
-        }
-      }
-
-      if (file == null) {
-        throw 'read file error';
-      }
-
-      final result = await ImageGallerySaver.saveFile(file.path);
-
-      if (result == null || result == '') {
-        throw 'Save image fail';
-      }
-
-      logger.d('保存成功');
-      return true;
-    } catch (e, stack) {
-      logger.e('$e\n$stack');
-      rethrow;
-    }
-  }
-
-  static Future<String> _downloadImage(String imageUrl, {String? gid}) async {
-    late String savePath;
-    await ehDownload(
-        url: imageUrl,
-        savePath: (Headers headers) {
-          logger.d(headers);
-          final contentDisposition = headers.value('content-disposition');
-          final filename = contentDisposition
-                  ?.split(RegExp(r"filename(=|\*=UTF-8'')"))
-                  .last ??
-              '';
-          final fileNameDecode = Uri.decodeFull(filename).replaceAll('/', '_');
-          logger.d(fileNameDecode);
-          savePath = path.joinAll(
-              [Global.tempPath, 'torrent', (gid ?? '0'), fileNameDecode]);
-          return savePath;
-        });
-    return savePath;
   }
 
   /// 由api获取画廊图片的信息
@@ -655,5 +472,163 @@ class Api {
     );
 
     return _reImage;
+  }
+
+  // 下载单张图片
+  static Future<String> _downloadImage(
+    String imageUrl, {
+    String? gid,
+    ProgressCallback? progressCallback,
+  }) async {
+    late String savePath;
+    await ehDownload(
+        progressCallback: progressCallback,
+        url: imageUrl,
+        savePath: (Headers headers) {
+          logger.d(headers);
+          final contentDisposition = headers.value('content-disposition');
+          final filename = contentDisposition
+                  ?.split(RegExp(r"filename(=|\*=UTF-8'')"))
+                  .last ??
+              '';
+          final fileNameDecode = Uri.decodeFull(filename).replaceAll('/', '_');
+          logger.d(fileNameDecode);
+          savePath = path.joinAll(
+              [Global.tempPath, 'torrent', (gid ?? '0'), fileNameDecode]);
+          return savePath;
+        });
+    return savePath;
+  }
+
+  // 保存图片到相册
+  static Future<void> saveNetworkImageToPhoto(
+    String imageUrl, {
+    String? gid,
+    ProgressCallback? progressCallback,
+    BuildContext? context,
+  }) async {
+    logger.d('imageUrl $imageUrl');
+
+    // 权限检查
+    final permission =
+        await requestPhotosPermission(context: context, onlyAdd: true);
+    if (!permission) {
+      throw EhError(error: 'Permission denied');
+    }
+
+    logger.d('开始下载图片');
+
+    io.File? file;
+    late String fileName;
+
+    // 从缓存中获取
+    file = await getCachedImageFile(imageUrl);
+
+    if (file != null) {
+      fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+    } else {
+      // 无缓存下载
+      logger.d('无缓存下载');
+      final savePath = await _downloadImage(
+        imageUrl,
+        gid: gid,
+        progressCallback: progressCallback,
+      );
+      file = io.File(savePath);
+      fileName = path.basename(savePath);
+    }
+
+    fileName = fileName.replaceAll('/', '_');
+    if (gid != null) {
+      fileName = '$gid-$fileName';
+    }
+    logger.d('保存图片到相册 $fileName');
+
+    final result = await ImageGallerySaver.saveFile(file.path, name: fileName);
+    logger.d('${result.runtimeType} $result');
+
+    if (result == null || result == '') {
+      throw EhError(error: 'Save image fail');
+    }
+  }
+
+  static Future<void> shareNetworkImage(
+    String imageUrl, {
+    String? gid,
+    ProgressCallback? progressCallback,
+    BuildContext? context,
+  }) async {
+    logger.d('imageUrl $imageUrl');
+    logger.d('开始下载图片');
+
+    io.File? file;
+    late String fileName;
+
+    // 从缓存中获取
+    file = await getCachedImageFile(imageUrl);
+
+    if (file != null) {
+      fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+      logger.d('fileName $fileName');
+      file = file.copySync(path.join(Global.tempPath, fileName));
+    } else {
+      // 无缓存下载
+      logger.d('无缓存下载');
+      final savePath = await _downloadImage(
+        imageUrl,
+        gid: gid,
+        progressCallback: progressCallback,
+      );
+      file = io.File(savePath);
+      fileName = path.basename(savePath);
+    }
+
+    fileName = fileName.replaceAll('/', '_');
+    if (gid != null) {
+      fileName = '$gid-$fileName';
+    }
+
+    await Share.shareFiles([file.path], text: fileName);
+  }
+
+  // 保存本地图片到相册
+  static Future<void> saveLocalImageToPhoto(
+    String imagePath, {
+    String? gid,
+    ProgressCallback? progressCallback,
+    BuildContext? context,
+  }) async {
+    // 权限检查
+    final permission =
+        await requestPhotosPermission(context: context, onlyAdd: true);
+    if (!permission) {
+      throw EhError(error: 'Permission denied');
+    }
+
+    final file = io.File(imagePath);
+    if (!file.existsSync()) {
+      throw EhError(error: 'File not found');
+    }
+
+    final result = await ImageGallerySaver.saveFile(file.path);
+    logger.d('${result.runtimeType} $result');
+
+    if (result == null || result == '') {
+      throw EhError(error: 'Save image fail');
+    }
+  }
+
+  static Future<void> shareLocalImage(
+    String imagePath, {
+    String? gid,
+    ProgressCallback? progressCallback,
+    BuildContext? context,
+  }) async {
+    final file = io.File(imagePath);
+    if (!file.existsSync()) {
+      throw EhError(error: 'File not found');
+    }
+
+    await Share.shareFiles([imagePath]);
   }
 }

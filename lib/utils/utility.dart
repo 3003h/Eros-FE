@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/api.dart';
@@ -50,6 +51,90 @@ Future<void> requestManageExternalStoragePermission() async {
       throw 'Unable to download, please authorize first~';
     }
   }
+}
+
+// check photos Permission
+Future<bool> requestPhotosPermission({
+  BuildContext? context,
+  bool onlyAdd = true,
+}) async {
+  // if ios
+  if (GetPlatform.isIOS) {
+    final PermissionStatus statusPhotos = await Permission.photos.status;
+    final PermissionStatus statusPhotosAdd =
+        await Permission.photosAddOnly.status;
+
+    if (!onlyAdd) {
+      // 永久拒绝 直接跳转到设置
+      if (statusPhotosAdd.isPermanentlyDenied && context != null) {
+        _jumpToAppSettings(context);
+        return false;
+      }
+
+      // 拒绝 申请权限
+      if (statusPhotosAdd.isDenied) {
+        if (await Permission.photosAddOnly.request().isGranted ||
+            await Permission.photosAddOnly.request().isLimited) {
+          return await Permission.photosAddOnly.status.isGranted ||
+              await Permission.photos.status.isLimited;
+        } else {
+          throw EhError(error: 'Unable to download, please authorize first~');
+        }
+      }
+    } else {
+      // 永久拒绝 直接跳转到设置
+      if (statusPhotos.isPermanentlyDenied && context != null) {
+        _jumpToAppSettings(context);
+        return false;
+      }
+
+      // 拒绝 申请权限
+      if (statusPhotos.isDenied) {
+        if (await Permission.photos.request().isGranted ||
+            await Permission.photos.request().isLimited) {
+          return await Permission.photos.status.isGranted ||
+              await Permission.photos.status.isLimited;
+        } else {
+          throw EhError(error: 'Unable to download, please authorize first~');
+        }
+      }
+    }
+  }
+
+  // android
+  if (GetPlatform.isAndroid) {
+    final PermissionStatus status = await Permission.storage.status;
+    logger.v(status);
+
+    // 永久拒绝 直接跳转到设置
+    if (status.isPermanentlyDenied) {
+      if (await Permission.storage.request().isGranted) {
+        return await Permission.storage.status.isGranted;
+      } else if (context != null) {
+        await _jumpToAppSettings(context);
+        return false;
+      } else {
+        throw EhError(
+            error: 'Permission is permanently denied, open App Settings');
+      }
+    } else {
+      if (await Permission.storage.request().isGranted) {
+        return await Permission.storage.status.isGranted;
+      } else {
+        throw EhError(error: 'Unable to download, please authorize first~');
+      }
+    }
+  }
+
+  return true;
+}
+
+/// 跳转权限设置
+Future<bool?> _jumpToAppSettings(BuildContext context) async {
+  return await jumpToAppSettings(
+      context,
+      'You have disabled the necessary permissions for the application:'
+      '\nRead and write phone storage, is it allowed in the settings?');
 }
 
 /// 跳转权限设置

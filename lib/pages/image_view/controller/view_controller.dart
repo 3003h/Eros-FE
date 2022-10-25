@@ -45,7 +45,7 @@ const double kBottomBarHeight = 64.0;
 const double kSliderBarHeight = 64.0;
 
 // 顶栏高度
-const double kTopBarHeight = 44.0;
+const double kTopBarHeight = 56.0;
 
 // 顶栏按钮高度
 const double kTopBarButtonHeight = 44.0;
@@ -867,7 +867,7 @@ class ViewExtController extends GetxController {
         imageUrl: p?.imageUrl,
         origImageUrl: p?.originImageUrl,
         filePath: p?.filePath,
-        gid: p?.gid,
+        gid: vState.gid,
       );
     } else {
       logger.d('share localFile');
@@ -875,6 +875,30 @@ class ViewExtController extends GetxController {
         context,
         isLocal: true,
         filePath: vState.imagePathList[vState.currentItemIndex],
+        gid: vState.gid,
+      );
+    }
+  }
+
+  void tapSave(BuildContext context) {
+    if (vState.loadFrom == LoadFrom.gallery) {
+      logger.d('save networkFile ${vState.currentItemIndex + 1}');
+      final GalleryImage? p = vState.imageMap?[vState.currentItemIndex + 1];
+      logger.d('p:\n${p?.toJson()}');
+      showSaveActionSheet(
+        context,
+        imageUrl: p?.imageUrl,
+        origImageUrl: p?.originImageUrl,
+        filePath: p?.filePath,
+        gid: vState.gid,
+      );
+    } else {
+      logger.d('save localFile');
+      showSaveActionSheet(
+        context,
+        isLocal: true,
+        filePath: vState.imagePathList[vState.currentItemIndex],
+        gid: vState.gid,
       );
     }
   }

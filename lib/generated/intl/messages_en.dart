@@ -323,6 +323,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "s_and": MessageLookupByLibrary.simpleMessage("and"),
         "s_pages": MessageLookupByLibrary.simpleMessage("pages"),
         "s_stars": m2,
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "save_into_album":
             MessageLookupByLibrary.simpleMessage("Save into the album"),
         "saved_successfully":

@@ -402,5 +402,6 @@
   "proxy_type": "Proxy Type",
   "host": "Host",
   "port": "Port",
-  "direct": "Direct"
+  "direct": "Direct",
+  "save": "Save"
 }
