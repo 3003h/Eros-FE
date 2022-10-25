@@ -19,13 +19,6 @@ import 'api.dart';
 import 'app_dio/pdio.dart';
 
 Options getCacheOptions({bool forceRefresh = false}) {
-  // return buildCacheOptions(
-  //   const Duration(days: 5),
-  //   maxStale: const Duration(days: 7),
-  //   forceRefresh: forceRefresh,
-  //   // options: options,
-  // );
-
   final options = Api.cacheOption
       .copyWith(
         policy: forceRefresh ? CachePolicy.refreshForceCache : null,
@@ -219,10 +212,14 @@ Future<GalleryImage?> fetchImageInfo(
   bool refresh = false,
   String? sourceId,
   CancelToken? cancelToken,
+  String? debugLabel,
 }) async {
   final Map<String, dynamic> _params = {
     if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
   };
+
+  logger.v('fetchImageInfo: href $href, refresh $refresh, sourceId $sourceId, '
+      'debugLabel $debugLabel');
 
   String mpvSer = '1';
   final isMpv = regGalleryMpvPageUrl.hasMatch(href);

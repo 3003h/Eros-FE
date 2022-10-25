@@ -521,6 +521,7 @@ class GalleryPageController extends GetxController
     int itemSer, {
     CancelToken? cancelToken,
     bool changeSource = false,
+    bool refresh = false,
   }) async {
     try {
       /// 当前缩略图对象
@@ -556,7 +557,8 @@ class GalleryPageController extends GetxController
           final GalleryImage? _image = await fetchImageInfo(
             gState.imageMap[itemSer]?.href ?? '',
             sourceId: _sourceId,
-            refresh: true,
+            refresh: changeSource || refresh,
+            debugLabel: 'fetchAndParserImageInfo 加载当前页信息',
           );
 
           logger.v('fetch _image ${_image?.toJson()}');

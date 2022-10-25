@@ -1,5 +1,4 @@
 import 'package:blur/blur.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -278,14 +277,38 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
   Widget build(BuildContext context) {
     final headerMaxHeight = context.mediaQueryPadding.top + kHeaderMaxHeight;
 
-    final Widget scrollView = ExtendedNestedScrollView(
+    final body = Builder(builder: (context) {
+      return GestureDetector(
+        onPanDown: (e) {
+          // 恢复启用 scrollToItem
+          linkScrollBarController.enableScrollToItem();
+        },
+        child: Obx(() {
+          return PageView(
+            key: ValueKey(controller.showBarsBtn), // 登录状态变化后能刷新
+            controller: pageController,
+            children: [
+              ...controller.favcatList
+                  .map((e) => FavoriteSubPage(
+                        favcat: e.favId,
+                      ))
+                  .toList(),
+            ],
+            onPageChanged: (index) {
+              linkScrollBarController.scrollToItem(index);
+              controller.onPageChanged(index);
+            },
+          );
+        }),
+      );
+    });
+
+    final scrollView = NestedScrollView(
       floatHeaderSlivers: true,
-      onlyOneScrollInBody: true,
-      headerSliverBuilder: (context, innerBoxIsScrolled) {
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
           SliverOverlapAbsorber(
-            handle: ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
-                context),
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: SliverPersistentHeader(
               floating: true,
               pinned: true,
@@ -302,31 +325,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
           )
         ];
       },
-      body: Builder(builder: (context) {
-        return GestureDetector(
-          onPanDown: (e) {
-            // 恢复启用 scrollToItem
-            linkScrollBarController.enableScrollToItem();
-          },
-          child: Obx(() {
-            return PageView(
-              key: ValueKey(controller.showBarsBtn), // 登录状态变化后能刷新
-              controller: pageController,
-              children: [
-                ...controller.favcatList
-                    .map((e) => FavoriteSubPage(
-                          favcat: e.favId,
-                        ))
-                    .toList(),
-              ],
-              onPageChanged: (index) {
-                linkScrollBarController.scrollToItem(index);
-                controller.onPageChanged(index);
-              },
-            );
-          }),
-        );
-      }),
+      body: body,
     );
 
     return CupertinoPageScaffold(
