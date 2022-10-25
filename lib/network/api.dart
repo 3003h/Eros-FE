@@ -511,7 +511,7 @@ class Api {
 
     // 权限检查
     final permission =
-        await requestPhotosPermission(context: context, onlyAdd: true);
+        await requestPhotosPermission(context: context, addOnly: true);
     if (!permission) {
       throw EhError(error: 'Permission denied');
     }
@@ -544,11 +544,16 @@ class Api {
     }
     logger.d('保存图片到相册 $fileName');
 
-    final result = await ImageGallerySaver.saveFile(file.path, name: fileName);
-    logger.d('${result.runtimeType} $result');
-
-    if (result == null || result == '') {
-      throw EhError(error: 'Save image fail');
+    try {
+      final result = await ImageGallerySaver.saveFile(file.path,
+          name: fileName, isReturnPathOfIOS: true);
+      logger.d('${result.runtimeType} $result');
+      if (result == null || result == '') {
+        throw EhError(error: 'Save image fail');
+      }
+    } catch (e, s) {
+      logger.e('保存图片到相册失败', e, s);
+      throw EhError(error: '保存失败');
     }
   }
 
@@ -600,7 +605,7 @@ class Api {
   }) async {
     // 权限检查
     final permission =
-        await requestPhotosPermission(context: context, onlyAdd: true);
+        await requestPhotosPermission(context: context, addOnly: true);
     if (!permission) {
       throw EhError(error: 'Permission denied');
     }

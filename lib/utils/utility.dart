@@ -56,7 +56,7 @@ Future<void> requestManageExternalStoragePermission() async {
 // check photos Permission
 Future<bool> requestPhotosPermission({
   BuildContext? context,
-  bool onlyAdd = true,
+  bool addOnly = true,
 }) async {
   // if ios
   if (GetPlatform.isIOS) {
@@ -64,7 +64,7 @@ Future<bool> requestPhotosPermission({
     final PermissionStatus statusPhotosAdd =
         await Permission.photosAddOnly.status;
 
-    if (!onlyAdd) {
+    if (addOnly) {
       // 永久拒绝 直接跳转到设置
       if (statusPhotosAdd.isPermanentlyDenied && context != null) {
         _jumpToAppSettings(context);
@@ -73,6 +73,7 @@ Future<bool> requestPhotosPermission({
 
       // 拒绝 申请权限
       if (statusPhotosAdd.isDenied) {
+        logger.d('photosAddOnly isDenied');
         if (await Permission.photosAddOnly.request().isGranted ||
             await Permission.photosAddOnly.request().isLimited) {
           return await Permission.photosAddOnly.status.isGranted ||
