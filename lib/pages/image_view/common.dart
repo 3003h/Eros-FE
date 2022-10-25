@@ -96,14 +96,15 @@ class GalleryPara {
         final String _href = imageMap[_ser]?.href ?? '';
 
         // paraImageLageInfoFromHtml
-        final GalleryImage? _imageFromApi = await fetchImageInfo(_href);
+        final GalleryImage? _imageFromPage = await fetchImageInfo(_href);
 
-        _url = _imageFromApi?.imageUrl ?? '';
+        _url = _imageFromPage?.imageUrl ?? '';
 
         _image = _image.copyWith(
           imageUrl: _url,
-          imageWidth: _imageFromApi?.imageWidth,
-          imageHeight: _imageFromApi?.imageHeight,
+          imageWidth: _imageFromPage?.imageWidth,
+          imageHeight: _imageFromPage?.imageHeight,
+          originImageUrl: _imageFromPage?.originImageUrl,
         );
 
         _processingSerSet.remove(_ser);

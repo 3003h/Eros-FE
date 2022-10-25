@@ -52,8 +52,6 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - fullscreen (0.0.1):
-    - Flutter
   - google_mlkit_barcode_scanning (0.4.0):
     - Flutter
     - google_mlkit_commons
@@ -200,7 +198,6 @@ DEPENDENCIES:
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_isolate (from `.symlinks/plugins/flutter_isolate/ios`)
   - flutter_vibrate (from `.symlinks/plugins/flutter_vibrate/ios`)
-  - fullscreen (from `.symlinks/plugins/fullscreen/ios`)
   - google_mlkit_barcode_scanning (from `.symlinks/plugins/google_mlkit_barcode_scanning/ios`)
   - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
@@ -267,8 +264,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_isolate/ios"
   flutter_vibrate:
     :path: ".symlinks/plugins/flutter_vibrate/ios"
-  fullscreen:
-    :path: ".symlinks/plugins/fullscreen/ios"
   google_mlkit_barcode_scanning:
     :path: ".symlinks/plugins/google_mlkit_barcode_scanning/ios"
   google_mlkit_commons:
@@ -331,7 +326,6 @@ SPEC CHECKSUMS:
   flutter_isolate: 0edf5081826d071adf21759d1eb10ff5c24503b5
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  fullscreen: d93e707e6b36120f20e64e2f814ee0726164e70b
   google_mlkit_barcode_scanning: 4805cc8281f41915a13f8bbb7223291e982b6836
   google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
@@ -342,7 +336,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
-  isar_flutter_libs: bc88affa0adeeb8800ffd2ca0177669dc18cd201
+  isar_flutter_libs: bfb66f35a1fa9db9ec96b93539a03329ce147738
   learning_language: 6484df8f93ad53c63134d8dc658bc39998c19b36
   local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
