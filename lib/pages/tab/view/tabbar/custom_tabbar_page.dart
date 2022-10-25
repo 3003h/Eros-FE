@@ -1,6 +1,5 @@
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
@@ -36,14 +35,12 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
   Widget build(BuildContext context) {
     final headerMaxHeight = context.mediaQueryPadding.top + kHeaderMaxHeight;
 
-    final Widget scrollView = ExtendedNestedScrollView(
+    final Widget scrollView = NestedScrollView(
       floatHeaderSlivers: true,
-      onlyOneScrollInBody: true,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           SliverOverlapAbsorber(
-            handle: ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
-                context),
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
             sliver: SliverPersistentHeader(
               floating: true,
               pinned: true,

@@ -25,7 +25,7 @@ class GalleryCacheController extends GetxController {
   }
 
   void setGalleryProviderCache(String? gid, GalleryProvider? galleryProvider) {
-    logger.d('setGalleryProviderCache');
+    logger.v('setGalleryProviderCache');
     // clone一个新的对象 避免后续加载更多image影响
     _galleryProviderCache[gid ?? ''] = galleryProvider?.clone();
   }

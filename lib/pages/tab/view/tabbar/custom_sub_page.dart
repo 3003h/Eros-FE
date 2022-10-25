@@ -1,4 +1,3 @@
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,8 +24,6 @@ class _SubListViewState<T extends CustomSubListController>
   late final CustomSubListController subController;
   final CustomTabbarController controller = Get.find();
   final EhTabController ehTabController = EhTabController();
-  final GlobalKey<ExtendedNestedScrollViewState> _key =
-      GlobalKey<ExtendedNestedScrollViewState>();
 
   @override
   void initState() {
