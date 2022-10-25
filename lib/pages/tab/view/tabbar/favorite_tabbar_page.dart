@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:blur/blur.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -238,8 +240,9 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               padding: const EdgeInsets.all(0),
               minSize: 36,
               child: Container(
+                alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                constraints: const BoxConstraints(minWidth: 24),
+                constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
                 decoration: BoxDecoration(
                     border: Border.all(
                       color: CupertinoDynamicColor.resolve(
@@ -248,11 +251,12 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                     ),
                     borderRadius: const BorderRadius.all(Radius.circular(8))),
                 child: Obx(() => Text(
-                      '${controller.curPage + 1}',
+                      '${max(1, controller.curPage + 1)}',
                       textAlign: TextAlign.center,
                       textScaleFactor: 0.9,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          height: 1.25,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.activeBlue, context)),
                     )),
