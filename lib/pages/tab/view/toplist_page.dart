@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -10,7 +12,6 @@ import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
 
 import '../comm.dart';
-import 'constants.dart';
 import 'gallery_base.dart';
 
 class ToplistTab extends StatefulWidget {
@@ -84,8 +85,9 @@ class _ToplistTabState extends State<ToplistTab> {
               minSize: 40,
               padding: const EdgeInsets.only(right: 6),
               child: Container(
+                alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-                constraints: const BoxConstraints(minWidth: 24),
+                constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: CupertinoDynamicColor.resolve(
@@ -95,11 +97,12 @@ class _ToplistTabState extends State<ToplistTab> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Obx(() => Text(
-                      '${controller.curPage + 1}',
+                      '${max(1, controller.curPage + 1)}',
                       textScaleFactor: 0.9,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          height: 1.25,
                           color: CupertinoDynamicColor.resolve(
                               CupertinoColors.activeBlue, context)),
                     )),
