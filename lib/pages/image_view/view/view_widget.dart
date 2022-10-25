@@ -6,6 +6,7 @@ import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -13,6 +14,7 @@ import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -768,6 +770,24 @@ class ViewTopBar extends GetView<ViewExtController> {
                             showLable: false,
                             // showLable: false,
                           ),
+                        // 分享按钮
+                        MouseRegionClick(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              controller.tapShare(context);
+                            },
+                            child: Container(
+                              width: 40,
+                              height: kBottomBarButtonHeight,
+                              child: const Icon(
+                                FontAwesomeIcons.share,
+                                color: CupertinoColors.systemGrey6,
+                                size: 22,
+                              ),
+                            ),
+                          ),
+                        ),
                         // 菜单页面入口
                         MouseRegionClick(
                           child: GestureDetector(
@@ -925,7 +945,7 @@ class ControllerButtonBar extends StatelessWidget {
     required this.controller,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.max,
-    this.showLable = true,
+    this.showLable = false,
   }) : super(key: key);
 
   final ViewExtController controller;
@@ -941,12 +961,12 @@ class ControllerButtonBar extends StatelessWidget {
       mainAxisAlignment: mainAxisAlignment,
       mainAxisSize: mainAxisSize,
       children: <Widget>[
-        // 分享按钮
+        // 保存按钮
         MouseRegionClick(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
-              controller.tapShare(context);
+              controller.tapSave(context);
             },
             child: Container(
               width: buttonWidth,
@@ -955,7 +975,7 @@ class ControllerButtonBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(
-                    FontAwesomeIcons.shareFromSquare,
+                    FontAwesomeIcons.solidFloppyDisk,
                     color: CupertinoColors.systemGrey6,
                     size: 22,
                   ),
@@ -964,7 +984,7 @@ class ControllerButtonBar extends StatelessWidget {
                     Expanded(
                       child: Center(
                         child: Text(
-                          L10n.of(context).share,
+                          L10n.of(context).save,
                           style: _kBottomTextStyle,
                         ),
                       ),
@@ -1107,7 +1127,7 @@ class ControllerButtonBar extends StatelessWidget {
                       id: idShowThumbListIcon,
                       builder: (logic) {
                         return Icon(
-                          FontAwesomeIcons.images,
+                          FontAwesomeIcons.solidImages,
                           size: 22,
                           color: logic.vState.showThumbList
                               ? CupertinoColors.activeBlue
@@ -1539,6 +1559,94 @@ class _ViewPageSliderState extends State<ViewPageSlider> {
   }
 }
 
+Future<void> showSaveActionSheet(
+  BuildContext context, {
+  String? imageUrl,
+  String? origImageUrl,
+  String? filePath,
+  LoadFrom loadType = LoadFrom.gallery,
+  String? gid,
+  bool isLocal = false,
+}) {
+  return showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) {
+        final CupertinoActionSheet dialog = CupertinoActionSheet(
+          title: Text(L10n.of(context).save_into_album),
+          cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(L10n.of(context).cancel)),
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              onPressed: () async {
+                logger.d('重采样图片');
+                Get.back();
+                if (filePath != null && filePath.isNotEmpty) {
+                  await Api.saveLocalImageToPhoto(
+                    filePath,
+                    context: context,
+                    gid: gid,
+                  );
+                } else if (imageUrl != null && imageUrl.isNotEmpty) {
+                  await Api.saveNetworkImageToPhoto(
+                    imageUrl,
+                    context: context,
+                    gid: gid,
+                  );
+                } else {
+                  showToast('imageUrl is null or file is null');
+                }
+
+                showToast(L10n.of(context).saved_successfully);
+              },
+              child: Text(L10n.of(context).resample_image),
+            ),
+            if (!isLocal)
+              CupertinoActionSheetAction(
+                onPressed: () async {
+                  logger.d('原图');
+                  Get.back();
+
+                  if (origImageUrl == null || origImageUrl.isEmpty) {
+                    showToast('origImageUrl is null');
+                    return;
+                  }
+
+                  SmartDialog.showLoading(
+                    builder: (_) => _downloadIndicator(),
+                    backDismiss: false,
+                  );
+                  try {
+                    await Api.saveNetworkImageToPhoto(
+                      origImageUrl,
+                      context: context,
+                      gid: gid,
+                      progressCallback: (int count, int total) {
+                        // logger.d('$count $total');
+                      },
+                    );
+                    logger.d('下载完成');
+                    showToast(L10n.current.saved_successfully);
+                  } on EhError catch (e, stack) {
+                    logger.e('下载失败', e, stack);
+                    showToast(e.message);
+                  } catch (e, stack) {
+                    logger.e('下载失败', e, stack);
+                    showToast(e.toString());
+                  } finally {
+                    SmartDialog.dismiss();
+                  }
+                },
+                child: Text(L10n.of(context).original_image),
+              ),
+          ],
+        );
+        return EhDarkCupertinoTheme(child: dialog);
+      });
+}
+
 Future<void> showShareActionSheet(
   BuildContext context, {
   String? imageUrl,
@@ -1552,6 +1660,7 @@ Future<void> showShareActionSheet(
       context: context,
       builder: (BuildContext context) {
         final CupertinoActionSheet dialog = CupertinoActionSheet(
+          title: Text(L10n.of(context).share_image),
           cancelButton: CupertinoActionSheetAction(
               onPressed: () {
                 Get.back();
@@ -1560,57 +1669,63 @@ Future<void> showShareActionSheet(
           actions: <Widget>[
             CupertinoActionSheetAction(
               onPressed: () async {
-                logger.v('保存到手机');
+                logger.v('重采样图片');
                 Get.back();
-                final bool result = await Api.saveImage(
-                  context: context,
-                  imageUrl: imageUrl,
-                  filePath: filePath,
-                  gid: gid,
-                );
-                if (result) {
-                  showToast(L10n.of(context).saved_successfully);
+                if (filePath != null && filePath.isNotEmpty) {
+                  await Api.shareLocalImage(
+                    filePath,
+                    context: context,
+                    gid: gid,
+                  );
+                } else if (imageUrl != null && imageUrl.isNotEmpty) {
+                  await Api.shareNetworkImage(
+                    imageUrl,
+                    context: context,
+                    gid: gid,
+                  );
+                } else {
+                  showToast('imageUrl is null or file is null');
                 }
               },
-              child: Text(L10n.of(context).save_into_album),
-            ),
-            CupertinoActionSheetAction(
-              onPressed: () {
-                logger.v('系统分享');
-                Get.back();
-                Api.shareImageExtended(imageUrl: imageUrl, filePath: filePath);
-              },
-              child: Text(L10n.of(context).system_share),
+              child: Text(L10n.of(context).resample_image),
             ),
             if (!isLocal)
               CupertinoActionSheetAction(
                 onPressed: () async {
-                  logger.v('保存到手机 原图');
+                  logger.v('原图');
                   Get.back();
-                  final bool result = await Api.saveImage(
-                    context: context,
-                    imageUrl: origImageUrl,
-                    gid: gid,
+
+                  if (origImageUrl == null || origImageUrl.isEmpty) {
+                    showToast('origImageUrl is null');
+                    return;
+                  }
+
+                  SmartDialog.showLoading(
+                    builder: (_) => _downloadIndicator(),
+                    backDismiss: false,
                   );
-                  if (result) {
-                    showToast(L10n.of(context).saved_successfully);
+                  try {
+                    await Api.shareNetworkImage(
+                      origImageUrl,
+                      context: context,
+                      gid: gid,
+                      progressCallback: (int count, int total) {
+                        // logger.d('$count $total');
+                      },
+                    );
+                    logger.d('下载完成');
+                    showToast(L10n.current.saved_successfully);
+                  } on EhError catch (e, stack) {
+                    logger.e('下载失败', e, stack);
+                    showToast(e.message);
+                  } catch (e, stack) {
+                    logger.e('下载失败', e, stack);
+                    showToast(e.toString());
+                  } finally {
+                    SmartDialog.dismiss();
                   }
                 },
-                child: Text(
-                    '${L10n.of(context).save_into_album}(${L10n.of(context).original_image})'),
-              ),
-            if (!isLocal)
-              CupertinoActionSheetAction(
-                onPressed: () {
-                  logger.v('系统分享 原图');
-                  Get.back();
-                  Api.shareImageExtended(
-                    imageUrl: origImageUrl,
-                    gid: gid,
-                  );
-                },
-                child: Text(
-                    '${L10n.of(context).system_share}(${L10n.of(context).original_image})'),
+                child: Text(L10n.of(context).original_image),
               ),
           ],
         );
@@ -1646,6 +1761,17 @@ Future<void> showImageSheet(
             CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
+                  showSaveActionSheet(
+                    context,
+                    imageUrl: imageUrl,
+                    filePath: filePath,
+                    origImageUrl: origImageUrl,
+                  );
+                },
+                child: Text(L10n.of(context).save_into_album)),
+            CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
                   showShareActionSheet(
                     context,
                     imageUrl: imageUrl,
@@ -1659,3 +1785,20 @@ Future<void> showImageSheet(
         return EhDarkCupertinoTheme(child: dialog);
       });
 }
+
+Widget _downloadIndicator() => Center(
+      child: CupertinoTheme(
+        data: const CupertinoThemeData(
+          brightness: Brightness.dark,
+        ),
+        child: CupertinoPopupSurface(
+          child: Container(
+              height: 80,
+              width: 80,
+              alignment: Alignment.center,
+              child: const CupertinoActivityIndicator(
+                radius: 20,
+              )),
+        ),
+      ),
+    );

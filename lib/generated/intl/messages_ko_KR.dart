@@ -293,6 +293,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "s_and": MessageLookupByLibrary.simpleMessage("그리고"),
         "s_pages": MessageLookupByLibrary.simpleMessage("페이지"),
         "s_stars": m2,
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
         "save_into_album": MessageLookupByLibrary.simpleMessage("앨범에 저장"),
         "saved_successfully": MessageLookupByLibrary.simpleMessage("저장 완료"),
         "screen_orientation": MessageLookupByLibrary.simpleMessage("화면 방향"),

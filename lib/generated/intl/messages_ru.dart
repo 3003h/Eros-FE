@@ -41,7 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
             'temp': 'temp',
           })}";
 
-  static String m4(version) => "Update to ${version}";
+  static String m4(version) => "Обновиться до ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -80,14 +80,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Аватар"),
         "back": MessageLookupByLibrary.simpleMessage("Назад"),
-        "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
-            "Blurring of cover background"),
+        "blurring_cover_background":
+            MessageLookupByLibrary.simpleMessage("Размытие фона обложки"),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
-        "change_to_favorites":
-            MessageLookupByLibrary.simpleMessage("Change to favorites"),
+        "change_to_favorites": MessageLookupByLibrary.simpleMessage(
+            "Переместить в другое избранное"),
         "chapter": MessageLookupByLibrary.simpleMessage("Глава"),
         "check_for_update":
-            MessageLookupByLibrary.simpleMessage("Check for Update"),
+            MessageLookupByLibrary.simpleMessage("Проверить на обновления"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("Очистить кэш"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("Очистить"),
         "clear_search_history":
@@ -171,7 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Название категории"),
         "groupType": MessageLookupByLibrary.simpleMessage("Тип категории"),
         "hide": MessageLookupByLibrary.simpleMessage("Скрыть"),
-        "host": MessageLookupByLibrary.simpleMessage("Host"),
+        "host": MessageLookupByLibrary.simpleMessage("Узел"),
         "hours": MessageLookupByLibrary.simpleMessage("час(ов)"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Тип загрузки"),
@@ -190,8 +190,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "last_favorites": MessageLookupByLibrary.simpleMessage(
             "Последнее использованное избранное, долгий тап чтобы выбрать вручную"),
         "latest_version":
-            MessageLookupByLibrary.simpleMessage("Latest version"),
-        "layout": MessageLookupByLibrary.simpleMessage("Layout"),
+            MessageLookupByLibrary.simpleMessage("Последняя версия"),
+        "layout": MessageLookupByLibrary.simpleMessage("Внешний вид"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("Слева направо"),
         "license": MessageLookupByLibrary.simpleMessage("Лицензии"),
         "light": MessageLookupByLibrary.simpleMessage("Светлая"),
@@ -228,14 +228,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Многопоточная загрузка"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("Мои теги на сайте"),
-        "never": MessageLookupByLibrary.simpleMessage("Never"),
+        "never": MessageLookupByLibrary.simpleMessage("Никогда"),
         "newGroup": MessageLookupByLibrary.simpleMessage("Новая категория"),
         "newText": MessageLookupByLibrary.simpleMessage("Новый тег"),
         "new_comment":
             MessageLookupByLibrary.simpleMessage("Новый комментарий"),
         "no": MessageLookupByLibrary.simpleMessage("Нет"),
         "noMorePreviews": MessageLookupByLibrary.simpleMessage("Конец списка"),
-        "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
+        "no_limit": MessageLookupByLibrary.simpleMessage("Без лимита"),
         "notFav": MessageLookupByLibrary.simpleMessage("Добавить в избранное"),
         "not_login": MessageLookupByLibrary.simpleMessage("Not Login"),
         "off": MessageLookupByLibrary.simpleMessage("Выключены"),
@@ -273,16 +273,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Пожалуйста, введите пароль"),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("Пожалуйста, введите логин"),
-        "port": MessageLookupByLibrary.simpleMessage("Port"),
+        "port": MessageLookupByLibrary.simpleMessage("Порт"),
         "preload_image": MessageLookupByLibrary.simpleMessage(
             "Предварительная загрузка изображений"),
         "previews": MessageLookupByLibrary.simpleMessage("Превью"),
         "processing": MessageLookupByLibrary.simpleMessage("В процессе"),
-        "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
-        "proxy_type": MessageLookupByLibrary.simpleMessage("Proxy Type"),
+        "proxy": MessageLookupByLibrary.simpleMessage("Прокси"),
+        "proxy_type": MessageLookupByLibrary.simpleMessage("Тип прокси"),
         "pure_black": MessageLookupByLibrary.simpleMessage("Чёрная"),
         "quick_search": MessageLookupByLibrary.simpleMessage("Быстрый поиск"),
-        "read": MessageLookupByLibrary.simpleMessage("Читалка"),
+        "read": MessageLookupByLibrary.simpleMessage("Чтение"),
         "read_from_clipboard":
             MessageLookupByLibrary.simpleMessage("Вставить из буфера обмена"),
         "read_setting":
@@ -291,10 +291,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Режим чтения"),
         "rebuild_tasks_data":
             MessageLookupByLibrary.simpleMessage("Пересобрать задания"),
-        "redirect_thumb_link":
-            MessageLookupByLibrary.simpleMessage("Redirect Thumb Link"),
+        "redirect_thumb_link": MessageLookupByLibrary.simpleMessage(
+            "Перенаправление адреса миниатюры"),
         "redirect_thumb_link_summary": MessageLookupByLibrary.simpleMessage(
-            "Redirect Thumb Link To ehgt.org"),
+            "Перенаправление адреса миниатюры на ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Скачать заново"),
         "reload_image":
             MessageLookupByLibrary.simpleMessage("Загрузить заново"),
@@ -340,6 +340,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "s_and": MessageLookupByLibrary.simpleMessage("и"),
         "s_pages": MessageLookupByLibrary.simpleMessage("страницы"),
         "s_stars": m2,
+        "save": MessageLookupByLibrary.simpleMessage("Сохранить"),
         "save_into_album":
             MessageLookupByLibrary.simpleMessage("Сохранить в галерею"),
         "saved_successfully":
@@ -376,7 +377,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Синхронизация быстрого поиска"),
         "sync_read_progress": MessageLookupByLibrary.simpleMessage(
             "Синхронизация прогресса чтения"),
-        "system_proxy": MessageLookupByLibrary.simpleMessage("System Proxy"),
+        "system_proxy":
+            MessageLookupByLibrary.simpleMessage("Системное Прокси"),
         "system_share":
             MessageLookupByLibrary.simpleMessage("Поделиться через...."),
         "t_Clear_all_history":
@@ -405,7 +407,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Показывать материалы с тегом"),
         "tag_dialog_tagWeight":
             MessageLookupByLibrary.simpleMessage("Значимость тега"),
-        "tag_limit": MessageLookupByLibrary.simpleMessage("Tag Limit"),
+        "tag_limit": MessageLookupByLibrary.simpleMessage("Лимит тегов"),
         "tag_vote_down":
             MessageLookupByLibrary.simpleMessage("Дизлайкнуть тег"),
         "tag_vote_up": MessageLookupByLibrary.simpleMessage("Лайкнуть тег"),
@@ -591,7 +593,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_tag_short_order": MessageLookupByLibrary.simpleMessage(
             "Порядок сортировки тегов галереи"),
         "uc_tag_wt":
-            MessageLookupByLibrary.simpleMessage("Tag Watching Threshold"),
+            MessageLookupByLibrary.simpleMessage("Порог отображения тегов"),
         "uc_tag_wt_desc": MessageLookupByLibrary.simpleMessage(
             "Недавно загруженные галереи будут отображаться в отслеживаемом, если в них есть хотя бы один тег с положительным приоритетом, и сумма приоритета в его просмотренных тегах составляет это значение или выше. Этот порог может быть установлен в диапазоне от 0 до 9999"),
         "uc_tb_0": MessageLookupByLibrary.simpleMessage("По алфавиту"),
@@ -640,8 +642,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_name": MessageLookupByLibrary.simpleMessage("Логин"),
         "version": MessageLookupByLibrary.simpleMessage("Версия"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("Вибрация"),
-        "volume_key_turn_page":
-            MessageLookupByLibrary.simpleMessage("Volume key to turn page"),
+        "volume_key_turn_page": MessageLookupByLibrary.simpleMessage(
+            "Переключение страниц кнопкой громкости"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("Дизлайк успешно поставлен"),
         "vote_successfully":

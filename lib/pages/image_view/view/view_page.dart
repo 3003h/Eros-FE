@@ -149,9 +149,12 @@ class ImageView extends StatelessWidget {
           case ViewMode.topToBottom:
             return const ImageListView();
           case ViewMode.LeftToRight:
-            return true ? const ImagePageView() : const ImagePhotoView();
+            return const ImagePageView();
+            return kReleaseMode
+                ? const ImagePageView()
+                : const ImagePhotoView();
           case ViewMode.rightToLeft:
-            // return const ImagePageView(reverse: true);
+            return const ImagePageView(reverse: true);
             return kReleaseMode
                 ? const ImagePageView(reverse: true)
                 : const ImagePhotoView(reverse: true);
