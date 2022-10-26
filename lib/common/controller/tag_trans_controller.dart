@@ -275,4 +275,8 @@ class TagTransController extends GetxController {
 
     return _translates;
   }
+
+  Future<void> tapTagTranslate(TagTranslat tagTranslat) async {
+    await isarHelper.tapTagTranslate(tagTranslat);
+  }
 }

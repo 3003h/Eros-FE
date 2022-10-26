@@ -12,6 +12,7 @@ class TagTranslat {
     this.name,
     this.intro,
     this.links,
+    this.lastUseTime = 0,
   }) : id = Isar.autoIncrement;
   Id id;
   @Index()
@@ -23,9 +24,11 @@ class TagTranslat {
   final String? name;
   final String? intro;
   final String? links;
+  @Index()
+  final int lastUseTime;
 
   @override
   String toString() {
-    return 'TagTranslat{namespace: $namespace, key: $key, name: $name, intro: $intro, links: $links}';
+    return 'TagTranslat{id: $id, namespace: $namespace, key: $key, name: $name, intro: $intro, links: $links, time: $lastUseTime}';
   }
 }

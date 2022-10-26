@@ -137,129 +137,159 @@ extension $GalleryImageTaskCopyWith on GalleryImageTask {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
 extension GetGalleryImageTaskCollection on Isar {
-  IsarCollection<GalleryImageTask> get galleryImageTasks => collection();
+  IsarCollection<GalleryImageTask> get galleryImageTasks => this.collection();
 }
 
 const GalleryImageTaskSchema = CollectionSchema(
   name: r'GalleryImageTask',
-  schema:
-      r'{"name":"GalleryImageTask","idName":"id","properties":[{"name":"filePath","type":"String"},{"name":"gid","type":"Long"},{"name":"href","type":"String"},{"name":"imageUrl","type":"String"},{"name":"ser","type":"Long"},{"name":"sourceId","type":"String"},{"name":"status","type":"Long"},{"name":"token","type":"String"}],"indexes":[{"name":"gid","unique":false,"replace":false,"properties":[{"name":"gid","type":"Value","caseSensitive":false}]},{"name":"gid_ser","unique":true,"replace":true,"properties":[{"name":"gid","type":"Value","caseSensitive":false},{"name":"ser","type":"Value","caseSensitive":false}]}],"links":[]}',
+  id: -8132713106941185218,
+  properties: {
+    r'filePath': PropertySchema(
+      id: 0,
+      name: r'filePath',
+      type: IsarType.string,
+    ),
+    r'gid': PropertySchema(
+      id: 1,
+      name: r'gid',
+      type: IsarType.long,
+    ),
+    r'href': PropertySchema(
+      id: 2,
+      name: r'href',
+      type: IsarType.string,
+    ),
+    r'imageUrl': PropertySchema(
+      id: 3,
+      name: r'imageUrl',
+      type: IsarType.string,
+    ),
+    r'ser': PropertySchema(
+      id: 4,
+      name: r'ser',
+      type: IsarType.long,
+    ),
+    r'sourceId': PropertySchema(
+      id: 5,
+      name: r'sourceId',
+      type: IsarType.string,
+    ),
+    r'status': PropertySchema(
+      id: 6,
+      name: r'status',
+      type: IsarType.long,
+    ),
+    r'token': PropertySchema(
+      id: 7,
+      name: r'token',
+      type: IsarType.string,
+    )
+  },
+  estimateSize: _galleryImageTaskEstimateSize,
+  serialize: _galleryImageTaskSerialize,
+  deserialize: _galleryImageTaskDeserialize,
+  deserializeProp: _galleryImageTaskDeserializeProp,
   idName: r'id',
-  propertyIds: {
-    r'filePath': 0,
-    r'gid': 1,
-    r'href': 2,
-    r'imageUrl': 3,
-    r'ser': 4,
-    r'sourceId': 5,
-    r'status': 6,
-    r'token': 7
+  indexes: {
+    r'gid_ser': IndexSchema(
+      id: -2521744434897185117,
+      name: r'gid_ser',
+      unique: true,
+      replace: true,
+      properties: [
+        IndexPropertySchema(
+          name: r'gid',
+          type: IndexType.value,
+          caseSensitive: false,
+        ),
+        IndexPropertySchema(
+          name: r'ser',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    ),
+    r'gid': IndexSchema(
+      id: -5769570954466121977,
+      name: r'gid',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'gid',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
   },
-  listProperties: {},
-  indexIds: {r'gid': 0, r'gid_ser': 1},
-  indexValueTypes: {
-    r'gid': [
-      IndexValueType.long,
-    ],
-    r'gid_ser': [
-      IndexValueType.long,
-      IndexValueType.long,
-    ]
-  },
-  linkIds: {},
-  backlinkLinkNames: {},
+  links: {},
+  embeddedSchemas: {},
   getId: _galleryImageTaskGetId,
-  setId: _galleryImageTaskSetId,
   getLinks: _galleryImageTaskGetLinks,
-  attachLinks: _galleryImageTaskAttachLinks,
-  serializeNative: _galleryImageTaskSerializeNative,
-  deserializeNative: _galleryImageTaskDeserializeNative,
-  deserializePropNative: _galleryImageTaskDeserializePropNative,
-  serializeWeb: _galleryImageTaskSerializeWeb,
-  deserializeWeb: _galleryImageTaskDeserializeWeb,
-  deserializePropWeb: _galleryImageTaskDeserializePropWeb,
-  version: 4,
+  attach: _galleryImageTaskAttach,
+  version: '3.0.2',
 );
 
-int? _galleryImageTaskGetId(GalleryImageTask object) {
-  if (object.id == Isar.autoIncrement) {
-    return null;
-  } else {
-    return object.id;
+int _galleryImageTaskEstimateSize(
+  GalleryImageTask object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  {
+    final value = object.filePath;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
   }
+  {
+    final value = object.href;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.imageUrl;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.sourceId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.token.length * 3;
+  return bytesCount;
 }
 
-void _galleryImageTaskSetId(GalleryImageTask object, int id) {
-  object.id = id;
-}
-
-List<IsarLinkBase<dynamic>> _galleryImageTaskGetLinks(GalleryImageTask object) {
-  return [];
-}
-
-void _galleryImageTaskSerializeNative(
-    IsarCollection<GalleryImageTask> collection,
-    IsarCObject cObj,
-    GalleryImageTask object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
-  IsarUint8List? filePath$Bytes;
-  final filePath$Value = object.filePath;
-  if (filePath$Value != null) {
-    filePath$Bytes = IsarBinaryWriter.utf8Encoder.convert(filePath$Value);
-  }
-  IsarUint8List? href$Bytes;
-  final href$Value = object.href;
-  if (href$Value != null) {
-    href$Bytes = IsarBinaryWriter.utf8Encoder.convert(href$Value);
-  }
-  IsarUint8List? imageUrl$Bytes;
-  final imageUrl$Value = object.imageUrl;
-  if (imageUrl$Value != null) {
-    imageUrl$Bytes = IsarBinaryWriter.utf8Encoder.convert(imageUrl$Value);
-  }
-  IsarUint8List? sourceId$Bytes;
-  final sourceId$Value = object.sourceId;
-  if (sourceId$Value != null) {
-    sourceId$Bytes = IsarBinaryWriter.utf8Encoder.convert(sourceId$Value);
-  }
-  final token$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.token);
-  final size = (staticSize +
-      3 +
-      (filePath$Bytes?.length ?? 0) +
-      3 +
-      (href$Bytes?.length ?? 0) +
-      3 +
-      (imageUrl$Bytes?.length ?? 0) +
-      3 +
-      (sourceId$Bytes?.length ?? 0) +
-      3 +
-      (token$Bytes.length)) as int;
-  cObj.buffer = alloc(size);
-  cObj.buffer_length = size;
-
-  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
-  final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeHeader();
-  writer.writeByteList(offsets[0], filePath$Bytes);
+void _galleryImageTaskSerialize(
+  GalleryImageTask object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.filePath);
   writer.writeLong(offsets[1], object.gid);
-  writer.writeByteList(offsets[2], href$Bytes);
-  writer.writeByteList(offsets[3], imageUrl$Bytes);
+  writer.writeString(offsets[2], object.href);
+  writer.writeString(offsets[3], object.imageUrl);
   writer.writeLong(offsets[4], object.ser);
-  writer.writeByteList(offsets[5], sourceId$Bytes);
+  writer.writeString(offsets[5], object.sourceId);
   writer.writeLong(offsets[6], object.status);
-  writer.writeByteList(offsets[7], token$Bytes);
+  writer.writeString(offsets[7], object.token);
 }
 
-GalleryImageTask _galleryImageTaskDeserializeNative(
-    IsarCollection<GalleryImageTask> collection,
-    int id,
-    IsarBinaryReader reader,
-    List<int> offsets) {
+GalleryImageTask _galleryImageTaskDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = GalleryImageTask(
     filePath: reader.readStringOrNull(offsets[0]),
     gid: reader.readLong(offsets[1]),
@@ -274,11 +304,13 @@ GalleryImageTask _galleryImageTaskDeserializeNative(
   return object;
 }
 
-P _galleryImageTaskDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
-  switch (propertyIndex) {
-    case -1:
-      return id as P;
+P _galleryImageTaskDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
@@ -296,72 +328,22 @@ P _galleryImageTaskDeserializePropNative<P>(
     case 7:
       return (reader.readString(offset)) as P;
     default:
-      throw IsarError('Illegal propertyIndex');
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Object _galleryImageTaskSerializeWeb(
-    IsarCollection<GalleryImageTask> collection, GalleryImageTask object) {
-  final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(jsObj, r'filePath', object.filePath);
-  IsarNative.jsObjectSet(jsObj, r'gid', object.gid);
-  IsarNative.jsObjectSet(jsObj, r'href', object.href);
-  IsarNative.jsObjectSet(jsObj, r'id', object.id);
-  IsarNative.jsObjectSet(jsObj, r'imageUrl', object.imageUrl);
-  IsarNative.jsObjectSet(jsObj, r'ser', object.ser);
-  IsarNative.jsObjectSet(jsObj, r'sourceId', object.sourceId);
-  IsarNative.jsObjectSet(jsObj, r'status', object.status);
-  IsarNative.jsObjectSet(jsObj, r'token', object.token);
-  return jsObj;
+Id _galleryImageTaskGetId(GalleryImageTask object) {
+  return object.id;
 }
 
-GalleryImageTask _galleryImageTaskDeserializeWeb(
-    IsarCollection<GalleryImageTask> collection, Object jsObj) {
-  final object = GalleryImageTask(
-    filePath: IsarNative.jsObjectGet(jsObj, r'filePath'),
-    gid: IsarNative.jsObjectGet(jsObj, r'gid') ??
-        (double.negativeInfinity as int),
-    href: IsarNative.jsObjectGet(jsObj, r'href'),
-    imageUrl: IsarNative.jsObjectGet(jsObj, r'imageUrl'),
-    ser: IsarNative.jsObjectGet(jsObj, r'ser') ??
-        (double.negativeInfinity as int),
-    sourceId: IsarNative.jsObjectGet(jsObj, r'sourceId'),
-    status: IsarNative.jsObjectGet(jsObj, r'status'),
-    token: IsarNative.jsObjectGet(jsObj, r'token') ?? '',
-  );
-  object.id = IsarNative.jsObjectGet(jsObj, r'id');
-  return object;
+List<IsarLinkBase<dynamic>> _galleryImageTaskGetLinks(GalleryImageTask object) {
+  return [];
 }
 
-P _galleryImageTaskDeserializePropWeb<P>(Object jsObj, String propertyName) {
-  switch (propertyName) {
-    case r'filePath':
-      return (IsarNative.jsObjectGet(jsObj, r'filePath')) as P;
-    case r'gid':
-      return (IsarNative.jsObjectGet(jsObj, r'gid') ??
-          (double.negativeInfinity as int)) as P;
-    case r'href':
-      return (IsarNative.jsObjectGet(jsObj, r'href')) as P;
-    case r'id':
-      return (IsarNative.jsObjectGet(jsObj, r'id')) as P;
-    case r'imageUrl':
-      return (IsarNative.jsObjectGet(jsObj, r'imageUrl')) as P;
-    case r'ser':
-      return (IsarNative.jsObjectGet(jsObj, r'ser') ??
-          (double.negativeInfinity as int)) as P;
-    case r'sourceId':
-      return (IsarNative.jsObjectGet(jsObj, r'sourceId')) as P;
-    case r'status':
-      return (IsarNative.jsObjectGet(jsObj, r'status')) as P;
-    case r'token':
-      return (IsarNative.jsObjectGet(jsObj, r'token') ?? '') as P;
-    default:
-      throw IsarError('Illegal propertyName');
-  }
+void _galleryImageTaskAttach(
+    IsarCollection<dynamic> col, Id id, GalleryImageTask object) {
+  object.id = id;
 }
-
-void _galleryImageTaskAttachLinks(
-    IsarCollection<dynamic> col, int id, GalleryImageTask object) {}
 
 extension GalleryImageTaskByIndex on IsarCollection<GalleryImageTask> {
   Future<GalleryImageTask?> getByGidSer(int gid, int ser) {
@@ -430,19 +412,19 @@ extension GalleryImageTaskByIndex on IsarCollection<GalleryImageTask> {
     return deleteAllByIndexSync(r'gid_ser', values);
   }
 
-  Future<int> putByGidSer(GalleryImageTask object) {
+  Future<Id> putByGidSer(GalleryImageTask object) {
     return putByIndex(r'gid_ser', object);
   }
 
-  int putByGidSerSync(GalleryImageTask object, {bool saveLinks = true}) {
+  Id putByGidSerSync(GalleryImageTask object, {bool saveLinks = true}) {
     return putByIndexSync(r'gid_ser', object, saveLinks: saveLinks);
   }
 
-  Future<List<int>> putAllByGidSer(List<GalleryImageTask> objects) {
+  Future<List<Id>> putAllByGidSer(List<GalleryImageTask> objects) {
     return putAllByIndex(r'gid_ser', objects);
   }
 
-  List<int> putAllByGidSerSync(List<GalleryImageTask> objects,
+  List<Id> putAllByGidSerSync(List<GalleryImageTask> objects,
       {bool saveLinks = true}) {
     return putAllByIndexSync(r'gid_ser', objects, saveLinks: saveLinks);
   }
@@ -456,18 +438,18 @@ extension GalleryImageTaskQueryWhereSort
     });
   }
 
-  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhere> anyGid() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        const IndexWhereClause.any(indexName: r'gid'),
-      );
-    });
-  }
-
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhere> anyGidSer() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         const IndexWhereClause.any(indexName: r'gid_ser'),
+      );
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhere> anyGid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'gid'),
       );
     });
   }
@@ -476,7 +458,7 @@ extension GalleryImageTaskQueryWhereSort
 extension GalleryImageTaskQueryWhere
     on QueryBuilder<GalleryImageTask, GalleryImageTask, QWhereClause> {
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause> idEqualTo(
-      int id) {
+      Id id) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: id,
@@ -486,7 +468,7 @@ extension GalleryImageTaskQueryWhere
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      idNotEqualTo(int id) {
+      idNotEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -509,7 +491,7 @@ extension GalleryImageTaskQueryWhere
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      idGreaterThan(int id, {bool include = false}) {
+      idGreaterThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -518,7 +500,7 @@ extension GalleryImageTaskQueryWhere
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      idLessThan(int id, {bool include = false}) {
+      idLessThan(Id id, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -527,8 +509,8 @@ extension GalleryImageTaskQueryWhere
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause> idBetween(
-    int lowerId,
-    int upperId, {
+    Id lowerId,
+    Id upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -537,99 +519,6 @@ extension GalleryImageTaskQueryWhere
         lower: lowerId,
         includeLower: includeLower,
         upper: upperId,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      gidEqualTo(int gid) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.equalTo(
-        indexName: r'gid',
-        value: [gid],
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      gidNotEqualTo(int gid) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'gid',
-              lower: [],
-              upper: [gid],
-              includeUpper: false,
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'gid',
-              lower: [gid],
-              includeLower: false,
-              upper: [],
-            ));
-      } else {
-        return query
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'gid',
-              lower: [gid],
-              includeLower: false,
-              upper: [],
-            ))
-            .addWhereClause(IndexWhereClause.between(
-              indexName: r'gid',
-              lower: [],
-              upper: [gid],
-              includeUpper: false,
-            ));
-      }
-    });
-  }
-
-  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      gidGreaterThan(
-    int gid, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'gid',
-        lower: [gid],
-        includeLower: include,
-        upper: [],
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      gidLessThan(
-    int gid, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'gid',
-        lower: [],
-        upper: [gid],
-        includeUpper: include,
-      ));
-    });
-  }
-
-  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
-      gidBetween(
-    int lowerGid,
-    int upperGid, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IndexWhereClause.between(
-        indexName: r'gid',
-        lower: [lowerGid],
-        includeLower: includeLower,
-        upper: [upperGid],
         includeUpper: includeUpper,
       ));
     });
@@ -823,6 +712,99 @@ extension GalleryImageTaskQueryWhere
       ));
     });
   }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
+      gidEqualTo(int gid) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'gid',
+        value: [gid],
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
+      gidNotEqualTo(int gid) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'gid',
+              lower: [],
+              upper: [gid],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'gid',
+              lower: [gid],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'gid',
+              lower: [gid],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'gid',
+              lower: [],
+              upper: [gid],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
+      gidGreaterThan(
+    int gid, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'gid',
+        lower: [gid],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
+      gidLessThan(
+    int gid, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'gid',
+        lower: [],
+        upper: [gid],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterWhereClause>
+      gidBetween(
+    int lowerGid,
+    int upperGid, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'gid',
+        lower: [lowerGid],
+        includeLower: includeLower,
+        upper: [upperGid],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension GalleryImageTaskQueryFilter
@@ -831,6 +813,15 @@ extension GalleryImageTaskQueryFilter
       filePathIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'filePath',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      filePathIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'filePath',
       ));
     });
@@ -853,8 +844,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       filePathGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -869,8 +860,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       filePathLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -886,9 +877,9 @@ extension GalleryImageTaskQueryFilter
       filePathBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -948,6 +939,26 @@ extension GalleryImageTaskQueryFilter
         property: r'filePath',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      filePathIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'filePath',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      filePathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'filePath',
+        value: '',
       ));
     });
   }
@@ -1018,6 +1029,15 @@ extension GalleryImageTaskQueryFilter
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      hrefIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'href',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       hrefEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -1034,8 +1054,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       hrefGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1050,8 +1070,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       hrefLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1067,9 +1087,9 @@ extension GalleryImageTaskQueryFilter
       hrefBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1134,7 +1154,27 @@ extension GalleryImageTaskQueryFilter
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
-      idEqualTo(int value) {
+      hrefIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'href',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      hrefIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'href',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      idEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -1145,7 +1185,7 @@ extension GalleryImageTaskQueryFilter
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       idGreaterThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1159,7 +1199,7 @@ extension GalleryImageTaskQueryFilter
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       idLessThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1173,8 +1213,8 @@ extension GalleryImageTaskQueryFilter
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       idBetween(
-    int lower,
-    int upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1199,6 +1239,15 @@ extension GalleryImageTaskQueryFilter
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      imageUrlIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'imageUrl',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       imageUrlEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -1215,8 +1264,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       imageUrlGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1231,8 +1280,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       imageUrlLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1248,9 +1297,9 @@ extension GalleryImageTaskQueryFilter
       imageUrlBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1310,6 +1359,26 @@ extension GalleryImageTaskQueryFilter
         property: r'imageUrl',
         wildcard: pattern,
         caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      imageUrlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imageUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      imageUrlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imageUrl',
+        value: '',
       ));
     });
   }
@@ -1380,6 +1449,15 @@ extension GalleryImageTaskQueryFilter
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      sourceIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'sourceId',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       sourceIdEqualTo(
     String? value, {
     bool caseSensitive = true,
@@ -1396,8 +1474,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       sourceIdGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1412,8 +1490,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       sourceIdLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1429,9 +1507,9 @@ extension GalleryImageTaskQueryFilter
       sourceIdBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1496,9 +1574,38 @@ extension GalleryImageTaskQueryFilter
   }
 
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      sourceIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sourceId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      sourceIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'sourceId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       statusIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'status',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      statusIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'status',
       ));
     });
@@ -1577,8 +1684,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       tokenGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -1593,8 +1700,8 @@ extension GalleryImageTaskQueryFilter
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
       tokenLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -1610,9 +1717,9 @@ extension GalleryImageTaskQueryFilter
       tokenBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -1675,12 +1782,35 @@ extension GalleryImageTaskQueryFilter
       ));
     });
   }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      tokenIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'token',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterFilterCondition>
+      tokenIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'token',
+        value: '',
+      ));
+    });
+  }
 }
+
+extension GalleryImageTaskQueryObject
+    on QueryBuilder<GalleryImageTask, GalleryImageTask, QFilterCondition> {}
 
 extension GalleryImageTaskQueryLinks
     on QueryBuilder<GalleryImageTask, GalleryImageTask, QFilterCondition> {}
 
-extension GalleryImageTaskQueryWhereSortBy
+extension GalleryImageTaskQuerySortBy
     on QueryBuilder<GalleryImageTask, GalleryImageTask, QSortBy> {
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterSortBy>
       sortByFilePath() {
@@ -1791,7 +1921,7 @@ extension GalleryImageTaskQueryWhereSortBy
   }
 }
 
-extension GalleryImageTaskQueryWhereSortThenBy
+extension GalleryImageTaskQuerySortThenBy
     on QueryBuilder<GalleryImageTask, GalleryImageTask, QSortThenBy> {
   QueryBuilder<GalleryImageTask, GalleryImageTask, QAfterSortBy>
       thenByFilePath() {

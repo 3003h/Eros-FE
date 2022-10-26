@@ -46,6 +46,8 @@ class SearchPageController extends DefaultTabViewController {
 
   bool translateSerachHistory = false;
 
+  final TagTransController tagTransController = Get.find<TagTransController>();
+
   // 搜索输入框的控制器
   late final TextEditingController searchTextController =
       TextEditingController();
@@ -206,7 +208,7 @@ class SearchPageController extends DefaultTabViewController {
         // 中文从翻译库匹配
         if (localeService.isLanguageCodeZh) {
           logger.d('isLanguageCodeZh');
-          List<TagTranslat> qryTagsTemp = await Get.find<TagTransController>()
+          List<TagTranslat> qryTagsTemp = await tagTransController
               .getTagTranslatesLike(text: currQryText, limit: 200);
           if (qryTagsTemp.isNotEmpty) {
             qryTags.value = qryTagsTemp;
@@ -367,6 +369,8 @@ class SearchPageController extends DefaultTabViewController {
 
     FocusScope.of(Get.context!).requestFocus(searchFocusNode);
     qryTags.clear();
+
+    tagTransController.tapTagTranslate(_qry);
   }
 
   void appendTextToSearch(String text) {

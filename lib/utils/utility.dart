@@ -1,22 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/favcat.dart';
 import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:uuid/uuid.dart';
@@ -26,6 +18,22 @@ import '../fehviewer.dart';
 const _uuid = Uuid();
 String generateUuidv4() {
   return _uuid.v4();
+}
+
+/// 为 Dart 字符串优化后 FNV-1a 64bit 哈希算法
+int fastHash(String string) {
+  var hash = 0xcbf29ce484222325;
+
+  var i = 0;
+  while (i < string.length) {
+    final codeUnit = string.codeUnitAt(i++);
+    hash ^= codeUnit >> 8;
+    hash *= 0x100000001b3;
+    hash ^= codeUnit & 0xFF;
+    hash *= 0x100000001b3;
+  }
+
+  return hash;
 }
 
 // 请求完全读写权限
