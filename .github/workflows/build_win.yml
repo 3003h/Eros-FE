@@ -15,6 +15,12 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: replace isar
+        shell: bash
+        run: |
+          sed -i "s#isar: ^3.0.2'#isar: 3.0.0-dev.8#g" pubspec.yaml
+          git stash
+
       - name: Unlock secrets
         run: |
           Invoke-WebRequest -Uri https://github.com/AGWA/git-crypt/releases/download/0.7.0/git-crypt-0.7.0-x86_64.exe -OutFile git-crypt.exe
