@@ -163,7 +163,7 @@ packages:
       name: build_runner_core
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "7.2.6"
+    version: "7.2.7"
   built_collection:
     dependency: transitive
     description:
@@ -298,7 +298,7 @@ packages:
     source: hosted
     version: "4.0.4"
   cross_file:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cross_file
       url: "https://pub.flutter-io.cn"
@@ -970,7 +970,7 @@ packages:
       name: json_serializable
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.5.3"
+    version: "6.5.4"
   keframe:
     dependency: "direct main"
     description:
@@ -1439,13 +1439,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.13.1"
-  share:
+  share_plus:
     dependency: "direct main"
     description:
-      name: share
+      name: share_plus
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.4"
+    version: "6.0.1"
+  share_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: share_plus_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.1.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -1751,7 +1758,7 @@ packages:
       name: url_launcher_android
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.19"
+    version: "6.0.20"
   url_launcher_ios:
     dependency: transitive
     description:

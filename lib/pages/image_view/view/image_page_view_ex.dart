@@ -1,10 +1,10 @@
 import 'dart:math';
 
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
-import 'package:fehviewer/widget/eh_cached_network_image.dart';
 import 'package:fehviewer/widget/eh_image.dart';
 import 'package:fehviewer/widget/preload_photo_view_gallery.dart';
 import 'package:flutter/material.dart';
@@ -109,6 +109,10 @@ class ImagePhotoView extends GetView<ViewExtController> {
               filePath: _currentImage?.filePath,
               origImageUrl: _currentImage?.originImageUrl,
               title: '${vState.pageState?.title} [$imageSer]',
+              gid: vState.gid,
+              ser: imageSer,
+              isLocal: vState.loadFrom == LoadFrom.download ||
+                  vState.loadFrom == LoadFrom.archiver,
             );
           },
           child: imageView,

@@ -1,14 +1,14 @@
 import 'dart:convert';
 
+import 'package:cross_file/cross_file.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class LogViewPage extends StatelessWidget {
   LogViewPage({Key? key, required this.index, required this.title})
@@ -52,7 +52,7 @@ class LogViewPage extends StatelessWidget {
               size: 26,
             ),
             onPressed: () {
-              Share.shareFiles([logService.logFiles[index].path]);
+              Share.shareXFiles([XFile(logService.logFiles[index].path)]);
             },
           ),
           // transitionBetweenRoutes: false,

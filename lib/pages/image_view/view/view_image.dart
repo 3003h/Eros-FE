@@ -399,13 +399,18 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               final GalleryImage? _currentImage =
                   vState.pageState?.imageMap[widget.imageSer];
               showImageSheet(
-                  context,
-                  () => controller.reloadImage(widget.imageSer,
-                      changeSource: true),
-                  imageUrl: _currentImage?.imageUrl ?? '',
-                  filePath: _currentImage?.filePath,
-                  origImageUrl: _currentImage?.originImageUrl,
-                  title: '${vState.pageState?.title} [${widget.imageSer}]');
+                context,
+                () =>
+                    controller.reloadImage(widget.imageSer, changeSource: true),
+                imageUrl: _currentImage?.imageUrl ?? '',
+                filePath: _currentImage?.filePath,
+                origImageUrl: _currentImage?.originImageUrl,
+                title: '${vState.pageState?.title} [${widget.imageSer}]',
+                ser: widget.imageSer,
+                gid: vState.pageState?.gid,
+                isLocal: vState.loadFrom == LoadFrom.download ||
+                    vState.loadFrom == LoadFrom.archiver,
+              );
             },
             child: _buildViewImageWidgetProvider(),
           );
