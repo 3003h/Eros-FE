@@ -229,7 +229,6 @@ class EhConfigService extends ProfileService {
   bool get volumnTurnPage => _volumnTurnPage.value;
   set volumnTurnPage(bool val) => _volumnTurnPage.value = val;
 
-
   final _proxyType = ProxyType.system.obs;
   ProxyType get proxyType => _proxyType.value;
   set proxyType(ProxyType val) => _proxyType.value = val;
@@ -249,7 +248,6 @@ class EhConfigService extends ProfileService {
   final _proxyPassword = ''.obs;
   String get proxyPassword => _proxyPassword.value;
   set proxyPassword(String val) => _proxyPassword.value = val;
-
 
   @override
   void onInit() {
@@ -445,11 +443,10 @@ class EhConfigService extends ProfileService {
         (String value) => ehConfig = ehConfig.copyWith(favoritesOrder: value));
 
     tagTranslatVer.value = isarHelper.getTranslateVersion();
-    everProfile<String>(tagTranslatVer,
-        (value) {
-          // ehConfig = ehConfig.copyWith(tagTranslatVer: value);
-          isarHelper.putTagTranslateVersion(value);
-        });
+    everProfile<String>(tagTranslatVer, (value) {
+      // ehConfig = ehConfig.copyWith(tagTranslatVer: value);
+      isarHelper.putTagTranslateVersion(value);
+    });
 
     lastFavcat.value = ehConfig.lastFavcat ?? lastFavcat.value;
     everProfile<String>(
@@ -782,7 +779,7 @@ class EhConfigService extends ProfileService {
     // ];
 
     final List<String> pageNames = <String>[
-      '/${GallerySliverPage().runtimeType.toString()}',
+      '/${const GallerySliverPage().runtimeType.toString()}',
       EHRoutes.galleryPage,
     ];
 
