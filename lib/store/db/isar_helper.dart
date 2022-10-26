@@ -114,12 +114,16 @@ class IsarHelper {
     }
   }
 
+  // 模糊查询
   Future<List<TagTranslat>> findTagTranslateContains(
       String text, int limit) async {
     final result = await isar.tagTranslats
-        .where()
-        .namespaceNotEqualTo('rows')
+        .where(sort: Sort.desc)
+        .anyLastUseTime()
         .filter()
+        .not()
+        .namespaceEqualTo('rows')
+        .and()
         .keyContains(text)
         .or()
         .nameContains(text)
@@ -129,6 +133,15 @@ class IsarHelper {
     logger.d('result.len ${result.length}');
 
     return result;
+  }
+
+  Future<void> tapTagTranslate(TagTranslat tagTranslat) async {
+    await isar.writeTxn(() async {
+      final newTagTranslat = tagTranslat.copyWith(
+        lastUseTime: DateTime.now().millisecondsSinceEpoch,
+      );
+      await isar.tagTranslats.putByKeyNamespace(newTagTranslat);
+    });
   }
 
   Future<void> removeAllTagTranslate() async {

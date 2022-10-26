@@ -156,7 +156,7 @@ dependencies:
     git:
       url: https://github.com/google/flutter-desktop-embedding.git
       path: plugins/window_size
-  isar: 3.0.0-dev.8
+  isar: ^3.0.2
   isar_flutter_libs: ^3.0.0-dev.8
   dio_cache_interceptor: ^3.3.1
   dio_cache_interceptor_hive_store: ^3.2.0
