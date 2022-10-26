@@ -201,7 +201,7 @@ class AppPages {
     GetPage(
       name: EHRoutes.galleryPage,
       // page: () => GalleryMainPage(),
-      page: () => GallerySliverPage(),
+      page: () => const GallerySliverPage(),
       preventDuplicates: false,
     ),
     GetPage(

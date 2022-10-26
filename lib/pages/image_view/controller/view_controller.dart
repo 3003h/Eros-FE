@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:archive_async/archive_async.dart';
 import 'package:collection/collection.dart';

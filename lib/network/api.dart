@@ -631,7 +631,7 @@ class Api {
       fileName = '$gid-$fileName';
     }
 
-    await Share.shareXFiles([XFile(file!.path)], subject: fileName);
+    await Share.shareXFiles([XFile(file.path)], subject: fileName);
   }
 
   // 保存本地图片到相册

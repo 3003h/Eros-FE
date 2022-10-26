@@ -228,7 +228,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.galleryPage:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => GallerySliverPage(),
+                              page: () => const GallerySliverPage(),
                               transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                               // fullscreenDialog: true,

@@ -19,11 +19,6 @@ import 'header_sliver.dart';
 
 const double kHeaderHeight = 200.0 + 52;
 
-class GallerySliverPage extends StatefulWidget {
-  @override
-  _GallerySliverPageState createState() => _GallerySliverPageState();
-}
-
 class _GallerySliverSafeArea extends StatelessWidget {
   const _GallerySliverSafeArea({Key? key, required this.child})
       : super(key: key);
@@ -41,32 +36,51 @@ class _GallerySliverSafeArea extends StatelessWidget {
   }
 }
 
+class GallerySliverPage extends StatefulWidget {
+  const GallerySliverPage({Key? key}) : super(key: key);
+  @override
+  _GallerySliverPageState createState() => _GallerySliverPageState();
+}
+
 class _GallerySliverPageState extends State<GallerySliverPage> {
   late final GalleryPageController _controller;
   final _tag = pageCtrlTag;
 
   GalleryPageState get pageState => _controller.gState;
 
+  // final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     logger.v('initState pageCtrlTag:$pageCtrlTag');
     initPageController(tag: _tag);
+
+    // _scrollController = ScrollController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _controller = Get.put(GalleryPageController(), tag: _tag);
 
-    Future.delayed(const Duration(milliseconds: 100)).then((value) {
-      _controller.scrollController =
-          PrimaryScrollController.of(context) ?? ScrollController();
-      // _controller.scrollController = ScrollController();
-      _controller.scrollController
-          ?.addListener(_controller.scrollControllerLister);
-    });
+    _controller.scrollController =
+        PrimaryScrollController.of(context) ?? ScrollController();
+    _controller.scrollController
+        ?.addListener(_controller.scrollControllerLister);
+
+    // _scrollController =
+    //     PrimaryScrollController.of(context) ?? ScrollController();
+
+    // _scrollController.addListener(() {
+    //   logger.d('scrollController ${_scrollController.offset}');
+    // });
   }
 
   @override
   void dispose() {
     super.dispose();
-    // deletePageController(tag: _tag);
+    _controller.scrollController?.dispose();
   }
 
   @override
@@ -249,9 +263,8 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
     ];
 
     Widget body = CustomScrollView(
-      // primary: true,
       physics: const AlwaysScrollableScrollPhysics(),
-      // controller: _controller.scrollController,
+      controller: GetPlatform.isDesktop ? _controller.scrollController : null,
       slivers: _slivers,
     );
 
@@ -276,14 +289,6 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
     );
 
     body = CupertinoPageScaffold(child: body);
-
-    // body = CupertinoPageScaffold(
-    //   child: CupertinoScrollbar(
-    //     controller:
-    //         PrimaryScrollController.of(context) ?? _controller.scrollController,
-    //     child: body,
-    //   ),
-    // );
 
     return body;
   }

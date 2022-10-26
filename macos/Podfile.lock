@@ -5,9 +5,22 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - isar_flutter_libs (1.0.0):
+    - FlutterMacOS
   - package_info (0.0.1):
     - FlutterMacOS
+  - package_info_plus (0.0.1):
+    - FlutterMacOS
   - path_provider_macos (0.0.1):
+    - FlutterMacOS
+  - Sentry (7.28.0):
+    - Sentry/Core (= 7.28.0)
+  - Sentry/Core (7.28.0)
+  - sentry_flutter (0.0.1):
+    - Flutter
+    - FlutterMacOS
+    - Sentry (~> 7.28.0)
+  - share_plus (0.0.1):
     - FlutterMacOS
   - shared_preferences_macos (0.0.1):
     - FlutterMacOS
@@ -24,8 +37,12 @@ PODS:
 DEPENDENCIES:
   - bitsdojo_window_macos (from `Flutter/ephemeral/.symlinks/plugins/bitsdojo_window_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - isar_flutter_libs (from `Flutter/ephemeral/.symlinks/plugins/isar_flutter_libs/macos`)
   - package_info (from `Flutter/ephemeral/.symlinks/plugins/package_info/macos`)
+  - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
   - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
+  - sentry_flutter (from `Flutter/ephemeral/.symlinks/plugins/sentry_flutter/macos`)
+  - share_plus (from `Flutter/ephemeral/.symlinks/plugins/share_plus/macos`)
   - shared_preferences_macos (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
@@ -35,16 +52,25 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - FMDB
+    - Sentry
 
 EXTERNAL SOURCES:
   bitsdojo_window_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/bitsdojo_window_macos/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
+  isar_flutter_libs:
+    :path: Flutter/ephemeral/.symlinks/plugins/isar_flutter_libs/macos
   package_info:
     :path: Flutter/ephemeral/.symlinks/plugins/package_info/macos
+  package_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos
   path_provider_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos
+  sentry_flutter:
+    :path: Flutter/ephemeral/.symlinks/plugins/sentry_flutter/macos
+  share_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/share_plus/macos
   shared_preferences_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_macos/macos
   sqflite:
@@ -60,8 +86,13 @@ SPEC CHECKSUMS:
   bitsdojo_window_macos: 44e3b8fe3dd463820e0321f6256c5b1c16bb6a00
   FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  isar_flutter_libs: a775292698f2a56059161ae9c011071ab7984d96
   package_info: 6eba2fd8d3371dda2d85c8db6fe97488f24b74b2
+  package_info_plus: 02d7a575e80f194102bef286361c6c326e4c29ce
   path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
+  Sentry: 2c6053e4cfe6dea6608135dea1928ffbb4ecfba5
+  sentry_flutter: fad3ef0917dc1afa7d242af0743696ed9a9a8864
+  share_plus: 76dd39142738f7a68dd57b05093b5e8193f220f7
   shared_preferences_macos: a64dc611287ed6cbe28fd1297898db1336975727
   sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
   url_launcher_macos: 597e05b8e514239626bcf4a850fcf9ef5c856ec3

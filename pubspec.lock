@@ -1100,7 +1100,7 @@ packages:
       name: material_color_utilities
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.0"
+    version: "0.1.5"
   meta:
     dependency: transitive
     description:
@@ -1562,7 +1562,7 @@ packages:
       name: source_span
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.9.1"
+    version: "1.9.0"
   sp_util:
     dependency: transitive
     description:
@@ -1604,7 +1604,7 @@ packages:
       name: stream_channel
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.0"
   stream_transform:
     dependency: transitive
     description:
@@ -1695,7 +1695,7 @@ packages:
       name: test_api
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.14"
+    version: "0.4.12"
   throttling:
     dependency: "direct main"
     description:
@@ -1814,7 +1814,7 @@ packages:
       name: vector_math
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.4"
+    version: "2.1.2"
   vibration:
     dependency: "direct main"
     description:

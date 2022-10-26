@@ -407,6 +407,7 @@ class GalleryPageController extends GetxController
     if (scrollController == null) {
       return;
     }
+    // logger.d('${scrollController?.offset}');
     try {
       if (scrollController!.offset < kHeaderHeightOffset + kHeaderPaddingTop &&
           !gState.hideNavigationBtn) {
@@ -416,7 +417,9 @@ class GalleryPageController extends GetxController
           gState.hideNavigationBtn) {
         gState.hideNavigationBtn = false;
       }
-    } catch (_) {}
+    } catch (_) {
+      logger.e('$_');
+    }
   }
 
   /// 拉取直到index的缩略图信息
