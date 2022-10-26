@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:archive_async/archive_async.dart';
 import 'package:collection/collection.dart';
@@ -17,7 +16,6 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/store/archive_async.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_android_volume_keydown/flutter_android_volume_keydown.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -858,9 +856,10 @@ class ViewExtController extends GetxController {
   }
 
   void tapShare(BuildContext context) {
+    final ser = vState.currentItemIndex + 1;
     if (vState.loadFrom == LoadFrom.gallery) {
-      logger.d('share networkFile ${vState.currentItemIndex + 1}');
-      final GalleryImage? p = vState.imageMap?[vState.currentItemIndex + 1];
+      logger.d('share networkFile $ser');
+      final GalleryImage? p = vState.imageMap?[ser];
       logger.d('p:\n${p?.toJson()}');
       showShareActionSheet(
         context,
@@ -868,6 +867,7 @@ class ViewExtController extends GetxController {
         origImageUrl: p?.originImageUrl,
         filePath: p?.filePath,
         gid: vState.gid,
+        ser: ser,
       );
     } else {
       logger.d('share localFile');
@@ -876,14 +876,16 @@ class ViewExtController extends GetxController {
         isLocal: true,
         filePath: vState.imagePathList[vState.currentItemIndex],
         gid: vState.gid,
+        ser: ser,
       );
     }
   }
 
   void tapSave(BuildContext context) {
+    final ser = vState.currentItemIndex + 1;
     if (vState.loadFrom == LoadFrom.gallery) {
-      logger.d('save networkFile ${vState.currentItemIndex + 1}');
-      final GalleryImage? p = vState.imageMap?[vState.currentItemIndex + 1];
+      logger.d('save networkFile ser');
+      final GalleryImage? p = vState.imageMap?[ser];
       logger.d('p:\n${p?.toJson()}');
       showSaveActionSheet(
         context,
@@ -891,6 +893,7 @@ class ViewExtController extends GetxController {
         origImageUrl: p?.originImageUrl,
         filePath: p?.filePath,
         gid: vState.gid,
+        ser: ser,
       );
     } else {
       logger.d('save localFile');
@@ -899,6 +902,7 @@ class ViewExtController extends GetxController {
         isLocal: true,
         filePath: vState.imagePathList[vState.currentItemIndex],
         gid: vState.gid,
+        ser: ser,
       );
     }
   }

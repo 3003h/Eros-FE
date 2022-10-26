@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
@@ -23,7 +24,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 enum DownloadType {
   gallery,
@@ -419,7 +420,7 @@ class DownloadViewController extends GetxController {
     final _zipPath = await _exportGallery(context, () => _compZip(task));
 
     if (_zipPath != null) {
-      Share.shareFiles([_zipPath]);
+      Share.shareXFiles([XFile(_zipPath)]);
     }
   }
 
@@ -463,7 +464,7 @@ class DownloadViewController extends GetxController {
         await _exportGallery(context, () => _buildEpub(task));
 
     if (_exportFilePath != null) {
-      Share.shareFiles([_exportFilePath]);
+      Share.shareXFiles([XFile(_exportFilePath)]);
     }
   }
 
@@ -641,7 +642,7 @@ class DownloadViewController extends GetxController {
   Future shareTaskInfoFile() async {
     final _tempFilePath = await _writeTaskInfoFile();
     if (_tempFilePath != null) {
-      Share.shareFiles([_tempFilePath]);
+      Share.shareXFiles([XFile(_tempFilePath)]);
     }
   }
 

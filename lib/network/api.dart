@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
@@ -18,7 +19,7 @@ import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path/path.dart' as path;
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 final Api api = Api();
 
@@ -478,33 +479,64 @@ class Api {
   // 下载单张图片
   static Future<String> _downloadImage(
     String imageUrl, {
-    String? gid,
+    required String? gid,
+    required int? ser,
     ProgressCallback? progressCallback,
   }) async {
-    late String savePath;
-    await ehDownload(
-        progressCallback: progressCallback,
-        url: imageUrl,
-        savePath: (Headers headers) {
-          logger.d(headers);
-          final contentDisposition = headers.value('content-disposition');
-          final filename = contentDisposition
-                  ?.split(RegExp(r"filename(=|\*=UTF-8'')"))
-                  .last ??
-              '';
-          final fileNameDecode = Uri.decodeFull(filename).replaceAll('/', '_');
-          logger.d(fileNameDecode);
-          savePath = path.joinAll(
-              [Global.tempPath, 'torrent', (gid ?? '0'), fileNameDecode]);
-          return savePath;
-        });
-    return savePath;
+    String? saveDir;
+    io.File? saveFile;
+    late String realSavePath;
+    if (imageUrl.contains('/fullimg.php?')) {
+      saveDir = path.join(
+          Global.tempPath, 'ori_image_temp', gid ?? '0', '${ser ?? 0}');
+      if (!io.Directory(saveDir).existsSync()) {
+        io.Directory(saveDir).createSync(recursive: true);
+      }
+    }
+
+    final dir = io.Directory(saveDir ?? Global.tempPath);
+    if (dir.existsSync()) {
+      logger.d('缓存文件 ${dir.path}');
+      dir.listSync().forEach((element) {
+        logger.d('path ${element.path}');
+        if (element is io.File) {
+          saveFile = element;
+          logger.d('读取缓存文件 ${saveFile?.path}');
+        }
+      });
+    }
+
+    if (saveFile == null) {
+      await ehDownload(
+          progressCallback: progressCallback,
+          url: imageUrl,
+          savePath: (Headers headers) {
+            logger.d(headers);
+            final contentDisposition = headers.value('content-disposition');
+            final filename = contentDisposition
+                    ?.split(RegExp(r"filename(=|\*=UTF-8'')"))
+                    .last ??
+                '';
+            final fileNameDecode =
+                Uri.decodeFull(filename).replaceAll('/', '_');
+            logger.d(fileNameDecode);
+            realSavePath = saveDir != null
+                ? path.join(saveDir, fileNameDecode)
+                : path.join(Global.tempPath, gid ?? '0', fileNameDecode);
+            return realSavePath;
+          });
+    } else {
+      realSavePath = saveFile!.path;
+    }
+
+    return realSavePath;
   }
 
   // 保存图片到相册
   static Future<void> saveNetworkImageToPhoto(
     String imageUrl, {
-    String? gid,
+    required String? gid,
+    required int? ser,
     ProgressCallback? progressCallback,
     BuildContext? context,
   }) async {
@@ -533,6 +565,7 @@ class Api {
       final savePath = await _downloadImage(
         imageUrl,
         gid: gid,
+        ser: ser,
         progressCallback: progressCallback,
       );
       file = io.File(savePath);
@@ -560,7 +593,8 @@ class Api {
 
   static Future<void> shareNetworkImage(
     String imageUrl, {
-    String? gid,
+    required String? gid,
+    required int? ser,
     ProgressCallback? progressCallback,
     BuildContext? context,
   }) async {
@@ -580,13 +614,16 @@ class Api {
     } else {
       // 无缓存下载
       logger.d('无缓存下载');
-      final savePath = await _downloadImage(
+      final realSavePath = await _downloadImage(
         imageUrl,
         gid: gid,
+        ser: ser,
         progressCallback: progressCallback,
       );
-      file = io.File(savePath);
-      fileName = path.basename(savePath);
+      logger.d('realSavePath $realSavePath');
+      file = io.File(realSavePath);
+
+      fileName = path.basename(file.path);
     }
 
     fileName = fileName.replaceAll('/', '_');
@@ -594,7 +631,7 @@ class Api {
       fileName = '$gid-$fileName';
     }
 
-    await Share.shareFiles([file.path], text: fileName);
+    await Share.shareXFiles([XFile(file!.path)], subject: fileName);
   }
 
   // 保存本地图片到相册
@@ -635,6 +672,6 @@ class Api {
       throw EhError(error: 'File not found');
     }
 
-    await Share.shareFiles([imagePath]);
+    await Share.shareXFiles([XFile(imagePath)]);
   }
 }

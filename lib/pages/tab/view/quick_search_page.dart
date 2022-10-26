@@ -1,8 +1,8 @@
 import 'dart:io';
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:device_info/device_info.dart';
-import 'package:device_info_platform_interface/model/ios_device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
@@ -23,7 +23,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class QuickSearchListPage extends StatelessWidget {
   QuickSearchListPage({Key? key, this.autoSearch = true}) : super(key: key);
@@ -68,7 +68,7 @@ class QuickSearchListPage extends StatelessWidget {
                 onPressed: () async {
                   final _tempFilePath = await _writeFile();
                   if (_tempFilePath != null) {
-                    Share.shareFiles([_tempFilePath]);
+                    Share.shareXFiles([XFile(_tempFilePath)]);
                   }
                   Get.back();
                 },
@@ -87,7 +87,6 @@ class QuickSearchListPage extends StatelessWidget {
                     final _tempFilePath = await _writeFile();
                     await requestManageExternalStoragePermission();
                     if (_tempFilePath != null) {
-                      // Share.shareFiles([_tempFilePath]);
                       final _saveToDirPath =
                           await FilePicker.platform.getDirectoryPath();
                       logger.d('$_saveToDirPath');

@@ -1565,7 +1565,8 @@ Future<void> showSaveActionSheet(
   String? origImageUrl,
   String? filePath,
   LoadFrom loadType = LoadFrom.gallery,
-  String? gid,
+  required String? gid,
+  required int? ser,
   bool isLocal = false,
 }) {
   return showCupertinoModalPopup<void>(
@@ -1594,6 +1595,7 @@ Future<void> showSaveActionSheet(
                     imageUrl,
                     context: context,
                     gid: gid,
+                    ser: ser,
                   );
                 } else {
                   showToast('imageUrl is null or file is null');
@@ -1623,6 +1625,7 @@ Future<void> showSaveActionSheet(
                       origImageUrl,
                       context: context,
                       gid: gid,
+                      ser: ser,
                       progressCallback: (int count, int total) {
                         // logger.d('$count $total');
                       },
@@ -1653,7 +1656,8 @@ Future<void> showShareActionSheet(
   String? origImageUrl,
   String? filePath,
   LoadFrom loadType = LoadFrom.gallery,
-  String? gid,
+  required String? gid,
+  required int? ser,
   bool isLocal = false,
 }) {
   return showCupertinoModalPopup<void>(
@@ -1682,6 +1686,7 @@ Future<void> showShareActionSheet(
                     imageUrl,
                     context: context,
                     gid: gid,
+                    ser: ser,
                   );
                 } else {
                   showToast('imageUrl is null or file is null');
@@ -1709,12 +1714,13 @@ Future<void> showShareActionSheet(
                       origImageUrl,
                       context: context,
                       gid: gid,
+                      ser: ser,
                       progressCallback: (int count, int total) {
                         // logger.d('$count $total');
                       },
                     );
                     logger.d('下载完成');
-                    showToast(L10n.current.saved_successfully);
+                    // showToast(L10n.current.saved_successfully);
                   } on EhError catch (e, stack) {
                     logger.e('下载失败', e, stack);
                     showToast(e.message);
@@ -1740,6 +1746,9 @@ Future<void> showImageSheet(
   String? imageUrl,
   String? origImageUrl,
   String? filePath,
+  required String? gid,
+  required int? ser,
+  bool isLocal = false,
 }) {
   return showCupertinoModalPopup<void>(
       context: context,
@@ -1766,6 +1775,9 @@ Future<void> showImageSheet(
                     imageUrl: imageUrl,
                     filePath: filePath,
                     origImageUrl: origImageUrl,
+                    gid: gid,
+                    ser: ser,
+                    isLocal: isLocal,
                   );
                 },
                 child: Text(L10n.of(context).save_into_album)),
@@ -1777,6 +1789,9 @@ Future<void> showImageSheet(
                     imageUrl: imageUrl,
                     filePath: filePath,
                     origImageUrl: origImageUrl,
+                    gid: gid,
+                    ser: ser,
+                    isLocal: isLocal,
                   );
                 },
                 child: Text(L10n.of(context).share_image)),
