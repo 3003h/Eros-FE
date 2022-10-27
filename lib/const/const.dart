@@ -324,6 +324,8 @@ class EHConst {
     if (Global.inDebugMode) 100,
   ];
 
+  static List<int> webDAVConnections = multiDownload;
+
   static int cleanDataVer = 1;
 
   static List<int> autoLockTime = <int>[

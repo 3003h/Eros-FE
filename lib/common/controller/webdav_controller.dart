@@ -4,6 +4,8 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:executor/executor.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -37,6 +39,8 @@ const String kAESIV = '0000000000000000';
 
 class WebdavController extends GetxController {
   webdav.Client? client;
+
+  final EhConfigService _ehConfigService = Get.find();
 
   WebdavProfile get webdavProfile =>
       Global.profile.webdav ?? const WebdavProfile(url: '');
@@ -113,12 +117,25 @@ class WebdavController extends GetxController {
     return rult;
   }
 
+  late Executor webDAVExecutor;
+
+  void initExecutor() {
+    webDAVExecutor =
+        Executor(concurrency: _ehConfigService.webDAVMaxConnections);
+  }
+
+  void resetExecutorConcurrency(int concurrency) {
+    webDAVExecutor = Executor(concurrency: concurrency);
+  }
+
   @override
   void onInit() {
     super.onInit();
     if (webdavProfile.url.isNotEmpty) {
       initClient();
     }
+
+    initExecutor();
 
     syncHistory = webdavProfile.syncHistory ?? false;
     ever(_syncHistory, (bool val) {
