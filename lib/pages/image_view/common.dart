@@ -105,6 +105,7 @@ class GalleryPara {
           imageWidth: _imageFromPage?.imageWidth,
           imageHeight: _imageFromPage?.imageHeight,
           originImageUrl: _imageFromPage?.originImageUrl,
+          filename: _imageFromPage?.filename,
         );
 
         _processingSerSet.remove(_ser);

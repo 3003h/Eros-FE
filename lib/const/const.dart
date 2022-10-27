@@ -224,6 +224,8 @@ final RegExp regExpMpvThumbName = RegExp(r'[0-9a-f]{40}-(\d+)-(\d+)-(\d+)');
 
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
+  static const String appTitle = 'FEhViewer';
+
   // 网页登陆页面
   static const String URL_SIGN_IN =
       'https://forums.e-hentai.org/index.php?act=Login';

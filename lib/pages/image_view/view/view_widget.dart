@@ -1567,6 +1567,7 @@ Future<void> showSaveActionSheet(
   LoadFrom loadType = LoadFrom.gallery,
   required String? gid,
   required int? ser,
+  String? filename,
   bool isLocal = false,
 }) {
   return showCupertinoModalPopup<void>(
@@ -1590,28 +1591,29 @@ Future<void> showSaveActionSheet(
                     context: context,
                     gid: gid,
                   );
+                  showToast(L10n.of(context).saved_successfully);
                 } else if (imageUrl != null && imageUrl.isNotEmpty) {
                   await Api.saveNetworkImageToPhoto(
                     imageUrl,
                     context: context,
                     gid: gid,
                     ser: ser,
+                    filename: filename,
                   );
+                  showToast(L10n.of(context).saved_successfully);
                 } else {
                   showToast('imageUrl is null or file is null');
                 }
-
-                showToast(L10n.of(context).saved_successfully);
               },
               child: Text(L10n.of(context).resample_image),
             ),
-            if (!isLocal)
+            if (!isLocal && origImageUrl != null && origImageUrl.isNotEmpty)
               CupertinoActionSheetAction(
                 onPressed: () async {
                   logger.d('原图');
                   Get.back();
 
-                  if (origImageUrl == null || origImageUrl.isEmpty) {
+                  if (origImageUrl.isEmpty) {
                     showToast('origImageUrl is null');
                     return;
                   }
@@ -1626,6 +1628,7 @@ Future<void> showSaveActionSheet(
                       context: context,
                       gid: gid,
                       ser: ser,
+                      filename: filename,
                       progressCallback: (int count, int total) {
                         // logger.d('$count $total');
                       },
@@ -1658,6 +1661,7 @@ Future<void> showShareActionSheet(
   LoadFrom loadType = LoadFrom.gallery,
   required String? gid,
   required int? ser,
+  String? filename,
   bool isLocal = false,
 }) {
   return showCupertinoModalPopup<void>(
@@ -1687,6 +1691,7 @@ Future<void> showShareActionSheet(
                     context: context,
                     gid: gid,
                     ser: ser,
+                    filename: filename,
                   );
                 } else {
                   showToast('imageUrl is null or file is null');
@@ -1694,13 +1699,13 @@ Future<void> showShareActionSheet(
               },
               child: Text(L10n.of(context).resample_image),
             ),
-            if (!isLocal)
+            if (!isLocal && origImageUrl != null && origImageUrl.isNotEmpty)
               CupertinoActionSheetAction(
                 onPressed: () async {
                   logger.v('原图');
                   Get.back();
 
-                  if (origImageUrl == null || origImageUrl.isEmpty) {
+                  if (origImageUrl.isEmpty) {
                     showToast('origImageUrl is null');
                     return;
                   }
@@ -1715,6 +1720,7 @@ Future<void> showShareActionSheet(
                       context: context,
                       gid: gid,
                       ser: ser,
+                      filename: filename,
                       progressCallback: (int count, int total) {
                         // logger.d('$count $total');
                       },
@@ -1748,6 +1754,7 @@ Future<void> showImageSheet(
   String? filePath,
   required String? gid,
   required int? ser,
+  String? filename,
   bool isLocal = false,
 }) {
   return showCupertinoModalPopup<void>(
@@ -1777,6 +1784,7 @@ Future<void> showImageSheet(
                     origImageUrl: origImageUrl,
                     gid: gid,
                     ser: ser,
+                    filename: filename,
                     isLocal: isLocal,
                   );
                 },
@@ -1791,6 +1799,7 @@ Future<void> showImageSheet(
                     origImageUrl: origImageUrl,
                     gid: gid,
                     ser: ser,
+                    filename: filename,
                     isLocal: isLocal,
                   );
                 },

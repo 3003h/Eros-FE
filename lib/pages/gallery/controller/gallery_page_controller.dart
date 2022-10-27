@@ -581,6 +581,7 @@ class GalleryPageController extends GetxController
             imageWidth: _image.imageWidth,
             imageHeight: _image.imageHeight,
             originImageUrl: _image.originImageUrl,
+            filename: _image.filename,
             changeSource: changeSource,
             errorInfo: '',
             tempPath: '',

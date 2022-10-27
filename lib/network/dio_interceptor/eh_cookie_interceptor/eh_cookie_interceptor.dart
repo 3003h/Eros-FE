@@ -9,8 +9,9 @@ class EhCookieInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     try {
-      final cookiesString =
-          options.headers[HttpHeaders.cookieHeader] as String? ?? 'nw=1';
+      final cookieHeader =
+          options.headers[HttpHeaders.cookieHeader] as String? ?? '';
+      final cookiesString = cookieHeader.isNotEmpty ? cookieHeader : 'nw=1';
       logger.v('${options.uri} befor checkCookies:$cookiesString');
       final _cookies = cookiesString
           .split(';')

@@ -98,6 +98,8 @@ PODS:
     - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
+  - image_save (0.0.1):
+    - Flutter
   - isar_flutter_libs (1.0.0):
     - Flutter
   - learning_language (0.0.2):
@@ -202,6 +204,7 @@ DEPENDENCIES:
   - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
   - image_gallery_saver (from `.symlinks/plugins/image_gallery_saver/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - image_save (from `.symlinks/plugins/image_save/ios`)
   - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
   - learning_language (from `.symlinks/plugins/learning_language/ios`)
   - local_auth_ios (from `.symlinks/plugins/local_auth_ios/ios`)
@@ -272,6 +275,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_gallery_saver/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  image_save:
+    :path: ".symlinks/plugins/image_save/ios"
   isar_flutter_libs:
     :path: ".symlinks/plugins/isar_flutter_libs/ios"
   learning_language:
@@ -336,7 +341,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
-  isar_flutter_libs: bfb66f35a1fa9db9ec96b93539a03329ce147738
+  image_save: 66ab41fa2c60bc9569e55563ea287cced7b79fd1
+  isar_flutter_libs: bc88affa0adeeb8800ffd2ca0177669dc18cd201
   learning_language: 6484df8f93ad53c63134d8dc658bc39998c19b36
   local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4

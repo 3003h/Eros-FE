@@ -255,6 +255,7 @@ Future<GalleryImage> _fetchImageInfo(
     imageWidth: _image.imageWidth,
     imageHeight: _image.imageHeight,
     originImageUrl: _image.originImageUrl,
+    filename: _image.filename,
   );
 
   return _imageCopyWith;

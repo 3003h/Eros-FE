@@ -111,6 +111,7 @@ class ImagePhotoView extends GetView<ViewExtController> {
               title: '${vState.pageState?.title} [$imageSer]',
               gid: vState.gid,
               ser: imageSer,
+              filename: _currentImage?.filename,
               isLocal: vState.loadFrom == LoadFrom.download ||
                   vState.loadFrom == LoadFrom.archiver,
             );

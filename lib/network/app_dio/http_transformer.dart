@@ -161,7 +161,8 @@ class GalleryImageHttpTransformer extends HttpTransformer {
       Response<dynamic> response) async {
     final html = response.data as String;
     // 使用 compute 方式会内部的 EhError 无法正常抛出
-    final GalleryImage image = await compute(paraImage, html);
+    // final GalleryImage image = await compute(paraImage, html);
+    final GalleryImage image = paraImage(html);
     // throw EhError(type: EhErrorType.image509);
     if (image.imageUrl!.endsWith('/509.gif') ||
         image.imageUrl!.endsWith('/509s.gif')) {

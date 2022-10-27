@@ -408,6 +408,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 title: '${vState.pageState?.title} [${widget.imageSer}]',
                 ser: widget.imageSer,
                 gid: vState.pageState?.gid,
+                filename: _currentImage?.filename,
                 isLocal: vState.loadFrom == LoadFrom.download ||
                     vState.loadFrom == LoadFrom.archiver,
               );

@@ -86,7 +86,7 @@ Future<bool> requestPhotosPermission({
         if (await Permission.photosAddOnly.request().isGranted ||
             await Permission.photosAddOnly.request().isLimited) {
           return await Permission.photosAddOnly.status.isGranted ||
-              await Permission.photos.status.isLimited;
+              await Permission.photosAddOnly.status.isLimited;
         } else {
           throw EhError(error: 'Unable to download, please authorize first~');
         }
