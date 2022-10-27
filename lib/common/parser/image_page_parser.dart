@@ -20,10 +20,11 @@ GalleryImage paraImage(String htmlText) {
   // logger.d('largeImageUrl $imageUrl');
 
   final Element? elmI2 = document.querySelector('#i2 > div:nth-child(1)');
-  final RegExpMatch? _xy =
-      RegExp(r'::\s+(\d+)\s+x\s+(\d+)(\s+::)?').firstMatch(elmI2?.text ?? '');
-  final double? width = _xy != null ? double.parse(_xy.group(1)!) : null;
-  final double? height = _xy != null ? double.parse(_xy.group(2)!) : null;
+  final RegExpMatch? _xy = RegExp(r'(\S+)\s+::\s+(\d+)\s+x\s+(\d+)(\s+::)?')
+      .firstMatch(elmI2?.text ?? '');
+  final String? filename = _xy != null ? _xy.group(1)?.trim() : null;
+  final double? width = _xy != null ? double.parse(_xy.group(2)!) : null;
+  final double? height = _xy != null ? double.parse(_xy.group(3)!) : null;
 
   final String _sourceId = RegExp(r"nl\('(.*?)'\)")
           .firstMatch(
@@ -67,6 +68,7 @@ GalleryImage paraImage(String htmlText) {
     token: token,
     ser: ser,
     originImageUrl: originImageUrl,
+    filename: filename,
   );
 
   return _reImage;

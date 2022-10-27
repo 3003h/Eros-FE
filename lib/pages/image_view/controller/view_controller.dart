@@ -869,6 +869,7 @@ class ViewExtController extends GetxController {
         filePath: p?.filePath,
         gid: vState.gid,
         ser: ser,
+        filename: p?.filename,
       );
     } else {
       logger.d('share localFile');
@@ -895,6 +896,7 @@ class ViewExtController extends GetxController {
         filePath: p?.filePath,
         gid: vState.gid,
         ser: ser,
+        filename: p?.filename,
       );
     } else {
       logger.d('save localFile');

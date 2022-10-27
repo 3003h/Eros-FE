@@ -18,6 +18,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_save/image_save.dart';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
 
@@ -481,6 +482,7 @@ class Api {
     String imageUrl, {
     required String? gid,
     required int? ser,
+    String? fileName,
     ProgressCallback? progressCallback,
   }) async {
     String? saveDir;
@@ -511,18 +513,25 @@ class Api {
           progressCallback: progressCallback,
           url: imageUrl,
           savePath: (Headers headers) {
-            logger.d(headers);
+            logger.d('headers:\n$headers');
             final contentDisposition = headers.value('content-disposition');
+            logger.d('contentDisposition $contentDisposition');
             final filename = contentDisposition
                     ?.split(RegExp(r"filename(=|\*=UTF-8'')"))
                     .last ??
                 '';
             final fileNameDecode =
                 Uri.decodeFull(filename).replaceAll('/', '_');
-            logger.d(fileNameDecode);
-            realSavePath = saveDir != null
-                ? path.join(saveDir, fileNameDecode)
-                : path.join(Global.tempPath, gid ?? '0', fileNameDecode);
+            logger.d('fileNameDecode: $fileNameDecode, fileName: $fileName');
+            if (fileNameDecode.isEmpty) {
+              realSavePath = path.join(
+                  saveDir ?? path.join(Global.tempPath, gid ?? '0'), fileName);
+            } else {
+              realSavePath = saveDir != null
+                  ? path.join(saveDir, fileNameDecode)
+                  : path.join(Global.tempPath, gid ?? '0', fileNameDecode);
+            }
+
             return realSavePath;
           });
     } else {
@@ -537,28 +546,29 @@ class Api {
     String imageUrl, {
     required String? gid,
     required int? ser,
+    String? filename,
     ProgressCallback? progressCallback,
     BuildContext? context,
   }) async {
     logger.d('imageUrl $imageUrl');
 
     // 权限检查
-    final permission =
-        await requestPhotosPermission(context: context, addOnly: true);
-    if (!permission) {
-      throw EhError(error: 'Permission denied');
-    }
+    // final permission =
+    //     await requestPhotosPermission(context: context, addOnly: true);
+    // if (!permission) {
+    //   throw EhError(error: 'Permission denied');
+    // }
 
     logger.d('开始下载图片');
 
     io.File? file;
-    late String fileName;
+    late String realFileName;
 
     // 从缓存中获取
     file = await getCachedImageFile(imageUrl);
 
     if (file != null) {
-      fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+      realFileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
     } else {
       // 无缓存下载
       logger.d('无缓存下载');
@@ -566,23 +576,37 @@ class Api {
         imageUrl,
         gid: gid,
         ser: ser,
-        progressCallback: progressCallback,
+        fileName: filename,
+        progressCallback: (count, total) {
+          logger.d('count $count, total $total');
+          progressCallback?.call(count, total);
+        },
       );
       file = io.File(savePath);
-      fileName = path.basename(savePath);
+      realFileName = path.basename(savePath);
     }
 
-    fileName = fileName.replaceAll('/', '_');
+    realFileName = realFileName.replaceAll('/', '_');
     if (gid != null) {
-      fileName = '$gid-$fileName';
+      realFileName = '$gid-$realFileName';
     }
-    logger.d('保存图片到相册 $fileName');
+    logger.d('保存图片到相册 $realFileName lengthSync:${file.lengthSync()}');
 
     try {
-      final result = await ImageGallerySaver.saveFile(file.path,
-          name: fileName, isReturnPathOfIOS: true);
-      logger.d('${result.runtimeType} $result');
-      if (result == null || result == '') {
+      // final result =
+      //     await ImageGallerySaver.saveFile(file.path, name: realFileName);
+      // logger.d('${result.runtimeType} $result');
+      // if (result == null || result == '') {
+      //   throw EhError(error: 'Save image fail');
+      // }
+
+      final result = await ImageSave.saveImage(
+        file.readAsBytesSync(),
+        realFileName,
+        albumName: EHConst.appTitle,
+        overwriteSameNameFile: false,
+      );
+      if (result == null || !result) {
         throw EhError(error: 'Save image fail');
       }
     } catch (e, s) {
@@ -595,6 +619,7 @@ class Api {
     String imageUrl, {
     required String? gid,
     required int? ser,
+    String? filename,
     ProgressCallback? progressCallback,
     BuildContext? context,
   }) async {
@@ -602,15 +627,15 @@ class Api {
     logger.d('开始下载图片');
 
     io.File? file;
-    late String fileName;
+    late String realFileName;
 
     // 从缓存中获取
     file = await getCachedImageFile(imageUrl);
 
     if (file != null) {
-      fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-      logger.d('fileName $fileName');
-      file = file.copySync(path.join(Global.tempPath, fileName));
+      realFileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+      logger.d('realFileName $realFileName');
+      file = file.copySync(path.join(Global.tempPath, realFileName));
     } else {
       // 无缓存下载
       logger.d('无缓存下载');
@@ -618,20 +643,21 @@ class Api {
         imageUrl,
         gid: gid,
         ser: ser,
+        fileName: filename,
         progressCallback: progressCallback,
       );
       logger.d('realSavePath $realSavePath');
       file = io.File(realSavePath);
 
-      fileName = path.basename(file.path);
+      realFileName = path.basename(file.path);
     }
 
-    fileName = fileName.replaceAll('/', '_');
+    realFileName = realFileName.replaceAll('/', '_');
     if (gid != null) {
-      fileName = '$gid-$fileName';
+      realFileName = '$gid-$realFileName';
     }
 
-    await Share.shareXFiles([XFile(file.path)], subject: fileName);
+    await Share.shareXFiles([XFile(file.path)], subject: realFileName);
   }
 
   // 保存本地图片到相册

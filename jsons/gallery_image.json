@@ -23,5 +23,6 @@
   "checkHide?": false,
   "downloadProcess?": 1.0,
   "errorInfo?": "",
-  "tempPath?": ""
+  "tempPath?": "",
+  "filename?": ""
 }
