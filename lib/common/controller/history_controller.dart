@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:executor/executor.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -29,8 +28,6 @@ class HistoryController extends GetxController {
 
   final thrSync = Throttling(duration: const Duration(seconds: 60));
   final debSync = Debouncing(duration: const Duration(seconds: 80));
-
-  final executor = Executor(concurrency: 1);
 
   bool get isListView =>
       _ehConfigService.listMode.value == ListModeEnum.list ||
@@ -263,8 +260,9 @@ class HistoryController extends GetxController {
   }
 
   Future _downloadHistorys(List<HistoryIndexGid> hisList) async {
+    webdavController.initExecutor();
     for (final gid in hisList) {
-      executor.scheduleTask(() async {
+      webdavController.webDAVExecutor.scheduleTask(() async {
         if (gid.g != null) {
           final _image =
               await webdavController.downloadHistory('${gid.g!}_${gid.t}');
@@ -280,15 +278,16 @@ class HistoryController extends GetxController {
       });
     }
 
-    await executor.join(withWaiting: true);
+    await webdavController.webDAVExecutor.join(withWaiting: true);
   }
 
   Future _uploadHistorys(
     List<HistoryIndexGid?> localHisList, {
     List<HistoryIndexGid?>? listRemote,
   }) async {
+    webdavController.initExecutor();
     for (final his in localHisList) {
-      executor.scheduleTask(() async {
+      webdavController.webDAVExecutor.scheduleTask(() async {
         final GalleryProvider? _his =
             historys.firstWhereOrNull((element) => element.gid == his?.g);
 
@@ -302,7 +301,7 @@ class HistoryController extends GetxController {
         }
       });
     }
-    await executor.join(withWaiting: true);
+    await webdavController.webDAVExecutor.join(withWaiting: true);
   }
 
   // Future<void> _uploadHistoryIndex(List<HistoryIndexGid?> gids) async {

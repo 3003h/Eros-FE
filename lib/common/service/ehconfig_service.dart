@@ -1,4 +1,5 @@
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -249,9 +250,24 @@ class EhConfigService extends ProfileService {
   String get proxyPassword => _proxyPassword.value;
   set proxyPassword(String val) => _proxyPassword.value = val;
 
+  // webDAVMaxConnections
+  final _webDAVMaxConnections = 3.obs;
+  int get webDAVMaxConnections => _webDAVMaxConnections.value;
+  set webDAVMaxConnections(int val) => _webDAVMaxConnections.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    // webDAVMaxConnections
+    webDAVMaxConnections =
+        ehConfig.webDAVMaxConnections ?? webDAVMaxConnections;
+    everProfile<int>(_webDAVMaxConnections, (value) {
+      if (Get.isRegistered<WebdavController>()) {
+        Get.find<WebdavController>().resetExecutorConcurrency(value);
+      }
+      ehConfig = ehConfig.copyWith(webDAVMaxConnections: value);
+    });
 
     proxyType =
         EnumToString.fromString(ProxyType.values, ehConfig.proxyType ?? '') ??

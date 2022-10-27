@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/webview/mode.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../component/setting_base.dart';
+import 'setting_items/selector_Item.dart';
 
 class AdvancedSettingPage extends StatelessWidget {
   const AdvancedSettingPage({Key? key}) : super(key: key);
@@ -111,15 +113,16 @@ class ListViewAdvancedSetting extends StatelessWidget {
           )),
       const ItemSpace(),
       Obx(() => SelectorSettingItem(
-        title: L10n.of(context).proxy,
-        selector: getProxyTypeModeMap(context)[_ehConfigService.proxyType] ?? '',
-        onTap: () {
-          Get.toNamed(
-            EHRoutes.proxySeting,
-            id: isLayoutLarge ? 2 : null,
-          );
-        },
-      )),
+            title: L10n.of(context).proxy,
+            selector:
+                getProxyTypeModeMap(context)[_ehConfigService.proxyType] ?? '',
+            onTap: () {
+              Get.toNamed(
+                EHRoutes.proxySeting,
+                id: isLayoutLarge ? 2 : null,
+              );
+            },
+          )),
       TextSwitchItem(
         L10n.of(context).domain_fronting,
         intValue: _dnsService.enableDomainFronting,
@@ -153,6 +156,9 @@ class ListViewAdvancedSetting extends StatelessWidget {
       //   desc: '优先级低于自定义hosts',
       // ),
       const ItemSpace(),
+      // webDAVMaxConnections
+      _buildWebDAVMaxConnectionsItem(context, hideDivider: true),
+      const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).vibrate_feedback,
         intValue: _ehConfigService.vibrate.value,
@@ -184,4 +190,24 @@ class ListViewAdvancedSetting extends StatelessWidget {
       },
     );
   }
+}
+
+Widget _buildWebDAVMaxConnectionsItem(BuildContext context,
+    {bool hideDivider = false}) {
+  final String _title = 'WebDAV Max Connections';
+  final EhConfigService ehConfigService = Get.find();
+
+  // map from EHConst.webDAVConnections
+  final Map<int, String> actionMap = Map.fromEntries(
+      EHConst.webDAVConnections.map((e) => MapEntry(e, e.toString())));
+
+  return Obx(() {
+    return SelectorItem<int>(
+      title: _title,
+      hideDivider: hideDivider,
+      actionMap: actionMap,
+      initVal: ehConfigService.webDAVMaxConnections,
+      onValueChanged: (val) => ehConfigService.webDAVMaxConnections = val,
+    );
+  });
 }
