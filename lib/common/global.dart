@@ -9,7 +9,6 @@ import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
-import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/store/db/isar_helper.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
@@ -27,8 +26,6 @@ import 'package:package_info/package_info.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:system_network_proxy/system_network_proxy.dart';
-
-import 'package:system_proxy/system_proxy.dart';
 
 const int kProxyPort = 4041;
 
@@ -228,14 +225,15 @@ class Global {
   static void _initProfile() {
     final GStore gStore = Get.find<GStore>();
     // logger.v('profile\n${jsonEncode(gStore.profile.webdav)}');
-    profile = gStore.profile;
+    profile = hiveHelper.profile ?? gStore.profile;
   }
 
   // 持久化Profile信息
   static void saveProfile() {
     // logger.d(profile.toJson());
-    final GStore gStore = Get.find<GStore>();
-    gStore.profile = profile;
+    // final GStore gStore = Get.find<GStore>();
+    // gStore.profile = profile;
+    hiveHelper.profile = profile;
   }
 
   static void _checkReset() {

@@ -83,6 +83,7 @@ class QuickSearchListPage extends StatelessWidget {
               CupertinoDialogAction(
                 onPressed: () async {
                   Get.back();
+                  logger.d('Export');
                   try {
                     final _tempFilePath = await _writeFile();
                     await requestManageExternalStoragePermission();

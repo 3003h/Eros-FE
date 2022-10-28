@@ -120,7 +120,7 @@ class CuttomHostItem extends StatelessWidget {
     return Container(
       child: TextItem(
         host,
-        desc: addr,
+        subTitle: addr,
         onTap: () {
           showCustomHostEditer(context, index: index);
         },

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:fehviewer/common/controller/webdav_controller.dart';
+import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -36,7 +37,7 @@ class GalleryCacheController extends GetxController {
     String gid, {
     bool sync = true,
   }) async* {
-    final _localCache = gStore.getCache(gid);
+    final _localCache = hiveHelper.getCache(gid) ?? gStore.getCache(gid);
 
     if (!gCacheMap.containsKey(gid) && _localCache != null) {
       logger.d('get from store');
@@ -87,7 +88,8 @@ class GalleryCacheController extends GetxController {
       final _newCache = GalleryCache(gid: gid, lastIndex: index, time: _time);
       gCacheMap[gid] = _newCache;
       if (saveToStore) {
-        gStore.saveCache(_newCache);
+        // gStore.saveCache(_newCache);
+        hiveHelper.saveCache(_newCache);
         if (webdavController.syncReadProgress) {
           debSync.debounce(() => webdavController.uploadRead(_newCache));
         }
@@ -96,7 +98,8 @@ class GalleryCacheController extends GetxController {
       final _newCache = _ori.copyWith(lastIndex: index, time: _time);
       gCacheMap[gid] = _newCache;
       if (saveToStore) {
-        gStore.saveCache(_newCache);
+        // gStore.saveCache(_newCache);
+        hiveHelper.saveCache(_newCache);
         if (webdavController.syncReadProgress) {
           debSync.debounce(() => webdavController.uploadRead(_newCache));
         }
@@ -108,7 +111,8 @@ class GalleryCacheController extends GetxController {
     logger.v(
         'save All GalleryCache \n${gCacheMap.entries.map((e) => jsonEncode(e.value)).join('\n')}');
     gCacheMap.forEach((key, value) {
-      gStore.saveCache(value);
+      // gStore.saveCache(value);
+      hiveHelper.saveCache(value);
     });
   }
 
@@ -116,10 +120,12 @@ class GalleryCacheController extends GetxController {
     final GalleryCache? _ori = await listenGalleryCache(gid, sync: false).first;
     if (_ori == null) {
       gCacheMap[gid] = GalleryCache(gid: gid).copyWithMode(columnMode);
-      gStore.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));
+      // gStore.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));
+      hiveHelper.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));
     } else {
       gCacheMap[gid] = _ori.copyWithMode(columnMode);
-      gStore.saveCache(_ori.copyWithMode(columnMode));
+      // gStore.saveCache(_ori.copyWithMode(columnMode));
+      hiveHelper.saveCache(_ori.copyWithMode(columnMode));
     }
   }
 

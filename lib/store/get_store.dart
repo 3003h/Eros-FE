@@ -23,6 +23,7 @@ class GStore {
     await _getStore('Download').initStorage;
   }
 
+  @Deprecated('use hive')
   GalleryCache? getCache(String gid) {
     final val = ReadWriteValue(gid, '', _cacheStore).val;
     return val.isNotEmpty
@@ -30,17 +31,20 @@ class GStore {
         : null;
   }
 
+  @Deprecated('use hive')
   void saveCache(GalleryCache cache) {
     if (cache.gid != null) {
       ReadWriteValue(cache.gid!, '', _cacheStore).val = jsonEncode(cache);
     }
   }
 
+  @Deprecated('use [Global.profile]')
   set tabConfig(TabConfig? tabConfig) {
     logger.d('set tabConfig ${tabConfig?.toJson()}');
     ReadWriteValue('tabConfig', '', _profileStore).val = jsonEncode(tabConfig);
   }
 
+  @Deprecated('use [Global.profile]')
   TabConfig? get tabConfig {
     final String val =
         ReadWriteValue('tabConfig', '{"tab_item_list": []}', _profileStore).val;
@@ -53,6 +57,7 @@ class GStore {
         : null;
   }
 
+  @Deprecated('hive archiverTaskMap')
   set archiverTaskMap(Map<String, DownloadArchiverTaskInfo>? taskInfoMap) {
     logger.v('set archiverDlMap \n'
         '${taskInfoMap?.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
@@ -65,14 +70,13 @@ class GStore {
         jsonEncode(taskInfoMap.entries.map((e) => e.value).toList());
   }
 
+  @Deprecated('hive archiverTaskMap')
   Map<String, DownloadArchiverTaskInfo>? get archiverTaskMap {
     final val = ReadWriteValue('archiverTaskMap', '', _downloadStore).val;
 
     if (val.isEmpty) {
       return null;
     }
-
-    // logger.d('get archiverDlMap ${jsonDecode(val)}');
     final _map = <String, DownloadArchiverTaskInfo>{};
     for (final dynamic dlItemJson in jsonDecode(val) as List<dynamic>) {
       final _takInfo =
@@ -85,28 +89,7 @@ class GStore {
     return _map;
   }
 
-  set searchHistory(List<String> val) {
-    // logger.d('set searchHistory ${val.join(',')}');
-    ReadWriteValue('searchHistory', '', _hisStore).val = jsonEncode(val);
-  }
-
-  List<String> get searchHistory {
-    final String val = ReadWriteValue('searchHistory', '', _hisStore).val;
-
-    // logger.d('get searchHistory $val');
-
-    final List<String> rult = <String>[];
-    if (val.trim().isEmpty) {
-      return rult;
-    }
-    for (final dynamic his in jsonDecode(val) as List<dynamic>) {
-      final String _his = his as String;
-      rult.add(_his);
-    }
-
-    return rult;
-  }
-
+  @Deprecated('use hive')
   Profile get profile {
     final String val = ReadWriteValue('profile', '{}', _profileStore).val;
     final Profile _profileObj =
@@ -132,20 +115,8 @@ class GStore {
     return _profile;
   }
 
+  @Deprecated('use hive')
   set profile(Profile val) {
     ReadWriteValue('profile', '{}', _profileStore).val = jsonEncode(val);
-  }
-
-  List<GalleryProvider> get historys {
-    final String val = ReadWriteValue('galleryHistory', '[]', _hisStore).val;
-    final List<GalleryProvider> _his = (jsonDecode(val) as List)
-        .map((e) => GalleryProvider.fromJson(e as Map<String, dynamic>))
-        .toList();
-    return _his;
-  }
-
-  set historys(List<GalleryProvider> val) {
-    // logger.d('set his ${jsonEncode(val)}');
-    ReadWriteValue('galleryHistory', '{}', _hisStore).val = jsonEncode(val);
   }
 }

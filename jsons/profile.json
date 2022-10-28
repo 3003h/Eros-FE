@@ -13,5 +13,6 @@
   "autoLock": "$auto_lock",
   "webdav?": "$webdav_profile",
   "favConfig?": "$fav_config",
-  "customTabConfig?": "$custom_tab_config"
+  "customTabConfig?": "$custom_tab_config",
+  "tabConfig?": "$tab_config"
 }
