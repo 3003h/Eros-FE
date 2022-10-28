@@ -26,14 +26,20 @@ class QueueTask {
     _exec();
   }
 
-  void cancle(String taskName) {}
+  void cancel(String taskName) {}
 
   Future<void> _exec() async {
-    if (_taskCount >= maxThread) return;
-    if (_queue.isEmpty) return;
+    if (_taskCount >= maxThread) {
+      return;
+    }
+    if (_queue.isEmpty) {
+      return;
+    }
 
     for (int i = 0; i < maxThread; i++) {
-      if (_queue.isEmpty) continue;
+      if (_queue.isEmpty) {
+        continue;
+      }
 
       _TaskInfo _taskInfo = _queue.removeFirst();
       if (_taskInfo.taskCancelToken != null &&
