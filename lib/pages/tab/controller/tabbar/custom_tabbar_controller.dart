@@ -129,6 +129,8 @@ class CustomTabbarController extends DefaultTabViewController {
       Get.lazyPut(() => CustomSubListController(profileUuid: profile.uuid),
           tag: profile.uuid);
     }
+
+    syncProfiles();
   }
 
   @override
@@ -215,6 +217,8 @@ class CustomTabbarController extends DefaultTabViewController {
     await 200.milliseconds.delay();
     pageController.jumpToPage(index);
     linkScrollBarController.scrollToItem(index);
+
+    syncProfiles();
   }
 
   // 删除分组配置
@@ -227,8 +231,11 @@ class CustomTabbarController extends DefaultTabViewController {
 
     addDelProfile(profiles.firstWhere((element) => element.uuid == uuid));
     profiles.removeWhere((element) => element.uuid == uuid);
+
+    syncProfiles();
   }
 
+  // 添加到已删除列表 记录删除时间
   void addDelProfile(CustomProfile profile) {
     final nowTime = DateTime.now().millisecondsSinceEpoch;
     final _index = delProfiles.indexOf((e) => e.name == profile.name);
@@ -306,7 +313,7 @@ class CustomTabbarController extends DefaultTabViewController {
     logger.v('${jsonEncode(listLocal)} ');
 
     // 下载远程文件名列表 包含： 分组名 uuid 时间戳
-    final listRemote = await webdavController.getRemotGroupList();
+    final listRemote = await webdavController.getRemoteGroupList();
     // 远程列表为空 直接上传本地所有分组
     if (listRemote.isEmpty) {
       await _uploadProfiles(listLocal);
@@ -319,8 +326,10 @@ class CustomTabbarController extends DefaultTabViewController {
     // 合并列表
     final allProfile = <CustomProfile?>{...listRemote, ...listLocal};
     final diff = allProfile
-        .where((element) =>
-            !listRemote.contains(element) || !listLocal.contains(element))
+        .where(
+          (CustomProfile? element) =>
+              !listRemote.contains(element) || !listLocal.contains(element),
+        )
         .toList()
         .toSet();
     logger.v('diff ${diff.map((e) => e?.toJson())}');
@@ -399,7 +408,7 @@ class CustomTabbarController extends DefaultTabViewController {
 
         if (profile != null) {
           final upload = webdavController.uploadGroupProfile(profile);
-          final delete = webdavController.deleteRemotGroup(_oriRemote);
+          final delete = webdavController.deleteRemoteGroup(_oriRemote);
           await Future.wait([upload, delete]);
         }
       });

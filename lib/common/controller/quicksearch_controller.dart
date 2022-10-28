@@ -41,10 +41,14 @@ class QuickSearchController extends ProfileController {
 
     final _rs = await webdavController.downloadQuickSearch(_remoteTimes.max);
     final remoteTime = _rs?.item2 ?? 0;
+    final remoteList = _rs?.item1 ?? <String>[];
+    logger.d(
+        '远程时间 $remoteTime, 本地最后更新时间 $lastEditTime, 需要下载: ${remoteTime > lastEditTime}');
     // 远程时间大于等于本地最后编辑时间 下载远程数据
     if (remoteTime >= lastEditTime) {
-      _rs?.item1.forEach((e) => addText(e, silent: true));
+      remoteList.forEach((e) => addText(e, silent: true));
     } else {
+      // 上传本地数据
       await webdavController.uploadQuickSearch(searchTextList, lastEditTime);
       for (final time in _remoteTimes) {
         await webdavController.deleteQuickSearch(time);
@@ -64,9 +68,11 @@ class QuickSearchController extends ProfileController {
 
     everProfile<List<String>>(searchTextList, (List<String> value) {
       Global.profile = Global.profile.copyWith(searchText: value);
-      lastEditTime = DateTime.now().millisecondsSinceEpoch;
-      logger.d('lastEditTime: $lastEditTime');
-      hiveHelper.setQuickSearchLastEditTime(lastEditTime);
+      if (value.isNotEmpty) {
+        lastEditTime = DateTime.now().millisecondsSinceEpoch;
+        logger.d('最后更新时间: $lastEditTime');
+        hiveHelper.setQuickSearchLastEditTime(lastEditTime);
+      }
     });
 
     debounce<List<String>>(searchTextList, (List<String> value) {
