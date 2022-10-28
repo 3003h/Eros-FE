@@ -7,13 +7,13 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:flutter_socks_proxy/socks_proxy.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
@@ -75,6 +75,19 @@ class AppDio with DioMixin implements Dio {
       maxWidth: 120,
       // logPrint: kDebugMode ? loggerSimple.d : loggerSimpleOnlyFile.d,
       logPrint: loggerSimpleOnlyFile.d,
+    ));
+
+    // RetryInterceptor
+    interceptors.add(RetryInterceptor(
+      dio: this,
+      logPrint: logger.d, // specify log function (optional)
+      retries: 3, // retry count (optional)
+      retryDelays: const [
+        // set delays between retries (optional)
+        Duration(seconds: 1), // wait 1 sec before first retry
+        Duration(seconds: 2), // wait 2 sec before second retry
+        Duration(seconds: 3), // wait 3 sec before third retry
+      ],
     ));
 
     if (dioConfig?.interceptors?.isNotEmpty ?? false) {
