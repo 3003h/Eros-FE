@@ -78,12 +78,6 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _controller.scrollController?.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final dynamic tabTag = pageState.galleryRepository?.tabTag;
     final GalleryProvider? galleryProvider = pageState.galleryProvider;

@@ -995,6 +995,8 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           Get.back(
             id: isLayoutLarge ? 2 : null,
           );
+
+          Get.find<CustomTabbarController>().syncProfiles();
         },
         child: Text(
           L10n.of(context).done,

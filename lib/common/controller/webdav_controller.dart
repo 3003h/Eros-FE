@@ -38,7 +38,8 @@ const String kAESKey = 'fehviewer is very good!!';
 const String kAESIV = '0000000000000000';
 
 class WebdavController extends GetxController {
-  webdav.Client? client;
+  webdav.Client? _client;
+  webdav.Client get client => _client ?? initClient();
 
   final EhConfigService _ehConfigService = Get.find();
 
@@ -107,14 +108,14 @@ class WebdavController extends GetxController {
     }
 
     loadingLogin = true;
-    final rult = await addWebDAVProfile(
+    final result = await addWebDAVProfile(
       urlController.text,
       user: usernameController.text,
       pwd: passwdController.text,
     );
 
     loadingLogin = false;
-    return rult;
+    return result;
   }
 
   late Executor webDAVExecutor;
@@ -167,12 +168,17 @@ class WebdavController extends GetxController {
   }
 
   void closeClient() {
-    client = null;
+    syncGroupProfile = false;
+    syncHistory = false;
+    syncReadProgress = false;
+    syncQuickSearch = false;
+
+    _client = null;
   }
 
-  void initClient() {
+  webdav.Client initClient() {
     logger.v('initClient');
-    client = webdav.newClient(
+    _client = webdav.newClient(
       webdavProfile.url,
       user: webdavProfile.user ?? '',
       password: webdavProfile.password ?? '',
@@ -180,16 +186,16 @@ class WebdavController extends GetxController {
     );
 
     // Set the public request headers
-    client?.setHeaders({'accept-charset': 'utf-8'});
+    _client!.setHeaders({'accept-charset': 'utf-8'});
 
     // Set the connection server timeout time in milliseconds.
-    client?.setConnectTimeout(8000);
+    _client!.setConnectTimeout(8000);
 
     // Set send data timeout time in milliseconds.
-    client?.setSendTimeout(8000);
+    _client!.setSendTimeout(8000);
 
     // Set transfer data time in milliseconds.
-    client?.setReceiveTimeout(8000);
+    _client!.setReceiveTimeout(8000);
 
     checkDir(dir: kHistoryDtlDirPath)
         .then((value) => checkDir(dir: kHistoryDelDirPath))
@@ -198,19 +204,18 @@ class WebdavController extends GetxController {
         .then((value) => checkDir(dir: kSearchDirPath));
 
     validAccount = webdavProfile.user?.isNotEmpty ?? false;
+
+    return _client!;
   }
 
   Future<void> checkDir({String dir = kDirPath}) async {
-    if (client == null) {
-      return;
-    }
     try {
-      final list = await client!.readDir(dir);
+      final list = await client.readDir(dir);
       logger.v('$dir\n${list.map((e) => '${e.name} ${e.mTime}').join('\n')}');
     } on DioError catch (err) {
       if (err.response?.statusCode == 404) {
         logger.d('dir $dir 404, mkdir...');
-        await client!.mkdirAll(dir);
+        await client.mkdirAll(dir);
       }
     }
   }
@@ -222,11 +227,8 @@ class WebdavController extends GetxController {
     return 'fe_his_index_$_fileName';
   }
 
-  Future<List<String>> getRemotFileList() async {
-    if (client == null) {
-      return [];
-    }
-    final list = await client!.readDir(kHistoryDtlDirPath);
+  Future<List<String>> getRemoteFileList() async {
+    final list = await client.readDir(kHistoryDtlDirPath);
     final names = list.map((e) => e.name).toList();
     final _list = <String>[];
     for (final name in names) {
@@ -238,10 +240,7 @@ class WebdavController extends GetxController {
   }
 
   Future<List<String>> getRemotDeleteList() async {
-    if (client == null) {
-      return [];
-    }
-    final list = await client!.readDir(kHistoryDelDirPath);
+    final list = await client.readDir(kHistoryDelDirPath);
     final names = list.map((e) => e.name).toList();
     final _list = <String>[];
     for (final name in names) {
@@ -253,17 +252,11 @@ class WebdavController extends GetxController {
   }
 
   Future updateRemoveFlg(String gid) async {
-    if (client == null) {
-      return;
-    }
-    await client!.write('$kHistoryDelDirPath/$gid', Uint8List.fromList([]));
+    await client.write('$kHistoryDelDirPath/$gid', Uint8List.fromList([]));
   }
 
   Future<List<HistoryIndexGid>> getRemoteHistoryList() async {
-    if (client == null) {
-      return [];
-    }
-    final list = await client!.readDir(kHistoryDtlDirPath);
+    final list = await client.readDir(kHistoryDtlDirPath);
     final hisObjs = list.map((e) {
       final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
       final gid = name?.split('_')[0];
@@ -287,9 +280,6 @@ class WebdavController extends GetxController {
 
   // 上传历史记录
   Future<void> uploadHistory(GalleryProvider his) async {
-    if (client == null) {
-      return;
-    }
     logger.v('uploadHistory');
     final _path = path.join(Global.tempPath, his.gid);
     final File _file = File(_path);
@@ -306,7 +296,7 @@ class WebdavController extends GetxController {
       logger.v('encrypted.base64 ${encrypted.base64}');
       _file.writeAsStringSync(encrypted.base64);
 
-      await client!.writeFromFile(
+      await client.writeFromFile(
           _path, '$kHistoryDtlDirPath/${his.gid}_${his.lastViewTime}.json');
     } on DioError catch (err) {
       logger.d('${err.response?.statusCode}');
@@ -324,13 +314,10 @@ class WebdavController extends GetxController {
 
   // 下载历史记录
   Future<GalleryProvider?> downloadHistory(String fileName) async {
-    if (client == null) {
-      return null;
-    }
     logger.v('downloadHistory');
     final _path = path.join(Global.tempPath, fileName);
     try {
-      await client!.read2File('$kHistoryDtlDirPath/$fileName.json', _path);
+      await client.read2File('$kHistoryDtlDirPath/$fileName.json', _path);
       final File _file = File(_path);
       if (!_file.existsSync()) {
         return null;
@@ -364,10 +351,6 @@ class WebdavController extends GetxController {
 
   // 上传进度
   Future<void> uploadRead(GalleryCache read) async {
-    if (client == null) {
-      return;
-    }
-
     if (read.gid == null || read.gid!.isEmpty) {
       logger.e('uploadRead gid is null');
       return;
@@ -387,7 +370,7 @@ class WebdavController extends GetxController {
     _file.writeAsStringSync(encrypted.base64);
 
     try {
-      await client!.writeFromFile(_path, '$kReadDirPath/${read.gid}.json');
+      await client.writeFromFile(_path, '$kReadDirPath/${read.gid}.json');
     } on DioError catch (err) {
       logger.d('${err.response?.statusCode}');
       if (err.response?.statusCode == 404) {
@@ -403,14 +386,11 @@ class WebdavController extends GetxController {
 
   // 下载进度
   Future<GalleryCache?> downloadRead(String gid) async {
-    if (client == null) {
-      return null;
-    }
     logger.d('downloadRead');
     chkTempDir(kLocalReadDirPath);
     final _path = path.join(Global.tempPath, 'read', gid);
     try {
-      await client!.read2File('$kReadDirPath/$gid.json', _path);
+      await client.read2File('$kReadDirPath/$gid.json', _path);
       final File _file = File(_path);
       if (!_file.existsSync()) {
         return null;
@@ -434,10 +414,7 @@ class WebdavController extends GetxController {
   }
 
   Future<List<String>> getRemotReadList() async {
-    if (client == null) {
-      return [];
-    }
-    final list = await client!.readDir(kReadDirPath);
+    final list = await client.readDir(kReadDirPath);
     final names = list
         .map((e) => e.name?.substring(0, e.name?.lastIndexOf('.')))
         .toList();
@@ -453,9 +430,6 @@ class WebdavController extends GetxController {
   // 上传分组
   Future<void> uploadGroupProfile(CustomProfile profile,
       {bool isEncrypt = false}) async {
-    if (client == null) {
-      return;
-    }
     logger.d('upload group');
     chkTempDir(kLocalGroupDirPath);
 
@@ -472,8 +446,8 @@ class WebdavController extends GetxController {
     }
 
     try {
-      await client!
-          .writeFromFile(_path, '$kGroupDirPath/${profile.syncFileName}.json');
+      await client.writeFromFile(
+          _path, '$kGroupDirPath/${profile.syncFileName}.json');
     } on DioError catch (err) {
       logger.d('${err.response?.statusCode}');
       if (err.response?.statusCode == 404) {
@@ -489,16 +463,13 @@ class WebdavController extends GetxController {
 
   // 下载分组
   Future<CustomProfile?> downloadGroupProfile(CustomProfile profile) async {
-    if (client == null) {
-      return null;
-    }
     logger.d('download group ${profile.syncFileName}');
     chkTempDir(kLocalGroupDirPath);
     final _path =
         path.join(Global.tempPath, kLocalGroupDirPath, profile.syncFileName);
     try {
-      await client!
-          .read2File('$kGroupDirPath/${profile.syncFileName}.json', _path);
+      await client.read2File(
+          '$kGroupDirPath/${profile.syncFileName}.json', _path);
       final File _file = File(_path);
       if (!_file.existsSync()) {
         return null;
@@ -521,23 +492,24 @@ class WebdavController extends GetxController {
     }
   }
 
-  Future<List<CustomProfile>> getRemotGroupList() async {
-    if (client == null) {
-      return [];
-    }
-    final list = await client!.readDir(kGroupDirPath);
-    final profileObjs = list.map((e) {
+  Future<List<CustomProfile>> getRemoteGroupList() async {
+    final list = await client.readDir(kGroupDirPath);
+    final profiles = list.map((e) {
       final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
       final arr = name?.split(kGroupSeparator);
-      final profileName = arr?.take(arr.length - 2).join(kGroupSeparator) ?? '';
-      final uuid = arr?[arr.length - 2] ?? generateUuidv4();
-      final time = int.parse(arr?[arr.length - 1] ?? '0');
+      logger.d('getRemoteGroupList $arr');
+      // 名称
+      final profileName = arr?.first ?? '';
+      // uuid
+      final uuid = arr?[1] ?? generateUuidv4();
+      // 时间戳
+      final time = int.parse(arr?[2] ?? '0');
       if (profileName.isNotEmpty) {
         return CustomProfile(name: profileName, uuid: uuid, lastEditTime: time);
       }
     }).toList();
     final _list = <CustomProfile>[];
-    for (final profile in profileObjs) {
+    for (final profile in profiles) {
       if (profile != null) {
         _list.add(profile);
       }
@@ -545,13 +517,13 @@ class WebdavController extends GetxController {
     return _list;
   }
 
-  Future<void> deleteRemotGroup(CustomProfile? oriRemote) async {
-    if (client == null || oriRemote == null) {
+  Future<void> deleteRemoteGroup(CustomProfile? oriRemote) async {
+    if (oriRemote == null) {
       return;
     }
 
     try {
-      await client!.remove('$kGroupDirPath/${oriRemote.syncFileName}.json');
+      await client.remove('$kGroupDirPath/${oriRemote.syncFileName}.json');
     } catch (err) {
       logger.e('$err');
       return;
@@ -559,9 +531,6 @@ class WebdavController extends GetxController {
   }
 
   Future<void> uploadQuickSearch(List<String> texts, int time) async {
-    if (client == null) {
-      return;
-    }
     chkTempDir(kLocalSearchDirPath);
 
     final _path =
@@ -570,11 +539,9 @@ class WebdavController extends GetxController {
 
     final _text = texts.join('\n');
     _file.writeAsStringSync(_text);
-    // final encrypted = _encrypter.encrypt(_text, iv: _iv);
-    // _file.writeAsStringSync(encrypted.base64);
 
     try {
-      await client!.writeFromFile(
+      await client.writeFromFile(
           _path, '$kSearchDirPath/${kQuickSearchFile}_$time.txt');
     } on DioError catch (err) {
       logger.d('${err.response?.statusCode}');
@@ -590,18 +557,14 @@ class WebdavController extends GetxController {
   }
 
   Future<Tuple2<List<String>, int>?> downloadQuickSearch(int maxTime) async {
-    if (client == null) {
-      return null;
-    }
-
     logger.d('download $kQuickSearchFile');
     chkTempDir(kLocalSearchDirPath);
 
     final _path =
         path.join(Global.tempPath, kLocalSearchDirPath, kQuickSearchFile);
     try {
-      await client!
-          .read2File('$kSearchDirPath/${kQuickSearchFile}_$maxTime.txt', _path);
+      await client.read2File(
+          '$kSearchDirPath/${kQuickSearchFile}_$maxTime.txt', _path);
       final File _file = File(_path);
       if (!_file.existsSync()) {
         return null;
@@ -621,11 +584,7 @@ class WebdavController extends GetxController {
   }
 
   Future<List<int>> getQuickList() async {
-    if (client == null) {
-      return [0];
-    }
-
-    final list = (await client!.readDir(kSearchDirPath)).where(
+    final list = (await client.readDir(kSearchDirPath)).where(
         (element) => element.name?.startsWith(kQuickSearchFile) ?? false);
 
     final _filte = list.map((e) {
@@ -638,12 +597,8 @@ class WebdavController extends GetxController {
   }
 
   Future<void> deleteQuickSearch(int time) async {
-    if (client == null) {
-      return;
-    }
-
     try {
-      await client!.remove(
+      await client.remove(
           '$kSearchDirPath/$kQuickSearchFile$kQuickSearchSeparator$time.txt');
     } catch (err) {
       logger.e('$err');
@@ -681,15 +636,15 @@ class WebdavController extends GetxController {
 
   Future<bool> addWebDAVProfile(String url, {String? user, String? pwd}) async {
     isLongining = true;
-    bool rult = false;
+    bool result = false;
     try {
       _pingWebDAV(url, user: user, pwd: pwd);
-      rult = true;
+      result = true;
     } catch (e, stack) {
       logger.e('$e\n$stack');
       showToast('$e\n$stack');
     }
-    if (rult) {
+    if (result) {
       // 保存账号 rebuild
       WebdavProfile webdavUser =
           WebdavProfile(url: url, user: user, password: pwd);
@@ -698,16 +653,16 @@ class WebdavController extends GetxController {
       initClient();
     }
     isLongining = false;
-    return rult;
+    return result;
   }
 
   Future<void> deleteHistory(HistoryIndexGid? oriRemote) async {
-    if (client == null || oriRemote == null) {
+    if (oriRemote == null) {
       return;
     }
 
     try {
-      await client!
+      await client
           .remove('$kHistoryDtlDirPath/${oriRemote.g}_${oriRemote.t}.json');
     } catch (err) {
       logger.e('$err');

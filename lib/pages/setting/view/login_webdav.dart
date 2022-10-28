@@ -140,9 +140,9 @@ class LoginWebDAV extends GetView<WebdavController> {
                             onPressed: controller.loadingLogin
                                 ? null
                                 : () async {
-                                    final rult =
+                                    final result =
                                         await controller.pressLoginWebDAV();
-                                    if (rult != null && rult) {
+                                    if (result != null && result) {
                                       Get.back(id: isLayoutLarge ? 2 : null);
                                     }
                                   },

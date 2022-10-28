@@ -542,7 +542,7 @@ extension ExtCustomProfile on CustomProfile {
       ListModeEnum.global;
 
   String get syncFileName =>
-      '$name$kGroupSeparator$uuid$kGroupSeparator${lastEditTime ?? '0'}';
+      <String>[name, uuid, '${lastEditTime ?? 0}'].join(kGroupSeparator);
 }
 
 extension EhIterableExtension<T> on Iterable<T> {
