@@ -184,7 +184,16 @@ class GalleryItemFlowLarge extends StatelessWidget {
                     alignment: Alignment.center,
                     height:
                         galleryProvider.imgWidth != null ? _getHeigth() : null,
-                    child: CoverImg(imgUrl: galleryProvider.imgUrl!),
+                    child: Stack(
+                      children: [
+                        CoverImg(imgUrl: galleryProvider.imgUrl!),
+                        Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: _buildCount(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

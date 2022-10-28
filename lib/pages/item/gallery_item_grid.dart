@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import '../../common/service/ehconfig_service.dart';
 import '../../common/service/layout_service.dart';
@@ -11,7 +12,6 @@ import '../../const/theme_colors.dart';
 import '../../fehviewer.dart';
 import '../../widget/rating_bar.dart';
 import 'controller/galleryitem_controller.dart';
-import 'gallery_clipper.dart';
 import 'gallery_item.dart';
 import 'item_base.dart';
 
@@ -66,11 +66,22 @@ class GalleryItemGrid extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             /// 画廊封面
-            Container(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(kRadius),
-                  topRight: Radius.circular(kRadius),
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(kRadius),
+                topRight: Radius.circular(kRadius),
+              ),
+              child: Container(
+                foregroundDecoration: RotatedCornerDecoration(
+                  color: _colorCategory.withOpacity(0.8),
+                  labelInsets: const LabelInsets(baselineShift: 0.2, start: 2),
+                  geometry: const BadgeGeometry(
+                      width: kCategoryWidth, height: kCategoryHeight),
+                  textSpan: TextSpan(
+                    text: galleryProvider.translated ?? '',
+                    style: const TextStyle(
+                        fontSize: 8, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 child: Stack(
                   alignment: Alignment.topRight,
@@ -95,15 +106,6 @@ class GalleryItemGrid extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ClipPath(
-                      clipper: CategoryClipper(
-                          width: kCategoryWidth, height: kCategoryHeight),
-                      child: Container(
-                        width: kCategoryWidth,
-                        height: kCategoryHeight,
-                        color: _colorCategory.withOpacity(0.8),
-                      ),
-                    ),
                     // Positioned(bottom: 4, left: 4, child: _buildRating()),
                     Positioned(
                       bottom: 4,
@@ -113,19 +115,6 @@ class GalleryItemGrid extends StatelessWidget {
                           _buildFavcatIcon(),
                           _buildCount(),
                         ],
-                      ),
-                    ),
-                    Container(
-                      height: (kCategoryHeight + kRadius * 0.8) / 2,
-                      width: (kCategoryWidth + kRadius * 0.8) / 2,
-                      alignment: Alignment.center,
-                      child: Text(
-                        galleryProvider.translated ?? '',
-                        style: const TextStyle(
-                            fontSize: 7.5,
-                            color: CupertinoColors.white,
-                            fontWeight: FontWeight.bold,
-                            height: 1.2),
                       ),
                     ),
                   ],
