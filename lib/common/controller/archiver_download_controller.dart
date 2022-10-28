@@ -24,7 +24,7 @@ class ArchiverDownloadController extends GetxController {
   final Map<String, DownloadArchiverTaskInfo> _archiverTaskMap =
       <String, DownloadArchiverTaskInfo>{};
   set archiverTaskMap(Map<String, DownloadArchiverTaskInfo> val) {
-    _gStore.archiverTaskMap = val;
+    hiveHelper.archiverTaskMap = val;
   }
 
   Map<String, DownloadArchiverTaskInfo> get archiverTaskMap => _archiverTaskMap;
@@ -40,8 +40,9 @@ class ArchiverDownloadController extends GetxController {
     bindBackgroundIsolate(updateTask);
 
     // 从GS中初始化 archiverDlMap
-    final _archiver =
-        _gStore.archiverTaskMap ?? <String, DownloadArchiverTaskInfo>{};
+    final _archiver = hiveHelper.archiverTaskMap ??
+        _gStore.archiverTaskMap ??
+        <String, DownloadArchiverTaskInfo>{};
 
     // logger.d(
     //     '_archiver\n${_archiver.entries.map((e) => '${e.key}  ${e.value.toJson()}').join('\n')}');
@@ -90,7 +91,7 @@ class ArchiverDownloadController extends GetxController {
   }
 
   void _saveTask() {
-    _gStore.archiverTaskMap = _archiverTaskMap;
+    hiveHelper.archiverTaskMap = _archiverTaskMap;
   }
 
   Future<void> updateTask(

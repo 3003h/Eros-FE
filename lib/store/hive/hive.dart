@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:hive/hive.dart';
@@ -9,6 +10,8 @@ const String historyBox = 'history_box';
 const String historyDelBox = 'history_del_box';
 const String searchHistoryBox = 'search_history_box';
 const String configBox = 'config_box';
+const String archiverTaskBox = 'archiver_task_box';
+const String galleryCacheBox = 'gallery_cache_box';
 
 const String searchHistoryKey = 'search_history';
 const String layoutConfigKey = 'config_layout';
@@ -16,6 +19,7 @@ const String usersKey = 'users_info';
 const String profileDelKey = 'delete_profile';
 const String qsLastTimeKey = 'quick_search_last_edit_time';
 const String customImageHideKey = 'custom_image_hide';
+const String profileKey = 'profile';
 
 const String ehHomeKey = 'eh_home';
 const String viewHistoryMigrationKey = 'viewHistoryMigration';
@@ -26,6 +30,8 @@ class HiveHelper {
   static final _historyBox = Hive.box<String>(historyBox);
   static final _historyDelBox = Hive.box<String>(historyDelBox);
   static final _searchHistoryBox = Hive.box<String>(searchHistoryBox);
+  static final _archiverTaskBox = Hive.box<String>(archiverTaskBox);
+  static final _galleryCacheBox = Hive.box<String>(galleryCacheBox);
   static final _configBox = Hive.box<String>(configBox);
 
   static Future<void> init() async {
@@ -37,6 +43,16 @@ class HiveHelper {
         return entries > 10;
       },
     );
+
+    // open galleryCacheBox
+    await Hive.openBox<String>(
+      galleryCacheBox,
+      compactionStrategy: (int entries, int deletedEntries) {
+        logger.v('entries $entries');
+        return entries > 10;
+      },
+    );
+
     await Hive.openBox<String>(
       historyDelBox,
       compactionStrategy: (int entries, int deletedEntries) {
@@ -50,7 +66,21 @@ class HiveHelper {
       return entries > 20;
     });
 
-    await Hive.openBox<String>(configBox);
+    await Hive.openBox<String>(
+      archiverTaskBox,
+      compactionStrategy: (int entries, int deletedEntries) {
+        logger.v('entries $entries');
+        return entries > 10;
+      },
+    );
+
+    await Hive.openBox<String>(
+      configBox,
+      compactionStrategy: (int entries, int deletedEntries) {
+        logger.v('entries $entries');
+        return entries > 10;
+      },
+    );
   }
 
   List<GalleryProvider> getAllHistory() {
@@ -64,38 +94,15 @@ class HiveHelper {
     return _historys;
   }
 
-  GalleryProvider getHistory(String gid) {
-    final itemText = _historyBox.get(gid) ?? '{}';
-    return GalleryProvider.fromJson(
-        jsonDecode(itemText) as Map<String, dynamic>);
-  }
-
-  Future<void> addHistory(GalleryProvider galleryProvider) async {
-    final gid = galleryProvider.gid;
-    await _historyBox.put(gid, jsonEncode(galleryProvider));
-
-    logger.v('${_historyBox.keys}');
-    // _historyBox.compact();
-    // logger.v('${getHistory(_historyBox.keys.last as String).toJson()}');
-  }
-
-  Future<void> removeHistory(String gid) async {
-    _historyBox.delete(gid);
-  }
-
-  Future<int> cleanHistory() async {
-    return await _historyBox.clear();
-  }
-
   List<String> getAllSearchHistory() {
-    final rult = <String>[];
+    final result = <String>[];
     final String? val =
         _searchHistoryBox.get(searchHistoryKey, defaultValue: '[]');
     for (final dynamic his in jsonDecode(val ?? '[]') as List<dynamic>) {
       final String _his = his as String;
-      rult.add(_his);
+      result.add(_his);
     }
-    return rult;
+    return result;
   }
 
   Future<void> addHistoryDel(HistoryIndexGid gi) async {
@@ -158,7 +165,7 @@ class HiveHelper {
   }
 
   int getQuickSearchLastEditTime() {
-    final _time = '${DateTime.now().millisecondsSinceEpoch}';
+    const _time = '0';
     final val = _configBox.get(qsLastTimeKey, defaultValue: _time);
     return int.parse(val ?? _time);
   }
@@ -213,5 +220,84 @@ class HiveHelper {
 
   Future<void> setDownloadTaskMigration(bool value) async {
     await _configBox.put(downloadTaskMigrationKey, '$value');
+  }
+
+  set archiverTaskMap(Map<String, DownloadArchiverTaskInfo>? taskInfoMap) {
+    logger.v('set archiverDlMap \n'
+        '${taskInfoMap?.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
+
+    if (taskInfoMap == null) {
+      return;
+    }
+
+    for (final entry in taskInfoMap.entries) {
+      _archiverTaskBox.put(entry.key, jsonEncode(entry.value));
+    }
+  }
+
+  Map<String, DownloadArchiverTaskInfo>? get archiverTaskMap {
+    if (_archiverTaskBox.isEmpty) {
+      return null;
+    }
+
+    final _map = <String, DownloadArchiverTaskInfo>{};
+
+    for (final entry in _archiverTaskBox.toMap().entries) {
+      final _takInfo = DownloadArchiverTaskInfo.fromJson(
+          jsonDecode(entry.value) as Map<String, dynamic>);
+      if (_takInfo.tag != null) {
+        _map[_takInfo.tag!] = _takInfo;
+      }
+    }
+
+    return _map;
+  }
+
+  GalleryCache? getCache(String gid) {
+    final value = _galleryCacheBox.get(gid);
+
+    if (value == null) {
+      return null;
+    }
+
+    return GalleryCache.fromJson(jsonDecode(value) as Map<String, dynamic>);
+  }
+
+  void saveCache(GalleryCache cache) {
+    if (cache.gid != null) {
+      _galleryCacheBox.put(cache.gid!, jsonEncode(cache));
+    }
+  }
+
+  Profile? get profile {
+    final String? val = _configBox.get(profileKey);
+    if (val == null) {
+      return null;
+    }
+    logger.d('get profile $val');
+    final Profile _profileObj =
+        Profile.fromJson(jsonDecode(val) as Map<String, dynamic>);
+    final Profile _profile = kDefProfile.copyWith(
+      user: _profileObj.user,
+      ehConfig: _profileObj.ehConfig,
+      lastLogin: _profileObj.lastLogin,
+      locale: _profileObj.locale,
+      theme: _profileObj.theme,
+      searchText: _profileObj.searchText,
+      localFav: _profileObj.localFav,
+      enableAdvanceSearch: _profileObj.enableAdvanceSearch,
+      advanceSearch: _profileObj.advanceSearch,
+      dnsConfig: _profileObj.dnsConfig,
+      downloadConfig: _profileObj.downloadConfig,
+      webdav: _profileObj.webdav,
+      autoLock: _profileObj.autoLock,
+      favConfig: _profileObj.favConfig,
+      customTabConfig: _profileObj.customTabConfig,
+    );
+    return _profile;
+  }
+
+  set profile(Profile? val) {
+    _configBox.put(profileKey, jsonEncode(val));
   }
 }

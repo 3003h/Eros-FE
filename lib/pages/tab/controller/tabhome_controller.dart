@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -150,7 +151,9 @@ class TabHomeController extends GetxController {
   void onInit() {
     super.onInit();
 
-    _tabConfig = gStore.tabConfig ?? (const TabConfig(tabItemList: []));
+    _tabConfig = Global.profile.tabConfig ??
+        gStore.tabConfig ??
+        (const TabConfig(tabItemList: []));
 
     if (_tabConfig.tabMap.isNotEmpty) {
       final List<String> _tabConfigNames =
@@ -192,6 +195,10 @@ class TabHomeController extends GetxController {
     ever(tabMap, (Map<String, bool> map) {
       _tabConfig.setItemList(map, tabNameList);
       gStore.tabConfig = _tabConfig;
+
+      Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
+      Global.saveProfile();
+
       logger.d(
           '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')} ');
     });
@@ -199,6 +206,10 @@ class TabHomeController extends GetxController {
     ever(tabNameList, (List<String> nameList) {
       _tabConfig.setItemList(tabMap, nameList);
       gStore.tabConfig = _tabConfig;
+
+      Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
+      Global.saveProfile();
+
       logger.d(
           '${_tabConfig.tabItemList.map((e) => '${e.name}:${e.enable}').toList().join('\n')} ');
     });

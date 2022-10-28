@@ -562,19 +562,19 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
 class TextItem extends StatefulWidget {
   const TextItem(
     this.title, {
-    this.desc,
+    this.subTitle,
     this.onTap,
     Key? key,
-    this.hideLine = false,
+    this.hideDivider = false,
     this.cupertinoFormRow = false,
     this.textColor,
   }) : super(key: key);
 
   final String title;
-  final String? desc;
+  final String? subTitle;
   final VoidCallback? onTap;
 
-  final bool hideLine;
+  final bool hideDivider;
   final bool cupertinoFormRow;
   final Color? textColor;
 
@@ -628,15 +628,15 @@ class _TextItemState extends State<TextItem> {
                       color: widget.textColor,
                     ),
                   ),
-                  if (widget.desc != null)
+                  if (widget.subTitle != null)
                     Text(
-                      widget.desc ?? '',
+                      widget.subTitle ?? '',
                       style: const TextStyle(
                           fontSize: 12.5, color: CupertinoColors.systemGrey),
                     ).paddingOnly(top: 2.0),
                 ]),
           ),
-          if (!(widget.hideLine || widget.cupertinoFormRow))
+          if (!(widget.hideDivider || widget.cupertinoFormRow))
             Divider(
               indent: 20,
               height: kDividerHeight,

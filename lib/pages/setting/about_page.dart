@@ -67,13 +67,13 @@ class ListViewAbout extends StatelessWidget {
           // ),
           TextItem(
             L10n.of(context).app_title,
-            desc: 'An unofficial e-hentai app',
+            subTitle: 'An unofficial e-hentai app',
             onTap: null,
           ),
           if (!GetPlatform.isWindows)
             TextItem(
               L10n.of(context).version,
-              desc:
+              subTitle:
                   '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
               onTap: null,
             ),
@@ -81,7 +81,7 @@ class ListViewAbout extends StatelessWidget {
             Obx(() {
               return TextItem(
                 L10n.of(context).check_for_update,
-                desc: !_updateController.isLastVersion
+                subTitle: !_updateController.isLastVersion
                     ? L10n.of(context)
                         .update_to_version(_updateController.lastVersion ?? '')
                     : '${L10n.of(context).latest_version} ${_updateController.lastVersion ?? ''}',
@@ -90,13 +90,13 @@ class ListViewAbout extends StatelessWidget {
             }),
           TextItem(
             L10n.of(context).author,
-            desc: 'honjow  <honjow311@gmail.com>',
+            subTitle: 'honjow  <honjow311@gmail.com>',
             onTap: () => launchUrlString('mailto:honjow311@gmail.com'),
           ),
           if (!_ehConfigService.isSafeMode.value)
             TextItem(
               'Github',
-              desc: 'https://github.com/honjow/FEhViewer',
+              subTitle: 'https://github.com/honjow/FEhViewer',
               onTap: () => launchUrlString(
                 'https://github.com/honjow/FEhViewer',
                 mode: LaunchMode.externalApplication,
@@ -111,7 +111,7 @@ class ListViewAbout extends StatelessWidget {
           ),
           TextItem(
             'Telegram Channel',
-            desc: 'https://t.me/fehviewer',
+            subTitle: 'https://t.me/fehviewer',
             onTap: () => launchUrlString(
               'https://t.me/fehviewer',
               mode: LaunchMode.externalApplication,
@@ -191,7 +191,7 @@ class ListViewAbout extends StatelessWidget {
                 },
               );
             },
-            hideLine: true,
+            hideDivider: true,
           ),
         ],
       ),

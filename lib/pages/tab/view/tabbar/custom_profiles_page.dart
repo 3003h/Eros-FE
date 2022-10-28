@@ -84,7 +84,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
               ),
               TextItem(
                 L10n.of(context).newGroup,
-                hideLine: true,
+                hideDivider: true,
                 textColor: CupertinoDynamicColor.resolve(
                     CupertinoColors.activeBlue, context),
                 onTap: () => controller.toEditPage(),

@@ -142,7 +142,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
               return TextItem(
                 L10n.of(context).uc_crt_profile,
                 onTap: controller.crtNewProfile,
-                hideLine: controller.selectedIsDefault,
+                hideDivider: controller.selectedIsDefault,
               );
             }),
             Obx(() {
@@ -162,7 +162,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
                 return TextItem(
                   L10n.of(context).uc_set_as_def,
                   onTap: controller.setDefaultProfile,
-                  hideLine: true,
+                  hideDivider: true,
                 );
               }
             }),
