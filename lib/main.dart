@@ -22,6 +22,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'get_init.dart';
 import 'network/app_dio/pdio.dart';
+import 'widget/desktop.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -134,67 +135,69 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    Widget cupertinoApp({
-      CupertinoThemeData? theme,
-      Locale? locale,
-    }) {
-      return GetCupertinoApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
-        navigatorObservers: [
-          // if (GetPlatform.isMobile)
-          //   FirebaseAnalyticsObserver(analytics: analytics),
-          SentryNavigatorObserver(),
-          FlutterSmartDialog.observer,
-          MainNavigatorObserver(),
-        ],
-        // builder: kReleaseMode
-        //     ? FlutterSmartDialog.init(
-        //         styleBuilder: (child) => child,
-        //       )
-        //     : null,
-        builder: FlutterSmartDialog.init(
-          styleBuilder: (child) => child,
-        ),
-        getPages: AppPages.routes,
-        defaultTransition: Transition.cupertino,
-        initialRoute: EHRoutes.root,
-        theme: theme,
-        locale: locale,
-        enableLog: false && kDebugMode,
-        logWriterCallback: loggerGetx,
-        supportedLocales: <Locale>[
-          ...L10n.delegate.supportedLocales,
-        ],
-        localizationsDelegates: const [
-          // 本地化的代理类
-          L10n.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        // localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
-        //   final Locale _locale = window.locale;
-        //   logger.v(
-        //       'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
-        //   // logger.d('${_locale} ${supportedLocales}');
-        //   if (locale != null) {
-        //     // logger.d('sel $locale');
-        //     //如果已经选定语言，则不跟随系统
-        //     return locale;
-        //   } else {
-        //     logger.v('语言跟随系统语言  $_locale');
-        //     return null;
-        //   }
-        // },
-      );
+    Widget cupertinoApp() {
+      return Obx(() {
+        return GetCupertinoApp(
+          debugShowCheckedModeBanner: false,
+          onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
+          navigatorObservers: [
+            // if (GetPlatform.isMobile)
+            //   FirebaseAnalyticsObserver(analytics: analytics),
+            SentryNavigatorObserver(),
+            FlutterSmartDialog.observer,
+            MainNavigatorObserver(),
+          ],
+          // builder: kReleaseMode
+          //     ? FlutterSmartDialog.init(
+          //         styleBuilder: (child) => child,
+          //       )
+          //     : null,
+          builder: FlutterSmartDialog.init(
+            styleBuilder: (child) {
+              if (GetPlatform.isDesktop) {
+                return Desktop(child: child);
+              } else {
+                return child;
+              }
+            },
+          ),
+          getPages: AppPages.routes,
+          defaultTransition: Transition.cupertino,
+          initialRoute: EHRoutes.root,
+          theme: themeService.themeData,
+          locale: localeService.locale,
+          enableLog: false && kDebugMode,
+          logWriterCallback: loggerGetx,
+          supportedLocales: <Locale>[
+            ...L10n.delegate.supportedLocales,
+          ],
+          localizationsDelegates: const [
+            // 本地化的代理类
+            L10n.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          // localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
+          //   final Locale _locale = window.locale;
+          //   logger.v(
+          //       'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
+          //   // logger.d('${_locale} ${supportedLocales}');
+          //   if (locale != null) {
+          //     // logger.d('sel $locale');
+          //     //如果已经选定语言，则不跟随系统
+          //     return locale;
+          //   } else {
+          //     logger.v('语言跟随系统语言  $_locale');
+          //     return null;
+          //   }
+          // },
+        );
+      });
     }
 
     return OKToast(
-      child: Obx(() => cupertinoApp(
-            theme: themeService.themeData,
-            locale: localeService.locale,
-          )),
+      child: cupertinoApp(),
     );
   }
 }
