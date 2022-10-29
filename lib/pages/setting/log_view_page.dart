@@ -29,10 +29,6 @@ class _LogViewPageState extends State<LogViewPage> {
   void initState() {
     super.initState();
 
-    _scrollController.addListener(() {
-      logger.d('offset ${_scrollController.offset}');
-    });
-
     SchedulerBinding.instance.addPostFrameCallback((_) {
       // build完成后的回调
       logger.v('to end');

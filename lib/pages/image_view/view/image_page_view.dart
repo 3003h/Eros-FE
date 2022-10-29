@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:preload_page_view/preload_page_view.dart';
-import 'package:zoom_widget/zoom_widget.dart';
 
 import '../common.dart';
 import '../controller/view_controller.dart';
@@ -46,14 +45,6 @@ class ImagePageView extends GetView<ViewExtController> {
                       child: DoublePageView(pageIndex: pageIndex),
                     );
                   },
-                );
-              }
-
-              Widget doubleView2(int pageIndex) {
-                return Zoom(
-                  maxZoomWidth: context.width * 2,
-                  maxZoomHeight: context.height,
-                  child: DoublePageView(pageIndex: pageIndex),
                 );
               }
 
@@ -101,7 +92,6 @@ class ImagePageView extends GetView<ViewExtController> {
                       initialScale: PhotoViewComputedScale.contained,
                       minScale: PhotoViewComputedScale.contained,
                       maxScale: PhotoViewComputedScale.covered * 5,
-                      // scaleStateCycle: lisviewScaleStateCycle,
                       controller: logic.photoViewController,
                       // scaleStateController: logic.photoViewScaleStateController,
                       // disableGestures: true,
@@ -145,7 +135,7 @@ class ImagePageView extends GetView<ViewExtController> {
               /// PreloadPhotoView 的看图组件 有预加载功能
               return PreloadPhotoViewGallery.builder(
                   backgroundDecoration:
-                  const BoxDecoration(color: Colors.transparent),
+                      const BoxDecoration(color: Colors.transparent),
                   pageController: logic.preloadPageController,
                   itemCount: logic.vState.pageCount,
                   onPageChanged: (pageIndex) =>
@@ -155,7 +145,7 @@ class ImagePageView extends GetView<ViewExtController> {
                   scrollPhysics: const CustomScrollPhysics(),
                   reverse: reverse,
                   preloadPagesCount:
-                    max(0, logic.vState.ehConfigService.preloadImage.value),
+                      max(0, logic.vState.ehConfigService.preloadImage.value),
                   builder: (BuildContext context, int pageIndex) {
                     return PhotoViewGalleryPageOptions.customChild(
                       initialScale: PhotoViewComputedScale.contained,
