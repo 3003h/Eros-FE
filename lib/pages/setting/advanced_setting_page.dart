@@ -18,6 +18,7 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
@@ -172,58 +173,59 @@ class ListViewAdvancedSetting extends StatelessWidget {
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
         hideDivider: true,
       ),
-      const ItemSpace(),
-      TextItem(
-        'Export App Data',
-        // subTitle: 'Includes settings, quick search',
-        onTap: () async {
-          final Profile profile = Global.profile.copyWith(user: kDefUser);
-          final String jsonStr = jsonEncode(profile.toJson());
-          // final String base64Str = base64Encode(utf8.encode(jsonStr));
-          final time = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-          final tempFilePath =
-              path.join(Global.tempPath, 'fehviewer_profile_$time.json');
-          // logger.d('base64Str $base64Str,\njsonStr $jsonStr');
-          final tempFile = File(tempFilePath);
-          tempFile.writeAsStringSync(jsonStr);
+      if (!kReleaseMode) const ItemSpace(),
+      if (!kReleaseMode)
+        TextItem(
+          'Export App Data',
+          // subTitle: 'Includes settings, quick search',
+          onTap: () async {
+            final Profile profile = Global.profile.copyWith(user: kDefUser);
+            final String jsonStr = jsonEncode(profile.toJson());
+            final time = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+            final tempFilePath =
+                path.join(Global.tempPath, 'fehviewer_profile_$time.json');
+            final tempFile = File(tempFilePath);
+            tempFile.writeAsStringSync(jsonStr);
 
-          try {
-            await requestManageExternalStoragePermission();
+            try {
+              await requestManageExternalStoragePermission();
 
-            final _saveToDirPath = await FilePicker.platform.getDirectoryPath();
-            logger.d('saveToDirPath $_saveToDirPath');
-            if (_saveToDirPath != null) {
-              final _dstPath =
-                  path.join(_saveToDirPath, path.basename(tempFilePath));
-              tempFile.copySync(_dstPath);
+              final _saveToDirPath =
+                  await FilePicker.platform.getDirectoryPath();
+              logger.d('saveToDirPath $_saveToDirPath');
+              if (_saveToDirPath != null) {
+                final _dstPath =
+                    path.join(_saveToDirPath, path.basename(tempFilePath));
+                tempFile.copySync(_dstPath);
+              }
+            } catch (e) {
+              showToast('$e');
+              rethrow;
             }
-          } catch (e) {
-            showToast('$e');
-            rethrow;
-          }
-        },
-      ),
-      TextItem(
-        'Import App Data',
-        subTitle: 'Need restart app',
-        onTap: () async {
-          final FilePickerResult? result =
-              await FilePicker.platform.pickFiles();
-          if (result != null) {
-            final PlatformFile platFile = result.files.single;
-            final file = File(platFile.path!);
-            final String jsonStr = file.readAsStringSync();
-            final Map<String, dynamic> jsonMap =
-                jsonDecode(jsonStr) as Map<String, dynamic>;
-            final Profile profile = Profile.fromJson(jsonMap);
-            Global.profile = profile;
-            Global.saveProfile();
-            Get.reloadAll(force: true);
-            showToast('Import success');
-          }
-        },
-        hideDivider: true,
-      ),
+          },
+        ),
+      if (!kReleaseMode)
+        TextItem(
+          'Import App Data',
+          subTitle: 'Need restart app',
+          onTap: () async {
+            final FilePickerResult? result =
+                await FilePicker.platform.pickFiles();
+            if (result != null) {
+              final PlatformFile platFile = result.files.single;
+              final file = File(platFile.path!);
+              final String jsonStr = file.readAsStringSync();
+              final Map<String, dynamic> jsonMap =
+                  jsonDecode(jsonStr) as Map<String, dynamic>;
+              final Profile profile = Profile.fromJson(jsonMap);
+              Global.profile = profile;
+              Global.saveProfile();
+              Get.reloadAll(force: true);
+              showToast('Import success');
+            }
+          },
+          hideDivider: true,
+        ),
       const ItemSpace(),
       SelectorSettingItem(
         title: 'Log',
