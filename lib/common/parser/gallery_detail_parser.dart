@@ -31,7 +31,6 @@ List<GalleryComment> parseGalleryComment(Document document) {
       // 评论人
       final Element? postElem = childrenElms?[0];
       final String postName = postElem?.text.trim() ?? '';
-      print('postName: $postName');
 
       final Element? userIndexElm =
           comment.querySelector('div.c2 > div.c3 > a:nth-child(3)');

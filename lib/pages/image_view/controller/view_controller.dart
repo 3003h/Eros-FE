@@ -690,6 +690,15 @@ class ViewExtController extends GetxController {
     final enableAnimate = animate ?? _ehConfigService.turnPageAnimations;
 
     if (enableAnimate) {
+      if (vState.viewMode == ViewMode.topToBottom) {
+        itemScrollController.scrollTo(
+          index: page,
+          duration: duration,
+          curve: Curves.ease,
+        );
+        return;
+      }
+
       switch (pageViewType) {
         case PageViewType.photoView:
           pageController.animateToPage(
@@ -713,6 +722,13 @@ class ViewExtController extends GetxController {
           );
       }
     } else {
+      if (vState.viewMode == ViewMode.topToBottom) {
+        itemScrollController.jumpTo(
+          index: page,
+        );
+        return;
+      }
+
       switch (pageViewType) {
         case PageViewType.photoView:
           pageController.jumpToPage(page);
@@ -1126,7 +1142,7 @@ class ViewExtController extends GetxController {
     if (vState.autoRead) {
       if (vState.viewMode == ViewMode.topToBottom &&
           itemScrollController.isAttached) {
-        logger.d('trd minImageIndex:${vState.minImageIndex + 1}');
+        logger.d('t2d minImageIndex:${vState.minImageIndex + 1}');
         final _minIndex = vState.minImageIndex;
         final _minImageSer = _minIndex + 1;
         if (!(vState.loadCompleMap[_minImageSer] ?? false)) {
