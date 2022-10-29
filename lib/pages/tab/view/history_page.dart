@@ -67,6 +67,7 @@ class _HistoryTabState extends State<HistoryTab> {
       ),
     );
 
+    bool isRefresh = false;
     final Widget navigationBar = CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       padding: const EdgeInsetsDirectional.only(end: 4),
@@ -78,6 +79,33 @@ class _HistoryTabState extends State<HistoryTab> {
           mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (GetPlatform.isDesktop)
+              StatefulBuilder(builder: (context, setState) {
+                return CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  minSize: 40,
+                  child: isRefresh
+                      ? const CupertinoActivityIndicator(
+                          radius: 10,
+                        )
+                      : const Icon(
+                          CupertinoIcons.arrow_clockwise,
+                          size: 24,
+                        ),
+                  onPressed: () async {
+                    setState(() {
+                      isRefresh = true;
+                    });
+                    try {
+                      await controller.reloadData();
+                    } finally {
+                      setState(() {
+                        isRefresh = false;
+                      });
+                    }
+                  },
+                );
+              }),
             // 清除按钮
             CupertinoButton(
               minSize: 40,

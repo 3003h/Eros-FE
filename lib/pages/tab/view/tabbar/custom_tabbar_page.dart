@@ -201,23 +201,45 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            // 刷新按钮
                             if (GetPlatform.isDesktop)
-                              Obx(() {
-                                return CupertinoButton(
-                                  minSize: 40,
-                                  padding: const EdgeInsets.all(0),
-                                  child: const Icon(
-                                    FontAwesomeIcons.rotateRight,
-                                    size: 20,
-                                  ),
-                                  onPressed: controller
-                                          .currSubController?.reloadData ??
-                                      () {
-                                        controller.update();
-                                        controller.currSubController
-                                            ?.reloadData();
-                                      },
-                                );
+                              Builder(builder: (context) {
+                                bool isRefresh = false;
+                                return StatefulBuilder(
+                                    builder: (context, setState) {
+                                  return CupertinoButton(
+                                    minSize: 40,
+                                    padding: const EdgeInsets.all(0),
+                                    child: isRefresh
+                                        ? const CupertinoActivityIndicator(
+                                            radius: 10)
+                                        : const Icon(
+                                            FontAwesomeIcons.rotateRight,
+                                            size: 20,
+                                          ),
+                                    onPressed: () async {
+                                      setState(() {
+                                        isRefresh = true;
+                                      });
+                                      try {
+                                        if (controller.currSubController
+                                                ?.reloadData !=
+                                            null) {
+                                          await controller.currSubController!
+                                              .reloadData();
+                                        } else {
+                                          controller.update();
+                                          await controller.currSubController
+                                              ?.reloadData();
+                                        }
+                                      } finally {
+                                        setState(() {
+                                          isRefresh = false;
+                                        });
+                                      }
+                                    },
+                                  );
+                                });
                               }),
                             CupertinoButton(
                               minSize: 40,

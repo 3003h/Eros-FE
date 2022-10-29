@@ -40,6 +40,7 @@ class _ToplistTabState extends State<ToplistTab> {
   @override
   Widget build(BuildContext context) {
     final navigationBar = Obx(() {
+      bool isRefresh = false;
       return CupertinoNavigationBar(
         transitionBetweenRoutes: false,
         padding: const EdgeInsetsDirectional.only(end: 4),
@@ -65,6 +66,33 @@ class _ToplistTabState extends State<ToplistTab> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            if (GetPlatform.isDesktop)
+              StatefulBuilder(builder: (context, setState) {
+                return CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  minSize: 40,
+                  child: isRefresh
+                      ? const CupertinoActivityIndicator(
+                          radius: 10,
+                        )
+                      : const Icon(
+                          CupertinoIcons.arrow_clockwise,
+                          size: 24,
+                        ),
+                  onPressed: () async {
+                    setState(() {
+                      isRefresh = true;
+                    });
+                    try {
+                      await controller.reloadData();
+                    } finally {
+                      setState(() {
+                        isRefresh = false;
+                      });
+                    }
+                  },
+                );
+              }),
             CupertinoButton(
               padding: const EdgeInsets.all(0.0),
               minSize: 40,
