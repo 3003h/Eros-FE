@@ -172,6 +172,7 @@ dependencies:
   cross_file: ^0.3.3+2
   image_save: ^5.0.0
   fluentui_system_icons: ^1.1.185
+  flutter_keyboard_visibility: ^5.4.0
 
 
 dev_dependencies:

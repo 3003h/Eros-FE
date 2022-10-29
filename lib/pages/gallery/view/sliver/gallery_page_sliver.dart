@@ -48,15 +48,11 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
 
   GalleryPageState get pageState => _controller.gState;
 
-  // final ScrollController _scrollController = ScrollController();
-
   @override
   void initState() {
     super.initState();
     logger.v('initState pageCtrlTag:$pageCtrlTag');
     initPageController(tag: _tag);
-
-    // _scrollController = ScrollController();
   }
 
   @override
@@ -68,13 +64,6 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
         PrimaryScrollController.of(context) ?? ScrollController();
     _controller.scrollController
         ?.addListener(_controller.scrollControllerLister);
-
-    // _scrollController =
-    //     PrimaryScrollController.of(context) ?? ScrollController();
-
-    // _scrollController.addListener(() {
-    //   logger.d('scrollController ${_scrollController.offset}');
-    // });
   }
 
   @override
@@ -333,10 +322,42 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
         },
       ),
       trailing: Obx(() {
+        bool isRefresh = false;
         Widget buttons = Row(
           key: const ValueKey('buttons'),
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Refresh button
+            if (GetPlatform.isDesktop)
+              StatefulBuilder(builder: (context, setState) {
+                return CupertinoButton(
+                  padding: const EdgeInsets.all(0),
+                  minSize: 40,
+                  child: isRefresh
+                      ? const CupertinoActivityIndicator(
+                          radius: 12,
+                        )
+                      : const MouseRegionClick(
+                          child: Icon(
+                            CupertinoIcons.arrow_clockwise,
+                            size: 24,
+                          ),
+                        ),
+                  onPressed: () async {
+                    setState(() {
+                      isRefresh = true;
+                    });
+                    try {
+                      await _controller.handOnRefresh();
+                    } finally {
+                      setState(() {
+                        isRefresh = false;
+                      });
+                    }
+                  },
+                );
+              }),
+
             CupertinoButton(
               padding: const EdgeInsets.all(0),
               minSize: 40,

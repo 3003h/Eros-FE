@@ -15,11 +15,10 @@ import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
-
-import 'constants.dart';
 
 const CupertinoDynamicColor _kClearButtonColor =
     CupertinoDynamicColor.withBrightness(
@@ -827,81 +826,101 @@ class SearchTextFieldIn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       ehTheme.isDarkMode;
-      return CupertinoTextField(
-        style: const TextStyle(height: 1.25),
-        decoration: BoxDecoration(
-          color: ehTheme.textFieldBackgroundColor!.withOpacity(0.6),
-          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        ),
-        placeholder: L10n.of(context).search,
-        placeholderStyle: const TextStyle(
-          fontWeight: FontWeight.w400,
-          color: CupertinoColors.placeholderText,
-          height: 1.25,
-        ),
-        // clearButtonMode: OverlayVisibilityMode.editing,
-        prefix: CupertinoButton(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          minSize: 0,
-          child: Icon(
-            FontAwesomeIcons.magnifyingGlass,
-            size: 20.0,
-            color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
+      return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
+        return CupertinoTextField(
+          style: const TextStyle(height: 1.25),
+          decoration: BoxDecoration(
+            color: ehTheme.textFieldBackgroundColor!.withOpacity(0.6),
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           ),
-          onPressed: () {},
-        ),
-        suffix: GetBuilder<SearchPageController>(
-          id: GetIds.SEARCH_CLEAR_BTN,
-          tag: searchPageCtrlTag,
-          builder: (SearchPageController controller) {
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (controller.textIsGalleryUrl)
-                  GestureDetector(
-                    onTap: controller.jumpToGallery,
-                    child: Icon(
-                      FontAwesomeIcons.circleArrowRight,
-                      size: 20.0,
-                      color: CupertinoDynamicColor.resolve(
-                              _kClearButtonColor, Get.context!)
-                          .withOpacity(iconOpacity),
-                    ).paddingSymmetric(horizontal: 6),
-                  ),
-                if (controller.textIsNotEmpty && !controller.textIsGalleryUrl)
-                  GestureDetector(
-                    onTap: controller.addToQuickSearch,
-                    child: Icon(
-                      FontAwesomeIcons.circlePlus,
-                      size: 20.0,
-                      color: CupertinoDynamicColor.resolve(
-                              _kClearButtonColor, Get.context!)
-                          .withOpacity(iconOpacity),
-                    ).paddingSymmetric(horizontal: 4),
-                  ),
-                if (controller.textIsNotEmpty)
-                  GestureDetector(
-                    onTap: controller.clearText,
-                    child: Icon(
-                      FontAwesomeIcons.circleXmark,
-                      size: 20.0,
-                      color: CupertinoDynamicColor.resolve(
-                              _kClearButtonColor, Get.context!)
-                          .withOpacity(iconOpacity),
-                    ).paddingSymmetric(horizontal: 6),
-                  ),
-              ],
-            );
-          },
-        ),
-        padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
-        controller: controller.searchTextController,
-        autofocus: controller.autofocus,
-        onEditingComplete: controller.onEditingComplete,
-        focusNode: controller.searchFocusNode,
-        maxLines: multiline ? null : 1,
-        textInputAction: TextInputAction.search,
-      );
+          placeholder: L10n.of(context).search,
+          placeholderStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            color: CupertinoColors.placeholderText,
+            height: 1.25,
+          ),
+          // clearButtonMode: OverlayVisibilityMode.editing,
+          prefix: CupertinoButton(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            minSize: 0,
+            child: Icon(
+              FontAwesomeIcons.magnifyingGlass,
+              size: 20.0,
+              color: CupertinoColors.systemGrey.withOpacity(iconOpacity),
+            ),
+            onPressed: () {},
+          ),
+          suffix: GetBuilder<SearchPageController>(
+            id: GetIds.SEARCH_CLEAR_BTN,
+            tag: searchPageCtrlTag,
+            builder: (SearchPageController controller) {
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (GetPlatform.isDesktop)
+                    Builder(builder: (context) {
+                      bool isRefresh = false;
+                      return StatefulBuilder(builder: (context, setState) {
+                        return GestureDetector(
+                          onTap: () async {
+                            setState(() {
+                              isRefresh = true;
+                            });
+                            await controller.reloadData();
+                            setState(() {
+                              isRefresh = false;
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: isRefresh
+                                ? const CupertinoActivityIndicator(radius: 8)
+                                : Icon(
+                                    FontAwesomeIcons.rotateRight,
+                                    size: 18.0,
+                                    color: CupertinoDynamicColor.resolve(
+                                            _kClearButtonColor, Get.context!)
+                                        .withOpacity(iconOpacity),
+                                  ),
+                          ),
+                        );
+                      });
+                    }),
+                  if (controller.textIsNotEmpty && !controller.textIsGalleryUrl)
+                    GestureDetector(
+                      onTap: controller.addToQuickSearch,
+                      child: Icon(
+                        FontAwesomeIcons.circlePlus,
+                        size: 20.0,
+                        color: CupertinoDynamicColor.resolve(
+                                _kClearButtonColor, Get.context!)
+                            .withOpacity(iconOpacity),
+                      ).paddingSymmetric(horizontal: 4),
+                    ),
+                  if (controller.textIsNotEmpty)
+                    GestureDetector(
+                      onTap: controller.clearText,
+                      child: Icon(
+                        FontAwesomeIcons.circleXmark,
+                        size: 20.0,
+                        color: CupertinoDynamicColor.resolve(
+                                _kClearButtonColor, Get.context!)
+                            .withOpacity(iconOpacity),
+                      ).paddingSymmetric(horizontal: 6),
+                    ),
+                ],
+              );
+            },
+          ),
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 5, 6),
+          controller: controller.searchTextController,
+          autofocus: controller.autofocus,
+          onEditingComplete: controller.onEditingComplete,
+          focusNode: controller.searchFocusNode,
+          maxLines: (isKeyboardVisible && multiline) ? null : 1,
+          textInputAction: TextInputAction.search,
+        );
+      });
     });
   }
 }
