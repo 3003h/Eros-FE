@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -6,6 +7,8 @@ import 'package:get/get.dart' hide Node;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
+
+import '../../utils/logger.dart';
 
 String parseErrGallery(String response) {
   final Document document = parse(response);
@@ -28,11 +31,10 @@ List<GalleryComment> parseGalleryComment(Document document) {
       // 评论人
       final Element? postElem = childrenElms?[0];
       final String postName = postElem?.text.trim() ?? '';
+      print('postName: $postName');
 
       final Element? userIndexElm =
           comment.querySelector('div.c2 > div.c3 > a:nth-child(3)');
-
-      // print('userIndexElm ${userIndexElm?.innerHtml}');
 
       final String userIndex = userIndexElm?.attributes['href']?.trim() ?? '';
       final String userId = RegExp(r'.+index\.php\?showuser=(\d+)')
@@ -215,7 +217,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
       final spanElms = scoresElem?.querySelectorAll('span') ?? [];
 
       final _scoreDetails = [
-        (scoresElem?.nodes.first.text ?? '').replaceFirstMapped(
+        (scoresElem?.nodes.firstOrNull?.text ?? '').replaceFirstMapped(
             RegExp(r'(.+),\s+'), (match) => match.group(1) ?? ''),
         ...spanElms.map((e) => e.text).toList()
       ];
@@ -234,7 +236,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
         menberId: userId,
       ));
     } catch (e, stack) {
-      // logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
+      logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
     }
   }
 
