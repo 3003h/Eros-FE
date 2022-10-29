@@ -195,7 +195,7 @@ class AppPages {
         Get.lazyPut(() => ViewExtController(), fenix: true);
       }),
       // opaque: kDebugMode,
-      opaque: false,
+      opaque: GetPlatform.isIOS,
       showCupertinoParallax: false,
     ),
     GetPage(

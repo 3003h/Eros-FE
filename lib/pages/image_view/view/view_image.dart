@@ -571,7 +571,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               // image: EhCheckHideImage(
               //   checkQRCodeHide: checkQRCodeHide,
               //   checkPHashHide: checkPHashHide,
-              //   imageProvider: ExtendedEHNetworkImageProvider(
+              //   imageProvider: ExtendedNetworkImageProvider(
               //     _image?.imageUrl ?? '',
               //     timeLimit: const Duration(seconds: 10),
               //     cache: true,

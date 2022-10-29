@@ -193,6 +193,21 @@ class DoublePageView extends GetView<ViewExtController> {
 
   // ViewExtState get vState => controller.vState;
 
+  double getRatio(int ser, ViewExtState vState) {
+    final _curImage = vState.imageMap?[ser];
+    if (_curImage == null) {
+      return 1.0;
+    }
+
+    if ((_curImage.imageHeight ?? 0) > 0) {
+      return (_curImage.imageWidth ?? 0) / _curImage.imageHeight!;
+    } else if ((_curImage.thumbHeight ?? 0) > 0) {
+      return (_curImage.thumbWidth ?? 0) / _curImage.thumbHeight!;
+    } else {
+      return 1.0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ViewExtState vState = controller.vState;
@@ -204,85 +219,54 @@ class DoublePageView extends GetView<ViewExtController> {
         : pageIndex * 2;
     vState.serStart = serStart;
 
-    // logger.d('pageIndex $pageIndex leftSer $serStart');
+    double? _ratioStart = getRatio(serStart, vState);
 
-    Alignment? alignmentL =
-        vState.filecount > serStart ? Alignment.centerRight : null;
-    Alignment? alignmentR = serStart <= 0 ? null : Alignment.centerLeft;
+    double? _ratioEnd =
+        vState.filecount <= serStart ? 0.0 : getRatio(serStart + 1, vState);
 
-    logger.v('alignmentL:$alignmentL  alignmentR:$alignmentR');
+    double? _ratioBoth = _ratioStart + _ratioEnd;
 
-    double? _flexStart = () {
-      try {
-        final _curImage = vState.imageMap?[serStart];
-        return _curImage!.imageWidth! / _curImage.imageHeight!;
-      } on Exception catch (_) {
-        final _curImage = vState.imageMap?[serStart];
-        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
-      } catch (e) {
-        return 1.0;
-      }
-    }();
+    logger.v(
+        '_ratioStart:$_ratioStart  _ratioEnd:$_ratioEnd, _ratioBoth:$_ratioBoth');
 
-    double? _flexEnd = () {
-      if (vState.filecount <= serStart) {
-        return 0.0;
-      }
-      try {
-        final _curImage = vState.imageMap?[serStart + 1];
-        return _curImage!.imageWidth! / _curImage.imageHeight!;
-      } on Exception catch (_) {
-        final _curImage = vState.imageMap?[serStart + 1];
-        return _curImage!.thumbWidth! / _curImage.thumbHeight!;
-      } catch (e) {
-        return 1.0;
-      }
-    }();
-
-    logger.v('_flexStart:$_flexStart  _flexEnd:$_flexEnd');
+    final screenWidth = MediaQuery.of(context).size.width;
 
     final List<Widget> _pageList = <Widget>[
       if (serStart > 0)
         Expanded(
-          flex: _flexStart * 1000 ~/ 1,
-          child: Container(
-            alignment: reverse ? alignmentR : alignmentL,
-            child: ViewImage(
-              imageSer: serStart,
-              enableDoubleTap: false,
-              mode: ExtendedImageMode.none,
-              // enableSlideOutPage: false,
-            ),
+          flex: _ratioStart * screenWidth ~/ 1,
+          child: ViewImage(
+            imageSer: serStart,
+            enableDoubleTap: false,
+            mode: ExtendedImageMode.none,
+            enableSlideOutPage: false,
           ),
         ),
       if (vState.filecount > serStart)
         Expanded(
-          flex: _flexEnd * 1000 ~/ 1,
-          child: Container(
-            alignment: reverse ? alignmentL : alignmentR,
-            child: ViewImage(
-              imageSer: serStart + 1,
-              enableDoubleTap: false,
-              mode: ExtendedImageMode.none,
-              // enableSlideOutPage: false,
-            ),
+          flex: _ratioEnd * screenWidth ~/ 1,
+          child: ViewImage(
+            imageSer: serStart + 1,
+            enableDoubleTap: false,
+            mode: ExtendedImageMode.none,
+            enableSlideOutPage: false,
           ),
         ),
     ];
 
     return GestureDetector(
-      // onDoubleTap: () {
-      //   logger.d('onDoubleTap');
-      //   controller.photoViewScaleStateController.scaleState =
-      //       PhotoViewScaleState.zoomedOut;
-      // },
       onDoubleTapDown: (details) {
         logger.d('onDoubleTapDown');
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: reverse ? _pageList.reversed.toList() : _pageList,
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: _ratioBoth,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: reverse ? _pageList.reversed.toList() : _pageList,
+          ),
+        ),
       ),
     );
   }
