@@ -308,6 +308,9 @@ class CustomTabbarController extends DefaultTabViewController {
   }
 
   Future<void> syncProfiles() async {
+    if (!webdavController.syncGroupProfile) {
+      return;
+    }
     final listLocal = List<CustomProfile>.from(profiles);
     logger.v('listLocal ${listLocal.length} \n${listLocal.map((e) => e.uuid)}');
     logger.v('${jsonEncode(listLocal)} ');
