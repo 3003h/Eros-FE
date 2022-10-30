@@ -34,7 +34,7 @@ const int _kDefNameLen = 4;
 
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
-    : (GetPlatform.isDesktop
+    : (GetPlatform.isWindows
         ? path.join((await getDownloadsDirectory())!.path, 'fehviewer')
         : path.join(Global.appDocPath, 'Download'));
 
@@ -158,8 +158,16 @@ class DownloadController extends GetxController {
 
     final String _downloadPath = path.join(
         '$gid - ${path.split(title).join('_').replaceAll(RegExp(r'[/:*"<>|,?]'), '_')}');
-    final String _dirPath =
-        await _getGalleryDownloadPath(custpath: _downloadPath);
+    String _dirPath;
+    try {
+      _dirPath = await _getGalleryDownloadPath(custpath: _downloadPath);
+    } catch (err, stack) {
+      logger.e('创建目录失败', err, stack);
+      showToast('创建目录失败, $err');
+      return;
+    }
+
+    logger.d('downloadPath:$_dirPath');
 
     // 登记主任务表
     final GalleryTask galleryTask = GalleryTask(
@@ -717,9 +725,9 @@ class DownloadController extends GetxController {
       _dirPath = path.join(ehConfigService.downloadLocatino, custpath);
       savedDir = Directory(_dirPath);
     } else if (!GetPlatform.isIOS) {
-      logger.d('无自定义下载路径');
       _dirPath = path.join(await defDownloadPath, custpath);
       savedDir = Directory(_dirPath);
+      logger.d('无自定义下载路径, 使用默认路径 $_dirPath');
     } else {
       logger.d('iOS');
       // iOS 记录的为相对路径 不记录doc的实际路径
