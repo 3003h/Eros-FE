@@ -28,6 +28,7 @@ class ViewImage extends StatefulWidget {
     this.enableDoubleTap = true,
     this.mode = ExtendedImageMode.gesture,
     this.enableSlideOutPage = true,
+    this.imageSizeChanged,
   }) : super(key: key);
 
   final int imageSer;
@@ -35,6 +36,7 @@ class ViewImage extends StatefulWidget {
   final bool enableDoubleTap;
   final ExtendedImageMode mode;
   final bool enableSlideOutPage;
+  final ValueChanged<Size>? imageSizeChanged;
 
   @override
   _ViewImageState createState() => _ViewImageState();
@@ -205,6 +207,9 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
       loadStateChanged: (ExtendedImageState state) {
         final ImageInfo? imageInfo = state.extendedImageInfo;
+        widget.imageSizeChanged?.call(Size(
+            imageInfo?.image.width.toDouble() ?? 0.0,
+            imageInfo?.image.height.toDouble() ?? 0.0));
         if (state.extendedImageLoadState == LoadState.completed ||
             imageInfo != null) {
           // 加载完成 显示图片
@@ -520,9 +525,14 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               return fileImage(_image!.tempPath!);
             }
 
+            // 图片加载完成
             final _onLoadCompleted = (ExtendedImageState state) {
               final ImageInfo? imageInfo = state.extendedImageInfo;
               controller.setScale100(imageInfo!, context.mediaQuerySize);
+
+              widget.imageSizeChanged?.call(Size(
+                  imageInfo.image.width.toDouble(),
+                  imageInfo.image.height.toDouble()));
 
               if (_image != null) {
                 final GalleryImage? _tmpImage = vState.imageMap?[_image.ser];

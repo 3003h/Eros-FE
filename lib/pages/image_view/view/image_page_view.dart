@@ -42,7 +42,10 @@ class ImagePageView extends GetView<ViewExtController> {
                       maxScale: PhotoViewComputedScale.contained * 2.0,
                       childSize: MediaQuery.of(context).size * 2,
                       scaleStateCycle: lisviewScaleStateCycle,
-                      child: DoublePageView(pageIndex: pageIndex),
+                      child: DoublePageView(
+                        pageIndex: pageIndex,
+                        key: ValueKey(controller.vState.columnMode),
+                      ),
                     );
                   },
                 );
@@ -95,7 +98,10 @@ class ImagePageView extends GetView<ViewExtController> {
                       controller: logic.photoViewController,
                       // scaleStateController: logic.photoViewScaleStateController,
                       // disableGestures: true,
-                      child: DoublePageView(pageIndex: pageIndex),
+                      child: DoublePageView(
+                        pageIndex: pageIndex,
+                        key: ValueKey(controller.vState.columnMode),
+                      ),
                     );
                   });
           }
