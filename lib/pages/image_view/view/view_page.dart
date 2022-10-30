@@ -282,13 +282,15 @@ class _DoublePageViewState extends State<DoublePageView> {
         ),
     ];
 
-    Widget doubleView = AspectRatio(
+    Widget doubleView = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: reverse ? _pageList.reversed.toList() : _pageList,
+    );
+
+    doubleView = AspectRatio(
       aspectRatio: _ratioBoth,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: reverse ? _pageList.reversed.toList() : _pageList,
-      ),
+      child: doubleView,
     );
 
     return GestureDetector(
