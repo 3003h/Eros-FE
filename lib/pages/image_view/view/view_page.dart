@@ -259,7 +259,7 @@ class _DoublePageViewState extends State<DoublePageView> {
     final reverse = vState.viewMode == ViewMode.rightToLeft;
 
     logger.v(
-        '_ratioStart:$_ratioStart  _ratioEnd:$_ratioEnd, _ratioBoth:$_ratioBoth');
+        '_ratioStart:$_ratioStart, _ratioEnd:$_ratioEnd, _ratioBoth:$_ratioBoth');
 
     final List<Widget> _pageList = <Widget>[
       if (serStart > 0)
