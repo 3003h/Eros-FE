@@ -94,7 +94,7 @@ dependencies:
   keframe: ^3.0.0
   executor: ^2.2.2
   synchronized: ^3.0.0
-  isolate_handler: ^1.0.0
+  isolate_handler: ^1.0.2
   worker_manager: ^4.2.4
   collection: ^1.15.0
   zoom_widget: ^2.0.0
