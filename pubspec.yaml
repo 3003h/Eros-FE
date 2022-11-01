@@ -52,7 +52,7 @@ dependencies:
   # 从分享菜单打开
   receive_sharing_intent: ^1.4.5
   # 分享
-  share_plus: ^6.0.1
+  share_plus: ^6.2.0
   # 权限检查
   permission_handler: ^10.0.0
   # 缓存
