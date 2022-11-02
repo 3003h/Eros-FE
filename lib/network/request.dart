@@ -45,7 +45,7 @@ Future<GalleryList?> getGallery({
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
-  logger.d('globalSearch $globalSearch');
+  logger.v('globalSearch $globalSearch');
 
   late final String _url;
   switch (galleryListType) {
@@ -81,7 +81,7 @@ Future<GalleryList?> getGallery({
       'favcat': favcat,
   };
 
-  logger.d('advanceSearch ${advanceSearch?.param}  refresh $refresh');
+  logger.v('advanceSearch ${advanceSearch?.param}  refresh $refresh');
 
   /// 高级搜索处理
   if (advanceSearch != null) {
@@ -125,16 +125,20 @@ Future<GalleryList?> getGallery({
   }
 
   if (httpResponse.error is FavOrderException) {
-    logger.d('FavOrderException');
     final _order = (httpResponse.error as FavOrderException).order;
     _params['inline_set'] = _order;
+    logger.e('FavOrderException, need change order inline_set=$_order');
     _params.removeWhere((key, value) => key == 'page');
+
+    logger.d('ff $_url ${_params}');
     httpResponse = await dioHttpClient.get(
       _url,
       queryParameters: _params,
       httpTransformer:
           isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
-      options: getCacheOptions(forceRefresh: true),
+      options: getCacheOptions(forceRefresh: false)
+        ..followRedirects = true
+        ..validateStatus = (status) => (status ?? 0) < 500,
       cancelToken: cancelToken,
     );
   }
@@ -142,7 +146,7 @@ Future<GalleryList?> getGallery({
   if (httpResponse.ok && httpResponse.data is GalleryList) {
     return httpResponse.data as GalleryList;
   } else {
-    logger.v('${httpResponse.error.runtimeType}');
+    logger.d('${httpResponse.error.runtimeType}');
     throw httpResponse.error ?? EhError(error: 'getGallery error');
   }
 }

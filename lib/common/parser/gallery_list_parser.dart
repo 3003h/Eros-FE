@@ -30,16 +30,16 @@ bool isGalleryListDmL(String response) {
 bool isFavoriteOrder(String response) {
   final dom.Document document = parse(response);
 
-  final List<dom.Element> domList =
-      document.querySelectorAll('body > div.ido > div');
-
-  if (domList.length > 2) {
-    final dom.Element? orderElm = domList[2].querySelector('div > span');
-// logger.d('${orderElm.text}');
-    return orderElm?.text.trim() == 'Favorited';
-  }
-
-  return false;
+  final dom.Element? orderElm =
+      document.querySelector('.searchnav')?.children.firstOrNull;
+  logger.d('ooo ${orderElm?.text}');
+  final options = orderElm?.querySelectorAll('option');
+  return (options
+              ?.where((e) => e.attributes['selected'] == 'selected')
+              .firstOrNull
+              ?.text ??
+          '')
+      .contains('Favorited');
 }
 
 GalleryList parseGalleryListOfFav(String response) {
