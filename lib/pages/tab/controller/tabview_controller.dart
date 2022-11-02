@@ -11,23 +11,14 @@ import '../comm.dart';
 import 'enum.dart';
 
 abstract class TabViewController extends GetxController {
-  // 当前页码
-  final _curPage = (-1).obs;
-  int get curPage => _curPage.value;
-  set curPage(int val) => _curPage.value = val;
-
   final TagController tagController = Get.find();
 
   String get listViewId => 'listViewId';
 
-  // 最小页码
-  int minPage = 1;
-  // 最大页码
-  int maxPage = 1;
   // 下一页
-  int nextPage = 1;
+  String? next;
   // 上一页
-  int? prevPage;
+  String? prev;
 
   String? heroTag;
 
@@ -35,7 +26,7 @@ abstract class TabViewController extends GetxController {
 
   bool canLoadMore = false;
 
-  bool get keepPosition => curPage > -1;
+  bool get keepPosition => prev?.isNotEmpty ?? false;
 
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
@@ -73,24 +64,29 @@ abstract class TabViewController extends GetxController {
     return null;
   }
 
+  Future<GalleryList?> fetchPrevData() async {
+    cancelToken = CancelToken();
+    return null;
+  }
+
   // 首次请求
   Future<void> firstLoad() async {
     canLoadMore = false;
     await Future.delayed(200.milliseconds);
     try {
       cancelToken = CancelToken();
-      final GalleryList? rult = await fetchData();
-      if (rult == null) {
+      final GalleryList? result = await fetchData();
+      if (result == null) {
         change(null, status: RxStatus.loading());
         return;
       }
 
-      final _listItem = rult.gallerys;
+      final _listItem = result.gallerys;
 
       logger.v('_listItem ${_listItem?.length}');
 
-      maxPage = rult.maxPage ?? 0;
-      nextPage = rult.nextPage ?? 1;
+      next = result.next;
+      prev = result.prev;
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -103,24 +99,28 @@ abstract class TabViewController extends GetxController {
 
   // 重新加载
   Future<void> reloadData() async {
-    curPage = 0;
+    next = null;
+    prev = null;
 
     try {
-      final GalleryList? rult = await fetchData(
+      final GalleryList? result = await fetchData(
         refresh: true,
       );
 
-      logger.v('reloadData length ${rult?.gallerys?.length}');
+      logger.v('reloadData length ${result?.gallerys?.length}');
 
-      if (rult == null) {
+      if (result == null) {
         return;
       }
 
-      final List<GalleryProvider>? rultList = rult.gallerys;
+      final List<GalleryProvider>? resultList = result.gallerys;
 
-      maxPage = rult.maxPage ?? 0;
-      nextPage = rult.nextPage ?? 1;
-      change(rultList, status: RxStatus.success());
+      next = result.next;
+      prev = result.prev;
+
+      logger.v('reloadData next $next, prev $prev');
+
+      change(resultList, status: RxStatus.success());
     } catch (err) {
       // change(state, status: RxStatus.error(err.toString()));
       final errmsg = err is HttpException ? err.message : '$err';
@@ -128,7 +128,8 @@ abstract class TabViewController extends GetxController {
     }
   }
 
-  int? lastNextPage;
+  String? lastNext;
+  String? lastPrev;
 
   // 加载更多
   Future<void> loadDataMore() async {
@@ -143,43 +144,42 @@ abstract class TabViewController extends GetxController {
       return;
     }
 
-    if (lastNextPage == nextPage) {
-      logger.v('lastNextPage == nextPage  $nextPage');
+    if (lastNext == next) {
+      logger.v('lastNext == next  $next');
       return;
     }
 
     logger.v('loadDataMore .....');
     pageState = PageState.LoadingMore;
 
-    logger.v('load page: $nextPage');
+    logger.v('load page next: $next');
 
-    lastNextPage = nextPage;
+    lastNext = next;
 
     try {
-      final GalleryList? rult = await fetchMoreData();
+      final GalleryList? result = await fetchMoreData();
 
-      if (rult == null) {
+      if (result == null) {
         return;
       }
 
-      final List<GalleryProvider> rultList = rult.gallerys ?? [];
+      final List<GalleryProvider> resultList = result.gallerys ?? [];
 
-      if (rultList.isNotEmpty &&
+      if (resultList.isNotEmpty &&
           state?.indexWhere(
-                  (GalleryProvider e) => e.gid == rultList.first.gid) ==
+                  (GalleryProvider e) => e.gid == resultList.first.gid) ==
               -1) {
-        maxPage = rult.maxPage ?? 0;
-        nextPage = rult.nextPage ?? 1;
-        curPage = nextPage;
+        next = result.next;
+        prev = result.prev;
       }
 
       final insertIndex = state?.length ?? 0;
 
       logger.v('insertIndex $insertIndex');
 
-      change([...?state, ...rultList], status: RxStatus.success());
+      change([...?state, ...resultList], status: RxStatus.success());
 
-      // for (final _ in rultList) {
+      // for (final _ in resultList) {
       //   sliverAnimatedListKey.currentState?.insertItem(insertIndex);
       // }
     } catch (e, stack) {
@@ -193,23 +193,70 @@ abstract class TabViewController extends GetxController {
 
   // 加载上一页
   Future<void> loadPrevious() async {
-    // keepPosition = true;
+    await Future.delayed(100.milliseconds);
+    if (!canLoadData) {
+      logger.e('not canLoadData');
+      return;
+    }
 
-    await loadFromPage(prevPage ?? 0, previous: true);
+    if (!canLoadMore) {
+      logger.e('not canLoadMore');
+      return;
+    }
+
+    if (lastPrev == prev) {
+      logger.v('lastNext == next  $next');
+      return;
+    }
+
+    logger.v('loadDataMore .....');
+    pageState = PageState.LoadingMore;
+
+    logger.v('load page prev: $prev');
+
+    lastPrev = prev;
+
+    try {
+      final GalleryList? result = await fetchPrevData();
+
+      if (result == null) {
+        return;
+      }
+
+      final List<GalleryProvider> resultList = result.gallerys ?? [];
+
+      if (resultList.isNotEmpty &&
+          state?.indexWhere(
+                  (GalleryProvider e) => e.gid == resultList.first.gid) ==
+              -1) {
+        next = result.next;
+        prev = result.prev;
+      }
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        change([...resultList, ...?state], status: RxStatus.success());
+      });
+    } catch (e, stack) {
+      pageState = PageState.LoadingException;
+      rethrow;
+    }
+    // 成功才更新
+
+    pageState = PageState.None;
   }
 
   // 跳转到指定页加载
-  Future<void> loadFromPage(int page, {bool previous = false}) async {
-    cancelToken = CancelToken();
-  }
+  // Future<void> loadFromPage(int page, {bool previous = false}) async {
+  //   cancelToken = CancelToken();
+  // }
 
   Future<void> onRefresh() async {
     if (!(cancelToken?.isCancelled ?? false)) {
       cancelToken?.cancel();
     }
     change(state, status: RxStatus.success());
-    logger.v('minPage: $minPage');
-    if (minPage > 1) {
+    logger.v('prev: $prev');
+    if ((prev ?? '').isNotEmpty) {
       await loadPrevious();
     } else {
       await reloadData();
