@@ -116,7 +116,7 @@ dependencies:
   palette_generator: ^0.3.2
   getwidget: ^3.0.1
 #  open_file: ^3.2.1
-  open_filex: ^4.1.1
+  open_filex: ^4.3.0
   flustars: ^2.0.1
   dio_smart_retry: ^1.0.3
   flutter_smart_dialog: ^4.5.4
