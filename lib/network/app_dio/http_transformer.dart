@@ -108,16 +108,13 @@ class FavoriteListHttpTransformer extends HttpTransformer {
     // 排序参数
     final String _order = EHConst.favoriteOrder[order] ?? EHConst.FAV_ORDER_FAV;
     // final bool isOrderFav = isFavoriteOrder(html);
-    final bool isOrderFav = isFavoriteOrder(html);
+    final bool isOrderFav = await compute(isFavoriteOrder, html);
 
     final bool needReOrder = isOrderFav ^ (order == FavoriteOrder.fav);
 
-    logger
-        .d('isOrderFav $isOrderFav, _order: $_order, needReOrder $needReOrder');
-
     // 列表样式检查 不符合则设置参数重新请求
-    final bool isDml = isGalleryListDmL(html);
-    // final bool isDml = await compute(isGalleryListDmL, html);
+    // final bool isDml = isGalleryListDmL(html);
+    final bool isDml = await compute(isGalleryListDmL, html);
 
     if (!isDml) {
       return DioHttpResponse<GalleryList>.failureFromError(
