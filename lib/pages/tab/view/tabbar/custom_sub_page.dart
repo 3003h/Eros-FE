@@ -82,8 +82,12 @@ class _SubListViewState<T extends CustomSubListController>
 
   Widget _buildRefresh(BuildContext context) {
     return SliverPadding(
-        padding: EdgeInsets.only(
-            top: context.mediaQueryPadding.top + kTopTabbarHeight + 8),
+        // padding: EdgeInsets.only(
+        //     top: context.mediaQueryPadding.top + kTopTabbarHeight),
+        padding: widget.pinned
+            ? const EdgeInsets.only(top: kHeaderMaxHeight)
+            : EdgeInsets.only(
+                top: context.mediaQueryPadding.top + kTopTabbarHeight),
         sliver: EhCupertinoSliverRefreshControl(
           onRefresh: subController.onRefresh,
         ));

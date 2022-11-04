@@ -72,8 +72,10 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
 
   Widget _buildRefresh(BuildContext context) {
     return SliverPadding(
-        padding: EdgeInsets.only(
-            top: context.mediaQueryPadding.top + kTopTabbarHeight + 8),
+        padding: widget.pinned
+            ? const EdgeInsets.only(top: kHeaderMaxHeight)
+            : EdgeInsets.only(
+                top: context.mediaQueryPadding.top + kTopTabbarHeight),
         sliver: EhCupertinoSliverRefreshControl(
           onRefresh: _favoriteSubListController.onRefresh,
         ));
