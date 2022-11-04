@@ -29,7 +29,8 @@ import '../../item/gallery_item_grid_placeholder.dart';
 SliverPadding buildWaterfallFlow(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
-  String? next,
+  int? maxPage,
+  required int curPage,
   VoidCallback? lastComplete,
   bool large = false,
   Key? key,
@@ -65,11 +66,11 @@ SliverPadding buildWaterfallFlow(
           if (galleryProviders.length - 1 < index) {
             return const SizedBox.shrink();
           }
-
-          if (index == galleryProviders.length - 1 &&
-              (next?.isNotEmpty ?? false)) {
-            // 加载完成最后一项的回调
-            lastComplete?.call();
+          if (maxPage != null) {
+            if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+              // 加载完成最后一项的回调
+              lastComplete?.call();
+            }
           }
 
           final GalleryProvider _provider = galleryProviders[index];
@@ -108,7 +109,8 @@ SliverPadding buildWaterfallFlow(
 SliverPadding buildGridView(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
-  String? next,
+  int? maxPage,
+  required int curPage,
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
@@ -128,11 +130,11 @@ SliverPadding buildGridView(
           if (galleryProviders.length - 1 < index) {
             return const SizedBox.shrink();
           }
-
-          if (index == galleryProviders.length - 1 &&
-              (next?.isNotEmpty ?? false)) {
-            // 加载完成最后一项的回调
-            lastComplete?.call();
+          if (maxPage != null) {
+            if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+              // 加载完成最后一项的回调
+              lastComplete?.call();
+            }
           }
 
           final GalleryProvider _provider = galleryProviders[index];
@@ -165,7 +167,8 @@ SliverPadding buildGridView(
 SliverPadding buildDebugSimple(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
-  String? next,
+  int? maxPage,
+  required int curPage,
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
@@ -179,11 +182,11 @@ SliverPadding buildDebugSimple(
           if (galleryProviders.length - 1 < index) {
             return const SizedBox.shrink();
           }
-
-          if (index == galleryProviders.length - 1 &&
-              (next?.isNotEmpty ?? false)) {
-            // 加载完成最后一项的回调
-            lastComplete?.call();
+          if (maxPage != null) {
+            if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+              // 加载完成最后一项的回调
+              lastComplete?.call();
+            }
           }
 
           final GalleryProvider _provider = galleryProviders[index];
@@ -316,7 +319,8 @@ Widget buildDelGallerySliverListItem(
 Widget buildAnimatedGallerySliverListView(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
-  String? next,
+  int? maxPage,
+  int curPage = 0,
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
@@ -332,9 +336,11 @@ Widget buildAnimatedGallerySliverListView(
         return const SizedBox.shrink();
       }
 
-      if (index == galleryProviders.length - 1 && (next?.isNotEmpty ?? false)) {
-        // 加载完成最后一项的回调
-        lastComplete?.call();
+      if (maxPage != null) {
+        if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+          // 加载完成最后一项的回调
+          lastComplete?.call();
+        }
       }
 
       final GalleryProvider _itemInfo = galleryProviders[index];
@@ -377,7 +383,8 @@ Widget buildAnimatedGallerySliverListView(
 Widget buildGallerySliverListView(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
-  String? next,
+  int? maxPage,
+  int curPage = 0,
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
@@ -393,11 +400,12 @@ Widget buildGallerySliverListView(
           return const SizedBox.shrink();
         }
 
-        if (index == galleryProviders.length - 1 &&
-            (next?.isNotEmpty ?? false)) {
-          // 加载完成最后一项的回调
-          SchedulerBinding.instance
-              .addPostFrameCallback((_) => lastComplete?.call());
+        if (maxPage != null) {
+          if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+            // 加载完成最后一项的回调
+            SchedulerBinding.instance
+                .addPostFrameCallback((_) => lastComplete?.call());
+          }
         }
 
         final GalleryProvider _provider = galleryProviders[index];
@@ -433,7 +441,8 @@ Widget buildGallerySliverListView(
 Widget buildAnimatedGallerySliverListSimpleView(
   List<GalleryProvider> galleryProviders,
   tabTag, {
-  String? next,
+  int? maxPage,
+  required int curPage,
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
@@ -450,9 +459,11 @@ Widget buildAnimatedGallerySliverListSimpleView(
         return const SizedBox.shrink();
       }
 
-      if (index == galleryProviders.length - 1 && (next?.isNotEmpty ?? false)) {
-        // 加载完成最后一项的回调
-        lastComplete?.call();
+      if (maxPage != null) {
+        if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+          // 加载完成最后一项的回调
+          lastComplete?.call();
+        }
       }
 
       final GalleryProvider _provider = galleryProviders[index];
@@ -481,7 +492,8 @@ Widget buildAnimatedGallerySliverListSimpleView(
 Widget buildGallerySliverListSimpleView(
   List<GalleryProvider> galleryProviders,
   dynamic tabTag, {
-  String? next,
+  int? maxPage,
+  int curPage = 0,
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
@@ -497,11 +509,12 @@ Widget buildGallerySliverListSimpleView(
           return const SizedBox.shrink();
         }
 
-        if (index == galleryProviders.length - 1 &&
-            (next?.isNotEmpty ?? false)) {
-          // 加载完成最后一项的回调
-          SchedulerBinding.instance
-              .addPostFrameCallback((_) => lastComplete?.call());
+        if (maxPage != null) {
+          if (index == galleryProviders.length - 1 && curPage < maxPage - 1) {
+            // 加载完成最后一项的回调
+            SchedulerBinding.instance
+                .addPostFrameCallback((_) => lastComplete?.call());
+          }
         }
 
         final GalleryProvider _provider = galleryProviders[index];
@@ -532,7 +545,8 @@ Widget buildGallerySliverListSimpleView(
 Widget getGallerySliverList(
   List<GalleryProvider>? galleryProviders,
   tabTag, {
-  String? next,
+  int? maxPage,
+  int? curPage,
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
@@ -542,8 +556,9 @@ Widget getGallerySliverList(
 }) {
   final EhConfigService ehConfigService = Get.find();
   final _key = key ?? ValueKey(galleryProviders.hashCode);
+  // logger.d('_key $_key');
 
-  logger.v('next $next');
+  logger.v('lastTopitemIndex $lastTopitemIndex');
 
   return Obx(() {
     final mod = listMode?.value != ListModeEnum.global
@@ -556,7 +571,8 @@ Widget getGallerySliverList(
         return buildGallerySliverListView(
           galleryProviders ?? [],
           tabTag,
-          next: next,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
@@ -567,7 +583,8 @@ Widget getGallerySliverList(
         return buildWaterfallFlow(
           galleryProviders ?? [],
           tabTag,
-          next: next,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
@@ -577,7 +594,8 @@ Widget getGallerySliverList(
         return buildWaterfallFlow(
           galleryProviders ?? [],
           tabTag,
-          next: next,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
           lastComplete: lastComplete,
           large: true,
           key: _key,
@@ -598,7 +616,8 @@ Widget getGallerySliverList(
         return buildGallerySliverListSimpleView(
           galleryProviders ?? [],
           tabTag,
-          next: next,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
@@ -609,7 +628,8 @@ Widget getGallerySliverList(
         return buildGridView(
           galleryProviders ?? [],
           tabTag,
-          next: next,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
@@ -619,7 +639,8 @@ Widget getGallerySliverList(
         return buildDebugSimple(
           galleryProviders ?? [],
           tabTag,
-          next: next,
+          maxPage: maxPage,
+          curPage: curPage ?? 0,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,

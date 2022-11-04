@@ -85,7 +85,8 @@ class FavoriteViewController extends DefaultTabViewController {
       logger.v('本地收藏');
       final List<GalleryProvider> localFav = _localFavController.loacalFavs;
 
-      return Future<GalleryList>.value(GalleryList(gallerys: localFav));
+      return Future<GalleryList>.value(
+          GalleryList(gallerys: localFav, maxPage: 1));
     }
   }
 

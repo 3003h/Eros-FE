@@ -29,9 +29,9 @@ Options getCacheOptions({bool forceRefresh = false}) {
 }
 
 Future<GalleryList?> getGallery({
-  PageType? pageType,
-  String? gid,
-  String? search,
+  int? page,
+  String? fromGid,
+  String? serach,
   int? cats,
   bool refresh = false,
   CancelToken? cancelToken,
@@ -40,12 +40,9 @@ Future<GalleryList?> getGallery({
   String? favcat,
   ValueChanged<List<Favcat>>? favCatList,
   AdvanceSearch? advanceSearch,
-  bool globalSearch = false,
 }) async {
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
-
-  logger.d('globalSearch $globalSearch');
 
   late final String _url;
   switch (galleryListType) {
@@ -70,35 +67,37 @@ Future<GalleryList?> getGallery({
   final isPopular = galleryListType == GalleryListType.popular;
 
   final Map<String, dynamic> _params = <String, dynamic>{
-    // if (!isTopList && !isPopular) 'page': pageType ?? 0,
-    // if (isTopList) 'p': pageType ?? 0,
-    if (!isPopular && pageType != null && gid != null) pageType.value: gid,
+    if (!isTopList && !isPopular) 'page': page ?? 0,
+    if (isTopList) 'p': page ?? 0,
     if (!isTopList && !isPopular && !isFav) 'f_cats': cats,
-    // if (!isTopList && !isPopular && gid != null) 'from': gid,
-    if (!isTopList && !isPopular && search != null) 'f_search': search,
+    if (!isTopList && !isPopular && fromGid != null) 'from': fromGid,
+    if (!isTopList && !isPopular && serach != null) 'f_search': serach,
     if (isTopList && toplist != null && toplist.isNotEmpty) 'tl': toplist,
     if (isFav && favcat != null && favcat != 'a' && favcat.isNotEmpty)
       'favcat': favcat,
   };
 
-  logger.d('advanceSearch ${advanceSearch?.param}  refresh $refresh');
+  logger.v('advanceSearchParam ${advanceSearch?.param}');
 
   /// 高级搜索处理
   if (advanceSearch != null) {
-    if (advanceSearch.param.isNotEmpty && !isPopular) {
+    if (advanceSearch.param.isNotEmpty) {
       _params['advsearch'] = 1;
       _params.addAll(advanceSearch.param);
     }
-  } else if (globalSearch && _searchController.enableAdvance) {
+  } else if (!isTopList &&
+      !isPopular &&
+      !isFav &&
+      _searchController.enableAdvance) {
     _params['advsearch'] = 1;
     _params.addAll(_searchController.advanceSearchMap);
   }
 
-  if (search != null && isFav) {
+  if (serach != null && isFav) {
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.d('url:$_url ${_params}');
+  logger.v('url:$_url ${_params}');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,

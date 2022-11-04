@@ -18,14 +18,6 @@ enum GalleryListType {
   aggregate,
 }
 
-enum PageType {
-  next('next'),
-  prev('prev');
-
-  const PageType(this.value);
-  final String value;
-}
-
 abstract class FetchListClient {
   FetchListClient({required this.fetchParams});
   FetchParams fetchParams;
@@ -41,9 +33,9 @@ class DefaultFetchListClient extends FetchListClient {
   Future<GalleryList?> fetch() async {
     // await Future<void>.delayed(const Duration(seconds: 15));
     return await getGallery(
-      pageType: fetchParams.pageType,
-      gid: fetchParams.gid,
-      search: fetchParams.searchText,
+      page: fetchParams.page,
+      fromGid: fetchParams.fromGid,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
@@ -55,41 +47,37 @@ class DefaultFetchListClient extends FetchListClient {
 class SearchFetchListClient extends FetchListClient {
   SearchFetchListClient({
     required FetchParams fetchParams,
-    this.globalSearch = false,
   }) : super(fetchParams: fetchParams);
 
   final TagController tagController = Get.find();
-  final bool globalSearch;
 
   @override
   Future<GalleryList?> fetch() async {
-    final result = await getGallery(
-      pageType: fetchParams.pageType,
-      gid: fetchParams.gid,
-      search: fetchParams.searchText,
+    final rult = await getGallery(
+      page: fetchParams.page,
+      fromGid: fetchParams.fromGid,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
       galleryListType: fetchParams.galleryListType,
       advanceSearch: fetchParams.advanceSearch,
-      globalSearch: globalSearch,
     );
 
     // hide tag filter 20220606
     if ((fetchParams.galleryListType == GalleryListType.gallery &&
             !(fetchParams.advanceSearch?.disableDFTags ?? false)) ||
         fetchParams.galleryListType == GalleryListType.popular) {
-      final gidList = result?.gallerys
+      final gidList = rult?.gallerys
           ?.where((element) => tagController.needHide(element.simpleTags ?? []))
           .map((e) => e.gid);
       if (gidList != null && gidList.isNotEmpty) {
         logger.e('${fetchParams.galleryListType} remove gallery $gidList');
-        result?.gallerys
-            ?.removeWhere((element) => gidList.contains(element.gid));
+        rult?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
       }
     }
 
-    return result;
+    return rult;
   }
 }
 
@@ -101,9 +89,9 @@ class WatchedFetchListClient extends FetchListClient {
   @override
   Future<GalleryList?> fetch() async {
     return await getGallery(
-      pageType: fetchParams.pageType,
-      gid: fetchParams.gid,
-      search: fetchParams.searchText,
+      page: fetchParams.page,
+      fromGid: fetchParams.fromGid,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
@@ -120,9 +108,9 @@ class FavoriteFetchListClient extends FetchListClient {
   @override
   Future<GalleryList?> fetch() async {
     return await getGallery(
-      pageType: fetchParams.pageType,
-      gid: fetchParams.gid,
-      search: fetchParams.searchText,
+      page: fetchParams.page,
+      fromGid: fetchParams.fromGid,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
@@ -141,10 +129,10 @@ class ToplistFetchListClient extends FetchListClient {
 
   @override
   Future<GalleryList?> fetch() async {
-    final result = await getGallery(
-      pageType: fetchParams.pageType,
-      gid: fetchParams.gid,
-      search: fetchParams.searchText,
+    final rult = await getGallery(
+      page: fetchParams.page,
+      fromGid: fetchParams.fromGid,
+      serach: fetchParams.searchText,
       cats: fetchParams.cats,
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
@@ -152,15 +140,15 @@ class ToplistFetchListClient extends FetchListClient {
       toplist: fetchParams.toplist,
     );
 
-    final gidList = result?.gallerys
+    final gidList = rult?.gallerys
         ?.where((element) => tagController.needHide(element.simpleTags ?? []))
         .map((e) => e.gid);
     if (gidList != null && gidList.isNotEmpty) {
       logger.i('${fetchParams.galleryListType} remove gallery $gidList');
-      result?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
+      rult?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
     }
 
-    return result;
+    return rult;
   }
 }
 
@@ -180,8 +168,8 @@ class PopularFetchListClient extends FetchListClient {
 
 class FetchParams {
   FetchParams({
-    this.pageType = PageType.next,
-    this.gid,
+    this.page,
+    this.fromGid,
     this.searchText,
     this.searchType = SearchType.normal,
     this.cats,
@@ -192,12 +180,12 @@ class FetchParams {
     this.galleryListType = GalleryListType.gallery,
     this.advanceSearch,
   });
-  PageType? pageType;
-  String? gid;
+  int? page;
+  String? fromGid;
   String? searchText;
   int? cats;
-  bool refresh;
-  SearchType searchType;
+  bool refresh = false;
+  SearchType searchType = SearchType.normal;
   CancelToken? cancelToken;
   String? favcat;
   String? toplist;
