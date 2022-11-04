@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -309,37 +311,36 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             },
           ),
           // 页码跳转按钮
-          // 20221102 eh改版
-          // CupertinoButton(
-          //   minSize: 36,
-          //   padding: const EdgeInsets.only(right: 6),
-          //   child: Container(
-          //     alignment: Alignment.center,
-          //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-          //     constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
-          //     decoration: BoxDecoration(
-          //       border: Border.all(
-          //         color: CupertinoDynamicColor.resolve(
-          //             CupertinoColors.activeBlue, context),
-          //         width: 1.8,
-          //       ),
-          //       borderRadius: BorderRadius.circular(8),
-          //     ),
-          //     child: Obx(() => Text(
-          //           '${max(1, controller.curPage + 1)}',
-          //           textAlign: TextAlign.center,
-          //           textScaleFactor: 0.9,
-          //           style: TextStyle(
-          //               height: 1.3,
-          //               fontWeight: FontWeight.bold,
-          //               color: CupertinoDynamicColor.resolve(
-          //                   CupertinoColors.activeBlue, context)),
-          //         )),
-          //   ),
-          //   onPressed: () {
-          //     controller.showJumpToPage();
-          //   },
-          // ),
+          CupertinoButton(
+            minSize: 36,
+            padding: const EdgeInsets.only(right: 6),
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+              constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.activeBlue, context),
+                  width: 1.8,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Obx(() => Text(
+                    '${max(1, controller.curPage + 1)}',
+                    textAlign: TextAlign.center,
+                    textScaleFactor: 0.9,
+                    style: TextStyle(
+                        height: 1.3,
+                        fontWeight: FontWeight.bold,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.activeBlue, context)),
+                  )),
+            ),
+            onPressed: () {
+              controller.showJumpToPage();
+            },
+          ),
         ],
       ),
     );
