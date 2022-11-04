@@ -171,6 +171,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Название категории"),
         "groupType": MessageLookupByLibrary.simpleMessage("Тип категории"),
         "hide": MessageLookupByLibrary.simpleMessage("Скрыть"),
+        "hide_top_bar_on_scroll":
+            MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
         "host": MessageLookupByLibrary.simpleMessage("Узел"),
         "hours": MessageLookupByLibrary.simpleMessage("час(ов)"),
         "image_download_type":

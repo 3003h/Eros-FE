@@ -1,20 +1,14 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/base_service.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -24,7 +18,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import '../enum.dart';
 import 'controller_tag_service.dart';
 import 'locale_service.dart';
 
@@ -255,9 +248,20 @@ class EhConfigService extends ProfileService {
   int get webDAVMaxConnections => _webDAVMaxConnections.value;
   set webDAVMaxConnections(int val) => _webDAVMaxConnections.value = val;
 
+  // hideTopBarOnScroll
+  final _hideTopBarOnScroll = false.obs;
+  bool get hideTopBarOnScroll => _hideTopBarOnScroll.value;
+  set hideTopBarOnScroll(bool val) => _hideTopBarOnScroll.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    // hideTopBarOnScroll
+    hideTopBarOnScroll = ehConfig.hideTopBarOnScroll ?? hideTopBarOnScroll;
+    everProfile<bool>(_hideTopBarOnScroll, (value) {
+      ehConfig = ehConfig.copyWith(hideTopBarOnScroll: value);
+    });
 
     // webDAVMaxConnections
     webDAVMaxConnections =

@@ -152,6 +152,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "hide_top_bar_on_scroll":
+            MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
         "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
         "image_download_type":

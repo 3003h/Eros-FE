@@ -403,5 +403,6 @@
   "host": "地址",
   "port": "端口",
   "direct": "直连",
-  "save": "保存"
+  "save": "保存",
+  "hide_top_bar_on_scroll": "滚动时隐藏顶栏"
 }

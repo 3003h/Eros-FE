@@ -12,9 +12,11 @@ import '../gallery_base.dart';
 import '../tab_base.dart';
 
 class FavoriteSubPage extends StatefulWidget {
-  const FavoriteSubPage({Key? key, required this.favcat}) : super(key: key);
+  const FavoriteSubPage({Key? key, required this.favcat, this.pinned = true})
+      : super(key: key);
 
   final String favcat;
+  final bool pinned;
 
   @override
   _FavoriteSubPageState createState() => _FavoriteSubPageState();
@@ -52,7 +54,11 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
     return CustomScrollView(
       // cacheExtent: context.height * 2,
       slivers: [
-        _buildRefresh(context),
+        SliverSafeArea(
+          top: widget.pinned,
+          bottom: false,
+          sliver: _buildRefresh(context),
+        ),
         _buildListView(),
         Obx(() {
           return EndIndicator(
@@ -67,7 +73,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
   Widget _buildRefresh(BuildContext context) {
     return SliverPadding(
         padding: EdgeInsets.only(
-            top: context.mediaQueryPadding.top + kTopTabbarHeight),
+            top: context.mediaQueryPadding.top + kTopTabbarHeight + 8),
         sliver: EhCupertinoSliverRefreshControl(
           onRefresh: _favoriteSubListController.onRefresh,
         ));

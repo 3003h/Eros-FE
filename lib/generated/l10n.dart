@@ -4114,6 +4114,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Hide top bar on scroll`
+  String get hide_top_bar_on_scroll {
+    return Intl.message(
+      'Hide top bar on scroll',
+      name: 'hide_top_bar_on_scroll',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {
