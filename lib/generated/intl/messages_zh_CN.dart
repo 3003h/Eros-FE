@@ -139,6 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("分组名称"),
         "groupType": MessageLookupByLibrary.simpleMessage("类型"),
         "hide": MessageLookupByLibrary.simpleMessage("隐藏"),
+        "hide_top_bar_on_scroll":
+            MessageLookupByLibrary.simpleMessage("滚动时隐藏顶栏"),
         "host": MessageLookupByLibrary.simpleMessage("地址"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
         "image_download_type": MessageLookupByLibrary.simpleMessage("下载类型"),

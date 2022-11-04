@@ -403,5 +403,6 @@
   "host": "Узел",
   "port": "Порт",
   "direct": "Direct",
-  "save": "Сохранить"
+  "save": "Сохранить",
+  "hide_top_bar_on_scroll": "Hide top bar on scroll"
 }

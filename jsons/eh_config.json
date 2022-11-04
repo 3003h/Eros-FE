@@ -56,5 +56,6 @@
   "proxyPort?": 1080,
   "proxyUsername?": "",
   "proxyPassword?": "",
-  "webDAVMaxConnections?": 2
+  "webDAVMaxConnections?": 2,
+  "hideTopBarOnScroll?": false
 }

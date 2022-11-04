@@ -116,6 +116,11 @@ class ListViewLayoutSetting extends StatelessWidget {
         onChanged: _handleJpnTitleChanged,
         // desc: '如果该画廊有日文标题则优先显示',
       ),
+      TextSwitchItem(
+        L10n.of(context).hide_top_bar_on_scroll,
+        intValue: _ehConfigService.hideTopBarOnScroll,
+        onChanged: (val) => _ehConfigService.hideTopBarOnScroll = val,
+      ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
           '画廊封面模糊',
