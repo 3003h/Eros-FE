@@ -145,6 +145,11 @@ class CustomTabbarController extends DefaultTabViewController {
     this.index = index;
   }
 
+  @override
+  Future<void> showJumpDialog() async {
+    await currSubController?.showJumpDialog();
+  }
+
   // @override
   // Future<void> showJumpToPage() async {
   //   void _jump() {

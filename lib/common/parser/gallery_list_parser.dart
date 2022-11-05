@@ -100,14 +100,15 @@ GalleryList parseGalleryList(
   const searchnavSelector = '.searchnav';
   final searchnavElm = document.querySelector(searchnavSelector);
 
-  // next
-  final nextElm = searchnavElm?.children[3];
-  final nextHref = nextElm?.children.firstOrNull?.attributes['href'];
-  final _next = nextHref?.split('=').last;
-
-  final prevElm = searchnavElm?.children[2];
-  final prevHref = prevElm?.children.firstOrNull?.attributes['href'];
+  // prev
+  final prevElm = searchnavElm?.querySelector('#uprev');
+  final prevHref = prevElm?.attributes['href'];
   final _prev = prevHref?.split('=').last;
+
+  // next
+  final nextElm = searchnavElm?.querySelector('#unext');
+  final nextHref = nextElm?.attributes['href'];
+  final _next = nextHref?.split('=').last;
 
   logger.d('next:$_next, prev:$_prev');
 

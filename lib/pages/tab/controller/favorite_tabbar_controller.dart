@@ -65,6 +65,11 @@ class FavoriteTabberController extends DefaultTabViewController {
     }
   }
 
+  @override
+  Future<void> showJumpDialog() async {
+    await currSubController?.showJumpDialog();
+  }
+
   // Future<void> loadFromPageFav(int page) {
   //   return loadFromPage(page);
   // }

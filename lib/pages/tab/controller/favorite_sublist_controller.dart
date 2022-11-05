@@ -6,10 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../fetch_list.dart';
+import 'default_tabview_controller.dart';
 import 'enum.dart';
-import 'tabview_controller.dart';
 
-class FavoriteSubListController extends TabViewController {
+class FavoriteSubListController extends DefaultTabViewController {
   late String favcat;
 
   final LocalFavController _localFavController = Get.find();
@@ -108,6 +108,7 @@ class FavoriteSubListController extends TabViewController {
   //   }
   // }
 
+  @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     return FavoriteFetchListClient(fetchParams: fetchParams);
   }
@@ -116,7 +117,7 @@ class FavoriteSubListController extends TabViewController {
   Future<void> lastComplete() async {
     await super.lastComplete();
     if ((state ?? []).isNotEmpty &&
-        (next ?? '').isNotEmpty &&
+        next.isNotEmpty &&
         pageState != PageState.Loading) {
       // 加载更多
       logger.d('加载更多');

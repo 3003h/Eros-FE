@@ -751,6 +751,23 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             //     return const SizedBox.shrink();
             //   }
             // }),
+            Obx(() {
+              if (controller.next.isNotEmpty) {
+                return CupertinoButton(
+                  minSize: 40,
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    CupertinoIcons.arrow_uturn_down_circle,
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    controller.showJumpDialog();
+                  },
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
             CupertinoButton(
               minSize: 36,
               padding: const EdgeInsets.all(0),
@@ -790,17 +807,17 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             //   },
             // ),
             // 打开快捷搜索
-            CupertinoButton(
-              minSize: 36,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.listUl,
-                size: 20,
-              ),
-              onPressed: () {
-                controller.quickSearchList();
-              },
-            ),
+            // CupertinoButton(
+            //   minSize: 36,
+            //   padding: const EdgeInsets.all(0),
+            //   child: const Icon(
+            //     FontAwesomeIcons.listUl,
+            //     size: 20,
+            //   ),
+            //   onPressed: () {
+            //     controller.quickSearchList();
+            //   },
+            // ),
           ],
         ),
       );
@@ -907,6 +924,16 @@ class SearchTextFieldIn extends StatelessWidget {
                             .withOpacity(iconOpacity),
                       ).paddingSymmetric(horizontal: 6),
                     ),
+                  GestureDetector(
+                    onTap: controller.quickSearchList,
+                    child: Icon(
+                      FontAwesomeIcons.listUl,
+                      size: 18.0,
+                      color: CupertinoDynamicColor.resolve(
+                              _kClearButtonColor, Get.context!)
+                          .withOpacity(iconOpacity),
+                    ).paddingOnly(right: 10, left: 6),
+                  ),
                 ],
               );
             },
