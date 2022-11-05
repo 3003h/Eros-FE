@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
@@ -113,36 +111,36 @@ class _ToplistTabState extends State<ToplistTab> {
             onPressed: () => controller.setToplist(context),
           ),
           // 页码跳转按钮
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.only(right: 6),
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-              constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.activeBlue, context),
-                  width: 1.8,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Obx(() => Text(
-                    '${max(1, controller.curPage + 1)}',
-                    textScaleFactor: 0.9,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        height: 1.25,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.activeBlue, context)),
-                  )),
-            ),
-            onPressed: () {
-              controller.showJumpToPage();
-            },
-          ),
+          // CupertinoButton(
+          //   minSize: 40,
+          //   padding: const EdgeInsets.only(right: 6),
+          //   child: Container(
+          //     alignment: Alignment.center,
+          //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+          //     constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
+          //     decoration: BoxDecoration(
+          //       border: Border.all(
+          //         color: CupertinoDynamicColor.resolve(
+          //             CupertinoColors.activeBlue, context),
+          //         width: 1.8,
+          //       ),
+          //       borderRadius: BorderRadius.circular(8),
+          //     ),
+          //     child: Obx(() => Text(
+          //           '${max(1, controller.curPage + 1)}',
+          //           textScaleFactor: 0.9,
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(
+          //               fontWeight: FontWeight.bold,
+          //               height: 1.25,
+          //               color: CupertinoDynamicColor.resolve(
+          //                   CupertinoColors.activeBlue, context)),
+          //         )),
+          //   ),
+          //   onPressed: () {
+          //     controller.showJumpToPage();
+          //   },
+          // ),
         ],
       ),
     );
@@ -229,8 +227,7 @@ class _ToplistTabState extends State<ToplistTab> {
           return getGallerySliverList(
             logic.state,
             controller.heroTag,
-            maxPage: controller.maxPage,
-            curPage: controller.curPage,
+            next: logic.next,
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,

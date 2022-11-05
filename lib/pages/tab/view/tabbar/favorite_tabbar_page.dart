@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:blur/blur.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
@@ -246,7 +244,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               ),
               onPressed: () => controller.setOrder(context),
             ),
-            PageSelectorButton(controller: controller),
+            // PageSelectorButton(controller: controller),
           ],
         ).paddingOnly(right: 4),
       );
@@ -254,47 +252,47 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
   }
 }
 
-class PageSelectorButton extends StatelessWidget {
-  const PageSelectorButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final FavoriteTabberController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoButton(
-      padding: const EdgeInsets.all(0),
-      minSize: 36,
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-        constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.activeBlue, context),
-              width: 1.8,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(8))),
-        child: Obx(() => Text(
-              '${max(1, controller.curPage + 1)}',
-              textAlign: TextAlign.center,
-              textScaleFactor: 0.9,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  height: 1.25,
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.activeBlue, context)),
-            )),
-      ),
-      onPressed: () {
-        controller.showJumpToPage();
-      },
-    );
-  }
-}
+// class PageSelectorButton extends StatelessWidget {
+//   const PageSelectorButton({
+//     Key? key,
+//     required this.controller,
+//   }) : super(key: key);
+//
+//   final FavoriteTabberController controller;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return CupertinoButton(
+//       padding: const EdgeInsets.all(0),
+//       minSize: 36,
+//       child: Container(
+//         alignment: Alignment.center,
+//         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+//         constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
+//         decoration: BoxDecoration(
+//             border: Border.all(
+//               color: CupertinoDynamicColor.resolve(
+//                   CupertinoColors.activeBlue, context),
+//               width: 1.8,
+//             ),
+//             borderRadius: const BorderRadius.all(Radius.circular(8))),
+//         child: Obx(() => Text(
+//               '${max(1, controller.curPage + 1)}',
+//               textAlign: TextAlign.center,
+//               textScaleFactor: 0.9,
+//               style: TextStyle(
+//                   fontWeight: FontWeight.bold,
+//                   height: 1.25,
+//                   color: CupertinoDynamicColor.resolve(
+//                       CupertinoColors.activeBlue, context)),
+//             )),
+//       ),
+//       onPressed: () {
+//         controller.showJumpToPage();
+//       },
+//     );
+//   }
+// }
 
 class FavoriteTabBar extends StatelessWidget {
   const FavoriteTabBar({

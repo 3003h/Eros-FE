@@ -668,8 +668,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           return getGallerySliverList(
             logic.state,
             controller.heroTag,
-            maxPage: controller.maxPage,
-            curPage: controller.curPage,
+            next: logic.next,
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,
@@ -706,52 +705,52 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             // 页码
-            Obx(() {
-              if (controller.curPage > -1) {
-                return Container(
-                  margin: const EdgeInsets.only(left: 8, right: 4),
-                  child: CupertinoButton(
-                    minSize: 36,
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 0),
-                      constraints: const BoxConstraints(minWidth: 24),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.activeBlue, context),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Obx(() => Text(
-                            '${controller.curPage + 1}',
-                            textAlign: TextAlign.center,
-                            textScaleFactor: 0.85,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.activeBlue, context),
-                              // height: 1.2,
-                              // textBaseline: TextBaseline.ideographic,
-                            ),
-                            // strutStyle: const StrutStyle(
-                            //   leading: 0.2,
-                            //   height: 1.2,
-                            //   forceStrutHeight: true,
-                            // ),
-                          )),
-                    ),
-                    onPressed: () {
-                      controller.showJumpToPage();
-                    },
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }),
+            // Obx(() {
+            //   if (controller.curPage > -1) {
+            //     return Container(
+            //       margin: const EdgeInsets.only(left: 8, right: 4),
+            //       child: CupertinoButton(
+            //         minSize: 36,
+            //         padding: const EdgeInsets.all(0),
+            //         child: Container(
+            //           padding: const EdgeInsets.symmetric(
+            //               horizontal: 4, vertical: 0),
+            //           constraints: const BoxConstraints(minWidth: 24),
+            //           decoration: BoxDecoration(
+            //             border: Border.all(
+            //               color: CupertinoDynamicColor.resolve(
+            //                   CupertinoColors.activeBlue, context),
+            //               width: 2.0,
+            //             ),
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           child: Obx(() => Text(
+            //                 '${controller.curPage + 1}',
+            //                 textAlign: TextAlign.center,
+            //                 textScaleFactor: 0.85,
+            //                 style: TextStyle(
+            //                   fontWeight: FontWeight.bold,
+            //                   color: CupertinoDynamicColor.resolve(
+            //                       CupertinoColors.activeBlue, context),
+            //                   // height: 1.2,
+            //                   // textBaseline: TextBaseline.ideographic,
+            //                 ),
+            //                 // strutStyle: const StrutStyle(
+            //                 //   leading: 0.2,
+            //                 //   height: 1.2,
+            //                 //   forceStrutHeight: true,
+            //                 // ),
+            //               )),
+            //         ),
+            //         onPressed: () {
+            //           controller.showJumpToPage();
+            //         },
+            //       ),
+            //     );
+            //   } else {
+            //     return const SizedBox.shrink();
+            //   }
+            // }),
             CupertinoButton(
               minSize: 36,
               padding: const EdgeInsets.all(0),

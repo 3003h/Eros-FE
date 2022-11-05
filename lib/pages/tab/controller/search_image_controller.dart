@@ -41,7 +41,9 @@ class SearchImageController extends DefaultTabViewController {
     }
 
     listType = ListType.gallery;
-    curPage = -1;
+    // curPage = -1;
+    next = null;
+    prev = null;
 
     if (clear) {
       change(state, status: RxStatus.loading());
@@ -55,10 +57,14 @@ class SearchImageController extends DefaultTabViewController {
         return;
       }
 
-      maxPage = rult.maxPage ?? 0;
-      curPage = maxPage >= 0 ? 0 : -1;
+      // maxPage = rult.maxPage ?? 0;
+      // curPage = maxPage >= 0 ? 0 : -1;
 
-      nextPage = rult.nextPage ?? 1;
+      // nextPage = rult.nextPage ?? 1;
+
+      next = rult.next;
+      prev = rult.prev;
+
       change(rult.gallerys ?? [], status: RxStatus.success());
     } catch (err) {
       change(null, status: RxStatus.error(err.toString()));

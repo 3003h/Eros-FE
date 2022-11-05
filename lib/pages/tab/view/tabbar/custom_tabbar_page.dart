@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -89,7 +87,6 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           controller.linkScrollBarController.enableScrollToItem();
         },
         child: Obx(() {
-          final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
           return PageView(
             // CustomScrollPhysics对于改善滑动问题没有帮助
             // physics: const CustomScrollPhysics(),
@@ -102,7 +99,6 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                         .map((e) => SubListView<CustomSubListController>(
                               profileUuid: e.uuid,
                               key: ValueKey(e.uuid),
-                              pinned: !hideTopBarOnScroll,
                             ))
                         .toList(),
                   ]
@@ -198,36 +194,36 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             },
           ),
           // 页码跳转按钮
-          CupertinoButton(
-            minSize: 36,
-            padding: const EdgeInsets.only(right: 6),
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-              constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.activeBlue, context),
-                  width: 1.8,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Obx(() => Text(
-                    '${max(1, controller.curPage + 1)}',
-                    textAlign: TextAlign.center,
-                    textScaleFactor: 0.9,
-                    style: TextStyle(
-                        height: 1.3,
-                        fontWeight: FontWeight.bold,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.activeBlue, context)),
-                  )),
-            ),
-            onPressed: () {
-              controller.showJumpToPage();
-            },
-          ),
+          // CupertinoButton(
+          //   minSize: 36,
+          //   padding: const EdgeInsets.only(right: 6),
+          //   child: Container(
+          //     alignment: Alignment.center,
+          //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+          //     constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
+          //     decoration: BoxDecoration(
+          //       border: Border.all(
+          //         color: CupertinoDynamicColor.resolve(
+          //             CupertinoColors.activeBlue, context),
+          //         width: 1.8,
+          //       ),
+          //       borderRadius: BorderRadius.circular(8),
+          //     ),
+          //     child: Obx(() => Text(
+          //           '${max(1, controller.curPage + 1)}',
+          //           textAlign: TextAlign.center,
+          //           textScaleFactor: 0.9,
+          //           style: TextStyle(
+          //               height: 1.3,
+          //               fontWeight: FontWeight.bold,
+          //               color: CupertinoDynamicColor.resolve(
+          //                   CupertinoColors.activeBlue, context)),
+          //         )),
+          //   ),
+          //   onPressed: () {
+          //     controller.showJumpToPage();
+          //   },
+          // ),
         ],
       ),
     );
