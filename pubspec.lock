@@ -465,6 +465,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.0"
+  extended_nested_scroll_view:
+    dependency: "direct main"
+    description:
+      name: extended_nested_scroll_view
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.1.3"
   extended_sliver:
     dependency: "direct main"
     description:
