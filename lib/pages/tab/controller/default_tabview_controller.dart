@@ -12,6 +12,7 @@ import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../comm.dart';
@@ -41,6 +42,12 @@ class DefaultTabViewController extends TabViewController {
   // 页码跳转输入框的控制器
   final TextEditingController pageJumpTextEditController =
       TextEditingController();
+
+  final TextEditingController gidTextEditController = TextEditingController();
+
+  final TextEditingController jumpOrSeekTextEditController =
+      TextEditingController();
+  final gidNode = FocusNode();
 
   FetchListClient? fetchClient;
 
@@ -190,6 +197,27 @@ class DefaultTabViewController extends TabViewController {
     lastItemBuildComplete = false;
   }
 
+  @override
+  Future<GalleryList?> fetchFrom(
+      {String? gid, PageType? pageType, String? jump, String? seek}) async {
+    final fetchConfig = FetchParams(
+      pageType: pageType,
+      gid: gid,
+      cats: cats ?? ehConfigService.catFilter.value,
+      refresh: true,
+      cancelToken: cancelToken,
+      favcat: curFavcat,
+      toplist: currToplist,
+      searchType: searchType,
+      searchText: searchText,
+      jump: jump,
+      seek: seek,
+    );
+    FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+    final result = await fetchListClient.fetch();
+    return result;
+  }
+
   // @override
   // Future<void> loadFromPage(int page, {bool previous = false}) async {
   //   await super.loadFromPage(page);
@@ -274,6 +302,177 @@ class DefaultTabViewController extends TabViewController {
   //   return showJumpDialog(jump: _jump, maxPage: maxPage);
   // }
 
+  Future<void> showJumpDialog() {
+    // gidTextEditController.text = next;
+    return showCupertinoDialog<void>(
+      context: Get.context!,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Jump or Seek'),
+          content: Container(
+            child: Column(
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Enter GID / Data or Offset'),
+                ),
+                CupertinoTextField(
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  placeholder: 'Data or Offset',
+                  controller: jumpOrSeekTextEditController,
+                  autofocus: true,
+                  // keyboardType: TextInputType.number,
+                  onEditingComplete: () {
+                    // 点击键盘完成
+                    FocusScope.of(context).requestFocus(gidNode);
+                  },
+                ),
+                const SizedBox(height: 8),
+                CupertinoTextField(
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  focusNode: gidNode,
+                  placeholder: 'GID',
+                  controller: gidTextEditController,
+                  // keyboardType: TextInputType.number,
+                  onEditingComplete: () {
+                    // 点击键盘完成
+                    _jumpToPage(
+                      pageType: PageType.next,
+                    );
+                  },
+                ),
+                const SizedBox(height: 8),
+                // Text('Prev: $prev ,Next: $next'),
+                // Text('Next: $next'),
+                if (prev.isNotEmpty)
+                  Row(
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.circleArrowLeft,
+                        size: 16,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.secondaryLabel, context),
+                      ).paddingSymmetric(horizontal: 8),
+                      Expanded(
+                          child: Text(
+                        '$prev',
+                        textAlign: TextAlign.start,
+                      )),
+                    ],
+                  ),
+                if (next.isNotEmpty)
+                  Row(
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.circleArrowRight,
+                        size: 16,
+                        color: CupertinoDynamicColor.resolve(
+                            CupertinoColors.secondaryLabel, context),
+                      ).paddingSymmetric(horizontal: 8),
+                      Expanded(
+                          child: Text(
+                        '$next',
+                        textAlign: TextAlign.start,
+                      )),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('Prev'),
+              onPressed: () async {
+                // _jumpToPage(pageType: PageType.prev);
+                try {
+                  await _jumpToPage(pageType: PageType.prev);
+                } catch (e, stack) {
+                  logger.e('jump to Next error', e, stack);
+                  showToast('$e');
+                }
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('Next'),
+              onPressed: () async {
+                // 画廊跳转
+                logger.d('jump to Next');
+                try {
+                  await _jumpToPage(
+                    pageType: PageType.next,
+                  );
+                } catch (e, stack) {
+                  logger.e('jump to Next error', e, stack);
+                  showToast(e.toString());
+                }
+                // _jumpToPage(pageType: PageType.next);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _jumpToPage({
+    PageType? pageType,
+  }) async {
+    final String jumpOrSeek = jumpOrSeekTextEditController.text.trim();
+    final String _gid = gidTextEditController.text.trim();
+
+    logger.d('jumpOrSeek is $jumpOrSeek _gid is $_gid');
+
+    if (jumpOrSeek.isEmpty && _gid.isEmpty) {
+      showToast(L10n.of(Get.context!).input_empty);
+      return;
+    }
+
+    final jumpExp = RegExp(r'^\d+[wmy]?$');
+    // YYYY, YYYY-MM or YYYY-MM-DD
+    final dateExpFull = RegExp(r'^\d{4}(-\d{2}){0,2}$');
+    // YY-MM or YY-MM-DD
+    final dateExpShort = RegExp(r'^\d{2}(-\d{2}){1,2}$');
+
+    String jump = '';
+    String seek = '';
+    if (jumpExp.hasMatch(jumpOrSeek)) {
+      jump = jumpOrSeek;
+    } else if (dateExpFull.hasMatch(jumpOrSeek) ||
+        dateExpShort.hasMatch(jumpOrSeek)) {
+      seek = jumpOrSeek;
+    } else {
+      showToast(L10n.of(Get.context!).input_error);
+    }
+
+    logger.d('jump is $jump, seek is $seek, gid is $_gid');
+
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
+
+    // if _gid is not empty, toGid is _gid ,
+    // else if pageType is prev, toGid is prev,
+    // else if pageType is next, toGid is next
+    final toGid = _gid.isEmpty
+        ? pageType == PageType.prev
+            ? prev
+            : next
+        : _gid;
+
+    loadFrom(
+      jump: jump,
+      seek: seek,
+      gid: toGid,
+      pageType: pageType,
+    );
+    Get.back();
+  }
+
   // Future showJumpDialog({VoidCallback? jump, int? maxPage}) {
   //   return showCupertinoDialog<void>(
   //     context: Get.context!,
@@ -333,13 +532,6 @@ class DefaultTabViewController extends TabViewController {
   }
 
   final TabHomeController _tabHomeController = Get.find();
-
-  //
-  // bool get enablePopupMenu =>
-  //     _tabHomeController.tabMap.entries
-  //         .toList()
-  //         .indexWhere((MapEntry<String, bool> element) => !element.value) >
-  //     -1;
 
   int get hidenTagCount => _tabHomeController.tabMap.entries
       .where((MapEntry<String, bool> element) => !element.value)
@@ -503,7 +695,7 @@ class DefaultTabViewController extends TabViewController {
         if (_scrollController.position.pixels >
             _scrollController.position.maxScrollExtent -
                 context.mediaQuerySize.longestSide) {
-          if ((next ?? '').isNotEmpty &&
+          if ((next).isNotEmpty &&
               lastItemBuildComplete &&
               pageState != PageState.Loading) {
             // 加载更多

@@ -4,6 +4,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -16,9 +17,16 @@ abstract class TabViewController extends GetxController {
   String get listViewId => 'listViewId';
 
   // 下一页
-  String? next;
+  // String? next;
+  final RxString _next = ''.obs;
+  String get next => _next.value;
+  set next(String? value) => _next.value = value ?? '';
+
   // 上一页
-  String? prev;
+  // String? prev;
+  final RxString _prev = ''.obs;
+  String get prev => _prev.value;
+  set prev(String? value) => _prev.value = value ?? '';
 
   String? heroTag;
 
@@ -26,7 +34,7 @@ abstract class TabViewController extends GetxController {
 
   bool canLoadMore = false;
 
-  bool get keepPosition => prev?.isNotEmpty ?? false;
+  bool get keepPosition => prev.isNotEmpty;
 
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
@@ -65,6 +73,16 @@ abstract class TabViewController extends GetxController {
   }
 
   Future<GalleryList?> fetchPrevData() async {
+    cancelToken = CancelToken();
+    return null;
+  }
+
+  Future<GalleryList?> fetchFrom({
+    String? gid,
+    PageType? pageType,
+    String? jump,
+    String? seek,
+  }) async {
     cancelToken = CancelToken();
     return null;
   }
@@ -245,6 +263,48 @@ abstract class TabViewController extends GetxController {
   // Future<void> loadFromPage(int page, {bool previous = false}) async {
   //   cancelToken = CancelToken();
   // }
+
+  Future<void> loadFrom({
+    String? gid,
+    PageType? pageType,
+    String? jump,
+    String? seek,
+  }) async {
+    cancelToken = CancelToken();
+
+    canLoadMore = false;
+    pageState = PageState.Loading;
+    change(state, status: RxStatus.loading());
+    try {
+      final GalleryList? result = await fetchFrom(
+        gid: gid,
+        pageType: pageType,
+        jump: jump,
+        seek: seek,
+      );
+      if (result == null) {
+        change(null, status: RxStatus.loading());
+        return;
+      }
+
+      final _listItem = result.gallerys;
+
+      logger.d('loadFrom _listItem ${_listItem?.length}');
+
+      next = result.next;
+      prev = result.prev;
+      change(_listItem, status: RxStatus.success());
+      pageState = PageState.None;
+      logger.d('loadFrom next $next, prev $prev');
+    } catch (err, stack) {
+      logger.e('$err\n$stack');
+      final errMsg = err is HttpException ? err.message : '$err';
+      pageState = PageState.LoadingError;
+      change(null, status: RxStatus.error(errMsg));
+    } finally {
+      canLoadMore = true;
+    }
+  }
 
   Future<void> onRefresh() async {
     if (!(cancelToken?.isCancelled ?? false)) {

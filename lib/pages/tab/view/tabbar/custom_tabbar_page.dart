@@ -197,38 +197,64 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             },
           ),
           // 页码跳转按钮
-          // CupertinoButton(
-          //   minSize: 36,
-          //   padding: const EdgeInsets.only(right: 6),
-          //   child: Container(
-          //     alignment: Alignment.center,
-          //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-          //     constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
-          //     decoration: BoxDecoration(
-          //       border: Border.all(
-          //         color: CupertinoDynamicColor.resolve(
-          //             CupertinoColors.activeBlue, context),
-          //         width: 1.8,
-          //       ),
-          //       borderRadius: BorderRadius.circular(8),
-          //     ),
-          //     child: Obx(() => Text(
-          //           '${max(1, controller.curPage + 1)}',
-          //           textAlign: TextAlign.center,
-          //           textScaleFactor: 0.9,
-          //           style: TextStyle(
-          //               height: 1.3,
-          //               fontWeight: FontWeight.bold,
-          //               color: CupertinoDynamicColor.resolve(
-          //                   CupertinoColors.activeBlue, context)),
-          //         )),
-          //   ),
-          //   onPressed: () {
-          //     controller.showJumpToPage();
-          //   },
-          // ),
+          // JumpButton(controller: controller),
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              CupertinoIcons.arrow_uturn_down_circle,
+              size: 28,
+            ),
+            onPressed: () {
+              controller.showJumpDialog();
+            },
+          ),
         ],
       ),
+    );
+  }
+}
+
+class JumpButton extends StatelessWidget {
+  const JumpButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final CustomTabbarController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      minSize: 36,
+      padding: const EdgeInsets.only(right: 6),
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+        constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.activeBlue, context),
+            width: 1.8,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Obx(() => Text(
+              // '${max(1, controller.curPage + 1)}',
+              '1',
+              textAlign: TextAlign.center,
+              textScaleFactor: 0.9,
+              style: TextStyle(
+                  height: 1.3,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.activeBlue, context)),
+            )),
+      ),
+      onPressed: () {
+        controller.showJumpDialog();
+      },
     );
   }
 }

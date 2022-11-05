@@ -247,6 +247,17 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
               ),
               onPressed: () => controller.setOrder(context),
             ),
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                CupertinoIcons.arrow_uturn_down_circle,
+                size: 28,
+              ),
+              onPressed: () {
+                controller.showJumpDialog();
+              },
+            ),
             // PageSelectorButton(controller: controller),
           ],
         ).paddingOnly(right: 4),

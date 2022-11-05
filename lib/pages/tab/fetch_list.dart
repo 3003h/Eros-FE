@@ -48,6 +48,8 @@ class DefaultFetchListClient extends FetchListClient {
       cancelToken: fetchParams.cancelToken,
       refresh: fetchParams.refresh,
       advanceSearch: fetchParams.advanceSearch,
+      jump: fetchParams.jump,
+      seek: fetchParams.seek,
     );
   }
 }
@@ -73,6 +75,8 @@ class SearchFetchListClient extends FetchListClient {
       galleryListType: fetchParams.galleryListType,
       advanceSearch: fetchParams.advanceSearch,
       globalSearch: globalSearch,
+      jump: fetchParams.jump,
+      seek: fetchParams.seek,
     );
 
     // hide tag filter 20220606
@@ -128,6 +132,8 @@ class FavoriteFetchListClient extends FetchListClient {
       refresh: fetchParams.refresh,
       favcat: fetchParams.favcat,
       galleryListType: GalleryListType.favorite,
+      jump: fetchParams.jump,
+      seek: fetchParams.seek,
     );
   }
 }
@@ -191,6 +197,8 @@ class FetchParams {
     this.toplist,
     this.galleryListType = GalleryListType.gallery,
     this.advanceSearch,
+    this.jump,
+    this.seek,
   });
   PageType? pageType;
   String? gid;
@@ -203,4 +211,6 @@ class FetchParams {
   String? toplist;
   GalleryListType? galleryListType;
   AdvanceSearch? advanceSearch;
+  String? jump;
+  String? seek;
 }

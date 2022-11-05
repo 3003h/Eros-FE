@@ -31,6 +31,8 @@ Options getCacheOptions({bool forceRefresh = false}) {
 Future<GalleryList?> getGallery({
   PageType? pageType,
   String? gid,
+  String? jump,
+  String? seek,
   String? search,
   int? cats,
   bool refresh = false,
@@ -72,6 +74,8 @@ Future<GalleryList?> getGallery({
   final Map<String, dynamic> _params = <String, dynamic>{
     // if (!isTopList && !isPopular) 'page': pageType ?? 0,
     // if (isTopList) 'p': pageType ?? 0,
+    if (!isPopular) 'jump': jump,
+    if (!isPopular) 'seek': seek,
     if (!isPopular && pageType != null && gid != null) pageType.value: gid,
     if (!isTopList && !isPopular && !isFav) 'f_cats': cats,
     // if (!isTopList && !isPopular && gid != null) 'from': gid,

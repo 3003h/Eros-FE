@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
+import 'package:fehviewer/pages/tab/controller/default_tabview_controller.dart';
 import 'package:get/get.dart';
 
 import '../../fetch_list.dart';
@@ -10,7 +10,7 @@ import '../enum.dart';
 import 'custom_tabbar_controller.dart';
 
 /// 控制单个自定义列表
-class CustomSubListController extends TabViewController {
+class CustomSubListController extends DefaultTabViewController {
   CustomSubListController({required this.profileUuid});
 
   final CustomTabbarController _customTabbarController = Get.find();
@@ -182,7 +182,7 @@ class CustomSubListController extends TabViewController {
   Future<void> lastComplete() async {
     super.lastComplete();
     if ((state ?? []).isNotEmpty &&
-        (next ?? '').isNotEmpty &&
+        next.isNotEmpty &&
         pageState != PageState.Loading) {
       // 加载更多
       loadDataMore();
