@@ -99,47 +99,41 @@ class _HistoryTabState extends State<HistoryTab> {
         ),
       ),
     );
-    final customScrollView = Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
-      return CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: <Widget>[
-          if (hideTopBarOnScroll)
-            SliverFloatingPinnedPersistentHeader(
-              delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-                minExtentProtoType: SizedBox(
-                  height: context.mediaQueryPadding.top,
-                ),
-                maxExtentProtoType: navigationBar,
-                builder: (_, __, ___) => navigationBar,
-              ),
+    final Widget customScrollView = CustomScrollView(
+      // cacheExtent: 500,
+      // controller: scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      slivers: <Widget>[
+        SliverFloatingPinnedPersistentHeader(
+          delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+            minExtentProtoType: SizedBox(
+              height: context.mediaQueryPadding.top,
             ),
-          EhCupertinoSliverRefreshControl(
-            onRefresh: controller.syncHistory,
+            maxExtentProtoType: navigationBar,
+            builder: (_, __, ___) => navigationBar,
           ),
-          SliverSafeArea(
-            top: !hideTopBarOnScroll,
-            sliver: GetBuilder<HistoryController>(
-              init: HistoryController(),
-              builder: (logic) {
-                return getGallerySliverList(
-                  logic.historys,
-                  controller.heroTag,
-                  key: controller.sliverAnimatedListKey,
-                );
-              },
-            ),
+        ),
+        EhCupertinoSliverRefreshControl(
+          onRefresh: controller.syncHistory,
+        ),
+        SliverSafeArea(
+          top: false,
+          sliver: GetBuilder<HistoryController>(
+            init: HistoryController(),
+            builder: (logic) {
+              return getGallerySliverList(
+                logic.historys,
+                controller.heroTag,
+                key: controller.sliverAnimatedListKey,
+              );
+            },
           ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
 
-    return Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
-      return CupertinoPageScaffold(
-        navigationBar: hideTopBarOnScroll ? null : navigationBar,
-        child: SizeCacheWidget(child: customScrollView),
-      );
-    });
+    return CupertinoPageScaffold(
+      child: SizeCacheWidget(child: customScrollView),
+    );
   }
 }

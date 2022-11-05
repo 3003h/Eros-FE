@@ -101,12 +101,17 @@ class SearchPageController extends DefaultTabViewController {
   @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     return SearchFetchListClient(
-        fetchParams: fetchParams..galleryListType = _currListType);
+      fetchParams: fetchParams..galleryListType = _currListType,
+      globalSearch: true,
+    );
   }
 
   /// 执行搜索
   Future<void> _startSearch({bool clear = true}) async {
-    curPage = -1;
+    // curPage = -1;
+    next = null;
+    prev = null;
+
     searchText = searchTextController.text.trim();
 
     if (searchText.isNotEmpty) {
@@ -123,10 +128,12 @@ class SearchPageController extends DefaultTabViewController {
           return;
         }
 
-        maxPage = rult.maxPage ?? 0;
-        curPage = maxPage >= 0 ? 0 : -1;
-
-        nextPage = rult.nextPage ?? 1;
+        // maxPage = rult.maxPage ?? 0;
+        // curPage = maxPage >= 0 ? 0 : -1;
+        //
+        // nextPage = rult.nextPage ?? 1;
+        next = rult.next;
+        prev = rult.prev;
         change(rult.gallerys ?? [], status: RxStatus.success());
       } catch (err) {
         change(null, status: RxStatus.error(err.toString()));
@@ -393,7 +400,9 @@ class SearchPageController extends DefaultTabViewController {
   void clearText() {
     vibrateUtil.light();
     searchTextController.clear();
-    curPage = -1;
+    // curPage = -1;
+    next = null;
+    prev = null;
   }
 
   void jumpToGallery() {

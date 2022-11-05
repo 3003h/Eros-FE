@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:html/dom.dart' as dom;
@@ -29,16 +30,16 @@ bool isGalleryListDmL(String response) {
 bool isFavoriteOrder(String response) {
   final dom.Document document = parse(response);
 
-  final List<dom.Element> domList =
-      document.querySelectorAll('body > div.ido > div');
-
-  if (domList.length > 2) {
-    final dom.Element? orderElm = domList[2].querySelector('div > span');
-// logger.d('${orderElm.text}');
-    return orderElm?.text.trim() == 'Favorited';
-  }
-
-  return false;
+  final dom.Element? orderElm =
+      document.querySelector('.searchnav')?.children.firstOrNull;
+  logger.d('ooo ${orderElm?.text}');
+  final options = orderElm?.querySelectorAll('option');
+  return (options
+              ?.where((e) => e.attributes['selected'] == 'selected')
+              .firstOrNull
+              ?.text ??
+          '')
+      .contains('Favorited');
 }
 
 GalleryList parseGalleryListOfFav(String response) {
@@ -81,21 +82,34 @@ GalleryList parseGalleryList(
   }
 
 // 最大页数
-  int _maxPage = 0;
-  List<dom.Element> _pages = document.querySelectorAll(_pageSelector);
-  if (_pages.length > 2) {
-    final dom.Element _maxPageElem = _pages[_pages.length - 2];
-    _maxPage = int.parse(_maxPageElem.text.trim());
-  }
+//   int _maxPage = 0;
+//   List<dom.Element> _pages = document.querySelectorAll(_pageSelector);
+//   if (_pages.length > 2) {
+//     final dom.Element _maxPageElem = _pages[_pages.length - 2];
+//     _maxPage = int.parse(_maxPageElem.text.trim());
+//   }
 
   // 下一页页码
-  final dom.Element? _curPageElem =
-      _pages.firstWhereOrNull((e) => e.attributes['class'] == 'ptds');
-  final _curPage = _curPageElem?.text.trim() ?? '1';
-  final _nextPage = int.parse(_curPage.split('-').last);
-  // logger.d('_curPage:$_curPage, nextIndex:$_nextPage');
+  // final dom.Element? _curPageElem =
+  //     _pages.firstWhereOrNull((e) => e.attributes['class'] == 'ptds');
+  // final _curPage = _curPageElem?.text.trim() ?? '1';
+  // final _nextPage = int.parse(_curPage.split('-').last);
 
-  final _prevPage = int.parse(_curPage.split('-').first) - 2;
+  // final _prevPage = int.parse(_curPage.split('-').first) - 2;
+
+  const searchnavSelector = '.searchnav';
+  final searchnavElm = document.querySelector(searchnavSelector);
+
+  // next
+  final nextElm = searchnavElm?.children[3];
+  final nextHref = nextElm?.children.firstOrNull?.attributes['href'];
+  final _next = nextHref?.split('=').last;
+
+  final prevElm = searchnavElm?.children[2];
+  final prevHref = prevElm?.children.firstOrNull?.attributes['href'];
+  final _prev = prevHref?.split('=').last;
+
+  logger.d('next:$_next, prev:$_prev');
 
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
@@ -304,9 +318,8 @@ GalleryList parseGalleryList(
   // return Tuple2(_gallaryProviders, _maxPage);
   return GalleryList(
     gallerys: _gallaryProviders,
-    maxPage: _maxPage,
     favList: favcatList,
-    nextPage: _nextPage,
-    prevPage: _prevPage,
+    next: _next,
+    prev: _prev,
   );
 }

@@ -41,8 +41,7 @@ class FavoriteSubListController extends TabViewController {
       logger.v('本地收藏');
       final List<GalleryProvider> localFav = _localFavController.loacalFavs;
 
-      return Future<GalleryList>.value(
-          GalleryList(gallerys: localFav, maxPage: 1));
+      return Future<GalleryList>.value(GalleryList(gallerys: localFav));
     }
   }
 
@@ -50,8 +49,8 @@ class FavoriteSubListController extends TabViewController {
   Future<GalleryList?> fetchMoreData() async {
     await super.fetchMoreData();
     final fetchConfig = FetchParams(
-      page: nextPage,
-      fromGid: state?.last.gid ?? '0',
+      pageType: PageType.next,
+      gid: next,
       refresh: true,
       cancelToken: cancelToken,
       favcat: favcat,
@@ -60,54 +59,54 @@ class FavoriteSubListController extends TabViewController {
     return await fetchListClient.fetch();
   }
 
-  @override
-  Future<void> loadFromPage(int page, {bool previous = false}) async {
-    await super.loadFromPage(page);
-    logger.d('jump to page =>  $page');
-    canLoadMore = false;
-    pageState = PageState.Loading;
-    if (!previous) {
-      change(state, status: RxStatus.loading());
-    }
-
-    final fetchConfig = FetchParams(
-      page: page,
-      refresh: true,
-      cancelToken: cancelToken,
-      favcat: favcat,
-    );
-    try {
-      FetchListClient fetchListClient = getFetchListClient(fetchConfig);
-      final GalleryList? rult = await fetchListClient.fetch();
-
-      curPage = page;
-      minPage = page;
-      if (!previous) {
-        nextPage = rult?.nextPage ?? page + 1;
-      }
-      prevPage = rult?.prevPage;
-      logger.d('after loadFromPage nextPage is $nextPage');
-      if (rult != null) {
-        if (previous) {
-          state?.insertAll(0, rult.gallerys ?? []);
-          change(state, status: RxStatus.success());
-        } else {
-          change(rult.gallerys, status: RxStatus.success());
-        }
-      }
-      pageState = PageState.None;
-    } catch (e) {
-      pageState = PageState.LoadingError;
-      if (!previous) {
-        change(null, status: RxStatus.error('$e'));
-      } else {
-        showToast('$e');
-      }
-      rethrow;
-    } finally {
-      canLoadMore = true;
-    }
-  }
+  // @override
+  // Future<void> loadFromPage(int page, {bool previous = false}) async {
+  //   await super.loadFromPage(page);
+  //   logger.d('jump to page =>  $page');
+  //   canLoadMore = false;
+  //   pageState = PageState.Loading;
+  //   if (!previous) {
+  //     change(state, status: RxStatus.loading());
+  //   }
+  //
+  //   final fetchConfig = FetchParams(
+  //     pageType: page,
+  //     refresh: true,
+  //     cancelToken: cancelToken,
+  //     favcat: favcat,
+  //   );
+  //   try {
+  //     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+  //     final GalleryList? rult = await fetchListClient.fetch();
+  //
+  //     curPage = page;
+  //     minPage = page;
+  //     if (!previous) {
+  //       nextPage = rult?.nextPage ?? page + 1;
+  //     }
+  //     prevPage = rult?.prevPage;
+  //     logger.d('after loadFromPage nextPage is $nextPage');
+  //     if (rult != null) {
+  //       if (previous) {
+  //         state?.insertAll(0, rult.gallerys ?? []);
+  //         change(state, status: RxStatus.success());
+  //       } else {
+  //         change(rult.gallerys, status: RxStatus.success());
+  //       }
+  //     }
+  //     pageState = PageState.None;
+  //   } catch (e) {
+  //     pageState = PageState.LoadingError;
+  //     if (!previous) {
+  //       change(null, status: RxStatus.error('$e'));
+  //     } else {
+  //       showToast('$e');
+  //     }
+  //     rethrow;
+  //   } finally {
+  //     canLoadMore = true;
+  //   }
+  // }
 
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     return FavoriteFetchListClient(fetchParams: fetchParams);
@@ -117,7 +116,7 @@ class FavoriteSubListController extends TabViewController {
   Future<void> lastComplete() async {
     await super.lastComplete();
     if ((state ?? []).isNotEmpty &&
-        curPage < maxPage - 1 &&
+        (next ?? '').isNotEmpty &&
         pageState != PageState.Loading) {
       // 加载更多
       logger.d('加载更多');
