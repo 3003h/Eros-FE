@@ -1,5 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -50,12 +51,14 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
 
   Widget buildNestedScrollView(BuildContext context, bool hideTopBarOnScroll) {
     final headerMaxHeight = context.mediaQueryPadding.top + kHeaderMaxHeight;
-    return NestedScrollView(
+    return ExtendedNestedScrollView(
       floatHeaderSlivers: true,
+      onlyOneScrollInBody: true,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           SliverOverlapAbsorber(
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            handle: ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
+                context),
             sliver: SliverPersistentHeader(
               floating: true,
               pinned: true,
