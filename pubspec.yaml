@@ -173,6 +173,7 @@ dependencies:
   image_save: ^5.0.0
   fluentui_system_icons: ^1.1.185
   flutter_keyboard_visibility: ^5.4.0
+  extended_nested_scroll_view: ^5.1.3
 
 
 dev_dependencies:
