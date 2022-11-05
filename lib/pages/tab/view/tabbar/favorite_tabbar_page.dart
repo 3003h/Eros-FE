@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:blur/blur.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -105,14 +106,16 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
     );
   }
 
-  NestedScrollView buildNestedScrollView(
+  Widget buildNestedScrollView(
       double headerMaxHeight, bool hideTopBarOnScroll) {
-    return NestedScrollView(
+    return ExtendedNestedScrollView(
       floatHeaderSlivers: true,
+      onlyOneScrollInBody: true,
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
           SliverOverlapAbsorber(
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            handle: ExtendedNestedScrollView.sliverOverlapAbsorberHandleFor(
+                context),
             sliver: SliverPersistentHeader(
               floating: true,
               pinned: true,
