@@ -39,7 +39,7 @@ class DefaultFetchListClient extends FetchListClient {
 
   @override
   Future<GalleryList?> fetch() async {
-    // await Future<void>.delayed(const Duration(seconds: 15));
+    logger.d('DefaultFetchListClient fetchParams ${fetchParams.toString()}');
     return await getGallery(
       pageType: fetchParams.pageType,
       gid: fetchParams.gid,
@@ -65,6 +65,8 @@ class SearchFetchListClient extends FetchListClient {
 
   @override
   Future<GalleryList?> fetch() async {
+    // logger.d('SearchFetchListClient fetchParams ${fetchParams.toString()}');
+
     final result = await getGallery(
       pageType: fetchParams.pageType,
       gid: fetchParams.gid,
@@ -213,4 +215,9 @@ class FetchParams {
   AdvanceSearch? advanceSearch;
   String? jump;
   String? seek;
+
+  @override
+  String toString() {
+    return 'FetchParams{pageType: $pageType, gid: $gid, searchText: $searchText, searchType: $searchType, cats: $cats, refresh: $refresh, cancelToken: $cancelToken, favcat: $favcat, toplist: $toplist, galleryListType: $galleryListType, advanceSearch: $advanceSearch, jump: $jump, seek: $seek}';
+  }
 }

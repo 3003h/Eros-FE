@@ -77,7 +77,7 @@ abstract class TabViewController extends GetxController {
     return null;
   }
 
-  Future<GalleryList?> fetchFrom({
+  Future<GalleryList?> fetchDataFrom({
     String? gid,
     PageType? pageType,
     String? jump,
@@ -276,7 +276,7 @@ abstract class TabViewController extends GetxController {
     pageState = PageState.Loading;
     change(state, status: RxStatus.loading());
     try {
-      final GalleryList? result = await fetchFrom(
+      final GalleryList? result = await fetchDataFrom(
         gid: gid,
         pageType: pageType,
         jump: jump,
@@ -289,13 +289,13 @@ abstract class TabViewController extends GetxController {
 
       final _listItem = result.gallerys;
 
-      logger.d('loadFrom _listItem ${_listItem?.length}');
+      logger.v('loadFrom _listItem ${_listItem?.length}');
 
       next = result.next;
       prev = result.prev;
       change(_listItem, status: RxStatus.success());
       pageState = PageState.None;
-      logger.d('loadFrom next $next, prev $prev');
+      logger.v('loadFrom next $next, prev $prev');
     } catch (err, stack) {
       logger.e('$err\n$stack');
       final errMsg = err is HttpException ? err.message : '$err';

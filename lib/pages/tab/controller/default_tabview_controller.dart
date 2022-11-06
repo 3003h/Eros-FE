@@ -181,6 +181,7 @@ class DefaultTabViewController extends TabViewController {
       searchType: searchType,
       searchText: searchText,
     );
+
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
   }
@@ -212,8 +213,12 @@ class DefaultTabViewController extends TabViewController {
   }
 
   @override
-  Future<GalleryList?> fetchFrom(
-      {String? gid, PageType? pageType, String? jump, String? seek}) async {
+  Future<GalleryList?> fetchDataFrom({
+    String? gid,
+    PageType? pageType,
+    String? jump,
+    String? seek,
+  }) async {
     final fetchConfig = FetchParams(
       pageType: pageType,
       gid: gid,
@@ -227,6 +232,7 @@ class DefaultTabViewController extends TabViewController {
       jump: jump,
       seek: seek,
     );
+
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     final result = await fetchListClient.fetch();
     return result;
