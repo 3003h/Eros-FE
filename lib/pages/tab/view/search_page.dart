@@ -761,7 +761,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                     size: 28,
                   ),
                   onPressed: () {
-                    controller.showJumpDialog();
+                    controller.showJumpDialog(context);
                   },
                 );
               } else {

@@ -146,8 +146,8 @@ class CustomTabbarController extends DefaultTabViewController {
   }
 
   @override
-  Future<void> showJumpDialog() async {
-    await currSubController?.showJumpDialog();
+  Future<void> showJumpDialog(BuildContext context) async {
+    await currSubController?.showJumpDialog(context);
   }
 
   // @override

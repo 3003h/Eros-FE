@@ -255,7 +255,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
                 size: 28,
               ),
               onPressed: () {
-                controller.showJumpDialog();
+                controller.showJumpDialog(context);
               },
             ),
             // PageSelectorButton(controller: controller),

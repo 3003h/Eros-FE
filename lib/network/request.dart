@@ -102,7 +102,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.d('url:$_url $_params');
+  logger.v('url:$_url $_params');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,

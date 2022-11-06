@@ -209,7 +209,7 @@ Future<void> updateTagTranslate() async {
 
   if (ehConfigService.tagTranslateDataUpdateMode ==
       TagTranslateDataUpdateMode.everyStartApp) {
-    logger.d('updateTagTranslate everyStartApp');
+    logger.v('updateTagTranslate everyStartApp');
     if (await tagTransController.checkUpdate()) {
       await tagTransController.updateDB();
     }

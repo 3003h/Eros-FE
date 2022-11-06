@@ -110,7 +110,7 @@ GalleryList parseGalleryList(
   final nextHref = nextElm?.attributes['href'];
   final _next = nextHref?.split('=').last;
 
-  logger.d('next:$_next, prev:$_prev');
+  logger.v('next:$_next, prev:$_prev');
 
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);

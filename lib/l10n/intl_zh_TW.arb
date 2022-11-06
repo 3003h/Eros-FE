@@ -402,5 +402,10 @@
   "port": "端口",
   "direct": "Direct",
   "save": "保存",
-  "hide_top_bar_on_scroll": "滚动时隐藏顶栏"
+  "hide_top_bar_on_scroll": "滚动时隐藏顶栏",
+  "jump_or_seek": "跳转/搜寻",
+  "enter_date_or_offset_or_gid": "输入具体日期或偏移量 / GID",
+  "date_or_offset": "日期或偏移量",
+  "jump_next": "后面",
+  "jump_prev": "前面"
 }
