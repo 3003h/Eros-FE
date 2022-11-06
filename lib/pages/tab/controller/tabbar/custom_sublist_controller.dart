@@ -29,7 +29,7 @@ class CustomSubListController extends DefaultTabViewController {
 
   @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {
-    logger.d('CustomSubListController getFetchListClient $fetchParams');
+    logger.v('CustomSubListController getFetchListClient $fetchParams');
     return SearchFetchListClient(fetchParams: fetchParams);
   }
 
@@ -123,8 +123,8 @@ class CustomSubListController extends DefaultTabViewController {
   }) async {
     await super.fetchDataFrom();
     final fetchConfig = FetchParams(
-      pageType: PageType.next,
-      gid: state?.last.gid ?? '0',
+      pageType: pageType,
+      gid: gid,
       cats: profile?.cats,
       refresh: true,
       cancelToken: cancelToken,

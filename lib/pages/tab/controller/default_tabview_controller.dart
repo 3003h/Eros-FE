@@ -322,11 +322,12 @@ class DefaultTabViewController extends TabViewController {
   //   return showJumpDialog(jump: _jump, maxPage: maxPage);
   // }
 
-  final _showDatePicker = false.obs;
-
+  final _showDatePicker = true.obs;
   bool get showDatePicker => _showDatePicker.value;
-
   set showDatePicker(bool value) => _showDatePicker.value = value;
+
+  String? lastSeek;
+  String? lastJump;
 
   Future<void> showJumpDialog(BuildContext context) async {
     bool editingDate = false;
@@ -354,7 +355,7 @@ class DefaultTabViewController extends TabViewController {
                     clearButtonMode: OverlayVisibilityMode.editing,
                     placeholder: L10n.of(context).date_or_offset,
                     controller: jumpOrSeekTextEditController,
-                    autofocus: true,
+                    autofocus: false,
                     suffix: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -406,24 +407,35 @@ class DefaultTabViewController extends TabViewController {
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     margin: const EdgeInsets.only(top: 8.0),
-                    padding: const EdgeInsets.only(top: 1),
-                    height: showDatePicker ? 120 : 1.1,
+                    height: showDatePicker ? 120 : 0,
                     child: Localizations.override(
                       context: context,
                       delegates: const [
                         AppGlobalCupertinoLocalizationsDelegate(),
                       ],
-                      child: CupertinoDatePicker(
-                        // yyyy-MM-dd
-                        mode: CupertinoDatePickerMode.date,
-                        dateOrder: DatePickerDateOrder.ymd,
-                        minimumYear: 2007,
-                        maximumYear: DateTime.now().year,
-                        onDateTimeChanged: (value) {
-                          jumpOrSeekTextEditController.text =
-                              DateFormat('yyyy-MM-dd').format(value);
-                        },
-                      ),
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        if (constraints.maxHeight < 40) {
+                          return Container();
+                        }
+                        return CupertinoDatePicker(
+                          // yyyy-MM-dd
+                          mode: CupertinoDatePickerMode.date,
+                          // DateTime from lastSeek
+                          initialDateTime: lastSeek != null
+                              ? DateTime.tryParse(lastSeek!) ?? DateTime.now()
+                              : DateTime.now(),
+                          dateOrder: DatePickerDateOrder.ymd,
+                          minimumYear: 2007,
+                          minimumDate: DateTime(2007, 3, 20),
+                          maximumYear: DateTime.now().year,
+                          maximumDate:
+                              DateTime.now().add(const Duration(minutes: 1)),
+                          onDateTimeChanged: (value) {
+                            jumpOrSeekTextEditController.text =
+                                DateFormat('yyyy-MM-dd').format(value);
+                          },
+                        );
+                      }),
                     ),
                   );
                 }),
@@ -474,38 +486,50 @@ class DefaultTabViewController extends TabViewController {
                   );
                 }),
                 const SizedBox(height: 8),
-                if (prev.isNotEmpty)
-                  Row(
+                Container(
+                  height: 40,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Icon(
-                        FontAwesomeIcons.circleArrowLeft,
-                        size: 16,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.secondaryLabel, context),
-                      ).paddingSymmetric(horizontal: 8),
-                      Expanded(
-                          child: Text(
-                        prev,
-                        textAlign: TextAlign.start,
-                      )),
+                      if (prev.isNotEmpty)
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.circleArrowLeft,
+                                size: 16,
+                                color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondaryLabel, context),
+                              ).paddingSymmetric(horizontal: 8),
+                              Expanded(
+                                  child: Text(
+                                prev.replaceFirst('-', '-\n'),
+                                textAlign: TextAlign.left,
+                              )),
+                            ],
+                          ),
+                        ),
+                      if (next.isNotEmpty)
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Text(
+                                next.replaceFirst('-', '-\n'),
+                                textAlign: TextAlign.right,
+                              )),
+                              Icon(
+                                FontAwesomeIcons.circleArrowRight,
+                                size: 16,
+                                color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondaryLabel, context),
+                              ).paddingSymmetric(horizontal: 8),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
-                if (next.isNotEmpty)
-                  Row(
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.circleArrowRight,
-                        size: 16,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.secondaryLabel, context),
-                      ).paddingSymmetric(horizontal: 8),
-                      Expanded(
-                          child: Text(
-                        next,
-                        textAlign: TextAlign.start,
-                      )),
-                    ],
-                  ),
+                ),
               ],
             ),
           ),
@@ -520,7 +544,7 @@ class DefaultTabViewController extends TabViewController {
                 try {
                   await _jumpToPage(pageType: PageType.prev);
                 } catch (e, stack) {
-                  logger.e('jump to Next error', e, stack);
+                  logger.e('jump to Prev error', e, stack);
                   showToast('$e');
                 }
               },
@@ -600,6 +624,10 @@ class DefaultTabViewController extends TabViewController {
       pageType: pageType,
     );
     Get.back();
+    lastSeek = seek;
+    lastJump = jump;
+    jumpOrSeekTextEditController.clear();
+    gidTextEditController.clear();
   }
 
   // Future showJumpDialog({VoidCallback? jump, int? maxPage}) {
