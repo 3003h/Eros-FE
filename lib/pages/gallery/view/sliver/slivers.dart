@@ -89,7 +89,7 @@ class GalleryActions extends StatelessWidget {
                 .split('\|')
                 .first;
             logger.d('处理后标题 "$title"');
-            NavigatorUtil.goSearchPageWithParam(simpleSearch: '"$title"');
+            NavigatorUtil.goSearchPageWithParam(simpleSearch: 'title:"$title"');
           },
         ),
       ),
