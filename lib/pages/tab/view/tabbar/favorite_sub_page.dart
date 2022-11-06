@@ -120,7 +120,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
             return getGallerySliverList(
               _favoriteSubListController.state,
               _favoriteSubListController.heroTag,
-              next: logic.next,
+              next: logic.nextGid,
               lastComplete: _favoriteSubListController.lastComplete,
               key: _favoriteSubListController.sliverAnimatedListKey,
             );

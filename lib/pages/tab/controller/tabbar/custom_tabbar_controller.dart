@@ -56,7 +56,7 @@ class CustomTabbarController extends DefaultTabViewController {
   set reorderable(bool val) => _reorderable.value = val;
 
   Map<String, CustomSubListController> subControllerMap = {};
-  CustomSubListController? get currSubController =>
+  CustomSubListController? get _currSubController =>
       subControllerMap[currProfileUuid];
 
   // @override
@@ -147,7 +147,25 @@ class CustomTabbarController extends DefaultTabViewController {
 
   @override
   Future<void> showJumpDialog(BuildContext context) async {
-    await currSubController?.showJumpDialog(context);
+    await _currSubController?.showJumpDialog(context);
+  }
+
+  @override
+  bool get afterJump => _currSubController?.afterJump ?? false;
+
+  @override
+  Future<void> jumpToTop() async {
+    await _currSubController?.jumpToTop();
+  }
+
+  @override
+  Future<void> reloadData() async {
+    if (_currSubController?.reloadData != null) {
+      await _currSubController!.reloadData();
+    } else {
+      update();
+      await _currSubController?.reloadData();
+    }
   }
 
   // @override

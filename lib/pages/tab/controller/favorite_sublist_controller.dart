@@ -2,14 +2,14 @@ import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
+import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../fetch_list.dart';
-import 'default_tabview_controller.dart';
 import 'enum.dart';
 
-class FavoriteSubListController extends DefaultTabViewController {
+class FavoriteSubListController extends TabViewController {
   late String favcat;
 
   final LocalFavController _localFavController = Get.find();
@@ -50,7 +50,21 @@ class FavoriteSubListController extends DefaultTabViewController {
     await super.fetchMoreData();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: next,
+      gid: nextGid,
+      refresh: true,
+      cancelToken: cancelToken,
+      favcat: favcat,
+    );
+    FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+    return await fetchListClient.fetch();
+  }
+
+  @override
+  Future<GalleryList?> fetchPrevData() async {
+    await super.fetchPrevData();
+    final fetchConfig = FetchParams(
+      pageType: PageType.prev,
+      gid: prevGid,
       refresh: true,
       cancelToken: cancelToken,
       favcat: favcat,
@@ -138,7 +152,7 @@ class FavoriteSubListController extends DefaultTabViewController {
   Future<void> lastComplete() async {
     await super.lastComplete();
     if ((state ?? []).isNotEmpty &&
-        next.isNotEmpty &&
+        nextGid.isNotEmpty &&
         pageState != PageState.Loading) {
       // 加载更多
       logger.d('加载更多');

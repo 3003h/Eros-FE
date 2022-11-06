@@ -109,8 +109,8 @@ class SearchPageController extends DefaultTabViewController {
   /// 执行搜索
   Future<void> _startSearch({bool clear = true}) async {
     // curPage = -1;
-    next = null;
-    prev = null;
+    nextGid = null;
+    prevGid = null;
 
     searchText = searchTextController.text.trim();
 
@@ -132,8 +132,8 @@ class SearchPageController extends DefaultTabViewController {
         // curPage = maxPage >= 0 ? 0 : -1;
         //
         // nextPage = rult.nextPage ?? 1;
-        next = rult.next;
-        prev = rult.prev;
+        nextGid = rult.next;
+        prevGid = rult.prev;
         change(rult.gallerys ?? [], status: RxStatus.success());
       } catch (err) {
         change(null, status: RxStatus.error(err.toString()));
@@ -401,8 +401,8 @@ class SearchPageController extends DefaultTabViewController {
     vibrateUtil.light();
     searchTextController.clear();
     // curPage = -1;
-    next = null;
-    prev = null;
+    nextGid = null;
+    prevGid = null;
   }
 
   void jumpToGallery() {

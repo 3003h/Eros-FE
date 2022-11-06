@@ -102,7 +102,7 @@ class SearchImagePage extends GetView<SearchImageController> {
             return getGallerySliverList(
               logic.state,
               controller.tabIndex,
-              next: controller.next,
+              next: controller.nextGid,
               lastComplete: controller.lastComplete,
               // centerKey: centerKey,
               key: controller.sliverAnimatedListKey,

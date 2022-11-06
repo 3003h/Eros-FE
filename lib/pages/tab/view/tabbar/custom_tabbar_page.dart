@@ -200,6 +200,23 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           ),
           // 页码跳转按钮
           // JumpButton(controller: controller),
+          Obx(() {
+            if (controller.afterJump) {
+              return CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  CupertinoIcons.arrow_up_circle,
+                  size: 28,
+                ),
+                onPressed: () {
+                  controller.jumpToTop();
+                },
+              );
+            } else {
+              return const SizedBox();
+            }
+          }),
           CupertinoButton(
             minSize: 40,
             padding: const EdgeInsets.all(0),
@@ -365,16 +382,7 @@ class CustomTabBar extends StatelessWidget {
                                   isRefresh = true;
                                 });
                                 try {
-                                  if (controller
-                                          .currSubController?.reloadData !=
-                                      null) {
-                                    await controller.currSubController!
-                                        .reloadData();
-                                  } else {
-                                    controller.update();
-                                    await controller.currSubController
-                                        ?.reloadData();
-                                  }
+                                  await controller.reloadData();
                                 } finally {
                                   setState(() {
                                     isRefresh = false;
