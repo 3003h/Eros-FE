@@ -17,10 +17,6 @@ class CustomSubListController extends DefaultTabViewController {
 
   final RxBool _isBackgroundRefresh = false.obs;
 
-  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
-
-  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
-
   final listModeObs = ListModeEnum.list.obs;
 
   ListModeEnum get listMode => listModeObs.value;
@@ -31,7 +27,9 @@ class CustomSubListController extends DefaultTabViewController {
 
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 
+  @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {
+    logger.d('CustomSubListController getFetchListClient $fetchParams');
     return SearchFetchListClient(fetchParams: fetchParams);
   }
 
@@ -116,67 +114,30 @@ class CustomSubListController extends DefaultTabViewController {
     return await fetchListClient.fetch();
   }
 
-  // @override
-  // Future<void> loadFromPage(int page, {bool previous = false}) async {
-  //   logger.v('loadFromPage $page');
-  //   await super.loadFromPage(page);
-  //   canLoadMore = false;
-  //   pageState = PageState.Loading;
-  //   if (!previous) {
-  //     change(state, status: RxStatus.loading());
-  //   }
-  //
-  //   final fetchConfig = FetchParams(
-  //     pageType: page,
-  //     cats: profile?.cats,
-  //     refresh: true,
-  //     cancelToken: cancelToken,
-  //     searchText: profile?.searchText?.join(' '),
-  //     advanceSearch:
-  //         (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
-  //     galleryListType: profile?.listType ?? GalleryListType.gallery,
-  //   );
-  //
-  //   try {
-  //     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
-  //     final GalleryList? result = await fetchListClient.fetch();
-  //
-  //     curPage = page;
-  //     minPage = page;
-  //     if (!previous) {
-  //       nextPage = result?.nextPage ?? page + 1;
-  //     }
-  //     prevPage = result?.prevPage;
-  //
-  //     if (result != null) {
-  //       if (previous) {
-  //         final allIn = result.gallerys
-  //             ?.map((e) => e.gid)
-  //             .every((gid) => state?.map((e) => e.gid).contains(gid) ?? false);
-  //         if (allIn ?? false) {
-  //           logger.v('${result.gallerys?.length}  $prevPage');
-  //           await loadPrevious();
-  //         } else {
-  //           state?.insertAll(0, result.gallerys ?? []);
-  //           change(state, status: RxStatus.success());
-  //         }
-  //       } else {
-  //         change(result.gallerys, status: RxStatus.success());
-  //       }
-  //     }
-  //     pageState = PageState.None;
-  //   } catch (e) {
-  //     pageState = PageState.LoadingError;
-  //     if (!previous) {
-  //       change(null, status: RxStatus.error('$e'));
-  //     } else {
-  //       showToast('$e');
-  //     }
-  //     rethrow;
-  //   } finally {
-  //     canLoadMore = true;
-  //   }
-  // }
+  @override
+  Future<GalleryList?> fetchDataFrom({
+    String? gid,
+    PageType? pageType,
+    String? jump,
+    String? seek,
+  }) async {
+    await super.fetchDataFrom();
+    final fetchConfig = FetchParams(
+      pageType: PageType.next,
+      gid: state?.last.gid ?? '0',
+      cats: profile?.cats,
+      refresh: true,
+      cancelToken: cancelToken,
+      searchText: profile?.searchText?.join(' '),
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
+      galleryListType: profile?.listType ?? GalleryListType.gallery,
+      jump: jump,
+      seek: seek,
+    );
+    FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+    return await fetchListClient.fetch();
+  }
 
   @override
   Future<void> lastComplete() async {

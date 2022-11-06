@@ -59,6 +59,27 @@ class FavoriteSubListController extends DefaultTabViewController {
     return await fetchListClient.fetch();
   }
 
+  @override
+  Future<GalleryList?> fetchDataFrom({
+    String? gid,
+    PageType? pageType,
+    String? jump,
+    String? seek,
+  }) async {
+    await super.fetchDataFrom();
+    final fetchConfig = FetchParams(
+      pageType: pageType,
+      gid: gid,
+      jump: jump,
+      seek: seek,
+      refresh: true,
+      cancelToken: cancelToken,
+      favcat: favcat,
+    );
+    FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+    return await fetchListClient.fetch();
+  }
+
   // @override
   // Future<void> loadFromPage(int page, {bool previous = false}) async {
   //   await super.loadFromPage(page);
