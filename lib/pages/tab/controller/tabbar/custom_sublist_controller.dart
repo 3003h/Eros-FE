@@ -1,21 +1,20 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/default_tabview_controller.dart';
 import 'package:get/get.dart';
 
 import '../../fetch_list.dart';
 import '../enum.dart';
+import '../tabview_controller.dart';
 import 'custom_tabbar_controller.dart';
 
 /// 控制单个自定义列表
-class CustomSubListController extends DefaultTabViewController {
+class CustomSubListController extends TabViewController {
   CustomSubListController({required this.profileUuid});
 
   final CustomTabbarController _customTabbarController = Get.find();
-
-  final RxBool _isBackgroundRefresh = false.obs;
 
   final listModeObs = ListModeEnum.list.obs;
 
@@ -51,7 +50,7 @@ class CustomSubListController extends DefaultTabViewController {
 
   @override
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    await super.fetchData();
+    cancelToken = CancelToken();
 
     logger.v(' ${jsonEncode(profile)}');
 
@@ -98,10 +97,28 @@ class CustomSubListController extends DefaultTabViewController {
 
   @override
   Future<GalleryList?> fetchMoreData() async {
-    await super.fetchMoreData();
+    cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: state?.last.gid ?? '0',
+      gid: nextGid,
+      cats: profile?.cats,
+      refresh: true,
+      cancelToken: cancelToken,
+      searchText: profile?.searchText?.join(' '),
+      advanceSearch:
+          (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
+      galleryListType: profile?.listType ?? GalleryListType.gallery,
+    );
+    FetchListClient fetchListClient = getFetchListClient(fetchConfig);
+    return await fetchListClient.fetch();
+  }
+
+  @override
+  Future<GalleryList?> fetchPrevData() async {
+    cancelToken = CancelToken();
+    final fetchConfig = FetchParams(
+      pageType: PageType.prev,
+      gid: prevGid,
       cats: profile?.cats,
       refresh: true,
       cancelToken: cancelToken,
@@ -121,7 +138,7 @@ class CustomSubListController extends DefaultTabViewController {
     String? jump,
     String? seek,
   }) async {
-    await super.fetchDataFrom();
+    cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       pageType: pageType,
       gid: gid,
@@ -143,7 +160,7 @@ class CustomSubListController extends DefaultTabViewController {
   Future<void> lastComplete() async {
     super.lastComplete();
     if ((state ?? []).isNotEmpty &&
-        next.isNotEmpty &&
+        nextGid.isNotEmpty &&
         pageState != PageState.Loading) {
       // 加载更多
       loadDataMore();

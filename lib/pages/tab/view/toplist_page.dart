@@ -110,6 +110,40 @@ class _ToplistTabState extends State<ToplistTab> {
             ),
             onPressed: () => controller.setToplist(context),
           ),
+          Obx(() {
+            if (controller.afterJump) {
+              return CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  CupertinoIcons.arrow_up_circle,
+                  size: 28,
+                ),
+                onPressed: () {
+                  controller.jumpToTop();
+                },
+              );
+            } else {
+              return const SizedBox();
+            }
+          }),
+          Obx(() {
+            if (controller.nextGid.isNotEmpty) {
+              return CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  CupertinoIcons.arrow_uturn_down_circle,
+                  size: 28,
+                ),
+                onPressed: () {
+                  controller.showJumpDialog(context);
+                },
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
           // 页码跳转按钮
           // CupertinoButton(
           //   minSize: 40,
@@ -227,7 +261,7 @@ class _ToplistTabState extends State<ToplistTab> {
           return getGallerySliverList(
             logic.state,
             controller.heroTag,
-            next: logic.next,
+            next: logic.nextGid,
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,

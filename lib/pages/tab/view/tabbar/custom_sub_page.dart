@@ -127,7 +127,7 @@ class _SubListViewState<T extends CustomSubListController>
           return getGallerySliverList(
             logic.state,
             subController.heroTag,
-            next: logic.next,
+            next: logic.nextGid,
             lastComplete: subController.lastComplete,
             // key: subController.sliverAnimatedListKey,
             listMode: subController.listModeObs,

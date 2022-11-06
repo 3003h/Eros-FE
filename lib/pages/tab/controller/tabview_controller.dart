@@ -1,15 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
+import 'package:fehviewer/utils/app_cupertino_localizations_delegate.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../comm.dart';
 import 'enum.dart';
+
+const CupertinoDynamicColor _kClearButtonColor =
+    CupertinoDynamicColor.withBrightness(
+  color: Color(0xFF636366),
+  darkColor: Color(0xFFAEAEB2),
+);
 
 abstract class TabViewController extends GetxController {
   final TagController tagController = Get.find();
@@ -17,16 +27,24 @@ abstract class TabViewController extends GetxController {
   String get listViewId => 'listViewId';
 
   // 下一页
-  // String? next;
-  final RxString _next = ''.obs;
-  String get next => _next.value;
-  set next(String? value) => _next.value = value ?? '';
+  final RxString _nextGid = ''.obs;
+  String get nextGid => _nextGid.value;
+  set nextGid(String? value) => _nextGid.value = value ?? '';
 
   // 上一页
-  // String? prev;
-  final RxString _prev = ''.obs;
-  String get prev => _prev.value;
-  set prev(String? value) => _prev.value = value ?? '';
+  final RxString _prevGid = ''.obs;
+  String get prevGid => _prevGid.value;
+  set prevGid(String? value) => _prevGid.value = value ?? '';
+
+  final _afterJump = false.obs;
+  bool get afterJump => _afterJump.value;
+  set afterJump(bool value) => _afterJump.value = value;
+
+  final TextEditingController gidTextEditController = TextEditingController();
+
+  final TextEditingController jumpOrSeekTextEditController =
+      TextEditingController();
+  final gidNode = FocusNode();
 
   String? heroTag;
 
@@ -34,7 +52,11 @@ abstract class TabViewController extends GetxController {
 
   bool canLoadMore = false;
 
-  bool get keepPosition => prev.isNotEmpty;
+  bool get keepPosition => prevGid.isNotEmpty;
+
+  final RxBool _isBackgroundRefresh = false.obs;
+  bool get isBackgroundRefresh => _isBackgroundRefresh.value;
+  set isBackgroundRefresh(bool val) => _isBackgroundRefresh.value = val;
 
   final GlobalKey<SliverAnimatedListState> sliverAnimatedListKey =
       GlobalKey<SliverAnimatedListState>();
@@ -57,9 +79,17 @@ abstract class TabViewController extends GetxController {
   set pageState(PageState val) => _pageState.value = val;
 
   bool get canLoadData =>
-      pageState != PageState.Loading && pageState != PageState.LoadingMore;
+      pageState != PageState.Loading &&
+      pageState != PageState.LoadingMore &&
+      pageState != PageState.LoadingPrev;
 
   final EhConfigService ehConfigService = Get.find();
+
+  @override
+  void onReady() {
+    super.onReady();
+    firstLoad();
+  }
 
   // 请求一批画廊数据
   Future<GalleryList?> fetchData({bool refresh = false}) async {
@@ -103,8 +133,8 @@ abstract class TabViewController extends GetxController {
 
       logger.v('_listItem ${_listItem?.length}');
 
-      next = result.next;
-      prev = result.prev;
+      nextGid = result.next;
+      prevGid = result.prev;
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -117,8 +147,8 @@ abstract class TabViewController extends GetxController {
 
   // 重新加载
   Future<void> reloadData() async {
-    next = null;
-    prev = null;
+    nextGid = null;
+    prevGid = null;
 
     try {
       final GalleryList? result = await fetchData(
@@ -133,17 +163,22 @@ abstract class TabViewController extends GetxController {
 
       final List<GalleryProvider>? resultList = result.gallerys;
 
-      next = result.next;
-      prev = result.prev;
+      nextGid = result.next;
+      prevGid = result.prev;
 
-      logger.v('reloadData next $next, prev $prev');
+      logger.v('reloadData next $nextGid, prev $prevGid');
 
       change(resultList, status: RxStatus.success());
+      afterJump = false;
     } catch (err) {
       // change(state, status: RxStatus.error(err.toString()));
       final errmsg = err is HttpException ? err.message : '$err';
       showToast(errmsg);
     }
+  }
+
+  Future<void> jumpToTop() async {
+    await reloadData();
   }
 
   String? lastNext;
@@ -162,17 +197,17 @@ abstract class TabViewController extends GetxController {
       return;
     }
 
-    if (lastNext == next) {
-      logger.v('lastNext == next  $next');
+    if (lastNext == nextGid) {
+      logger.v('lastNext == next  $nextGid');
       return;
     }
 
     logger.v('loadDataMore .....');
     pageState = PageState.LoadingMore;
 
-    logger.v('load page next: $next');
+    logger.v('load page next: $nextGid');
 
-    lastNext = next;
+    lastNext = nextGid;
 
     try {
       final GalleryList? result = await fetchMoreData();
@@ -187,8 +222,8 @@ abstract class TabViewController extends GetxController {
           state?.indexWhere(
                   (GalleryProvider e) => e.gid == resultList.first.gid) ==
               -1) {
-        next = result.next;
-        prev = result.prev;
+        nextGid = result.next;
+        prevGid = result.prev;
       }
 
       final insertIndex = state?.length ?? 0;
@@ -208,27 +243,28 @@ abstract class TabViewController extends GetxController {
   // 加载上一页
   Future<void> loadPrevious() async {
     await Future.delayed(100.milliseconds);
+    logger.d('loadPrevious .....');
     if (!canLoadData) {
-      logger.e('not canLoadData');
+      logger.e('not loadPrevious');
       return;
     }
 
     if (!canLoadMore) {
-      logger.e('not canLoadMore');
+      logger.e('not loadPrevious');
       return;
     }
 
-    if (lastPrev == prev) {
-      logger.v('lastNext == next  $next');
+    if (lastPrev == prevGid) {
+      logger.v('lastPrev == prev  $prevGid');
       return;
     }
 
-    logger.v('loadDataMore .....');
-    pageState = PageState.LoadingMore;
+    logger.v('loadPrevious .....');
+    pageState = PageState.LoadingPrev;
 
-    logger.v('load page prev: $prev');
+    logger.v('load page prev: $prevGid');
 
-    lastPrev = prev;
+    lastPrev = prevGid;
 
     try {
       final GalleryList? result = await fetchPrevData();
@@ -243,8 +279,8 @@ abstract class TabViewController extends GetxController {
           state?.indexWhere(
                   (GalleryProvider e) => e.gid == resultList.first.gid) ==
               -1) {
-        next = result.next;
-        prev = result.prev;
+        nextGid = result.next;
+        prevGid = result.prev;
       }
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -291,11 +327,12 @@ abstract class TabViewController extends GetxController {
 
       logger.v('loadFrom _listItem ${_listItem?.length}');
 
-      next = result.next;
-      prev = result.prev;
+      nextGid = result.next;
+      prevGid = result.prev;
       change(_listItem, status: RxStatus.success());
       pageState = PageState.None;
-      logger.v('loadFrom next $next, prev $prev');
+      logger.d('loadFrom next $nextGid, prev $prevGid ____');
+      afterJump = true;
     } catch (err, stack) {
       logger.e('$err\n$stack');
       final errMsg = err is HttpException ? err.message : '$err';
@@ -311,14 +348,16 @@ abstract class TabViewController extends GetxController {
       cancelToken?.cancel();
     }
     change(state, status: RxStatus.success());
-    // logger.d('prev: $prev');
-    // if ((prev ?? '').isNotEmpty) {
-    //   await loadPrevious();
-    // } else {
-    //   await reloadData();
-    // }
+    logger.d('prev: $prevGid afterJump: $afterJump');
+    if (prevGid.isNotEmpty && afterJump) {
+      logger.d('loadPrevious');
+      await loadPrevious();
+    } else {
+      logger.d('reloadData');
+      await reloadData();
+    }
 
-    await reloadData();
+    // await reloadData();
   }
 
   Future<void> reLoadDataFirst() async {
@@ -354,9 +393,315 @@ abstract class TabViewController extends GetxController {
         curve: Curves.ease);
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-    firstLoad();
+  final _showDatePicker = true.obs;
+  bool get showDatePicker => _showDatePicker.value;
+  set showDatePicker(bool value) => _showDatePicker.value = value;
+
+  String? lastSeek;
+  String? lastJump;
+
+  Future<void> showJumpDialog(BuildContext context) async {
+    bool editingDate = false;
+    bool editingGid = false;
+    if (jumpOrSeekTextEditController.text.isEmpty) {
+      jumpOrSeekTextEditController.text =
+          lastJump ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
+    }
+    return showCupertinoDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text(L10n.of(context).jump_or_seek),
+          content: Container(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(L10n.of(context).enter_date_or_offset_or_gid),
+                ),
+                StatefulBuilder(builder: (context, setState) {
+                  return CupertinoTextField(
+                    decoration: BoxDecoration(
+                      color: ehTheme.textFieldBackgroundColor,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
+                    ),
+                    clearButtonMode: OverlayVisibilityMode.editing,
+                    placeholder: L10n.of(context).date_or_offset,
+                    controller: jumpOrSeekTextEditController,
+                    autofocus: false,
+                    suffix: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (editingDate)
+                          GestureDetector(
+                            onTap: () {
+                              jumpOrSeekTextEditController.clear();
+                              setState(() {
+                                editingDate = false;
+                              });
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.circleXmark,
+                              size: 20.0,
+                              color: CupertinoDynamicColor.resolve(
+                                  _kClearButtonColor, Get.context!),
+                            ).paddingSymmetric(horizontal: 6),
+                          ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              showDatePicker = !showDatePicker;
+                            });
+                          },
+                          child: Icon(
+                            FontAwesomeIcons.calendar,
+                            size: 20.0,
+                            color: showDatePicker
+                                ? null
+                                : CupertinoDynamicColor.resolve(
+                                    _kClearButtonColor, Get.context!),
+                          ).paddingSymmetric(horizontal: 6),
+                        ),
+                      ],
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        editingDate = value.isNotEmpty;
+                      });
+                    },
+                    // keyboardType: TextInputType.number,
+                    onEditingComplete: () {
+                      // 点击键盘完成
+                      FocusScope.of(context).requestFocus(gidNode);
+                    },
+                  );
+                }),
+                Obx(() {
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.only(top: 8.0),
+                    height: showDatePicker ? 120 : 0,
+                    child: Localizations.override(
+                      context: context,
+                      delegates: const [
+                        AppGlobalCupertinoLocalizationsDelegate(),
+                      ],
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        if (constraints.maxHeight < 40) {
+                          return Container();
+                        }
+                        return CupertinoDatePicker(
+                          // yyyy-MM-dd
+                          mode: CupertinoDatePickerMode.date,
+                          // DateTime from lastSeek
+                          initialDateTime: lastSeek != null
+                              ? DateTime.tryParse(lastSeek!) ?? DateTime.now()
+                              : DateTime.now(),
+                          dateOrder: DatePickerDateOrder.ymd,
+                          minimumYear: 2007,
+                          minimumDate: DateTime(2007, 3, 20),
+                          maximumYear: DateTime.now().year,
+                          maximumDate:
+                              DateTime.now().add(const Duration(minutes: 1)),
+                          onDateTimeChanged: (value) {
+                            jumpOrSeekTextEditController.text =
+                                DateFormat('yyyy-MM-dd').format(value);
+                          },
+                        );
+                      }),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 8),
+                StatefulBuilder(builder: (context, setState) {
+                  return CupertinoTextField(
+                    decoration: BoxDecoration(
+                      color: ehTheme.textFieldBackgroundColor,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
+                    ),
+                    clearButtonMode: OverlayVisibilityMode.editing,
+                    focusNode: gidNode,
+                    placeholder: 'GID',
+                    controller: gidTextEditController,
+                    // keyboardType: TextInputType.number,
+                    suffix: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (editingGid)
+                          GestureDetector(
+                            onTap: () {
+                              gidTextEditController.clear();
+                              setState(() {
+                                editingGid = false;
+                              });
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.circleXmark,
+                              size: 20.0,
+                              color: CupertinoDynamicColor.resolve(
+                                  _kClearButtonColor, Get.context!),
+                            ).paddingSymmetric(horizontal: 6),
+                          ),
+                      ],
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        editingGid = value.isNotEmpty;
+                      });
+                    },
+                    onEditingComplete: () {
+                      // 点击键盘完成
+                      _jumpToPage(
+                        pageType: PageType.next,
+                      );
+                    },
+                  );
+                }),
+                const SizedBox(height: 8),
+                Container(
+                  height: 40,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      if (prevGid.isNotEmpty)
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.circleArrowLeft,
+                                size: 16,
+                                color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondaryLabel, context),
+                              ).paddingSymmetric(horizontal: 8),
+                              Expanded(
+                                  child: Text(
+                                prevGid.replaceFirst('-', '-\n'),
+                                textAlign: TextAlign.left,
+                              )),
+                            ],
+                          ),
+                        ),
+                      if (nextGid.isNotEmpty)
+                        Expanded(
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Text(
+                                nextGid.replaceFirst('-', '-\n'),
+                                textAlign: TextAlign.right,
+                              )),
+                              Icon(
+                                FontAwesomeIcons.circleArrowRight,
+                                size: 16,
+                                color: CupertinoDynamicColor.resolve(
+                                    CupertinoColors.secondaryLabel, context),
+                              ).paddingSymmetric(horizontal: 8),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              // child: Text(L10n.of(context).jump_prev),
+              child: const Icon(
+                FontAwesomeIcons.circleArrowLeft,
+              ),
+              onPressed: () async {
+                // _jumpToPage(pageType: PageType.prev);
+                try {
+                  await _jumpToPage(pageType: PageType.prev);
+                } catch (e, stack) {
+                  logger.e('jump to Prev error', e, stack);
+                  showToast('$e');
+                }
+              },
+            ),
+            CupertinoDialogAction(
+              // child: Text(L10n.of(context).jump_next),
+              child: const Icon(
+                FontAwesomeIcons.circleArrowRight,
+              ),
+              onPressed: () async {
+                // 画廊跳转
+                logger.v('jump to Next');
+                try {
+                  await _jumpToPage(
+                    pageType: PageType.next,
+                  );
+                } catch (e, stack) {
+                  logger.e('jump to Next error', e, stack);
+                  showToast(e.toString());
+                }
+                // _jumpToPage(pageType: PageType.next);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _jumpToPage({
+    PageType? pageType,
+  }) async {
+    final String jumpOrSeek = jumpOrSeekTextEditController.text.trim();
+    final String _gid = gidTextEditController.text.trim();
+
+    logger.v('jumpOrSeek is $jumpOrSeek _gid is $_gid');
+
+    if (jumpOrSeek.isEmpty && _gid.isEmpty) {
+      showToast(L10n.of(Get.context!).input_empty);
+      return;
+    }
+
+    final jumpExp = RegExp(r'^\d+[wmy]?$');
+    // YYYY, YYYY-MM or YYYY-MM-DD
+    final dateExpFull = RegExp(r'^\d{4}(-\d{2}){0,2}$');
+    // YY-MM or YY-MM-DD
+    final dateExpShort = RegExp(r'^\d{2}(-\d{2}){1,2}$');
+
+    String jump = '';
+    String seek = '';
+    if (jumpExp.hasMatch(jumpOrSeek)) {
+      jump = jumpOrSeek;
+    } else if (dateExpFull.hasMatch(jumpOrSeek) ||
+        dateExpShort.hasMatch(jumpOrSeek)) {
+      seek = jumpOrSeek;
+    } else {
+      showToast(L10n.of(Get.context!).input_error);
+    }
+
+    logger.v('jump is $jump, seek is $seek, gid is $_gid');
+
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
+
+    // if _gid is not empty, toGid is _gid ,
+    // else if pageType is prev, toGid is prev,
+    // else if pageType is next, toGid is next
+    final toGid = _gid.isEmpty
+        ? pageType == PageType.prev
+            ? prevGid
+            : nextGid
+        : _gid;
+
+    loadFrom(
+      jump: jump,
+      seek: seek,
+      gid: toGid,
+      pageType: pageType,
+    );
+    Get.back();
+    lastSeek = seek;
+    lastJump = jump;
+    jumpOrSeekTextEditController.clear();
+    gidTextEditController.clear();
   }
 }

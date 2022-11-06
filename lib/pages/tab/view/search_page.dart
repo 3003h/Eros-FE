@@ -668,7 +668,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           return getGallerySliverList(
             logic.state,
             controller.heroTag,
-            next: logic.next,
+            next: logic.nextGid,
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,
@@ -752,7 +752,24 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             //   }
             // }),
             Obx(() {
-              if (controller.next.isNotEmpty) {
+              if (controller.afterJump) {
+                return CupertinoButton(
+                  minSize: 40,
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    CupertinoIcons.arrow_up_circle,
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    controller.jumpToTop();
+                  },
+                );
+              } else {
+                return const SizedBox();
+              }
+            }),
+            Obx(() {
+              if (controller.nextGid.isNotEmpty) {
                 return CupertinoButton(
                   minSize: 40,
                   padding: const EdgeInsets.all(0),

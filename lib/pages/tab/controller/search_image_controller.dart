@@ -48,8 +48,8 @@ class SearchImageController extends DefaultTabViewController {
 
     listType = ListType.gallery;
     // curPage = -1;
-    next = null;
-    prev = null;
+    nextGid = null;
+    prevGid = null;
 
     if (clear) {
       change(state, status: RxStatus.loading());
@@ -68,8 +68,8 @@ class SearchImageController extends DefaultTabViewController {
 
       // nextPage = rult.nextPage ?? 1;
 
-      next = rult.next;
-      prev = rult.prev;
+      nextGid = rult.next;
+      prevGid = rult.prev;
 
       change(rult.gallerys ?? [], status: RxStatus.success());
     } catch (err) {

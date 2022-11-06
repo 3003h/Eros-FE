@@ -110,7 +110,7 @@ GalleryList parseGalleryList(
   final nextHref = nextElm?.attributes['href'];
   final _next = nextHref?.split('=').last;
 
-  logger.d('parse next:$_next, prev:$_prev');
+  logger.v('parse next:$_next, prev:$_prev');
 
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);
@@ -120,7 +120,7 @@ GalleryList parseGalleryList(
     final String? category =
         tr.querySelector('td.gl1c.glcat > div')?.text.trim();
 
-// 表头或者广告
+    // 表头或者广告
     if (category == null || category.isEmpty) {
       continue;
     }

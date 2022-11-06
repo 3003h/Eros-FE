@@ -25,7 +25,7 @@ class FavoriteTabberController extends DefaultTabViewController {
   String get currFavcat => _currFavcat.value;
   set currFavcat(String val) => _currFavcat.value = val;
 
-  FavoriteSubListController? get currSubController => userController.isLogin
+  FavoriteSubListController? get _currSubController => userController.isLogin
       ? subControllerMap[currFavcat]
       : subControllerMap['l'];
 
@@ -60,14 +60,32 @@ class FavoriteTabberController extends DefaultTabViewController {
   Future<void> setOrder(BuildContext context) async {
     final FavoriteOrder? order = await ehConfigService.showFavOrder(context);
     if (order != null) {
-      currSubController?.change(state, status: RxStatus.loading());
-      currSubController?.reloadData();
+      _currSubController?.change(state, status: RxStatus.loading());
+      _currSubController?.reloadData();
     }
   }
 
   @override
   Future<void> showJumpDialog(BuildContext context) async {
-    await currSubController?.showJumpDialog(context);
+    await _currSubController?.showJumpDialog(context);
+  }
+
+  @override
+  bool get afterJump => _currSubController?.afterJump ?? false;
+
+  @override
+  Future<void> jumpToTop() async {
+    await _currSubController?.jumpToTop();
+  }
+
+  @override
+  Future<void> reloadData() async {
+    if (_currSubController?.reloadData != null) {
+      await _currSubController!.reloadData();
+    } else {
+      update();
+      await _currSubController?.reloadData();
+    }
   }
 
   // Future<void> loadFromPageFav(int page) {
