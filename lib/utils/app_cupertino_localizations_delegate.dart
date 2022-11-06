@@ -15,8 +15,6 @@ class AppGlobalCupertinoLocalizationsDelegate
   Future<CupertinoLocalizations> load(Locale locale) async {
     final localizations =
         await GlobalCupertinoLocalizations.delegate.load(locale);
-    print('********* load: $locale');
-    // return localizations;
     return AppCupertinoLocalizations(localizations);
   }
 

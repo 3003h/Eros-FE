@@ -983,6 +983,8 @@ Future<GalleryList?> searchImage(
     'f_sfile': MultipartFile.fromString('File Search'),
   });
 
+  logger.d('searchImage url: $url');
+
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
     data: formData,
