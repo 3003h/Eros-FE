@@ -90,6 +90,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           controller.linkScrollBarController.enableScrollToItem();
         },
         child: Obx(() {
+          final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
           return PageView(
             // CustomScrollPhysics对于改善滑动问题没有帮助
             // physics: const CustomScrollPhysics(),
@@ -102,6 +103,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                         .map((e) => SubListView<CustomSubListController>(
                               profileUuid: e.uuid,
                               key: ValueKey(e.uuid),
+                              pinned: !hideTopBarOnScroll,
                             ))
                         .toList(),
                   ]
@@ -206,7 +208,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
               size: 28,
             ),
             onPressed: () {
-              controller.showJumpDialog();
+              controller.showJumpDialog(context);
             },
           ),
         ],
@@ -253,7 +255,7 @@ class JumpButton extends StatelessWidget {
             )),
       ),
       onPressed: () {
-        controller.showJumpDialog();
+        controller.showJumpDialog(context);
       },
     );
   }
