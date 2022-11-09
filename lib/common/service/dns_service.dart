@@ -41,20 +41,20 @@ class DnsService extends ProfileService {
     return _map;
   }
 
-  /// 合并 内置host以及自定义host列表
+  /// 合并 内置 host 以及自定义 host 列表
   Map<String, List<String>> get hostMapMerge {
-    final coutomHosts = hostMap;
+    final customHosts = hostMap;
 
     // 预置列表
     if (enableCustomHosts) {
       for (final host in EHConst.internalHosts.entries) {
-        coutomHosts.putIfAbsent(host.key, () => host.value);
+        customHosts.putIfAbsent(host.key, () => host.value);
       }
     } else {
       return EHConst.internalHosts;
     }
 
-    return coutomHosts;
+    return customHosts;
   }
 
   String getHost(String oriHost) {
@@ -109,7 +109,7 @@ class DnsService extends ProfileService {
       return null;
     }
 
-    // 24小时
+    // 24 小时
     const int updateInterval = 86400;
 
     final int index =
