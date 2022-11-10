@@ -11,7 +11,7 @@
             android:requestLegacyExternalStorage="true"
             android:label="FEhViewer"
             android:icon="@mipmap/ic_launcher"
-            android:localeConfig="@xml/locales_config">
+            android:localeConfig="@xml/locales_config" tools:targetApi="r">
         <activity
                 android:name=".MainActivity"
                 android:exported="true"
