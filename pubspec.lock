@@ -1137,7 +1137,7 @@ packages:
     source: hosted
     version: "1.8.0"
   mime:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: mime
       url: "https://pub.flutter-io.cn"
@@ -1537,6 +1537,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
+  shared_storage:
+    dependency: "direct main"
+    description:
+      name: shared_storage
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.0"
   shelf:
     dependency: transitive
     description:

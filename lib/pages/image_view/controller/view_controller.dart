@@ -220,7 +220,7 @@ class ViewExtController extends GetxController {
   void onReady() {
     super.onReady();
 
-    logger.d('Read onReady');
+    logger.v('Read onReady');
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中

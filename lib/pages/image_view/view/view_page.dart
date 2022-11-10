@@ -145,7 +145,7 @@ class ImageView extends StatelessWidget {
     return GetBuilder<ViewExtController>(
       id: idImagePageView,
       builder: (logic) {
-        logger.d('build ImageView');
+        logger.v('build ImageView');
         switch (logic.vState.viewMode) {
           case ViewMode.topToBottom:
             return const ImageListView();
