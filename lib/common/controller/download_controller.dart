@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -23,6 +24,7 @@ import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_storage/shared_storage.dart' as saf;
@@ -190,8 +192,6 @@ class DownloadController extends GetxController {
     }
 
     // 先查询任务是否已存在
-    // final GalleryTask? _oriTask =
-    //     await galleryTaskDao.findGalleryTaskByGid(gid ?? -1);
     final GalleryTask? _oriTask =
         await isarHelper.findGalleryTaskByGid(gid ?? -1);
     if (_oriTask != null) {
@@ -272,36 +272,45 @@ class DownloadController extends GetxController {
     return galleryTask;
   }
 
+  // 写入元数据文件
   Future<void> _writeTaskInfoFile(GalleryTask? galleryTask) async {
     if (galleryTask == null) {
       return;
     }
 
-    // final imageTaskList = (await imageTaskDao.findAllTaskByGid(galleryTask.gid))
-    //     .map((e) => e.copyWith(imageUrl: ''))
-    //     .toList();
     final imageTaskList =
         (await isarHelper.findImageTaskAllByGid(galleryTask.gid))
             .map((e) => e.copyWith(imageUrl: ''))
             .toList();
 
     String jsonImageTaskList = jsonEncode(imageTaskList);
+    String jsonGalleryTask = jsonEncode(galleryTask.copyWith(dirPath: ''));
+    logger.d('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
 
     final dirPath = galleryTask.realDirPath;
     if (dirPath == null || dirPath.isEmpty) {
       return;
     }
-    final File _infoFile = File(path.join(dirPath, '.info'));
 
-    String jsonGalleryTask = jsonEncode(galleryTask.copyWith(dirPath: ''));
-    logger.d('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
+    final info = '$jsonGalleryTask\n$jsonImageTaskList';
+    final infoBytes = Uint8List.fromList(utf8.encode(info));
 
-    _infoFile.writeAsString('$jsonGalleryTask\n$jsonImageTaskList');
+    if (dirPath.startsWith('content://')) {
+      // SAF
+      await saf.createFileAsBytes(
+        Uri.parse(dirPath),
+        mimeType: '',
+        displayName: '.info',
+        bytes: infoBytes,
+      );
+    } else {
+      final File _infoFile = File(path.join(dirPath, '.info'));
+      _infoFile.writeAsString(info);
+    }
   }
 
   /// 暂停任务
   Future<GalleryTask?> galleryTaskPaused(int gid, {bool silent = false}) async {
-    // logger.d('galleryTaskPaused $gid');
     _cancelDownloadStateChkTimer(gid: gid);
     logger.v('${dState.cancelTokenMap[gid]?.isCancelled}');
     if (!((dState.cancelTokenMap[gid]?.isCancelled) ?? true)) {
@@ -316,8 +325,6 @@ class DownloadController extends GetxController {
 
   /// 恢复任务
   Future<void> galleryTaskResume(int gid) async {
-    // final GalleryTask? galleryTask =
-    //     await galleryTaskDao.findGalleryTaskByGid(gid);
     final GalleryTask? galleryTask = await isarHelper.findGalleryTaskByGid(gid);
     if (galleryTask != null) {
       logger.d('恢复任务 $gid');
@@ -327,7 +334,6 @@ class DownloadController extends GetxController {
 
   /// 重下任务
   Future<void> galleryTaskRestart(int gid) async {
-    // await imageTaskDao.deleteImageTaskByGid(gid);
     isarHelper.removeImageTask(gid);
 
     final GalleryTask? galleryTask = await isarHelper.findGalleryTaskByGid(gid);
@@ -380,8 +386,6 @@ class DownloadController extends GetxController {
 
   /// 根据gid获取任务
   Future<List<GalleryImageTask>> getImageTasks(int gid) async {
-    // final List<GalleryImageTask> tasks =
-    //     await imageTaskDao.findAllTaskByGid(gid);
     final List<GalleryImageTask> tasks =
         await isarHelper.findImageTaskAllByGid(gid);
     return tasks;
@@ -400,7 +404,15 @@ class DownloadController extends GetxController {
     String? dirpath = _task.realDirPath;
     logger.d('dirPath: $dirpath');
     if (dirpath != null && shouldDeleteContent) {
-      Directory(dirpath).delete(recursive: true);
+      if (dirpath.startsWith('content://')) {
+        // SAF
+        await saf.delete(Uri.parse(dirpath));
+      } else {
+        final dir = Directory(dirpath);
+        if (await dir.exists()) {
+          await dir.delete(recursive: true);
+        }
+      }
     }
 
     if (!((dState.cancelTokenMap[_task.gid]?.isCancelled) ?? true)) {
@@ -408,9 +420,6 @@ class DownloadController extends GetxController {
     }
 
     // 删除数据库记录
-    // imageTaskDao.deleteImageTaskByGid(_task.gid);
-    // galleryTaskDao.deleteTaskByGid(_task.gid);
-
     isarHelper.removeImageTask(_task.gid);
     isarHelper.removeGalleryTask(_task.gid);
 
@@ -662,13 +671,43 @@ class DownloadController extends GetxController {
     }
 
     if (!formCache) {
+      late String savePath;
+      if (parentPath.startsWith('content://')) {
+        // temp save path
+        savePath = path.join(
+          (await getTemporaryDirectory()).path,
+          'temp_download',
+          '${generateUuidv4()}_fileName',
+        );
+      } else {
+        savePath = path.join(parentPath, fileName);
+      }
+
       await ehDownload(
         url: url,
-        savePath: parentPath,
+        savePath: savePath,
         cancelToken: cancelToken,
         onDownloadComplete: onDownloadComplete,
         progressCallback: progressCallback,
       );
+
+      if (parentPath.startsWith('content://')) {
+        // read file
+        final File file = File(savePath);
+        final bytes = await file.readAsBytes();
+        // saf write file
+        final mimeType =
+            lookupMimeType(file.path, headerBytes: bytes.take(8).toList());
+        logger.d('mimeType $mimeType');
+        await saf.createFileAsBytes(
+          Uri.parse(parentPath),
+          mimeType: mimeType ?? '',
+          displayName: fileName,
+          bytes: bytes,
+        );
+        // delete temp file
+        await file.delete();
+      }
     } else {
       onDownloadComplete?.call();
     }

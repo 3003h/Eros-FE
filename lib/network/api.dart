@@ -419,6 +419,7 @@ class Api {
     logger.d('from cache \n$imageUrl');
 
     if (parentPath.startsWith('content://')) {
+      // SAF 方式
       final bytes = await imageFile.readAsBytes();
 
       final mimeType =
@@ -427,13 +428,14 @@ class Api {
 
       final result = await saf.createFileAsBytes(
         Uri.parse(parentPath),
-        mimeType: mimeType ?? 'image/jpeg',
+        mimeType: mimeType ?? '',
         displayName: fileName,
         bytes: bytes,
       );
       logger.d('save to content:// result ${result?.uri}');
       return result?.uri.toString();
     } else {
+      // 普通方式
       final toFilePath = path.join(parentPath, fileName);
       imageFile.copySync(toFilePath);
       return toFilePath;

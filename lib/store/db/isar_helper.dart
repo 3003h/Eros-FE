@@ -151,6 +151,7 @@ class IsarHelper {
     });
   }
 
+  /// GalleryTasks
   Future<List<GalleryTask>> findAllGalleryTasks() async {
     final taks = await isar.galleryTasks.where().sortByAddTimeDesc().findAll();
     return taks;
@@ -191,6 +192,7 @@ class IsarHelper {
     });
   }
 
+  /// ImageTasks
   Future<List<GalleryImageTask>> findImageTaskAllByGid(int gid) async {
     return await isar.galleryImageTasks
         .where()
