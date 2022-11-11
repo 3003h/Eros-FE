@@ -1,7 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cross_file/cross_file.dart';
 import 'package:device_info/device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
@@ -10,11 +9,10 @@ import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/utility.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +22,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_storage/shared_storage.dart' as saf;
 
 class QuickSearchListPage extends StatelessWidget {
   QuickSearchListPage({Key? key, this.autoSearch = true}) : super(key: key);
@@ -53,6 +52,7 @@ class QuickSearchListPage extends StatelessWidget {
         _tempFlie.writeAsStringSync(_searchText);
         return _tempFlie.path;
       }
+      return null;
     }
 
     Future<void> _showFile() async {
@@ -81,27 +81,6 @@ class QuickSearchListPage extends StatelessWidget {
                 ),
               ),
               CupertinoDialogAction(
-                onPressed: () async {
-                  Get.back();
-                  logger.d('Export');
-                  try {
-                    final _tempFilePath = await _writeFile();
-                    await requestManageExternalStoragePermission();
-                    if (_tempFilePath != null) {
-                      final _saveToDirPath =
-                          await FilePicker.platform.getDirectoryPath();
-                      logger.d('$_saveToDirPath');
-                      if (_saveToDirPath != null) {
-                        final _dstPath = path.join(
-                            _saveToDirPath, path.basename(_tempFilePath));
-                        File(_tempFilePath).copySync(_dstPath);
-                      }
-                    }
-                  } catch (e) {
-                    showToast('$e');
-                    rethrow;
-                  }
-                },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -110,27 +89,63 @@ class QuickSearchListPage extends StatelessWidget {
                     const Text('Export'),
                   ],
                 ),
-              ),
-              CupertinoDialogAction(
                 onPressed: () async {
-                  final FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-                  if (result != null) {
-                    final File _file = File(result.files.single.path!);
-                    final String _fileText = _file.readAsStringSync();
-                    if (_fileText.contains('#FEhViewer')) {
-                      logger.v(_fileText);
-                      final List<String> _importTexts = _fileText.split('\n');
-                      for (final element in _importTexts) {
-                        if (element.trim().isNotEmpty &&
-                            !element.startsWith('#')) {
-                          quickSearchController.addText(element);
+                  Get.back();
+                  logger.d('Export');
+                  // try {
+                  //   final _tempFilePath = await _writeFile();
+                  //   await requestManageExternalStoragePermission();
+                  //   if (_tempFilePath != null) {
+                  //     final _saveToDirPath =
+                  //         await FilePicker.platform.getDirectoryPath();
+                  //     logger.d('$_saveToDirPath');
+                  //     if (_saveToDirPath != null) {
+                  //       final _dstPath = path.join(
+                  //           _saveToDirPath, path.basename(_tempFilePath));
+                  //       File(_tempFilePath).copySync(_dstPath);
+                  //     }
+                  //   }
+                  // } catch (e) {
+                  //   showToast('$e');
+                  //   rethrow;
+                  // }
+
+                  try {
+                    final _tempFilePath = await _writeFile();
+                    if (_tempFilePath != null) {
+                      if (GetPlatform.isAndroid) {
+                        // SAF
+                        final result = await saf.openDocumentTree();
+                        if (result != null) {
+                          final _saveToDirPath = result;
+                          logger.d('$_saveToDirPath');
+                          final bytes = File(_tempFilePath).readAsBytesSync();
+                          final file = await saf.createFileAsBytes(
+                            _saveToDirPath,
+                            mimeType: '',
+                            displayName: path.basename(_tempFilePath),
+                            bytes: bytes,
+                          );
+                          logger.d('file: ${file?.uri}');
+                        }
+                      } else {
+                        final _saveToDirPath =
+                            await FilePicker.platform.getDirectoryPath();
+                        logger.d('$_saveToDirPath');
+                        if (_saveToDirPath != null) {
+                          final _dstPath = path.join(
+                              _saveToDirPath, path.basename(_tempFilePath));
+                          File(_tempFilePath).copySync(_dstPath);
                         }
                       }
                     }
+                  } catch (e) {
+                    showToast('$e');
+                    rethrow;
                   }
-                  Get.back();
                 },
+              ),
+              CupertinoDialogAction(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -139,6 +154,49 @@ class QuickSearchListPage extends StatelessWidget {
                     const Text('Import'),
                   ],
                 ),
+                onPressed: () async {
+                  Get.back();
+                  late final String _fileText;
+                  if (GetPlatform.isAndroid) {
+                    // SAF read file
+                    try {
+                      final uriList = await saf.openDocument();
+                      logger.d('uriList: $uriList');
+                      final uri = uriList?.first;
+                      logger.d('result: $uri');
+
+                      if (uri != null) {
+                        final byte = await saf.getDocumentContent(uri);
+                        if (byte != null) {
+                          // utf8
+                          _fileText = utf8.decode(byte);
+                          logger.d('$_fileText');
+                        }
+                      }
+                    } catch (e, s) {
+                      logger.e('$e\n$s');
+                    }
+                  } else {
+                    final FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      final File _file = File(result.files.single.path!);
+                      logger.d(_file.path);
+                      _fileText = _file.readAsStringSync();
+                    }
+                  }
+
+                  if (_fileText.contains('#FEhViewer')) {
+                    logger.v(_fileText);
+                    final List<String> _importTexts = _fileText.split('\n');
+                    for (final element in _importTexts) {
+                      if (element.trim().isNotEmpty &&
+                          !element.startsWith('#')) {
+                        quickSearchController.addText(element);
+                      }
+                    }
+                  }
+                },
               ),
               CupertinoDialogAction(
                   onPressed: () {

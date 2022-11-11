@@ -72,7 +72,7 @@ packages:
       name: basic_utils
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.4.1"
+    version: "5.4.2"
   bitsdojo_window:
     dependency: "direct main"
     description:
@@ -450,14 +450,14 @@ packages:
       name: extended_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.3.1"
+    version: "6.3.2"
   extended_image_library:
     dependency: transitive
     description:
       name: extended_image_library
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.4.0"
+    version: "3.4.1"
   extended_list_library:
     dependency: transitive
     description:
@@ -727,7 +727,7 @@ packages:
       name: flutter_smart_dialog
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.6.2+1"
+    version: "4.7.0+1"
   flutter_socks_proxy:
     dependency: "direct main"
     description:
@@ -807,7 +807,7 @@ packages:
       name: glob
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   google_mlkit_barcode_scanning:
     dependency: "direct main"
     description:
@@ -1438,7 +1438,7 @@ packages:
       name: rxdart
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.27.5"
+    version: "0.27.6"
   scroll_to_index:
     dependency: "direct main"
     description:
@@ -1459,14 +1459,14 @@ packages:
       name: sentry
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.14.0"
+    version: "6.15.1"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.14.0"
+    version: "6.15.1"
   share_plus:
     dependency: "direct main"
     description:
@@ -1540,9 +1540,11 @@ packages:
   shared_storage:
     dependency: "direct main"
     description:
-      name: shared_storage
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: f10d9229b238b01a628a22035f4bfffe3e6b96e6
+      url: "https://github.com/honjow/shared-storage.git"
+    source: git
     version: "0.6.0"
   shelf:
     dependency: transitive
@@ -1940,7 +1942,7 @@ packages:
       name: win32
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   window_size:
     dependency: "direct main"
     description:
