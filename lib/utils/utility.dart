@@ -38,6 +38,7 @@ int fastHash(String string) {
 }
 
 // 请求完全读写权限
+@Deprecated('use SAF')
 Future<void> requestManageExternalStoragePermission() async {
   if (!GetPlatform.isAndroid) {
     return;
