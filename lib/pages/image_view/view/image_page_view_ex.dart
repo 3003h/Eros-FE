@@ -5,7 +5,7 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
-import 'package:fehviewer/widget/eh_image.dart';
+import 'package:fehviewer/widget/image/eh_image.dart';
 import 'package:fehviewer/widget/preload_photo_view_gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

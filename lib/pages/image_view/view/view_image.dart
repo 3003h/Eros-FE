@@ -10,6 +10,7 @@ import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
+import 'package:fehviewer/widget/image/extended_saf_image_privider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -197,62 +198,80 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   /// 本地图片文件 构建Widget
   Widget fileImage(String path) {
     final Size size = MediaQuery.of(context).size;
-    return ExtendedImage.file(
-      File(path),
-      fit: BoxFit.contain,
-      filterQuality: FilterQuality.medium,
-      enableSlideOutPage: widget.enableSlideOutPage,
-      mode: widget.mode,
-      initGestureConfigHandler: _initGestureConfigHandler,
-      onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
-      loadStateChanged: (ExtendedImageState state) {
-        final ImageInfo? imageInfo = state.extendedImageInfo;
-        widget.imageSizeChanged?.call(Size(
-            imageInfo?.image.width.toDouble() ?? 0.0,
-            imageInfo?.image.height.toDouble() ?? 0.0));
-        if (state.extendedImageLoadState == LoadState.completed ||
-            imageInfo != null) {
-          // 加载完成 显示图片
-          controller.setScale100(imageInfo!, size);
 
-          // 重新设置图片容器大小
-          if (vState.imageSizeMap[widget.imageSer] == null) {
-            vState.imageSizeMap[widget.imageSer] = Size(
-                imageInfo.image.width.toDouble(),
-                imageInfo.image.height.toDouble());
-            Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-                controller.update(['$idImageListView${widget.imageSer}']));
-          }
+    final loadStateChanged = (ExtendedImageState state) {
+      final ImageInfo? imageInfo = state.extendedImageInfo;
+      widget.imageSizeChanged?.call(Size(
+          imageInfo?.image.width.toDouble() ?? 0.0,
+          imageInfo?.image.height.toDouble() ?? 0.0));
+      if (state.extendedImageLoadState == LoadState.completed ||
+          imageInfo != null) {
+        // 加载完成 显示图片
+        controller.setScale100(imageInfo!, size);
 
-          controller.onLoadCompleted(widget.imageSer);
-
-          return controller.vState.viewMode != ViewMode.topToBottom
-              ? Hero(
-                  tag: '${widget.imageSer}',
-                  child: state.completedWidget,
-                  createRectTween: (Rect? begin, Rect? end) =>
-                      MaterialRectCenterArcTween(begin: begin, end: end),
-                )
-              : state.completedWidget;
-        } else if (state.extendedImageLoadState == LoadState.loading) {
-          // 显示加载中
-          final ImageChunkEvent? loadingProgress = state.loadingProgress;
-          final double? progress = loadingProgress?.expectedTotalBytes != null
-              ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
-                  (loadingProgress?.expectedTotalBytes ?? 1)
-              : null;
-
-          return ViewLoading(
-            ser: widget.imageSer,
-            // progress: progress,
-            duration: vState.viewMode != ViewMode.topToBottom
-                ? const Duration(milliseconds: 100)
-                : null,
-            debugLable: '### Widget fileImage 加载图片文件',
-          );
+        // 重新设置图片容器大小
+        if (vState.imageSizeMap[widget.imageSer] == null) {
+          vState.imageSizeMap[widget.imageSer] = Size(
+              imageInfo.image.width.toDouble(),
+              imageInfo.image.height.toDouble());
+          Future.delayed(const Duration(milliseconds: 100)).then((value) =>
+              controller.update(['$idImageListView${widget.imageSer}']));
         }
-      },
-    );
+
+        controller.onLoadCompleted(widget.imageSer);
+
+        return controller.vState.viewMode != ViewMode.topToBottom
+            ? Hero(
+                tag: '${widget.imageSer}',
+                child: state.completedWidget,
+                createRectTween: (Rect? begin, Rect? end) =>
+                    MaterialRectCenterArcTween(begin: begin, end: end),
+              )
+            : state.completedWidget;
+      } else if (state.extendedImageLoadState == LoadState.loading) {
+        // 显示加载中
+        final ImageChunkEvent? loadingProgress = state.loadingProgress;
+        final double? progress = loadingProgress?.expectedTotalBytes != null
+            ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
+                (loadingProgress?.expectedTotalBytes ?? 1)
+            : null;
+
+        return ViewLoading(
+          ser: widget.imageSer,
+          // progress: progress,
+          duration: vState.viewMode != ViewMode.topToBottom
+              ? const Duration(milliseconds: 100)
+              : null,
+          debugLable: '### Widget fileImage 加载图片文件',
+        );
+      }
+    };
+
+    // final imageProvider = path.startsWith('content://')
+    //     ? ExtendedFileImageProvider(File(path))
+    //     : ExtendedSafImageProvider(Uri.parse(path));
+
+    return path.startsWith('content://')
+        ? ExtendedImage(
+            image: ExtendedSafImageProvider(Uri.parse(path)),
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.medium,
+            enableSlideOutPage: widget.enableSlideOutPage,
+            mode: widget.mode,
+            initGestureConfigHandler: _initGestureConfigHandler,
+            onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
+            loadStateChanged: loadStateChanged,
+          )
+        : ExtendedImage(
+            image: ExtendedFileImageProvider(File(path)),
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.medium,
+            enableSlideOutPage: widget.enableSlideOutPage,
+            mode: widget.mode,
+            initGestureConfigHandler: _initGestureConfigHandler,
+            onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
+            loadStateChanged: loadStateChanged,
+          );
   }
 
   /// 本地图片文件 构建Widget

@@ -297,6 +297,7 @@ class DownloadController extends GetxController {
 
     if (dirPath.startsWith('content://')) {
       // SAF
+      await ss.delete(Uri.parse('$dirPath%2F.info'));
       await ss.createFileAsBytes(
         Uri.parse(dirPath),
         mimeType: '',

@@ -263,19 +263,11 @@ class _DoublePageViewState extends State<DoublePageView> {
 
     final List<Widget> _pageList = <Widget>[
       if (serStart > 0)
-        // Expanded(
-        //   flex: _ratioStart * screenWidth ~/ 1,
-        //   child: buildViewImageStart(),
-        // ),
         AspectRatio(
           aspectRatio: _ratioStart,
           child: buildViewImageStart(),
         ),
       if (vState.filecount > serStart)
-        // Expanded(
-        //   flex: _ratioEnd * screenWidth ~/ 1,
-        //   child: buildViewImageEnd(),
-        // ),
         AspectRatio(
           aspectRatio: _ratioEnd,
           child: buildViewImageEnd(),
