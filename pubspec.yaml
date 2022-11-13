@@ -175,8 +175,9 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.0
   extended_nested_scroll_view: ^5.1.3
   shared_storage: #^0.6.0
-    git: https://github.com/honjow/shared-storage.git
+    git: https://github.com/alexrintt/shared-storage.git
   mime: ^1.0.2
+  saf: ^1.0.3+4
 
 
 dev_dependencies:

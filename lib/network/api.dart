@@ -22,7 +22,7 @@ import 'package:image_save/image_save.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_storage/shared_storage.dart' as saf;
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 final Api api = Api();
 
@@ -426,7 +426,7 @@ class Api {
           lookupMimeType(imageFile.path, headerBytes: bytes.take(8).toList());
       logger.d('mimeType $mimeType');
 
-      final result = await saf.createFileAsBytes(
+      final result = await ss.createFileAsBytes(
         Uri.parse(parentPath),
         mimeType: mimeType ?? '',
         displayName: fileName,
