@@ -150,7 +150,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           realDirPath = dirPath;
         }
 
-        logger.d('pics: ${pics.map((e) => e).join('\n')}');
+        logger.v('pics: ${pics.map((e) => e).join('\n')}');
 
         // 读取进度
         int? lastIndex = 0;
