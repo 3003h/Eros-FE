@@ -5,7 +5,7 @@ import 'package:fehviewer/component/setting_base.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:shared_storage/shared_storage.dart' as saf;
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 import '../../fehviewer.dart';
 import 'setting_items/selector_Item.dart';
@@ -75,7 +75,7 @@ class ListViewDownloadSetting extends StatelessWidget {
                   onTap: () async {
                     if (GetPlatform.isAndroid) {
                       // android 使用 SAF
-                      final uri = await saf.openDocumentTree();
+                      final uri = await ss.openDocumentTree();
                       logger.d('uri $uri');
                       if (uri != null) {
                         ehConfigService.downloadLocatino = uri.toString();

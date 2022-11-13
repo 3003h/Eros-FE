@@ -27,7 +27,7 @@ import 'package:get/get.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_storage/shared_storage.dart' as saf;
+import 'package:shared_storage/shared_storage.dart' as ss;
 import 'package:sprintf/sprintf.dart' as sp;
 
 import 'cache_controller.dart';
@@ -117,7 +117,7 @@ class DownloadController extends GetxController {
     //     .map((path) async {
     //   logger.d('path $path');
     //   if (path.startsWith('content://')) {
-    //     final parent = await saf.parentFile(Uri.parse(path));
+    //     final parent = await ss.parentFile(Uri.parse(path));
     //     return parent?.uri.toString() ?? downloadPath;
     //   } else {
     //     return Directory(path).parent.path;
@@ -137,15 +137,15 @@ class DownloadController extends GetxController {
       if (dirPath.startsWith('content://')) {
         // SAF 方式
         if (allow) {
-          final file = await saf.findFile(Uri.parse(dirPath), '.nomedia');
+          final file = await ss.findFile(Uri.parse(dirPath), '.nomedia');
           if (file != null) {
             logger.d('delete: ${file.uri}');
-            await saf.delete(file.uri);
+            await ss.delete(file.uri);
           }
         } else {
-          final file = await saf.findFile(Uri.parse(dirPath), '.nomedia');
+          final file = await ss.findFile(Uri.parse(dirPath), '.nomedia');
           if (file == null) {
-            final result = await saf.createFileAsString(
+            final result = await ss.createFileAsString(
               Uri.parse(dirPath),
               mimeType: '',
               displayName: '.nomedia',
@@ -297,7 +297,7 @@ class DownloadController extends GetxController {
 
     if (dirPath.startsWith('content://')) {
       // SAF
-      await saf.createFileAsBytes(
+      await ss.createFileAsBytes(
         Uri.parse(dirPath),
         mimeType: '',
         displayName: '.info',
@@ -406,7 +406,7 @@ class DownloadController extends GetxController {
     if (dirpath != null && shouldDeleteContent) {
       if (dirpath.startsWith('content://')) {
         // SAF
-        await saf.delete(Uri.parse(dirpath));
+        await ss.delete(Uri.parse(dirpath));
       } else {
         final dir = Directory(dirpath);
         if (await dir.exists()) {
@@ -695,11 +695,11 @@ class DownloadController extends GetxController {
         // read file
         final File file = File(savePath);
         final bytes = await file.readAsBytes();
-        // saf write file
+        // SAF write file
         final mimeType =
             lookupMimeType(file.path, headerBytes: bytes.take(8).toList());
-        logger.d('mimeType $mimeType');
-        await saf.createFileAsBytes(
+        logger.v('mimeType $mimeType');
+        await ss.createFileAsBytes(
           Uri.parse(parentPath),
           mimeType: mimeType ?? '',
           displayName: fileName,
@@ -832,7 +832,7 @@ class DownloadController extends GetxController {
     if (saveDirPath.startsWith('content://')) {
       final galleryDirUrl = '${ehConfigService.downloadLocatino}%2F$dirName';
       final uri = Uri.parse(galleryDirUrl);
-      final exists = await saf.exists(uri) ?? false;
+      final exists = await ss.exists(uri) ?? false;
 
       if (exists) {
         return galleryDirUrl;
@@ -840,7 +840,7 @@ class DownloadController extends GetxController {
 
       final parentUri = Uri.parse(ehConfigService.downloadLocatino);
       try {
-        final result = await saf.createDirectory(parentUri, dirName);
+        final result = await ss.createDirectory(parentUri, dirName);
         if (result != null) {
           return result.uri.toString();
         } else {
