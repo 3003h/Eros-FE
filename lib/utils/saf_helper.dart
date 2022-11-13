@@ -7,7 +7,29 @@ import 'package:shared_storage/shared_storage.dart' as ss;
 
 const kSafCacheDir = 'saf_cache';
 
-Future<String> safCache(Uri cacheUri) async {
+Future<String> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
+  final exists = await ss.exists(cacheUri) ?? false;
+  if (!exists) {
+    throw Exception('safCacheSingle: $cacheUri not exists');
+  }
+
+  final cachePath = await _makeExternalStorageTempPath(cacheUri);
+  try {
+    final bytes = await ss.getDocumentContent(cacheUri);
+    if (bytes != null) {
+      final file = File(cachePath);
+      if (overwrite || !file.existsSync()) {
+        await file.writeAsBytes(bytes);
+      }
+    }
+  } catch (e, stack) {
+    logger.e('safCache error', e, stack);
+  }
+
+  return cachePath;
+}
+
+Future<String> safCache(Uri cacheUri, {bool overwrite = false}) async {
   const columns = <ss.DocumentFileColumn>[
     ss.DocumentFileColumn.displayName,
     ss.DocumentFileColumn.size,
@@ -16,24 +38,7 @@ Future<String> safCache(Uri cacheUri) async {
     ss.DocumentFileColumn.mimeType,
   ];
 
-  final extPath = await pp.getExternalStorageDirectory();
-  if (extPath == null) {
-    logger.e('extPath is null');
-    throw Exception('getExternalStorageDirectory is null');
-  }
-
-  final parentDocumentFile = await cacheUri.toDocumentFile();
-  if (parentDocumentFile == null) {
-    logger.e('parentDocumentFile is null');
-    throw Exception('parentDocumentFile is null');
-  }
-  logger.d('parentDocumentFile id: ${parentDocumentFile.id}');
-
-  final cachePath = path.join(
-    extPath.path,
-    kSafCacheDir,
-    _makeDirectoryPathToName(parentDocumentFile.id ?? ''),
-  );
+  final cachePath = await _makeExternalStorageTempPath(cacheUri);
   logger.d('cache to cachePath: $cachePath');
 
   final Stream<ss.DocumentFile> onNewFileLoaded =
@@ -46,9 +51,14 @@ Future<String> safCache(Uri cacheUri) async {
     try {
       final bytes = await ss.getDocumentContent(documentFile.uri);
       final file = File(path.join(cachePath, documentFile.name));
-      if (bytes != null && bytes.isNotEmpty && !file.existsSync()) {
-        await file.create(recursive: true);
-        await file.writeAsBytes(bytes);
+      if (bytes != null && bytes.isNotEmpty) {
+        if (overwrite) {
+          await file.writeAsBytes(bytes);
+        } else {
+          if (!file.existsSync()) {
+            await file.writeAsBytes(bytes);
+          }
+        }
       }
     } catch (e, stack) {
       logger.e('safCache error', e, stack);
@@ -58,6 +68,52 @@ Future<String> safCache(Uri cacheUri) async {
   return cachePath;
 }
 
+Future<String> _makeExternalStorageTempPath(Uri uri) async {
+  final extPath = await pp.getExternalStorageDirectory();
+
+  final documentFile = await uri.toDocumentFile();
+  if (documentFile == null) {
+    logger.e('documentFile is null');
+    throw Exception('documentFile is null');
+  }
+  logger.d('documentFile id: ${documentFile.id}');
+
+  if (extPath == null) {
+    logger.e('extPath is null');
+    throw Exception('getExternalStorageDirectory is null');
+  }
+
+  final cachePath = path.join(
+    extPath.path,
+    kSafCacheDir,
+    _makeDirectoryPathToName(documentFile.id ?? ''),
+  );
+  logger.d('cache to cachePath: $cachePath');
+
+  return cachePath;
+}
+
 String _makeDirectoryPathToName(String path) {
   return path.replaceAll('/', '_').replaceAll(':', '_');
+}
+
+String safMakeUriString({String path = '', bool isTreeUri = false}) {
+  path = path.replaceAll(RegExp(r'^(/storage/emulated/\d+/|/sdcard/)'), '');
+
+  String uri = '';
+  String base =
+      'content://com.android.externalstorage.documents/tree/primary%3A';
+  String documentUri = '/document/primary%3A' +
+      path.replaceAll('/', '%2F').replaceAll(' ', '%20');
+  if (isTreeUri) {
+    uri = base + path.replaceAll('/', '%2F').replaceAll(' ', '%20');
+  } else {
+    var pathSegments = path.split('/');
+    var fileName = pathSegments[pathSegments.length - 1];
+    var directory = path.split('/$fileName')[0];
+    uri = base +
+        directory.replaceAll('/', '%2F').replaceAll(' ', '%20') +
+        documentUri;
+  }
+  return uri;
 }

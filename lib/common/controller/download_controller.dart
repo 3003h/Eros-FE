@@ -20,6 +20,7 @@ import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
+import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:fehviewer/utils/toast.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -95,8 +96,7 @@ class DownloadController extends GetxController {
     // logger.d(
     //     'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
     dState.executor = Executor(concurrency: ehConfigService.multiDownload);
-    allowMediaScan(ehConfigService.allowMediaScan);
-    initGalleryTasks();
+    asyncInit();
   }
 
   @override
@@ -105,26 +105,31 @@ class DownloadController extends GetxController {
     super.onClose();
   }
 
+  Future<void> asyncInit() async {
+    await updateCustomDownloadPath();
+    allowMediaScan(ehConfigService.allowMediaScan);
+    initGalleryTasks();
+  }
+
+  Future<void> updateCustomDownloadPath() async {
+    final customDownloadPath = ehConfigService.downloadLocatino;
+    logger.d('customDownloadPath:$customDownloadPath');
+    if (!GetPlatform.isAndroid ||
+        customDownloadPath.isEmpty ||
+        customDownloadPath.startsWith('content://')) {
+      return;
+    }
+
+    final uri = safMakeUriString(path: customDownloadPath, isTreeUri: true);
+    ehConfigService.downloadLocatino = uri;
+    restoreGalleryTasks();
+
+    logger.d('updateCustomDownloadPath $uri');
+  }
+
   /// 切换允许媒体扫描
   Future<void> allowMediaScan(bool allow) async {
     final downloadPath = await _getGalleryDownloadPath();
-
-    // final pathListFuture = dState.galleryTasks
-    //     .where((task) => task.realDirPath != null)
-    //     .map((task) => task.realDirPath!)
-    //     .toSet()
-    //     .toList()
-    //     .map((path) async {
-    //   logger.d('path $path');
-    //   if (path.startsWith('content://')) {
-    //     final parent = await ss.parentFile(Uri.parse(path));
-    //     return parent?.uri.toString() ?? downloadPath;
-    //   } else {
-    //     return Directory(path).parent.path;
-    //   }
-    // });
-    //
-    // final pathList = await Future.wait(pathListFuture);
 
     final pathList = <String>[];
 
