@@ -13,5 +13,6 @@
   "status?": 1,
   "progress?": 100,
   "timeCreated?": 123,
-  "resolution?": "1280x"
+  "resolution?": "1280x",
+  "safUri?": ""
 }
