@@ -22,7 +22,7 @@ Future<String> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
   if (!file.existsSync() || overwrite || file.lengthSync() != domSize) {
     final bytes = await domFile?.getContent();
     if (bytes != null) {
-      await file.writeAsBytes(bytes);
+      file.writeAsBytesSync(bytes);
     }
   }
 
@@ -88,6 +88,12 @@ Future<String> _makeExternalStorageTempPath(Uri uri) async {
     kSafCacheDir,
     _makeDirectoryPathToName(documentFile.id ?? ''),
   );
+
+  final parentDir = Directory(path.dirname(cachePath));
+  if (!parentDir.existsSync()) {
+    parentDir.createSync(recursive: true);
+  }
+
   logger.d('cache to cachePath: $cachePath');
 
   return cachePath;

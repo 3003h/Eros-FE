@@ -224,7 +224,11 @@ class ArchiverDownloadController extends GetxController {
     showToast('Download task added');
   }
 
-  void removeTask(String? tag) {
+  void removeTask(String? tag, {bool shouldDeleteContent = true}) {
+    final task = archiverTaskMap[tag];
+    if (shouldDeleteContent && task != null && task.safUri != null) {
+      ss.delete(Uri.parse(task.safUri!));
+    }
     archiverTaskMap.remove(tag);
     hiveHelper.removeArchiverTask(tag);
   }
@@ -364,7 +368,9 @@ class ArchiverDownloadController extends GetxController {
           status: downloadTask.status.value,
           progress: downloadTask.progress,
           fileName: downloadTask.filename,
-          savedDir: downloadTask.savedDir,
+          savedDir: downloadTask.savedDir.contains('saf_temp_archiver')
+              ? null
+              : downloadTask.savedDir,
           url: downloadTask.url,
           timeCreated: downloadTask.timeCreated,
           resolution: _resolution,
