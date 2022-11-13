@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pp;
@@ -12,18 +13,17 @@ Future<String> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
   if (!exists) {
     throw Exception('safCacheSingle: $cacheUri not exists');
   }
+  final ss.DocumentFile? domFile = await cacheUri.toDocumentFile();
+  final domSize = domFile?.size;
+  logger.d('dom size: $domSize');
 
   final cachePath = await _makeExternalStorageTempPath(cacheUri);
-  try {
-    final bytes = await ss.getDocumentContent(cacheUri);
+  final file = File(cachePath);
+  if (!file.existsSync() || overwrite || file.lengthSync() != domSize) {
+    final bytes = await domFile?.getContent();
     if (bytes != null) {
-      final file = File(cachePath);
-      if (overwrite || !file.existsSync()) {
-        await file.writeAsBytes(bytes);
-      }
+      await file.writeAsBytes(bytes);
     }
-  } catch (e, stack) {
-    logger.e('safCache error', e, stack);
   }
 
   return cachePath;
@@ -69,7 +69,7 @@ Future<String> safCache(Uri cacheUri, {bool overwrite = false}) async {
 }
 
 Future<String> _makeExternalStorageTempPath(Uri uri) async {
-  final extPath = await pp.getExternalStorageDirectory();
+  final extPath = (await pp.getExternalCacheDirectories())?.firstOrNull;
 
   final documentFile = await uri.toDocumentFile();
   if (documentFile == null) {

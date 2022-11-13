@@ -463,7 +463,7 @@ class WebdavController extends GetxController {
 
   // 下载分组
   Future<CustomProfile?> downloadGroupProfile(CustomProfile profile) async {
-    logger.d('download group ${profile.syncFileName}');
+    logger.v('download group ${profile.syncFileName}');
     chkTempDir(kLocalGroupDirPath);
     final _path =
         path.join(Global.tempPath, kLocalGroupDirPath, profile.syncFileName);

@@ -32,8 +32,11 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
         coverUrl = archiverTaskInfo.imgUrl,
         galleryUrl = archiverTaskInfo.galleryUrl,
         galleryGid = archiverTaskInfo.gid,
-        filePath = path.join(
-            archiverTaskInfo.savedDir ?? '', archiverTaskInfo.fileName),
+        filePath =
+            (archiverTaskInfo.savedDir?.startsWith('content://') ?? false)
+                ? archiverTaskInfo.safUri ?? ''
+                : path.join(
+                    archiverTaskInfo.savedDir ?? '', archiverTaskInfo.fileName),
         timeCreated = archiverTaskInfo.timeCreated != null
             ? DateTime.fromMillisecondsSinceEpoch(
                 archiverTaskInfo.timeCreated ?? 0)

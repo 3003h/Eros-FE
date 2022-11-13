@@ -133,7 +133,7 @@ class DownloadController extends GetxController {
 
     final pathList = <String>[];
 
-    logger.d('allowMediaScan $pathList');
+    logger.v('allowMediaScan $pathList');
 
     pathList.add(downloadPath);
 

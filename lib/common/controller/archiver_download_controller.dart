@@ -11,6 +11,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 Future<String> get defDownloadPath async => GetPlatform.isAndroid
     ? path.join((await getExternalStorageDirectory())!.path, 'Download')
@@ -21,13 +22,8 @@ const flutterDownloadPortName = 'downloader_send_port';
 final regExpResolution = RegExp(r'-(\d+[xX])\.\w+$');
 
 class ArchiverDownloadController extends GetxController {
-  final Map<String, DownloadArchiverTaskInfo> _archiverTaskMap =
+  final Map<String, DownloadArchiverTaskInfo> archiverTaskMap =
       <String, DownloadArchiverTaskInfo>{};
-  set archiverTaskMap(Map<String, DownloadArchiverTaskInfo> val) {
-    hiveHelper.archiverTaskMap = val;
-  }
-
-  Map<String, DownloadArchiverTaskInfo> get archiverTaskMap => _archiverTaskMap;
 
   final GStore _gStore = Get.find();
 
@@ -39,16 +35,16 @@ class ArchiverDownloadController extends GetxController {
     logger.v('ArchiverDownloadController onInit');
     bindBackgroundIsolate(updateTask);
 
-    // 从GS中初始化 archiverDlMap
-    final _archiver = hiveHelper.archiverTaskMap ??
+    // 初始化 taskMap
+    final _archiver = hiveHelper.getAllArchiverTaskMap() ??
         _gStore.archiverTaskMap ??
         <String, DownloadArchiverTaskInfo>{};
 
     // logger.d(
     //     '_archiver\n${_archiver.entries.map((e) => '${e.key}  ${e.value.toJson()}').join('\n')}');
 
-    _archiverTaskMap.clear();
-    _archiverTaskMap.addAll(_archiver);
+    archiverTaskMap.clear();
+    archiverTaskMap.addAll(_archiver);
 
     // 处理archiver任务
     _getArchiverTask();
@@ -90,10 +86,6 @@ class ArchiverDownloadController extends GetxController {
     IsolateNameServer.removePortNameMapping(flutterDownloadPortName);
   }
 
-  void _saveTask() {
-    hiveHelper.archiverTaskMap = _archiverTaskMap;
-  }
-
   Future<void> updateTask(
     String taskId,
     DownloadTaskStatus status,
@@ -130,17 +122,65 @@ class ArchiverDownloadController extends GetxController {
       resolution: _resolution,
     );
 
-    final _tag = archiverTaskMap[_key]!.tag;
-    if (Get.isRegistered<DownloadViewController>()) {
-      Get.find<DownloadViewController>()
-          .update(['${idDownloadArchiverItem}_$_tag']);
-    }
+    DownloadArchiverTaskInfo task = archiverTaskMap[_key]!;
+
+    final _tag = task.tag;
 
     if (status == DownloadTaskStatus.complete && fileName == null) {
       await 200.milliseconds.delay();
       await updateTask(taskId, status, progress);
     }
-    _saveTask();
+
+    if (status == DownloadTaskStatus.complete &&
+        (task.savedDir?.startsWith('content://') ?? false)) {
+      final safUri = await copyFileToSAF(task);
+      if (safUri != null) {
+        logger.d('safUri $safUri');
+        archiverTaskMap[_key] = archiverTaskMap[_key]!.copyWith(
+          safUri: safUri.toString(),
+        );
+        task = archiverTaskMap[_key]!;
+      }
+    }
+    hiveHelper.putArchiverTask(task);
+
+    if (Get.isRegistered<DownloadViewController>()) {
+      Get.find<DownloadViewController>()
+          .update(['${idDownloadArchiverItem}_$_tag']);
+    }
+  }
+
+  Future<Uri?> copyFileToSAF(DownloadArchiverTaskInfo task) async {
+    logger.d('copyFileToSAF ${task.fileName}');
+    final savePath = task.savedDir;
+    final fileName = task.fileName;
+    if (fileName == null || savePath == null) {
+      return null;
+    }
+    final tempFilePath = getTempFilePath(savePath, fileName);
+    logger.d('tempFilePath $tempFilePath');
+    final tempFile = File(tempFilePath);
+    if (!tempFile.existsSync()) {
+      logger.e('tempFile ${tempFile.path} not exist');
+      return null;
+    }
+    final parentUri = Uri.parse(await _getArchiverDownloadPath());
+    try {
+      final result = await ss.createFileAsBytes(
+        parentUri,
+        bytes: tempFile.readAsBytesSync(),
+        mimeType: 'application/zip',
+        displayName: fileName,
+      );
+      logger.d('write result ${result?.uri}');
+      logger.d('copyFileToSAF success');
+      return result?.uri;
+    } catch (e, s) {
+      logger.e('copyFileToSAF', e, s);
+    } finally {
+      tempFile.deleteSync();
+    }
+    return null;
   }
 
   /// 新增下载任务
@@ -163,6 +203,8 @@ class ArchiverDownloadController extends GetxController {
 
     final String? _taskId = await _downloadArchiverFile(url, _downloadPath);
 
+    logger.d('_downloadPath $_downloadPath');
+
     archiverTaskMap[_tag] = kDefDownloadTaskInfo.copyWith(
       tag: _tag,
       gid: gid,
@@ -178,13 +220,13 @@ class ArchiverDownloadController extends GetxController {
     if (Get.isRegistered<DownloadViewController>()) {
       Get.find<DownloadViewController>().update();
     }
-    _saveTask();
+    hiveHelper.putArchiverTask(archiverTaskMap[_tag]!);
     showToast('Download task added');
   }
 
   void removeTask(String? tag) {
     archiverTaskMap.remove(tag);
-    _saveTask();
+    hiveHelper.removeArchiverTask(tag);
   }
 
   void _downloadViewAnimateListAdd({int? index}) {
@@ -194,8 +236,43 @@ class ArchiverDownloadController extends GetxController {
     }
   }
 
-  /// 获取下载路径
   Future<String> _getArchiverDownloadPath() async {
+    final customDownloadPath = ehConfigService.downloadLocatino;
+    late String dirPath;
+    if (GetPlatform.isIOS) {
+      dirPath = path.join(Global.appDocPath, 'Download', 'Archiver');
+    }
+
+    if (customDownloadPath.isNotEmpty &&
+        customDownloadPath.startsWith('content://')) {
+      dirPath = customDownloadPath;
+    } else {
+      dirPath = path.join(customDownloadPath, 'Archiver');
+    }
+
+    if (dirPath.startsWith('content://')) {
+      final domFile = await ss.findFile(Uri.parse(dirPath), 'Archiver');
+      logger.d('domFile name:${domFile?.name}, type:${domFile?.type}');
+      if (domFile == null) {
+        final parentUri = Uri.parse(customDownloadPath);
+        final result = await ss.createDirectory(parentUri, 'Archiver');
+        logger.d('create dir result ${result?.uri}');
+        return result?.uri.toString() ?? '';
+      } else {
+        dirPath = domFile.uri.toString();
+      }
+    } else {
+      final _dir = Directory(dirPath);
+      if (!_dir.existsSync()) {
+        _dir.createSync(recursive: true);
+      }
+    }
+
+    return dirPath;
+  }
+
+  /// 获取下载路径
+  Future<String> _getArchiverDownloadPath_Old() async {
     late String _dirPath;
 
     if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
@@ -231,6 +308,12 @@ class ArchiverDownloadController extends GetxController {
     final Map<String, String> _httpHeaders = {
       'Cookie': Global.profile.user.cookie,
     };
+
+    if (savePath.startsWith('content://')) {
+      savePath = getTempFilePath(savePath, fileName ?? '');
+      logger.d('savePath $savePath');
+    }
+
     return await FlutterDownloader.enqueue(
       url: downloadUrl,
       savedDir: savePath,
@@ -239,6 +322,15 @@ class ArchiverDownloadController extends GetxController {
       openFileFromNotification: false,
       headers: _httpHeaders,
     );
+  }
+
+  String getTempFilePath(String destPath, String fileName) {
+    final parentPath = path.join(Global.extStoreTempPath, 'saf_temp_archiver');
+    final parentDir = Directory(parentPath);
+    if (!parentDir.existsSync()) {
+      parentDir.createSync(recursive: true);
+    }
+    return path.join(Global.extStoreTempPath, 'saf_temp_archiver', fileName);
   }
 
   /// 不在 archiverDlMap 中的任务
@@ -268,7 +360,6 @@ class ArchiverDownloadController extends GetxController {
         final _resolution =
             regExpResolution.firstMatch(downloadTask.filename ?? '')?.group(1);
 
-        // 触发ever 保存到GS中
         archiverTaskMap[_taskInfo.tag!] = _taskInfo.copyWith(
           status: downloadTask.status.value,
           progress: downloadTask.progress,
