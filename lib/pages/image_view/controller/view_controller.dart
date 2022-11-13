@@ -487,10 +487,14 @@ class ViewExtController extends GetxController {
         imageTask.filePath != null &&
         imageTask.filePath!.isNotEmpty &&
         imageTask.status == TaskStatus.complete.value) {
+      final filePath = dir.startsWith('content://')
+          ? '$dir%2F${imageTask.filePath}'
+          : path.join(dir, imageTask.filePath!);
+
       return GalleryImage(
         ser: itemSer,
         completeDownload: true,
-        filePath: path.join(dir, imageTask.filePath!),
+        filePath: filePath,
       );
     }
     return null;

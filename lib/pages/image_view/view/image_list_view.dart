@@ -250,7 +250,8 @@ class _ImageListViewState extends State<ImageListView> {
                 height: _height ?? context.mediaQueryShortestSide,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.ease,
-                child: kReleaseMode ? viewImage : viewImage2,
+                // child: !kDebugMode ? viewImage : viewImage2,
+                child: viewImage,
               );
             }),
       );

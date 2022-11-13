@@ -11,6 +11,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
+import 'package:fehviewer/widget/image/extended_saf_image_privider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -1176,13 +1177,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
           children: [
             Container(
               height: kThumbListViewHeight,
-              // padding: const EdgeInsets.symmetric(vertical: 8),
-              // padding: EdgeInsets.symmetric(
-              //     horizontal: context.width / 2 - kThumbImageWidth / 2 - 2),
               child: ScrollablePositionedList.builder(
-                // physics: const ClampingScrollPhysics(),
-                // padding: EdgeInsets.symmetric(
-                //     horizontal: context.width / 2 - kThumbImageWidth / 2 - 2),
                 itemScrollController: logic.thumbScrollController,
                 itemPositionsListener: logic.thumbPositionsListener,
                 itemCount: controller.vState.filecount,
@@ -1195,11 +1190,17 @@ class ThumbnailListView extends GetView<ViewExtController> {
                     case LoadFrom.download:
                       final path = controller.vState.imagePathList[index];
 
-                      thumb = ExtendedImage.file(
-                        File(path),
-                        fit: BoxFit.cover,
-                        filterQuality: FilterQuality.medium,
-                      );
+                      thumb = path.startsWith('content://')
+                          ? ExtendedImage(
+                              image: ExtendedSafImageProvider(Uri.parse(path)),
+                              fit: BoxFit.cover,
+                              filterQuality: FilterQuality.medium,
+                            )
+                          : ExtendedImage.file(
+                              File(path),
+                              fit: BoxFit.cover,
+                              filterQuality: FilterQuality.medium,
+                            );
                       break;
                     case LoadFrom.gallery:
                       thumb = FutureThumbl(itemSer: index + 1);

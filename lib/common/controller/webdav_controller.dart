@@ -497,7 +497,7 @@ class WebdavController extends GetxController {
     final profiles = list.map((e) {
       final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
       final arr = name?.split(kGroupSeparator);
-      logger.d('getRemoteGroupList $arr');
+      logger.v('getRemoteGroupList $arr');
       // 名称
       final profileName = arr?.first ?? '';
       // uuid
