@@ -14,7 +14,7 @@ import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/eh_network_image.dart';
+import 'package:fehviewer/widget/image/eh_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,12 +116,41 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           return;
         }
 
-        // 下载的图片文件路径
-        final List<String> pics = imageTasks
-            .where((element) =>
-                element.filePath != null && element.filePath!.isNotEmpty)
-            .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
-            .toList();
+        late final List<String> pics;
+        late final String? realDirPath;
+        final dirPath = gTask.realDirPath;
+
+        // /// 把SAF路径下的画廊目录缓存到外置目录中
+        // /// 可能还需要考虑同步问题
+        // if (dirPath?.startsWith('content://') ?? false) {
+        //   realDirPath = await safCache(Uri.parse(dirPath!));
+        // } else {
+        //   realDirPath = dirPath;
+        // }
+
+        // // 下载的图片文件路径
+        // pics = imageTasks
+        //     .where((element) =>
+        //         element.filePath != null && element.filePath!.isNotEmpty)
+        //     .map((e) => path.join(realDirPath ?? '', e.filePath ?? ''))
+        //     .toList();
+
+        if (dirPath?.startsWith('content://') ?? false) {
+          pics = imageTasks
+              .where((element) =>
+                  element.filePath != null && element.filePath!.isNotEmpty)
+              .map((e) => '$dirPath%2F${e.filePath}')
+              .toList();
+        } else {
+          pics = imageTasks
+              .where((element) =>
+                  element.filePath != null && element.filePath!.isNotEmpty)
+              .map((e) => path.join(dirPath ?? '', e.filePath ?? ''))
+              .toList();
+          realDirPath = dirPath;
+        }
+
+        logger.d('pics: ${pics.map((e) => e).join('\n')}');
 
         // 读取进度
         int? lastIndex = 0;
@@ -137,7 +166,10 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
 
         // 进入阅读
         NavigatorUtil.goGalleryViewPageFile(
-            lastIndex ?? 0, pics, '${galleryTask.gid}');
+          lastIndex ?? 0,
+          pics,
+          '${galleryTask.gid}',
+        );
       },
       onLongPress: () => controller.onLongPress(taskIndex, task: galleryTask),
       child: _buildCardItem(context, _complete, addTime: addTime),
