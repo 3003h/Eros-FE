@@ -133,7 +133,7 @@ const ViewHistorySchema = CollectionSchema(
   getId: _viewHistoryGetId,
   getLinks: _viewHistoryGetLinks,
   attach: _viewHistoryAttach,
-  version: '3.0.2',
+  version: '3.0.3',
 );
 
 int _viewHistoryEstimateSize(

@@ -668,8 +668,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           return getGallerySliverList(
             logic.state,
             controller.heroTag,
-            maxPage: controller.maxPage,
-            curPage: controller.curPage,
+            next: logic.next,
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,
@@ -706,47 +705,81 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             // 页码
+            // Obx(() {
+            //   if (controller.curPage > -1) {
+            //     return Container(
+            //       margin: const EdgeInsets.only(left: 8, right: 4),
+            //       child: CupertinoButton(
+            //         minSize: 36,
+            //         padding: const EdgeInsets.all(0),
+            //         child: Container(
+            //           padding: const EdgeInsets.symmetric(
+            //               horizontal: 4, vertical: 0),
+            //           constraints: const BoxConstraints(minWidth: 24),
+            //           decoration: BoxDecoration(
+            //             border: Border.all(
+            //               color: CupertinoDynamicColor.resolve(
+            //                   CupertinoColors.activeBlue, context),
+            //               width: 2.0,
+            //             ),
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           child: Obx(() => Text(
+            //                 '${controller.curPage + 1}',
+            //                 textAlign: TextAlign.center,
+            //                 textScaleFactor: 0.85,
+            //                 style: TextStyle(
+            //                   fontWeight: FontWeight.bold,
+            //                   color: CupertinoDynamicColor.resolve(
+            //                       CupertinoColors.activeBlue, context),
+            //                   // height: 1.2,
+            //                   // textBaseline: TextBaseline.ideographic,
+            //                 ),
+            //                 // strutStyle: const StrutStyle(
+            //                 //   leading: 0.2,
+            //                 //   height: 1.2,
+            //                 //   forceStrutHeight: true,
+            //                 // ),
+            //               )),
+            //         ),
+            //         onPressed: () {
+            //           controller.showJumpToPage();
+            //         },
+            //       ),
+            //     );
+            //   } else {
+            //     return const SizedBox.shrink();
+            //   }
+            // }),
             Obx(() {
-              if (controller.curPage > -1) {
-                return Container(
-                  margin: const EdgeInsets.only(left: 8, right: 4),
-                  child: CupertinoButton(
-                    minSize: 36,
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 4, vertical: 0),
-                      constraints: const BoxConstraints(minWidth: 24),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.activeBlue, context),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Obx(() => Text(
-                            '${controller.curPage + 1}',
-                            textAlign: TextAlign.center,
-                            textScaleFactor: 0.85,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.activeBlue, context),
-                              // height: 1.2,
-                              // textBaseline: TextBaseline.ideographic,
-                            ),
-                            // strutStyle: const StrutStyle(
-                            //   leading: 0.2,
-                            //   height: 1.2,
-                            //   forceStrutHeight: true,
-                            // ),
-                          )),
-                    ),
-                    onPressed: () {
-                      controller.showJumpToPage();
-                    },
+              if (controller.afterJump) {
+                return CupertinoButton(
+                  minSize: 40,
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    CupertinoIcons.arrow_up_circle,
+                    size: 28,
                   ),
+                  onPressed: () {
+                    controller.jumpToTop();
+                  },
+                );
+              } else {
+                return const SizedBox();
+              }
+            }),
+            Obx(() {
+              if (controller.next.isNotEmpty) {
+                return CupertinoButton(
+                  minSize: 40,
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    CupertinoIcons.arrow_uturn_down_circle,
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    controller.showJumpDialog(context);
+                  },
                 );
               } else {
                 return const SizedBox.shrink();
@@ -791,17 +824,17 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             //   },
             // ),
             // 打开快捷搜索
-            CupertinoButton(
-              minSize: 36,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.listUl,
-                size: 20,
-              ),
-              onPressed: () {
-                controller.quickSearchList();
-              },
-            ),
+            // CupertinoButton(
+            //   minSize: 36,
+            //   padding: const EdgeInsets.all(0),
+            //   child: const Icon(
+            //     FontAwesomeIcons.listUl,
+            //     size: 20,
+            //   ),
+            //   onPressed: () {
+            //     controller.quickSearchList();
+            //   },
+            // ),
           ],
         ),
       );
@@ -908,6 +941,16 @@ class SearchTextFieldIn extends StatelessWidget {
                             .withOpacity(iconOpacity),
                       ).paddingSymmetric(horizontal: 6),
                     ),
+                  GestureDetector(
+                    onTap: controller.quickSearchList,
+                    child: Icon(
+                      FontAwesomeIcons.listUl,
+                      size: 18.0,
+                      color: CupertinoDynamicColor.resolve(
+                              _kClearButtonColor, Get.context!)
+                          .withOpacity(iconOpacity),
+                    ).paddingOnly(right: 10, left: 6),
+                  ),
                 ],
               );
             },

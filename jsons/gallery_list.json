@@ -1,5 +1,7 @@
 {
   "gallerys?": "$[]gallery_provider",
+  "nextGid?": "",
+  "prevGid?": "",
   "maxPage?": 50,
   "nextPage?": 3,
   "prevPage?": 2,

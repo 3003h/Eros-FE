@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
@@ -29,9 +30,12 @@ Options getCacheOptions({bool forceRefresh = false}) {
 }
 
 Future<GalleryList?> getGallery({
+  PageType? pageType,
+  String? gid,
+  String? jump,
+  String? seek,
+  String? search,
   int? page,
-  String? fromGid,
-  String? serach,
   int? cats,
   bool refresh = false,
   CancelToken? cancelToken,
@@ -40,9 +44,12 @@ Future<GalleryList?> getGallery({
   String? favcat,
   ValueChanged<List<Favcat>>? favCatList,
   AdvanceSearch? advanceSearch,
+  bool globalSearch = false,
 }) async {
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
+
+  logger.v('globalSearch $globalSearch');
 
   late final String _url;
   switch (galleryListType) {
@@ -66,38 +73,50 @@ Future<GalleryList?> getGallery({
   final isFav = galleryListType == GalleryListType.favorite;
   final isPopular = galleryListType == GalleryListType.popular;
 
-  final Map<String, dynamic> _params = <String, dynamic>{
+  final exParams = <String, dynamic>{
+    if (!isPopular) 'jump': jump,
+    if (!isPopular) 'seek': seek,
+    if (!isPopular && pageType != null && gid != null) pageType.value: gid,
+  };
+
+  final ehParams = <String, dynamic>{
     if (!isTopList && !isPopular) 'page': page ?? 0,
     if (isTopList) 'p': page ?? 0,
+    if (!isTopList && !isPopular && gid != null) 'from': gid,
+  };
+
+  final Map<String, dynamic> _params = <String, dynamic>{
     if (!isTopList && !isPopular && !isFav) 'f_cats': cats,
-    if (!isTopList && !isPopular && fromGid != null) 'from': fromGid,
-    if (!isTopList && !isPopular && serach != null) 'f_search': serach,
+    if (!isTopList && !isPopular && search != null) 'f_search': search,
     if (isTopList && toplist != null && toplist.isNotEmpty) 'tl': toplist,
     if (isFav && favcat != null && favcat != 'a' && favcat.isNotEmpty)
       'favcat': favcat,
   };
 
-  logger.v('advanceSearchParam ${advanceSearch?.param}');
+  if (Get.find<EhConfigService>().isSiteEx.value) {
+    _params.addAll(exParams);
+  } else {
+    _params.addAll(ehParams);
+  }
+
+  logger.v('advanceSearch ${advanceSearch?.param}  refresh $refresh');
 
   /// 高级搜索处理
   if (advanceSearch != null) {
-    if (advanceSearch.param.isNotEmpty) {
+    if (advanceSearch.param.isNotEmpty && !isPopular) {
       _params['advsearch'] = 1;
       _params.addAll(advanceSearch.param);
     }
-  } else if (!isTopList &&
-      !isPopular &&
-      !isFav &&
-      _searchController.enableAdvance) {
+  } else if (globalSearch && _searchController.enableAdvance) {
     _params['advsearch'] = 1;
     _params.addAll(_searchController.advanceSearchMap);
   }
 
-  if (serach != null && isFav) {
+  if (search != null && isFav) {
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.v('url:$_url ${_params}');
+  logger.d('url:$_url $_params');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,
@@ -124,16 +143,20 @@ Future<GalleryList?> getGallery({
   }
 
   if (httpResponse.error is FavOrderException) {
-    logger.d('FavOrderException');
     final _order = (httpResponse.error as FavOrderException).order;
     _params['inline_set'] = _order;
+    logger.e('FavOrderException, need change order inline_set=$_order');
     _params.removeWhere((key, value) => key == 'page');
+
+    logger.d('ff $_url ${_params}');
     httpResponse = await dioHttpClient.get(
       _url,
       queryParameters: _params,
       httpTransformer:
           isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
-      options: getCacheOptions(forceRefresh: true),
+      options: getCacheOptions(forceRefresh: false)
+        ..followRedirects = true
+        ..validateStatus = (status) => (status ?? 0) < 500,
       cancelToken: cancelToken,
     );
   }
@@ -141,7 +164,7 @@ Future<GalleryList?> getGallery({
   if (httpResponse.ok && httpResponse.data is GalleryList) {
     return httpResponse.data as GalleryList;
   } else {
-    logger.v('${httpResponse.error.runtimeType}');
+    logger.d('${httpResponse.error.runtimeType}');
     throw httpResponse.error ?? EhError(error: 'getGallery error');
   }
 }
@@ -973,6 +996,8 @@ Future<GalleryList?> searchImage(
     if (exp ?? false) 'fs_exp': MultipartFile.fromString('on'), // 搜索被删除
     'f_sfile': MultipartFile.fromString('File Search'),
   });
+
+  logger.d('searchImage url: $url');
 
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,

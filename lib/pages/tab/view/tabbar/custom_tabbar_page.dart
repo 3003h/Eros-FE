@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
@@ -168,7 +166,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
       ),
       padding: const EdgeInsetsDirectional.only(end: 4),
       middle: GestureDetector(
-        onTap: () => controller.srcollToTop(context),
+        onTap: () => controller.scrollToTop(context),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -201,38 +199,81 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
             },
           ),
           // 页码跳转按钮
-          CupertinoButton(
-            minSize: 36,
-            padding: const EdgeInsets.only(right: 6),
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-              constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.activeBlue, context),
-                  width: 1.8,
+          // JumpButton(controller: controller),
+          Obx(() {
+            if (controller.afterJump) {
+              return CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  CupertinoIcons.arrow_up_circle,
+                  size: 28,
                 ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Obx(() => Text(
-                    '${max(1, controller.curPage + 1)}',
-                    textAlign: TextAlign.center,
-                    textScaleFactor: 0.9,
-                    style: TextStyle(
-                        height: 1.3,
-                        fontWeight: FontWeight.bold,
-                        color: CupertinoDynamicColor.resolve(
-                            CupertinoColors.activeBlue, context)),
-                  )),
+                onPressed: () {
+                  controller.jumpToTop();
+                },
+              );
+            } else {
+              return const SizedBox();
+            }
+          }),
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              CupertinoIcons.arrow_uturn_down_circle,
+              size: 28,
             ),
             onPressed: () {
-              controller.showJumpToPage();
+              controller.showJumpDialog(context);
             },
           ),
         ],
       ),
+    );
+  }
+}
+
+class JumpButton extends StatelessWidget {
+  const JumpButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final CustomTabbarController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      minSize: 36,
+      padding: const EdgeInsets.only(right: 6),
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+        constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.activeBlue, context),
+            width: 1.8,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Obx(() => Text(
+              // '${max(1, controller.curPage + 1)}',
+              '1',
+              textAlign: TextAlign.center,
+              textScaleFactor: 0.9,
+              style: TextStyle(
+                  height: 1.3,
+                  fontWeight: FontWeight.bold,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.activeBlue, context)),
+            )),
+      ),
+      onPressed: () {
+        controller.showJumpDialog(context);
+      },
     );
   }
 }
@@ -341,16 +382,7 @@ class CustomTabBar extends StatelessWidget {
                                   isRefresh = true;
                                 });
                                 try {
-                                  if (controller
-                                          .currSubController?.reloadData !=
-                                      null) {
-                                    await controller.currSubController!
-                                        .reloadData();
-                                  } else {
-                                    controller.update();
-                                    await controller.currSubController
-                                        ?.reloadData();
-                                  }
+                                  await controller.reloadData();
                                 } finally {
                                   setState(() {
                                     isRefresh = false;
