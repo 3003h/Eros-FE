@@ -84,7 +84,6 @@ class _DownloadTabState extends State<DownloadTab> {
               padding: const EdgeInsets.all(0),
               child: const Icon(
                 CupertinoIcons.arrow_up_arrow_down_square_fill,
-                // FontAwesomeIcons.arrowsUpDownLeftRight,
                 size: 28,
               ),
               onPressed: _showExportDialog,

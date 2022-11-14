@@ -7,6 +7,7 @@ import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/epub/epub_builder.dart';
 import 'package:fehviewer/common/global.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -25,6 +26,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 enum DownloadType {
   gallery,
@@ -298,26 +300,57 @@ class DownloadViewController extends GetxController {
                     L10n.of(context).export,
                   ),
                 ),
-              // if (type == DownloadType.archiver &&
-              //     archiverTasks[taskIndex].status ==
-              //         DownloadTaskStatus.complete.value)
-              //   CupertinoActionSheetAction(
-              //     onPressed: () {
-              //       Get.back();
-              //       exportArchiverTaskFile(taskIndex);
-              //     },
-              //     child: Text(
-              //       L10n.of(context).export,
-              //     ),
-              //   ),
               // 删除
               CupertinoActionSheetAction(
                 onPressed: () {
                   Get.back();
-                  _showDeleteDialog(taskIndex, type);
+                  _showDeleteSheet(taskIndex, type);
                 },
                 child: Text(
                   L10n.of(context).delete,
+                  style: const TextStyle(color: CupertinoColors.destructiveRed),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _showDeleteSheet(int taskIndex, DownloadType type) async {
+    await showCupertinoModalPopup<void>(
+        context: Get.overlayContext!,
+        builder: (BuildContext context) {
+          return CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(L10n.of(context).cancel)),
+            actions: <Widget>[
+              // 删除
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                  type == DownloadType.archiver
+                      ? removeArchiverTask(taskIndex,
+                          shouldDeleteContent: false)
+                      : removeGalleryTask(taskIndex,
+                          shouldDeleteContent: false);
+                },
+                child: Text(
+                  L10n.of(context).delete_task_only,
+                  style: const TextStyle(color: CupertinoColors.destructiveRed),
+                ),
+              ),
+              CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                  type == DownloadType.archiver
+                      ? removeArchiverTask(taskIndex)
+                      : removeGalleryTask(taskIndex);
+                },
+                child: Text(
+                  L10n.of(context).delete_task_and_content,
                   style: const TextStyle(color: CupertinoColors.destructiveRed),
                 ),
               ),
@@ -333,7 +366,6 @@ class DownloadViewController extends GetxController {
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text(L10n.of(context).delete_task),
-          // content: const Text('Import and Export download task'),
           actions: [
             CupertinoDialogAction(
               onPressed: () async {
@@ -424,10 +456,11 @@ class DownloadViewController extends GetxController {
     if (_zipPath != null) {
       Share.shareXFiles([XFile(_zipPath)]);
     }
+    return null;
   }
 
   Future<String?> _compZip(GalleryTask task) async {
-    final _tempPath = path.join(Global.tempPath, 'export_temp');
+    final _tempPath = path.join(Global.extStoreTempPath, 'export_temp');
     Directory _tempDir = Directory(_tempPath);
     if (_tempDir.existsSync()) {
       _tempDir.deleteSync(recursive: true);
@@ -436,20 +469,47 @@ class DownloadViewController extends GetxController {
 
     // 打包zip
     final encoder = ZipFileEncoder();
-    final _zipPath =
-        path.join(Global.tempPath, 'zip', '${task.gid}_${task.title}.zip');
+    final _zipPath = path.join(
+        Global.extStoreTempPath, 'zip', '${task.gid}_${task.title}.zip');
     encoder.create(_zipPath);
 
-    // 添加文件
-    final _galleryDir = Directory(task.realDirPath!);
-    for (final _file in _galleryDir.listSync()) {
-      if ((await FileSystemEntity.type(_file.path)) ==
-          FileSystemEntityType.file) {
-        final srcFile = File(_file.path);
-        // srcFile.copySync(path.join(_tempPath, path.basename(srcFile.path)));
-        // logger.d('${_file.path}');
-        encoder.addFile(srcFile);
+    if (task.realDirPath?.isContentUri ?? false) {
+      // SAF list files
+      const columns = <ss.DocumentFileColumn>[
+        ss.DocumentFileColumn.displayName,
+        ss.DocumentFileColumn.size,
+        ss.DocumentFileColumn.lastModified,
+        ss.DocumentFileColumn.id,
+        ss.DocumentFileColumn.mimeType,
+      ];
+      final onFileLoaded =
+          ss.listFiles(Uri.parse(task.realDirPath!), columns: columns);
+
+      await for (final domFile in onFileLoaded) {
+        final bytes = await domFile.getContent();
+        if (bytes == null) {
+          continue;
+        }
+        final _filePath = path.join(_tempPath, domFile.name);
+        File(_filePath).writeAsBytesSync(bytes);
+        encoder.addFile(File(_filePath));
       }
+    } else {
+      // 添加文件
+      final _galleryDir = Directory(task.realDirPath!);
+      for (final _file in _galleryDir.listSync()) {
+        if ((await FileSystemEntity.type(_file.path)) ==
+            FileSystemEntityType.file) {
+          final srcFile = File(_file.path);
+          encoder.addFile(srcFile);
+        }
+      }
+    }
+
+    if (kDebugMode) {
+      // _zipPath len
+      final _file = File(_zipPath);
+      logger.d('zip file len ${_file.lengthSync()}');
     }
 
     encoder.close();
@@ -468,6 +528,7 @@ class DownloadViewController extends GetxController {
     if (_exportFilePath != null) {
       Share.shareXFiles([XFile(_exportFilePath)]);
     }
+    return null;
   }
 
   Future<String?> _buildEpub(GalleryTask task) async {
@@ -479,9 +540,14 @@ class DownloadViewController extends GetxController {
 
     // 打包epub文件
     final _epubPath =
-        path.join(Global.tempPath, 'epub', '${task.gid}_$title.epub');
-    // compactZip(_epubPath, _tempEpubPath);
+        path.join(Global.extStoreTempPath, 'epub', '${task.gid}_$title.epub');
     await compute(isolateCompactDirToZip, [_epubPath, _tempEpubPath]);
+
+    if (kDebugMode) {
+      // _epubPath len
+      final _file = File(_epubPath);
+      logger.d('epub file len ${_file.lengthSync()}');
+    }
 
     return _epubPath;
   }

@@ -257,6 +257,13 @@ extension ExtString on String {
         this;
   }
 
+  String get shortTitle {
+    return replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
+        .trim()
+        .split('\|')
+        .first;
+  }
+
   String get realDownloadPath {
     if (GetPlatform.isIOS) {
       final List<String> pathList = path.split(this).reversed.toList();
