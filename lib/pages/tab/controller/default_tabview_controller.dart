@@ -1,5 +1,5 @@
 import 'dart:ui' show ImageFilter;
-
+import 'package:collection/collection.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -152,7 +152,9 @@ class DefaultTabViewController extends TabViewController {
     cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: nextGid,
+      gid: ehConfigService.isSiteEx.value
+          ? nextGid
+          : state?.lastOrNull?.gid ?? '',
       cats: cats ?? ehConfigService.catFilter.value,
       refresh: true,
       cancelToken: cancelToken,
@@ -160,6 +162,7 @@ class DefaultTabViewController extends TabViewController {
       toplist: currToplist,
       searchType: searchType,
       searchText: searchText,
+      page: nextPage,
     );
 
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
@@ -179,6 +182,7 @@ class DefaultTabViewController extends TabViewController {
       toplist: currToplist,
       searchType: searchType,
       searchText: searchText,
+      page: prevPage,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -199,6 +203,7 @@ class DefaultTabViewController extends TabViewController {
     PageType? pageType,
     String? jump,
     String? seek,
+    int? page,
   }) async {
     final fetchConfig = FetchParams(
       pageType: pageType,
@@ -212,6 +217,7 @@ class DefaultTabViewController extends TabViewController {
       searchText: searchText,
       jump: jump,
       seek: seek,
+      page: page,
     );
 
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
@@ -525,7 +531,7 @@ class DefaultTabViewController extends TabViewController {
         if (_scrollController.position.pixels >
             _scrollController.position.maxScrollExtent -
                 context.mediaQuerySize.longestSide) {
-          if ((nextGid).isNotEmpty &&
+          if (next.isNotEmpty &&
               lastItemBuildComplete &&
               pageState != PageState.Loading) {
             // 加载更多

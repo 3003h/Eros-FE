@@ -50,6 +50,7 @@ class DefaultFetchListClient extends FetchListClient {
       advanceSearch: fetchParams.advanceSearch,
       jump: fetchParams.jump,
       seek: fetchParams.seek,
+      page: fetchParams.page,
     );
   }
 }
@@ -79,6 +80,7 @@ class SearchFetchListClient extends FetchListClient {
       globalSearch: globalSearch,
       jump: fetchParams.jump,
       seek: fetchParams.seek,
+      page: fetchParams.page,
     );
 
     // hide tag filter 20220606
@@ -136,6 +138,7 @@ class FavoriteFetchListClient extends FetchListClient {
       galleryListType: GalleryListType.favorite,
       jump: fetchParams.jump,
       seek: fetchParams.seek,
+      page: fetchParams.page,
     );
   }
 }
@@ -201,6 +204,7 @@ class FetchParams {
     this.advanceSearch,
     this.jump,
     this.seek,
+    this.page,
   });
   PageType? pageType;
   String? gid;
@@ -215,9 +219,10 @@ class FetchParams {
   AdvanceSearch? advanceSearch;
   String? jump;
   String? seek;
+  int? page;
 
   @override
   String toString() {
-    return 'FetchParams{pageType: $pageType, gid: $gid, searchText: $searchText, searchType: $searchType, cats: $cats, refresh: $refresh, cancelToken: $cancelToken, favcat: $favcat, toplist: $toplist, galleryListType: $galleryListType, advanceSearch: $advanceSearch, jump: $jump, seek: $seek}';
+    return 'FetchParams{pageType: $pageType, gid: $gid, searchText: $searchText, searchType: $searchType, cats: $cats, refresh: $refresh, cancelToken: $cancelToken, favcat: $favcat, toplist: $toplist, galleryListType: $galleryListType, advanceSearch: $advanceSearch, jump: $jump, seek: $seek, page: $page}';
   }
 }

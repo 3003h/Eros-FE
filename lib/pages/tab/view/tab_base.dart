@@ -543,7 +543,7 @@ Widget getGallerySliverList(
   final EhConfigService ehConfigService = Get.find();
   final _key = key ?? ValueKey(galleryProviders.hashCode);
 
-  logger.v('next $next');
+  // logger.d('next $next');
 
   return Obx(() {
     final mod = listMode?.value != ListModeEnum.global

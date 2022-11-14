@@ -31,9 +31,9 @@ class _HistoryTabState extends State<HistoryTab> {
   void initState() {
     super.initState();
 
-    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopCall = () => controller.scrollToTop(context);
     ehTabController.scrollToTopRefreshCall =
-        () => controller.srcollToTopRefresh(context);
+        () => controller.scrollToTopRefresh(context);
     if (controller.heroTag != null) {
       tabPages.scrollControllerMap[controller.heroTag!] = ehTabController;
     }
@@ -50,7 +50,7 @@ class _HistoryTabState extends State<HistoryTab> {
       padding: const EdgeInsetsDirectional.only(end: 4),
       leading: controller.getLeading(context),
       middle: GestureDetector(
-          onTap: () => controller.srcollToTop(context), child: Text(_title)),
+          onTap: () => controller.scrollToTop(context), child: Text(_title)),
       trailing: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,

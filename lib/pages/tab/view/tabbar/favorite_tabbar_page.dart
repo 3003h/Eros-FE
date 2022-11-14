@@ -180,7 +180,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
         ),
         padding: const EdgeInsetsDirectional.only(end: 4),
         middle: GestureDetector(
-          onTap: () => controller.srcollToTop(context),
+          onTap: () => controller.scrollToTop(context),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

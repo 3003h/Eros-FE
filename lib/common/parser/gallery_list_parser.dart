@@ -1,9 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/utility.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
@@ -96,20 +93,21 @@ GalleryList parseGalleryList(
   }
 
 // 最大页数
-//   int _maxPage = 0;
-//   List<dom.Element> _pages = document.querySelectorAll(_pageSelector);
-//   if (_pages.length > 2) {
-//     final dom.Element _maxPageElem = _pages[_pages.length - 2];
-//     _maxPage = int.parse(_maxPageElem.text.trim());
-//   }
+  int _maxPage = 0;
+  List<dom.Element> _pages = document.querySelectorAll(_pageSelector);
+  if (_pages.length > 2) {
+    final dom.Element _maxPageElem = _pages[_pages.length - 2];
+    _maxPage = int.parse(_maxPageElem.text.trim());
+  }
 
   // 下一页页码
-  // final dom.Element? _curPageElem =
-  //     _pages.firstWhereOrNull((e) => e.attributes['class'] == 'ptds');
-  // final _curPage = _curPageElem?.text.trim() ?? '1';
-  // final _nextPage = int.parse(_curPage.split('-').last);
+  final dom.Element? _curPageElem =
+      _pages.firstWhereOrNull((e) => e.attributes['class'] == 'ptds');
+  final _curPage = _curPageElem?.text.trim() ?? '';
+  final _nextPage = int.tryParse(_curPage.split('-').last);
+  final _prevPage = (int.tryParse(_curPage.split('-').first) ?? 0) - 2;
 
-  // final _prevPage = int.parse(_curPage.split('-').first) - 2;
+  logger.v('$_curPage , _nextPage:$_nextPage , _prevPage:$_prevPage');
 
   const searchnavSelector = '.searchnav';
   final searchnavElm = document.querySelector(searchnavSelector);
@@ -334,7 +332,10 @@ GalleryList parseGalleryList(
   return GalleryList(
     gallerys: _gallaryProviders,
     favList: favcatList,
-    next: _next,
-    prev: _prev,
+    nextGid: _next,
+    prevGid: _prev,
+    nextPage: _nextPage,
+    prevPage: _prevPage,
+    maxPage: _maxPage,
   );
 }

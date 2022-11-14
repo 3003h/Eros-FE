@@ -47,7 +47,7 @@ class _ToplistTabState extends State<ToplistTab> {
       leading: controller.getLeading(context),
       middle: Obx(() {
         return GestureDetector(
-          onTap: () => controller.srcollToTop(context),
+          onTap: () => controller.scrollToTop(context),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -261,7 +261,7 @@ class _ToplistTabState extends State<ToplistTab> {
           return getGallerySliverList(
             logic.state,
             controller.heroTag,
-            next: logic.nextGid,
+            next: logic.next,
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,

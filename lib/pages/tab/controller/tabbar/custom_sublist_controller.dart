@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -26,7 +27,6 @@ class CustomSubListController extends TabViewController {
 
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 
-  @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     logger.v('CustomSubListController getFetchListClient $fetchParams');
     return SearchFetchListClient(fetchParams: fetchParams);
@@ -100,7 +100,10 @@ class CustomSubListController extends TabViewController {
     cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: nextGid,
+      // gid: nextGid,
+      gid: ehConfigService.isSiteEx.value
+          ? nextGid
+          : state?.lastOrNull?.gid ?? '',
       cats: profile?.cats,
       refresh: true,
       cancelToken: cancelToken,
@@ -108,6 +111,7 @@ class CustomSubListController extends TabViewController {
       advanceSearch:
           (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
+      page: nextPage,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -126,6 +130,7 @@ class CustomSubListController extends TabViewController {
       advanceSearch:
           (profile?.enableAdvance ?? false) ? profile?.advSearch : null,
       galleryListType: profile?.listType ?? GalleryListType.gallery,
+      page: prevPage,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -137,6 +142,7 @@ class CustomSubListController extends TabViewController {
     PageType? pageType,
     String? jump,
     String? seek,
+    int? page,
   }) async {
     cancelToken = CancelToken();
     final fetchConfig = FetchParams(
@@ -151,6 +157,7 @@ class CustomSubListController extends TabViewController {
       galleryListType: profile?.listType ?? GalleryListType.gallery,
       jump: jump,
       seek: seek,
+      page: page,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -159,8 +166,11 @@ class CustomSubListController extends TabViewController {
   @override
   Future<void> lastComplete() async {
     super.lastComplete();
+
+    logger.d('next $next prev $prev');
+
     if ((state ?? []).isNotEmpty &&
-        nextGid.isNotEmpty &&
+        next.isNotEmpty &&
         pageState != PageState.Loading) {
       // 加载更多
       loadDataMore();
