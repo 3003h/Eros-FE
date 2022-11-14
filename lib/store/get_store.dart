@@ -70,6 +70,10 @@ class GStore {
         jsonEncode(taskInfoMap.entries.map((e) => e.value).toList());
   }
 
+  void cleanArchiverTaskMap() {
+    ReadWriteValue('archiverTaskMap', '', _downloadStore).val = '';
+  }
+
   @Deprecated('hive archiverTaskMap')
   Map<String, DownloadArchiverTaskInfo>? get archiverTaskMap {
     final val = ReadWriteValue('archiverTaskMap', '', _downloadStore).val;
