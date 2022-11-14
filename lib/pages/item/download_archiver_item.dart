@@ -5,6 +5,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/archive_async.dart';
+import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,10 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
         coverUrl = archiverTaskInfo.imgUrl,
         galleryUrl = archiverTaskInfo.galleryUrl,
         galleryGid = archiverTaskInfo.gid,
-        filePath = path.join(
-            archiverTaskInfo.savedDir ?? '', archiverTaskInfo.fileName),
+        filePath = (archiverTaskInfo.savedDir?.isContentUri ?? false)
+            ? archiverTaskInfo.safUri ?? ''
+            : path.join(
+                archiverTaskInfo.savedDir ?? '', archiverTaskInfo.fileName),
         timeCreated = archiverTaskInfo.timeCreated != null
             ? DateTime.fromMillisecondsSinceEpoch(
                 archiverTaskInfo.timeCreated ?? 0)
@@ -111,9 +114,16 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                     lastIndex = cache?.lastIndex;
                   }
 
+                  late String archiverPath;
+                  if (filePath.realArchiverPath.isContentUri) {
+                    archiverPath = await safCacheSingle(
+                        Uri.parse(filePath.realArchiverPath));
+                  } else {
+                    archiverPath = filePath.realArchiverPath;
+                  }
+
                   // 异步读取zip
-                  final tuple =
-                      await readAsyncArchive(filePath.realArchiverPath);
+                  final tuple = await readAsyncArchive(archiverPath);
                   final asyncArchive = tuple.item1;
                   final inputStream = tuple.item2;
                   logger.v('${asyncArchive.length}');

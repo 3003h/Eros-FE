@@ -463,6 +463,7 @@ class WebdavController extends GetxController {
 
   // 下载分组
   Future<CustomProfile?> downloadGroupProfile(CustomProfile profile) async {
+    logger.v('download group ${profile.syncFileName}');
     chkTempDir(kLocalGroupDirPath);
     final _path =
         path.join(Global.tempPath, kLocalGroupDirPath, profile.syncFileName);
@@ -496,6 +497,7 @@ class WebdavController extends GetxController {
     final profiles = list.map((e) {
       final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
       final arr = name?.split(kGroupSeparator);
+      logger.v('getRemoteGroupList $arr');
       // 名称
       final profileName = arr?.first ?? '';
       // uuid

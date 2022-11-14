@@ -220,7 +220,7 @@ class ViewExtController extends GetxController {
   void onReady() {
     super.onReady();
 
-    logger.d('Read onReady');
+    logger.v('Read onReady');
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
@@ -487,10 +487,14 @@ class ViewExtController extends GetxController {
         imageTask.filePath != null &&
         imageTask.filePath!.isNotEmpty &&
         imageTask.status == TaskStatus.complete.value) {
+      final filePath = dir.isContentUri
+          ? '$dir%2F${imageTask.filePath}'
+          : path.join(dir, imageTask.filePath!);
+
       return GalleryImage(
         ser: itemSer,
         completeDownload: true,
-        filePath: path.join(dir, imageTask.filePath!),
+        filePath: filePath,
       );
     }
     return null;

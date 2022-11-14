@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -96,6 +97,7 @@ class Global {
   static String appDocPath = '';
   static String tempPath = '';
   static late String extStorePath;
+  static late String extStoreTempPath = '';
   static String dbPath = '';
 
   static late PackageInfo packageInfo;
@@ -140,6 +142,11 @@ class Global {
     tempPath = (await getTemporaryDirectory()).path;
     extStorePath = Platform.isAndroid || Platform.isFuchsia
         ? (await getExternalStorageDirectory())?.path ?? ''
+        : '';
+
+    extStoreTempPath = Platform.isAndroid || Platform.isFuchsia
+        ? (await getExternalCacheDirectories())?.firstOrNull?.path ??
+            extStorePath
         : '';
 
     if (!GetPlatform.isWindows) {
