@@ -115,23 +115,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         }
 
         late final List<String> pics;
-        late final String? realDirPath;
         final dirPath = gTask.realDirPath;
-
-        // /// 把SAF路径下的画廊目录缓存到外置目录中
-        // /// 可能还需要考虑同步问题
-        // if (dirPath?.isContentUri ?? false) {
-        //   realDirPath = await safCache(Uri.parse(dirPath!));
-        // } else {
-        //   realDirPath = dirPath;
-        // }
-
-        // // 下载的图片文件路径
-        // pics = imageTasks
-        //     .where((element) =>
-        //         element.filePath != null && element.filePath!.isNotEmpty)
-        //     .map((e) => path.join(realDirPath ?? '', e.filePath ?? ''))
-        //     .toList();
 
         if (dirPath?.isContentUri ?? false) {
           pics = imageTasks
@@ -145,7 +129,6 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                   element.filePath != null && element.filePath!.isNotEmpty)
               .map((e) => path.join(dirPath ?? '', e.filePath ?? ''))
               .toList();
-          realDirPath = dirPath;
         }
 
         logger.v('pics: ${pics.map((e) => e).join('\n')}');

@@ -83,11 +83,8 @@ class GalleryActions extends StatelessWidget {
           FontAwesomeIcons.solidImages,
           title: L10n.of(context).p_Similar,
           onTap: () {
-            final String title = (galleryProvider.englishTitle ?? '')
-                .replaceAll(RegExp(r'(\[.*?\]|\(.*?\))|{.*?}'), '')
-                .trim()
-                .split('\|')
-                .first;
+            final String title =
+                (galleryProvider.englishTitle ?? '').shortTitle;
             logger.d('处理后标题 "$title"');
             NavigatorUtil.goSearchPageWithParam(simpleSearch: 'title:"$title"');
           },

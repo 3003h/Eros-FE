@@ -5,14 +5,25 @@ import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
-/// 检查返回结果是否是l视图
+/// 检查返回结果是否是 compact 视图
 bool isGalleryListDmL(String response) {
   final dom.Document document = parse(response);
-  final List<dom.Element> domList =
-      document.querySelectorAll('#dms > div > select > option');
 
-  for (final dom.Element elm in domList) {
-// logger.v('${elm.attributes["value"]} —— ${elm.attributes.keys}');
+  final dom.Element? searchnavElm = document.querySelector('.searchnav');
+
+  late List<dom.Element>? optionElms;
+  if (searchnavElm == null) {
+    optionElms = document.querySelectorAll('#dms > div > select > option');
+  } else {
+    optionElms = searchnavElm
+        .querySelector('#ulast')
+        ?.parent
+        ?.nextElementSibling
+        ?.querySelectorAll('option');
+    logger.d('searchnav optionElms length ${optionElms?.length}');
+  }
+
+  for (final dom.Element elm in optionElms ?? []) {
     final Map<dynamic, String> attributes = elm.attributes;
     if (attributes.keys.contains('selected')) {
       return attributes['value'] == 'l';
@@ -20,11 +31,12 @@ bool isGalleryListDmL(String response) {
       continue;
     }
   }
+
   return true;
 }
 
 ///  收藏夹 检查返回结果的排序方式
-bool isFavoriteOrder(String response) {
+bool? isFavoriteOrder(String response) {
   final dom.Document document = parse(response);
 
   final dom.Element? orderElm =
@@ -49,7 +61,7 @@ bool isFavoriteOrder(String response) {
       return orderElm?.text.trim() == 'Favorited';
     }
 
-    return false;
+    return null;
   }
 }
 

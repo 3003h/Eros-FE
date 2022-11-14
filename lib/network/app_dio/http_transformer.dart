@@ -75,7 +75,6 @@ class GalleryListHttpTransformer extends HttpTransformer {
     // 列表样式检查 不符合则设置参数重新请求
     final bool isDml = isGalleryListDmL(html);
     if (isDml) {
-      // final GalleryList _list = await compute(parseGalleryList, html);
       final GalleryList _list = parseGalleryList(html);
 
       // 查询和写入simpletag的翻译
@@ -107,17 +106,18 @@ class FavoriteListHttpTransformer extends HttpTransformer {
         FavoriteOrder.fav;
     // 排序参数
     final String _order = EHConst.favoriteOrder[order] ?? EHConst.FAV_ORDER_FAV;
-    // final bool isOrderFav = isFavoriteOrder(html);
-    final bool isOrderFav = isFavoriteOrder(html);
 
-    final bool needReOrder = isOrderFav ^ (order == FavoriteOrder.fav);
+    final bool? isOrderFav = isFavoriteOrder(html);
+    bool needReOrder = false;
+    if (isOrderFav != null) {
+      needReOrder = isOrderFav ^ (order == FavoriteOrder.fav);
+    }
 
     logger
         .d('isOrderFav $isOrderFav, _order: $_order, needReOrder $needReOrder');
 
     // 列表样式检查 不符合则设置参数重新请求
     final bool isDml = isGalleryListDmL(html);
-    // final bool isDml = await compute(isGalleryListDmL, html);
 
     if (!isDml) {
       return DioHttpResponse<GalleryList>.failureFromError(
@@ -126,7 +126,6 @@ class FavoriteListHttpTransformer extends HttpTransformer {
       return DioHttpResponse<GalleryList>.failureFromError(
           FavOrderException(order: _order));
     } else {
-      // final GalleryList _list = await compute(parseGalleryListOfFav, html);
       final GalleryList _list = parseGalleryListOfFav(html);
 
       // 查询和写入simpletag的翻译

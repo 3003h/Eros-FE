@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
+import 'package:collection/collection.dart';
 import 'package:fehviewer/component/exception/error.dart';
+import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +14,7 @@ import 'package:image/image.dart' as pimage;
 import 'package:jinja/jinja.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:path/path.dart' as path;
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 import '../global.dart';
 
@@ -32,7 +37,8 @@ void isolateCompactDirToZip(List<String> para) {
 }
 
 Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
-  final _tempPath = tempPath ?? path.join(Global.tempPath, 'export_epub_temp');
+  final _tempPath =
+      tempPath ?? path.join(Global.extStoreTempPath, 'export_epub_temp');
 
   Directory _tempDir = Directory(_tempPath);
   if (_tempDir.existsSync()) {
@@ -41,17 +47,17 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   _tempDir.createSync(recursive: true);
 
   final metaPath = path.join(_tempPath, 'META-INF');
-  _creatDir(metaPath);
+  _createDir(metaPath);
 
   // OEBPS 目录创建
   final oebpsPath = path.join(_tempPath, 'OEBPS');
-  _creatDir(oebpsPath);
+  _createDir(oebpsPath);
 
   final contentPath = path.join(oebpsPath, 'content');
-  _creatDir(contentPath);
+  _createDir(contentPath);
 
   final resourcesPath = path.join(contentPath, 'resources');
-  _creatDir(resourcesPath);
+  _createDir(resourcesPath);
 
   // mimetype
   final fileMimetype = File(path.join(_tempPath, 'mimetype'));
@@ -69,24 +75,90 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   final fileContainer = File(path.join(metaPath, 'container.xml'));
   fileContainer.writeAsStringSync(containerText);
 
-  // 画廊图片
-  final _galleryDir = Directory(task.realDirPath!);
-  final _fileList = _galleryDir
-      .listSync()
-      .whereType<File>()
-      .where((element) => !path.basename(element.path).startsWith('.'))
-      .toList()
-    ..sort((a, b) => a.path.compareTo(b.path));
+  late final Uint8List imageData;
+  late final String coverName;
+  late final String name;
+  late final List<Map<String, String>> fileNameList;
 
-  // 封面处理
-  final imageData = _fileList.first.readAsBytesSync();
+  // 画廊图片
+  if (task.realDirPath?.isContentUri ?? false) {
+    const columns = <ss.DocumentFileColumn>[
+      ss.DocumentFileColumn.displayName,
+      ss.DocumentFileColumn.id,
+    ];
+
+    final Stream<ss.DocumentFile> onFileLoaded =
+        ss.listFiles(Uri.parse(task.realDirPath!), columns: columns);
+
+    final List<ss.DocumentFile> fileList = (await onFileLoaded.toList())
+        .whereNot((e) => e.name?.startsWith('.') ?? false)
+        .toList();
+    imageData = (await fileList.first.getContent())!;
+    coverName = '#cover${path.extension(fileList.first.name!)}';
+    name = fileList.first.name!.toLowerCase();
+
+    // 模板数据
+    fileNameList = fileList
+        .map(
+          (e) => {
+            'withoutExtension': path.basenameWithoutExtension(e.name!),
+            'name': path.basename(e.name!),
+            'extension': path.extension(e.name!) == '.jpg'
+                ? 'jpeg'
+                : path.extension(e.name!).split('.').last.toLowerCase(),
+          },
+        )
+        .toList()
+      ..sort((a, b) => a['name']!.compareTo(b['name']!));
+
+    // 图片复制到 resourcesPath
+    for (final domFile in fileList) {
+      final _file =
+          File(path.join(resourcesPath, path.basename(domFile.name!)));
+      final _fileData = await domFile.getContent();
+      if (_fileData != null) {
+        _file.writeAsBytesSync(_fileData);
+      }
+    }
+  } else {
+    final _galleryDir = Directory(task.realDirPath!);
+    final List<File> fileList = _galleryDir
+        .listSync()
+        .whereType<File>()
+        .where((element) => !path.basename(element.path).startsWith('.'))
+        .toList()
+      ..sort((a, b) => a.path.compareTo(b.path));
+
+    // 封面图片数据
+    imageData = fileList.first.readAsBytesSync();
+    coverName = '#cover${path.extension(fileList.first.path)}';
+    name = fileList.first.path.toLowerCase();
+
+    // 模板数据
+    fileNameList = fileList
+        .map(
+          (e) => {
+            'withoutExtension': path.basenameWithoutExtension(e.path),
+            'name': path.basename(e.path),
+            'extension': path.extension(e.path) == '.jpg'
+                ? 'jpeg'
+                : path.extension(e.path).split('.').last.toLowerCase(),
+          },
+        )
+        .toList()
+      ..sort((a, b) => a['name']!.compareTo(b['name']!));
+
+    // 图片复制到 resourcesPath
+    for (final file in fileList) {
+      File(file.path)
+          .copySync(path.join(resourcesPath, path.basename(file.path)));
+    }
+  }
 
   final image = pimage.decodeImage(imageData);
   if (image == null) {
     throw EhError(error: 'read image error');
   }
-  // final trimRect = findTrim(image, mode: TrimMode.transparent);
-  // logger.d('trimRect $trimRect');
 
   final paletteGenerator = await PaletteGenerator.fromImageProvider(
     MemoryImage(imageData),
@@ -101,24 +173,16 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
     pimage.Color.fromRgba(dColor.red, dColor.green, dColor.blue, dColor.alpha),
   );
 
-  final cover = pimage.copyResize(
+  final pimage.Image cover = pimage.copyResize(
       pimage.copyInto(backgroundImage, image, center: true),
       width: 1200);
 
   logger.d('${cover.width} ${cover.height}');
 
-  final coverName = '#cover${path.extension(_fileList.first.path)}';
-  final name = _fileList.first.path.toLowerCase();
-  final coverImage = name.endsWith('.jpg') || name.endsWith('.jpeg')
+  final List<int> coverImage = name.endsWith('.jpg') || name.endsWith('.jpeg')
       ? pimage.encodeJpg(cover, quality: 80)
       : pimage.encodeNamedImage(cover, name)!;
   File(path.join(resourcesPath, coverName)).writeAsBytesSync(coverImage);
-
-  // 图片复制到 resourcesPath
-  for (final _file in _fileList) {
-    File(_file.path)
-        .copySync(path.join(resourcesPath, path.basename(_file.path)));
-  }
 
   // 模板操作
   final environment = Environment();
@@ -138,21 +202,8 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
       await rootBundle.loadString('assets/templates/epub/OEBPS/toc.ncx.tpl');
   final tocTemplate = environment.fromString(tocTemplateText);
 
-  final _fileNameList = _fileList
-      .map(
-        (e) => {
-          'withoutExtension': path.basenameWithoutExtension(e.path),
-          'name': path.basename(e.path),
-          'extension': path.extension(e.path) == '.jpg'
-              ? 'jpeg'
-              : path.extension(e.path).split('.').last.toLowerCase(),
-        },
-      )
-      .toList()
-    ..sort((a, b) => a['name']!.compareTo(b['name']!));
-
   // 写入index
-  for (final _imgFile in _fileNameList) {
+  for (final _imgFile in fileNameList) {
     final _xhtml = indexTemplate.render(
       fileName: _imgFile['name'],
     );
@@ -164,11 +215,9 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
 
   // 写入 metadata.opf
   final metadata = metadataTemplate.render(
-      title: task.title,
-      fileNameList: _fileNameList,
-      // coverName: _fileNameList.first['name'],
+      title: htmlEscape.convert(task.title.shortTitle),
+      fileNameList: fileNameList,
       coverName: coverName,
-      // coverExtension: _fileNameList.first['extension'],
       coverExtension: path.extension(coverName) == '.jpg'
           ? 'jpeg'
           : path.extension(coverName).split('.').last.toLowerCase());
@@ -185,7 +234,7 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   return _tempPath;
 }
 
-void _creatDir(String path) {
+void _createDir(String path) {
   final _dir = Directory(path);
   if (!_dir.existsSync()) {
     _dir.createSync(recursive: true);
