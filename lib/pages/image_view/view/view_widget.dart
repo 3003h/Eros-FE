@@ -1190,7 +1190,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
                     case LoadFrom.download:
                       final path = controller.vState.imagePathList[index];
 
-                      thumb = path.startsWith('content://')
+                      thumb = path.isContentUri
                           ? ExtendedImage(
                               image: ExtendedSafImageProvider(Uri.parse(path)),
                               fit: BoxFit.cover,

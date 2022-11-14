@@ -418,7 +418,7 @@ class Api {
 
     logger.d('from cache \n$imageUrl');
 
-    if (parentPath.startsWith('content://')) {
+    if (parentPath.isContentUri) {
       // SAF 方式
       final bytes = await imageFile.readAsBytes();
 

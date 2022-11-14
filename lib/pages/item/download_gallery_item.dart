@@ -7,14 +7,12 @@ import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/image/eh_network_image.dart';
+import 'package:fehviewer/widget/image/extended_saf_image_privider.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +120,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
 
         // /// 把SAF路径下的画廊目录缓存到外置目录中
         // /// 可能还需要考虑同步问题
-        // if (dirPath?.startsWith('content://') ?? false) {
+        // if (dirPath?.isContentUri ?? false) {
         //   realDirPath = await safCache(Uri.parse(dirPath!));
         // } else {
         //   realDirPath = dirPath;
@@ -135,7 +133,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         //     .map((e) => path.join(realDirPath ?? '', e.filePath ?? ''))
         //     .toList();
 
-        if (dirPath?.startsWith('content://') ?? false) {
+        if (dirPath?.isContentUri ?? false) {
           pics = imageTasks
               .where((element) =>
                   element.filePath != null && element.filePath!.isNotEmpty)
@@ -249,7 +247,10 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       child: DownloadItemCoverImage(
         filePath: (galleryTask.coverImage != null &&
                 galleryTask.coverImage!.isNotEmpty)
-            ? path.join(galleryTask.realDirPath ?? '', galleryTask.coverImage)
+            ? (galleryTask.realDirPath?.isContentUri ?? false)
+                ? '${galleryTask.realDirPath}%2F${galleryTask.coverImage}'
+                : path.join(
+                    galleryTask.realDirPath ?? '', galleryTask.coverImage)
             : null,
         url: galleryTask.coverUrl,
         cardType: cardType,
@@ -540,20 +541,29 @@ class DownloadItemCoverImage extends StatelessWidget {
 
     Widget image = () {
       if (filePath != null) {
-        return ExtendedImage.file(
-          File(filePath!),
-          fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
-          loadStateChanged: (ExtendedImageState state) {
-            if (state.extendedImageLoadState == LoadState.loading) {
-              return Container(
-                alignment: Alignment.center,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey5, context),
-                child: const CupertinoActivityIndicator(),
+        final loadStateChanged = (ExtendedImageState state) {
+          if (state.extendedImageLoadState == LoadState.loading) {
+            return Container(
+              alignment: Alignment.center,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey5, context),
+              child: const CupertinoActivityIndicator(),
+            );
+          }
+          return null;
+        };
+
+        return (filePath?.isContentUri ?? false)
+            ? ExtendedImage(
+                image: ExtendedSafImageProvider(Uri.parse(filePath!)),
+                fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
+                loadStateChanged: loadStateChanged,
+              )
+            : ExtendedImage.file(
+                File(filePath!),
+                fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
+                loadStateChanged: loadStateChanged,
               );
-            }
-          },
-        );
       } else if (url != null) {
         return EhNetworkImage(
           imageUrl: url!,
