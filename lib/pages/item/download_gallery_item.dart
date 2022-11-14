@@ -7,14 +7,12 @@ import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/route/navigator_util.dart';
 import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/widget/eh_network_image.dart';
+import 'package:fehviewer/widget/image/extended_saf_image_privider.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,12 +114,41 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           return;
         }
 
-        // 下载的图片文件路径
-        final List<String> pics = imageTasks
-            .where((element) =>
-                element.filePath != null && element.filePath!.isNotEmpty)
-            .map((e) => path.join(gTask.realDirPath ?? '', e.filePath ?? ''))
-            .toList();
+        late final List<String> pics;
+        late final String? realDirPath;
+        final dirPath = gTask.realDirPath;
+
+        // /// 把SAF路径下的画廊目录缓存到外置目录中
+        // /// 可能还需要考虑同步问题
+        // if (dirPath?.isContentUri ?? false) {
+        //   realDirPath = await safCache(Uri.parse(dirPath!));
+        // } else {
+        //   realDirPath = dirPath;
+        // }
+
+        // // 下载的图片文件路径
+        // pics = imageTasks
+        //     .where((element) =>
+        //         element.filePath != null && element.filePath!.isNotEmpty)
+        //     .map((e) => path.join(realDirPath ?? '', e.filePath ?? ''))
+        //     .toList();
+
+        if (dirPath?.isContentUri ?? false) {
+          pics = imageTasks
+              .where((element) =>
+                  element.filePath != null && element.filePath!.isNotEmpty)
+              .map((e) => '$dirPath%2F${e.filePath}')
+              .toList();
+        } else {
+          pics = imageTasks
+              .where((element) =>
+                  element.filePath != null && element.filePath!.isNotEmpty)
+              .map((e) => path.join(dirPath ?? '', e.filePath ?? ''))
+              .toList();
+          realDirPath = dirPath;
+        }
+
+        logger.v('pics: ${pics.map((e) => e).join('\n')}');
 
         // 读取进度
         int? lastIndex = 0;
@@ -137,7 +164,10 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
 
         // 进入阅读
         NavigatorUtil.goGalleryViewPageFile(
-            lastIndex ?? 0, pics, '${galleryTask.gid}');
+          lastIndex ?? 0,
+          pics,
+          '${galleryTask.gid}',
+        );
       },
       onLongPress: () => controller.onLongPress(taskIndex, task: galleryTask),
       child: _buildCardItem(context, _complete, addTime: addTime),
@@ -217,7 +247,10 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
       child: DownloadItemCoverImage(
         filePath: (galleryTask.coverImage != null &&
                 galleryTask.coverImage!.isNotEmpty)
-            ? path.join(galleryTask.realDirPath ?? '', galleryTask.coverImage)
+            ? (galleryTask.realDirPath?.isContentUri ?? false)
+                ? '${galleryTask.realDirPath}%2F${galleryTask.coverImage}'
+                : path.join(
+                    galleryTask.realDirPath ?? '', galleryTask.coverImage)
             : null,
         url: galleryTask.coverUrl,
         cardType: cardType,
@@ -508,20 +541,29 @@ class DownloadItemCoverImage extends StatelessWidget {
 
     Widget image = () {
       if (filePath != null) {
-        return ExtendedImage.file(
-          File(filePath!),
-          fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
-          loadStateChanged: (ExtendedImageState state) {
-            if (state.extendedImageLoadState == LoadState.loading) {
-              return Container(
-                alignment: Alignment.center,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey5, context),
-                child: const CupertinoActivityIndicator(),
+        final loadStateChanged = (ExtendedImageState state) {
+          if (state.extendedImageLoadState == LoadState.loading) {
+            return Container(
+              alignment: Alignment.center,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey5, context),
+              child: const CupertinoActivityIndicator(),
+            );
+          }
+          return null;
+        };
+
+        return (filePath?.isContentUri ?? false)
+            ? ExtendedImage(
+                image: ExtendedSafImageProvider(Uri.parse(filePath!)),
+                fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
+                loadStateChanged: loadStateChanged,
+              )
+            : ExtendedImage.file(
+                File(filePath!),
+                fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
+                loadStateChanged: loadStateChanged,
               );
-            }
-          },
-        );
       } else if (url != null) {
         return EhNetworkImage(
           imageUrl: url!,

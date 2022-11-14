@@ -1,28 +1,20 @@
 import 'dart:io';
 
-// import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cross_file/cross_file.dart';
 import 'package:device_info/device_info.dart';
 import 'package:fehviewer/common/controller/quicksearch_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/utility.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/utils/import_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
 
 class QuickSearchListPage extends StatelessWidget {
@@ -42,19 +34,7 @@ class QuickSearchListPage extends StatelessWidget {
     }
   }
 
-  Widget _buildListBtns(BuildContext context) {
-    Future<String?> _writeFile() async {
-      final List<String> _searchTextList = quickSearchController.searchTextList;
-      if (_searchTextList.isNotEmpty) {
-        final String _searchText = '#FEhViewer\n${_searchTextList.join('\n')}';
-        logger.v(_searchText);
-
-        final File _tempFlie = await _getLocalFile();
-        _tempFlie.writeAsStringSync(_searchText);
-        return _tempFlie.path;
-      }
-    }
-
+  Widget _buildListButtons(BuildContext context) {
     Future<void> _showFile() async {
       return showCupertinoDialog<void>(
         context: Get.overlayContext!,
@@ -66,7 +46,7 @@ class QuickSearchListPage extends StatelessWidget {
             actions: [
               CupertinoDialogAction(
                 onPressed: () async {
-                  final _tempFilePath = await _writeFile();
+                  final _tempFilePath = await writeQuickSearchTempFile();
                   if (_tempFilePath != null) {
                     Share.shareXFiles([XFile(_tempFilePath)]);
                   }
@@ -81,27 +61,6 @@ class QuickSearchListPage extends StatelessWidget {
                 ),
               ),
               CupertinoDialogAction(
-                onPressed: () async {
-                  Get.back();
-                  logger.d('Export');
-                  try {
-                    final _tempFilePath = await _writeFile();
-                    await requestManageExternalStoragePermission();
-                    if (_tempFilePath != null) {
-                      final _saveToDirPath =
-                          await FilePicker.platform.getDirectoryPath();
-                      logger.d('$_saveToDirPath');
-                      if (_saveToDirPath != null) {
-                        final _dstPath = path.join(
-                            _saveToDirPath, path.basename(_tempFilePath));
-                        File(_tempFilePath).copySync(_dstPath);
-                      }
-                    }
-                  } catch (e) {
-                    showToast('$e');
-                    rethrow;
-                  }
-                },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -110,27 +69,13 @@ class QuickSearchListPage extends StatelessWidget {
                     const Text('Export'),
                   ],
                 ),
+                onPressed: () async {
+                  Get.back();
+                  logger.d('Export');
+                  exportQuickSearchToFile();
+                },
               ),
               CupertinoDialogAction(
-                onPressed: () async {
-                  final FilePickerResult? result =
-                      await FilePicker.platform.pickFiles();
-                  if (result != null) {
-                    final File _file = File(result.files.single.path!);
-                    final String _fileText = _file.readAsStringSync();
-                    if (_fileText.contains('#FEhViewer')) {
-                      logger.v(_fileText);
-                      final List<String> _importTexts = _fileText.split('\n');
-                      for (final element in _importTexts) {
-                        if (element.trim().isNotEmpty &&
-                            !element.startsWith('#')) {
-                          quickSearchController.addText(element);
-                        }
-                      }
-                    }
-                  }
-                  Get.back();
-                },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -139,6 +84,10 @@ class QuickSearchListPage extends StatelessWidget {
                     const Text('Import'),
                   ],
                 ),
+                onPressed: () async {
+                  Get.back();
+                  importQuickSearchFromFile();
+                },
               ),
               CupertinoDialogAction(
                   onPressed: () {
@@ -201,7 +150,7 @@ class QuickSearchListPage extends StatelessWidget {
           padding: const EdgeInsetsDirectional.only(start: 0),
           middle: Text(L10n.of(context).quick_search),
           transitionBetweenRoutes: false,
-          trailing: _buildListBtns(context),
+          trailing: _buildListButtons(context),
         ),
         child: SafeArea(
           child: Obx(

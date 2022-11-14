@@ -5,6 +5,7 @@ import 'package:fehviewer/component/setting_base.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 import '../../fehviewer.dart';
 import 'setting_items/selector_Item.dart';
@@ -72,23 +73,21 @@ class ListViewDownloadSetting extends StatelessWidget {
                         await defDownloadPath,
                   ),
                   onTap: () async {
-                    final String? result =
-                        await FilePicker.platform.getDirectoryPath();
-                    logger.d('set $result');
-
-                    if (result != null) {
-                      if (result.startsWith('/storage/emulated/0/')) {
-                        final _uri =
-                            result.replaceFirst('/storage/emulated/0/', '');
-                        final _uriEncode = Uri.encodeComponent(':$_uri');
-                        logger.d('_uriEncode $_uriEncode');
-                        final _fullUri =
-                            'content://com.android.externalstorage.documents/tree/'
-                            'primary$_uriEncode/document/primary$_uriEncode';
-                        logger.d('_fullUri  $_fullUri');
+                    if (GetPlatform.isAndroid) {
+                      // android 使用 SAF
+                      final uri = await ss.openDocumentTree();
+                      logger.d('uri $uri');
+                      if (uri != null) {
+                        ehConfigService.downloadLocatino = uri.toString();
                       }
+                    } else {
+                      final String? result =
+                          await FilePicker.platform.getDirectoryPath();
+                      logger.d('set $result');
 
-                      ehConfigService.downloadLocatino = result;
+                      if (result != null) {
+                        ehConfigService.downloadLocatino = result;
+                      }
                     }
                   },
                 );

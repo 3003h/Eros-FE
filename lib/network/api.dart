@@ -19,8 +19,10 @@ import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_save/image_save.dart';
+import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 final Api api = Api();
 
@@ -399,27 +401,45 @@ class Api {
   }
 
   // 从ExtendedImage缓存保存图片
-  static Future<bool> saveImageFromExtendedCache({
+  static Future<String?> saveImageFromExtendedCache({
     required String imageUrl,
-    required String savePath,
+    required String parentPath,
+    required String fileName,
   }) async {
     if (!(await cachedImageExists(imageUrl))) {
-      return false;
+      return null;
     }
 
     final imageFile = await getCachedImageFile(imageUrl);
     if (imageFile == null) {
       logger.d('not from cache \n$imageUrl');
-      return false;
+      return null;
     }
 
     logger.d('from cache \n$imageUrl');
 
-    // final imageBytes = await imageFile.readAsBytes();
-    // final _name = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+    if (parentPath.isContentUri) {
+      // SAF 方式
+      final bytes = await imageFile.readAsBytes();
 
-    final destFile = imageFile.copySync(savePath);
-    return true;
+      final mimeType =
+          lookupMimeType(imageFile.path, headerBytes: bytes.take(8).toList());
+      logger.d('mimeType $mimeType');
+
+      final result = await ss.createFileAsBytes(
+        Uri.parse(parentPath),
+        mimeType: mimeType ?? '',
+        displayName: fileName,
+        bytes: bytes,
+      );
+      logger.d('save to content:// result ${result?.uri}');
+      return result?.uri.toString();
+    } else {
+      // 普通方式
+      final toFilePath = path.join(parentPath, fileName);
+      imageFile.copySync(toFilePath);
+      return toFilePath;
+    }
   }
 
   /// 由api获取画廊图片的信息

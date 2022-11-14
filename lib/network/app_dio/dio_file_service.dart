@@ -1,13 +1,16 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cache_manager/src/web/mime_converter.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 import '../../network/app_dio/dio_http_cli.dart';
 import '../../network/app_dio/http_response.dart';
@@ -82,13 +85,62 @@ class DioFileService extends FileService {
       }
       return await loadDio(imageUrl);
     } else {
-      final file = File(filePath);
-      if (file.existsSync()) {
-        return FileGetResponse(file.path);
+      late Uint8List bytes;
+      late String extension;
+      if (filePath.isContentUri) {
+        final data = await ss.getDocumentContent(Uri.parse(filePath));
+        if (data == null) {
+          throw Exception('image data is null');
+        }
+        bytes = data;
       } else {
-        throw Exception('file not exist');
+        final file = File(filePath);
+        if (await file.exists()) {
+          bytes = await file.readAsBytes();
+        } else {
+          throw Exception('file not exists');
+        }
       }
+      extension = filePath.split('.').last;
+
+      return MemoryGetResponse(bytes, extension);
     }
+  }
+}
+
+class MemoryGetResponse implements FileServiceResponse {
+  MemoryGetResponse(this.bytes, this.extension);
+  final Uint8List bytes;
+  final String extension;
+
+  @override
+  Stream<List<int>> get content {
+    return Stream.value(bytes);
+  }
+
+  @override
+  int? get contentLength {
+    return bytes.length;
+  }
+
+  @override
+  String? get eTag {
+    return null;
+  }
+
+  @override
+  String get fileExtension {
+    return extension;
+  }
+
+  @override
+  int get statusCode {
+    return 200;
+  }
+
+  @override
+  DateTime get validTill {
+    return clock.now().add(const Duration(days: 1));
   }
 }
 

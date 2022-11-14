@@ -38,13 +38,24 @@ int fastHash(String string) {
 }
 
 // 请求完全读写权限
+@Deprecated('use SAF')
 Future<void> requestManageExternalStoragePermission() async {
   if (!GetPlatform.isAndroid) {
     return;
   }
+
+  final androidInfo = await deviceInfo.androidInfo;
+  final sdkInt = androidInfo.version.sdkInt;
+  if (sdkInt < 30) {
+    logger.d('sdkInt $sdkInt < 30');
+    return;
+  }
+
   final PermissionStatus statusMStorage =
       await Permission.manageExternalStorage.status;
   logger.d('manageExternalStorage $statusMStorage');
+
+  // 始终拒绝
   if (statusMStorage.isPermanentlyDenied) {
     if (await Permission.manageExternalStorage.request().isGranted) {
       return;
@@ -57,7 +68,7 @@ Future<void> requestManageExternalStoragePermission() async {
     if (await Permission.manageExternalStorage.request().isGranted) {
       return;
     } else {
-      throw 'Unable to download, please authorize first~';
+      throw 'Unable to download, please authorize Permission manageExternalStorage first~';
     }
   }
 }

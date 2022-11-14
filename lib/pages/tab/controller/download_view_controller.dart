@@ -104,31 +104,35 @@ class DownloadViewController extends GetxController {
 
   // Archiver暂停任务
   Future<void> pauseArchiverDownload({required String? taskId}) async {
-    if (taskId != null) FlutterDownloader.pause(taskId: taskId);
+    if (taskId != null) {
+      FlutterDownloader.pause(taskId: taskId);
+    }
   }
 
   // Archiver取消任务
   Future<void> cancelArchiverDownload({required String? taskId}) async {
-    if (taskId != null) FlutterDownloader.cancel(taskId: taskId);
+    if (taskId != null) {
+      FlutterDownloader.cancel(taskId: taskId);
+    }
   }
 
   // Archiver恢复任务
   Future<void> resumeArchiverDownload(int index) async {
-    final String? _oriTaskid = archiverTasks[index].taskId;
+    final String? _oriTaskId = archiverTasks[index].taskId;
     final int? _oriStatus = archiverTasks[index].status;
 
     String? _newTaskId;
     if (_oriStatus == DownloadTaskStatus.paused.value) {
-      _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskid ?? '');
+      _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskId ?? '');
     } else if (_oriStatus == DownloadTaskStatus.failed.value) {
-      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
+      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskId ?? '');
     }
 
     if (_newTaskId == null) {
       return;
     }
 
-    logger.d('oriTaskid $_oriTaskid,  newTaskId $_newTaskId');
+    logger.d('oriTaskid $_oriTaskId,  newTaskId $_newTaskId');
     if (_newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
@@ -179,7 +183,6 @@ class DownloadViewController extends GetxController {
         (context, animation) =>
             downloadArchiverDelItemBuilder(context, index, animation));
 
-    // _archiverDownloadController.archiverTaskMap.remove(_tag);
     _archiverDownloadController.removeTask(_tag);
     FlutterDownloader.remove(
       taskId: _oriTaskid ?? '',
@@ -200,11 +203,10 @@ class DownloadViewController extends GetxController {
 
   // 导出Archiver文件
   Future<void> exportArchiverTaskFile(int index) async {
-    final String? _oriTaskid = archiverTasks[index].taskId;
+    final String? _oriTaskId = archiverTasks[index].taskId;
 
-    // final _result = await OpenFile.open('');
     FlutterDownloader.open(
-      taskId: _oriTaskid ?? '',
+      taskId: _oriTaskId ?? '',
     );
   }
 

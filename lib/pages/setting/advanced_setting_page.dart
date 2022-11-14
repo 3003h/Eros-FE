@@ -1,27 +1,17 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/profile.dart';
 import 'package:fehviewer/pages/setting/webview/mode.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:fehviewer/utils/import_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:path/path.dart' as path;
 
 import '../../component/setting_base.dart';
 import 'setting_items/selector_Item.dart';
@@ -179,29 +169,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           'Export App Data',
           // subTitle: 'Includes settings, quick search',
           onTap: () async {
-            final Profile profile = Global.profile.copyWith(user: kDefUser);
-            final String jsonStr = jsonEncode(profile.toJson());
-            final time = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-            final tempFilePath =
-                path.join(Global.tempPath, 'fehviewer_profile_$time.json');
-            final tempFile = File(tempFilePath);
-            tempFile.writeAsStringSync(jsonStr);
-
-            try {
-              await requestManageExternalStoragePermission();
-
-              final _saveToDirPath =
-                  await FilePicker.platform.getDirectoryPath();
-              logger.d('saveToDirPath $_saveToDirPath');
-              if (_saveToDirPath != null) {
-                final _dstPath =
-                    path.join(_saveToDirPath, path.basename(tempFilePath));
-                tempFile.copySync(_dstPath);
-              }
-            } catch (e) {
-              showToast('$e');
-              rethrow;
-            }
+            exportAppDataToFile();
           },
         ),
       if (!kReleaseMode)
@@ -209,20 +177,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           'Import App Data',
           subTitle: 'Need restart app',
           onTap: () async {
-            final FilePickerResult? result =
-                await FilePicker.platform.pickFiles();
-            if (result != null) {
-              final PlatformFile platFile = result.files.single;
-              final file = File(platFile.path!);
-              final String jsonStr = file.readAsStringSync();
-              final Map<String, dynamic> jsonMap =
-                  jsonDecode(jsonStr) as Map<String, dynamic>;
-              final Profile profile = Profile.fromJson(jsonMap);
-              Global.profile = profile;
-              Global.saveProfile();
-              Get.reloadAll(force: true);
-              showToast('Import success');
-            }
+            importAppDataFromFile();
           },
           hideDivider: true,
         ),

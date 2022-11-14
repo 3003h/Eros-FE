@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 const String historyBox = 'history_box';
@@ -222,7 +221,10 @@ class HiveHelper {
     await _configBox.put(downloadTaskMigrationKey, '$value');
   }
 
-  set archiverTaskMap(Map<String, DownloadArchiverTaskInfo>? taskInfoMap) {
+  void putAllArchiverTaskMap(
+      Map<String, DownloadArchiverTaskInfo>? taskInfoMap) {
+    // len
+    logger.d('set archiverTaskMap len ${taskInfoMap?.length}');
     logger.v('set archiverDlMap \n'
         '${taskInfoMap?.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
 
@@ -235,7 +237,19 @@ class HiveHelper {
     }
   }
 
-  Map<String, DownloadArchiverTaskInfo>? get archiverTaskMap {
+  void putArchiverTask(DownloadArchiverTaskInfo? taskInfo) {
+    if (taskInfo == null) {
+      return;
+    }
+    logger.v('set archiverTask ${taskInfo.toJson()}');
+    _archiverTaskBox.put(taskInfo.tag, jsonEncode(taskInfo));
+  }
+
+  void removeArchiverTask(String? tag) {
+    _archiverTaskBox.delete(tag);
+  }
+
+  Map<String, DownloadArchiverTaskInfo>? getAllArchiverTaskMap() {
     if (_archiverTaskBox.isEmpty) {
       return null;
     }
