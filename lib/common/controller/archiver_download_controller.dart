@@ -40,8 +40,10 @@ class ArchiverDownloadController extends GetxController {
         _gStore.archiverTaskMap ??
         <String, DownloadArchiverTaskInfo>{};
 
-    // logger.d(
-    //     '_archiver\n${_archiver.entries.map((e) => '${e.key}  ${e.value.toJson()}').join('\n')}');
+    // 清理GS里的内容
+    if (_gStore.archiverTaskMap?.isNotEmpty ?? false) {
+      _gStore.cleanArchiverTaskMap();
+    }
 
     archiverTaskMap.clear();
     archiverTaskMap.addAll(_archiver);
