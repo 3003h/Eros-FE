@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
@@ -50,10 +51,14 @@ class FavoriteSubListController extends TabViewController {
     await super.fetchMoreData();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: nextGid,
+      // gid: nextGid,
+      gid: ehConfigService.isSiteEx.value
+          ? nextGid
+          : state?.lastOrNull?.gid ?? '',
       refresh: true,
       cancelToken: cancelToken,
       favcat: favcat,
+      page: nextPage,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -68,6 +73,7 @@ class FavoriteSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       favcat: favcat,
+      page: prevPage,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -79,6 +85,7 @@ class FavoriteSubListController extends TabViewController {
     PageType? pageType,
     String? jump,
     String? seek,
+    int? page,
   }) async {
     await super.fetchDataFrom();
     final fetchConfig = FetchParams(
@@ -89,6 +96,7 @@ class FavoriteSubListController extends TabViewController {
       refresh: true,
       cancelToken: cancelToken,
       favcat: favcat,
+      page: page,
     );
     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
     return await fetchListClient.fetch();
@@ -143,7 +151,6 @@ class FavoriteSubListController extends TabViewController {
   //   }
   // }
 
-  @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {
     return FavoriteFetchListClient(fetchParams: fetchParams);
   }

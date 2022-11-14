@@ -22,9 +22,28 @@ const CupertinoDynamicColor _kClearButtonColor =
 );
 
 abstract class TabViewController extends GetxController {
+  // 当前页码
+  // final _curPage = (-1).obs;
+  // int get curPage => _curPage.value;
+  // set curPage(int val) => _curPage.value = val;
+
   final TagController tagController = Get.find();
 
   String get listViewId => 'listViewId';
+
+  // // 最小页码
+  // int minPage = 1;
+
+  // 最大页码
+  int? maxPage = 1;
+
+  final RxInt _nextPage = (-1).obs;
+  int get nextPage => _nextPage.value;
+  set nextPage(int? val) => _nextPage.value = val ?? -1;
+
+  final RxInt _prevPage = (-1).obs;
+  int get prevPage => _prevPage.value;
+  set prevPage(int? val) => _prevPage.value = val ?? -1;
 
   // 下一页
   final RxString _nextGid = ''.obs;
@@ -36,9 +55,19 @@ abstract class TabViewController extends GetxController {
   String get prevGid => _prevGid.value;
   set prevGid(String? value) => _prevGid.value = value ?? '';
 
+  String get next => ehConfigService.isSiteEx.value
+      ? nextGid
+      : '${nextPage > -1 ? nextPage : ''}';
+
+  String get prev => ehConfigService.isSiteEx.value
+      ? prevGid
+      : '${prevPage > -1 ? prevPage : ''}';
+
   final _afterJump = false.obs;
   bool get afterJump => _afterJump.value;
   set afterJump(bool value) => _afterJump.value = value;
+
+  final TextEditingController pageTextEditController = TextEditingController();
 
   final TextEditingController gidTextEditController = TextEditingController();
 
@@ -52,7 +81,7 @@ abstract class TabViewController extends GetxController {
 
   bool canLoadMore = false;
 
-  bool get keepPosition => prevGid.isNotEmpty;
+  bool get keepPosition => prevGid.isNotEmpty || prevPage > -1;
 
   final RxBool _isBackgroundRefresh = false.obs;
   bool get isBackgroundRefresh => _isBackgroundRefresh.value;
@@ -112,6 +141,7 @@ abstract class TabViewController extends GetxController {
     PageType? pageType,
     String? jump,
     String? seek,
+    int? page,
   }) async {
     cancelToken = CancelToken();
     return null;
@@ -133,8 +163,8 @@ abstract class TabViewController extends GetxController {
 
       logger.v('_listItem ${_listItem?.length}');
 
-      nextGid = result.next;
-      prevGid = result.prev;
+      nextGid = result.nextGid;
+      prevGid = result.prevGid;
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -149,6 +179,9 @@ abstract class TabViewController extends GetxController {
   Future<void> reloadData() async {
     nextGid = null;
     prevGid = null;
+    nextPage = null;
+    prevPage = null;
+    maxPage = null;
 
     try {
       final GalleryList? result = await fetchData(
@@ -163,10 +196,13 @@ abstract class TabViewController extends GetxController {
 
       final List<GalleryProvider>? resultList = result.gallerys;
 
-      nextGid = result.next;
-      prevGid = result.prev;
+      nextGid = result.nextGid;
+      prevGid = result.prevGid;
+      nextPage = result.nextPage;
+      prevPage = result.prevPage;
+      maxPage = result.maxPage;
 
-      logger.v('reloadData next $nextGid, prev $prevGid');
+      logger.d('reloadData next $next, prev $prev');
 
       change(resultList, status: RxStatus.success());
       afterJump = false;
@@ -197,17 +233,17 @@ abstract class TabViewController extends GetxController {
       return;
     }
 
-    if (lastNext == nextGid) {
-      logger.v('lastNext == next  $nextGid');
+    if (lastNext == next) {
+      logger.v('lastNext == next  $next');
       return;
     }
 
     logger.v('loadDataMore .....');
     pageState = PageState.LoadingMore;
 
-    logger.v('load page next: $nextGid');
+    logger.d('load page next: $next');
 
-    lastNext = nextGid;
+    lastNext = next;
 
     try {
       final GalleryList? result = await fetchMoreData();
@@ -218,12 +254,18 @@ abstract class TabViewController extends GetxController {
 
       final List<GalleryProvider> resultList = result.gallerys ?? [];
 
-      if (resultList.isNotEmpty &&
-          state?.indexWhere(
-                  (GalleryProvider e) => e.gid == resultList.first.gid) ==
-              -1) {
-        nextGid = result.next;
-        prevGid = result.prev;
+      final n = state?.indexWhere(
+              (GalleryProvider e) => e.gid == resultList.first.gid) ==
+          -1;
+
+      if (resultList.isNotEmpty && n) {
+        nextGid = result.nextGid;
+        prevGid = result.prevGid;
+        nextPage = result.nextPage;
+        prevPage = result.prevPage;
+        maxPage = result.maxPage;
+
+        logger.d('loadDataMore next $next, prev $prev');
       }
 
       final insertIndex = state?.length ?? 0;
@@ -254,8 +296,8 @@ abstract class TabViewController extends GetxController {
       return;
     }
 
-    if (lastPrev == prevGid) {
-      logger.v('lastPrev == prev  $prevGid');
+    if (lastPrev == prev) {
+      logger.v('lastPrev == prev  $prev');
       return;
     }
 
@@ -279,8 +321,11 @@ abstract class TabViewController extends GetxController {
           state?.indexWhere(
                   (GalleryProvider e) => e.gid == resultList.first.gid) ==
               -1) {
-        nextGid = result.next;
-        prevGid = result.prev;
+        nextGid = result.nextGid;
+        prevGid = result.prevGid;
+        nextPage = result.nextPage;
+        prevPage = result.prevPage;
+        maxPage = result.maxPage;
       }
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -295,16 +340,12 @@ abstract class TabViewController extends GetxController {
     pageState = PageState.None;
   }
 
-  // 跳转到指定页加载
-  // Future<void> loadFromPage(int page, {bool previous = false}) async {
-  //   cancelToken = CancelToken();
-  // }
-
   Future<void> loadFrom({
     String? gid,
     PageType? pageType,
     String? jump,
     String? seek,
+    int? page,
   }) async {
     cancelToken = CancelToken();
 
@@ -317,6 +358,7 @@ abstract class TabViewController extends GetxController {
         pageType: pageType,
         jump: jump,
         seek: seek,
+        page: page,
       );
       if (result == null) {
         change(null, status: RxStatus.loading());
@@ -327,11 +369,13 @@ abstract class TabViewController extends GetxController {
 
       logger.v('loadFrom _listItem ${_listItem?.length}');
 
-      nextGid = result.next;
-      prevGid = result.prev;
+      nextGid = result.nextGid;
+      prevGid = result.prevGid;
+      nextPage = result.nextPage;
+      prevPage = result.prevPage;
       change(_listItem, status: RxStatus.success());
       pageState = PageState.None;
-      logger.d('loadFrom next $nextGid, prev $prevGid ____');
+      logger.d('loadFrom next $next, prev $prev');
       afterJump = true;
     } catch (err, stack) {
       logger.e('$err\n$stack');
@@ -348,16 +392,14 @@ abstract class TabViewController extends GetxController {
       cancelToken?.cancel();
     }
     change(state, status: RxStatus.success());
-    logger.d('prev: $prevGid afterJump: $afterJump');
-    if (prevGid.isNotEmpty && afterJump) {
+    logger.d('prevGid: $prevGid, prevPage $prevPage,  afterJump: $afterJump');
+    if ((prevGid.isNotEmpty || prevPage != null) && afterJump) {
       logger.d('loadPrevious');
       await loadPrevious();
     } else {
       logger.d('reloadData');
       await reloadData();
     }
-
-    // await reloadData();
   }
 
   Future<void> reLoadDataFirst() async {
@@ -375,18 +417,18 @@ abstract class TabViewController extends GetxController {
     required EhTabController ehTabController,
     String? tabTag,
   }) {
-    ehTabController.scrollToTopCall = () => srcollToTop(context);
-    ehTabController.scrollToTopRefreshCall = () => srcollToTopRefresh(context);
+    ehTabController.scrollToTopCall = () => scrollToTop(context);
+    ehTabController.scrollToTopRefreshCall = () => scrollToTopRefresh(context);
 
     tabPages.scrollControllerMap[tabTag ?? heroTag ?? ''] = ehTabController;
   }
 
-  void srcollToTop(BuildContext context) {
+  void scrollToTop(BuildContext context) {
     PrimaryScrollController.of(context)?.animateTo(0.0,
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
-  void srcollToTopRefresh(BuildContext context) {
+  void scrollToTopRefresh(BuildContext context) {
     PrimaryScrollController.of(context)?.animateTo(
         -kDefaultRefreshTriggerPullDistance,
         duration: const Duration(milliseconds: 500),
@@ -411,245 +453,316 @@ abstract class TabViewController extends GetxController {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text(L10n.of(context).jump_or_seek),
-          content: Container(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(L10n.of(context).enter_date_or_offset_or_gid),
-                ),
-                StatefulBuilder(builder: (context, setState) {
-                  return CupertinoTextField(
-                    decoration: BoxDecoration(
-                      color: ehTheme.textFieldBackgroundColor,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(8.0)),
-                    ),
-                    clearButtonMode: OverlayVisibilityMode.editing,
-                    placeholder: L10n.of(context).date_or_offset,
-                    controller: jumpOrSeekTextEditController,
-                    autofocus: false,
-                    suffix: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (editingDate)
-                          GestureDetector(
-                            onTap: () {
-                              jumpOrSeekTextEditController.clear();
-                              setState(() {
-                                editingDate = false;
-                              });
-                            },
-                            child: Icon(
-                              FontAwesomeIcons.circleXmark,
-                              size: 20.0,
-                              color: CupertinoDynamicColor.resolve(
-                                  _kClearButtonColor, Get.context!),
-                            ).paddingSymmetric(horizontal: 6),
-                          ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              showDatePicker = !showDatePicker;
-                            });
-                          },
-                          child: Icon(
-                            FontAwesomeIcons.calendar,
-                            size: 20.0,
-                            color: showDatePicker
-                                ? null
-                                : CupertinoDynamicColor.resolve(
-                                    _kClearButtonColor, Get.context!),
-                          ).paddingSymmetric(horizontal: 6),
-                        ),
-                      ],
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        editingDate = value.isNotEmpty;
-                      });
-                    },
-                    // keyboardType: TextInputType.number,
-                    onEditingComplete: () {
-                      // 点击键盘完成
-                      FocusScope.of(context).requestFocus(gidNode);
-                    },
-                  );
-                }),
-                Obx(() {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.only(top: 8.0),
-                    height: showDatePicker ? 120 : 0,
-                    child: Localizations.override(
-                      context: context,
-                      delegates: const [
-                        AppGlobalCupertinoLocalizationsDelegate(),
-                      ],
-                      child: LayoutBuilder(builder: (context, constraints) {
-                        if (constraints.maxHeight < 40) {
-                          return Container();
-                        }
-                        return CupertinoDatePicker(
-                          // yyyy-MM-dd
-                          mode: CupertinoDatePickerMode.date,
-                          // DateTime from lastSeek
-                          initialDateTime: lastSeek != null
-                              ? DateTime.tryParse(lastSeek!) ?? DateTime.now()
-                              : DateTime.now(),
-                          dateOrder: DatePickerDateOrder.ymd,
-                          minimumYear: 2007,
-                          minimumDate: DateTime(2007, 3, 20),
-                          maximumYear: DateTime.now().year,
-                          maximumDate:
-                              DateTime.now().add(const Duration(minutes: 1)),
-                          onDateTimeChanged: (value) {
-                            jumpOrSeekTextEditController.text =
-                                DateFormat('yyyy-MM-dd').format(value);
-                          },
-                        );
-                      }),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 8),
-                StatefulBuilder(builder: (context, setState) {
-                  return CupertinoTextField(
-                    decoration: BoxDecoration(
-                      color: ehTheme.textFieldBackgroundColor,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(8.0)),
-                    ),
-                    clearButtonMode: OverlayVisibilityMode.editing,
-                    focusNode: gidNode,
-                    placeholder: 'GID',
-                    controller: gidTextEditController,
-                    // keyboardType: TextInputType.number,
-                    suffix: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (editingGid)
-                          GestureDetector(
-                            onTap: () {
-                              gidTextEditController.clear();
-                              setState(() {
-                                editingGid = false;
-                              });
-                            },
-                            child: Icon(
-                              FontAwesomeIcons.circleXmark,
-                              size: 20.0,
-                              color: CupertinoDynamicColor.resolve(
-                                  _kClearButtonColor, Get.context!),
-                            ).paddingSymmetric(horizontal: 6),
-                          ),
-                      ],
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        editingGid = value.isNotEmpty;
-                      });
-                    },
-                    onEditingComplete: () {
-                      // 点击键盘完成
-                      _jumpToPage(
-                        pageType: PageType.next,
-                      );
-                    },
-                  );
-                }),
-                const SizedBox(height: 8),
-                Container(
-                  height: 40,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      if (prevGid.isNotEmpty)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.circleArrowLeft,
-                                size: 16,
-                                color: CupertinoDynamicColor.resolve(
-                                    CupertinoColors.secondaryLabel, context),
-                              ).paddingSymmetric(horizontal: 8),
-                              Expanded(
-                                  child: Text(
-                                prevGid.replaceFirst('-', '-\n'),
-                                textAlign: TextAlign.left,
-                              )),
-                            ],
-                          ),
-                        ),
-                      if (nextGid.isNotEmpty)
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: Text(
-                                nextGid.replaceFirst('-', '-\n'),
-                                textAlign: TextAlign.right,
-                              )),
-                              Icon(
-                                FontAwesomeIcons.circleArrowRight,
-                                size: 16,
-                                color: CupertinoDynamicColor.resolve(
-                                    CupertinoColors.secondaryLabel, context),
-                              ).paddingSymmetric(horizontal: 8),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              // child: Text(L10n.of(context).jump_prev),
-              child: const Icon(
-                FontAwesomeIcons.circleArrowLeft,
-              ),
-              onPressed: () async {
-                // _jumpToPage(pageType: PageType.prev);
-                try {
-                  await _jumpToPage(pageType: PageType.prev);
-                } catch (e, stack) {
-                  logger.e('jump to Prev error', e, stack);
-                  showToast('$e');
-                }
-              },
-            ),
-            CupertinoDialogAction(
-              // child: Text(L10n.of(context).jump_next),
-              child: const Icon(
-                FontAwesomeIcons.circleArrowRight,
-              ),
-              onPressed: () async {
-                // 画廊跳转
-                logger.v('jump to Next');
-                try {
-                  await _jumpToPage(
-                    pageType: PageType.next,
-                  );
-                } catch (e, stack) {
-                  logger.e('jump to Next error', e, stack);
-                  showToast(e.toString());
-                }
-                // _jumpToPage(pageType: PageType.next);
-              },
-            ),
-          ],
-        );
+        return ehConfigService.isSiteEx.value
+            ? buildTimeDialog(context, editingDate, editingGid)
+            : buildPageDialog(context);
       },
     );
   }
 
-  Future<void> _jumpToPage({
+  Widget buildPageDialog(BuildContext context) {
+    return CupertinoAlertDialog(
+      title: Text(L10n.of(context).jump_to_page),
+      content: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                  '${L10n.of(context).page_range} 1 - ${(maxPage ?? 0) + 1}'),
+            ),
+            CupertinoTextField(
+              decoration: BoxDecoration(
+                color: ehTheme.textFieldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              ),
+              clearButtonMode: OverlayVisibilityMode.editing,
+              controller: pageTextEditController,
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              onEditingComplete: () {
+                // 点击键盘完成
+                _jumpToPage(context);
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text(L10n.of(context).cancel),
+          onPressed: () async {
+            Get.back();
+          },
+        ),
+        CupertinoDialogAction(
+          child: Text(L10n.of(context).ok),
+          onPressed: () async {
+            // 画廊跳转
+            try {
+              await _jumpToPage(context);
+            } catch (e, stack) {
+              logger.e('jump to page error', e, stack);
+              showToast(e.toString());
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget buildTimeDialog(
+    BuildContext context,
+    bool editingDate,
+    bool editingGid,
+  ) {
+    return CupertinoAlertDialog(
+      title: Text(L10n.of(context).jump_or_seek),
+      content: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(L10n.of(context).enter_date_or_offset_or_gid),
+            ),
+            StatefulBuilder(builder: (context, setState) {
+              return CupertinoTextField(
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                clearButtonMode: OverlayVisibilityMode.editing,
+                placeholder: L10n.of(context).date_or_offset,
+                controller: jumpOrSeekTextEditController,
+                autofocus: false,
+                suffix: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (editingDate)
+                      GestureDetector(
+                        onTap: () {
+                          jumpOrSeekTextEditController.clear();
+                          setState(() {
+                            editingDate = false;
+                          });
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.circleXmark,
+                          size: 20.0,
+                          color: CupertinoDynamicColor.resolve(
+                              _kClearButtonColor, Get.context!),
+                        ).paddingSymmetric(horizontal: 6),
+                      ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showDatePicker = !showDatePicker;
+                        });
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.calendar,
+                        size: 20.0,
+                        color: showDatePicker
+                            ? null
+                            : CupertinoDynamicColor.resolve(
+                                _kClearButtonColor, Get.context!),
+                      ).paddingSymmetric(horizontal: 6),
+                    ),
+                  ],
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    editingDate = value.isNotEmpty;
+                  });
+                },
+                // keyboardType: TextInputType.number,
+                onEditingComplete: () {
+                  // 点击键盘完成
+                  FocusScope.of(context).requestFocus(gidNode);
+                },
+              );
+            }),
+            Obx(() {
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.only(top: 8.0),
+                height: showDatePicker ? 120 : 0,
+                child: Localizations.override(
+                  context: context,
+                  delegates: const [
+                    AppGlobalCupertinoLocalizationsDelegate(),
+                  ],
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    if (constraints.maxHeight < 40) {
+                      return Container();
+                    }
+                    return CupertinoDatePicker(
+                      // yyyy-MM-dd
+                      mode: CupertinoDatePickerMode.date,
+                      // DateTime from lastSeek
+                      initialDateTime: lastSeek != null
+                          ? DateTime.tryParse(lastSeek!) ?? DateTime.now()
+                          : DateTime.now(),
+                      dateOrder: DatePickerDateOrder.ymd,
+                      minimumYear: 2007,
+                      minimumDate: DateTime(2007, 3, 20),
+                      maximumYear: DateTime.now().year,
+                      maximumDate:
+                          DateTime.now().add(const Duration(minutes: 1)),
+                      onDateTimeChanged: (value) {
+                        jumpOrSeekTextEditController.text =
+                            DateFormat('yyyy-MM-dd').format(value);
+                      },
+                    );
+                  }),
+                ),
+              );
+            }),
+            const SizedBox(height: 8),
+            StatefulBuilder(builder: (context, setState) {
+              return CupertinoTextField(
+                decoration: BoxDecoration(
+                  color: ehTheme.textFieldBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                clearButtonMode: OverlayVisibilityMode.editing,
+                focusNode: gidNode,
+                placeholder: 'GID',
+                controller: gidTextEditController,
+                // keyboardType: TextInputType.number,
+                suffix: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (editingGid)
+                      GestureDetector(
+                        onTap: () {
+                          gidTextEditController.clear();
+                          setState(() {
+                            editingGid = false;
+                          });
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.circleXmark,
+                          size: 20.0,
+                          color: CupertinoDynamicColor.resolve(
+                              _kClearButtonColor, Get.context!),
+                        ).paddingSymmetric(horizontal: 6),
+                      ),
+                  ],
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    editingGid = value.isNotEmpty;
+                  });
+                },
+                onEditingComplete: () {
+                  // 点击键盘完成
+                  _jumpToPageWithGidOrTime(
+                    pageType: PageType.next,
+                  );
+                },
+              );
+            }),
+            const SizedBox(height: 8),
+            Container(
+              height: 40,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  if (prevGid.isNotEmpty)
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.circleArrowLeft,
+                            size: 16,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                          ).paddingSymmetric(horizontal: 8),
+                          Expanded(
+                              child: Text(
+                            prevGid.replaceFirst('-', '-\n'),
+                            textAlign: TextAlign.left,
+                          )),
+                        ],
+                      ),
+                    ),
+                  if (nextGid.isNotEmpty)
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                              child: Text(
+                            nextGid.replaceFirst('-', '-\n'),
+                            textAlign: TextAlign.right,
+                          )),
+                          Icon(
+                            FontAwesomeIcons.circleArrowRight,
+                            size: 16,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                          ).paddingSymmetric(horizontal: 8),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: const Icon(
+            FontAwesomeIcons.circleArrowLeft,
+          ),
+          onPressed: () async {
+            try {
+              await _jumpToPageWithGidOrTime(pageType: PageType.prev);
+            } catch (e, stack) {
+              logger.e('jump to Prev error', e, stack);
+              showToast('$e');
+            }
+          },
+        ),
+        CupertinoDialogAction(
+          child: const Icon(
+            FontAwesomeIcons.circleArrowRight,
+          ),
+          onPressed: () async {
+            // 画廊跳转
+            logger.v('jump to Next');
+            try {
+              await _jumpToPageWithGidOrTime(
+                pageType: PageType.next,
+              );
+            } catch (e, stack) {
+              logger.e('jump to Next error', e, stack);
+              showToast(e.toString());
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Future<void> _jumpToPage(BuildContext context) async {
+    final String toPage = pageTextEditController.text.trim();
+    if (toPage.isEmpty) {
+      return;
+    }
+    final int page = (int.tryParse(toPage) ?? 1) - 1;
+    if (page < 0 || page > (maxPage ?? 0)) {
+      showToast(L10n.of(context).page_range_error);
+    }
+    loadFrom(
+      page: page,
+    );
+    Get.back();
+  }
+
+  Future<void> _jumpToPageWithGidOrTime({
     PageType? pageType,
   }) async {
     final String jumpOrSeek = jumpOrSeekTextEditController.text.trim();

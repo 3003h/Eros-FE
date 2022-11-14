@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
@@ -34,6 +35,7 @@ Future<GalleryList?> getGallery({
   String? jump,
   String? seek,
   String? search,
+  int? page,
   int? cats,
   bool refresh = false,
   CancelToken? cancelToken,
@@ -71,19 +73,31 @@ Future<GalleryList?> getGallery({
   final isFav = galleryListType == GalleryListType.favorite;
   final isPopular = galleryListType == GalleryListType.popular;
 
-  final Map<String, dynamic> _params = <String, dynamic>{
-    // if (!isTopList && !isPopular) 'page': pageType ?? 0,
-    // if (isTopList) 'p': pageType ?? 0,
+  final exParams = <String, dynamic>{
     if (!isPopular) 'jump': jump,
     if (!isPopular) 'seek': seek,
     if (!isPopular && pageType != null && gid != null) pageType.value: gid,
+  };
+
+  final ehParams = <String, dynamic>{
+    if (!isTopList && !isPopular) 'page': page ?? 0,
+    if (isTopList) 'p': page ?? 0,
+    if (!isTopList && !isPopular && gid != null) 'from': gid,
+  };
+
+  final Map<String, dynamic> _params = <String, dynamic>{
     if (!isTopList && !isPopular && !isFav) 'f_cats': cats,
-    // if (!isTopList && !isPopular && gid != null) 'from': gid,
     if (!isTopList && !isPopular && search != null) 'f_search': search,
     if (isTopList && toplist != null && toplist.isNotEmpty) 'tl': toplist,
     if (isFav && favcat != null && favcat != 'a' && favcat.isNotEmpty)
       'favcat': favcat,
   };
+
+  if (Get.find<EhConfigService>().isSiteEx.value) {
+    _params.addAll(exParams);
+  } else {
+    _params.addAll(ehParams);
+  }
 
   logger.v('advanceSearch ${advanceSearch?.param}  refresh $refresh');
 

@@ -668,7 +668,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
           return getGallerySliverList(
             logic.state,
             controller.heroTag,
-            next: logic.nextGid,
+            next: logic.next,
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,
@@ -769,7 +769,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
               }
             }),
             Obx(() {
-              if (controller.nextGid.isNotEmpty) {
+              if (controller.next.isNotEmpty) {
                 return CupertinoButton(
                   minSize: 40,
                   padding: const EdgeInsets.all(0),

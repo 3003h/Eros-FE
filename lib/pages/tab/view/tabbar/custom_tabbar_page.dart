@@ -166,7 +166,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
       ),
       padding: const EdgeInsetsDirectional.only(end: 4),
       middle: GestureDetector(
-        onTap: () => controller.srcollToTop(context),
+        onTap: () => controller.scrollToTop(context),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
