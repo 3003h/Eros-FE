@@ -134,7 +134,7 @@ class ArchiverDownloadController extends GetxController {
     }
 
     if (status == DownloadTaskStatus.complete &&
-        (task.savedDir?.startsWith('content://') ?? false)) {
+        (task.savedDir?.isContentUri ?? false)) {
       final safUri = await copyFileToSAF(task);
       if (safUri != null) {
         logger.d('safUri $safUri');
@@ -249,14 +249,13 @@ class ArchiverDownloadController extends GetxController {
       dirPath = path.join(Global.appDocPath, 'Download', 'Archiver');
     }
 
-    if (customDownloadPath.isNotEmpty &&
-        customDownloadPath.startsWith('content://')) {
+    if (customDownloadPath.isNotEmpty && customDownloadPath.isContentUri) {
       dirPath = customDownloadPath;
     } else {
       dirPath = path.join(customDownloadPath, 'Archiver');
     }
 
-    if (dirPath.startsWith('content://')) {
+    if (dirPath.isContentUri) {
       final domFile = await ss.findFile(Uri.parse(dirPath), 'Archiver');
       logger.d('domFile name:${domFile?.name}, type:${domFile?.type}');
       if (domFile == null) {
@@ -315,7 +314,7 @@ class ArchiverDownloadController extends GetxController {
       'Cookie': Global.profile.user.cookie,
     };
 
-    if (savePath.startsWith('content://')) {
+    if (savePath.isContentUri) {
       savePath = getTempFilePath(savePath, fileName ?? '');
       logger.d('savePath $savePath');
     }

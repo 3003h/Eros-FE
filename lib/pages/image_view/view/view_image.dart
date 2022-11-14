@@ -247,7 +247,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       }
     };
 
-    return path.startsWith('content://')
+    return path.isContentUri
         ? ExtendedImage(
             image: ExtendedSafImageProvider(Uri.parse(path)),
             fit: BoxFit.contain,

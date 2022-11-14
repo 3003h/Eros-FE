@@ -275,6 +275,10 @@ extension ExtString on String {
       return this;
     }
   }
+
+  bool get isContentUri {
+    return startsWith('content://');
+  }
 }
 
 extension ExtensionWidget on Widget {

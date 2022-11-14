@@ -487,7 +487,7 @@ class ViewExtController extends GetxController {
         imageTask.filePath != null &&
         imageTask.filePath!.isNotEmpty &&
         imageTask.status == TaskStatus.complete.value) {
-      final filePath = dir.startsWith('content://')
+      final filePath = dir.isContentUri
           ? '$dir%2F${imageTask.filePath}'
           : path.join(dir, imageTask.filePath!);
 

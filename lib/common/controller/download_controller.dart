@@ -116,7 +116,7 @@ class DownloadController extends GetxController {
     logger.d('customDownloadPath:$customDownloadPath');
     if (!GetPlatform.isAndroid ||
         customDownloadPath.isEmpty ||
-        customDownloadPath.startsWith('content://')) {
+        customDownloadPath.isContentUri) {
       return;
     }
 
@@ -139,7 +139,7 @@ class DownloadController extends GetxController {
 
     for (final dirPath in pathList) {
       logger.d('media path: $dirPath');
-      if (dirPath.startsWith('content://')) {
+      if (dirPath.isContentUri) {
         // SAF 方式
         if (allow) {
           final file = await ss.findFile(Uri.parse(dirPath), '.nomedia');
@@ -300,9 +300,12 @@ class DownloadController extends GetxController {
     final info = '$jsonGalleryTask\n$jsonImageTaskList';
     final infoBytes = Uint8List.fromList(utf8.encode(info));
 
-    if (dirPath.startsWith('content://')) {
+    if (dirPath.isContentUri) {
       // SAF
-      await ss.delete(Uri.parse('$dirPath%2F.info'));
+      final infoDomFile = await ss.findFile(Uri.parse(dirPath), '.info');
+      if (infoDomFile?.name != null) {
+        await ss.delete(Uri.parse('$dirPath%2F.info'));
+      }
       await ss.createFileAsBytes(
         Uri.parse(dirPath),
         mimeType: '',
@@ -410,7 +413,7 @@ class DownloadController extends GetxController {
     String? dirpath = _task.realDirPath;
     logger.d('dirPath: $dirpath');
     if (dirpath != null && shouldDeleteContent) {
-      if (dirpath.startsWith('content://')) {
+      if (dirpath.isContentUri) {
         // SAF
         await ss.delete(Uri.parse(dirpath));
       } else {
@@ -678,7 +681,7 @@ class DownloadController extends GetxController {
 
     if (!formCache) {
       late String savePath;
-      if (parentPath.startsWith('content://')) {
+      if (parentPath.isContentUri) {
         // temp save path
         savePath = path.join(
           (await getTemporaryDirectory()).path,
@@ -697,7 +700,7 @@ class DownloadController extends GetxController {
         progressCallback: progressCallback,
       );
 
-      if (parentPath.startsWith('content://')) {
+      if (parentPath.isContentUri) {
         // read file
         final File file = File(savePath);
         final bytes = await file.readAsBytes();
@@ -835,7 +838,7 @@ class DownloadController extends GetxController {
       return saveDirPath;
     }
 
-    if (saveDirPath.startsWith('content://')) {
+    if (saveDirPath.isContentUri) {
       final galleryDirUrl = '${ehConfigService.downloadLocatino}%2F$dirName';
       final uri = Uri.parse(galleryDirUrl);
       final exists = await ss.exists(uri) ?? false;

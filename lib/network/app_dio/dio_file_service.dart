@@ -5,6 +5,7 @@ import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cache_manager/src/web/mime_converter.dart';
@@ -86,7 +87,7 @@ class DioFileService extends FileService {
     } else {
       late Uint8List bytes;
       late String extension;
-      if (filePath.startsWith('content://')) {
+      if (filePath.isContentUri) {
         final data = await ss.getDocumentContent(Uri.parse(filePath));
         if (data == null) {
           throw Exception('image data is null');
