@@ -111,6 +111,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark": MessageLookupByLibrary.simpleMessage("Тёмная"),
         "dark_mode_effect":
             MessageLookupByLibrary.simpleMessage("Вид тёмной темы"),
+        "date_or_offset":
+            MessageLookupByLibrary.simpleMessage("Date or Offset"),
         "default_avatar_style":
             MessageLookupByLibrary.simpleMessage("Стиль аватара по умолчанию"),
         "default_favorites":
@@ -148,6 +150,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("Мои теги"),
         "ehentai_settings":
             MessageLookupByLibrary.simpleMessage("EHentai настройки"),
+        "enter_date_or_offset_or_gid":
+            MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("Показать"),
         "export": MessageLookupByLibrary.simpleMessage("Экспортировать"),
         "favcat": MessageLookupByLibrary.simpleMessage("Избранное"),
@@ -185,6 +189,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Буфер обмена пуст"),
         "input_error": MessageLookupByLibrary.simpleMessage("Ошибка ввода"),
         "instantly": MessageLookupByLibrary.simpleMessage("Сразу"),
+        "jump_next": MessageLookupByLibrary.simpleMessage("Next"),
+        "jump_or_seek": MessageLookupByLibrary.simpleMessage("Jump or Seek"),
+        "jump_prev": MessageLookupByLibrary.simpleMessage("Prev"),
         "jump_to_page":
             MessageLookupByLibrary.simpleMessage("Перейти на страницу"),
         "landscape": MessageLookupByLibrary.simpleMessage("Landscape"),

@@ -82,8 +82,6 @@ class _SubListViewState<T extends CustomSubListController>
 
   Widget _buildRefresh(BuildContext context) {
     return SliverPadding(
-        // padding: EdgeInsets.only(
-        //     top: context.mediaQueryPadding.top + kTopTabbarHeight),
         padding: widget.pinned
             ? const EdgeInsets.only(top: kHeaderMaxHeight)
             : EdgeInsets.only(
@@ -129,8 +127,7 @@ class _SubListViewState<T extends CustomSubListController>
           return getGallerySliverList(
             logic.state,
             subController.heroTag,
-            maxPage: subController.maxPage,
-            curPage: subController.curPage,
+            next: logic.next,
             lastComplete: subController.lastComplete,
             // key: subController.sliverAnimatedListKey,
             listMode: subController.listModeObs,

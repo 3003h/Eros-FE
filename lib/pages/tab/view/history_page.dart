@@ -31,9 +31,9 @@ class _HistoryTabState extends State<HistoryTab> {
   void initState() {
     super.initState();
 
-    ehTabController.scrollToTopCall = () => controller.srcollToTop(context);
+    ehTabController.scrollToTopCall = () => controller.scrollToTop(context);
     ehTabController.scrollToTopRefreshCall =
-        () => controller.srcollToTopRefresh(context);
+        () => controller.scrollToTopRefresh(context);
     if (controller.heroTag != null) {
       tabPages.scrollControllerMap[controller.heroTag!] = ehTabController;
     }
@@ -50,7 +50,7 @@ class _HistoryTabState extends State<HistoryTab> {
       padding: const EdgeInsetsDirectional.only(end: 4),
       leading: controller.getLeading(context),
       middle: GestureDetector(
-          onTap: () => controller.srcollToTop(context), child: Text(_title)),
+          onTap: () => controller.scrollToTop(context), child: Text(_title)),
       trailing: Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -99,47 +99,41 @@ class _HistoryTabState extends State<HistoryTab> {
         ),
       ),
     );
-    final customScrollView = Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
-      return CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: <Widget>[
-          if (hideTopBarOnScroll)
-            SliverFloatingPinnedPersistentHeader(
-              delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-                minExtentProtoType: SizedBox(
-                  height: context.mediaQueryPadding.top,
-                ),
-                maxExtentProtoType: navigationBar,
-                builder: (_, __, ___) => navigationBar,
-              ),
+    final Widget customScrollView = CustomScrollView(
+      // cacheExtent: 500,
+      // controller: scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      slivers: <Widget>[
+        SliverFloatingPinnedPersistentHeader(
+          delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+            minExtentProtoType: SizedBox(
+              height: context.mediaQueryPadding.top,
             ),
-          EhCupertinoSliverRefreshControl(
-            onRefresh: controller.syncHistory,
+            maxExtentProtoType: navigationBar,
+            builder: (_, __, ___) => navigationBar,
           ),
-          SliverSafeArea(
-            top: !hideTopBarOnScroll,
-            sliver: GetBuilder<HistoryController>(
-              init: HistoryController(),
-              builder: (logic) {
-                return getGallerySliverList(
-                  logic.historys,
-                  controller.heroTag,
-                  key: controller.sliverAnimatedListKey,
-                );
-              },
-            ),
+        ),
+        EhCupertinoSliverRefreshControl(
+          onRefresh: controller.syncHistory,
+        ),
+        SliverSafeArea(
+          top: false,
+          sliver: GetBuilder<HistoryController>(
+            init: HistoryController(),
+            builder: (logic) {
+              return getGallerySliverList(
+                logic.historys,
+                controller.heroTag,
+                key: controller.sliverAnimatedListKey,
+              );
+            },
           ),
-        ],
-      );
-    });
+        ),
+      ],
+    );
 
-    return Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
-      return CupertinoPageScaffold(
-        navigationBar: hideTopBarOnScroll ? null : navigationBar,
-        child: SizeCacheWidget(child: customScrollView),
-      );
-    });
+    return CupertinoPageScaffold(
+      child: SizeCacheWidget(child: customScrollView),
+    );
   }
 }

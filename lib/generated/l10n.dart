@@ -4124,6 +4124,56 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Jump or Seek`
+  String get jump_or_seek {
+    return Intl.message(
+      'Jump or Seek',
+      name: 'jump_or_seek',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter date or offset or gid`
+  String get enter_date_or_offset_or_gid {
+    return Intl.message(
+      'Enter date or offset or gid',
+      name: 'enter_date_or_offset_or_gid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date or Offset`
+  String get date_or_offset {
+    return Intl.message(
+      'Date or Offset',
+      name: 'date_or_offset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Next`
+  String get jump_next {
+    return Intl.message(
+      'Next',
+      name: 'jump_next',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prev`
+  String get jump_prev {
+    return Intl.message(
+      'Prev',
+      name: 'jump_prev',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

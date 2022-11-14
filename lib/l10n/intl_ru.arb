@@ -404,5 +404,10 @@
   "port": "Порт",
   "direct": "Direct",
   "save": "Сохранить",
-  "hide_top_bar_on_scroll": "Hide top bar on scroll"
+  "hide_top_bar_on_scroll": "Hide top bar on scroll",
+  "jump_or_seek": "Jump or Seek",
+  "enter_date_or_offset_or_gid": "Enter date or offset or gid",
+  "date_or_offset": "Date or Offset",
+  "jump_next": "Next",
+  "jump_prev": "Prev"
 }

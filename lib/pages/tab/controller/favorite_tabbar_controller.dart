@@ -25,7 +25,7 @@ class FavoriteTabberController extends DefaultTabViewController {
   String get currFavcat => _currFavcat.value;
   set currFavcat(String val) => _currFavcat.value = val;
 
-  FavoriteSubListController? get currSubController => userController.isLogin
+  FavoriteSubListController? get _currSubController => userController.isLogin
       ? subControllerMap[currFavcat]
       : subControllerMap['l'];
 
@@ -60,51 +60,74 @@ class FavoriteTabberController extends DefaultTabViewController {
   Future<void> setOrder(BuildContext context) async {
     final FavoriteOrder? order = await ehConfigService.showFavOrder(context);
     if (order != null) {
-      currSubController?.change(state, status: RxStatus.loading());
-      currSubController?.reloadData();
+      _currSubController?.change(state, status: RxStatus.loading());
+      _currSubController?.reloadData();
     }
   }
 
-  Future<void> loadFromPageFav(int page) {
-    return loadFromPage(page);
+  @override
+  Future<void> showJumpDialog(BuildContext context) async {
+    await _currSubController?.showJumpDialog(context);
   }
 
   @override
-  int get maxPage => currSubController?.maxPage ?? 1;
+  bool get afterJump => _currSubController?.afterJump ?? false;
 
   @override
-  int get minPage => currSubController?.minPage ?? 0;
+  Future<void> jumpToTop() async {
+    await _currSubController?.jumpToTop();
+  }
 
   @override
-  int get curPage => currSubController?.curPage ?? 0;
-
-  @override
-  Future<void> showJumpToPage() async {
-    void _jump() {
-      logger.d('jumpToPage');
-      final String _input = pageJumpTextEditController.text.trim();
-
-      if (_input.isEmpty) {
-        showToast(L10n.of(Get.context!).input_empty);
-      }
-
-      // 数字检查
-      if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
-        showToast(L10n.of(Get.context!).input_error);
-      }
-
-      final int _toPage = int.parse(_input) - 1;
-      if (_toPage >= 0 && _toPage <= maxPage - 1) {
-        FocusScope.of(Get.context!).requestFocus(FocusNode());
-        currSubController?.loadFromPage(_toPage);
-        Get.back();
-      } else {
-        showToast(L10n.of(Get.context!).page_range_error);
-      }
+  Future<void> reloadData() async {
+    if (_currSubController?.reloadData != null) {
+      await _currSubController!.reloadData();
+    } else {
+      update();
+      await _currSubController?.reloadData();
     }
-
-    return await showJumpDialog(jump: _jump, maxPage: maxPage);
   }
+
+  // Future<void> loadFromPageFav(int page) {
+  //   return loadFromPage(page);
+  // }
+
+  // @override
+  // int get maxPage => currSubController?.maxPage ?? 1;
+  //
+  // @override
+  // int get minPage => currSubController?.minPage ?? 0;
+  //
+  // @override
+  // int get curPage => currSubController?.curPage ?? 0;
+
+  // @override
+  // Future<void> showJumpToPage() async {
+  //   void _jump() {
+  //     logger.d('jumpToPage');
+  //     final String _input = pageJumpTextEditController.text.trim();
+  //
+  //     if (_input.isEmpty) {
+  //       showToast(L10n.of(Get.context!).input_empty);
+  //     }
+  //
+  //     // 数字检查
+  //     if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
+  //       showToast(L10n.of(Get.context!).input_error);
+  //     }
+  //
+  //     final int _toPage = int.parse(_input) - 1;
+  //     if (_toPage >= 0 && _toPage <= maxPage - 1) {
+  //       FocusScope.of(Get.context!).requestFocus(FocusNode());
+  //       currSubController?.loadFromPage(_toPage);
+  //       Get.back();
+  //     } else {
+  //       showToast(L10n.of(Get.context!).page_range_error);
+  //     }
+  //   }
+  //
+  //   return await showJumpDialog(jump: _jump, maxPage: maxPage);
+  // }
 
   void onPageChanged(int index) {
     currFavcat = favoriteSelectorController.favcatList[index].favId;
