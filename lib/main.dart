@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
