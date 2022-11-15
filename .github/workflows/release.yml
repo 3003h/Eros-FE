@@ -170,7 +170,7 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '11'
-#          cache: gradle
+          cache: gradle
 
       # 安装 Flutter
       - name: Flutter action
@@ -249,7 +249,7 @@ jobs:
           path: ${{ matrix.artifact_path }}
 
   Publish_releases:
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') && !contains(github.ref, 'beta') && !contains(github.ref, 'alpha') && !contains(github.ref, 'rc')
     name: Publish releases
     needs: Build_and_upload
     runs-on: ubuntu-latest
@@ -277,7 +277,7 @@ jobs:
           artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
           tag: ${{ github.ref_name }}
           bodyFile: changelog/v${{ steps.get_version.outputs.version }}.md
-#          prerelease: true
+          prerelease: contains(github.ref, 'pre')
           allowUpdates: true
           artifactErrorsFailBuild: true
           replacesArtifacts: true
