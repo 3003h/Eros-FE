@@ -401,12 +401,10 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
 
   // uploader
   final _uploader = document.querySelector('#gdn > a')?.text.trim() ?? '';
-  print('######_uploader $_uploader');
 
   final _galleryComments = parseGalleryComment(document);
 
   final _chapter = _parseChapter(_galleryComments);
-  // print(_chapter.map((e) => e.toJson()).join('\n'));
 
   final galleryProvider = GalleryProvider(
     imgUrl: _imageUrl,

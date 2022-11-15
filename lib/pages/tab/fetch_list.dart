@@ -39,7 +39,7 @@ class DefaultFetchListClient extends FetchListClient {
 
   @override
   Future<GalleryList?> fetch() async {
-    logger.d('DefaultFetchListClient fetchParams ${fetchParams.toString()}');
+    logger.v('DefaultFetchListClient fetchParams ${fetchParams.toString()}');
     return await getGallery(
       pageType: fetchParams.pageType,
       gid: fetchParams.gid,
