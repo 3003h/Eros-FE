@@ -108,11 +108,7 @@ class SearchPageController extends DefaultTabViewController {
 
   /// 执行搜索
   Future<void> _startSearch({bool clear = true}) async {
-    nextGid = null;
-    prevGid = null;
-    nextPage = null;
-    prevPage = null;
-    maxPage = null;
+    resetResultPage();
 
     searchText = searchTextController.text.trim();
 
@@ -388,10 +384,7 @@ class SearchPageController extends DefaultTabViewController {
   void clearText() {
     vibrateUtil.light();
     searchTextController.clear();
-    nextGid = null;
-    prevGid = null;
-    nextPage = null;
-    prevPage = null;
+    resetResultPage();
   }
 
   void jumpToGallery() {

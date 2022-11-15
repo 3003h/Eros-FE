@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/favorite/favorite_tabbar_controller.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -60,12 +60,6 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
     double offset,
     double maxExtentCallBackValue,
   ) {
-    // double iconOpacity = 0.0;
-    // final transparentOffset = maxExtentCallBackValue - 60;
-    // if (offset < transparentOffset) {
-    //   iconOpacity = 1 - offset / transparentOffset;
-    // }
-
     return Container(
       height: maxExtentCallBackValue,
       child: Column(

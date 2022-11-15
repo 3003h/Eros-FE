@@ -1,11 +1,11 @@
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/tabbar/custom_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/group/custom_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/group/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../comm.dart';
-import '../../controller/tabbar/custom_tabbar_controller.dart';
 import '../constants.dart';
 import '../gallery_base.dart';
 import '../tab_base.dart';

@@ -138,7 +138,7 @@ class DownloadController extends GetxController {
     pathList.add(downloadPath);
 
     for (final dirPath in pathList) {
-      logger.d('media path: $dirPath');
+      logger.v('media path: $dirPath');
       if (dirPath.isContentUri) {
         // SAF 方式
         if (allow) {

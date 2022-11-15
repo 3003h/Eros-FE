@@ -1,6 +1,6 @@
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/favorite_sublist_controller.dart';
-import 'package:fehviewer/pages/tab/controller/favorite_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/favorite/favorite_sublist_controller.dart';
+import 'package:fehviewer/pages/tab/controller/favorite/favorite_tabbar_controller.dart';
 import 'package:fehviewer/widget/refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

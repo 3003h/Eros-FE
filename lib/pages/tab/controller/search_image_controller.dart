@@ -48,11 +48,7 @@ class SearchImageController extends DefaultTabViewController {
 
     listType = ListType.gallery;
 
-    nextGid = null;
-    prevGid = null;
-    nextPage = null;
-    prevPage = null;
-    maxPage = null;
+    resetResultPage();
 
     if (clear) {
       change(state, status: RxStatus.loading());

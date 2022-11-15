@@ -4,7 +4,7 @@ import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import 'default_tabview_controller.dart';
+import '../default_tabview_controller.dart';
 import 'favorite_sublist_controller.dart';
 
 class FavoriteTabberController extends DefaultTabViewController {
@@ -87,47 +87,6 @@ class FavoriteTabberController extends DefaultTabViewController {
       await _currSubController?.reloadData();
     }
   }
-
-  // Future<void> loadFromPageFav(int page) {
-  //   return loadFromPage(page);
-  // }
-
-  // @override
-  // int get maxPage => currSubController?.maxPage ?? 1;
-  //
-  // @override
-  // int get minPage => currSubController?.minPage ?? 0;
-  //
-  // @override
-  // int get curPage => currSubController?.curPage ?? 0;
-
-  // @override
-  // Future<void> showJumpToPage() async {
-  //   void _jump() {
-  //     logger.d('jumpToPage');
-  //     final String _input = pageJumpTextEditController.text.trim();
-  //
-  //     if (_input.isEmpty) {
-  //       showToast(L10n.of(Get.context!).input_empty);
-  //     }
-  //
-  //     // 数字检查
-  //     if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
-  //       showToast(L10n.of(Get.context!).input_error);
-  //     }
-  //
-  //     final int _toPage = int.parse(_input) - 1;
-  //     if (_toPage >= 0 && _toPage <= maxPage - 1) {
-  //       FocusScope.of(Get.context!).requestFocus(FocusNode());
-  //       currSubController?.loadFromPage(_toPage);
-  //       Get.back();
-  //     } else {
-  //       showToast(L10n.of(Get.context!).page_range_error);
-  //     }
-  //   }
-  //
-  //   return await showJumpDialog(jump: _jump, maxPage: maxPage);
-  // }
 
   void onPageChanged(int index) {
     currFavcat = favoriteSelectorController.favcatList[index].favId;
