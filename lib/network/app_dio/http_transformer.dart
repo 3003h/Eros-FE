@@ -114,7 +114,7 @@ class FavoriteListHttpTransformer extends HttpTransformer {
     }
 
     logger
-        .d('isOrderFav $isOrderFav, _order: $_order, needReOrder $needReOrder');
+        .v('isOrderFav $isOrderFav, _order: $_order, needReOrder $needReOrder');
 
     // 列表样式检查 不符合则设置参数重新请求
     final bool isDml = isGalleryListDmL(html);

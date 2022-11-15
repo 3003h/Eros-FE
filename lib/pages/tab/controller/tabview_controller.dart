@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
@@ -57,7 +58,7 @@ abstract class TabViewController extends GetxController {
 
   String get next => ehConfigService.isSiteEx.value
       ? nextGid
-      : '${nextPage > -1 ? nextPage : ''}';
+      : '${nextPage > 0 ? nextPage : ''}';
 
   String get prev => ehConfigService.isSiteEx.value
       ? prevGid
@@ -147,6 +148,25 @@ abstract class TabViewController extends GetxController {
     return null;
   }
 
+  void setResultPage(GalleryList result) {
+    nextGid = result.nextGid;
+    prevGid = result.prevGid;
+    nextPage = result.nextPage;
+    prevPage = result.prevPage;
+    maxPage = result.maxPage;
+  }
+
+  void resetResultPage() {
+    if (ehConfigService.isSiteEx.value) {
+      nextGid = null;
+      prevGid = null;
+    } else {
+      nextPage = null;
+      prevPage = null;
+      maxPage = null;
+    }
+  }
+
   // 首次请求
   Future<void> firstLoad() async {
     canLoadMore = false;
@@ -163,13 +183,12 @@ abstract class TabViewController extends GetxController {
 
       logger.v('_listItem ${_listItem?.length}');
 
-      nextGid = result.nextGid;
-      prevGid = result.prevGid;
+      setResultPage(result);
       change(_listItem, status: RxStatus.success());
     } catch (err, stack) {
       logger.e('$err\n$stack');
-      final errmsg = err is HttpException ? err.message : '$err';
-      change(null, status: RxStatus.error(errmsg));
+      final errMsg = err is HttpException ? err.message : '$err';
+      change(null, status: RxStatus.error(errMsg));
     } finally {
       canLoadMore = true;
     }
@@ -177,11 +196,7 @@ abstract class TabViewController extends GetxController {
 
   // 重新加载
   Future<void> reloadData() async {
-    nextGid = null;
-    prevGid = null;
-    nextPage = null;
-    prevPage = null;
-    maxPage = null;
+    resetResultPage();
 
     try {
       final GalleryList? result = await fetchData(
@@ -196,11 +211,7 @@ abstract class TabViewController extends GetxController {
 
       final List<GalleryProvider>? resultList = result.gallerys;
 
-      nextGid = result.nextGid;
-      prevGid = result.prevGid;
-      nextPage = result.nextPage;
-      prevPage = result.prevPage;
-      maxPage = result.maxPage;
+      setResultPage(result);
 
       logger.d('reloadData next $next, prev $prev');
 
@@ -255,15 +266,11 @@ abstract class TabViewController extends GetxController {
       final List<GalleryProvider> resultList = result.gallerys ?? [];
 
       final n = state?.indexWhere(
-              (GalleryProvider e) => e.gid == resultList.first.gid) ==
+              (GalleryProvider e) => e.gid == resultList.firstOrNull?.gid) ==
           -1;
 
       if (resultList.isNotEmpty && n) {
-        nextGid = result.nextGid;
-        prevGid = result.prevGid;
-        nextPage = result.nextPage;
-        prevPage = result.prevPage;
-        maxPage = result.maxPage;
+        setResultPage(result);
 
         logger.d('loadDataMore next $next, prev $prev');
       }
@@ -321,11 +328,7 @@ abstract class TabViewController extends GetxController {
           state?.indexWhere(
                   (GalleryProvider e) => e.gid == resultList.first.gid) ==
               -1) {
-        nextGid = result.nextGid;
-        prevGid = result.prevGid;
-        nextPage = result.nextPage;
-        prevPage = result.prevPage;
-        maxPage = result.maxPage;
+        setResultPage(result);
       }
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -369,10 +372,7 @@ abstract class TabViewController extends GetxController {
 
       logger.v('loadFrom _listItem ${_listItem?.length}');
 
-      nextGid = result.nextGid;
-      prevGid = result.prevGid;
-      nextPage = result.nextPage;
-      prevPage = result.prevPage;
+      setResultPage(result);
       change(_listItem, status: RxStatus.success());
       pageState = PageState.None;
       logger.d('loadFrom next $next, prev $prev');
@@ -393,7 +393,7 @@ abstract class TabViewController extends GetxController {
     }
     change(state, status: RxStatus.success());
     logger.d('prevGid: $prevGid, prevPage $prevPage,  afterJump: $afterJump');
-    if ((prevGid.isNotEmpty || prevPage != null) && afterJump) {
+    if ((prevGid.isNotEmpty || prevPage >= 0) && afterJump) {
       logger.v('loadPrevious');
       await loadPrevious();
     } else {
@@ -443,18 +443,13 @@ abstract class TabViewController extends GetxController {
   String? lastJump;
 
   Future<void> showJumpDialog(BuildContext context) async {
-    bool editingDate = false;
-    bool editingGid = false;
-    if (jumpOrSeekTextEditController.text.isEmpty) {
-      jumpOrSeekTextEditController.text =
-          lastJump ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
-    }
+    logger.d('showJumpDialog');
     return showCupertinoDialog<void>(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
         return ehConfigService.isSiteEx.value
-            ? buildTimeDialog(context, editingDate, editingGid)
+            ? buildTimeDialog(context)
             : buildPageDialog(context);
       },
     );
@@ -468,8 +463,7 @@ abstract class TabViewController extends GetxController {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                  '${L10n.of(context).page_range} 1 - ${(maxPage ?? 0) + 1}'),
+              child: Text('${L10n.of(context).page_range} 1 - ${maxPage ?? 0}'),
             ),
             CupertinoTextField(
               decoration: BoxDecoration(
@@ -512,11 +506,14 @@ abstract class TabViewController extends GetxController {
     );
   }
 
-  Widget buildTimeDialog(
-    BuildContext context,
-    bool editingDate,
-    bool editingGid,
-  ) {
+  Widget buildTimeDialog(BuildContext context) {
+    bool editingDate = false;
+    bool editingGid = false;
+    if (jumpOrSeekTextEditController.text.isEmpty) {
+      jumpOrSeekTextEditController.text =
+          lastJump ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
+    }
+
     return CupertinoAlertDialog(
       title: Text(L10n.of(context).jump_or_seek),
       content: Container(

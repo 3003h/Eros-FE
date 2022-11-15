@@ -57,7 +57,7 @@ bool? isFavoriteOrder(String response) {
 
     if (domList.length > 2) {
       final dom.Element? orderElm = domList[2].querySelector('div > span');
-      logger.d('${orderElm?.text}');
+      logger.v('${orderElm?.text}');
       return orderElm?.text.trim() == 'Favorited';
     }
 
@@ -116,8 +116,13 @@ GalleryList parseGalleryList(
   final dom.Element? _curPageElem =
       _pages.firstWhereOrNull((e) => e.attributes['class'] == 'ptds');
   final _curPage = _curPageElem?.text.trim() ?? '';
-  final _nextPage = int.tryParse(_curPage.split('-').last);
-  final _prevPage = (int.tryParse(_curPage.split('-').first) ?? 0) - 2;
+  final _nextPage =
+      (int.tryParse(_curPageElem?.nextElementSibling?.text.trim() ?? '') ?? 0) -
+          1;
+  final _prevPage =
+      (int.tryParse(_curPageElem?.previousElementSibling?.text.trim() ?? '') ??
+              0) -
+          1;
 
   logger.v('$_curPage , _nextPage:$_nextPage , _prevPage:$_prevPage');
 

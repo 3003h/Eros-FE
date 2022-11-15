@@ -11,8 +11,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
-import '../fetch_list.dart';
-import 'default_tabview_controller.dart';
+import '../../fetch_list.dart';
+import '../default_tabview_controller.dart';
 
 class FavoriteViewController extends DefaultTabViewController {
   final RxString _title = ''.obs;
