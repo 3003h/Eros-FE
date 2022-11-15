@@ -4,7 +4,7 @@ import 'package:fehviewer/common/service/base_service.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/proxy.dart';
-import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
+import 'package:fehviewer/pages/gallery/view/sliver/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
@@ -799,7 +799,8 @@ class EhConfigService extends ProfileService {
     // ];
 
     final List<String> pageNames = <String>[
-      '/${const GallerySliverPage().runtimeType.toString()}',
+      // '/${const GallerySliverPage().runtimeType.toString()}',
+      '/${const GalleryPage().runtimeType.toString()}',
       EHRoutes.galleryPage,
     ];
 

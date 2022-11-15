@@ -60,9 +60,6 @@ class GalleryHeaderSliver extends StatelessWidget {
                             // 标题
                             GalleryTitle(
                               title: _pageState.title,
-                              // title: 'ceui',
-                              // title:
-                              //     '测试测试测试测试测试测试测试测试测试测试测试测试测试测试试测试测试测试测测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试',
                             ),
                             // 上传用户
                             GalleryUploader(
@@ -72,9 +69,6 @@ class GalleryHeaderSliver extends StatelessWidget {
                               height: 8,
                             ),
 
-                            // Expanded(
-                            //     child: GalleryInfoView(
-                            //         pageController: _controller)),
                             const Spacer(),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +88,6 @@ class GalleryHeaderSliver extends StatelessWidget {
               ],
             ),
           ),
-          // GalleryInfoBar(hearTextStyle: _hearTextStyle),
           GalleryInfoBarSliver(pageController: _controller),
         ],
       ),

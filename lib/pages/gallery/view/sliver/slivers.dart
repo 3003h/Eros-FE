@@ -21,14 +21,14 @@ import '../const.dart';
 class GalleryActions extends StatelessWidget {
   const GalleryActions({
     Key? key,
-    required this.galleryProvider,
-    required this.pageController,
+    required this.provider,
+    required this.controller,
   }) : super(key: key);
 
-  final GalleryProvider galleryProvider;
-  final GalleryPageController pageController;
+  final GalleryProvider provider;
+  final GalleryPageController controller;
 
-  GalleryPageState get pageStat => pageController.gState;
+  GalleryPageState get pageStat => controller.gState;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class GalleryActions extends StatelessWidget {
                   ? FontAwesomeIcons.solidStar
                   : FontAwesomeIcons.star,
               title: L10n.of(context).p_Rate,
-              onTap: galleryProvider.apiuid?.isNotEmpty ?? false
+              onTap: provider.apiuid?.isNotEmpty ?? false
                   ? () {
                       showRateDialog(context);
                     }
@@ -50,16 +50,15 @@ class GalleryActions extends StatelessWidget {
       // 画廊下载
       Expanded(
         child: DownloadGalleryButton(
-          pageController: pageController,
+          pageController: controller,
         ),
       ),
       // 种子下载
       Expanded(
         child: TextBtn(
           FontAwesomeIcons.magnet,
-          title:
-              '${L10n.of(context).p_Torrent}(${galleryProvider.torrentcount ?? 0})',
-          onTap: galleryProvider.torrentcount != '0'
+          title: '${L10n.of(context).p_Torrent}(${provider.torrentcount ?? 0})',
+          onTap: provider.torrentcount != '0'
               ? () async {
                   showTorrentDialog();
                   // showTorrentModal();
@@ -83,8 +82,7 @@ class GalleryActions extends StatelessWidget {
           FontAwesomeIcons.solidImages,
           title: L10n.of(context).p_Similar,
           onTap: () {
-            final String title =
-                (galleryProvider.englishTitle ?? '').shortTitle;
+            final String title = (provider.englishTitle ?? '').shortTitle;
             logger.d('处理后标题 "$title"');
             NavigatorUtil.goSearchPageWithParam(simpleSearch: 'title:"$title"');
           },
@@ -266,8 +264,8 @@ class GalleryObxSliver extends StatelessWidget {
   }
 }
 
-class PreviewSliverGrid extends StatelessWidget {
-  const PreviewSliverGrid({
+class ThumbSliverGrid extends StatelessWidget {
+  const ThumbSliverGrid({
     Key? key,
     required this.images,
     required this.gid,
