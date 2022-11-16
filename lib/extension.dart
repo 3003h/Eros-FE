@@ -511,22 +511,18 @@ extension ExtMvpImage on MvpImage {
 extension ExtAdvanceSearch on AdvanceSearch {
   Map<String, dynamic> get param {
     return <String, dynamic>{
-      if (searchGalleryName) 'f_sname': 'on',
-      if (searchGalleryTags) 'f_stags': 'on',
-      if (searchGalleryDesc) 'f_sdesc': 'on',
-      if (searchToreenFilenames) 'f_storr': 'on',
-      if (onlyShowWhithTorrents) 'f_sto': 'on',
-      if (searchLowPowerTags) 'f_sdt1': 'on',
-      if (searchDownvotedTags) 'f_sdt2': 'on',
-      if (searchExpunged) 'f_sh': 'on',
-      if (searchWithminRating) 'f_sr': 'on',
-      if (searchWithminRating) 'f_srdd': minRating,
-      if (searchBetweenpage) 'f_sp': 'on',
-      if (searchBetweenpage && startPage.isNotEmpty) 'f_spf': startPage,
-      if (searchBetweenpage && endPage.isNotEmpty) 'f_spt': endPage,
-      if (disableDFLanguage) 'f_sfl': 'on',
-      if (disableDFUploader) 'f_sfu': 'on',
-      if (disableDFTags) 'f_sft': 'on',
+      if (requireGalleryTorrent ?? false) 'f_sto': 'on',
+      if (browseExpungedGalleries ?? false) 'f_sh': 'on',
+      if (searchWithMinRating ?? false) 'f_sr': 'on',
+      if (searchWithMinRating ?? false) 'f_srdd': minRating,
+      if (searchBetweenPage ?? false) 'f_sp': 'on',
+      if ((searchBetweenPage ?? false) && (startPage?.isNotEmpty ?? false))
+        'f_spf': startPage,
+      if ((searchBetweenPage ?? false) && (endPage?.isNotEmpty ?? false))
+        'f_spt': endPage,
+      if (disableCustomFilterLanguage ?? false) 'f_sfl': 'on',
+      if (disableCustomFilterUploader ?? false) 'f_sfu': 'on',
+      if (disableCustomFilterTags ?? false) 'f_sft': 'on',
     };
   }
 }

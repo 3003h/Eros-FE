@@ -47,22 +47,22 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
   bool hideTab = false;
 
-  bool searchGalleryName = true;
-  bool searchGalleryTags = true;
-  bool searchGalleryDesc = false;
-  bool searchToreenFilenames = false;
-  bool onlyShowWhithTorrents = false;
-  bool searchLowPowerTags = false;
-  bool searchDownvotedTags = false;
-  bool searchExpunged = false;
-  bool searchWithminRating = false;
+  // bool searchGalleryName = true;
+  // bool searchGalleryTags = true;
+  // bool searchGalleryDesc = false;
+  // bool searchToreenFilenames = false;
+  bool requireGalleryTorrent = false;
+  // bool searchLowPowerTags = false;
+  // bool searchDownvotedTags = false;
+  bool browseExpungedGalleries = false;
+  bool searchWithMinRating = false;
   int minRating = 2;
-  bool searchBetweenpage = false;
+  bool searchBetweenPage = false;
   String? startPage;
   String? endPage;
-  bool disableDFLanguage = false;
-  bool disableDFUploader = false;
-  bool disableDFTags = false;
+  bool disableCustomFilterLanguage = false;
+  bool disableCustomFilterUploader = false;
+  bool disableCustomFilterTags = false;
 
   List<String> searchTextList = <String>[];
   // List<String> aggGroupList = <String>[];
@@ -79,53 +79,37 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       return;
     }
 
-    logger.d('searchWithminRating $searchWithminRating $minRating');
+    logger.d('searchWithminRating $searchWithMinRating $minRating');
 
     customProfile = customProfile.copyWith(
       enableAdvance: enableAdvance,
       searchText: searchTextList,
       listModeValue: listMode.name,
       hideTab: hideTab,
-      // aggregateGroups: aggGroupList,
       lastEditTime: DateTime.now().millisecondsSinceEpoch,
       advSearch: customProfile.advSearch?.copyWith(
-            searchGalleryName: searchGalleryName,
-            searchGalleryTags: searchGalleryTags,
-            searchGalleryDesc: searchGalleryDesc,
-            searchToreenFilenames: searchToreenFilenames,
-            onlyShowWhithTorrents: onlyShowWhithTorrents,
-            searchLowPowerTags: searchLowPowerTags,
-            searchDownvotedTags: searchDownvotedTags,
-            searchExpunged: searchExpunged,
-            searchWithminRating: searchWithminRating,
+            requireGalleryTorrent: requireGalleryTorrent,
+            browseExpungedGalleries: browseExpungedGalleries,
+            searchWithMinRating: searchWithMinRating,
             minRating: minRating,
-            searchBetweenpage: searchBetweenpage,
+            searchBetweenPage: searchBetweenPage,
             startPage: startPage,
             endPage: endPage,
-            disableDFLanguage: disableDFLanguage,
-            disableDFUploader: disableDFUploader,
-            disableDFTags: disableDFTags,
+            disableCustomFilterLanguage: disableCustomFilterLanguage,
+            disableCustomFilterUploader: disableCustomFilterUploader,
+            disableCustomFilterTags: disableCustomFilterTags,
           ) ??
           AdvanceSearch(
-            searchGalleryName: searchGalleryName,
-            searchGalleryTags: searchGalleryTags,
-            searchGalleryDesc: searchGalleryDesc,
-            searchToreenFilenames: searchToreenFilenames,
-            onlyShowWhithTorrents: onlyShowWhithTorrents,
-            searchLowPowerTags: searchLowPowerTags,
-            searchDownvotedTags: searchDownvotedTags,
-            searchExpunged: searchExpunged,
-            searchWithminRating: searchWithminRating,
+            requireGalleryTorrent: requireGalleryTorrent,
+            browseExpungedGalleries: browseExpungedGalleries,
+            searchWithMinRating: searchWithMinRating,
             minRating: minRating,
-            searchBetweenpage: searchBetweenpage,
+            searchBetweenPage: searchBetweenPage,
             startPage: startPage ?? '',
             endPage: endPage ?? '',
-            disableDFLanguage: disableDFLanguage,
-            disableDFUploader: disableDFUploader,
-            disableDFTags: disableDFTags,
-            favSearchName: true,
-            favSearchTags: true,
-            favSearchNote: true,
+            disableCustomFilterLanguage: disableCustomFilterLanguage,
+            disableCustomFilterUploader: disableCustomFilterUploader,
+            disableCustomFilterTags: disableCustomFilterTags,
           ),
     );
 
@@ -172,31 +156,37 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
     listMode = customProfile.listMode;
 
-    searchGalleryTags =
-        customProfile.advSearch?.searchGalleryTags ?? searchGalleryTags;
-    searchGalleryDesc =
-        customProfile.advSearch?.searchGalleryDesc ?? searchGalleryDesc;
-    searchToreenFilenames =
-        customProfile.advSearch?.searchToreenFilenames ?? searchToreenFilenames;
-    onlyShowWhithTorrents =
-        customProfile.advSearch?.onlyShowWhithTorrents ?? onlyShowWhithTorrents;
-    searchLowPowerTags =
-        customProfile.advSearch?.searchLowPowerTags ?? searchLowPowerTags;
-    searchDownvotedTags =
-        customProfile.advSearch?.searchDownvotedTags ?? searchDownvotedTags;
-    searchExpunged = customProfile.advSearch?.searchExpunged ?? searchExpunged;
-    searchWithminRating =
-        customProfile.advSearch?.searchWithminRating ?? searchWithminRating;
+    // searchGalleryTags =
+    //     customProfile.advSearch?.searchGalleryTags ?? searchGalleryTags;
+    // searchGalleryDesc =
+    //     customProfile.advSearch?.searchGalleryDesc ?? searchGalleryDesc;
+    // searchToreenFilenames =
+    //     customProfile.advSearch?.searchToreenFilenames ?? searchToreenFilenames;
+    requireGalleryTorrent =
+        customProfile.advSearch?.requireGalleryTorrent ?? requireGalleryTorrent;
+    // searchLowPowerTags =
+    //     customProfile.advSearch?.searchLowPowerTags ?? searchLowPowerTags;
+    // searchDownvotedTags =
+    //     customProfile.advSearch?.searchDownvotedTags ?? searchDownvotedTags;
+    browseExpungedGalleries =
+        customProfile.advSearch?.browseExpungedGalleries ??
+            browseExpungedGalleries;
+    searchWithMinRating =
+        customProfile.advSearch?.searchWithMinRating ?? searchWithMinRating;
     minRating = customProfile.advSearch?.minRating ?? minRating;
-    searchBetweenpage =
-        customProfile.advSearch?.searchBetweenpage ?? searchBetweenpage;
+    searchBetweenPage =
+        customProfile.advSearch?.searchBetweenPage ?? searchBetweenPage;
     startPage = customProfile.advSearch?.startPage ?? startPage;
     endPage = customProfile.advSearch?.endPage ?? endPage;
-    disableDFLanguage =
-        customProfile.advSearch?.disableDFLanguage ?? disableDFLanguage;
-    disableDFUploader =
-        customProfile.advSearch?.disableDFUploader ?? disableDFUploader;
-    disableDFTags = customProfile.advSearch?.disableDFTags ?? disableDFTags;
+    disableCustomFilterLanguage =
+        customProfile.advSearch?.disableCustomFilterLanguage ??
+            disableCustomFilterLanguage;
+    disableCustomFilterUploader =
+        customProfile.advSearch?.disableCustomFilterUploader ??
+            disableCustomFilterUploader;
+    disableCustomFilterTags =
+        customProfile.advSearch?.disableCustomFilterTags ??
+            disableCustomFilterTags;
   }
 
   Future<void> showSearchAttach(
@@ -740,45 +730,45 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             children: [
               Column(
                 children: [
-                  TextSwitchItem(
-                    L10n.of(context).s_Search_Gallery_Name,
-                    intValue: searchGalleryName,
-                    onChanged: (val) => searchGalleryName = val,
-                  ),
-                  TextSwitchItem(
-                    L10n.of(context).s_Search_Gallery_Tags,
-                    intValue: searchGalleryTags,
-                    onChanged: (val) => searchGalleryTags = val,
-                  ),
-                  TextSwitchItem(
-                    L10n.of(context).s_Search_Gallery_Description,
-                    intValue: searchGalleryDesc,
-                    onChanged: (val) => searchGalleryDesc = val,
-                  ),
-                  TextSwitchItem(
-                    L10n.of(context).s_Search_Torrent_Filenames,
-                    intValue: searchToreenFilenames,
-                    onChanged: (val) => searchToreenFilenames = val,
-                  ),
+                  // TextSwitchItem(
+                  //   L10n.of(context).s_Search_Gallery_Name,
+                  //   intValue: searchGalleryName,
+                  //   onChanged: (val) => searchGalleryName = val,
+                  // ),
+                  // TextSwitchItem(
+                  //   L10n.of(context).s_Search_Gallery_Tags,
+                  //   intValue: searchGalleryTags,
+                  //   onChanged: (val) => searchGalleryTags = val,
+                  // ),
+                  // TextSwitchItem(
+                  //   L10n.of(context).s_Search_Gallery_Description,
+                  //   intValue: searchGalleryDesc,
+                  //   onChanged: (val) => searchGalleryDesc = val,
+                  // ),
+                  // TextSwitchItem(
+                  //   L10n.of(context).s_Search_Torrent_Filenames,
+                  //   intValue: searchToreenFilenames,
+                  //   onChanged: (val) => searchToreenFilenames = val,
+                  // ),
                   TextSwitchItem(
                     L10n.of(context).s_Only_Show_Galleries_With_Torrents,
-                    intValue: onlyShowWhithTorrents,
-                    onChanged: (val) => onlyShowWhithTorrents = val,
+                    intValue: requireGalleryTorrent,
+                    onChanged: (val) => requireGalleryTorrent = val,
                   ),
-                  TextSwitchItem(
-                    L10n.of(context).s_Search_Low_Power_Tags,
-                    intValue: searchLowPowerTags,
-                    onChanged: (val) => searchLowPowerTags = val,
-                  ),
-                  TextSwitchItem(
-                    L10n.of(context).s_Search_Downvoted_Tags,
-                    intValue: searchDownvotedTags,
-                    onChanged: (val) => searchDownvotedTags = val,
-                  ),
+                  // TextSwitchItem(
+                  //   L10n.of(context).s_Search_Low_Power_Tags,
+                  //   intValue: searchLowPowerTags,
+                  //   onChanged: (val) => searchLowPowerTags = val,
+                  // ),
+                  // TextSwitchItem(
+                  //   L10n.of(context).s_Search_Downvoted_Tags,
+                  //   intValue: searchDownvotedTags,
+                  //   onChanged: (val) => searchDownvotedTags = val,
+                  // ),
                   TextSwitchItem(
                     L10n.of(context).s_Show_Expunged_Galleries,
-                    intValue: searchExpunged,
-                    onChanged: (val) => searchExpunged = val,
+                    intValue: browseExpungedGalleries,
+                    onChanged: (val) => browseExpungedGalleries = val,
                   ),
                   buildSearchWithminRating(context),
                 ],
@@ -793,18 +783,18 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             children: [
               TextSwitchItem(
                 L10n.of(context).language,
-                intValue: disableDFLanguage,
-                onChanged: (val) => disableDFLanguage = val,
+                intValue: disableCustomFilterLanguage,
+                onChanged: (val) => disableCustomFilterLanguage = val,
               ),
               TextSwitchItem(
                 L10n.of(context).uploader,
-                intValue: disableDFUploader,
-                onChanged: (val) => disableDFUploader = val,
+                intValue: disableCustomFilterUploader,
+                onChanged: (val) => disableCustomFilterUploader = val,
               ),
               TextSwitchItem(
                 L10n.of(context).tags,
-                intValue: disableDFTags,
-                onChanged: (val) => disableDFTags = val,
+                intValue: disableCustomFilterTags,
+                onChanged: (val) => disableCustomFilterTags = val,
               ),
             ],
           ).autoCompressKeyboard(context),
@@ -819,10 +809,10 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       children: [
         TextSwitchItem(
           L10n.of(context).s_Minimum_Rating,
-          intValue: searchWithminRating,
+          intValue: searchWithMinRating,
           onChanged: (val) {
             setState(() {
-              searchWithminRating = val;
+              searchWithMinRating = val;
             });
           },
         ),
@@ -830,7 +820,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           curve: Curves.ease,
           duration: 300.milliseconds,
           width: double.infinity,
-          height: searchWithminRating ? kItemHeight : 0,
+          height: searchWithMinRating ? kItemHeight : 0,
           // height: kItemHeight,
           color: CupertinoDynamicColor.resolve(
               ehTheme.itemBackgroundColor!, Get.context!),
@@ -840,7 +830,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
               firstCurve: Curves.ease,
               secondCurve: Curves.ease,
               duration: 300.milliseconds,
-              crossFadeState: searchWithminRating
+              crossFadeState: searchWithMinRating
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
               secondChild: const SizedBox.shrink(),
@@ -910,10 +900,10 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           Expanded(
             child: TextSwitchItem(
               L10n.of(context).s_pages,
-              intValue: searchBetweenpage,
+              intValue: searchBetweenPage,
               onChanged: (val) {
                 setState(() {
-                  searchBetweenpage = val;
+                  searchBetweenPage = val;
                 });
               },
             ),
@@ -930,7 +920,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                 ),
                 keyboardType: TextInputType.number,
                 // cursorHeight: 14,
-                enabled: searchBetweenpage,
+                enabled: searchBetweenPage,
                 style: const TextStyle(
                   height: 1.2,
                   textBaseline: TextBaseline.alphabetic,
@@ -961,7 +951,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
               ),
               keyboardType: TextInputType.number,
               // cursorHeight: 14,
-              enabled: searchBetweenpage,
+              enabled: searchBetweenPage,
               style: const TextStyle(
                 height: 1.2,
                 textBaseline: TextBaseline.alphabetic,

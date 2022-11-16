@@ -20,21 +20,21 @@ class GalleryFilterController extends GetxController {
     final startPage = _advanceSearchController.advanceSearch.value.startPage;
     final endPage = _advanceSearchController.advanceSearch.value.endPage;
     statrPageCtrl.value = TextEditingValue(
-      text: startPage,
+      text: startPage ?? '',
       selection: TextSelection.fromPosition(
         TextPosition(
           affinity: TextAffinity.downstream,
-          offset: startPage.length,
+          offset: (startPage ?? '').length,
         ),
       ),
     );
 
     endPageCtrl.value = TextEditingValue(
-      text: endPage,
+      text: endPage ?? '',
       selection: TextSelection.fromPosition(
         TextPosition(
           affinity: TextAffinity.downstream,
-          offset: endPage.length,
+          offset: (endPage ?? '').length,
         ),
       ),
     );

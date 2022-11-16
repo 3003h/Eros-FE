@@ -1,4 +1,5 @@
 import 'dart:ui' show ImageFilter;
+
 import 'package:collection/collection.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:dio/dio.dart';
@@ -152,9 +153,7 @@ class DefaultTabViewController extends TabViewController {
     cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: ehConfigService.isSiteEx.value
-          ? nextGid
-          : state?.lastOrNull?.gid ?? '',
+      gid: kNewSearch ? nextGid : state?.lastOrNull?.gid ?? '',
       cats: cats ?? ehConfigService.catFilter.value,
       refresh: true,
       cancelToken: cancelToken,

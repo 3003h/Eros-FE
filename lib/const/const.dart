@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 final kFilenameFormat =
     GetPlatform.isWindows ? 'yyyy-MM-dd HH_mm_ss' : 'yyyy-MM-dd HH:mm:ss';
 
+const kNewSearch = true;
+
 enum ListModeEnum {
   list,
   waterfall,
@@ -104,25 +106,16 @@ LoadStateChanged defLoadStateChanged = (ExtendedImageState state) {
 // const double kThresholdTabletWidth = 700.0;
 
 const AdvanceSearch kDefAdvanceSearch = AdvanceSearch(
-  searchGalleryName: true,
-  searchGalleryTags: true,
-  searchGalleryDesc: false,
-  searchToreenFilenames: false,
-  onlyShowWhithTorrents: false,
-  searchLowPowerTags: false,
-  searchDownvotedTags: false,
-  searchExpunged: false,
-  searchWithminRating: false,
+  requireGalleryTorrent: false,
+  browseExpungedGalleries: false,
+  searchWithMinRating: false,
   minRating: 2,
-  searchBetweenpage: false,
+  searchBetweenPage: false,
   startPage: '',
   endPage: '',
-  disableDFLanguage: false,
-  disableDFUploader: false,
-  disableDFTags: false,
-  favSearchName: true,
-  favSearchTags: true,
-  favSearchNote: true,
+  disableCustomFilterLanguage: false,
+  disableCustomFilterUploader: false,
+  disableCustomFilterTags: false,
 );
 
 const User kDefUser = User(
