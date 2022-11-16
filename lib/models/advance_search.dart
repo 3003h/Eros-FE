@@ -5,160 +5,97 @@ import 'package:flutter/foundation.dart';
 class AdvanceSearch {
   
   const AdvanceSearch({
-    required this.searchGalleryName,
-    required this.searchGalleryTags,
-    required this.searchGalleryDesc,
-    required this.searchToreenFilenames,
-    required this.onlyShowWhithTorrents,
-    required this.searchLowPowerTags,
-    required this.searchDownvotedTags,
-    required this.searchExpunged,
-    required this.searchWithminRating,
-    required this.minRating,
-    required this.searchBetweenpage,
-    required this.startPage,
-    required this.endPage,
-    required this.disableDFLanguage,
-    required this.disableDFUploader,
-    required this.disableDFTags,
-    required this.favSearchName,
-    required this.favSearchTags,
-    required this.favSearchNote,
+    this.requireGalleryTorrent,
+    this.browseExpungedGalleries,
+    this.searchWithMinRating,
+    this.minRating,
+    this.searchBetweenPage,
+    this.startPage,
+    this.endPage,
+    this.disableCustomFilterLanguage,
+    this.disableCustomFilterUploader,
+    this.disableCustomFilterTags,
   });
 
-  final bool searchGalleryName;
-  final bool searchGalleryTags;
-  final bool searchGalleryDesc;
-  final bool searchToreenFilenames;
-  final bool onlyShowWhithTorrents;
-  final bool searchLowPowerTags;
-  final bool searchDownvotedTags;
-  final bool searchExpunged;
-  final bool searchWithminRating;
-  final int minRating;
-  final bool searchBetweenpage;
-  final String startPage;
-  final String endPage;
-  final bool disableDFLanguage;
-  final bool disableDFUploader;
-  final bool disableDFTags;
-  final bool favSearchName;
-  final bool favSearchTags;
-  final bool favSearchNote;
+  final bool? requireGalleryTorrent;
+  final bool? browseExpungedGalleries;
+  final bool? searchWithMinRating;
+  final int? minRating;
+  final bool? searchBetweenPage;
+  final String? startPage;
+  final String? endPage;
+  final bool? disableCustomFilterLanguage;
+  final bool? disableCustomFilterUploader;
+  final bool? disableCustomFilterTags;
 
   factory AdvanceSearch.fromJson(Map<String,dynamic> json) => AdvanceSearch(
-    searchGalleryName: json['searchGalleryName'] as bool,
-    searchGalleryTags: json['searchGalleryTags'] as bool,
-    searchGalleryDesc: json['searchGalleryDesc'] as bool,
-    searchToreenFilenames: json['searchToreenFilenames'] as bool,
-    onlyShowWhithTorrents: json['onlyShowWhithTorrents'] as bool,
-    searchLowPowerTags: json['searchLowPowerTags'] as bool,
-    searchDownvotedTags: json['searchDownvotedTags'] as bool,
-    searchExpunged: json['searchExpunged'] as bool,
-    searchWithminRating: json['searchWithminRating'] as bool,
-    minRating: json['minRating'] as int,
-    searchBetweenpage: json['searchBetweenpage'] as bool,
-    startPage: json['startPage'] as String,
-    endPage: json['endPage'] as String,
-    disableDFLanguage: json['disableDFLanguage'] as bool,
-    disableDFUploader: json['disableDFUploader'] as bool,
-    disableDFTags: json['disableDFTags'] as bool,
-    favSearchName: json['favSearchName'] as bool,
-    favSearchTags: json['favSearchTags'] as bool,
-    favSearchNote: json['favSearchNote'] as bool
+    requireGalleryTorrent: json['requireGalleryTorrent'] != null ? json['requireGalleryTorrent'] as bool : null,
+    browseExpungedGalleries: json['browseExpungedGalleries'] != null ? json['browseExpungedGalleries'] as bool : null,
+    searchWithMinRating: json['searchWithMinRating'] != null ? json['searchWithMinRating'] as bool : null,
+    minRating: json['minRating'] != null ? json['minRating'] as int : null,
+    searchBetweenPage: json['searchBetweenPage'] != null ? json['searchBetweenPage'] as bool : null,
+    startPage: json['startPage'] != null ? json['startPage'] as String : null,
+    endPage: json['endPage'] != null ? json['endPage'] as String : null,
+    disableCustomFilterLanguage: json['disableCustomFilterLanguage'] != null ? json['disableCustomFilterLanguage'] as bool : null,
+    disableCustomFilterUploader: json['disableCustomFilterUploader'] != null ? json['disableCustomFilterUploader'] as bool : null,
+    disableCustomFilterTags: json['disableCustomFilterTags'] != null ? json['disableCustomFilterTags'] as bool : null
   );
   
   Map<String, dynamic> toJson() => {
-    'searchGalleryName': searchGalleryName,
-    'searchGalleryTags': searchGalleryTags,
-    'searchGalleryDesc': searchGalleryDesc,
-    'searchToreenFilenames': searchToreenFilenames,
-    'onlyShowWhithTorrents': onlyShowWhithTorrents,
-    'searchLowPowerTags': searchLowPowerTags,
-    'searchDownvotedTags': searchDownvotedTags,
-    'searchExpunged': searchExpunged,
-    'searchWithminRating': searchWithminRating,
+    'requireGalleryTorrent': requireGalleryTorrent,
+    'browseExpungedGalleries': browseExpungedGalleries,
+    'searchWithMinRating': searchWithMinRating,
     'minRating': minRating,
-    'searchBetweenpage': searchBetweenpage,
+    'searchBetweenPage': searchBetweenPage,
     'startPage': startPage,
     'endPage': endPage,
-    'disableDFLanguage': disableDFLanguage,
-    'disableDFUploader': disableDFUploader,
-    'disableDFTags': disableDFTags,
-    'favSearchName': favSearchName,
-    'favSearchTags': favSearchTags,
-    'favSearchNote': favSearchNote
+    'disableCustomFilterLanguage': disableCustomFilterLanguage,
+    'disableCustomFilterUploader': disableCustomFilterUploader,
+    'disableCustomFilterTags': disableCustomFilterTags
   };
 
   AdvanceSearch clone() => AdvanceSearch(
-    searchGalleryName: searchGalleryName,
-    searchGalleryTags: searchGalleryTags,
-    searchGalleryDesc: searchGalleryDesc,
-    searchToreenFilenames: searchToreenFilenames,
-    onlyShowWhithTorrents: onlyShowWhithTorrents,
-    searchLowPowerTags: searchLowPowerTags,
-    searchDownvotedTags: searchDownvotedTags,
-    searchExpunged: searchExpunged,
-    searchWithminRating: searchWithminRating,
+    requireGalleryTorrent: requireGalleryTorrent,
+    browseExpungedGalleries: browseExpungedGalleries,
+    searchWithMinRating: searchWithMinRating,
     minRating: minRating,
-    searchBetweenpage: searchBetweenpage,
+    searchBetweenPage: searchBetweenPage,
     startPage: startPage,
     endPage: endPage,
-    disableDFLanguage: disableDFLanguage,
-    disableDFUploader: disableDFUploader,
-    disableDFTags: disableDFTags,
-    favSearchName: favSearchName,
-    favSearchTags: favSearchTags,
-    favSearchNote: favSearchNote
+    disableCustomFilterLanguage: disableCustomFilterLanguage,
+    disableCustomFilterUploader: disableCustomFilterUploader,
+    disableCustomFilterTags: disableCustomFilterTags
   );
 
     
   AdvanceSearch copyWith({
-    bool? searchGalleryName,
-    bool? searchGalleryTags,
-    bool? searchGalleryDesc,
-    bool? searchToreenFilenames,
-    bool? onlyShowWhithTorrents,
-    bool? searchLowPowerTags,
-    bool? searchDownvotedTags,
-    bool? searchExpunged,
-    bool? searchWithminRating,
+    bool? requireGalleryTorrent,
+    bool? browseExpungedGalleries,
+    bool? searchWithMinRating,
     int? minRating,
-    bool? searchBetweenpage,
+    bool? searchBetweenPage,
     String? startPage,
     String? endPage,
-    bool? disableDFLanguage,
-    bool? disableDFUploader,
-    bool? disableDFTags,
-    bool? favSearchName,
-    bool? favSearchTags,
-    bool? favSearchNote
+    bool? disableCustomFilterLanguage,
+    bool? disableCustomFilterUploader,
+    bool? disableCustomFilterTags
   }) => AdvanceSearch(
-    searchGalleryName: searchGalleryName ?? this.searchGalleryName,
-    searchGalleryTags: searchGalleryTags ?? this.searchGalleryTags,
-    searchGalleryDesc: searchGalleryDesc ?? this.searchGalleryDesc,
-    searchToreenFilenames: searchToreenFilenames ?? this.searchToreenFilenames,
-    onlyShowWhithTorrents: onlyShowWhithTorrents ?? this.onlyShowWhithTorrents,
-    searchLowPowerTags: searchLowPowerTags ?? this.searchLowPowerTags,
-    searchDownvotedTags: searchDownvotedTags ?? this.searchDownvotedTags,
-    searchExpunged: searchExpunged ?? this.searchExpunged,
-    searchWithminRating: searchWithminRating ?? this.searchWithminRating,
+    requireGalleryTorrent: requireGalleryTorrent ?? this.requireGalleryTorrent,
+    browseExpungedGalleries: browseExpungedGalleries ?? this.browseExpungedGalleries,
+    searchWithMinRating: searchWithMinRating ?? this.searchWithMinRating,
     minRating: minRating ?? this.minRating,
-    searchBetweenpage: searchBetweenpage ?? this.searchBetweenpage,
+    searchBetweenPage: searchBetweenPage ?? this.searchBetweenPage,
     startPage: startPage ?? this.startPage,
     endPage: endPage ?? this.endPage,
-    disableDFLanguage: disableDFLanguage ?? this.disableDFLanguage,
-    disableDFUploader: disableDFUploader ?? this.disableDFUploader,
-    disableDFTags: disableDFTags ?? this.disableDFTags,
-    favSearchName: favSearchName ?? this.favSearchName,
-    favSearchTags: favSearchTags ?? this.favSearchTags,
-    favSearchNote: favSearchNote ?? this.favSearchNote,
+    disableCustomFilterLanguage: disableCustomFilterLanguage ?? this.disableCustomFilterLanguage,
+    disableCustomFilterUploader: disableCustomFilterUploader ?? this.disableCustomFilterUploader,
+    disableCustomFilterTags: disableCustomFilterTags ?? this.disableCustomFilterTags,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is AdvanceSearch && searchGalleryName == other.searchGalleryName && searchGalleryTags == other.searchGalleryTags && searchGalleryDesc == other.searchGalleryDesc && searchToreenFilenames == other.searchToreenFilenames && onlyShowWhithTorrents == other.onlyShowWhithTorrents && searchLowPowerTags == other.searchLowPowerTags && searchDownvotedTags == other.searchDownvotedTags && searchExpunged == other.searchExpunged && searchWithminRating == other.searchWithminRating && minRating == other.minRating && searchBetweenpage == other.searchBetweenpage && startPage == other.startPage && endPage == other.endPage && disableDFLanguage == other.disableDFLanguage && disableDFUploader == other.disableDFUploader && disableDFTags == other.disableDFTags && favSearchName == other.favSearchName && favSearchTags == other.favSearchTags && favSearchNote == other.favSearchNote;
+    || other is AdvanceSearch && requireGalleryTorrent == other.requireGalleryTorrent && browseExpungedGalleries == other.browseExpungedGalleries && searchWithMinRating == other.searchWithMinRating && minRating == other.minRating && searchBetweenPage == other.searchBetweenPage && startPage == other.startPage && endPage == other.endPage && disableCustomFilterLanguage == other.disableCustomFilterLanguage && disableCustomFilterUploader == other.disableCustomFilterUploader && disableCustomFilterTags == other.disableCustomFilterTags;
 
   @override
-  int get hashCode => searchGalleryName.hashCode ^ searchGalleryTags.hashCode ^ searchGalleryDesc.hashCode ^ searchToreenFilenames.hashCode ^ onlyShowWhithTorrents.hashCode ^ searchLowPowerTags.hashCode ^ searchDownvotedTags.hashCode ^ searchExpunged.hashCode ^ searchWithminRating.hashCode ^ minRating.hashCode ^ searchBetweenpage.hashCode ^ startPage.hashCode ^ endPage.hashCode ^ disableDFLanguage.hashCode ^ disableDFUploader.hashCode ^ disableDFTags.hashCode ^ favSearchName.hashCode ^ favSearchTags.hashCode ^ favSearchNote.hashCode;
+  int get hashCode => requireGalleryTorrent.hashCode ^ browseExpungedGalleries.hashCode ^ searchWithMinRating.hashCode ^ minRating.hashCode ^ searchBetweenPage.hashCode ^ startPage.hashCode ^ endPage.hashCode ^ disableCustomFilterLanguage.hashCode ^ disableCustomFilterUploader.hashCode ^ disableCustomFilterTags.hashCode;
 }

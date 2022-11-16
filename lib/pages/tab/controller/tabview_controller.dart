@@ -56,13 +56,9 @@ abstract class TabViewController extends GetxController {
   String get prevGid => _prevGid.value;
   set prevGid(String? value) => _prevGid.value = value ?? '';
 
-  String get next => ehConfigService.isSiteEx.value
-      ? nextGid
-      : '${nextPage > 0 ? nextPage : ''}';
+  String get next => kNewSearch ? nextGid : '${nextPage > 0 ? nextPage : ''}';
 
-  String get prev => ehConfigService.isSiteEx.value
-      ? prevGid
-      : '${prevPage > -1 ? prevPage : ''}';
+  String get prev => kNewSearch ? prevGid : '${prevPage > -1 ? prevPage : ''}';
 
   final _afterJump = false.obs;
   bool get afterJump => _afterJump.value;
@@ -157,7 +153,7 @@ abstract class TabViewController extends GetxController {
   }
 
   void resetResultPage() {
-    if (ehConfigService.isSiteEx.value) {
+    if (kNewSearch) {
       nextGid = null;
       prevGid = null;
     } else {
@@ -448,9 +444,7 @@ abstract class TabViewController extends GetxController {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return ehConfigService.isSiteEx.value
-            ? buildTimeDialog(context)
-            : buildPageDialog(context);
+        return kNewSearch ? buildTimeDialog(context) : buildPageDialog(context);
       },
     );
   }

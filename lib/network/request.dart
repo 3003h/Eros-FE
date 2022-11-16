@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:fehviewer/common/controller/advance_search_controller.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
@@ -93,7 +92,7 @@ Future<GalleryList?> getGallery({
       'favcat': favcat,
   };
 
-  if (Get.find<EhConfigService>().isSiteEx.value) {
+  if (kNewSearch) {
     _params.addAll(exParams);
   } else {
     _params.addAll(ehParams);

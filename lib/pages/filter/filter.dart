@@ -239,7 +239,7 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
-  final bool value;
+  final bool? value;
   final ValueChanged<bool> onChanged;
   final bool expand;
 
@@ -260,7 +260,8 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Transform.scale(
               scale: 0.8,
-              child: CupertinoSwitch(value: value, onChanged: onChanged),
+              child:
+                  CupertinoSwitch(value: value ?? false, onChanged: onChanged),
             ),
           ),
         ],

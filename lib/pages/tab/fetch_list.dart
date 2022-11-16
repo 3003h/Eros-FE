@@ -85,7 +85,7 @@ class SearchFetchListClient extends FetchListClient {
 
     // hide tag filter 20220606
     if ((fetchParams.galleryListType == GalleryListType.gallery &&
-            !(fetchParams.advanceSearch?.disableDFTags ?? false)) ||
+            !(fetchParams.advanceSearch?.disableCustomFilterTags ?? false)) ||
         fetchParams.galleryListType == GalleryListType.popular) {
       final gidList = result?.gallerys
           ?.where((element) => tagController.needHide(element.simpleTags ?? []))

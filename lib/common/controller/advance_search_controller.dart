@@ -20,22 +20,16 @@ class AdvanceSearchController extends ProfileController {
     final AdvanceSearch advanceSearchValue = advanceSearch.value;
 
     final String para =
-        '&f_sname=${advanceSearchValue.searchGalleryName ? "on" : ""}'
-        '&f_stags=${advanceSearchValue.searchGalleryTags ? "on" : ""}'
-        '&f_sdesc=${advanceSearchValue.searchGalleryDesc ? "on" : ""}'
-        '&f_storr=${advanceSearchValue.searchToreenFilenames ? "on" : ""}'
-        '&f_sto=${advanceSearchValue.onlyShowWhithTorrents ? "on" : ""}'
-        '&f_sdt1=${advanceSearchValue.searchLowPowerTags ? "on" : ""}'
-        '&f_sdt2=${advanceSearchValue.searchDownvotedTags ? "on" : ""}'
-        '&f_sh=${advanceSearchValue.searchExpunged ? "on" : ""}'
-        '&f_sr=${advanceSearchValue.searchWithminRating ? "on" : ""}'
+        '&f_sto=${advanceSearchValue.requireGalleryTorrent ?? false ? "on" : ""}'
+        '&f_sh=${advanceSearchValue.browseExpungedGalleries ?? false ? "on" : ""}'
+        '&f_sr=${advanceSearchValue.searchWithMinRating ?? false ? "on" : ""}'
         '&f_srdd=${advanceSearchValue.minRating}'
-        '&f_sp=${advanceSearchValue.searchBetweenpage ? "on" : ""}'
+        '&f_sp=${advanceSearchValue.searchBetweenPage ?? false ? "on" : ""}'
         '&f_spf=${advanceSearchValue.startPage}'
         '&f_spt=${advanceSearchValue.endPage}'
-        '&f_sfl=${advanceSearchValue.disableDFLanguage ? "on" : ""}'
-        '&f_sfu=${advanceSearchValue.disableDFUploader ? "on" : ""}'
-        '&f_sft=${advanceSearchValue.disableDFTags ? "on" : ""}';
+        '&f_sfl=${advanceSearchValue.disableCustomFilterLanguage ?? false ? "on" : ""}'
+        '&f_sfu=${advanceSearchValue.disableCustomFilterUploader ?? false ? "on" : ""}'
+        '&f_sft=${advanceSearchValue.disableCustomFilterTags ?? false ? "on" : ""}';
 
     return para;
   }
@@ -46,9 +40,9 @@ class AdvanceSearchController extends ProfileController {
     final AdvanceSearch val = advanceSearch.value;
 
     return <String, dynamic>{
-      if (val.favSearchName) 'sn': 'on',
-      if (val.favSearchTags) 'st': 'on',
-      if (val.favSearchNote) 'sf': 'on',
+      // if (val.favSearchName) 'sn': 'on',
+      // if (val.favSearchTags) 'st': 'on',
+      // if (val.favSearchNote) 'sf': 'on',
     };
   }
 

@@ -54,9 +54,7 @@ class FavoriteSubListController extends TabViewController {
     await super.fetchMoreData();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: ehConfigService.isSiteEx.value
-          ? nextGid
-          : state?.lastOrNull?.gid ?? '',
+      gid: kNewSearch ? nextGid : state?.lastOrNull?.gid ?? '',
       refresh: true,
       cancelToken: cancelToken,
       favcat: favcat,
