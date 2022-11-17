@@ -17,6 +17,8 @@ class GalleryImage {
     this.thumbWidth,
     this.imageHeight,
     this.imageWidth,
+    this.oriHeight,
+    this.oriWidth,
     this.offSet,
     this.sourceId,
     this.completeHeight,
@@ -45,6 +47,8 @@ class GalleryImage {
   final double? thumbWidth;
   final double? imageHeight;
   final double? imageWidth;
+  final double? oriHeight;
+  final double? oriWidth;
   final double? offSet;
   final String? sourceId;
   final bool? completeHeight;
@@ -73,6 +77,8 @@ class GalleryImage {
     thumbWidth: json['thumbWidth'] != null ? json['thumbWidth'] as double : null,
     imageHeight: json['imageHeight'] != null ? json['imageHeight'] as double : null,
     imageWidth: json['imageWidth'] != null ? json['imageWidth'] as double : null,
+    oriHeight: json['oriHeight'] != null ? json['oriHeight'] as double : null,
+    oriWidth: json['oriWidth'] != null ? json['oriWidth'] as double : null,
     offSet: json['offSet'] != null ? json['offSet'] as double : null,
     sourceId: json['sourceId'] != null ? json['sourceId'] as String : null,
     completeHeight: json['completeHeight'] != null ? json['completeHeight'] as bool : null,
@@ -102,6 +108,8 @@ class GalleryImage {
     'thumbWidth': thumbWidth,
     'imageHeight': imageHeight,
     'imageWidth': imageWidth,
+    'oriHeight': oriHeight,
+    'oriWidth': oriWidth,
     'offSet': offSet,
     'sourceId': sourceId,
     'completeHeight': completeHeight,
@@ -131,6 +139,8 @@ class GalleryImage {
     thumbWidth: thumbWidth,
     imageHeight: imageHeight,
     imageWidth: imageWidth,
+    oriHeight: oriHeight,
+    oriWidth: oriWidth,
     offSet: offSet,
     sourceId: sourceId,
     completeHeight: completeHeight,
@@ -161,6 +171,8 @@ class GalleryImage {
     double? thumbWidth,
     double? imageHeight,
     double? imageWidth,
+    double? oriHeight,
+    double? oriWidth,
     double? offSet,
     String? sourceId,
     bool? completeHeight,
@@ -188,6 +200,8 @@ class GalleryImage {
     thumbWidth: thumbWidth ?? this.thumbWidth,
     imageHeight: imageHeight ?? this.imageHeight,
     imageWidth: imageWidth ?? this.imageWidth,
+    oriHeight: oriHeight ?? this.oriHeight,
+    oriWidth: oriWidth ?? this.oriWidth,
     offSet: offSet ?? this.offSet,
     sourceId: sourceId ?? this.sourceId,
     completeHeight: completeHeight ?? this.completeHeight,
@@ -206,8 +220,8 @@ class GalleryImage {
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath && changeSource == other.changeSource && hide == other.hide && checkHide == other.checkHide && downloadProcess == other.downloadProcess && errorInfo == other.errorInfo && tempPath == other.tempPath && filename == other.filename;
+    || other is GalleryImage && largeThumb == other.largeThumb && completeCache == other.completeCache && startPrecache == other.startPrecache && ser == other.ser && href == other.href && imageUrl == other.imageUrl && originImageUrl == other.originImageUrl && thumbUrl == other.thumbUrl && thumbHeight == other.thumbHeight && thumbWidth == other.thumbWidth && imageHeight == other.imageHeight && imageWidth == other.imageWidth && oriHeight == other.oriHeight && oriWidth == other.oriWidth && offSet == other.offSet && sourceId == other.sourceId && completeHeight == other.completeHeight && gid == other.gid && token == other.token && completeDownload == other.completeDownload && filePath == other.filePath && changeSource == other.changeSource && hide == other.hide && checkHide == other.checkHide && downloadProcess == other.downloadProcess && errorInfo == other.errorInfo && tempPath == other.tempPath && filename == other.filename;
 
   @override
-  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode ^ changeSource.hashCode ^ hide.hashCode ^ checkHide.hashCode ^ downloadProcess.hashCode ^ errorInfo.hashCode ^ tempPath.hashCode ^ filename.hashCode;
+  int get hashCode => largeThumb.hashCode ^ completeCache.hashCode ^ startPrecache.hashCode ^ ser.hashCode ^ href.hashCode ^ imageUrl.hashCode ^ originImageUrl.hashCode ^ thumbUrl.hashCode ^ thumbHeight.hashCode ^ thumbWidth.hashCode ^ imageHeight.hashCode ^ imageWidth.hashCode ^ oriHeight.hashCode ^ oriWidth.hashCode ^ offSet.hashCode ^ sourceId.hashCode ^ completeHeight.hashCode ^ gid.hashCode ^ token.hashCode ^ completeDownload.hashCode ^ filePath.hashCode ^ changeSource.hashCode ^ hide.hashCode ^ checkHide.hashCode ^ downloadProcess.hashCode ^ errorInfo.hashCode ^ tempPath.hashCode ^ filename.hashCode;
 }

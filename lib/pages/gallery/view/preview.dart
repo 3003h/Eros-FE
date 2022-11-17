@@ -41,12 +41,13 @@ class _PreviewContainerState extends State<PreviewContainer> {
     Widget _buildImage() {
       if (widget.galleryImage.largeThumb ?? false) {
         // 缩略大图
-        return EhNetworkImage(
+        Widget image = EhNetworkImage(
           httpHeaders: {if (widget.referer != null) 'Referer': widget.referer!},
           imageUrl: widget.galleryImage.thumbUrl ?? '',
           progressIndicatorBuilder: (_, __, ___) {
             return const CupertinoActivityIndicator();
           },
+          fit: BoxFit.cover,
           checkHide: true,
           onHideFlagChanged: (isHideImage) {
             if (isHideImage) {
@@ -58,29 +59,38 @@ class _PreviewContainerState extends State<PreviewContainer> {
             );
           },
         );
+
+        return AspectRatio(
+            aspectRatio: (widget.galleryImage.oriWidth ?? 300) /
+                (widget.galleryImage.oriHeight ?? 400),
+            child: image);
       } else {
         // 缩略小图 需要切割
-        return LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final imageSize = Size(widget.galleryImage.thumbWidth!,
-                widget.galleryImage.thumbHeight!);
-            final size = Size(constraints.maxWidth, constraints.maxHeight);
-            final FittedSizes fittedSizes =
-                applyBoxFit(BoxFit.contain, imageSize, size);
+        return AspectRatio(
+          aspectRatio: (widget.galleryImage.thumbWidth ?? 300) /
+              (widget.galleryImage.thumbHeight ?? 400),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final imageSize = Size(widget.galleryImage.thumbWidth!,
+                  widget.galleryImage.thumbHeight!);
+              final size = Size(constraints.maxWidth, constraints.maxHeight);
+              final FittedSizes fittedSizes =
+                  applyBoxFit(BoxFit.contain, imageSize, size);
 
-            return ExtendedImageRect(
-              url: widget.galleryImage.thumbUrl!,
-              height: fittedSizes.destination.height,
-              width: fittedSizes.destination.width,
-              onLoadComplet: widget.onLoadComplet,
-              sourceRect: Rect.fromLTWH(
-                widget.galleryImage.offSet! + 1,
-                1.0,
-                widget.galleryImage.thumbWidth! - 2,
-                widget.galleryImage.thumbHeight! - 2,
-              ),
-            );
-          },
+              return ExtendedImageRect(
+                url: widget.galleryImage.thumbUrl!,
+                height: fittedSizes.destination.height,
+                width: fittedSizes.destination.width,
+                onLoadComplet: widget.onLoadComplet,
+                sourceRect: Rect.fromLTWH(
+                  widget.galleryImage.offSet! + 1,
+                  1.0,
+                  widget.galleryImage.thumbWidth! - 2,
+                  widget.galleryImage.thumbHeight! - 2,
+                ),
+              );
+            },
+          ),
         );
       }
     }
@@ -93,10 +103,6 @@ class _PreviewContainerState extends State<PreviewContainer> {
       },
       onLongPress: () {
         if (widget.galleryImage.largeThumb ?? false) {
-          // if (!kReleaseMode) {
-          //   pHashHelper.compareLast(galleryImage.thumbUrl ?? '');
-          // }
-
           showCupertinoModalPopup(
               context: context,
               builder: (context) {

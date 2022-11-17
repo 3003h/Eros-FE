@@ -13,6 +13,7 @@ import 'package:fehviewer/network/app_dio/http_config.dart';
 import 'package:fehviewer/store/db/isar_helper.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
+import 'package:fehviewer/store/hive/hive_cache.dart';
 import 'package:fehviewer/utils/http_override.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/foundation.dart';
@@ -34,6 +35,7 @@ final LocalAuthentication localAuth = LocalAuthentication();
 DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
 final HiveHelper hiveHelper = HiveHelper();
+final HiveCacheHelper hiveCacheHelper = HiveCacheHelper();
 final IsarHelper isarHelper = IsarHelper();
 
 final Global global = Global();
@@ -173,7 +175,8 @@ class Global {
 
     await GStore.init();
 
-    await HiveHelper.init();
+    await hiveHelper.init();
+    await hiveCacheHelper.init();
     await isarHelper.initIsar();
 
     _profileInit();

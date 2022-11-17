@@ -33,7 +33,7 @@ class HiveHelper {
   static final _galleryCacheBox = Hive.box<String>(galleryCacheBox);
   static final _configBox = Hive.box<String>(configBox);
 
-  static Future<void> init() async {
+  Future<void> init() async {
     await Hive.initFlutter();
     await Hive.openBox<String>(
       historyBox,
@@ -61,8 +61,8 @@ class HiveHelper {
     );
     await Hive.openBox<String>(searchHistoryBox,
         compactionStrategy: (int entries, int deletedEntries) {
-      logger.v('entries $entries');
-      return entries > 20;
+      logger.v('$searchHistoryBox entries $entries');
+      return true;
     });
 
     await Hive.openBox<String>(
@@ -76,8 +76,8 @@ class HiveHelper {
     await Hive.openBox<String>(
       configBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.v('entries $entries');
-        return entries > 10;
+        logger.v('$configBox entries $entries');
+        return entries > 2;
       },
     );
   }
@@ -135,18 +135,22 @@ class HiveHelper {
     return EhLayout.fromJson(jsonDecode(val ?? '{}') as Map<String, dynamic>);
   }
 
-  Future<void> setUsersInfo(List<User> users) async {
-    await _configBox.put(usersKey, jsonEncode(users));
-  }
+  // Future<void> setUsersInfo(List<User> users) async {
+  //   await _configBox.put(usersKey, jsonEncode(users));
+  // }
 
-  List<User> getUsersInfo() {
-    final all = _configBox.get(usersKey, defaultValue: '[]');
+  // List<User> getUsersInfo() {
+  //   final all = _configBox.get(usersKey, defaultValue: '[]');
+  //
+  //   final _users = <User>[];
+  //   for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
+  //     _users.add(User.fromJson(val as Map<String, dynamic>));
+  //   }
+  //   return _users;
+  // }
 
-    final _users = <User>[];
-    for (final val in jsonDecode(all ?? '[]') as List<dynamic>) {
-      _users.add(User.fromJson(val as Map<String, dynamic>));
-    }
-    return _users;
+  void clearUsersInfo() {
+    _configBox.delete(usersKey);
   }
 
   Future<void> setProfileDelList(List<CustomProfile> delProfiles) async {
