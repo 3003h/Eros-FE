@@ -185,7 +185,7 @@ dev_dependencies:
   # flutter pub run build_runner watch --delete-conflicting-outputs
 
   # flutter pub run intl_utils:generate
-  intl_utils: ^2.5.1
+  intl_utils: ^2.8.1
   # flutter pub run apn_json2model
   apn_json2model: ^2.3.0
   build_runner: ^2.0.3
