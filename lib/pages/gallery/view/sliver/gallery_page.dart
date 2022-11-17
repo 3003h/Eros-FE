@@ -9,6 +9,7 @@ import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
@@ -278,7 +279,11 @@ class GalleryBody extends StatelessWidget {
             TagTile(provider: state),
             ChapterTile(controller: controller, provider: state),
             CommentTile(controller: controller, provider: state),
-            ThumbTile(controller: controller, provider: state),
+            ThumbTile(
+              controller: controller,
+              provider: state,
+              horizontal: kDebugMode,
+            ),
           ]),
         );
       },
@@ -399,30 +404,53 @@ class ThumbTile extends StatelessWidget {
     Key? key,
     required this.provider,
     required this.controller,
+    this.horizontal = false,
   }) : super(key: key);
   final GalleryProvider provider;
   final GalleryPageController controller;
+  final bool horizontal;
 
   @override
   Widget build(BuildContext context) {
     final pageState = controller.gState;
-    return MultiSliver(children: [
-      SliverPadding(
-        padding: const EdgeInsets.only(
-          left: kPadding,
-          right: kPadding,
-          bottom: 20,
+
+    if (horizontal) {
+      return MultiSliver(children: [
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {},
+          child: Row(
+            children: [
+              MiniTitle(title: 'Thumbs'),
+              const Spacer(),
+            ],
+          ),
         ),
-        sliver: ThumbSliverGrid(
+        ThumbHorizontalList(
           images: pageState.firstPageImage,
           gid: provider.gid ?? '',
           referer: controller.gState.url,
+        )
+      ]);
+    } else {
+      return MultiSliver(children: [
+        SliverPadding(
+          padding: const EdgeInsets.only(
+            left: kPadding,
+            right: kPadding,
+            bottom: 20,
+          ),
+          sliver: ThumbSliverGrid(
+            images: pageState.firstPageImage,
+            gid: provider.gid ?? '',
+            referer: controller.gState.url,
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: MorePreviewButton(hasMorePreview: pageState.hasMoreImage),
-      ),
-    ]);
+        Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: MorePreviewButton(hasMorePreview: pageState.hasMoreImage),
+        ),
+      ]);
+    }
   }
 }

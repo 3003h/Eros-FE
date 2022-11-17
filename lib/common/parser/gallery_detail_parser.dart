@@ -501,11 +501,19 @@ List<GalleryImage> parseGalleryImage(Document document) {
       final String picSer = imgElem?.attributes['alt']?.trim() ?? '';
       final String picSrcUrl = imgElem?.attributes['src']?.trim() ?? '';
 
+      final array = picSrcUrl.split('-');
+      final String width = array[array.length - 3];
+      final String height = array[array.length - 2];
+      logger.v('picSrcUrl: $picSrcUrl, width: $width, height: $height');
+
       galleryImages.add(GalleryImage(
-          ser: int.parse(picSer),
-          largeThumb: true,
-          href: picHref,
-          thumbUrl: picSrcUrl));
+        ser: int.parse(picSer),
+        largeThumb: true,
+        href: picHref,
+        thumbUrl: picSrcUrl,
+        oriWidth: double.parse(width),
+        oriHeight: double.parse(height),
+      ));
     }
   }
 

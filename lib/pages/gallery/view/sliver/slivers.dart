@@ -202,13 +202,17 @@ class MiniTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
+    return Container(
+      padding:
+          const EdgeInsets.symmetric(horizontal: 2 + kPadding, vertical: 4),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-    ).paddingSymmetric(horizontal: 2 + kPadding);
+    );
   }
 }
 
@@ -260,6 +264,45 @@ class GalleryObxSliver extends StatelessWidget {
               );
             }
           : (_) => const SliverToBoxAdapter(),
+    );
+  }
+}
+
+class ThumbHorizontalList extends StatelessWidget {
+  const ThumbHorizontalList({
+    Key? key,
+    required this.images,
+    required this.gid,
+    this.referer,
+  }) : super(key: key);
+
+  final List<GalleryImage> images;
+  final String gid;
+  final String? referer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      margin: EdgeInsets.only(
+          bottom: context.mediaQueryPadding.bottom + 20, top: 4),
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return PreviewContainer(
+            galleryImageList: images,
+            index: index,
+            gid: gid,
+            onLoadComplet: () {
+              final thumbUrl = images[index].thumbUrl ?? '';
+            },
+            referer: referer,
+          );
+        },
+        separatorBuilder: (context, index) => SizedBox(width: 8),
+        itemCount: images.length,
+      ),
     );
   }
 }

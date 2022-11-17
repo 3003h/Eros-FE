@@ -11,7 +11,9 @@ class AvatarController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final _c = hiveHelper.getUsersInfo();
+    hiveHelper.clearUsersInfo();
+
+    final _c = hiveCacheHelper.getUsersInfo();
     // logger.d('onInit\n${_c.map((e) => e.toJson()).join('\n')} ');
     _cacheUsers.clear();
     _cacheUsers.addAll(_c);
@@ -53,7 +55,7 @@ class AvatarController extends GetxController {
     } else {
       _cacheUsers.add(user);
     }
-    hiveHelper.setUsersInfo(_cacheUsers);
+    hiveCacheHelper.setUsersInfo(_cacheUsers);
   }
 
   bool isCached(String userId) {

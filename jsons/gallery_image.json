@@ -11,6 +11,8 @@
   "thumbWidth?": 2.0,
   "imageHeight?": 2000.0,
   "imageWidth?": 1280.0,
+  "oriHeight?": 2000.0,
+  "oriWidth?": 1280.0,
   "offSet?" : 200.0,
   "sourceId?": "1234",
   "completeHeight?": false,
