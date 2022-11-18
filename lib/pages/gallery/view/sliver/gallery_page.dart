@@ -282,7 +282,7 @@ class GalleryBody extends StatelessWidget {
             ThumbTile(
               controller: controller,
               provider: state,
-              horizontal: kDebugMode,
+              horizontal: false,
             ),
           ]),
         );

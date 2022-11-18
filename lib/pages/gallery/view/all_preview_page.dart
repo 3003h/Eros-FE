@@ -2,7 +2,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/all_previews_controller.dart';
 import 'package:fehviewer/pages/gallery/view/preview.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 

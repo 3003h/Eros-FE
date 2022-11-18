@@ -79,7 +79,6 @@ List<GalleryComment> parseGalleryComment(Document document) {
       if (_c4 != null) {
         final Element _hand = _c4.children.first;
         final String _handText = _hand.attributes['onclick'] ?? '';
-        // _id = RegExp(r'\((\d+)\)').firstMatch(_handText)?.group(1) ?? '';
         _canEdit = _handText.contains('edit_');
         _canVote = _handText.contains('vote_');
 
@@ -98,11 +97,14 @@ List<GalleryComment> parseGalleryComment(Document document) {
       }
 
       final Element? _c6 = comment.querySelector('div.c6');
-      final String _attriId = _c6?.attributes['id'] ?? '';
-      _id = RegExp(r'_(\d+)').firstMatch(_attriId)?.group(1) ?? '';
+      final String _attributesId = _c6?.attributes['id'] ?? '';
+      _id = RegExp(r'_(\d+)').firstMatch(_attributesId)?.group(1) ?? '';
 
       // 解析评论内容
       final Element? contextElem = comment.querySelector('div.c6');
+
+      final rawContent = contextElem?.innerHtml ?? '';
+      logger.v('rawContent: $rawContent');
 
       /// for in遍历的方式处理
       final List<GalleryCommentSpan> commentSpansf = [];
@@ -232,7 +234,8 @@ List<GalleryComment> parseGalleryComment(Document document) {
         time: postTimeLocal,
         score: score,
         scoreDetails: _scoreDetails,
-        menberId: userId,
+        memberId: userId,
+        rawContent: rawContent,
       ));
     } catch (e, stack) {
       logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());

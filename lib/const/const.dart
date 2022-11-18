@@ -11,6 +11,12 @@ import 'package:get/get.dart';
 final kFilenameFormat =
     GetPlatform.isWindows ? 'yyyy-MM-dd HH_mm_ss' : 'yyyy-MM-dd HH:mm:ss';
 
+final urlRegExp = RegExp(
+    r'(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]');
+
+final commentUrlRegExp = RegExp(
+    r'(?<!(">\n?|="))(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]');
+
 const kNewSearch = true;
 
 enum ListModeEnum {
