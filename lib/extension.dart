@@ -66,6 +66,14 @@ extension ExtComment on GalleryComment {
         return e.translate ?? '';
       }).join();
 
+  String? get linkifyContent {
+    // 识别URL，并修改为 a href 元素
+    return rawContent?.replaceAllMapped(
+      commentUrlRegExp,
+      (match) => '<a href="${match.group(0)}">${match.group(0)}</a>',
+    );
+  }
+
   DateTime get dateTime => DateFormat('yyyy-MM-dd HH:mm').parse(time);
 }
 

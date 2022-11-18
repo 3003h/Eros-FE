@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
 import 'package:flutter_linkify/flutter_linkify.dart' as clif;
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:linkify/linkify.dart';
@@ -22,11 +23,15 @@ const double kSizeVote = 15.0;
 const double kSizeNotVote = 15.0;
 
 class CommentItem extends StatelessWidget {
-  const CommentItem(
-      {Key? key, required this.galleryComment, this.simple = false})
-      : super(key: key);
+  const CommentItem({
+    Key? key,
+    required this.galleryComment,
+    this.simple = false,
+    this.fromHtml = true,
+  }) : super(key: key);
   final GalleryComment galleryComment;
   final bool simple;
+  final bool fromHtml;
 
   CommentController get controller => Get.find(tag: pageCtrlTag);
 
@@ -35,6 +40,86 @@ class CommentItem extends StatelessWidget {
     /// 解析回复的评论
     final reptyComment = controller.parserCommentRepty(galleryComment);
     final reptyComments = controller.parserAllCommentRepty(galleryComment);
+
+    final TextStyle _commentTextStyle = TextStyle(
+      fontSize: 13,
+      height: 1.5,
+      color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
+    );
+
+    if (fromHtml) {
+      if (galleryComment.rawContent != galleryComment.linkifyContent) {
+        logger.d('${galleryComment.name}\n'
+            'rawContent ${galleryComment.rawContent}\n'
+            'lnkContent ${galleryComment.linkifyContent}');
+      }
+
+      return GetBuilder<CommentController>(
+        init: CommentController(),
+        tag: pageCtrlTag,
+        id: galleryComment.id ?? 'None',
+        builder: (_commentController) {
+          return Container(
+            margin: const EdgeInsets.only(top: 8),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                color: ehTheme.commentBackgroundColor,
+                padding: const EdgeInsets.all(8),
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildHeader(context, _commentController),
+                    if (galleryComment.id != '0' && reptyComment != null)
+                      buildReply(context, reptyComments: reptyComments),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: HtmlWidget(
+                        '${galleryComment.linkifyContent}',
+                        textStyle: _commentTextStyle,
+                        onTapUrl: (url) {
+                          onOpenUrl(context, url: url);
+                          return true;
+                        },
+                        customWidgetBuilder: (element) {
+                          if (element.localName == 'img') {
+                            final src = element.attributes['src'];
+                            final href = element.attributes['href'];
+                            if (src != null) {
+                              return GestureDetector(
+                                onTap: href != null
+                                    ? () => onOpenUrl(context, url: href)
+                                    : null,
+                                child: Container(
+                                  constraints: const BoxConstraints(
+                                      maxWidth: 120, maxHeight: 160),
+                                  child: EhNetworkImage(
+                                    imageUrl: src,
+                                    placeholder: (_, __) =>
+                                        const CupertinoActivityIndicator(),
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    buildTail(
+                      context,
+                      _commentController,
+                      showRepty: galleryComment.id != '0' && !simple,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
 
     /// 评论item
     return GetBuilder<CommentController>(
@@ -61,10 +146,12 @@ class CommentItem extends StatelessWidget {
                       child: simple
                           ? _buildSimpleExpTextLinkify(
                               context: context,
+                              style: _commentTextStyle,
                               showTranslate:
                                   galleryComment.showTranslate ?? false)
                           : FullTextCustMergeText(
                               span: galleryComment.span,
+                              style: _commentTextStyle,
                               showTranslate:
                                   galleryComment.showTranslate ?? false,
                               onOpenUrl: onOpenUrl,
@@ -363,7 +450,7 @@ class CommentItem extends StatelessWidget {
     final AvatarController avatarController = Get.find();
 
     final _name = comment?.name ?? galleryComment.name;
-    final _userId = comment?.menberId ?? galleryComment.menberId ?? '0';
+    final _userId = comment?.memberId ?? galleryComment.memberId ?? '0';
     final _commentId = comment?.id ?? galleryComment.id ?? '0';
     final _future = avatarController.getUser(_userId);
 
@@ -702,12 +789,14 @@ class FullTextCustMergeText extends StatelessWidget {
     required this.span,
     required this.controller,
     required this.onOpenUrl,
+    this.style,
   }) : super(key: key);
 
   final bool showTranslate;
   final List<GalleryCommentSpan> span;
   final CommentController controller;
   final OnOpenUrlCallback onOpenUrl;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -786,7 +875,7 @@ class FullTextCustMergeText extends StatelessWidget {
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
-                        .merge(_commentTextStyle)
+                        .merge(style ?? _commentTextStyle)
                         .copyWith(
                           color: Colors.blueAccent,
                           decoration: TextDecoration.underline,

@@ -34,7 +34,7 @@ class FavoriteSubListController extends TabViewController {
         galleryListType: GalleryListType.favorite,
       );
 
-      logger.d(
+      logger.v(
           'favcat $favcat, result prev:${result?.prevPage} next:${result?.nextPage}, max:${result?.maxPage}');
 
       _favoriteSelectorController?.addAllFavList(result?.favList ?? []);

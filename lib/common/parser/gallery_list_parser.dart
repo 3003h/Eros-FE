@@ -20,7 +20,7 @@ bool isGalleryListDmL(String response) {
         ?.parent
         ?.nextElementSibling
         ?.querySelectorAll('option');
-    logger.d('searchnav optionElms length ${optionElms?.length}');
+    logger.v('searchnav optionElms length ${optionElms?.length}');
   }
 
   for (final dom.Element elm in optionElms ?? []) {
@@ -43,7 +43,7 @@ bool? isFavoriteOrder(String response) {
       document.querySelector('.searchnav')?.children.firstOrNull;
 
   if (orderElm != null) {
-    logger.d('ooo ${orderElm.text}');
+    logger.v('ooo ${orderElm.text}');
     final options = orderElm.querySelectorAll('option');
     return (options
                 .where((e) => e.attributes['selected'] == 'selected')
