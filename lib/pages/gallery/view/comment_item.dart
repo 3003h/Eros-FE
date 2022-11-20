@@ -8,15 +8,15 @@ import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/widget/expandable_linkify.dart';
 import 'package:fehviewer/widget/text_avatar.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
-import 'package:flutter_linkify/flutter_linkify.dart' as clif;
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/parser.dart' show parse;
 import 'package:linkify/linkify.dart';
-
-import '../../../widget/eh_linkify_text.dart';
 
 const int kMaxline = 4;
 const double kSizeVote = 15.0;
@@ -27,11 +27,9 @@ class CommentItem extends StatelessWidget {
     Key? key,
     required this.galleryComment,
     this.simple = false,
-    this.fromHtml = true,
   }) : super(key: key);
   final GalleryComment galleryComment;
   final bool simple;
-  final bool fromHtml;
 
   CommentController get controller => Get.find(tag: pageCtrlTag);
 
@@ -47,128 +45,214 @@ class CommentItem extends StatelessWidget {
       color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
     );
 
-    if (fromHtml) {
-      if (galleryComment.rawContent != galleryComment.linkifyContent) {
-        logger.d('${galleryComment.name}\n'
-            'rawContent ${galleryComment.rawContent}\n'
-            'lnkContent ${galleryComment.linkifyContent}');
-      }
+    Widget commentItem;
 
-      return GetBuilder<CommentController>(
-        init: CommentController(),
-        tag: pageCtrlTag,
-        id: galleryComment.id ?? 'None',
-        builder: (_commentController) {
-          return Container(
-            margin: const EdgeInsets.only(top: 8),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                color: ehTheme.commentBackgroundColor,
-                padding: const EdgeInsets.all(8),
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    buildHeader(context, _commentController),
-                    if (galleryComment.id != '0' && reptyComment != null)
-                      buildReply(context, reptyComments: reptyComments),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: HtmlWidget(
-                        '${galleryComment.linkifyContent}',
-                        textStyle: _commentTextStyle,
-                        onTapUrl: (url) {
-                          onOpenUrl(context, url: url);
-                          return true;
-                        },
-                        customWidgetBuilder: (element) {
-                          if (element.localName == 'img') {
-                            final src = element.attributes['src'];
-                            final href = element.attributes['href'];
-                            if (src != null) {
-                              return GestureDetector(
-                                onTap: href != null
-                                    ? () => onOpenUrl(context, url: href)
-                                    : null,
-                                child: Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 120, maxHeight: 160),
-                                  child: EhNetworkImage(
-                                    imageUrl: src,
-                                    placeholder: (_, __) =>
-                                        const CupertinoActivityIndicator(),
-                                  ),
-                                ),
-                              );
-                            }
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    buildTail(
-                      context,
-                      _commentController,
-                      showRepty: galleryComment.id != '0' && !simple,
-                    ),
-                  ],
-                ),
+    if (galleryComment.rawContent != galleryComment.linkifyContent || true) {
+      logger.d('${galleryComment.name}\n'
+          'rawContent ${galleryComment.rawContent}\n'
+          'lnkContent ${galleryComment.linkifyContent}');
+    }
+
+    commentItem = GetBuilder<CommentController>(
+      init: CommentController(),
+      tag: pageCtrlTag,
+      id: galleryComment.id ?? 'None',
+      builder: (_commentController) {
+        return Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              color: ehTheme.commentBackgroundColor,
+              padding: const EdgeInsets.all(8),
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _CommentHead(
+                    commentController: _commentController,
+                    galleryComment: galleryComment,
+                    simple: simple,
+                  ),
+                  if (galleryComment.id != '0' && reptyComment != null)
+                    _CommentReply(reptyComments: reptyComments),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: simple
+                        ? _buildSimpleExpTextLinkify(
+                            context: context,
+                            style: _commentTextStyle,
+                            showTranslate:
+                                galleryComment.showTranslate ?? false,
+                          )
+                        : buildComment(_commentTextStyle, context),
+                  ),
+                  _CommentTail(
+                    commentController: _commentController,
+                    showRepty: galleryComment.id != '0' && !simple,
+                    simple: simple,
+                    galleryComment: galleryComment,
+                  ),
+                ],
               ),
             ),
-          );
-        },
+          ),
+        );
+      },
+    );
+
+    if (!simple) {
+      commentItem = SelectionArea(child: commentItem);
+    }
+
+    return commentItem;
+  }
+
+  Widget buildComment(
+    TextStyle _commentTextStyle,
+    BuildContext context, {
+    int? maxLines,
+  }) {
+    final html = '<div>${galleryComment.linkifyContent}</div>';
+    // parse html
+    final dom.Element element = parse(html).body!.firstChild! as dom.Element;
+    return Text.rich(
+      TextSpan(
+        style: _commentTextStyle,
+        children: element.nodes.map((e) => buildCommentTile(e)).toList(),
+      ),
+      maxLines: maxLines,
+    );
+  }
+
+  InlineSpan buildCommentTile(dom.Node node) {
+    if (node is dom.Text) {
+      return TextSpan(text: node.text);
+    }
+
+    if (node is! dom.Element) {
+      return TextSpan(text: node.text);
+    }
+
+    if (node.localName == 'div' && node.attributes['id'] == 'spa') {
+      return const TextSpan();
+    }
+
+    if (node.localName == 'br') {
+      return const TextSpan(text: '\n');
+    }
+
+    if (node.localName == 'span') {
+      return TextSpan(
+        style: _parseTextStyle(node),
+        children: node.nodes.map((e) => buildCommentTile(e)).toList(),
       );
     }
 
-    /// 评论item
-    return GetBuilder<CommentController>(
-        init: CommentController(),
-        tag: pageCtrlTag,
-        id: galleryComment.id ?? 'None',
-        builder: (CommentController _commentController) {
-          return Container(
-            margin: const EdgeInsets.only(top: 8),
-            child: ClipRRect(
-              // 圆角
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                color: ehTheme.commentBackgroundColor,
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    buildHeader(context, _commentController),
-                    if (galleryComment.id != '0' && reptyComment != null)
-                      buildReply(context, reptyComments: reptyComments),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: simple
-                          ? _buildSimpleExpTextLinkify(
-                              context: context,
-                              style: _commentTextStyle,
-                              showTranslate:
-                                  galleryComment.showTranslate ?? false)
-                          : FullTextCustMergeText(
-                              span: galleryComment.span,
-                              style: _commentTextStyle,
-                              showTranslate:
-                                  galleryComment.showTranslate ?? false,
-                              onOpenUrl: onOpenUrl,
-                              controller: controller,
-                            ),
-                    ),
-                    buildTail(
-                      context,
-                      _commentController,
-                      showRepty: galleryComment.id != '0' && !simple,
-                    ),
-                  ],
-                ),
-              ),
+    if (node.localName == 'strong') {
+      return TextSpan(
+        style: const TextStyle(fontWeight: FontWeight.bold),
+        children: node.nodes.map((e) => buildCommentTile(e)).toList(),
+      );
+    }
+
+    if (node.localName == 'em') {
+      return TextSpan(
+        style: const TextStyle(fontStyle: FontStyle.italic),
+        children: node.nodes.map((e) => buildCommentTile(e)).toList(),
+      );
+    }
+
+    if (node.localName == 'del') {
+      return TextSpan(
+        style: const TextStyle(decoration: TextDecoration.lineThrough),
+        children: node.nodes.map((e) => buildCommentTile(e)).toList(),
+      );
+    }
+
+    if (node.localName == 'img') {
+      final src = node.attributes['src'];
+      if (src != null) {
+        return WidgetSpan(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 120, maxHeight: 160),
+            child: EhNetworkImage(
+              imageUrl: src,
+              placeholder: (_, __) => const CupertinoActivityIndicator(),
             ),
-          );
-        });
+          ),
+        );
+      }
+    }
+
+    // link
+    if (node.localName == 'a') {
+      return TextSpan(
+        text: node.text, // 不设置会导致recognizer无效
+        style: const TextStyle(color: CupertinoColors.activeBlue),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            onOpenUrl(url: node.attributes['href'] ?? '');
+          },
+        children: node.children.map((e) => buildCommentTile(e)).toList(),
+      );
+    }
+
+    logger.e('Can not parse $node');
+    return TextSpan(text: node.text);
+  }
+
+  TextStyle? _parseTextStyle(dom.Element node) {
+    final style = node.attributes['style'];
+    if (style == null) {
+      return null;
+    }
+
+    final Map<String, String> styleMap = Map.fromEntries(
+      style
+          .split(';')
+          .map((e) => e.split(':'))
+          .where((e) => e.length == 2)
+          .map((e) => MapEntry(e[0].trim(), e[1].trim())),
+    );
+
+    return TextStyle(
+      color: styleMap['color'] == null
+          ? null
+          : Color(int.parse(styleMap['color']!.substring(1), radix: 16) +
+              0xFF000000),
+      fontWeight: styleMap['font-weight'] == 'bold' ? FontWeight.bold : null,
+      fontStyle: styleMap['font-style'] == 'italic' ? FontStyle.italic : null,
+      decoration: styleMap['text-decoration'] == 'underline'
+          ? TextDecoration.underline
+          : null,
+    );
+  }
+
+  Widget buildHtmlWidget(TextStyle _commentTextStyle, BuildContext context) {
+    return HtmlWidget(
+      '${galleryComment.linkifyContent}',
+      textStyle: _commentTextStyle,
+      onTapUrl: (url) {
+        onOpenUrl(url: url);
+        return true;
+      },
+      customWidgetBuilder: (element) {
+        if (element.localName == 'img') {
+          final src = element.attributes['src'];
+          if (src != null) {
+            return Container(
+              constraints: const BoxConstraints(maxWidth: 120, maxHeight: 160),
+              child: EhNetworkImage(
+                imageUrl: src,
+                placeholder: (_, __) => const CupertinoActivityIndicator(),
+              ),
+            );
+          }
+        }
+        return null;
+      },
+    );
   }
 
   /// 简单布局 可展开 带链接文字
@@ -179,7 +263,7 @@ class CommentItem extends StatelessWidget {
   }) {
     return ExpandableLinkify(
       text: showTranslate ? galleryComment.textTranslate : galleryComment.text,
-      onOpen: (link) => onOpenUrl(context, url: link),
+      onOpen: (link) => onOpenUrl(url: link),
       options: const LinkifyOptions(humanize: false),
       maxLines: kMaxline,
       softWrap: true,
@@ -200,11 +284,15 @@ class CommentItem extends StatelessWidget {
           CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
     );
   }
+}
 
-  Widget buildReply(
-    BuildContext context, {
-    required List<GalleryComment?> reptyComments,
-  }) {
+class _CommentReply extends StatelessWidget {
+  const _CommentReply({Key? key, required this.reptyComments})
+      : super(key: key);
+  final List<GalleryComment?> reptyComments;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: reptyComments.map((reptyComment) {
         if (reptyComment == null) {
@@ -223,10 +311,12 @@ class CommentItem extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _buildUserWidget(
-                      comment: reptyComment,
-                      // fontSize: 12,
-                    ).paddingOnly(bottom: 6),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: _CommentUser(
+                        comment: reptyComment,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -248,12 +338,23 @@ class CommentItem extends StatelessWidget {
       }).toList(),
     );
   }
+}
 
-  Widget buildTail(
-    BuildContext context,
-    CommentController commentController, {
-    bool showRepty = false,
-  }) {
+class _CommentTail extends StatelessWidget {
+  const _CommentTail({
+    Key? key,
+    required this.commentController,
+    this.showRepty = false,
+    required this.galleryComment,
+    required this.simple,
+  }) : super(key: key);
+  final GalleryComment galleryComment;
+  final CommentController commentController;
+  final bool showRepty;
+  final bool simple;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Text(
@@ -341,117 +442,28 @@ class CommentItem extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget buildHeader(
-    BuildContext context,
-    CommentController commentController,
-  ) {
-    return Row(
-      children: <Widget>[
-        Expanded(child: _buildUserWidget()),
-        if (galleryComment.id != '0' && !simple)
-          GestureDetector(
-            onTap: () => _showScoreDeatil(galleryComment.scoreDetails, context),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // 分值
-                Container(
-                  decoration: BoxDecoration(
-                    color: ehTheme.commitIconColor,
-                    // border:
-                    //     Border.all(color: ehTheme.commitIconColor!, width: 1.4),
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  constraints: const BoxConstraints(minWidth: 18),
-                  height: 18,
-                  padding: const EdgeInsets.symmetric(horizontal: 7),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                  child: Center(
-                    child: Text(
-                      galleryComment.score.startsWith('+')
-                          ? '+${galleryComment.score.substring(1)}'
-                          : galleryComment.score.startsWith('-')
-                              ? galleryComment.score
-                              : '+${galleryComment.score}',
-                      style: TextStyle(
-                        fontSize: 10,
-                        height: 1.3,
-                        fontWeight: FontWeight.w600,
-                        // color: ehTheme.commitIconColor,
-                        color: ehTheme.commentBackgroundColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        else if (galleryComment.id == '0')
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          //   child: Icon(
-          //     FontAwesomeIcons.userNinja,
-          //     size: 15,
-          //     color: ehTheme.commitIconColor,
-          //   ),
-          // ),
-          Container(
-            decoration: BoxDecoration(
-              color: ehTheme.commitIconColor,
-              borderRadius: BorderRadius.circular(9),
-            ),
-            constraints: const BoxConstraints(minWidth: 18),
-            height: 18,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-            child: Center(
-              child: Text(
-                'UP',
-                style: TextStyle(
-                  fontSize: 10,
-                  height: 1.3,
-                  fontWeight: FontWeight.w600,
-                  // color: ehTheme.commitIconColor,
-                  color: ehTheme.commentBackgroundColor,
-                ),
-              ),
-            ),
-          ),
-        CupertinoTheme(
-          data: const CupertinoThemeData(primaryColor: ThemeColors.commitText),
-          child: Row(
-            children: <Widget>[
-              // 翻译
-              if (Get.find<EhConfigService>().commentTrans.value && !simple)
-                CupertinoTheme(
-                  data: ehTheme.themeData!,
-                  child: TranslateButton(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    galleryComment: galleryComment,
-                    commentController: commentController,
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+class _CommentUser extends StatelessWidget {
+  const _CommentUser({
+    Key? key,
+    required this.comment,
+    this.fontSize = 13,
+    this.avatarSize = 28,
+  }) : super(key: key);
 
-  Widget _buildUserWidget({
-    GalleryComment? comment,
-    double fontSize = 13,
-    double avatarSize = 28,
-  }) {
+  final GalleryComment comment;
+  final double fontSize;
+  final double avatarSize;
+
+  @override
+  Widget build(BuildContext context) {
     final EhConfigService _ehConfigService = Get.find();
     final AvatarController avatarController = Get.find();
 
-    final _name = comment?.name ?? galleryComment.name;
-    final _userId = comment?.memberId ?? galleryComment.memberId ?? '0';
-    final _commentId = comment?.id ?? galleryComment.id ?? '0';
+    final _name = comment.name;
+    final _userId = comment.memberId ?? '0';
+    final _commentId = comment.id ?? '0';
     final _future = avatarController.getUser(_userId);
 
     final _placeHold = Obx(() {
@@ -544,180 +556,105 @@ class CommentItem extends StatelessWidget {
       );
     });
   }
+}
 
-  /// 显示评分详情
-  void _showScoreDeatil(List<String>? scoreDeatils, BuildContext context) {
-    // logger.d('scoreDeatils ${scoreDeatils} ');
-    if (scoreDeatils == null || scoreDeatils.isEmpty) {
-      return;
-    }
-    vibrateUtil.light();
-    logger.v(scoreDeatils.join('   '));
-    showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => CupertinoAlertDialog(
-        content: Container(
-            child: Column(
-          children: scoreDeatils
-              .map((e) => Container(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+class _CommentHead extends StatelessWidget {
+  const _CommentHead({
+    Key? key,
+    required this.commentController,
+    required this.galleryComment,
+    required this.simple,
+  }) : super(key: key);
+  final CommentController commentController;
+  final GalleryComment galleryComment;
+  final bool simple;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(child: _CommentUser(comment: galleryComment)),
+        if (galleryComment.id != '0' && !simple)
+          GestureDetector(
+            onTap: () => _showScoreDetail(galleryComment.scoreDetails, context),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 分值
+                Container(
+                  decoration: BoxDecoration(
+                    color: ehTheme.commitIconColor,
+                    // border:
+                    //     Border.all(color: ehTheme.commitIconColor!, width: 1.4),
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  constraints: const BoxConstraints(minWidth: 18),
+                  height: 18,
+                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                  child: Center(
                     child: Text(
-                      e,
-                      style: const TextStyle(fontSize: 14),
+                      galleryComment.score.startsWith('+')
+                          ? '+${galleryComment.score.substring(1)}'
+                          : galleryComment.score.startsWith('-')
+                              ? galleryComment.score
+                              : '+${galleryComment.score}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        height: 1.3,
+                        fontWeight: FontWeight.w600,
+                        // color: ehTheme.commitIconColor,
+                        color: ehTheme.commentBackgroundColor,
+                      ),
                     ),
-                  ))
-              .toList(),
-        )),
-      ),
-    );
-  }
-
-  Widget _fullText(BuildContext context) {
-    return clif.SelectableLinkify(
-      onOpen: (link) => onOpenUrl(context, url: link.url),
-      text: galleryComment.text,
-//      softWrap: true,
-      textAlign: TextAlign.left,
-      // 对齐方式
-      style: TextStyle(
-        fontSize: 14,
-        color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-      ),
-      options: const LinkifyOptions(humanize: false),
-    );
-  }
-
-  /// Text.rich实现图文混排
-  /// 文字不能选择操作
-  Widget _fullRitchText(BuildContext context) {
-    return Text.rich(TextSpan(
-      children:
-          List<InlineSpan>.from(galleryComment.span.map((GalleryCommentSpan e) {
-        if (e.imageUrl != null) {
-          return WidgetSpan(
-            child: GestureDetector(
-              onTap: () => onOpenUrl(context, url: e.href!),
-              child: Container(
-                constraints:
-                    const BoxConstraints(maxWidth: 100, maxHeight: 140),
-                child: EhNetworkImage(
-                  imageUrl: e.imageUrl!,
-                  placeholder: (_, __) => const CupertinoActivityIndicator(),
-                ),
-                // child: NetworkExtendedImage(
-                //   url: e.imageUrl ?? '',
-                // ),
-              ),
-            ),
-          );
-        } else {
-          final elements = linkify(
-            e.text ?? '',
-            options: const LinkifyOptions(humanize: false),
-            linkifiers: defaultLinkifiers,
-          );
-
-          TextStyle _custStyle = TextStyle(
-            fontSize: 14,
-            color:
-                CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-          );
-
-          return clif.buildTextSpan(
-            elements,
-            style: Theme.of(context).textTheme.bodyText2!.merge(_custStyle),
-            onOpen: (link) => onOpenUrl(context, url: link.url),
-            linkStyle: Theme.of(context)
-                .textTheme
-                .bodyText2!
-                .merge(_custStyle)
-                .copyWith(
-                  color: Colors.blueAccent,
-                  decoration: TextDecoration.underline,
-                )
-                .merge(null),
-          );
-        }
-      }).toList()),
-    ));
-  }
-
-  /// 分段实现混排
-  /// 文字可复制 但是只能分段复制
-  Widget _fullTextCust(BuildContext context) {
-    // 首先按照换行进行分组
-    final separates = <int>[];
-    for (int i = 0; i < galleryComment.span.length; i++) {
-      final _span = galleryComment.span[i];
-      if (_span.text == '\n') {
-        separates.add(i);
-      }
-    }
-
-    separates.insert(0, -1);
-    separates.add(galleryComment.span.length);
-
-    if (separates.length > 2) {
-      logger.v('$separates');
-    }
-
-    // logger.v('$separates');
-
-    final List<List<GalleryCommentSpan>> _groups = [];
-    for (int j = 0; j < separates.length - 1; j++) {
-      final _start = separates[j] + 1;
-      final _end = separates[j + 1];
-      if (_end < _start) {
-        continue;
-      }
-
-      final _group = galleryComment.span.sublist(_start, _end);
-      if (_group.isNotEmpty) {
-        _groups.add(_group);
-      } else {
-        // 空行
-        _groups.add([const GalleryCommentSpan(text: '')]);
-      }
-    }
-
-    // logger.v('${_groups.length}');
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: List<Widget>.from(_groups.map((List<GalleryCommentSpan> spans) {
-        return Wrap(
-          children: List<Widget>.from(spans.map((GalleryCommentSpan e) {
-            if (e.imageUrl != null) {
-              return GestureDetector(
-                onTap: () => onOpenUrl(context, url: e.href!),
-                child: Container(
-                  constraints:
-                      const BoxConstraints(maxWidth: 100, maxHeight: 140),
-                  child: EhNetworkImage(
-                    imageUrl: e.imageUrl!,
-                    placeholder: (_, __) => const CupertinoActivityIndicator(),
                   ),
                 ),
-              );
-            } else {
-              return clif.SelectableLinkify(
-                onOpen: (link) => onOpenUrl(context, url: link.url),
-                text: e.text ?? '',
-                textAlign: TextAlign.left,
-                // 对齐方式
+              ],
+            ),
+          )
+        else if (galleryComment.id == '0')
+          Container(
+            decoration: BoxDecoration(
+              color: ehTheme.commitIconColor,
+              borderRadius: BorderRadius.circular(9),
+            ),
+            constraints: const BoxConstraints(minWidth: 18),
+            height: 18,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Center(
+              child: Text(
+                'UP',
                 style: TextStyle(
-                  fontSize: 14,
-                  color: CupertinoDynamicColor.resolve(
-                      ThemeColors.commitText, context),
-                  fontFamilyFallback: EHConst.fontFamilyFallback,
+                  fontSize: 10,
+                  height: 1.3,
+                  fontWeight: FontWeight.w600,
+                  // color: ehTheme.commitIconColor,
+                  color: ehTheme.commentBackgroundColor,
                 ),
-                options: const LinkifyOptions(humanize: false),
-              );
-            }
-          }).toList()),
-        );
-      }).toList()),
+              ),
+            ),
+          ),
+        CupertinoTheme(
+          data: const CupertinoThemeData(primaryColor: ThemeColors.commitText),
+          child: Row(
+            children: <Widget>[
+              // 翻译
+              if (Get.find<EhConfigService>().commentTrans.value && !simple)
+                CupertinoTheme(
+                  data: ehTheme.themeData!,
+                  child: TranslateButton(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    galleryComment: galleryComment,
+                    commentController: commentController,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -782,163 +719,29 @@ typedef OnOpenUrlCallback = void Function(
   String? url,
 });
 
-class FullTextCustMergeText extends StatelessWidget {
-  const FullTextCustMergeText({
-    Key? key,
-    this.showTranslate = false,
-    required this.span,
-    required this.controller,
-    required this.onOpenUrl,
-    this.style,
-  }) : super(key: key);
-
-  final bool showTranslate;
-  final List<GalleryCommentSpan> span;
-  final CommentController controller;
-  final OnOpenUrlCallback onOpenUrl;
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    // 首先进行分组
-    final List<List<GalleryCommentSpan>> _groups = [];
-
-    for (int i = 0; i < span.length; i++) {
-      // 当前片段
-      final _span = span[i];
-
-      // 下一个片段
-      final _nextSpan = i < span.length - 1 ? span[i + 1] : null;
-
-      // 前一个片段
-      final _preSpan = i <= span.length - 1 && i != 0 ? span[i - 1] : null;
-
-      final bool _curIsText = _span.imageUrl?.isEmpty ?? true;
-      final bool _preIsText = _preSpan?.imageUrl?.isEmpty ?? true;
-      final bool _curIsLast = i == span.length - 1;
-
-      // 前一个是不同类型
-      final bool _preOthType = (_span.imageUrl?.isEmpty ?? true) !=
-          (_preSpan?.imageUrl?.isEmpty ?? true);
-
-      // 后一个是不同类型
-      final bool _nextOthType = (_span.imageUrl?.isEmpty ?? true) !=
-          (_nextSpan?.imageUrl?.isEmpty ?? true);
-
-      // 前一个是文本并且换行结尾
-      final bool _preEndWithBr = (_preSpan?.imageUrl?.isEmpty ?? true) &&
-          (_preSpan?.text?.endsWith('\n') ?? false);
-
-      // 当前span为文本并且换行结尾
-      final bool _curSpanEndWithBr = (_span.imageUrl?.isEmpty ?? true) &&
-          (_span.text?.endsWith('\n') ?? false);
-
-      // logger.v('${_span.toJson()} '
-      //     '\n-----\n'
-      //     '下一个类型不同$_nextOthType  当前为文本并且结尾换行$_curSpanEndWithBr\n'
-      //     '前一个类型不同$_preOthType 当前为最后一个$_curIsLast');
-
-      if ((!_preIsText && _nextOthType && _curSpanEndWithBr) ||
-          (_preIsText && _preEndWithBr) ||
-          (_preOthType && _curIsLast)) {
-        // logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
-        _groups.add([_span]);
-      } else {
-        if (_groups.isNotEmpty) {
-          // logger.v('追加到末尾分组 -> ${_curIsText ? _span.text : '[image]'} ');
-          _groups.last.add(_span);
-        } else {
-          // logger.v('新分组 -> ${_curIsText ? _span.text : '[image]'} ');
-          _groups.add([_span]);
-        }
-      }
-    }
-
-    final TextStyle _commentTextStyle = TextStyle(
-      fontSize: 13,
-      height: 1.2,
-      color: CupertinoDynamicColor.resolve(ThemeColors.commitText, context),
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: _groups.map((List<GalleryCommentSpan> spans) {
-        return Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children:
-              List<Widget>.from(spans.map((GalleryCommentSpan commentSpan) {
-            switch (commentSpan.sType) {
-              case CommentSpanType.linkText: // 链接文字
-                return Text.rich(
-                  TextSpan(
-                    text: commentSpan.text,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2!
-                        .merge(style ?? _commentTextStyle)
-                        .copyWith(
-                          color: Colors.blueAccent,
-                          decoration: TextDecoration.underline,
-                        ),
-                    recognizer: controller.genTapGestureRecognizer()
-                      ..onTap =
-                          () => onOpenUrl(context, url: commentSpan.href!),
-                  ),
-                ).marginOnly(right: 2);
-              case CommentSpanType.text: // 普通文字
-
-                final String oriText = (showTranslate
-                        ? commentSpan.translate
-                        : commentSpan.text) ??
-                    '';
-                String _text = oriText.endsWith('\n')
-                    ? oriText.substring(0, oriText.length - 1)
-                    : oriText;
-
-                _text = _text.startsWith('\n') ? _text.substring(1) : _text;
-
-                return EhLinkifyText(
-                  _text,
-                  textStyle: _commentTextStyle,
-                  onTap: (link) => onOpenUrl(context, url: link.value),
-                  textAlign: TextAlign.start,
-                  selectable: true,
-                );
-
-              // return Text(_text, style: _commentTextStyle);
-
-              // return clif.SelectableLinkify(
-              //   onOpen: (link) => onOpenUrl(context, url: link.url),
-              //   text: _text,
-              //   textAlign: TextAlign.start,
-              //   // 对齐方式
-              //   // style: CupertinoTheme.of(context)
-              //   //     .textTheme
-              //   //     .actionTextStyle
-              //   //     .merge(_commentTextStyle),
-              //   options: const LinkifyOptions(humanize: false),
-              // );
-              case CommentSpanType.image: // 图片
-              case CommentSpanType.linkImage: // 带链接图片
-
-                return GestureDetector(
-                  onTap: () => onOpenUrl(context, url: commentSpan.href!),
-                  child: Container(
-                    constraints:
-                        const BoxConstraints(maxWidth: 100, maxHeight: 140),
-                    child: EhNetworkImage(
-                      imageUrl: commentSpan.imageUrl ?? '',
-                      placeholder: (_, __) =>
-                          const CupertinoActivityIndicator(),
-                    ),
-                  ),
-                );
-              default:
-                return const SizedBox();
-            }
-          }).toList()),
-        );
-      }).toList(),
-    );
+/// 显示评分详情
+void _showScoreDetail(List<String>? scores, BuildContext context) {
+  if (scores == null || scores.isEmpty) {
+    return;
   }
+  vibrateUtil.light();
+  logger.v(scores.join('   '));
+  showCupertinoDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) => CupertinoAlertDialog(
+      content: Container(
+          child: Column(
+        children: scores
+            .map((e) => Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Text(
+                    e,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ))
+            .toList(),
+      )),
+    ),
+  );
 }

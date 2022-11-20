@@ -231,7 +231,7 @@ class _TagDialogViewState extends State<TagDialogView> {
                           data: _taginfo?.introMDimage ?? '',
                           selectable: true,
                           onTapLink: (String text, String? href, String title) {
-                            onOpenUrl(context, url: href);
+                            onOpenUrl(url: href);
                           },
                           styleSheetTheme:
                               MarkdownStyleSheetBaseTheme.cupertino,
@@ -265,7 +265,7 @@ class _TagDialogViewState extends State<TagDialogView> {
                           data: _taginfo?.links ?? '',
                           selectable: true,
                           onTapLink: (String text, String? href, String title) {
-                            onOpenUrl(context, url: href);
+                            onOpenUrl(url: href);
                           },
                           styleSheet: MarkdownStyleSheet(
                             a: const TextStyle(
