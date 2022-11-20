@@ -351,7 +351,6 @@ class TopCommentEx extends StatelessWidget {
           .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
                 simple: true,
-                fromHtml: false,
               ))
           .toList();
     }

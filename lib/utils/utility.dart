@@ -317,7 +317,7 @@ String renderSize(int inValue) {
   return '$size ${unitArr[index]}';
 }
 
-Future<void> onOpenUrl(BuildContext context, {String? url}) async {
+Future<void> onOpenUrl({String? url}) async {
   vibrateUtil.light();
 
   final String? _openUrl = Uri.encodeFull(url ?? '');
