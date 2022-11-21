@@ -128,7 +128,7 @@ class _ToplistTabState extends State<ToplistTab> {
             }
           }),
           Obx(() {
-            if (controller.nextGid.isNotEmpty) {
+            if (controller.next.isNotEmpty) {
               return CupertinoButton(
                 minSize: 40,
                 padding: const EdgeInsets.all(0),
@@ -144,37 +144,6 @@ class _ToplistTabState extends State<ToplistTab> {
               return const SizedBox.shrink();
             }
           }),
-          // 页码跳转按钮
-          // CupertinoButton(
-          //   minSize: 40,
-          //   padding: const EdgeInsets.only(right: 6),
-          //   child: Container(
-          //     alignment: Alignment.center,
-          //     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
-          //     constraints: const BoxConstraints(minWidth: 24, maxHeight: 26),
-          //     decoration: BoxDecoration(
-          //       border: Border.all(
-          //         color: CupertinoDynamicColor.resolve(
-          //             CupertinoColors.activeBlue, context),
-          //         width: 1.8,
-          //       ),
-          //       borderRadius: BorderRadius.circular(8),
-          //     ),
-          //     child: Obx(() => Text(
-          //           '${max(1, controller.curPage + 1)}',
-          //           textScaleFactor: 0.9,
-          //           textAlign: TextAlign.center,
-          //           style: TextStyle(
-          //               fontWeight: FontWeight.bold,
-          //               height: 1.25,
-          //               color: CupertinoDynamicColor.resolve(
-          //                   CupertinoColors.activeBlue, context)),
-          //         )),
-          //   ),
-          //   onPressed: () {
-          //     controller.showJumpToPage();
-          //   },
-          // ),
         ],
       ),
     );
@@ -196,14 +165,18 @@ class _ToplistTabState extends State<ToplistTab> {
                 builder: (_, __, ___) => navigationBar,
               ),
             ),
-          EhCupertinoSliverRefreshControl(
-            onRefresh: controller.onRefresh,
+          SliverPadding(
+            padding: EdgeInsets.only(
+              top: hideTopBarOnScroll
+                  ? 0
+                  : (kMinInteractiveDimensionCupertino +
+                      context.mediaQueryPadding.top),
+            ),
+            sliver: EhCupertinoSliverRefreshControl(
+              onRefresh: controller.onRefresh,
+            ),
           ),
-          SliverSafeArea(
-            top: !hideTopBarOnScroll,
-            bottom: false,
-            sliver: _buildListView(context),
-          ),
+          _buildListView(context),
           Obx(() {
             return EndIndicator(
               pageState: controller.pageState,

@@ -150,10 +150,11 @@ class DefaultTabViewController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchMoreData() async {
+    logger.v('fetchMoreData nextPage $nextPage');
     cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       pageType: PageType.next,
-      gid: kNewSearch ? nextGid : state?.lastOrNull?.gid ?? '',
+      gid: nextPage > -1 ? (state?.lastOrNull?.gid ?? '') : nextGid,
       cats: cats ?? ehConfigService.catFilter.value,
       refresh: true,
       cancelToken: cancelToken,
@@ -223,143 +224,6 @@ class DefaultTabViewController extends TabViewController {
     final result = await fetchListClient.fetch();
     return result;
   }
-
-  // @override
-  // Future<void> loadFromPage(int page, {bool previous = false}) async {
-  //   await super.loadFromPage(page);
-  //   logger.d('jump to page =>  $page');
-  //
-  //   final int _catNum = ehConfigService.catFilter.value;
-  //   pageState = PageState.Loading;
-  //   if (!previous) {
-  //     change(state, status: RxStatus.loading());
-  //   }
-  //
-  //   previousList.clear();
-  //
-  //   final fetchConfig = FetchParams(
-  //     pageType: page,
-  //     cats: cats ?? _catNum,
-  //     refresh: true,
-  //     cancelToken: cancelToken,
-  //     favcat: curFavcat,
-  //     toplist: currToplist,
-  //     searchText: searchText,
-  //     searchType: searchType,
-  //   );
-  //   try {
-  //     FetchListClient fetchListClient = getFetchListClient(fetchConfig);
-  //     final GalleryList? rult = await fetchListClient.fetch();
-  //
-  //     curPage = page;
-  //     minPage = page;
-  //     if (!previous) {
-  //       nextPage = rult?.nextPage ?? page + 1;
-  //     }
-  //     prevPage = rult?.prevPage;
-  //     logger.d('after loadFromPage nextPage is $nextPage');
-  //     if (rult != null) {
-  //       if (previous) {
-  //         state?.insertAll(0, rult.gallerys ?? []);
-  //         change(state, status: RxStatus.success());
-  //       } else {
-  //         change(rult.gallerys, status: RxStatus.success());
-  //       }
-  //     }
-  //     pageState = PageState.None;
-  //     lastItemBuildComplete = false;
-  //   } catch (e) {
-  //     pageState = PageState.LoadingError;
-  //     if (!previous) {
-  //       change(null, status: RxStatus.error('$e'));
-  //     } else {
-  //       showToast('$e');
-  //     }
-  //     rethrow;
-  //   } finally {
-  //     canLoadMore = true;
-  //   }
-  // }
-
-  /// 跳转页码
-  // Future<void> showJumpToPage() async {
-  //   void _jump() {
-  //     final String _input = pageJumpTextEditController.text.trim();
-  //
-  //     if (_input.isEmpty) {
-  //       showToast(L10n.of(Get.context!).input_empty);
-  //     }
-  //
-  //     // 数字检查
-  //     if (!RegExp(r'(^\d+$)').hasMatch(_input)) {
-  //       showToast(L10n.of(Get.context!).input_error);
-  //     }
-  //
-  //     final int _toPage = int.parse(_input) - 1;
-  //     if (_toPage >= 0 && _toPage <= maxPage - 1) {
-  //       FocusScope.of(Get.context!).requestFocus(FocusNode());
-  //       loadFromPage(_toPage);
-  //       Get.back();
-  //     } else {
-  //       showToast(L10n.of(Get.context!).page_range_error);
-  //     }
-  //   }
-  //
-  //   return showJumpDialog(jump: _jump, maxPage: maxPage);
-  // }
-
-  // Future showJumpDialog({VoidCallback? jump, int? maxPage}) {
-  //   return showCupertinoDialog<void>(
-  //     context: Get.context!,
-  //     builder: (BuildContext context) {
-  //       return CupertinoAlertDialog(
-  //         title: Text(L10n.of(context).jump_to_page),
-  //         content: Container(
-  //           child: Column(
-  //             children: <Widget>[
-  //               Padding(
-  //                 padding: const EdgeInsets.all(8.0),
-  //                 child: Text('${L10n.of(context).page_range} 1~$maxPage'),
-  //               ),
-  //               CupertinoTextField(
-  //                 decoration: BoxDecoration(
-  //                   color: ehTheme.textFieldBackgroundColor,
-  //                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-  //                 ),
-  //                 controller: pageJumpTextEditController,
-  //                 autofocus: true,
-  //                 keyboardType: TextInputType.number,
-  //                 onEditingComplete: () {
-  //                   // 点击键盘完成
-  //                   // 画廊跳转
-  //                   jump?.call();
-  //                 },
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           CupertinoDialogAction(
-  //             child: Text(L10n.of(context).cancel),
-  //             onPressed: () {
-  //               Get.back();
-  //             },
-  //           ),
-  //           CupertinoDialogAction(
-  //             child: Text(
-  //               L10n.of(context).ok,
-  //               style: const TextStyle(fontWeight: FontWeight.w500),
-  //             ),
-  //             onPressed: () {
-  //               // 画廊跳转
-  //               jump?.call();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   @override
   Future<void> lastComplete() async {

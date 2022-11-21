@@ -72,13 +72,13 @@ Future<GalleryList?> getGallery({
   final isFav = galleryListType == GalleryListType.favorite;
   final isPopular = galleryListType == GalleryListType.popular;
 
-  final exParams = <String, dynamic>{
+  final gidOrTimeParams = <String, dynamic>{
     if (!isPopular) 'jump': jump,
     if (!isPopular) 'seek': seek,
     if (!isPopular && pageType != null && gid != null) pageType.value: gid,
   };
 
-  final ehParams = <String, dynamic>{
+  final pageParams = <String, dynamic>{
     if (!isTopList && !isPopular) 'page': page ?? 0,
     if (isTopList) 'p': page ?? 0,
     if (!isTopList && !isPopular && gid != null) 'from': gid,
@@ -92,10 +92,11 @@ Future<GalleryList?> getGallery({
       'favcat': favcat,
   };
 
-  if (kNewSearch) {
-    _params.addAll(exParams);
+  if (page != null && page > -1) {
+    logger.d('page $page');
+    _params.addAll(pageParams);
   } else {
-    _params.addAll(ehParams);
+    _params.addAll(gidOrTimeParams);
   }
 
   logger.v('advanceSearch ${advanceSearch?.param}  refresh $refresh');

@@ -101,7 +101,7 @@ class CustomSubListController extends TabViewController {
     final fetchConfig = FetchParams(
       pageType: PageType.next,
       // gid: nextGid,
-      gid: kNewSearch ? nextGid : state?.lastOrNull?.gid ?? '',
+      gid: nextPage > -1 ? (state?.lastOrNull?.gid ?? '') : nextGid,
       cats: profile?.cats,
       refresh: true,
       cancelToken: cancelToken,

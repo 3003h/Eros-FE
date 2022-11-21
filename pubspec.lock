@@ -1563,7 +1563,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: b806fbd8ce52a64a5a3d071c0a9e3bc0783f0cbd
+      resolved-ref: f3327f759918168dc7eefcf778392ab2f631938f
       url: "https://github.com/alexrintt/shared-storage.git"
     source: git
     version: "0.7.0"
