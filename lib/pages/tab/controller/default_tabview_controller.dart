@@ -225,11 +225,6 @@ class DefaultTabViewController extends TabViewController {
     return result;
   }
 
-  @override
-  Future<void> lastComplete() async {
-    lastItemBuildComplete = true;
-  }
-
   final TabHomeController _tabHomeController = Get.find();
 
   int get hidenTagCount => _tabHomeController.tabMap.entries
@@ -384,27 +379,40 @@ class DefaultTabViewController extends TabViewController {
   }) {
     initEhTabController(context: context, ehTabController: ehTabController);
 
-    initStateAddPostFrameCallback(context);
+    // initStateAddPostFrameCallback(context);
   }
 
-  void initStateAddPostFrameCallback(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final _scrollController = PrimaryScrollController.of(context);
-      _scrollController?.addListener(() async {
-        if (_scrollController.position.pixels >
-            _scrollController.position.maxScrollExtent -
-                context.mediaQuerySize.longestSide) {
-          if (next.isNotEmpty &&
-              lastItemBuildComplete &&
-              pageState != PageState.Loading) {
-            // 加载更多
-            await loadDataMore();
-          } else {
-            // 没有更多了
-            // showToast('No More');
-          }
-        }
-      });
-    });
+  @override
+  Future<void> lastComplete() async {
+    lastItemBuildComplete = true;
+    logger.d('加载更多...$next');
+    if ((state ?? []).isNotEmpty &&
+        next.isNotEmpty &&
+        pageState != PageState.Loading) {
+      // 加载更多
+      logger.d('加载更多');
+      await loadDataMore();
+    }
   }
+
+  // void initStateAddPostFrameCallback(BuildContext context) {
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     final _scrollController = PrimaryScrollController.of(context);
+  //     _scrollController?.addListener(() async {
+  //       if (_scrollController.position.pixels >
+  //           _scrollController.position.maxScrollExtent -
+  //               context.mediaQuerySize.longestSide) {
+  //         if (next.isNotEmpty &&
+  //             lastItemBuildComplete &&
+  //             pageState != PageState.Loading) {
+  //           // 加载更多
+  //           await loadDataMore();
+  //         } else {
+  //           // 没有更多了
+  //           // showToast('No More');
+  //         }
+  //       }
+  //     });
+  //   });
+  // }
 }
