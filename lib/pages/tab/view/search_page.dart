@@ -69,7 +69,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       );
     }
 
-    controller.initStateAddPostFrameCallback(context);
+    // controller.initStateAddPostFrameCallback(context);
   }
 
   @override
