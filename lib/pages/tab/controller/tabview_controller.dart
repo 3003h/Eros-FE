@@ -32,9 +32,6 @@ abstract class TabViewController extends GetxController {
 
   String get listViewId => 'listViewId';
 
-  // // 最小页码
-  // int minPage = 1;
-
   // 最大页码
   int? maxPage = 1;
 
@@ -56,9 +53,9 @@ abstract class TabViewController extends GetxController {
   String get prevGid => _prevGid.value;
   set prevGid(String? value) => _prevGid.value = value ?? '';
 
-  String get next => kNewSearch ? nextGid : '${nextPage > 0 ? nextPage : ''}';
+  String get next => '${nextPage > 0 ? nextPage : nextGid}';
 
-  String get prev => kNewSearch ? prevGid : '${prevPage > -1 ? prevPage : ''}';
+  String get prev => '${prevPage > -1 ? prevPage : prevGid}';
 
   final _afterJump = false.obs;
   bool get afterJump => _afterJump.value;
@@ -153,14 +150,11 @@ abstract class TabViewController extends GetxController {
   }
 
   void resetResultPage() {
-    if (kNewSearch) {
-      nextGid = null;
-      prevGid = null;
-    } else {
-      nextPage = null;
-      prevPage = null;
-      maxPage = null;
-    }
+    nextGid = null;
+    prevGid = null;
+    nextPage = null;
+    prevPage = null;
+    maxPage = null;
   }
 
   // 首次请求
@@ -444,7 +438,9 @@ abstract class TabViewController extends GetxController {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return kNewSearch ? buildTimeDialog(context) : buildPageDialog(context);
+        return nextPage > -1
+            ? buildPageDialog(context)
+            : buildTimeDialog(context);
       },
     );
   }

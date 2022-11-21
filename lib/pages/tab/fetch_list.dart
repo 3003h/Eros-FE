@@ -161,13 +161,14 @@ class ToplistFetchListClient extends FetchListClient {
       refresh: fetchParams.refresh,
       galleryListType: GalleryListType.toplist,
       toplist: fetchParams.toplist,
+      page: fetchParams.page,
     );
 
     final gidList = result?.gallerys
         ?.where((element) => tagController.needHide(element.simpleTags ?? []))
         .map((e) => e.gid);
     if (gidList != null && gidList.isNotEmpty) {
-      logger.i('${fetchParams.galleryListType} remove gallery $gidList');
+      logger.v('${fetchParams.galleryListType} remove gallery $gidList');
       result?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
     }
 

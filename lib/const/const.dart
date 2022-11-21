@@ -17,8 +17,6 @@ final urlRegExp = RegExp(
 final commentUrlRegExp = RegExp(
     r'(?<!(">\n?|="))(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]');
 
-const kNewSearch = true;
-
 enum ListModeEnum {
   list,
   waterfall,
