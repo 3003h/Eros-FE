@@ -17,7 +17,7 @@ const int kMaxCount = 4;
 const int kCheckMaxCount = 10;
 
 // 无速度多少个周期后重试
-const int kRetryThresholdTime = 20;
+const int kRetryThresholdTime = 10;
 
 class DownloadState {
   DownloadState();

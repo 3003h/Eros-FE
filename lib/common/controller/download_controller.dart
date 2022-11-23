@@ -598,9 +598,10 @@ class DownloadController extends GetxController {
 
       fileNameWithoutExtension =
           _genFileNameWithoutExtension(imageFetched, maxSer);
-      logger.d('fileNameWithoutExtension:$fileNameWithoutExtension');
+      logger.v('fileNameWithoutExtension:$fileNameWithoutExtension');
 
       _addAllImages(gid, [imageFetched]);
+      await _putImageTask(gid, imageFetched, status: TaskStatus.running.value);
 
       if (reDownload) {
         logger.v('${imageFetched.href}\n${imageFetched.imageUrl} ');
@@ -652,6 +653,8 @@ class DownloadController extends GetxController {
         logger.d('重下载 _targetImageUrl:$_targetImageUrl');
 
         _addAllImages(gid, [imageFetched]);
+        await _putImageTask(gid, imageFetched,
+            status: TaskStatus.running.value);
 
         await _downloadToPath(
           _targetImageUrl,
@@ -1064,15 +1067,29 @@ class DownloadController extends GetxController {
     final List<GalleryImageTask> imageTasksOri =
         await isarHelper.findImageTaskAllByGid(galleryTask.gid);
 
+    final completeCount = imageTasksOri
+        .where((element) => element.status == TaskStatus.complete.value)
+        .length;
+
+    await isarHelper
+        .putGalleryTask(galleryTask.copyWith(completCount: completeCount));
+
+    if (completeCount == galleryTask.fileCount) {
+      logger.d('complete ${galleryTask.gid}  ${galleryTask.title}');
+      await galleryTaskComplete(galleryTask.gid);
+      _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
+      return;
+    }
+
     logger.v(
         '${imageTasksOri.where((element) => element.status != TaskStatus.complete.value).map((e) => e.toString()).join('\n')} ');
 
     // 初始化下载Map
     final initCount = _initDownloadMapByGid(galleryTask.gid, images: images);
-    logger.d('initCount: $initCount');
+    logger.v('initCount: $initCount');
 
     final putCount = await _updateImageTasksByGid(galleryTask.gid);
-    logger.d('putCount: $putCount');
+    logger.v('putCount: $putCount');
 
     galleryTaskUpdateStatus(galleryTask.gid, TaskStatus.running);
 
@@ -1087,15 +1104,15 @@ class DownloadController extends GetxController {
 
     final String downloadParentPath = galleryTask.realDirPath!;
 
-    final _completSers = imageTasksOri
+    final List<int> _completeSerList = imageTasksOri
         .where((element) => element.status == TaskStatus.complete.value)
         .map((e) => e.ser)
         .toList();
 
-    final int _maxCompletSer =
-        _completSers.isNotEmpty ? _completSers.reduce(max) : 0;
+    final int _maxCompleteSer =
+        _completeSerList.isNotEmpty ? _completeSerList.reduce(max) : 0;
 
-    logger.v('_maxCompletSer:$_maxCompletSer');
+    logger.v('_maxCompleteSer:$_maxCompleteSer');
 
     // 循环进行下载图片
     for (int index = 0; index < galleryTask.fileCount; index++) {
@@ -1121,6 +1138,9 @@ class DownloadController extends GetxController {
         if (tImage != null) {
           final int maxSer = galleryTask.fileCount + 1;
 
+          logger.v(
+              'itemSer, _maxCompleteSer + 1: $itemSer, ${_maxCompleteSer + 1}');
+
           try {
             await _downloadImageFlow(
               tImage,
@@ -1130,7 +1150,7 @@ class DownloadController extends GetxController {
               maxSer,
               downloadOrigImage: galleryTask.downloadOrigImage ?? false,
               cancelToken: _cancelToken,
-              reDownload: itemSer < _maxCompletSer + 2,
+              reDownload: itemSer > 1 && itemSer < _maxCompleteSer + 2,
               onDownloadCompleteWithFileName: (String fileName) =>
                   _onDownloadComplete(fileName, galleryTask.gid, itemSer),
             );
@@ -1166,17 +1186,17 @@ class DownloadController extends GetxController {
 
     // 下载完成 更新数据库明细
     // logger.v('下载完成 更新数据库明细');
-    // await isarHelper.updateImageTaskStatus(
-    //   gid,
-    //   itemSer,
-    //   TaskStatus.complete.value,
-    // );
+    await isarHelper.updateImageTaskStatus(
+      gid,
+      itemSer,
+      TaskStatus.complete.value,
+    );
 
     // 更新ui
     final List<GalleryImageTask> listComplete = await isarHelper
         .finaAllImageTaskByGidAndStatus(gid, TaskStatus.complete.value);
 
-    logger.d(
+    logger.v(
         'listComplete:  ${listComplete.length}: ${listComplete.map((e) => e.ser).join(',')}');
 
     final GalleryTask? _task = galleryTaskUpdate(
@@ -1304,7 +1324,7 @@ class DownloadController extends GetxController {
             .toList();
 
     if (_galleryImageTasks != null) {
-      logger.d('插入所有任务明细 $gid ${_galleryImageTasks.length}');
+      logger.v('插入所有任务明细 $gid ${_galleryImageTasks.length}');
       await isarHelper.putAllImageTask(_galleryImageTasks);
     }
 
