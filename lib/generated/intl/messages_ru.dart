@@ -108,6 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Текущая версия"),
         "custom_hosts":
             MessageLookupByLibrary.simpleMessage("Пользовательские узлы"),
+        "custom_width": MessageLookupByLibrary.simpleMessage("Custom Width"),
         "dark": MessageLookupByLibrary.simpleMessage("Тёмная"),
         "dark_mode_effect":
             MessageLookupByLibrary.simpleMessage("Вид тёмной темы"),

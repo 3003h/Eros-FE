@@ -409,5 +409,6 @@
   "enter_date_or_offset_or_gid": "Enter date or offset or gid",
   "date_or_offset": "Date or Offset",
   "jump_next": "Next",
-  "jump_prev": "Prev"
+  "jump_prev": "Prev",
+  "custom_width": "Custom Width"
 }

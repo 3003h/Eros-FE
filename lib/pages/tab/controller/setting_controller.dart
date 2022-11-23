@@ -107,8 +107,8 @@ class SettingViewController extends GetxController
 
     _routes = <String>[
       EHRoutes.ehSetting,
-      EHRoutes.layoutSeting,
-      EHRoutes.readSeting,
+      EHRoutes.layoutSetting,
+      EHRoutes.readSetting,
       EHRoutes.downloadSetting,
       EHRoutes.searchSetting,
       EHRoutes.advancedSetting,

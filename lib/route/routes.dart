@@ -5,24 +5,25 @@ class EHRoutes {
 
   static const String empty = '/empty';
 
-  static const String selFavorie = '/selFavoriePage';
+  static const String selFavorite = '/selFavoritePage';
 
   static const String unlockPage = '/unlockPage';
 
   static const String ehSetting = '/setting/ehSetting';
-  static const String layoutSeting = '/setting/layoutSetting';
+  static const String layoutSetting = '/setting/layoutSetting';
+  static const String itemWidthSetting = '/setting/itemWidthSetting';
   static const String downloadSetting = '/setting/downloadSetting';
   static const String searchSetting = '/setting/searchSetting';
   static const String advancedSetting = '/setting/advancedSetting';
   static const String securitySetting = '/setting/securitySetting';
-  static const String readSeting = '/setting/readSetting';
+  static const String readSetting = '/setting/readSetting';
   static const String about = '/setting/about';
   static const String avatarSetting = '/setting/avatarSetting';
   static const String license = '/setting/about/license';
 
   static const String quickSearch = '/quickSearch';
   static const String customHosts = '/customHosts';
-  static const String proxySeting = '/proxySeting';
+  static const String proxySetting = '/proxySetting';
   static const String logfile = '/logfile';
   static const String webDavSetting = '/webDavSetting';
   static const String mySettings = '/mySettings';
@@ -49,7 +50,7 @@ class EHRoutes {
 
   static const String favoriteTabbar = '/favoriteTabbar';
 
-  static const String customlist = '/customlist';
+  static const String customList = '/customList';
   static const String customProfiles = '/customProfiles';
   static const String customProfileSetting = '/customProfiles/setting';
 

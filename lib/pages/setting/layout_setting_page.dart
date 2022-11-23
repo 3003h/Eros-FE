@@ -133,6 +133,27 @@ class ListViewLayoutSetting extends StatelessWidget {
       _buildListModeItem(
         context,
       ),
+      Obx(() {
+        final showItem = _ehConfigService.listMode.value ==
+                ListModeEnum.waterfall ||
+            _ehConfigService.listMode.value == ListModeEnum.waterfallLarge ||
+            _ehConfigService.listMode.value == ListModeEnum.grid;
+        return AnimatedCrossFade(
+          alignment: Alignment.center,
+          crossFadeState:
+              showItem ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          firstCurve: Curves.easeIn,
+          secondCurve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+          firstChild: const SizedBox(),
+          secondChild: SelectorSettingItem(
+            title: L10n.of(context).custom_width,
+            onTap: () {
+              NavigatorUtil.goItemWidthSettingPage();
+            },
+          ),
+        );
+      }),
       _buildTagLimitItem(context),
       Obx(() {
         return AnimatedCrossFade(
