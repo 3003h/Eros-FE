@@ -34,7 +34,7 @@ dependencies:
   flutter_inappwebview: ^5.3.2
   html: ^0.15.0
   flutter_linkify: ^5.0.2
-  url_launcher: ^6.0.3
+  url_launcher: ^6.1.7
   tuple: ^2.0.0
   get: ^4.3.8
   get_storage: ^2.0.3
