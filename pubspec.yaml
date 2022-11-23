@@ -31,7 +31,7 @@ dependencies:
   oktoast: ^3.0.0
   html_unescape: ^2.0.0
   enum_to_string: ^2.0.1
-  flutter_inappwebview: ^5.3.2
+  flutter_inappwebview: ^5.7.2
   html: ^0.15.0
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.3
