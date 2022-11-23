@@ -140,7 +140,10 @@ class Global {
     ));
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
-    appDocPath = (await getApplicationDocumentsDirectory()).path;
+    final defaultAppDocPath = (await getApplicationDocumentsDirectory()).path;
+    appDocPath = Platform.isWindows
+        ? path.join(defaultAppDocPath, EHConst.appTitle)
+        : defaultAppDocPath;
     tempPath = (await getTemporaryDirectory()).path;
     extStorePath = Platform.isAndroid || Platform.isFuchsia
         ? (await getExternalStorageDirectory())?.path ?? ''
@@ -175,7 +178,11 @@ class Global {
 
     await GStore.init();
 
-    await hiveHelper.init();
+    if (Platform.isWindows) {
+      await hiveHelper.init(EHConst.appTitle);
+    } else {
+      await hiveHelper.init();
+    }
     await hiveCacheHelper.init();
     await isarHelper.initIsar();
 

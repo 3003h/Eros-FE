@@ -33,8 +33,8 @@ class HiveHelper {
   static final _galleryCacheBox = Hive.box<String>(galleryCacheBox);
   static final _configBox = Hive.box<String>(configBox);
 
-  Future<void> init() async {
-    await Hive.initFlutter();
+  Future<void> init([String? subDir]) async {
+    await Hive.initFlutter(subDir);
     await Hive.openBox<String>(
       historyBox,
       compactionStrategy: (int entries, int deletedEntries) {
