@@ -98,6 +98,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "current_site": m0,
         "current_version": MessageLookupByLibrary.simpleMessage("현재 버전"),
         "custom_hosts": MessageLookupByLibrary.simpleMessage("사용자 지정 hosts"),
+        "custom_width": MessageLookupByLibrary.simpleMessage("Custom Width"),
         "dark": MessageLookupByLibrary.simpleMessage("어둡게"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("다크 모드 효과"),
         "date_or_offset":

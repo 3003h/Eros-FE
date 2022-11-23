@@ -19,6 +19,7 @@ import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
 import 'package:fehviewer/pages/setting/image_hide_page.dart';
+import 'package:fehviewer/pages/setting/item_width_setting_page.dart';
 import 'package:fehviewer/pages/setting/layout_setting_page.dart';
 import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
@@ -146,14 +147,19 @@ class TabHomeLarge extends GetView<TabHomeController> {
                               transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                             );
-                          case EHRoutes.layoutSeting:
+                          case EHRoutes.layoutSetting:
                             return GetPageRoute(
                               settings: settings,
                               page: () => const LayoutSettingPage(),
                               transition: Transition.fadeIn,
                               showCupertinoParallax: false,
                             );
-                          case EHRoutes.readSeting:
+                          case EHRoutes.itemWidthSetting:
+                            return GetPageRoute(
+                              settings: settings,
+                              page: () => const ItemWidthSettingPage(),
+                            );
+                          case EHRoutes.readSetting:
                             return GetPageRoute(
                               settings: settings,
                               page: () => const ReadSettingPage(),
@@ -193,7 +199,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                               settings: settings,
                               page: () => CustomHostsPage(),
                             );
-                          case EHRoutes.proxySeting:
+                          case EHRoutes.proxySetting:
                             return GetPageRoute(
                               settings: settings,
                               page: () => ProxyPage(),

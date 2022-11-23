@@ -14,6 +14,7 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/route/first_observer.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
@@ -266,5 +267,19 @@ class NavigatorUtil {
           gid: gid,
         ));
     Get.delete<ViewExtController>();
+  }
+
+  static Future<void> goItemWidthSettingPage() async {
+    final topFirstRoute =
+        FirstNavigatorObserver().history.lastOrNull?.settings.name;
+
+    if (topFirstRoute == EHRoutes.itemWidthSetting) {
+      return;
+    }
+
+    Get.toNamed(
+      EHRoutes.itemWidthSetting,
+      id: isLayoutLarge ? 1 : null,
+    );
   }
 }

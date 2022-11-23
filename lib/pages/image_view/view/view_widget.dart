@@ -795,7 +795,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                             behavior: HitTestBehavior.opaque,
                             onTap: () async {
                               controller.cancelVolumeKeydownListen();
-                              await Get.toNamed(EHRoutes.readSeting);
+                              await Get.toNamed(EHRoutes.readSetting);
                               controller.addVolumeKeydownListen();
                             },
                             child: Container(

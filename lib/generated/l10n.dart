@@ -4174,6 +4174,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Custom Width`
+  String get custom_width {
+    return Intl.message(
+      'Custom Width',
+      name: 'custom_width',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

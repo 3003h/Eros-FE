@@ -408,7 +408,7 @@ class FavoriteTabBar extends StatelessWidget {
                         onPressed: () async {
                           // 跳转收藏夹选择页
                           final result = await Get.toNamed(
-                            EHRoutes.selFavorie,
+                            EHRoutes.selFavorite,
                             id: isLayoutLarge ? 1 : null,
                           );
                           if (result != null && result is Favcat) {

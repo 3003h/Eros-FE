@@ -23,6 +23,7 @@ import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
 import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
 import 'package:fehviewer/pages/setting/image_hide_page.dart';
+import 'package:fehviewer/pages/setting/item_width_setting_page.dart';
 import 'package:fehviewer/pages/setting/layout_setting_page.dart';
 import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
@@ -84,7 +85,7 @@ class AppPages {
       transition: Transition.fadeIn,
     ),
     GetPage(
-      name: EHRoutes.selFavorie,
+      name: EHRoutes.selFavorite,
       page: () => FavoriteSelectorPage(),
     ),
     GetPage(
@@ -92,8 +93,12 @@ class AppPages {
       page: () => const EhSettingPage(),
     ),
     GetPage(
-      name: EHRoutes.layoutSeting,
+      name: EHRoutes.layoutSetting,
       page: () => const LayoutSettingPage(),
+    ),
+    GetPage(
+      name: EHRoutes.itemWidthSetting,
+      page: () => const ItemWidthSettingPage(),
     ),
     GetPage(
       name: EHRoutes.advancedSetting,
@@ -121,7 +126,7 @@ class AppPages {
       page: () => SecuritySettingPage(),
     ),
     GetPage(
-      name: EHRoutes.readSeting,
+      name: EHRoutes.readSetting,
       page: () => const ReadSettingPage(),
     ),
     GetPage(
@@ -220,7 +225,7 @@ class AppPages {
       page: () => const CustomHostsPage(),
     ),
     GetPage(
-      name: EHRoutes.proxySeting,
+      name: EHRoutes.proxySetting,
       page: () => const ProxyPage(),
     ),
     GetPage(
@@ -264,7 +269,7 @@ class AppPages {
       page: () => const LoginWebDAV(),
     ),
     GetPage(
-      name: EHRoutes.customlist,
+      name: EHRoutes.customList,
       page: () => const CustomTabbarList(),
     ),
     GetPage(

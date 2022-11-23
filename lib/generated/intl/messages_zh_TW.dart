@@ -94,6 +94,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "current_site": m0,
         "current_version": MessageLookupByLibrary.simpleMessage("當前版本"),
         "custom_hosts": MessageLookupByLibrary.simpleMessage("自定hosts文件"),
+        "custom_width": MessageLookupByLibrary.simpleMessage("自定义宽度"),
         "dark": MessageLookupByLibrary.simpleMessage("深色模式"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("深色模式效果"),
         "date_or_offset": MessageLookupByLibrary.simpleMessage("日期或偏移量"),

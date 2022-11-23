@@ -49,7 +49,7 @@ class TabPages {
     EHRoutes.history: FontAwesomeIcons.history,
     EHRoutes.download: FontAwesomeIcons.download,
     EHRoutes.setting: FontAwesomeIcons.cog,
-    EHRoutes.customlist: FontAwesomeIcons.layerGroup,
+    EHRoutes.customList: FontAwesomeIcons.layerGroup,
     EHRoutes.favoriteTabbar: FontAwesomeIcons.heartBroken,
   };
 
@@ -67,7 +67,7 @@ class TabPages {
         EHRoutes.history: L10n.of(_context).tab_history,
         EHRoutes.download: L10n.of(_context).tab_download,
         EHRoutes.setting: L10n.of(_context).tab_setting,
-        EHRoutes.customlist: L10n.of(_context).tab_gallery,
+        EHRoutes.customList: L10n.of(_context).tab_gallery,
         EHRoutes.favoriteTabbar: L10n.of(_context).tab_favorite,
       };
 }

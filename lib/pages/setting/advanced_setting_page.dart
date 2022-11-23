@@ -116,7 +116,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 getProxyTypeModeMap(context)[_ehConfigService.proxyType] ?? '',
             onTap: () {
               Get.toNamed(
-                EHRoutes.proxySeting,
+                EHRoutes.proxySetting,
                 id: isLayoutLarge ? 2 : null,
               );
             },

@@ -104,6 +104,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "current_version":
             MessageLookupByLibrary.simpleMessage("Current Version"),
         "custom_hosts": MessageLookupByLibrary.simpleMessage("Custom Hosts"),
+        "custom_width": MessageLookupByLibrary.simpleMessage("Custom Width"),
         "dark": MessageLookupByLibrary.simpleMessage("Dark"),
         "dark_mode_effect":
             MessageLookupByLibrary.simpleMessage("Dark mode effect"),
