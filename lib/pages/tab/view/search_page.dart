@@ -919,6 +919,17 @@ class SearchTextFieldIn extends StatelessWidget {
                         );
                       });
                     }),
+                  if (controller.textIsGalleryUrl)
+                    GestureDetector(
+                      onTap: controller.jumpToGallery,
+                      child: Icon(
+                        FontAwesomeIcons.circleArrowRight,
+                        size: 20.0,
+                        color: CupertinoDynamicColor.resolve(
+                                _kClearButtonColor, Get.context!)
+                            .withOpacity(iconOpacity),
+                      ).paddingSymmetric(horizontal: 6),
+                    ),
                   if (controller.textIsNotEmpty && !controller.textIsGalleryUrl)
                     GestureDetector(
                       onTap: controller.addToQuickSearch,

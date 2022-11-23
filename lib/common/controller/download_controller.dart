@@ -1165,12 +1165,12 @@ class DownloadController extends GetxController {
     // logger.d('task is null: ${task == null}');
 
     // 下载完成 更新数据库明细
-    logger.v('下载完成 更新数据库明细');
-    await isarHelper.updateImageTaskStatus(
-      gid,
-      itemSer,
-      TaskStatus.complete.value,
-    );
+    // logger.v('下载完成 更新数据库明细');
+    // await isarHelper.updateImageTaskStatus(
+    //   gid,
+    //   itemSer,
+    //   TaskStatus.complete.value,
+    // );
 
     // 更新ui
     final List<GalleryImageTask> listComplete = await isarHelper
