@@ -227,9 +227,7 @@ class _ExtendedImageRectState extends State<ExtendedImageRect>
       width: widget.width,
       height: widget.height,
       headers: _httpHeaders,
-      // fit: widget.fit,
       fit: BoxFit.fitHeight,
-      // enableLoadState: false,
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
