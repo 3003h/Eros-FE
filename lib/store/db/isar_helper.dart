@@ -239,9 +239,6 @@ class IsarHelper {
 
   Future<void> updateImageTaskStatus(int gid, int ser, int status) async {
     final tasks = await isar.galleryImageTasks.getByGidSer(gid, ser);
-    if (tasks == null) {
-      logger.e('task is null, cant updateImageTaskStatus $gid $ser $status');
-    }
     await isar.writeTxn(() async {
       if (tasks != null) {
         await isar.galleryImageTasks.put(tasks.copyWith(status: status));
