@@ -17,7 +17,7 @@ const int kMaxCount = 4;
 const int kCheckMaxCount = 10;
 
 // 无速度多少个周期后重试
-const int kRetryThresholdTime = 10;
+const int kRetryThresholdTime = 20;
 
 class DownloadState {
   DownloadState();
@@ -29,14 +29,14 @@ class DownloadState {
   late Executor executor;
 
   QueueTask queueTask = QueueTask();
-  final Map<int, TaskCancelToken> taskCanceltokens = {};
+  final Map<int, TaskCancelToken> taskCancelTokens = {};
 
   final downloadMap = <int, List<GalleryImage>>{};
   final cancelTokenMap = <int, CancelToken>{};
 
   final Map<int, Timer?> chkTimers = {};
-  final Map<int, int> preComplet = {};
-  final Map<int, int> curComplet = {};
+  final Map<int, int> preComplete = {};
+  final Map<int, int> curComplete = {};
 
   final Map<String, int> downloadCounts = {};
   final Map<int, List<int>> lastCounts = {};

@@ -124,7 +124,7 @@ GalleryList parseGalleryList(
               0) -
           1;
 
-  logger.d('$_curPage , _nextPage:$_nextPage , _prevPage:$_prevPage');
+  logger.v('$_curPage , _nextPage:$_nextPage , _prevPage:$_prevPage');
 
   const searchnavSelector = '.searchnav';
   final searchnavElm = document.querySelector(searchnavSelector);
@@ -139,7 +139,7 @@ GalleryList parseGalleryList(
   final nextHref = nextElm?.attributes['href'];
   final _next = nextHref?.split('=').last;
 
-  logger.d('parse next:$_next, prev:$_prev');
+  logger.v('parse next:$_next, prev:$_prev');
 
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);

@@ -48,7 +48,7 @@ class CommentItem extends StatelessWidget {
     Widget commentItem;
 
     if (galleryComment.rawContent != galleryComment.linkifyContent || true) {
-      logger.d('${galleryComment.name}\n'
+      logger.v('${galleryComment.name}\n'
           'rawContent ${galleryComment.rawContent}\n'
           'lnkContent ${galleryComment.linkifyContent}');
     }

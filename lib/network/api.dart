@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:cross_file/cross_file.dart';
@@ -404,11 +405,13 @@ class Api {
   static Future<String?> saveImageFromExtendedCache({
     required String imageUrl,
     required String parentPath,
-    required String fileName,
+    required String fileNameWithoutExtension,
   }) async {
     if (!(await cachedImageExists(imageUrl))) {
       return null;
     }
+
+    logger.d('fileNameWithoutExtension $fileNameWithoutExtension');
 
     final imageFile = await getCachedImageFile(imageUrl);
     if (imageFile == null) {
@@ -418,13 +421,15 @@ class Api {
 
     logger.d('from cache \n$imageUrl');
 
+    final bytes = await imageFile.readAsBytes();
+    final mimeType =
+        lookupMimeType(imageFile.path, headerBytes: bytes.take(8).toList());
+    logger.d('mimeType $mimeType');
+    final ext = mimeType?.split('/').last ?? 'jpg';
+    final fileName = '$fileNameWithoutExtension.$ext';
+
     if (parentPath.isContentUri) {
       // SAF 方式
-      final bytes = await imageFile.readAsBytes();
-
-      final mimeType =
-          lookupMimeType(imageFile.path, headerBytes: bytes.take(8).toList());
-      logger.d('mimeType $mimeType');
 
       final result = await ss.createFileAsBytes(
         Uri.parse(parentPath),
@@ -433,11 +438,13 @@ class Api {
         bytes: bytes,
       );
       logger.d('save to content:// result ${result?.uri}');
-      return result?.uri.toString();
+      return fileName;
     } else {
       // 普通方式
       final toFilePath = path.join(parentPath, fileName);
-      imageFile.copySync(toFilePath);
+      final toFile = File(toFilePath);
+      // write file
+      await toFile.writeAsBytes(bytes);
       return toFilePath;
     }
   }

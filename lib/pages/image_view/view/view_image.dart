@@ -251,6 +251,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         ? ExtendedImage(
             image: ExtendedSafImageProvider(Uri.parse(path)),
             fit: BoxFit.contain,
+            clearMemoryCacheWhenDispose: true,
+            enableMemoryCache: false,
             filterQuality: FilterQuality.medium,
             enableSlideOutPage: widget.enableSlideOutPage,
             mode: widget.mode,
@@ -261,6 +263,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         : ExtendedImage(
             image: ExtendedFileImageProvider(File(path)),
             fit: BoxFit.contain,
+            clearMemoryCacheWhenDispose: true,
+            enableMemoryCache: false,
             filterQuality: FilterQuality.medium,
             enableSlideOutPage: widget.enableSlideOutPage,
             mode: widget.mode,
@@ -269,78 +273,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             loadStateChanged: loadStateChanged,
           );
   }
-
-  /// 本地图片文件 构建Widget
-  // Widget providerImage(ImageProvider imageProvider, String url, int ser) {
-  //   final Size size = MediaQuery.of(context).size;
-  //   return ExtendedImage(
-  //     image: imageProvider,
-  //     fit: BoxFit.contain,
-  //     enableSlideOutPage: widget.enableSlideOutPage,
-  //     mode: widget.mode,
-  //     initGestureConfigHandler: _initGestureConfigHandler,
-  //     onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
-  //     loadStateChanged: (ExtendedImageState state) {
-  //       final ImageInfo? imageInfo = state.extendedImageInfo;
-  //       if (state.extendedImageLoadState == LoadState.completed ||
-  //           imageInfo != null) {
-  //         // 加载完成 显示图片
-  //         controller.setScale100(imageInfo!, size);
-  //
-  //         // 重新设置图片容器大小
-  //         if (vState.imageSizeMap[widget.imageSer] == null) {
-  //           vState.imageSizeMap[widget.imageSer] = Size(
-  //               imageInfo.image.width.toDouble(),
-  //               imageInfo.image.height.toDouble());
-  //           Future.delayed(const Duration(milliseconds: 100)).then((value) =>
-  //               controller.update(['$idImageListView${widget.imageSer}']));
-  //         }
-  //
-  //         controller.onLoadCompleted(widget.imageSer);
-  //
-  //         Widget image = controller.vState.viewMode != ViewMode.topToBottom
-  //             ? Hero(
-  //                 tag: '${widget.imageSer}',
-  //                 child: state.completedWidget,
-  //                 createRectTween: (Rect? begin, Rect? end) {
-  //                   final tween =
-  //                       MaterialRectCenterArcTween(begin: begin, end: end);
-  //                   return tween;
-  //                 },
-  //               )
-  //             : state.completedWidget;
-  //
-  //         if (checkPHashHide || checkQRCodeHide) {
-  //           image = ImageWithHide(
-  //             url: url,
-  //             child: image,
-  //             ser: ser,
-  //             checkPHashHide: checkPHashHide,
-  //             checkQRCodeHide: checkQRCodeHide,
-  //           );
-  //         }
-  //
-  //         return image;
-  //       } else if (state.extendedImageLoadState == LoadState.loading) {
-  //         return null;
-  //         // 显示加载中
-  //         final ImageChunkEvent? loadingProgress = state.loadingProgress;
-  //         final double? progress = loadingProgress?.expectedTotalBytes != null
-  //             ? (loadingProgress?.cumulativeBytesLoaded ?? 0) /
-  //                 (loadingProgress?.expectedTotalBytes ?? 1)
-  //             : null;
-  //
-  //         return ViewLoading(
-  //           ser: widget.imageSer,
-  //           progress: progress,
-  //           duration: vState.viewMode != ViewMode.topToBottom
-  //               ? const Duration(milliseconds: 50)
-  //               : null,
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
 
   /// 归档页查看
   Widget archiverImage() {
