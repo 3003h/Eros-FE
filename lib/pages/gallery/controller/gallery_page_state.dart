@@ -80,10 +80,6 @@ class GalleryPageState {
 
   bool get localFav => galleryProvider?.localFav ?? false;
 
-  final _topTitle = ''.obs;
-  // get topTitle => _topTitle.value;
-  set topTitle(String val) => _topTitle.value = val;
-
   // 经过序号排序处理的图片对象list
   List<GalleryImage> get imagesFromMap {
     List<MapEntry<int, GalleryImage>> list = imageMap.entries
@@ -95,28 +91,49 @@ class GalleryPageState {
   }
 
   final Map<int, Future<List<GalleryImage>>> mapLoadImagesForSer = {};
-
   final RxList<GalleryComment> comments = <GalleryComment>[].obs;
 
-  // 另一个语言的标题
-  String get topTitle {
+  // 副标题
+  final _subTitle = ''.obs;
+  set subTitle(String val) => _subTitle.value = val;
+  String get subTitle {
     // logger.d('${galleryProvider.japaneseTitle} ${galleryProvider.englishTitle}');
 
-    if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryProvider?.englishTitle ?? '';
-    } else {
+    // if ((_ehConfigService.isJpnTitle.value) &&
+    //     (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
+    //   return galleryProvider?.englishTitle ?? '';
+    // } else {
+    //   return galleryProvider?.japaneseTitle ?? '';
+    // }
+
+    if (firstMainTitle == galleryProvider?.englishTitle) {
       return galleryProvider?.japaneseTitle ?? '';
+    } else {
+      return galleryProvider?.englishTitle ?? '';
     }
   }
 
+  String firstMainTitle = '';
+
   // 根据设置的语言显示的标题
-  String get title {
-    if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryProvider?.japaneseTitle ?? '';
-    } else {
+  String get mainTitle {
+    // if ((_ehConfigService.isJpnTitle.value) &&
+    //     (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
+    //   return galleryProvider?.japaneseTitle ?? '';
+    // } else {
+    //   return galleryProvider?.englishTitle ?? '';
+    // }
+
+    if (firstMainTitle.isEmpty) {
+      firstMainTitle = galleryProvider?.englishTitle ?? '';
+    }
+
+    if (firstMainTitle == galleryProvider?.englishTitle) {
       return galleryProvider?.englishTitle ?? '';
+    } else {
+      return galleryProvider?.japaneseTitle ??
+          galleryProvider?.englishTitle ??
+          '';
     }
   }
 

@@ -66,7 +66,7 @@ class GalleryHeader extends StatelessWidget {
                         children: <Widget>[
                           // 标题
                           GalleryTitle(
-                            title: logic.gState.title,
+                            title: logic.gState.mainTitle,
                           ),
                           // 上传用户
                           GalleryUploader(

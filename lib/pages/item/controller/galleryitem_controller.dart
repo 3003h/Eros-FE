@@ -89,12 +89,13 @@ class GalleryItemController extends GetxController {
   }
 
   String get title {
-    if ((_ehConfigService.isJpnTitle.value) &&
-        (galleryProvider.japaneseTitle?.isNotEmpty ?? false)) {
-      return galleryProvider.japaneseTitle ?? '';
-    } else {
-      return galleryProvider.englishTitle ?? '';
-    }
+    // if ((_ehConfigService.isJpnTitle.value) &&
+    //     (galleryProvider.japaneseTitle?.isNotEmpty ?? false)) {
+    //   return galleryProvider.japaneseTitle ?? '';
+    // } else {
+    //   return galleryProvider.englishTitle ?? '';
+    // }
+    return galleryProvider.englishTitle ?? '';
   }
 
   Rx<Color?> colorTap = ehTheme.itemBackgroundColor.obs;

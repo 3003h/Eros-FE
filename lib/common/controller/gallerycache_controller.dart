@@ -148,7 +148,7 @@ class GalleryCacheController extends GetxController {
       pageStateList.add(state);
     }
     logger.v(
-        'pageStateList\n${pageStateList.map((e) => '${e.title} - ${e.galleryProvider?.favcat}').join('\n')}');
+        'pageStateList\n${pageStateList.map((e) => '${e.mainTitle} - ${e.galleryProvider?.favcat}').join('\n')}');
   }
 
   GalleryPageState? getGalleryPageState(String gid) {
