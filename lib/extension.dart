@@ -10,6 +10,7 @@ import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
@@ -51,20 +52,25 @@ extension ExtTabList on TabConfig {
 }
 
 extension ExtComment on GalleryComment {
-  // 提取评论纯文字部分内容
-  String get text => span.map((GalleryCommentSpan e) {
-        if (e.imageUrl?.isNotEmpty ?? false) {
-          return '[image]${e.href ?? ''} ';
-        }
-        return e.text ?? '';
-      }).join();
+  String getText() {
+    if (text != null && text!.isNotEmpty) {
+      return text!;
+    }
 
-  String get textTranslate => span.map((GalleryCommentSpan e) {
-        if (e.imageUrl?.isNotEmpty ?? false) {
-          return '[image]${e.href ?? ''} ';
-        }
-        return e.translate ?? '';
-      }).join();
+    final html = '<div>$linkifyContent</div>';
+    final parsedString = parse(html).body?.text ?? '';
+    return parsedString;
+  }
+
+  String getTranslatedText() {
+    if (translatedText != null && translatedText!.isNotEmpty) {
+      return translatedText!;
+    }
+
+    final html = '<div>$linkifyTranslatedContent</div>';
+    final parsedString = parse(html).body?.text ?? '';
+    return parsedString;
+  }
 
   String? get linkifyContent {
     // 识别URL，并修改为 a href 元素
@@ -74,16 +80,15 @@ extension ExtComment on GalleryComment {
     );
   }
 
+  String? get linkifyTranslatedContent {
+    // 识别URL，并修改为 a href 元素
+    return translatedContent?.replaceAllMapped(
+      commentUrlRegExp,
+      (match) => '<a href="${match.group(0)}">${match.group(0)}</a>',
+    );
+  }
+
   DateTime get dateTime => DateFormat('yyyy-MM-dd HH:mm').parse(time);
-}
-
-extension ExtCommentSpan on GalleryCommentSpan {
-  CommentSpanType get sType =>
-      EnumToString.fromString(CommentSpanType.values, type ?? '') ??
-      CommentSpanType.text;
-
-  GalleryCommentSpan copyWithSpanType(CommentSpanType val) =>
-      copyWith(type: EnumToString.convertToString(val));
 }
 
 extension ExtGalleryProvider on GalleryProvider {

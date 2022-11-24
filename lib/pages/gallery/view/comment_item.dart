@@ -113,7 +113,10 @@ class CommentItem extends StatelessWidget {
     BuildContext context, {
     int? maxLines,
   }) {
-    final html = '<div>${galleryComment.linkifyContent}</div>';
+    final content = (galleryComment.showTranslate ?? false)
+        ? galleryComment.linkifyTranslatedContent ?? ''
+        : galleryComment.linkifyContent ?? '';
+    final html = '<div>$content</div>';
     // parse html
     final dom.Element element = parse(html).body!.firstChild! as dom.Element;
     return Text.rich(
@@ -262,7 +265,9 @@ class CommentItem extends StatelessWidget {
     required BuildContext context,
   }) {
     return ExpandableLinkify(
-      text: showTranslate ? galleryComment.textTranslate : galleryComment.text,
+      text: showTranslate
+          ? (galleryComment.translatedText ?? '')
+          : (galleryComment.text ?? ''),
       onOpen: (link) => onOpenUrl(url: link),
       options: const LinkifyOptions(humanize: false),
       maxLines: kMaxline,
@@ -321,7 +326,7 @@ class _CommentReply extends StatelessWidget {
                 ],
               ),
               Text(
-                reptyComment.text,
+                reptyComment.text ?? '',
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -381,7 +386,7 @@ class _CommentTail extends StatelessWidget {
               logger.i('edit ${galleryComment.id}');
               commentController.editComment(
                 id: galleryComment.id!,
-                oriComment: galleryComment.text,
+                oriComment: galleryComment.text ?? '',
               );
             },
           ),
@@ -693,12 +698,12 @@ class _TranslateButtonState extends State<TranslateButton> {
           : ehTheme.commitIconColor,
     );
 
-    const _w = CupertinoActivityIndicator(radius: kSizeVote / 2);
+    const _loadIcon = CupertinoActivityIndicator(radius: kSizeVote / 2);
 
     return CupertinoButton(
       padding: widget.padding,
       minSize: 0,
-      child: translating ? _w : _icon,
+      child: translating ? _loadIcon : _icon,
       onPressed: () async {
         vibrateUtil.light();
         setState(() {
