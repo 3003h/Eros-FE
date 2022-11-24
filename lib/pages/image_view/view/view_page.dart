@@ -261,17 +261,22 @@ class _DoublePageViewState extends State<DoublePageView> {
     logger.v(
         '_ratioStart:$_ratioStart, _ratioEnd:$_ratioEnd, _ratioBoth:$_ratioBoth');
 
-    final List<Widget> _pageList = <Widget>[
-      if (serStart > 0)
-        AspectRatio(
+    final showStart = serStart > 0;
+    final showEnd = vState.filecount > serStart;
+
+    Widget imageStart() => AspectRatio(
           aspectRatio: _ratioStart,
           child: buildViewImageStart(),
-        ),
-      if (vState.filecount > serStart)
-        AspectRatio(
+        );
+
+    Widget imageEnd() => AspectRatio(
           aspectRatio: _ratioEnd,
           child: buildViewImageEnd(),
-        ),
+        );
+
+    final List<Widget> _pageList = <Widget>[
+      if (showStart) showEnd ? imageStart() : Expanded(child: imageStart()),
+      if (showEnd) showStart ? imageEnd() : Expanded(child: imageEnd()),
     ];
 
     Widget doubleView = Row(

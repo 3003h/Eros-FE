@@ -128,7 +128,7 @@ dependencies:
   open_by_default:
     git:
       url: https://github.com/honjow/open_by_default.git
-  flex_color_picker: ^2.3.0
+  flex_color_picker: ^3.0.0
   bitsdojo_window: ^0.1.1
 #  image_picker: ^0.8.5
   sliver_tools: ^0.2.6
@@ -141,7 +141,7 @@ dependencies:
   image_compare: ^1.1.2
   isolate: ^2.1.1
   octo_image: ^1.0.2
-  google_mlkit_barcode_scanning: ^0.4.0
+  google_mlkit_barcode_scanning: ^0.5.0
 #  google_mlkit_translation: ^0.3.0
   # google_mlkit_language_id 在iOS上有问题。会闪退或者应用卡死
 #  google_mlkit_language_id: 0.3.0
