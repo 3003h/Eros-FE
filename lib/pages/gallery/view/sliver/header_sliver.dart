@@ -59,7 +59,7 @@ class GalleryHeaderSliver extends StatelessWidget {
                           children: [
                             // 标题
                             GalleryTitle(
-                              title: _pageState.title,
+                              title: _pageState.mainTitle,
                             ),
                             // 上传用户
                             GalleryUploader(

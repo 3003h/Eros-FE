@@ -106,7 +106,7 @@ class GalleryNavigationBar extends StatelessWidget {
         tag: pageCtrlTag,
         builder: (logic) {
           return SelectableText(
-            logic.gState.topTitle,
+            logic.gState.subTitle,
             textAlign: TextAlign.start,
             maxLines: 3,
             minLines: 1,

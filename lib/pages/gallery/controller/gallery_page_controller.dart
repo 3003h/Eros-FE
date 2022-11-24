@@ -643,7 +643,7 @@ class GalleryPageController extends GetxController
       token: gState.galleryProvider?.token,
       url: gState.galleryProvider?.url ?? '',
       fileCount: int.parse(gState.galleryProvider?.filecount ?? '0'),
-      title: gState.title,
+      title: gState.mainTitle,
       coverUrl: gState.galleryProvider?.imgUrl,
       rating: gState.galleryProvider?.rating,
       uploader: gState.galleryProvider?.uploader,

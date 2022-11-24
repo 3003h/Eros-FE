@@ -108,7 +108,7 @@ class ImagePhotoView extends GetView<ViewExtController> {
               imageUrl: _currentImage?.imageUrl ?? '',
               filePath: _currentImage?.filePath,
               origImageUrl: _currentImage?.originImageUrl,
-              title: '${vState.pageState?.title} [$imageSer]',
+              title: '${vState.pageState?.mainTitle} [$imageSer]',
               gid: vState.gid,
               ser: imageSer,
               filename: _currentImage?.filename,

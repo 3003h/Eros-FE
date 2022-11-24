@@ -73,7 +73,7 @@ class ArchiverController extends GetxController
       logger.d('archiver downloadLoacal $_url');
       _downloadController.downloadArchiverFile(
         gid: _pageState.galleryProvider?.gid ?? '0',
-        title: _pageState.title,
+        title: _pageState.mainTitle,
         dlType: dltype,
         url: _url,
         imgUrl: _pageState.galleryProvider?.imgUrl,

@@ -22,7 +22,7 @@ import 'controller_tag_service.dart';
 import 'locale_service.dart';
 
 class EhConfigService extends ProfileService {
-  RxBool isJpnTitle = false.obs;
+  // RxBool isJpnTitle = false.obs;
   // RxBool isTagTranslat = false.obs;
   RxBool isGalleryImgBlur = false.obs;
   RxBool isSiteEx = false.obs;
@@ -412,10 +412,10 @@ class EhConfigService extends ProfileService {
       Get.find<TabHomeController>().resetIndex();
     });
 
-    isJpnTitle.value = ehConfig.jpnTitle;
-    everProfile<bool>(isJpnTitle, (value) {
-      ehConfig = ehConfig.copyWith(jpnTitle: value);
-    });
+    // isJpnTitle.value = ehConfig.jpnTitle;
+    // everProfile<bool>(isJpnTitle, (value) {
+    //   ehConfig = ehConfig.copyWith(jpnTitle: value);
+    // });
 
     isTagTranslat = ehConfig.tagTranslat ?? isTagTranslat;
     everProfile<bool>(_isTagTranslat,

@@ -49,13 +49,13 @@ class ListViewLayoutSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
+    // final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
     final bool _tagTranslat = _ehConfigService.isTagTranslat;
     final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
 
-    void _handleJpnTitleChanged(bool newValue) {
-      _ehConfigService.isJpnTitle(newValue);
-    }
+    // void _handleJpnTitleChanged(bool newValue) {
+    //   _ehConfigService.isJpnTitle(newValue);
+    // }
 
     void _handleGalleryListImgBlurChanged(bool newValue) {
       _ehConfigService.isGalleryImgBlur.value = newValue;
@@ -110,12 +110,12 @@ class ListViewLayoutSetting extends StatelessWidget {
             desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
           );
         }),
-      TextSwitchItem(
-        L10n.of(context).show_jpn_title,
-        intValue: _jpnTitle,
-        onChanged: _handleJpnTitleChanged,
-        // desc: '如果该画廊有日文标题则优先显示',
-      ),
+      // TextSwitchItem(
+      //   L10n.of(context).show_jpn_title,
+      //   intValue: _jpnTitle,
+      //   onChanged: _handleJpnTitleChanged,
+      //   // desc: '如果该画廊有日文标题则优先显示',
+      // ),
       TextSwitchItem(
         L10n.of(context).hide_top_bar_on_scroll,
         intValue: _ehConfigService.hideTopBarOnScroll,
