@@ -54,10 +54,10 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - google_mlkit_barcode_scanning (0.4.0):
+  - google_mlkit_barcode_scanning (0.5.0):
     - Flutter
     - google_mlkit_commons
-    - GoogleMLKit/BarcodeScanning (~> 3.1.0)
+    - GoogleMLKit/BarcodeScanning (~> 3.2.0)
   - google_mlkit_commons (0.2.0):
     - Flutter
     - MLKitVision
@@ -65,14 +65,14 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleMLKit/BarcodeScanning (3.1.0):
+  - GoogleMLKit/BarcodeScanning (3.2.0):
     - GoogleMLKit/MLKitCore
-    - MLKitBarcodeScanning (~> 2.1.0)
-  - GoogleMLKit/LanguageID (3.1.0):
+    - MLKitBarcodeScanning (~> 2.2.0)
+  - GoogleMLKit/LanguageID (3.2.0):
     - GoogleMLKit/MLKitCore
-    - MLKitLanguageID (~> 3.1.0)
-  - GoogleMLKit/MLKitCore (3.1.0):
-    - MLKitCommon (~> 7.0.0)
+    - MLKitLanguageID (~> 3.2.0)
+  - GoogleMLKit/MLKitCore (3.2.0):
+    - MLKitCommon (~> 8.0.0)
   - GoogleToolboxForMac/DebugUtils (2.3.2):
     - GoogleToolboxForMac/Defines (= 2.3.2)
   - GoogleToolboxForMac/Defines (2.3.2)
@@ -104,14 +104,14 @@ PODS:
     - Flutter
   - learning_language (0.0.2):
     - Flutter
-    - GoogleMLKit/LanguageID (~> 3.1.0)
+    - GoogleMLKit/LanguageID (~> 3.2.0)
   - local_auth_ios (0.0.1):
     - Flutter
   - MLImage (1.0.0-beta3)
-  - MLKitBarcodeScanning (2.1.0):
-    - MLKitCommon (~> 7.0)
-    - MLKitVision (~> 4.1)
-  - MLKitCommon (7.0.0):
+  - MLKitBarcodeScanning (2.2.0):
+    - MLKitCommon (~> 8.0)
+    - MLKitVision (~> 4.2)
+  - MLKitCommon (8.0.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
@@ -120,22 +120,22 @@ PODS:
     - GoogleUtilitiesComponents (~> 1.0)
     - GTMSessionFetcher/Core (~> 1.1)
     - Protobuf (~> 3.12)
-  - MLKitLanguageID (3.1.0):
-    - MLKitNaturalLanguage (~> 4.1)
-  - MLKitNaturalLanguage (4.1.0):
+  - MLKitLanguageID (3.2.0):
+    - MLKitNaturalLanguage (~> 4.2)
+  - MLKitNaturalLanguage (4.2.0):
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - GoogleToolboxForMac/StringEncoding (~> 2.1)
     - GTMSessionFetcher/Core (~> 1.1)
-    - MLKitCommon (~> 7.0)
+    - MLKitCommon (~> 8.0)
     - Protobuf (~> 3.12)
-  - MLKitVision (4.1.0):
+  - MLKitVision (4.2.0):
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - GTMSessionFetcher/Core (~> 1.1)
     - MLImage (= 1.0.0-beta3)
-    - MLKitCommon (~> 7.0)
+    - MLKitCommon (~> 8.0)
     - Protobuf (~> 3.12)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
@@ -164,11 +164,11 @@ PODS:
   - SDWebImage (5.14.2):
     - SDWebImage/Core (= 5.14.2)
   - SDWebImage/Core (5.14.2)
-  - Sentry/HybridSDK (7.30.2)
+  - Sentry/HybridSDK (7.31.2)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 7.30.2)
+    - Sentry/HybridSDK (= 7.31.2)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -330,10 +330,10 @@ SPEC CHECKSUMS:
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_mlkit_barcode_scanning: 4805cc8281f41915a13f8bbb7223291e982b6836
+  google_mlkit_barcode_scanning: 5c18504510a7b3a326c2ab19758457633248b7b6
   google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
-  GoogleMLKit: 9d072522949ff0ef4dae5359feaf3db2ef2fa658
+  GoogleMLKit: 0017a6a8372e1a182139b9def4d89be5d87ca5a7
   GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
@@ -341,14 +341,14 @@ SPEC CHECKSUMS:
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_save: 66ab41fa2c60bc9569e55563ea287cced7b79fd1
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
-  learning_language: 6484df8f93ad53c63134d8dc658bc39998c19b36
+  learning_language: a69f9bea702eac31bf46a2afacf82bb5b72a5e6f
   local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
-  MLKitBarcodeScanning: 74f43c38f3f85b3f3f332006b20a1a22f404256c
-  MLKitCommon: 20f4aca0ec2bb37cef2b9c211b50586817bac5d3
-  MLKitLanguageID: 307e8e8bb45443d6ea2db51fcd6e4ca9371fdfac
-  MLKitNaturalLanguage: d10a5cebc36bfe2660af77fe726b4ba4b290c8a4
-  MLKitVision: 639a171d937241f3fcf92bc1b3ef8f179f49916c
+  MLKitBarcodeScanning: d92fe1911001ec36870162c5a0eb206f612b7169
+  MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175
+  MLKitLanguageID: 395b867dd9105709789c32b3bac8449cccd44332
+  MLKitNaturalLanguage: 3350ebe7436046cd3146b8df9a2e06d6ba7a6439
+  MLKitVision: 96c96571190b7f63eddf4a12068ce8a8689e0d2c
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   open_by_default: a696353e830a8f8b4b1df1a92e7122275675f983
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
@@ -362,8 +362,8 @@ SPEC CHECKSUMS:
   Protobuf: 02524ec14183fe08fb259741659e79683788158b
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
   SDWebImage: b9a731e1d6307f44ca703b3976d18c24ca561e84
-  Sentry: 9be48e341494bc976c963b05aa4a8ca48308c684
-  sentry_flutter: 544e6376e35b00eef9f0864f8bb7f10a0e204993
+  Sentry: b15765d11769852fe78c9add942f7df60ed5dbf5
+  sentry_flutter: 8ef5e68ee2d301805279ed134b3b38dbe9e090f0
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
