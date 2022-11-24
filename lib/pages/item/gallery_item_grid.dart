@@ -253,17 +253,17 @@ class GalleryItemGrid extends StatelessWidget {
 
   /// 构建标题
   Widget _buildTitle() {
-    return Obx(() => Text(
-          galleryProviderController.title,
-          maxLines: kTitleMaxLines,
-          textAlign: TextAlign.left, // 对齐方式
-          overflow: TextOverflow.ellipsis, // 超出部分
-          style: const TextStyle(
-            fontSize: 12,
-            // height: 1.3,
-            // fontWeight: FontWeight.w500,
-          ),
-        ));
+    return Text(
+      galleryProviderController.title,
+      maxLines: kTitleMaxLines,
+      textAlign: TextAlign.left, // 对齐方式
+      overflow: TextOverflow.ellipsis, // 超出部分
+      style: const TextStyle(
+        fontSize: 12,
+        // height: 1.3,
+        // fontWeight: FontWeight.w500,
+      ),
+    );
   }
 }
 

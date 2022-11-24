@@ -138,16 +138,16 @@ class GalleryItemSimpleWidget extends StatelessWidget {
 
   /// 构建标题
   Widget _buildTitle() {
-    return Obx(() => Text(
-          galleryProviderController.title,
-          maxLines: 2,
-          textAlign: TextAlign.left, // 对齐方式
-          overflow: TextOverflow.ellipsis, // 超出部分省略号
-          style: const TextStyle(
-            fontSize: 13.5,
-            fontWeight: FontWeight.w500,
-          ),
-        ));
+    return Text(
+      galleryProviderController.title,
+      maxLines: 2,
+      textAlign: TextAlign.left, // 对齐方式
+      overflow: TextOverflow.ellipsis, // 超出部分省略号
+      style: const TextStyle(
+        fontSize: 13.5,
+        fontWeight: FontWeight.w500,
+      ),
+    );
   }
 
   /// 构建封面图片
