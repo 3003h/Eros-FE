@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/chapter.dart';
 import 'package:get/get.dart' hide Node;
@@ -106,113 +105,6 @@ List<GalleryComment> parseGalleryComment(Document document) {
       final rawContent = contextElem?.innerHtml ?? '';
       logger.v('rawContent: $rawContent');
 
-      /// for in遍历的方式处理
-      final List<GalleryCommentSpan> commentSpansf = [];
-      for (final Node node in contextElem?.nodes ?? []) {
-        if (node.nodeType == Node.TEXT_NODE) {
-          final String _nodeText = RegExp(r'^"?(.+)"?$')
-                  .firstMatch(node.text?.trim() ?? '')
-                  ?.group(1)
-                  ?.trim() ??
-              node.text?.trim() ??
-              '';
-
-          // 如果数组最后一个是纯文本 直接追加文本
-          if (commentSpansf.isNotEmpty &&
-              (commentSpansf.last.sType == CommentSpanType.text)) {
-            commentSpansf.last = commentSpansf.last
-                .copyWith(text: '${commentSpansf.last.text ?? ''}$_nodeText');
-          } else {
-            commentSpansf.add(GalleryCommentSpan(text: _nodeText)
-                .copyWithSpanType(CommentSpanType.text));
-          }
-        } else if (node.nodeType == Node.ELEMENT_NODE) {
-          // br标签 换行
-          if ((node as Element).localName == 'br') {
-            // 如果数组最后一个是纯文本 直接追加文本
-            if (commentSpansf.isNotEmpty &&
-                (commentSpansf.last.sType == CommentSpanType.text)) {
-              commentSpansf.last = commentSpansf.last
-                  .copyWith(text: '${commentSpansf.last.text ?? ''}\n');
-            } else {
-              commentSpansf.add(const GalleryCommentSpan(text: '\n')
-                  .copyWithSpanType(CommentSpanType.text));
-            }
-            continue;
-          }
-
-          // span 带 href
-          if (node.localName == 'span' && node.children.isNotEmpty) {
-            final Element? _nodeElm = node.children.first;
-            final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
-            final GalleryCommentSpan _commentSpan = GalleryCommentSpan(
-              text: _nodeElm?.text.trim() ?? _nodeHref,
-              href: _nodeHref,
-            ).copyWithSpanType(CommentSpanType.linkText);
-
-            commentSpansf.add(_commentSpan);
-            continue;
-          }
-
-          // a标签带href
-          if (node.localName == 'a') {
-            final Element? _nodeElm = node;
-
-            final String _nodeHref = _nodeElm?.attributes['href'] ?? '';
-            // logger.d('_nodeHref $_nodeHref');
-
-            if (_nodeElm?.children.isNotEmpty ?? false) {
-              final Element? _imgElm = _nodeElm?.children
-                  .firstWhere((element) => element.localName == 'img');
-              final _nodeImageUrl = _imgElm?.attributes['src'];
-              final GalleryCommentSpan _commentSpan = GalleryCommentSpan(
-                text: _nodeElm?.text.trim() ?? _nodeHref,
-                href: _nodeHref,
-                imageUrl: _nodeImageUrl,
-              ).copyWithSpanType(CommentSpanType.linkImage);
-
-              commentSpansf.add(_commentSpan);
-              continue;
-            } else {
-              // 如果数组最后一个是纯文本 直接追加文本
-              if (_nodeHref.isEmpty &&
-                  commentSpansf.isNotEmpty &&
-                  (commentSpansf.last.sType == CommentSpanType.text)) {
-                commentSpansf.last = commentSpansf.last.copyWith(
-                    text: '${commentSpansf.last.text}${_nodeElm?.text ?? ''}');
-              } else {
-                // 文本和href相同的情况，添加为普通文本内容，靠linkedText组件自动识别区分
-                if (_nodeElm?.text == _nodeHref) {
-                  commentSpansf.add(GalleryCommentSpan(
-                    text: _nodeElm?.text ?? _nodeHref,
-                    href: _nodeHref,
-                  ).copyWithSpanType(CommentSpanType.text));
-                } else {
-                  // 文本和href不同 才添加linkText类型
-                  commentSpansf.add(GalleryCommentSpan(
-                    text: _nodeElm?.text ?? _nodeHref,
-                    href: _nodeHref,
-                  ).copyWithSpanType(CommentSpanType.linkText));
-                }
-              }
-            }
-          }
-
-          // 只有一个img的情况 无href
-          if (node.localName == 'img') {
-            final Element? _nodeElm = node;
-            final String _nodeImageUrl = _nodeElm?.attributes['src'] ?? '';
-
-            final _commentSpan = GalleryCommentSpan(
-              text: _nodeElm?.text.trim() ?? _nodeImageUrl,
-              imageUrl: _nodeImageUrl,
-            ).copyWithSpanType(CommentSpanType.image);
-
-            commentSpansf.add(_commentSpan);
-          }
-        }
-      }
-
       // 解析评论评分详情
       final Element? scoresElem = comment.querySelector('div.c7');
       final spanElms = scoresElem?.querySelectorAll('span') ?? [];
@@ -224,18 +116,21 @@ List<GalleryComment> parseGalleryComment(Document document) {
       ];
       // print('$_scoreDetails');
 
-      _galleryComment.add(GalleryComment(
+      final galleryComment = GalleryComment(
         id: _id,
         canEdit: _canEdit,
         canVote: _canVote,
         vote: _vote,
         name: postName,
-        span: commentSpansf,
         time: postTimeLocal,
         score: score,
         scoreDetails: _scoreDetails,
         memberId: userId,
         rawContent: rawContent,
+      );
+
+      _galleryComment.add(galleryComment.copyWith(
+        text: galleryComment.getText(),
       ));
     } catch (e, stack) {
       logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
@@ -441,7 +336,7 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
 List<Chapter>? _parseChapter(List<GalleryComment> comments) {
   final listListChapter = <List<Chapter>>[];
   for (final comment in comments) {
-    final listChapter = parseChapter(comment.text);
+    final listChapter = parseChapter(comment.rawContent ?? '');
     if (listChapter.length >= 2) {
       listListChapter.add(listChapter);
     }

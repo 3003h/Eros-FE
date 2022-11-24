@@ -23,7 +23,6 @@ export 'fav_config.dart';
 export 'favcat.dart';
 export 'gallery_cache.dart';
 export 'gallery_comment.dart';
-export 'gallery_comment_span.dart';
 export 'gallery_image.dart';
 export 'gallery_list.dart';
 export 'gallery_provider.dart';

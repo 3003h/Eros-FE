@@ -1,7 +1,6 @@
 {
   "name" : "",
   "time" : "",
-  "span" : "$[]gallery_comment_span",
   "score" : "20",
   "vote?": -1,
   "id?": "4089350",
@@ -10,5 +9,8 @@
   "canVote?": false,
   "showTranslate?": false,
   "scoreDetails?": [""],
-  "rawContent?": ""
+  "rawContent?": "",
+  "translatedContent?": "",
+  "text?": "",
+  "translatedText?": ""
 }

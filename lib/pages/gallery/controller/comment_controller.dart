@@ -83,7 +83,7 @@ class CommentController extends GetxController {
 
     // 用户名无空格 id为 #1234# 或者摩尔斯密码形式
     final reg = RegExp(r'\s*@(\S+)((?!#\d+#).)+(#(\d+)#|\n([ ·-]+))?');
-    final match = reg.firstMatch(comment.text);
+    final match = reg.firstMatch(comment.text ?? '');
     if (match == null || match.groupCount == 0) {
       return null;
     }
@@ -130,7 +130,7 @@ class CommentController extends GetxController {
     if (repty == null) {
       // 如果还是匹配不上 考虑用户名中带空格的可能性 但是需要换行结束
       final regSpace = RegExp(r'\s*@(.+)(\n)?');
-      final matchSpace = regSpace.firstMatch(comment.text);
+      final matchSpace = regSpace.firstMatch(comment.text ?? '');
       if (matchSpace == null || matchSpace.groupCount == 0) {
         return null;
       }
@@ -158,7 +158,8 @@ class CommentController extends GetxController {
   }
 
   List<GalleryComment?> parserAllCommentRepty(GalleryComment comment) {
-    List<String> textList = comment.text.split('@').map((e) => '@$e').toList();
+    List<String> textList =
+        (comment.text ?? '').split('@').map((e) => '@$e').toList();
 
     final reps = <GalleryComment?>[];
 
@@ -258,33 +259,33 @@ class CommentController extends GetxController {
     logger.v('commitTranslate');
     final int? _commentIndex =
         comments?.indexWhere((element) => element.id == _id.toString());
-    final List<GalleryCommentSpan>? spans = comments?[_commentIndex!].span;
+    final comment = comments?[_commentIndex!];
 
-    if (spans != null) {
-      for (int i = 0; i < spans.length; i++) {
-        String? translate = spans[i].translate;
-        if (translate?.isEmpty ?? true) {
-          if (spans[i].text?.isEmpty ?? true) {
-            return;
-          }
+    if (comment?.translatedContent != null &&
+        comment?.translatedContent?.trim() != '') {
+      comments![_commentIndex!] = comments![_commentIndex].copyWith(
+        showTranslate: !(comments![_commentIndex].showTranslate ?? false),
+      );
 
-          logger.d('11111');
-          translate = await translatorHelper.translateText(spans[i].text ?? '');
-
-          if (translate.trim().isEmpty) {
-            return;
-          }
-        }
-
-        spans[i] = spans[i].copyWith(translate: translate);
-      }
+      return;
     }
+
+    logger.d('t :${comment?.rawContent}');
+    final translate =
+        await translatorHelper.translateText(comment?.rawContent ?? '');
+
+    logger.d('tr: $translate');
 
     comments![_commentIndex!] = comments![_commentIndex].copyWith(
       showTranslate: !(comments![_commentIndex].showTranslate ?? false),
+      translatedContent: translate,
     );
+
+    comments![_commentIndex] = comments![_commentIndex].copyWith(
+      translatedText: comments![_commentIndex].getTranslatedText(),
+    );
+
     // update([_id]);
-    update();
   }
 
   // 点赞
@@ -459,7 +460,7 @@ class CommentController extends GetxController {
     final repty =
         comments?.firstWhereOrNull((element) => element.id == reptyCommentId);
 
-    reptyCommentText = repty?.text.replaceAll('\n', '    ') ?? '';
+    reptyCommentText = repty?.text?.replaceAll('\n', '    ') ?? '';
     reptyUser = repty?.name ?? '';
 
     if (repty != null) {
