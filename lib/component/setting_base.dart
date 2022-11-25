@@ -410,7 +410,7 @@ class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
 class TextSwitchItem extends StatefulWidget {
   const TextSwitchItem(
     this.title, {
-    required this.intValue,
+    required this.value,
     this.onChanged,
     this.desc,
     this.descOn,
@@ -422,7 +422,7 @@ class TextSwitchItem extends StatefulWidget {
     this.onTap,
   }) : super(key: key);
 
-  final bool? intValue;
+  final bool value;
   final ValueChanged<bool>? onChanged;
   final String title;
   final String? desc;
@@ -439,7 +439,7 @@ class TextSwitchItem extends StatefulWidget {
 }
 
 class _TextSwitchItemState extends State<TextSwitchItem> {
-  late bool _switchValue = false;
+  late bool _switchValue;
   String? _desc;
 
   late Color _color;
@@ -448,7 +448,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
   @override
   void initState() {
     super.initState();
-    _switchValue = widget.intValue ?? false;
+    _switchValue = widget.value;
 
     _color = CupertinoDynamicColor.resolve(
         ehTheme.itemBackgroundColor!, Get.context!);
@@ -457,7 +457,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
 
   @override
   Widget build(BuildContext context) {
-    _desc = _switchValue ? widget.descOn : widget.desc;
+    _desc = widget.value ? widget.descOn : widget.desc;
 
     final Color color =
         CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
@@ -516,7 +516,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                             setState(() {
                               _switchValue = value;
                               _desc = value ? widget.descOn : widget.desc;
-                              widget.onChanged?.call(_switchValue);
+                              widget.onChanged?.call(value);
                             });
                           }
                         : null,

@@ -326,7 +326,7 @@ Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
   return TextSwitchItem(
     L10n.of(context).uc_show_page_num,
     hideDivider: hideLine,
-    intValue: _controller.ehSetting.showGalleryPageNumbers == '0',
+    value: _controller.ehSetting.showGalleryPageNumbers == '0',
     onChanged: (val) => _controller.ehSetting =
         _controller.ehSetting.copyWith(showGalleryPageNumbers: val ? '0' : '1'),
   );
@@ -355,7 +355,7 @@ Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
       return TextSwitchItem(
         L10n.of(context).uc_ori_image,
         hideDivider: true,
-        intValue: _controller.ehSetting.originalImages == '1',
+        value: _controller.ehSetting.originalImages == '1',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),
       );
@@ -388,7 +388,7 @@ Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
       return TextSwitchItem(
         L10n.of(context).uc_mpv_always,
         key: UniqueKey(),
-        intValue: _controller.ehSetting.alwaysUseMpv == '1',
+        value: _controller.ehSetting.alwaysUseMpv == '1',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : '0'),
       );
@@ -450,7 +450,7 @@ Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
       return TextSwitchItem(
         L10n.of(context).uc_mpv_thumb_pane,
         key: UniqueKey(),
-        intValue: _controller.ehSetting.mpvThumbnailPane == '0',
+        value: _controller.ehSetting.mpvThumbnailPane == '0',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '0' : '1'),
       );

@@ -120,7 +120,7 @@ class _ListView extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       TextSwitchItem(
         L10n.of(context).show_comment_avatar,
-        intValue: _ehConfigService.showCommentAvatar,
+        value: _ehConfigService.showCommentAvatar,
         onChanged: (val) => _ehConfigService.showCommentAvatar = val,
         hideDivider: true,
       ),

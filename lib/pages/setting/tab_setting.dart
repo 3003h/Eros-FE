@@ -69,7 +69,7 @@ class TablistView extends StatelessWidget {
                   ),
                 ),
                 iconIndent: 32,
-                intValue: controller.tabMap[e],
+                value: controller.tabMap[e] ?? false,
                 onChanged: (controller.disableSwitch && controller.tabMap[e]!)
                     ? null
                     : (bool val) {

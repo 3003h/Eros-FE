@@ -253,9 +253,35 @@ class EhConfigService extends ProfileService {
   bool get hideTopBarOnScroll => _hideTopBarOnScroll.value;
   set hideTopBarOnScroll(bool val) => _hideTopBarOnScroll.value = val;
 
+  final _itemConfigList = <ItemConfig>[].obs;
+  final _itemConfigMap = <ListModeEnum, ItemConfig>{}.obs;
+  Map<ListModeEnum, ItemConfig> get mapItemConfig => _itemConfigMap;
+
+  ItemConfig? getItemConfig(ListModeEnum mode) {
+    return _itemConfigMap[mode];
+  }
+
+  void setItemConfig(ListModeEnum mode, ItemConfig Function(ItemConfig) func) {
+    _itemConfigMap[mode] = func(_itemConfigMap[mode] ??
+        ItemConfig(type: EnumToString.convertToString(mode)));
+    _itemConfigList(List.from(_itemConfigMap.values));
+  }
+
   @override
   void onInit() {
     super.onInit();
+
+    _itemConfigList(layoutConfig.itemConfigs);
+    for (final itemConfig in _itemConfigList) {
+      _itemConfigMap[
+          EnumToString.fromString(ListModeEnum.values, itemConfig.type ?? '') ??
+              ListModeEnum.grid] = itemConfig;
+    }
+
+    everProfile<List<ItemConfig>>(_itemConfigList, (val) {
+      logger.d('itemConfigList changed: ${val.map((e) => e.toJson())}');
+      layoutConfig = layoutConfig.copyWith(itemConfigs: val);
+    });
 
     // hideTopBarOnScroll
     hideTopBarOnScroll = ehConfig.hideTopBarOnScroll ?? hideTopBarOnScroll;

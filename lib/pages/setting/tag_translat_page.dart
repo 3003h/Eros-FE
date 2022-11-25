@@ -74,7 +74,7 @@ class ListViewTagTranslate extends StatelessWidget {
       children: [
         Obx(() => TextSwitchItem(
               '开启标签翻译',
-              intValue: _tagTranslat,
+              value: _tagTranslat,
               onChanged: _handleTagTranslatChanged,
               desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
               suffix: CupertinoButton(
@@ -98,7 +98,7 @@ class ListViewTagTranslate extends StatelessWidget {
         }),
         TextSwitchItem(
           '加速下载数据',
-          intValue: _ehConfigService.enableTagTranslateCDN,
+          value: _ehConfigService.enableTagTranslateCDN,
           onChanged: _handleTagTranslatCDNChanged,
           desc: '使用CDN进行加速下载',
         ),

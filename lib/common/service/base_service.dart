@@ -17,6 +17,11 @@ class ProfileService extends GetxService {
   set dnsConfig(DnsConfig val) =>
       Global.profile = Global.profile.copyWith(dnsConfig: val);
 
+  LayoutConfig get layoutConfig =>
+      Global.profile.layoutConfig ?? const LayoutConfig();
+  set layoutConfig(LayoutConfig val) =>
+      Global.profile = Global.profile.copyWith(layoutConfig: val);
+
   Worker everProfile<T>(RxInterface<T> listener, ValueChanged<T> onChange) {
     return ever<T>(listener, (value) {
       onChange(value);

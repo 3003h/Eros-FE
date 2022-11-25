@@ -110,21 +110,21 @@ class WebDavSettingView extends GetView<WebdavController> {
         const ItemSpace(),
         TextSwitchItem(
           L10n.of(context).sync_history,
-          intValue: controller.syncHistory,
+          value: controller.syncHistory,
           onChanged: (val) {
             controller.syncHistory = val;
           },
         ),
         TextSwitchItem(
           L10n.of(context).sync_read_progress,
-          intValue: controller.syncReadProgress,
+          value: controller.syncReadProgress,
           onChanged: (val) {
             controller.syncReadProgress = val;
           },
         ),
         TextSwitchItem(
           L10n.of(context).sync_group,
-          intValue: controller.syncGroupProfile,
+          value: controller.syncGroupProfile,
           onChanged: (val) {
             controller.syncGroupProfile = val;
           },
@@ -132,7 +132,7 @@ class WebDavSettingView extends GetView<WebdavController> {
         TextSwitchItem(
           L10n.of(context).sync_quick_search,
           hideDivider: true,
-          intValue: controller.syncQuickSearch,
+          value: controller.syncQuickSearch,
           onChanged: (val) {
             controller.syncQuickSearch = val;
           },

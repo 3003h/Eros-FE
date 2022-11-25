@@ -15,7 +15,6 @@ enum GalleryListType {
   toplist,
   favorite,
   popular,
-  aggregate,
 }
 
 enum PageType {

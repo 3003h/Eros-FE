@@ -71,7 +71,7 @@ class ListViewLayoutSetting extends StatelessWidget {
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
             L10n.of(context).dark_mode_effect,
-            intValue: _ehConfigService.isPureDarkTheme.value,
+            value: _ehConfigService.isPureDarkTheme.value,
             onChanged: _handlePureDarkChanged,
             desc: L10n.of(context).gray_black,
             descOn: L10n.of(context).pure_black,
@@ -118,13 +118,13 @@ class ListViewLayoutSetting extends StatelessWidget {
       // ),
       TextSwitchItem(
         L10n.of(context).hide_top_bar_on_scroll,
-        intValue: _ehConfigService.hideTopBarOnScroll,
+        value: _ehConfigService.hideTopBarOnScroll,
         onChanged: (val) => _ehConfigService.hideTopBarOnScroll = val,
       ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
           '画廊封面模糊',
-          intValue: _galleryImgBlur,
+          value: _galleryImgBlur,
           onChanged: _handleGalleryListImgBlurChanged,
           hideDivider: true,
           // desc: '画廊列表封面模糊效果',
@@ -167,7 +167,7 @@ class ListViewLayoutSetting extends StatelessWidget {
           firstChild: const SizedBox(),
           secondChild: TextSwitchItem(
             L10n.of(context).blurring_cover_background,
-            intValue: _ehConfigService.blurringOfCoverBackground,
+            value: _ehConfigService.blurringOfCoverBackground,
             onChanged: (val) =>
                 _ehConfigService.blurringOfCoverBackground = val,
             hideDivider: _ehConfigService.listMode.value != ListModeEnum.list,
@@ -186,7 +186,7 @@ class ListViewLayoutSetting extends StatelessWidget {
           firstChild: const SizedBox(),
           secondChild: TextSwitchItem(
             L10n.of(context).fixed_height_of_list_items,
-            intValue: _ehConfigService.fixedHeightOfListItems,
+            value: _ehConfigService.fixedHeightOfListItems,
             onChanged: (val) => _ehConfigService.fixedHeightOfListItems = val,
             hideDivider: true,
           ),
@@ -196,7 +196,7 @@ class ListViewLayoutSetting extends StatelessWidget {
       Obx(() {
         return SelectorSettingItem(
           title: L10n.of(context).avatar,
-          hideDivider: !localeService.isLanguageCodeZh,
+          hideDivider: !localeService.isLanguageCodeZh || !GetPlatform.isMobile,
           onTap: () {
             Get.toNamed(
               EHRoutes.avatarSetting,
@@ -208,10 +208,10 @@ class ListViewLayoutSetting extends StatelessWidget {
               : L10n.of(context).off,
         );
       }),
-      if (localeService.isLanguageCodeZh)
+      if (localeService.isLanguageCodeZh && GetPlatform.isMobile)
         TextSwitchItem(
           '评论机翻按钮',
-          intValue: _ehConfigService.commentTrans.value,
+          value: _ehConfigService.commentTrans.value,
           onChanged: (bool newValue) =>
               _ehConfigService.commentTrans.value = newValue,
           desc: '关闭',

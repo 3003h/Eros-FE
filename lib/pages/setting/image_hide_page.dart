@@ -32,7 +32,7 @@ class ImageHidePage extends GetView<ImageHideController> {
               children: [
                 Obx(() => TextSwitchItem(
                       L10n.of(context).QR_code_check,
-                      intValue: _ehConfigService.enableQRCodeCheck,
+                      value: _ehConfigService.enableQRCodeCheck,
                       onChanged: (bool val) =>
                           _ehConfigService.enableQRCodeCheck = val,
                       hideDivider: true,
@@ -40,7 +40,7 @@ class ImageHidePage extends GetView<ImageHideController> {
                 const ItemSpace(),
                 Obx(() => TextSwitchItem(
                       L10n.of(context).phash_check,
-                      intValue: _ehConfigService.enablePHashCheck,
+                      value: _ehConfigService.enablePHashCheck,
                       onChanged: (bool val) =>
                           _ehConfigService.enablePHashCheck = val,
                     )),

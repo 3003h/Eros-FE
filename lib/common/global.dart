@@ -240,16 +240,12 @@ class Global {
   }
 
   static void _initProfile() {
-    final GStore gStore = Get.find<GStore>();
-    // logger.v('profile\n${jsonEncode(gStore.profile.webdav)}');
-    profile = hiveHelper.profile ?? gStore.profile;
+    profile = hiveHelper.profile;
   }
 
   // 持久化Profile信息
   static void saveProfile() {
-    // logger.d(profile.toJson());
-    // final GStore gStore = Get.find<GStore>();
-    // gStore.profile = profile;
+    // logger.d(profile.layoutConfig?.toJson());
     hiveHelper.profile = profile;
   }
 

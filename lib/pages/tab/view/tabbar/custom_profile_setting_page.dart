@@ -451,61 +451,10 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                   ),
                 ),
                 // 搜索选项：关键词 类型 高级搜索，popular时隐藏, 聚合时显示聚合选项
-                AnimatedCrossFade(
-                  firstChild: const SizedBox(width: double.infinity),
-                  // secondChild: buildSearchOption(context),
-                  secondChild: AnimatedCrossFade(
-                    firstChild: buildAggregateOption(context),
-                    secondChild: buildSearchOption(context),
-                    crossFadeState: _listType != GalleryListType.aggregate
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    duration: 300.milliseconds,
-                  ),
-                  crossFadeState: _listType != GalleryListType.popular
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  duration: 300.milliseconds,
-                ),
+                buildSearchOption(context),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  // 聚合搜索设置
-  Widget buildAggregateOption(BuildContext context) {
-    // return SizedBox(width: double.infinity);
-    List<CustomProfile> profiles = controller.profiles
-        .where((p) =>
-            p.listType != GalleryListType.aggregate &&
-            p.uuid != customProfile.uuid)
-        .toList();
-    return GroupItem(
-      title: L10n.of(context).aggregate_groups,
-      child: Container(
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final profile = profiles[index];
-            return TextSwitchItem(
-              profile.name,
-              intValue: customProfile.aggregateGroups
-                  ?.any((element) => element.trim() == profile.uuid),
-              onChanged: (val) {
-                logger.d('${profile.uuid} $val');
-                if (val) {
-                  customProfile.aggregateGroups?.add(profile.uuid);
-                } else {
-                  customProfile.aggregateGroups?.removeWhere(
-                      (element) => element.trim() == profile.uuid);
-                }
-              },
-            );
-          },
-          itemCount: profiles.length,
         ),
       ),
     );
@@ -699,7 +648,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
         GroupItem(
           child: TextSwitchItem(
             L10n.of(context).s_Advanced_Options,
-            intValue: enableAdvance,
+            value: enableAdvance,
             onChanged: (val) {
               setState(() {
                 enableAdvance = val;
@@ -752,7 +701,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                   // ),
                   TextSwitchItem(
                     L10n.of(context).s_Only_Show_Galleries_With_Torrents,
-                    intValue: requireGalleryTorrent,
+                    value: requireGalleryTorrent,
                     onChanged: (val) => requireGalleryTorrent = val,
                   ),
                   // TextSwitchItem(
@@ -767,7 +716,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                   // ),
                   TextSwitchItem(
                     L10n.of(context).s_Show_Expunged_Galleries,
-                    intValue: browseExpungedGalleries,
+                    value: browseExpungedGalleries,
                     onChanged: (val) => browseExpungedGalleries = val,
                   ),
                   buildSearchWithminRating(context),
@@ -783,17 +732,17 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             children: [
               TextSwitchItem(
                 L10n.of(context).language,
-                intValue: disableCustomFilterLanguage,
+                value: disableCustomFilterLanguage,
                 onChanged: (val) => disableCustomFilterLanguage = val,
               ),
               TextSwitchItem(
                 L10n.of(context).uploader,
-                intValue: disableCustomFilterUploader,
+                value: disableCustomFilterUploader,
                 onChanged: (val) => disableCustomFilterUploader = val,
               ),
               TextSwitchItem(
                 L10n.of(context).tags,
-                intValue: disableCustomFilterTags,
+                value: disableCustomFilterTags,
                 onChanged: (val) => disableCustomFilterTags = val,
               ),
             ],
@@ -809,7 +758,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       children: [
         TextSwitchItem(
           L10n.of(context).s_Minimum_Rating,
-          intValue: searchWithMinRating,
+          value: searchWithMinRating,
           onChanged: (val) {
             setState(() {
               searchWithMinRating = val;
@@ -900,7 +849,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           Expanded(
             child: TextSwitchItem(
               L10n.of(context).s_pages,
-              intValue: searchBetweenPage,
+              value: searchBetweenPage,
               onChanged: (val) {
                 setState(() {
                   searchBetweenPage = val;

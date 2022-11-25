@@ -287,14 +287,18 @@ class HiveHelper {
     }
   }
 
-  Profile? get profile {
+  Profile get profile {
     final String? val = _configBox.get(profileKey);
     if (val == null) {
-      return null;
+      return kDefProfile;
     }
-    logger.d('get profile $val');
+    // logger.d('get profile $val');
+
     final Profile _profileObj =
         Profile.fromJson(jsonDecode(val) as Map<String, dynamic>);
+
+    // logger.d(' ${_profileObj.layoutConfig?.toJson()}');
+
     final Profile _profile = kDefProfile.copyWith(
       user: _profileObj.user,
       ehConfig: _profileObj.ehConfig,
@@ -311,6 +315,7 @@ class HiveHelper {
       autoLock: _profileObj.autoLock,
       favConfig: _profileObj.favConfig,
       customTabConfig: _profileObj.customTabConfig,
+      layoutConfig: _profileObj.layoutConfig,
     );
     return _profile;
   }

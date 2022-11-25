@@ -123,7 +123,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           )),
       TextSwitchItem(
         L10n.of(context).domain_fronting,
-        intValue: _dnsService.enableDomainFronting,
+        value: _dnsService.enableDomainFronting,
         onChanged: _handleDFChanged,
         desc: 'By pass SNI',
       ),
@@ -159,7 +159,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).vibrate_feedback,
-        intValue: _ehConfigService.vibrate.value,
+        value: _ehConfigService.vibrate.value,
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
         hideDivider: true,
       ),
@@ -193,7 +193,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       ),
       TextSwitchItem(
         'Log debugMode',
-        intValue: _ehConfigService.debugMode,
+        value: _ehConfigService.debugMode,
         onChanged: (bool val) => _ehConfigService.debugMode = val,
         hideDivider: true,
       ),

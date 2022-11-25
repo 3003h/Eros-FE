@@ -108,13 +108,13 @@ class ListViewEhSetting extends StatelessWidget {
         }),
       TextSwitchItem(
         L10n.of(context).link_redirect,
-        intValue: _ehConfigService.linkRedirect,
+        value: _ehConfigService.linkRedirect,
         onChanged: (val) => _ehConfigService.linkRedirect = val,
         desc: L10n.of(context).link_redirect_summary,
       ),
       TextSwitchItem(
         L10n.of(context).redirect_thumb_link,
-        intValue: _ehConfigService.redirectThumbLink,
+        value: _ehConfigService.redirectThumbLink,
         onChanged: (val) => _ehConfigService.redirectThumbLink = val,
         desc: L10n.of(context).redirect_thumb_link_summary,
       ),
@@ -126,7 +126,7 @@ class ListViewEhSetting extends StatelessWidget {
         ),
       TextSwitchItem(
         L10n.of(context).auto_select_profile,
-        intValue: _autoSelectProfile,
+        value: _autoSelectProfile,
         hideDivider: !_isLogin,
         onChanged: (val) => _ehConfigService.autoSelectProfile = val,
       ),
@@ -224,7 +224,7 @@ class ListViewEhSetting extends StatelessWidget {
       const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).default_favorites,
-        intValue: _favLongTap,
+        value: _favLongTap,
         onChanged: _handleFavLongTapChanged,
         desc: L10n.of(context).manually_sel_favorites,
         descOn: L10n.of(context).last_favorites,
@@ -232,7 +232,7 @@ class ListViewEhSetting extends StatelessWidget {
 
       TextSwitchItem(
         L10n.of(context).clipboard_detection,
-        intValue: _isClipboar,
+        value: _isClipboar,
         onChanged: _handleClipboarLinkTapChange,
         desc: L10n.of(context).clipboard_detection_desc,
         hideDivider: true,

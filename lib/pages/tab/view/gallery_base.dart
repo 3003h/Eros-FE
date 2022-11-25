@@ -17,7 +17,7 @@ class GalleryErrorPage extends StatelessWidget {
         CupertinoButton(
           onPressed: onTap,
           child: Icon(
-            radomList<IconData>([
+            randomList<IconData>([
               FontAwesomeIcons.grinBeamSweat,
               FontAwesomeIcons.sadTear,
               FontAwesomeIcons.tired,

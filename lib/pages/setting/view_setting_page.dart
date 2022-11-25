@@ -70,7 +70,7 @@ class ViewSettingList extends StatelessWidget {
       _buildDoublePageItem(context),
       TextSwitchItem(
         L10n.of(context).show_page_interval,
-        intValue: ehConfigService.showPageInterval.value,
+        value: ehConfigService.showPageInterval.value,
         onChanged: (bool val) {
           ehConfigService.showPageInterval.value = val;
           if (Get.isRegistered<ViewExtController>()) {
@@ -81,7 +81,7 @@ class ViewSettingList extends StatelessWidget {
       ),
       TextSwitchItem(
         L10n.of(context).turn_page_anima,
-        intValue: ehConfigService.turnPageAnimations,
+        value: ehConfigService.turnPageAnimations,
         onChanged: (bool val) {
           ehConfigService.turnPageAnimations = val;
         },
@@ -89,14 +89,14 @@ class ViewSettingList extends StatelessWidget {
       if (GetPlatform.isAndroid)
         TextSwitchItem(
           L10n.of(context).volume_key_turn_page,
-          intValue: ehConfigService.volumnTurnPage,
+          value: ehConfigService.volumnTurnPage,
           onChanged: (bool val) {
             ehConfigService.volumnTurnPage = val;
           },
         ),
       TextSwitchItem(
         L10n.of(context).fullscreen,
-        intValue: ehConfigService.viewFullscreen,
+        value: ehConfigService.viewFullscreen,
         onChanged: onViewFullscreenChanged,
         hideDivider: true,
       ),

@@ -7,6 +7,7 @@ import 'dns_config.dart';
 import 'download_config.dart';
 import 'eh_config.dart';
 import 'fav_config.dart';
+import 'layout_config.dart';
 import 'local_fav.dart';
 import 'tab_config.dart';
 import 'user.dart';
@@ -31,6 +32,7 @@ class Profile {
     this.favConfig,
     this.customTabConfig,
     this.tabConfig,
+    this.layoutConfig,
   });
 
   final EhConfig ehConfig;
@@ -49,6 +51,7 @@ class Profile {
   final FavConfig? favConfig;
   final CustomTabConfig? customTabConfig;
   final TabConfig? tabConfig;
+  final LayoutConfig? layoutConfig;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
       ehConfig: EhConfig.fromJson(json['ehConfig'] as Map<String, dynamic>),
@@ -78,6 +81,9 @@ class Profile {
           : null,
       tabConfig: json['tabConfig'] != null
           ? TabConfig.fromJson(json['tabConfig'] as Map<String, dynamic>)
+          : null,
+      layoutConfig: json['layoutConfig'] != null
+          ? LayoutConfig.fromJson(json['layoutConfig'] as Map<String, dynamic>)
           : null);
 
   Map<String, dynamic> toJson() => {
@@ -96,7 +102,8 @@ class Profile {
         'webdav': webdav?.toJson(),
         'favConfig': favConfig?.toJson(),
         'customTabConfig': customTabConfig?.toJson(),
-        'tabConfig': tabConfig?.toJson()
+        'tabConfig': tabConfig?.toJson(),
+        'layoutConfig': layoutConfig?.toJson()
       };
 
   Profile clone() => Profile(
@@ -115,7 +122,8 @@ class Profile {
       webdav: webdav?.clone(),
       favConfig: favConfig?.clone(),
       customTabConfig: customTabConfig?.clone(),
-      tabConfig: tabConfig?.clone());
+      tabConfig: tabConfig?.clone(),
+      layoutConfig: layoutConfig?.clone());
 
   Profile copyWith(
           {EhConfig? ehConfig,
@@ -133,7 +141,8 @@ class Profile {
           WebdavProfile? webdav,
           FavConfig? favConfig,
           CustomTabConfig? customTabConfig,
-          TabConfig? tabConfig}) =>
+          TabConfig? tabConfig,
+          LayoutConfig? layoutConfig}) =>
       Profile(
         ehConfig: ehConfig ?? this.ehConfig,
         user: user ?? this.user,
@@ -151,6 +160,7 @@ class Profile {
         favConfig: favConfig ?? this.favConfig,
         customTabConfig: customTabConfig ?? this.customTabConfig,
         tabConfig: tabConfig ?? this.tabConfig,
+        layoutConfig: layoutConfig ?? this.layoutConfig,
       );
 
   @override
@@ -172,7 +182,8 @@ class Profile {
           webdav == other.webdav &&
           favConfig == other.favConfig &&
           customTabConfig == other.customTabConfig &&
-          tabConfig == other.tabConfig;
+          tabConfig == other.tabConfig &&
+          layoutConfig == other.layoutConfig;
 
   @override
   int get hashCode =>
@@ -191,5 +202,6 @@ class Profile {
       webdav.hashCode ^
       favConfig.hashCode ^
       customTabConfig.hashCode ^
-      tabConfig.hashCode;
+      tabConfig.hashCode ^
+      layoutConfig.hashCode;
 }

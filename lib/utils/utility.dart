@@ -211,7 +211,7 @@ Size getTextSize(
   return painter.size;
 }
 
-T radomList<T>(Iterable<T> srcList) {
+T randomList<T>(Iterable<T> srcList) {
   final index = Random().nextInt(srcList.length);
   return srcList.toList()[index];
 }

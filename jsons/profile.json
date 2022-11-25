@@ -14,5 +14,6 @@
   "webdav?": "$webdav_profile",
   "favConfig?": "$fav_config",
   "customTabConfig?": "$custom_tab_config",
-  "tabConfig?": "$tab_config"
+  "tabConfig?": "$tab_config",
+  "layoutConfig?": "$layout_config"
 }

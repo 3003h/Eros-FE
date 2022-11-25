@@ -31,6 +31,8 @@ export 'gallery_torrent.dart';
 export 'history_index.dart';
 export 'history_index_gid.dart';
 export 'image_hide.dart';
+export 'item_config.dart';
+export 'layout_config.dart';
 export 'local_fav.dart';
 export 'mpv.dart';
 export 'mvp_image.dart';

@@ -96,7 +96,7 @@ class ListViewDownloadSetting extends StatelessWidget {
       if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
         TextSwitchItem(
           L10n.of(context).allow_media_scan,
-          intValue: ehConfigService.allowMediaScan,
+          value: ehConfigService.allowMediaScan,
           onChanged: _handleAllowMediaScanChanged,
         ),
       _buildPreloadImageItem(context),

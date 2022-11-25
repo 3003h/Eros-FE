@@ -39,7 +39,7 @@ class CustomHostsPage extends StatelessWidget {
               children: <Widget>[
                 Obx(() => TextSwitchItem(
                       _title,
-                      intValue: dnsConfigController.enableCustomHosts,
+                      value: dnsConfigController.enableCustomHosts,
                       onChanged: _handleEnableCustomHostDarkChanged,
                     )),
                 const ItemSpace(),

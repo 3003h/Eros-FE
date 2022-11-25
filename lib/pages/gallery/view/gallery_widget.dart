@@ -482,7 +482,7 @@ class TagGroupItem extends StatelessWidget {
                 ? TagButton(
                     color: CupertinoDynamicColor.resolve(
                         ThemeColors.tagColorTagType[_tagType.trim()] ??
-                            radomList<Color>(
+                            randomList<Color>(
                                 ThemeColors.tagColorTagType.values),
                         context),
                     text: ehConfigService.isTagTranslat
