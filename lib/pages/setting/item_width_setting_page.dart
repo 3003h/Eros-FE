@@ -47,8 +47,25 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
   void initState() {
     super.initState();
     selectedMode = _ehConfigService.listMode.value;
+    if (![
+      ListModeEnum.grid,
+      ListModeEnum.waterfall,
+      ListModeEnum.waterfallLarge
+    ].contains(selectedMode)) {
+      selectedMode = ListModeEnum.waterfallLarge;
+    }
+
     _onModeChange(selectedMode);
   }
+
+  Map<ListModeEnum, double> defaultWidthMap() => {
+        ListModeEnum.grid: EHConst.gridMaxCrossAxisExtent,
+        ListModeEnum.waterfall: Get.context!.isPhone
+            ? EHConst.waterfallFlowMaxCrossAxisExtent
+            : EHConst.waterfallFlowMaxCrossAxisExtentTablet,
+        ListModeEnum.waterfallLarge:
+            EHConst.waterfallFlowLargeMaxCrossAxisExtent,
+      };
 
   void _onModeChange(ListModeEnum mode) {
     selectedMode = mode;
@@ -57,6 +74,7 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
             false;
     customWidth =
         _ehConfigService.getItemConfig(selectedMode)?.customWidth?.toDouble() ??
+            defaultWidthMap()[mode] ??
             200.0;
   }
 
@@ -128,8 +146,8 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                                 child: CupertinoSlider(
                                   value: customWidth,
                                   min: 100,
-                                  max: 300,
-                                  divisions: 200,
+                                  max: 350,
+                                  divisions: 250,
                                   onChanged: (double val) {
                                     setState(() {
                                       customWidth = val;
@@ -148,8 +166,6 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                             ],
                           ),
                         ),
-                        // const ItemSpace(),
-                        const SizedBox(height: 10),
                         Expanded(
                           child: ExampleView(
                             selectedMode: selectedMode,
@@ -338,8 +354,8 @@ Widget _buildListModeItem(
   final String _title = L10n.of(context).list_mode;
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-    ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
     ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
+    ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
     ListModeEnum.grid: L10n.of(context).listmode_grid,
   };
   return SelectorItem<ListModeEnum>(

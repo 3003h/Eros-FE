@@ -257,8 +257,8 @@ class EhConfigService extends ProfileService {
   final _itemConfigMap = <ListModeEnum, ItemConfig>{}.obs;
   Map<ListModeEnum, ItemConfig> get mapItemConfig => _itemConfigMap;
 
-  ItemConfig? getItemConfig(ListModeEnum mode) {
-    return _itemConfigMap[mode];
+  ItemConfig? getItemConfig([ListModeEnum? mode]) {
+    return _itemConfigMap[mode ?? listMode.value];
   }
 
   void setItemConfig(ListModeEnum mode, ItemConfig Function(ItemConfig) func) {
@@ -274,7 +274,7 @@ class EhConfigService extends ProfileService {
     _itemConfigList(layoutConfig.itemConfigs);
     for (final itemConfig in _itemConfigList) {
       _itemConfigMap[
-          EnumToString.fromString(ListModeEnum.values, itemConfig.type ?? '') ??
+          EnumToString.fromString(ListModeEnum.values, itemConfig.type) ??
               ListModeEnum.grid] = itemConfig;
     }
 

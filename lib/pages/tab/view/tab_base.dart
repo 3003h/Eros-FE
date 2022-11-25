@@ -39,16 +39,42 @@ SliverPadding buildWaterfallFlow(
   final double _padding = large
       ? EHConst.waterfallFlowLargeCrossAxisSpacing
       : EHConst.waterfallFlowCrossAxisSpacing;
+  EhConfigService _ehConfigService = Get.find();
+  double getMaxCrossAxisExtent() {
+    if (large) {
+      final itemConfig =
+          _ehConfigService.getItemConfig(ListModeEnum.waterfallLarge);
+      const defaultMaxCrossAxisExtent =
+          EHConst.waterfallFlowLargeMaxCrossAxisExtent;
+      if (itemConfig?.enableCustomWidth ?? false) {
+        return itemConfig?.customWidth?.toDouble() ?? defaultMaxCrossAxisExtent;
+      } else {
+        return defaultMaxCrossAxisExtent;
+      }
+    } else {
+      final itemConfig = _ehConfigService.getItemConfig(ListModeEnum.waterfall);
+      final defaultMaxCrossAxisExtent = Get.context!.isPhone
+          ? EHConst.waterfallFlowMaxCrossAxisExtent
+          : EHConst.waterfallFlowMaxCrossAxisExtentTablet;
+      if (itemConfig?.enableCustomWidth ?? false) {
+        return itemConfig?.customWidth?.toDouble() ?? defaultMaxCrossAxisExtent;
+      } else {
+        return defaultMaxCrossAxisExtent;
+      }
+    }
+  }
+
   return SliverPadding(
     padding: EdgeInsets.all(_padding),
     sliver: SliverWaterfallFlow(
       key: key,
       gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: large
-            ? EHConst.waterfallFlowLargeMaxCrossAxisExtent
-            : (!Get.context!.isPhone
-                ? EHConst.waterfallFlowMaxCrossAxisExtentTablet
-                : EHConst.waterfallFlowMaxCrossAxisExtent),
+        // maxCrossAxisExtent: large
+        //     ? EHConst.waterfallFlowLargeMaxCrossAxisExtent
+        //     : (!Get.context!.isPhone
+        //         ? EHConst.waterfallFlowMaxCrossAxisExtentTablet
+        //         : EHConst.waterfallFlowMaxCrossAxisExtent),
+        maxCrossAxisExtent: getMaxCrossAxisExtent(),
         crossAxisSpacing: large
             ? EHConst.waterfallFlowLargeCrossAxisSpacing
             : EHConst.waterfallFlowCrossAxisSpacing,
@@ -114,11 +140,22 @@ SliverPadding buildGridView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
+  EhConfigService _ehConfigService = Get.find();
+  double getMaxCrossAxisExtent() {
+    final itemConfig = _ehConfigService.getItemConfig(ListModeEnum.grid);
+    const defaultMaxCrossAxisExtent = EHConst.gridMaxCrossAxisExtent;
+    if (itemConfig?.enableCustomWidth ?? false) {
+      return itemConfig?.customWidth?.toDouble() ?? defaultMaxCrossAxisExtent;
+    } else {
+      return defaultMaxCrossAxisExtent;
+    }
+  }
+
   return SliverPadding(
     padding: const EdgeInsets.all(EHConst.gridCrossAxisSpacing),
     sliver: SliverGrid(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: EHConst.gridMaxCrossAxisExtent,
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: getMaxCrossAxisExtent(),
         crossAxisSpacing: EHConst.gridCrossAxisSpacing,
         mainAxisSpacing: EHConst.gridMainAxisSpacing,
         childAspectRatio: EHConst.gridChildAspectRatio,
