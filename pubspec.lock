@@ -191,7 +191,7 @@ packages:
       name: cached_network_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.2.2"
+    version: "3.2.3"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
@@ -956,21 +956,21 @@ packages:
       name: isar
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6-dev.0"
   isar_flutter_libs:
     dependency: "direct main"
     description:
       name: isar_flutter_libs
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6-dev.0"
   isar_generator:
     dependency: "direct dev"
     description:
       name: isar_generator
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6-dev.0"
   isolate:
     dependency: "direct main"
     description:

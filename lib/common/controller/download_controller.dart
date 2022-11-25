@@ -357,17 +357,20 @@ class DownloadController extends GetxController {
   }
 
   /// 更新任务进度
-  GalleryTask? galleryTaskUpdate(int gid,
-      {int? countComplet, String? coverImg}) {
-    logger.v('galleryTaskCountUpdate gid:$gid count:$countComplet');
-    dState.curComplete[gid] = countComplet ?? 0;
+  GalleryTask? galleryTaskUpdate(
+    int gid, {
+    int? countComplete,
+    String? coverImg,
+  }) {
+    logger.v('galleryTaskCountUpdate gid:$gid count:$countComplete');
+    dState.curComplete[gid] = countComplete ?? 0;
 
     if (!dState.galleryTaskMap.containsKey(gid)) {
       return null;
     }
 
     dState.galleryTaskMap[gid] = dState.galleryTaskMap[gid]!.copyWith(
-      completCount: countComplet,
+      completCount: countComplete,
       coverImage: coverImg,
     );
 
@@ -376,7 +379,9 @@ class DownloadController extends GetxController {
 
   /// 更新任务状态
   Future<GalleryTask?> galleryTaskUpdateStatus(
-      int gid, TaskStatus status) async {
+    int gid,
+    TaskStatus status,
+  ) async {
     if (dState.galleryTaskMap.containsKey(gid) &&
         dState.galleryTaskMap[gid] != null) {
       dState.galleryTaskMap[gid] =
@@ -1096,7 +1101,7 @@ class DownloadController extends GetxController {
     final CancelToken _cancelToken = CancelToken();
     dState.cancelTokenMap[galleryTask.gid] = _cancelToken;
 
-    logger.v('filecount:${galleryTask.fileCount} url:${galleryTask.url}');
+    logger.v('fileCount:${galleryTask.fileCount} url:${galleryTask.url}');
 
     if (galleryTask.realDirPath == null) {
       return;
@@ -1201,7 +1206,7 @@ class DownloadController extends GetxController {
 
     final GalleryTask? _task = galleryTaskUpdate(
       gid,
-      countComplet: listComplete.length,
+      countComplete: listComplete.length,
       coverImg: itemSer == 1 ? fileName : null,
     );
     if (_task?.fileCount == listComplete.length) {
@@ -1290,20 +1295,26 @@ class DownloadController extends GetxController {
 
   Future _putImageTask(
     int gid,
-    GalleryImage images, {
+    GalleryImage image, {
     String? fileName,
     int? status,
   }) async {
+    final oriImageTask =
+        await isarHelper.findImageTaskAllByGidSer(gid, image.ser);
+
     final GalleryImageTask _imageTask = GalleryImageTask(
       gid: gid,
-      token: '',
-      href: images.href,
-      ser: images.ser,
-      imageUrl: images.imageUrl,
-      sourceId: images.sourceId,
-      filePath: fileName,
-      status: status,
+      token: image.token ?? oriImageTask?.token ?? '',
+      href: image.href ?? oriImageTask?.href,
+      ser: image.ser,
+      imageUrl: image.imageUrl ?? oriImageTask?.imageUrl,
+      sourceId: image.sourceId ?? oriImageTask?.sourceId,
+      filePath: fileName ?? oriImageTask?.filePath,
+      status: status ?? oriImageTask?.status,
     );
+
+    logger.v(
+        'putImageTask => statue:${_imageTask.status} name:${_imageTask.filePath}');
 
     await isarHelper.putImageTask(_imageTask);
   }
