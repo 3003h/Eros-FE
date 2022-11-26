@@ -26,7 +26,6 @@ import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
@@ -423,7 +422,7 @@ class DownloadController extends GetxController {
       return;
     }
     String? dirpath = _task.realDirPath;
-    logger.d('dirPath: $dirpath');
+    logger.v('dirPath: $dirpath');
     if (dirpath != null && shouldDeleteContent) {
       if (dirpath.isContentUri) {
         // SAF
@@ -635,14 +634,14 @@ class DownloadController extends GetxController {
         downloadParentPath,
         fileNameWithoutExtension,
         cancelToken: cancelToken,
-        onDownloadCompleteWithFileName: (fileName) {
-          onDownloadCompleteWithFileName?.call(fileName);
-          _putImageTask(
+        onDownloadCompleteWithFileName: (fileName) async {
+          await _putImageTask(
             gid,
             _uptImage,
             fileName: fileName,
             status: TaskStatus.complete.value,
           );
+          onDownloadCompleteWithFileName?.call(fileName);
         },
         progressCallback: _progressCallback,
       );
@@ -674,14 +673,14 @@ class DownloadController extends GetxController {
           downloadParentPath,
           fileNameWithoutExtension,
           cancelToken: cancelToken,
-          onDownloadCompleteWithFileName: (fileName) {
-            onDownloadCompleteWithFileName?.call(fileName);
-            _putImageTask(
+          onDownloadCompleteWithFileName: (fileName) async {
+            await _putImageTask(
               gid,
               imageFetched,
               fileName: fileName,
               status: TaskStatus.complete.value,
             );
+            onDownloadCompleteWithFileName?.call(fileName);
           },
           progressCallback: _progressCallback,
         );
@@ -715,40 +714,40 @@ class DownloadController extends GetxController {
     }
 
     // 缓存不存在的话下载
-    late dynamic savePath;
-    late String realSaveFullPath;
-    if (parentPath.isContentUri) {
-      // temp save path ,临时下载路径，完成后再复制到SAF路径
-      savePath = path.join(
-        (await getTemporaryDirectory()).path,
-        'temp_download',
-        '${generateUuidv4()}_$fileNameWithoutExtension',
-      );
-      logger.v('SAF temp savePath:$savePath');
-    } else {
-      logger.v('非SAF savePath:$parentPath');
-      savePath = (Headers headers) {
-        logger.v('headers:\n$headers');
-        final contentDisposition = headers.value('content-disposition');
-        logger.v('contentDisposition $contentDisposition');
-        final filename =
-            contentDisposition?.split(RegExp(r"filename(=|\*=UTF-8'')")).last ??
-                '';
-        final fileNameDecode = Uri.decodeFull(filename).replaceAll('/', '_');
-        logger.v(
-            'fileNameDecode: $fileNameDecode, fileBaseNameNotExt: $fileNameWithoutExtension');
-        late String ext;
-        if (fileNameDecode.isEmpty) {
-          ext = path.extension(url);
-        } else {
-          ext = path.extension(fileNameDecode);
-        }
+    String realSaveFullPath = '';
+    String tempSavePath = '';
+    String Function(Headers) savePath = (Headers headers) {
+      logger.v('headers:\n$headers');
+      final contentDisposition = headers.value('content-disposition');
+      logger.v('contentDisposition $contentDisposition');
+      final filename =
+          contentDisposition?.split(RegExp(r"filename(=|\*=UTF-8'')")).last ??
+              '';
+      final fileNameDecode = Uri.decodeFull(filename).replaceAll('/', '_');
+      logger.v(
+          'fileNameDecode: $fileNameDecode, fileBaseNameNotExt: $fileNameWithoutExtension');
+      late String ext;
+      if (fileNameDecode.isEmpty) {
+        ext = path.extension(url);
+      } else {
+        ext = path.extension(fileNameDecode);
+      }
 
+      if (parentPath.isContentUri) {
+        // temp save path ,临时下载路径，完成后再复制到SAF路径
+        tempSavePath = path.join(
+          Global.extStoreTempPath,
+          'temp_download',
+          '${generateUuidv4()}_$fileNameWithoutExtension$ext',
+        );
+        logger.v('SAF temp savePath:$tempSavePath');
+        return tempSavePath;
+      } else {
         realSaveFullPath =
             path.join(parentPath, '$fileNameWithoutExtension$ext');
         return realSaveFullPath;
-      };
-    }
+      }
+    };
 
     // 下载文件
     await ehDownload(
@@ -758,19 +757,28 @@ class DownloadController extends GetxController {
       onDownloadComplete: () async {
         logger.v('onDownloadComplete');
 
-        if (parentPath.isContentUri && savePath is String) {
+        if (parentPath.isContentUri && tempSavePath.isNotEmpty) {
           // read file
-          final File file = File(savePath);
+          final File file = File(tempSavePath);
           final bytes = await file.readAsBytes();
+          // final mimeType =
+          //     lookupMimeType(file.path, headerBytes: bytes.take(8).toList());
+
+          // late String ext;
+          // if (url.contains('/fullimg.php?')) {
+          //   logger.d('mimeType $mimeType, url $url');
+          //   ext = '.${mimeType?.split(' / ').last ?? '.jpg'}';
+          // } else {
+          //   ext = path.extension(url);
+          //   logger.d('not fullimg ext $ext');
+          // }
+          final extension = path.extension(tempSavePath);
+
           // SAF write file
-          final mimeType =
-              lookupMimeType(file.path, headerBytes: bytes.take(8).toList());
-          logger.v('mimeType $mimeType');
-          final ext = mimeType?.split('/').last ?? 'jpg';
-          final fileName = '$fileNameWithoutExtension.$ext';
+          final fileName = '$fileNameWithoutExtension$extension';
           await ss.createFileAsBytes(
             Uri.parse(parentPath),
-            mimeType: mimeType ?? '',
+            mimeType: '*/*',
             displayName: fileName,
             bytes: bytes,
           );
@@ -1110,12 +1118,12 @@ class DownloadController extends GetxController {
     await isarHelper
         .putGalleryTask(galleryTask.copyWith(completCount: completeCount));
 
-    if (completeCount == galleryTask.fileCount) {
-      logger.v('complete ${galleryTask.gid}  ${galleryTask.title}');
-      await galleryTaskComplete(galleryTask.gid);
-      _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
-      return;
-    }
+    // if (completeCount == galleryTask.fileCount) {
+    //   logger.v('complete ${galleryTask.gid}  ${galleryTask.title}');
+    //   await galleryTaskComplete(galleryTask.gid);
+    //   _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
+    //   return;
+    // }
 
     logger.v(
         '${imageTasksOri.where((element) => element.status != TaskStatus.complete.value).map((e) => e.toString()).join('\n')} ');
@@ -1330,24 +1338,34 @@ class DownloadController extends GetxController {
     String? fileName,
     int? status,
   }) async {
-    final oriImageTask =
+    final GalleryImageTask? oriImageTask =
         await isarHelper.findImageTaskAllByGidSer(gid, image.ser);
 
-    final GalleryImageTask _imageTask = GalleryImageTask(
+    final GalleryImageTask newImageTask = GalleryImageTask(
       gid: gid,
-      token: image.token ?? oriImageTask?.token ?? '',
-      href: image.href ?? oriImageTask?.href,
+      token: image.token ?? '',
+      href: image.href,
       ser: image.ser,
-      imageUrl: image.imageUrl ?? oriImageTask?.imageUrl,
-      sourceId: image.sourceId ?? oriImageTask?.sourceId,
-      filePath: fileName ?? oriImageTask?.filePath,
-      status: status ?? oriImageTask?.status,
+      imageUrl: image.imageUrl,
+      sourceId: image.sourceId,
+      filePath: fileName,
+      status: status,
     );
 
-    logger.v(
-        'putImageTask => statue:${_imageTask.status} name:${_imageTask.filePath}');
+    final GalleryImageTask imageTask = oriImageTask?.copyWith(
+          token: image.token,
+          href: image.href,
+          imageUrl: image.imageUrl,
+          sourceId: image.sourceId,
+          filePath: fileName,
+          status: status,
+        ) ??
+        newImageTask;
 
-    await isarHelper.putImageTask(_imageTask);
+    logger.v(
+        'putImageTask => statue:${imageTask.status} name:${imageTask.filePath}');
+
+    await isarHelper.putImageTask(imageTask);
   }
 
   Future<int> _updateImageTasksByGid(int gid,
