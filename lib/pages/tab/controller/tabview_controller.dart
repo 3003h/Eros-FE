@@ -203,7 +203,7 @@ abstract class TabViewController extends GetxController {
 
       setResultPage(result);
 
-      logger.d('reloadData next $next, prev $prev');
+      logger.v('reloadData next $next, prev $prev');
 
       change(resultList, status: RxStatus.success());
       afterJump = false;

@@ -132,6 +132,14 @@ class DownloadController extends GetxController {
   Future<void> allowMediaScan(bool allow) async {
     final downloadPath = await _getGalleryDownloadPath();
 
+    if (Platform.isAndroid) {
+      final uriList = await ss.persistedUriPermissions();
+      logger.d('uriList:$uriList');
+      if (uriList == null || uriList.isEmpty) {
+        logger.e('allowMediaScan uriList is null');
+      }
+    }
+
     final pathList = <String>[];
 
     logger.v('allowMediaScan $pathList');
@@ -869,6 +877,27 @@ class DownloadController extends GetxController {
     return _fileNameWithoutExtension;
   }
 
+  Future<void> checkSafPath(
+      {String? uri, bool saveDownloadPath = false}) async {
+    if (Platform.isAndroid) {
+      final String checkUri = uri ?? ehConfigService.downloadLocatino;
+      final uriList = await ss.persistedUriPermissions();
+      if (uriList == null || uriList.isEmpty) {
+        logger.e('persisted uriList is null');
+      } else {
+        if (!uriList.any((element) => element.uri.toString() == checkUri)) {
+          logger.e('uriList not contains $checkUri');
+          final uri =
+              await ss.openDocumentTree(initialUri: Uri.tryParse(checkUri));
+          logger.d('uri $uri');
+          if (uri != null && saveDownloadPath) {
+            ehConfigService.downloadLocatino = uri.toString();
+          }
+        }
+      }
+    }
+  }
+
   /// 获取下载路径
   Future<String> _getGalleryDownloadPath({String dirName = ''}) async {
     late final String saveDirPath;
@@ -895,6 +924,8 @@ class DownloadController extends GetxController {
     }
 
     if (saveDirPath.isContentUri) {
+      await checkSafPath(saveDownloadPath: true);
+
       final galleryDirUrl = '${ehConfigService.downloadLocatino}%2F$dirName';
       final uri = Uri.parse(galleryDirUrl);
       final exists = await ss.exists(uri) ?? false;
@@ -1080,7 +1111,7 @@ class DownloadController extends GetxController {
         .putGalleryTask(galleryTask.copyWith(completCount: completeCount));
 
     if (completeCount == galleryTask.fileCount) {
-      logger.d('complete ${galleryTask.gid}  ${galleryTask.title}');
+      logger.v('complete ${galleryTask.gid}  ${galleryTask.title}');
       await galleryTaskComplete(galleryTask.gid);
       _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
       return;
