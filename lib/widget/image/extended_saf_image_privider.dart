@@ -1,6 +1,7 @@
 import 'dart:ui' as ui show Codec;
 
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
@@ -44,6 +45,12 @@ class ExtendedSafImageProvider extends SafUriImage
   Future<ui.Codec> _loadAsync(
       SafUriImage key, DecoderBufferCallback decode) async {
     assert(key == this);
+
+    logger.d('loadAsync ${uri.toString()}');
+    if (!(await ss.exists(uri) ?? false)) {
+      PaintingBinding.instance.imageCache.evict(key);
+      throw StateError('File does not exist: ${uri.toString()}');
+    }
 
     final Uint8List? bytes = await ss.getDocumentContent(uri);
 

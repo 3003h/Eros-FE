@@ -241,7 +241,8 @@ class IsarHelper {
     final tasks = await isar.galleryImageTasks.getByGidSer(gid, ser);
     await isar.writeTxn(() async {
       if (tasks != null) {
-        await isar.galleryImageTasks.put(tasks.copyWith(status: status));
+        await isar.galleryImageTasks
+            .putByGidSer(tasks.copyWith(status: status));
       }
     });
   }

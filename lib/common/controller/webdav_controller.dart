@@ -386,7 +386,7 @@ class WebdavController extends GetxController {
 
   // 下载进度
   Future<GalleryCache?> downloadRead(String gid) async {
-    logger.d('downloadRead');
+    logger.v('downloadRead');
     chkTempDir(kLocalReadDirPath);
     final _path = path.join(Global.tempPath, 'read', gid);
     try {

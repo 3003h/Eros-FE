@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui show Codec, ImmutableBuffer;
 
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
@@ -52,6 +53,13 @@ class SafUriImage extends ImageProvider<SafUriImage> {
   Future<ui.Codec> _loadAsync(SafUriImage key, DecoderBufferCallback? decode,
       DecoderCallback? decodeDeprecated) async {
     assert(key == this);
+
+    logger.d('loadAsync ${uri.toString()}');
+    if (!(await ss.exists(uri) ?? false)) {
+      logger.e('File not exists: ${uri.toString()}');
+      PaintingBinding.instance.imageCache.evict(key);
+      throw StateError('File does not exist: ${uri.toString()}');
+    }
 
     final Uint8List? bytes = await ss.getDocumentContent(uri);
     if (bytes == null || bytes.lengthInBytes == 0) {
