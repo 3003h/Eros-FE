@@ -7,6 +7,7 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
+import '../../const/const.dart';
 import '../../utils/logger.dart';
 
 String parseErrGallery(String response) {
@@ -105,6 +106,14 @@ List<GalleryComment> parseGalleryComment(Document document) {
       final rawContent = contextElem?.innerHtml ?? '';
       logger.v('rawContent: $rawContent');
 
+      // 识别URL，并修改为 a href 元素
+      final linkifyContent = rawContent.replaceAllMapped(
+        commentUrlRegExp,
+        (match) => '<a href="${match.group(0)}">${match.group(0)}</a>',
+      );
+
+      final linkifyElement = parse(linkifyContent).body;
+
       // 解析评论评分详情
       final Element? scoresElem = comment.querySelector('div.c7');
       final spanElms = scoresElem?.querySelectorAll('span') ?? [];
@@ -126,11 +135,11 @@ List<GalleryComment> parseGalleryComment(Document document) {
         score: score,
         scoreDetails: _scoreDetails,
         memberId: userId,
-        rawContent: rawContent,
+        element: linkifyElement,
       );
 
       _galleryComment.add(galleryComment.copyWith(
-        text: galleryComment.getText(),
+        textList: galleryComment.getTextList(),
       ));
     } catch (e, stack) {
       logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());
@@ -336,7 +345,7 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
 List<Chapter>? _parseChapter(List<GalleryComment> comments) {
   final listListChapter = <List<Chapter>>[];
   for (final comment in comments) {
-    final listChapter = parseChapter(comment.rawContent ?? '');
+    final listChapter = parseChapter((comment.element as Element?)?.text ?? '');
     if (listChapter.length >= 2) {
       listListChapter.add(listChapter);
     }

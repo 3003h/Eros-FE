@@ -15,10 +15,10 @@ class GalleryComment {
     this.canVote,
     this.showTranslate,
     this.scoreDetails,
-    this.rawContent,
-    this.translatedContent,
-    this.text,
-    this.translatedText,
+    this.element,
+    this.translatedElement,
+    this.textList,
+    this.translatedTextList,
   });
 
   final String name;
@@ -31,10 +31,10 @@ class GalleryComment {
   final bool? canVote;
   final bool? showTranslate;
   final List<String>? scoreDetails;
-  final String? rawContent;
-  final String? translatedContent;
-  final String? text;
-  final String? translatedText;
+  final dynamic? element;
+  final dynamic? translatedElement;
+  final List<String>? textList;
+  final List<String>? translatedTextList;
 
   factory GalleryComment.fromJson(Map<String,dynamic> json) => GalleryComment(
     name: json['name'] as String,
@@ -47,10 +47,8 @@ class GalleryComment {
     canVote: json['canVote'] != null ? json['canVote'] as bool : null,
     showTranslate: json['showTranslate'] != null ? json['showTranslate'] as bool : null,
     scoreDetails: json['scoreDetails'] != null ? (json['scoreDetails'] as List? ?? []).map((e) => e as String).toList() : null,
-    rawContent: json['rawContent'] != null ? json['rawContent'] as String : null,
-    translatedContent: json['translatedContent'] != null ? json['translatedContent'] as String : null,
-    text: json['text'] != null ? json['text'] as String : null,
-    translatedText: json['translatedText'] != null ? json['translatedText'] as String : null
+    textList: json['textList'] != null ? (json['textList'] as List? ?? []).map((e) => e as String).toList() : null,
+    translatedTextList: json['translatedTextList'] != null ? (json['translatedTextList'] as List? ?? []).map((e) => e as String).toList() : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -64,10 +62,8 @@ class GalleryComment {
     'canVote': canVote,
     'showTranslate': showTranslate,
     'scoreDetails': scoreDetails?.map((e) => e.toString()).toList(),
-    'rawContent': rawContent,
-    'translatedContent': translatedContent,
-    'text': text,
-    'translatedText': translatedText
+    'textList': textList?.map((e) => e.toString()).toList(),
+    'translatedTextList': translatedTextList?.map((e) => e.toString()).toList()
   };
 
   GalleryComment clone() => GalleryComment(
@@ -81,10 +77,10 @@ class GalleryComment {
     canVote: canVote,
     showTranslate: showTranslate,
     scoreDetails: scoreDetails?.toList(),
-    rawContent: rawContent,
-    translatedContent: translatedContent,
-    text: text,
-    translatedText: translatedText
+    element: element,
+    translatedElement: translatedElement,
+    textList: textList?.toList(),
+    translatedTextList: translatedTextList?.toList()
   );
 
     
@@ -99,10 +95,10 @@ class GalleryComment {
     bool? canVote,
     bool? showTranslate,
     List<String>? scoreDetails,
-    String? rawContent,
-    String? translatedContent,
-    String? text,
-    String? translatedText
+    dynamic? element,
+    dynamic? translatedElement,
+    List<String>? textList,
+    List<String>? translatedTextList
   }) => GalleryComment(
     name: name ?? this.name,
     time: time ?? this.time,
@@ -114,16 +110,16 @@ class GalleryComment {
     canVote: canVote ?? this.canVote,
     showTranslate: showTranslate ?? this.showTranslate,
     scoreDetails: scoreDetails ?? this.scoreDetails,
-    rawContent: rawContent ?? this.rawContent,
-    translatedContent: translatedContent ?? this.translatedContent,
-    text: text ?? this.text,
-    translatedText: translatedText ?? this.translatedText,
+    element: element ?? this.element,
+    translatedElement: translatedElement ?? this.translatedElement,
+    textList: textList ?? this.textList,
+    translatedTextList: translatedTextList ?? this.translatedTextList,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is GalleryComment && name == other.name && time == other.time && score == other.score && vote == other.vote && id == other.id && memberId == other.memberId && canEdit == other.canEdit && canVote == other.canVote && showTranslate == other.showTranslate && scoreDetails == other.scoreDetails && rawContent == other.rawContent && translatedContent == other.translatedContent && text == other.text && translatedText == other.translatedText;
+    || other is GalleryComment && name == other.name && time == other.time && score == other.score && vote == other.vote && id == other.id && memberId == other.memberId && canEdit == other.canEdit && canVote == other.canVote && showTranslate == other.showTranslate && scoreDetails == other.scoreDetails && element == other.element && translatedElement == other.translatedElement && textList == other.textList && translatedTextList == other.translatedTextList;
 
   @override
-  int get hashCode => name.hashCode ^ time.hashCode ^ score.hashCode ^ vote.hashCode ^ id.hashCode ^ memberId.hashCode ^ canEdit.hashCode ^ canVote.hashCode ^ showTranslate.hashCode ^ scoreDetails.hashCode ^ rawContent.hashCode ^ translatedContent.hashCode ^ text.hashCode ^ translatedText.hashCode;
+  int get hashCode => name.hashCode ^ time.hashCode ^ score.hashCode ^ vote.hashCode ^ id.hashCode ^ memberId.hashCode ^ canEdit.hashCode ^ canVote.hashCode ^ showTranslate.hashCode ^ scoreDetails.hashCode ^ element.hashCode ^ translatedElement.hashCode ^ textList.hashCode ^ translatedTextList.hashCode;
 }

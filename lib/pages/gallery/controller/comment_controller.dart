@@ -10,6 +10,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:html/dom.dart' as dom;
 
 import '../../../utils/bcd_code.dart';
 import 'gallery_page_controller.dart';
@@ -261,8 +262,8 @@ class CommentController extends GetxController {
         comments?.indexWhere((element) => element.id == _id.toString());
     final comment = comments?[_commentIndex!];
 
-    if (comment?.translatedContent != null &&
-        comment?.translatedContent?.trim() != '') {
+    if (comment?.translatedElement != null &&
+        comment?.translatedElement is dom.Element) {
       comments![_commentIndex!] = comments![_commentIndex].copyWith(
         showTranslate: !(comments![_commentIndex].showTranslate ?? false),
       );
@@ -270,22 +271,56 @@ class CommentController extends GetxController {
       return;
     }
 
-    logger.d('t :${comment?.rawContent}');
-    final translate =
-        await translatorHelper.translateText(comment?.rawContent ?? '');
+    // new dom.Element from comment?.element
+    final _translatedElement = (comment?.element as dom.Element?)?.clone(true);
+    if (_translatedElement == null) {
+      return;
+    }
 
-    logger.d('tr: $translate');
+    final _translatedTextList = <String>[];
+
+    logger.d('t :${comment?.text}');
+    await _translateText(_translatedElement, _translatedTextList);
+
+    logger.d('t :${_translatedTextList.join('\n')}');
 
     comments![_commentIndex!] = comments![_commentIndex].copyWith(
       showTranslate: !(comments![_commentIndex].showTranslate ?? false),
-      translatedContent: translate,
-    );
-
-    comments![_commentIndex] = comments![_commentIndex].copyWith(
-      translatedText: comments![_commentIndex].getTranslatedText(),
+      translatedElement: _translatedElement,
     );
 
     // update([_id]);
+  }
+
+  Future<void> _translateText(
+    dom.Element element,
+    List<String> translatedTextList,
+  ) async {
+    if (element.nodes.isEmpty) {
+      translatedTextList.add(element.text);
+    } else {
+      for (final dom.Node node in element.nodes) {
+        if (node is dom.Element) {
+          if (node.localName == 'br') {
+            translatedTextList.add('\n');
+          } else if (node.localName == 'a') {
+            translatedTextList.add(node.text);
+          } else if (node.localName == 'img') {
+            translatedTextList.add(
+                node.attributes['alt'] ?? '[Image]${node.attributes['src']}');
+          } else {
+            await _translateText(node, translatedTextList);
+          }
+        } else if (node is dom.Text) {
+          final text = node.text;
+          if (text.trim().isNotEmpty) {
+            final translate = await translatorHelper.translateText(text);
+            node.text = translate;
+          }
+          translatedTextList.add(node.text);
+        }
+      }
+    }
   }
 
   // 点赞

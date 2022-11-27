@@ -57,7 +57,7 @@ class TranslatorHelper {
 
     String sourceLanguage = await _languageIdentifier.identify(sourceText);
     logger.d('sourceLanguage: $sourceLanguage');
-    if (sourceLanguage == 'und') {
+    if (sourceLanguage == 'und' || sourceLanguage.contains('-')) {
       sourceLanguage = 'auto';
     }
 

@@ -10,7 +10,7 @@ import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:html/parser.dart' show parse;
+import 'package:html/dom.dart' as dom;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 
@@ -52,41 +52,46 @@ extension ExtTabList on TabConfig {
 }
 
 extension ExtComment on GalleryComment {
-  String getText() {
-    if (text != null && text!.isNotEmpty) {
-      return text!;
+  void _parseText(dom.Element element, List<String> textList) {
+    if (element.nodes.isEmpty) {
+      textList.add(element.text);
+    } else {
+      for (final dom.Node node in element.nodes) {
+        if (node is dom.Element) {
+          if (node.localName == 'br') {
+            textList.add('\n');
+          } else if (node.localName == 'a') {
+            textList.add(node.text);
+          } else if (node.localName == 'img') {
+            textList.add(node.attributes['alt'] ?? '[Image]');
+          } else {
+            _parseText(node, textList);
+          }
+        } else if (node is dom.Text) {
+          textList.add(node.text);
+        }
+      }
+    }
+  }
+
+  List<String> getTextList() {
+    if (textList != null && textList!.isNotEmpty) {
+      return textList!;
     }
 
-    final html = '<div>$linkifyContent</div>';
-    final parsedString = parse(html).body?.text ?? '';
-    return parsedString;
-  }
+    final _textList = <String>[];
 
-  String getTranslatedText() {
-    if (translatedText != null && translatedText!.isNotEmpty) {
-      return translatedText!;
+    final dom.Element? body = element as dom.Element?;
+    if (body != null) {
+      _parseText(body, _textList);
     }
 
-    final html = '<div>$linkifyTranslatedContent</div>';
-    final parsedString = parse(html).body?.text ?? '';
-    return parsedString;
+    return _textList;
   }
 
-  String? get linkifyContent {
-    // 识别URL，并修改为 a href 元素
-    return rawContent?.replaceAllMapped(
-      commentUrlRegExp,
-      (match) => '<a href="${match.group(0)}">${match.group(0)}</a>',
-    );
-  }
+  String get text => (textList ?? getTextList()).join('');
 
-  String? get linkifyTranslatedContent {
-    // 识别URL，并修改为 a href 元素
-    return translatedContent?.replaceAllMapped(
-      commentUrlRegExp,
-      (match) => '<a href="${match.group(0)}">${match.group(0)}</a>',
-    );
-  }
+  String get translatedText => (translatedTextList ?? getTextList()).join('');
 
   DateTime get dateTime => DateFormat('yyyy-MM-dd HH:mm').parse(time);
 }

@@ -11,11 +11,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide SelectableText;
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:html/parser.dart' show parse;
 import 'package:linkify/linkify.dart';
 
 const int kMaxline = 4;
@@ -46,12 +44,6 @@ class CommentItem extends StatelessWidget {
     );
 
     Widget commentItem;
-
-    if (galleryComment.rawContent != galleryComment.linkifyContent || true) {
-      logger.v('${galleryComment.name}\n'
-          'rawContent ${galleryComment.rawContent}\n'
-          'lnkContent ${galleryComment.linkifyContent}');
-    }
 
     commentItem = GetBuilder<CommentController>(
       init: CommentController(),
@@ -113,16 +105,23 @@ class CommentItem extends StatelessWidget {
     BuildContext context, {
     int? maxLines,
   }) {
-    final content = (galleryComment.showTranslate ?? false)
-        ? galleryComment.linkifyTranslatedContent ?? ''
-        : galleryComment.linkifyContent ?? '';
-    final html = '<div>$content</div>';
-    // parse html
-    final dom.Element element = parse(html).body!.firstChild! as dom.Element;
+    if (galleryComment.element == null ||
+        galleryComment.element is! dom.Element?) {
+      return Container();
+    }
+
+    final dom.Element element = galleryComment.element as dom.Element;
+    final dom.Element? translateElement =
+        galleryComment.translatedElement as dom.Element?;
+
+    final dom.Element showElement = (galleryComment.showTranslate ?? false)
+        ? translateElement ?? element
+        : element;
+
     return Text.rich(
       TextSpan(
         style: _commentTextStyle,
-        children: element.nodes.map((e) => buildCommentTile(e)).toList(),
+        children: showElement.nodes.map((e) => buildCommentTile(e)).toList(),
       ),
       maxLines: maxLines,
     );
@@ -232,32 +231,6 @@ class CommentItem extends StatelessWidget {
     );
   }
 
-  Widget buildHtmlWidget(TextStyle _commentTextStyle, BuildContext context) {
-    return HtmlWidget(
-      '${galleryComment.linkifyContent}',
-      textStyle: _commentTextStyle,
-      onTapUrl: (url) {
-        onOpenUrl(url: url);
-        return true;
-      },
-      customWidgetBuilder: (element) {
-        if (element.localName == 'img') {
-          final src = element.attributes['src'];
-          if (src != null) {
-            return Container(
-              constraints: const BoxConstraints(maxWidth: 120, maxHeight: 160),
-              child: EhNetworkImage(
-                imageUrl: src,
-                placeholder: (_, __) => const CupertinoActivityIndicator(),
-              ),
-            );
-          }
-        }
-        return null;
-      },
-    );
-  }
-
   /// 简单布局 可展开 带链接文字
   Widget _buildSimpleExpTextLinkify({
     bool showTranslate = false,
@@ -265,9 +238,7 @@ class CommentItem extends StatelessWidget {
     required BuildContext context,
   }) {
     return ExpandableLinkify(
-      text: showTranslate
-          ? (galleryComment.translatedText ?? '')
-          : (galleryComment.text ?? ''),
+      text: showTranslate ? galleryComment.translatedText : galleryComment.text,
       onOpen: (link) => onOpenUrl(url: link),
       options: const LinkifyOptions(humanize: false),
       maxLines: kMaxline,

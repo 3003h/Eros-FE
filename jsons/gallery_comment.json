@@ -9,8 +9,8 @@
   "canVote?": false,
   "showTranslate?": false,
   "scoreDetails?": [""],
-  "rawContent?": "",
-  "translatedContent?": "",
-  "text?": "",
-  "translatedText?": ""
+  "@ignore element?": null,
+  "@ignore translatedElement?": null,
+  "textList?": [""],
+  "translatedTextList?": [""]
 }
