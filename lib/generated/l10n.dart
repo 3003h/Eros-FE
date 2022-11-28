@@ -3081,10 +3081,10 @@ class L10n {
     );
   }
 
-  /// `Narmal`
+  /// `Normal`
   String get uc_ts_0 {
     return Intl.message(
-      'Narmal',
+      'Normal',
       name: 'uc_ts_0',
       desc: '',
       args: [],
@@ -4190,6 +4190,56 @@ class L10n {
     return Intl.message(
       'Compatible Mode',
       name: 'read_view_compatible_mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export App Data`
+  String get export_app_data {
+    return Intl.message(
+      'Export App Data',
+      name: 'export_app_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export App Data To File`
+  String get export_app_data_summary {
+    return Intl.message(
+      'Export App Data To File',
+      name: 'export_app_data_summary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import App Data`
+  String get import_app_data {
+    return Intl.message(
+      'Import App Data',
+      name: 'import_app_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import App Data From Backup File, need restart app`
+  String get import_app_data_summary {
+    return Intl.message(
+      'Import App Data From Backup File, need restart app',
+      name: 'import_app_data_summary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WebDAV Max Connections`
+  String get webdav_max_connections {
+    return Intl.message(
+      'WebDAV Max Connections',
+      name: 'webdav_max_connections',
       desc: '',
       args: [],
     );

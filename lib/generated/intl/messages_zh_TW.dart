@@ -130,6 +130,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("输入具体日期或偏移量 / GID"),
         "expand": MessageLookupByLibrary.simpleMessage("Expand"),
         "export": MessageLookupByLibrary.simpleMessage("導出"),
+        "export_app_data": MessageLookupByLibrary.simpleMessage("导出应用数据"),
+        "export_app_data_summary":
+            MessageLookupByLibrary.simpleMessage("导出应用数据到本地文件"),
         "favcat": MessageLookupByLibrary.simpleMessage("收藏夾"),
         "favorites_order": MessageLookupByLibrary.simpleMessage("收藏夾排序"),
         "favorites_order_Use_favorited":
@@ -157,6 +160,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Download type"),
         "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
+        "import_app_data": MessageLookupByLibrary.simpleMessage("导入应用数据"),
+        "import_app_data_summary":
+            MessageLookupByLibrary.simpleMessage("从本地文件导入应用数据, 重启应用后生效"),
         "input_empty": MessageLookupByLibrary.simpleMessage("空白輸入"),
         "input_error": MessageLookupByLibrary.simpleMessage("輸入錯誤"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
@@ -444,8 +450,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_language": MessageLookupByLibrary.simpleMessage("語言"),
         "uc_lt_0": MessageLookupByLibrary.simpleMessage(
             "On mouse-over (pages load faster, but there may be a slight delay before a thumb appears)"),
+        "uc_lt_0_s": MessageLookupByLibrary.simpleMessage("鼠标悬停时"),
         "uc_lt_1": MessageLookupByLibrary.simpleMessage(
             "On page load (pages take longer to load, but there is no delay for loading a thumb after the page has loaded)"),
+        "uc_lt_1_s": MessageLookupByLibrary.simpleMessage("页面加载时"),
         "uc_male": MessageLookupByLibrary.simpleMessage("男性角色標籤"),
         "uc_mose_over_thumb":
             MessageLookupByLibrary.simpleMessage("mouse-over thumbnails"),
@@ -518,7 +526,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_thumb_size": MessageLookupByLibrary.simpleMessage("Size"),
         "uc_tl_0": MessageLookupByLibrary.simpleMessage("預設標題"),
         "uc_tl_1": MessageLookupByLibrary.simpleMessage(" 日文標題 (如果有的話)"),
-        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Narmal"),
+        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Normal"),
         "uc_ts_1": MessageLookupByLibrary.simpleMessage("Large"),
         "uc_uh_0":
             MessageLookupByLibrary.simpleMessage("Any client (Recommended)"),
@@ -551,6 +559,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "vote_successfully": MessageLookupByLibrary.simpleMessage("評價成功"),
         "vote_up_successfully": MessageLookupByLibrary.simpleMessage("已送出好評"),
         "webdav_Account": MessageLookupByLibrary.simpleMessage("WebDAV 帳號"),
+        "webdav_max_connections":
+            MessageLookupByLibrary.simpleMessage("WebDAV 最大连接数"),
         "welcome_text":
             MessageLookupByLibrary.simpleMessage("尻槍並非壞事~上癮並非好事~過度縱慾者腎虧~~")
       };

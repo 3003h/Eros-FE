@@ -155,6 +155,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("Показать"),
         "export": MessageLookupByLibrary.simpleMessage("Экспортировать"),
+        "export_app_data":
+            MessageLookupByLibrary.simpleMessage("Export App Data"),
+        "export_app_data_summary":
+            MessageLookupByLibrary.simpleMessage("Export App Data To File"),
         "favcat": MessageLookupByLibrary.simpleMessage("Избранное"),
         "favorites_order":
             MessageLookupByLibrary.simpleMessage("Упорядочить избранное"),
@@ -186,6 +190,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Скрыть изображение"),
         "image_limits":
             MessageLookupByLibrary.simpleMessage("Ограничения изображения"),
+        "import_app_data":
+            MessageLookupByLibrary.simpleMessage("Import App Data"),
+        "import_app_data_summary": MessageLookupByLibrary.simpleMessage(
+            "Import App Data From Backup File, need restart app"),
         "input_empty":
             MessageLookupByLibrary.simpleMessage("Буфер обмена пуст"),
         "input_error": MessageLookupByLibrary.simpleMessage("Ошибка ввода"),
@@ -664,6 +672,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Лайк успешно поставлен"),
         "webdav_Account":
             MessageLookupByLibrary.simpleMessage("Аккаунт WebDAV"),
+        "webdav_max_connections":
+            MessageLookupByLibrary.simpleMessage("WebDAV Max Connections"),
         "welcome_text": MessageLookupByLibrary.simpleMessage("~ах~ ах~ ах~~~")
       };
 }

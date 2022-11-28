@@ -49,14 +49,6 @@ class ListViewLayoutSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final bool _jpnTitle = _ehConfigService.isJpnTitle.value;
-    final bool _tagTranslat = _ehConfigService.isTagTranslat;
-    final bool _galleryImgBlur = _ehConfigService.isGalleryImgBlur.value;
-
-    // void _handleJpnTitleChanged(bool newValue) {
-    //   _ehConfigService.isJpnTitle(newValue);
-    // }
-
     void _handleGalleryListImgBlurChanged(bool newValue) {
       _ehConfigService.isGalleryImgBlur.value = newValue;
     }
@@ -76,12 +68,6 @@ class ListViewLayoutSetting extends StatelessWidget {
             desc: L10n.of(context).gray_black,
             descOn: L10n.of(context).pure_black,
           )),
-      // if (context.isTablet)
-      //   Obx(() => TextSwitchItem(
-      //         L10n.of(context).tablet_layout,
-      //         intValue: _ehConfigService.tabletLayout,
-      //         onChanged: (bool val) => _ehConfigService.tabletLayout = val,
-      //       )),
       if (context.isTablet) _buildTableLayoutItem(context),
       if (!Get.find<EhConfigService>().isSafeMode.value)
         SelectorSettingItem(
@@ -106,16 +92,12 @@ class ListViewLayoutSetting extends StatelessWidget {
                 id: isLayoutLarge ? 2 : null,
               );
             },
-            selector: _tagTranslat ? L10n.of(context).on : L10n.of(context).off,
+            selector: _ehConfigService.isTagTranslat
+                ? L10n.of(context).on
+                : L10n.of(context).off,
             desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
           );
         }),
-      // TextSwitchItem(
-      //   L10n.of(context).show_jpn_title,
-      //   intValue: _jpnTitle,
-      //   onChanged: _handleJpnTitleChanged,
-      //   // desc: '如果该画廊有日文标题则优先显示',
-      // ),
       TextSwitchItem(
         L10n.of(context).hide_top_bar_on_scroll,
         value: _ehConfigService.hideTopBarOnScroll,
@@ -124,7 +106,7 @@ class ListViewLayoutSetting extends StatelessWidget {
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
           '画廊封面模糊',
-          value: _galleryImgBlur,
+          value: _ehConfigService.isGalleryImgBlur.value,
           onChanged: _handleGalleryListImgBlurChanged,
           hideDivider: true,
           // desc: '画廊列表封面模糊效果',
@@ -133,27 +115,6 @@ class ListViewLayoutSetting extends StatelessWidget {
       _buildListModeItem(
         context,
       ),
-      // Obx(() {
-      //   final showItem = _ehConfigService.listMode.value ==
-      //           ListModeEnum.waterfall ||
-      //       _ehConfigService.listMode.value == ListModeEnum.waterfallLarge ||
-      //       _ehConfigService.listMode.value == ListModeEnum.grid;
-      //   return AnimatedCrossFade(
-      //     alignment: Alignment.center,
-      //     crossFadeState:
-      //         showItem ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-      //     firstCurve: Curves.easeIn,
-      //     secondCurve: Curves.easeOut,
-      //     duration: const Duration(milliseconds: 200),
-      //     firstChild: const SizedBox(),
-      //     secondChild: SelectorSettingItem(
-      //       title: L10n.of(context).custom_width,
-      //       onTap: () {
-      //         NavigatorUtil.goItemWidthSettingPage();
-      //       },
-      //     ),
-      //   );
-      // }),
       SelectorSettingItem(
         title: L10n.of(context).custom_width,
         onTap: () {

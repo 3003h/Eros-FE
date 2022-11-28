@@ -163,24 +163,25 @@ class ListViewAdvancedSetting extends StatelessWidget {
         onChanged: (bool val) => _ehConfigService.vibrate.value = val,
         hideDivider: true,
       ),
-      if (!kReleaseMode) const ItemSpace(),
-      if (!kReleaseMode)
-        TextItem(
-          'Export App Data',
-          // subTitle: 'Includes settings, quick search',
-          onTap: () async {
-            exportAppDataToFile();
-          },
-        ),
-      if (!kReleaseMode)
-        TextItem(
-          'Import App Data',
-          subTitle: 'Need restart app',
-          onTap: () async {
-            importAppDataFromFile();
-          },
-          hideDivider: true,
-        ),
+      const ItemSpace(),
+
+      TextItem(
+        L10n.of(context).export_app_data,
+        subTitle: L10n.of(context).export_app_data_summary,
+        onTap: () async {
+          // exportAppDataToFile(base64: !kDebugMode);
+          exportAppDataToFile();
+        },
+      ),
+
+      TextItem(
+        L10n.of(context).import_app_data,
+        subTitle: L10n.of(context).import_app_data_summary,
+        onTap: () async {
+          importAppDataFromFile();
+        },
+        hideDivider: true,
+      ),
       const ItemSpace(),
       SelectorSettingItem(
         title: 'Log',
@@ -210,7 +211,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
 Widget _buildWebDAVMaxConnectionsItem(BuildContext context,
     {bool hideDivider = false}) {
-  final String _title = 'WebDAV Max Connections';
+  final String _title = L10n.of(context).webdav_max_connections;
   final EhConfigService ehConfigService = Get.find();
 
   // map from EHConst.webDAVConnections

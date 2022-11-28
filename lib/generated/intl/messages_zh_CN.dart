@@ -125,6 +125,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("输入具体日期或偏移量 / GID"),
         "expand": MessageLookupByLibrary.simpleMessage("展开"),
         "export": MessageLookupByLibrary.simpleMessage("导出"),
+        "export_app_data": MessageLookupByLibrary.simpleMessage("导出应用数据"),
+        "export_app_data_summary":
+            MessageLookupByLibrary.simpleMessage("导出应用数据到本地文件"),
         "favcat": MessageLookupByLibrary.simpleMessage("收藏夹"),
         "favorites_order": MessageLookupByLibrary.simpleMessage("收藏夹排序"),
         "favorites_order_Use_favorited":
@@ -150,6 +153,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "image_download_type": MessageLookupByLibrary.simpleMessage("下载类型"),
         "image_hide": MessageLookupByLibrary.simpleMessage("图片隐藏"),
         "image_limits": MessageLookupByLibrary.simpleMessage("图片限制"),
+        "import_app_data": MessageLookupByLibrary.simpleMessage("导入应用数据"),
+        "import_app_data_summary":
+            MessageLookupByLibrary.simpleMessage("从本地文件导入应用数据, 重启应用后生效"),
         "input_empty": MessageLookupByLibrary.simpleMessage("输入空"),
         "input_error": MessageLookupByLibrary.simpleMessage("输入格式有误"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
@@ -510,6 +516,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "vote_successfully": MessageLookupByLibrary.simpleMessage("投票成功"),
         "vote_up_successfully": MessageLookupByLibrary.simpleMessage("赞成成功"),
         "webdav_Account": MessageLookupByLibrary.simpleMessage("WebDAV账户"),
+        "webdav_max_connections":
+            MessageLookupByLibrary.simpleMessage("WebDAV 最大连接数"),
         "welcome_text":
             MessageLookupByLibrary.simpleMessage("小撸怡情~大撸伤身~强撸灰飞烟灭~~")
       };

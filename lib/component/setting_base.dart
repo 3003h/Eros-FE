@@ -457,7 +457,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
 
   @override
   Widget build(BuildContext context) {
-    _desc = widget.value ? widget.descOn : widget.desc;
+    _desc = _switchValue ? widget.descOn : widget.desc;
 
     final Color color =
         CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
@@ -509,13 +509,11 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                         ]),
                   ),
                   if (widget.suffix != null) widget.suffix!,
-                  // if (widget.onChanged != null)
                   CupertinoSwitch(
                     onChanged: widget.onChanged != null
                         ? (bool value) {
                             setState(() {
                               _switchValue = value;
-                              _desc = value ? widget.descOn : widget.desc;
                               widget.onChanged?.call(value);
                             });
                           }

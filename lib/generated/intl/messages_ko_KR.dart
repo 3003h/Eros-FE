@@ -138,6 +138,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("펼치기"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
+        "export_app_data":
+            MessageLookupByLibrary.simpleMessage("Export App Data"),
+        "export_app_data_summary":
+            MessageLookupByLibrary.simpleMessage("Export App Data To File"),
         "favcat": MessageLookupByLibrary.simpleMessage("즐겨찾기"),
         "favorites_order": MessageLookupByLibrary.simpleMessage("즐겨찾기 정렬"),
         "favorites_order_Use_favorited":
@@ -165,6 +169,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Download type"),
         "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
+        "import_app_data":
+            MessageLookupByLibrary.simpleMessage("Import App Data"),
+        "import_app_data_summary": MessageLookupByLibrary.simpleMessage(
+            "Import App Data From Backup File, need restart app"),
         "input_empty": MessageLookupByLibrary.simpleMessage("인풋 비어있음"),
         "input_error": MessageLookupByLibrary.simpleMessage("인풋 에러"),
         "instantly": MessageLookupByLibrary.simpleMessage("즉시"),
@@ -585,6 +593,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "vote_up_successfully": MessageLookupByLibrary.simpleMessage("추천 성공"),
         "webdav_Account":
             MessageLookupByLibrary.simpleMessage("WebDAV Account"),
+        "webdav_max_connections":
+            MessageLookupByLibrary.simpleMessage("WebDAV Max Connections"),
         "welcome_text": MessageLookupByLibrary.simpleMessage("oh~ oh~ oh~~~")
       };
 }

@@ -149,6 +149,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("Expand"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
+        "export_app_data":
+            MessageLookupByLibrary.simpleMessage("Export App Data"),
+        "export_app_data_summary":
+            MessageLookupByLibrary.simpleMessage("Export App Data To File"),
         "favcat": MessageLookupByLibrary.simpleMessage("Favorites"),
         "favorites_order":
             MessageLookupByLibrary.simpleMessage("Favorites Order"),
@@ -178,6 +182,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Download Type"),
         "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
+        "import_app_data":
+            MessageLookupByLibrary.simpleMessage("Import App Data"),
+        "import_app_data_summary": MessageLookupByLibrary.simpleMessage(
+            "Import App Data From Backup File, need restart app"),
         "input_empty": MessageLookupByLibrary.simpleMessage("Input empty"),
         "input_error": MessageLookupByLibrary.simpleMessage("Input error"),
         "instantly": MessageLookupByLibrary.simpleMessage("Instantly"),
@@ -588,7 +596,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_tl_0": MessageLookupByLibrary.simpleMessage("Default Title"),
         "uc_tl_1": MessageLookupByLibrary.simpleMessage(
             "Japanese Title (if available)"),
-        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Narmal"),
+        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Normal"),
         "uc_ts_1": MessageLookupByLibrary.simpleMessage("Large"),
         "uc_uh_0":
             MessageLookupByLibrary.simpleMessage("Any client (Recommended)"),
@@ -627,6 +635,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Vote up successfully"),
         "webdav_Account":
             MessageLookupByLibrary.simpleMessage("WebDAV Account"),
+        "webdav_max_connections":
+            MessageLookupByLibrary.simpleMessage("WebDAV Max Connections"),
         "welcome_text": MessageLookupByLibrary.simpleMessage("~oh~ oh~ oh~~~")
       };
 }

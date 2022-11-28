@@ -87,7 +87,7 @@ Future<void> exportQuickSearchToFile() async {
 }
 
 Future<void> importAppDataFromFile() async {
-  late String jsonStr;
+  late String loadedStr;
   if (GetPlatform.isAndroid) {
     // SAF
     try {
@@ -98,8 +98,8 @@ Future<void> importAppDataFromFile() async {
         final byte = await ss.getDocumentContent(uri);
         if (byte != null) {
           // utf8
-          jsonStr = utf8.decode(byte);
-          logger.d('$jsonStr ');
+          loadedStr = utf8.decode(byte);
+          logger.d('$loadedStr ');
         }
       }
     } catch (e, s) {
@@ -110,27 +110,40 @@ Future<void> importAppDataFromFile() async {
     if (result != null) {
       final PlatformFile platFile = result.files.single;
       final file = File(platFile.path!);
-      jsonStr = file.readAsStringSync();
+      loadedStr = file.readAsStringSync();
     }
   }
+
+  late String jsonStr;
+  if (loadedStr.trim().startsWith('{')) {
+    logger.d('load json');
+    jsonStr = loadedStr;
+  } else {
+    logger.d('load base64');
+    final base64Str = loadedStr.trim();
+    jsonStr = utf8.decode(base64.decode(base64Str));
+  }
+
+  final user = Global.profile.user.clone();
 
   final Map<String, dynamic> jsonMap =
       jsonDecode(jsonStr) as Map<String, dynamic>;
   final Profile profile = Profile.fromJson(jsonMap);
-  Global.profile = profile;
+  Global.profile = profile.copyWith(user: user);
   Global.saveProfile();
   Get.reloadAll(force: true);
   showToast('Import success');
 }
 
-Future<void> exportAppDataToFile() async {
+Future<void> exportAppDataToFile({bool base64 = true}) async {
   final Profile profile = Global.profile.copyWith(user: kDefUser);
   final String jsonStr = jsonEncode(profile.toJson());
+  final String base64Str = base64Encode(utf8.encode(jsonStr));
   final time = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
   final tempFilePath =
       path.join(Global.tempPath, 'fehviewer_profile_$time.json');
   final tempFile = File(tempFilePath);
-  tempFile.writeAsStringSync(jsonStr);
+  tempFile.writeAsStringSync(base64 ? base64Str : jsonStr);
 
   try {
     if (GetPlatform.isAndroid) {
@@ -141,7 +154,7 @@ Future<void> exportAppDataToFile() async {
         final bytes = tempFile.readAsBytesSync();
         final file = await ss.createFileAsBytes(
           saveToDirPath,
-          mimeType: '',
+          mimeType: '*/*',
           displayName: path.basename(tempFilePath),
           bytes: bytes,
         );

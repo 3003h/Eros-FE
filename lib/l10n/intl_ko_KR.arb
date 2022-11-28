@@ -411,5 +411,10 @@
   "jump_next": "Next",
   "jump_prev": "Prev",
   "custom_width": "Custom Width",
-  "read_view_compatible_mode": "Compatible Mode"
+  "read_view_compatible_mode": "Compatible Mode",
+  "export_app_data": "Export App Data",
+  "export_app_data_summary": "Export App Data To File",
+  "import_app_data": "Import App Data",
+  "import_app_data_summary": "Import App Data From Backup File, need restart app",
+  "webdav_max_connections": "WebDAV Max Connections"
 }
