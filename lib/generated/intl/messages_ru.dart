@@ -297,6 +297,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Вставить из буфера обмена"),
         "read_setting":
             MessageLookupByLibrary.simpleMessage("Настройки читалки"),
+        "read_view_compatible_mode":
+            MessageLookupByLibrary.simpleMessage("Compatible Mode"),
         "reading_direction":
             MessageLookupByLibrary.simpleMessage("Режим чтения"),
         "rebuild_tasks_data":

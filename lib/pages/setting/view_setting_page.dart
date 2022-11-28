@@ -100,6 +100,16 @@ class ViewSettingList extends StatelessWidget {
         onChanged: onViewFullscreenChanged,
         hideDivider: true,
       ),
+      const ItemSpace(),
+      // CompatibleMode
+      TextSwitchItem(
+        L10n.of(context).read_view_compatible_mode,
+        value: ehConfigService.readViewCompatibleMode,
+        hideDivider: true,
+        onChanged: (bool val) {
+          ehConfigService.readViewCompatibleMode = val;
+        },
+      ),
     ];
     return ListView.builder(
       itemCount: _list.length,

@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -4179,6 +4180,16 @@ class L10n {
     return Intl.message(
       'Custom Width',
       name: 'custom_width',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Compatible Mode`
+  String get read_view_compatible_mode {
+    return Intl.message(
+      'Compatible Mode',
+      name: 'read_view_compatible_mode',
       desc: '',
       args: [],
     );

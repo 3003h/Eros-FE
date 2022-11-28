@@ -73,7 +73,7 @@ const int _speedInv = 10;
 enum PageViewType {
   photoView,
   preloadPhotoView,
-  preloadPageview,
+  preloadPageView,
   extendedImageGesturePageView,
 }
 
@@ -83,9 +83,6 @@ class ViewExtController extends GetxController {
 
   /// 状态
   final ViewExtState vState = ViewExtState();
-
-  // 使用 PhotoView
-  final pageViewType = PageViewType.preloadPageview;
 
   final _absorbing = false.obs;
   bool get absorbing => _absorbing.value;
@@ -104,6 +101,11 @@ class ViewExtController extends GetxController {
   EhConfigService get _ehConfigService => vState.ehConfigService;
 
   late final ArchiverDownloadController archiverDownloadController;
+
+  // 使用 PhotoView
+  PageViewType get pageViewType => _ehConfigService.readViewCompatibleMode
+      ? PageViewType.extendedImageGesturePageView
+      : PageViewType.preloadPageView;
 
   Map<String, DownloadArchiverTaskInfo> get archiverTaskMap =>
       archiverDownloadController.archiverTaskMap;
@@ -711,7 +713,7 @@ class ViewExtController extends GetxController {
             curve: Curves.ease,
           );
           break;
-        case PageViewType.preloadPageview:
+        case PageViewType.preloadPageView:
           preloadPageController.animateToPage(
             page,
             duration: duration,
@@ -737,7 +739,7 @@ class ViewExtController extends GetxController {
         case PageViewType.photoView:
           pageController.jumpToPage(page);
           break;
-        case PageViewType.preloadPageview:
+        case PageViewType.preloadPageView:
           preloadPageController.jumpToPage(page);
           break;
         default:
@@ -1353,7 +1355,7 @@ class ViewExtController extends GetxController {
       case PageViewType.photoView:
         onPageController.call();
         break;
-      case PageViewType.preloadPageview:
+      case PageViewType.preloadPageView:
         onPreviewPageController?.call();
         break;
       default:

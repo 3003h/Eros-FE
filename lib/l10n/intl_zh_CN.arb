@@ -410,5 +410,6 @@
   "date_or_offset": "日期或偏移量",
   "jump_next": "后面",
   "jump_prev": "前面",
-  "custom_width": "自定义宽度"
+  "custom_width": "自定义宽度",
+  "read_view_compatible_mode": "兼容模式"
 }

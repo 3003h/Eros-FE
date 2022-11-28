@@ -6,6 +6,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
+import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
@@ -267,9 +268,24 @@ class EhConfigService extends ProfileService {
     _itemConfigList(List.from(_itemConfigMap.values));
   }
 
+  // readViewCompatibleModes
+  final _readViewCompatibleMode = true.obs;
+  bool get readViewCompatibleMode => _readViewCompatibleMode.value;
+  set readViewCompatibleMode(bool val) => _readViewCompatibleMode.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    // readViewCompatibleModes
+    readViewCompatibleMode =
+        ehConfig.readViewCompatibleMode ?? readViewCompatibleMode;
+    everProfile<bool>(_readViewCompatibleMode, (val) {
+      ehConfig = ehConfig.copyWith(readViewCompatibleMode: val);
+      if (Get.isRegistered<ViewExtController>()) {
+        Get.find<ViewExtController>().update([idSlidePage]);
+      }
+    });
 
     _itemConfigList(layoutConfig.itemConfigs);
     for (final itemConfig in _itemConfigList) {

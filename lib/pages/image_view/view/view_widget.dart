@@ -1151,9 +1151,6 @@ class ControllerButtonBar extends StatelessWidget {
               ),
             ),
           ),
-
-        // else
-        //   const SizedBox(width: 40),
       ],
     );
   }

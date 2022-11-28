@@ -259,6 +259,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "read_from_clipboard":
             MessageLookupByLibrary.simpleMessage("Read from clipboard"),
         "read_setting": MessageLookupByLibrary.simpleMessage("읽기 설정"),
+        "read_view_compatible_mode":
+            MessageLookupByLibrary.simpleMessage("Compatible Mode"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("읽기 방향"),
         "rebuild_tasks_data":
             MessageLookupByLibrary.simpleMessage("Rebuild tasks data"),

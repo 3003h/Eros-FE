@@ -3,7 +3,7 @@ name: Build Release
 on:
   push:
     branches:
-#      - 'master'
+      - 'master'
 #      - 'build'
     tags:
       - v*

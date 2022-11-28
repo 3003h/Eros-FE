@@ -251,6 +251,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "read": MessageLookupByLibrary.simpleMessage("閱讀"),
         "read_from_clipboard": MessageLookupByLibrary.simpleMessage("從剪貼簿讀取"),
         "read_setting": MessageLookupByLibrary.simpleMessage("閱讀設置"),
+        "read_view_compatible_mode":
+            MessageLookupByLibrary.simpleMessage("Compatible Mode"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("閱讀方向"),
         "rebuild_tasks_data": MessageLookupByLibrary.simpleMessage("重建數據"),
         "redirect_thumb_link":

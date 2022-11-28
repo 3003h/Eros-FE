@@ -59,8 +59,6 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     logger.v('ViewPage dispose');
-    // Get.delete<ViewExtController>();
-    // 400.milliseconds.delay(() => Get.delete<ViewExtController>());
   }
 
   @override
@@ -73,9 +71,6 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
         child: ImagePlugins(
           child: ImageGestureDetector(
             child: ImageView(),
-            // child: Container(
-            //   color: Colors.amber,
-            // ),
           ),
         ),
       ),

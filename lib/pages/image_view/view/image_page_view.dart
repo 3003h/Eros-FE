@@ -24,10 +24,11 @@ class ImagePageView extends GetView<ViewExtController> {
     final imageView = GetBuilder<ViewExtController>(
       id: idSlidePage,
       builder: (logic) {
+        logger.d('logic.pageViewType ${logic.pageViewType}');
         if (logic.vState.columnMode != ViewColumnMode.single) {
           /// 双页模式
-          switch (controller.pageViewType) {
-            case PageViewType.preloadPageview:
+          switch (logic.pageViewType) {
+            case PageViewType.preloadPageView:
               Widget doubleView(int pageIndex) {
                 return PhotoViewGallery.builder(
                   backgroundDecoration:
@@ -106,7 +107,7 @@ class ImagePageView extends GetView<ViewExtController> {
           }
         } else {
           /// 单页模式
-          switch (controller.pageViewType) {
+          switch (logic.pageViewType) {
             case PageViewType.photoView:
 
               /// PhotoView 的看图组件
@@ -161,11 +162,12 @@ class ImagePageView extends GetView<ViewExtController> {
                       child: ViewImage(
                         imageSer: pageIndex + 1,
                         mode: ExtendedImageMode.none,
-                        enableSlideOutPage: !GetPlatform.isAndroid,
+                        // enableSlideOutPage: !GetPlatform.isAndroid,
+                        enableSlideOutPage: false,
                       ),
                     );
                   });
-            case PageViewType.preloadPageview:
+            case PageViewType.preloadPageView:
 
               /// 预渲染的PageView
               /// 可以无缝的进行翻页，可设置预载页范围
@@ -193,7 +195,8 @@ class ImagePageView extends GetView<ViewExtController> {
                       child: ViewImage(
                         imageSer: index + 1,
                         mode: ExtendedImageMode.gesture,
-                        enableSlideOutPage: !GetPlatform.isAndroid,
+                        // enableSlideOutPage: !GetPlatform.isAndroid,
+                        enableSlideOutPage: false,
                       ),
                     );
                   });
@@ -213,12 +216,6 @@ class ImagePageView extends GetView<ViewExtController> {
                 physics: const CustomScrollPhysics(),
                 reverse: reverse,
                 itemBuilder: (BuildContext context, int index) {
-                  // return Center(
-                  //     child: Text(
-                  //   '$index',
-                  //   style: TextStyle(color: Colors.white, fontSize: 100),
-                  // ));
-
                   logger.v('pageIndex $index ser ${index + 1}');
 
                   /// 单页
@@ -234,8 +231,8 @@ class ImagePageView extends GetView<ViewExtController> {
                     //     logic.vState.showPageInterval ? 1.000001 : 1.000001,
                     // initialScale: GetPlatform.isAndroid ? 1.000001 : 1.0,
                     mode: ExtendedImageMode.gesture,
-                    enableSlideOutPage: !GetPlatform.isAndroid,
-                    // enableSlideOutPage: false,
+                    // enableSlideOutPage: !GetPlatform.isAndroid,
+                    enableSlideOutPage: false,
                   );
                 },
               );

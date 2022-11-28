@@ -236,6 +236,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "read": MessageLookupByLibrary.simpleMessage("阅读"),
         "read_from_clipboard": MessageLookupByLibrary.simpleMessage("从剪贴板读取"),
         "read_setting": MessageLookupByLibrary.simpleMessage("阅读设置"),
+        "read_view_compatible_mode":
+            MessageLookupByLibrary.simpleMessage("兼容模式"),
         "reading_direction": MessageLookupByLibrary.simpleMessage("阅读方向"),
         "rebuild_tasks_data": MessageLookupByLibrary.simpleMessage("重建下载任务数据"),
         "redirect_thumb_link": MessageLookupByLibrary.simpleMessage("重定向缩略图链接"),

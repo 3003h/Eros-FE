@@ -57,5 +57,6 @@
   "proxyUsername?": "",
   "proxyPassword?": "",
   "webDAVMaxConnections?": 2,
-  "hideTopBarOnScroll?": false
+  "hideTopBarOnScroll?": false,
+  "readViewCompatibleMode?": true
 }

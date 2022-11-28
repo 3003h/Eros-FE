@@ -84,7 +84,7 @@ class CommentController extends GetxController {
 
     // 用户名无空格 id为 #1234# 或者摩尔斯密码形式
     final reg = RegExp(r'\s*@(\S+)((?!#\d+#).)+(#(\d+)#|\n([ ·-]+))?');
-    final match = reg.firstMatch(comment.text ?? '');
+    final match = reg.firstMatch(comment.text);
     if (match == null || match.groupCount == 0) {
       return null;
     }
@@ -131,7 +131,7 @@ class CommentController extends GetxController {
     if (repty == null) {
       // 如果还是匹配不上 考虑用户名中带空格的可能性 但是需要换行结束
       final regSpace = RegExp(r'\s*@(.+)(\n)?');
-      final matchSpace = regSpace.firstMatch(comment.text ?? '');
+      final matchSpace = regSpace.firstMatch(comment.text);
       if (matchSpace == null || matchSpace.groupCount == 0) {
         return null;
       }
@@ -160,7 +160,7 @@ class CommentController extends GetxController {
 
   List<GalleryComment?> parserAllCommentRepty(GalleryComment comment) {
     List<String> textList =
-        (comment.text ?? '').split('@').map((e) => '@$e').toList();
+        (comment.text).split('@').map((e) => '@$e').toList();
 
     final reps = <GalleryComment?>[];
 
@@ -495,7 +495,7 @@ class CommentController extends GetxController {
     final repty =
         comments?.firstWhereOrNull((element) => element.id == reptyCommentId);
 
-    reptyCommentText = repty?.text?.replaceAll('\n', '    ') ?? '';
+    reptyCommentText = repty?.text.replaceAll('\n', '    ') ?? '';
     reptyUser = repty?.name ?? '';
 
     if (repty != null) {

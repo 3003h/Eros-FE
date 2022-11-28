@@ -297,7 +297,7 @@ class _CommentReply extends StatelessWidget {
                 ],
               ),
               Text(
-                reptyComment.text ?? '',
+                reptyComment.text,
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -357,7 +357,7 @@ class _CommentTail extends StatelessWidget {
               logger.i('edit ${galleryComment.id}');
               commentController.editComment(
                 id: galleryComment.id!,
-                oriComment: galleryComment.text ?? '',
+                oriComment: galleryComment.text,
               );
             },
           ),

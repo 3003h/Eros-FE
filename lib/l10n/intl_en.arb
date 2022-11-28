@@ -410,5 +410,6 @@
   "date_or_offset": "Date or Offset",
   "jump_next": "Next",
   "jump_prev": "Prev",
-  "custom_width": "Custom Width"
+  "custom_width": "Custom Width",
+  "read_view_compatible_mode": "Compatible Mode"
 }
