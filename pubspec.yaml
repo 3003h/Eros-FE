@@ -68,7 +68,7 @@ dependencies:
   # 震动
   flutter_vibrate: ^1.3.0
   # 文件选择
-  file_picker: ^5.1.0
+  file_picker: ^5.2.3
   # 评星
   flutter_rating_bar: ^4.0.0
   custom_pop_up_menu: ^1.2.0
