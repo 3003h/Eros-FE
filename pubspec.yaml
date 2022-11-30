@@ -60,6 +60,7 @@ dependencies:
   # 图片保存
   image_gallery_saver: #any
     git: https://github.com/hui-z/image_gallery_saver.git
+    version: ^2.0.0
   # 滑动删除
   flutter_slidable: ^2.0.0
   scrollable_positioned_list: ^0.3.2
