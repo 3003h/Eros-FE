@@ -171,7 +171,7 @@ dependencies:
   rotated_corner_decoration: ^2.0.0
   cross_file: ^0.3.3+2
   image_save: ^5.0.0
-  fluentui_system_icons: ^1.1.185
+  fluentui_system_icons: ^1.1.188
   flutter_keyboard_visibility: ^5.4.0
   extended_nested_scroll_view: ^5.1.3
   shared_storage: #^0.6.0
