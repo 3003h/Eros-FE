@@ -40,24 +40,7 @@ extension EhString on String {
   }
 
   String get handleUrl {
-    return _domainFrontingUrl._handleThumbUrlToEh;
-  }
-
-  String get _domainFrontingUrl {
-    final DnsService dnsService = Get.find();
-    final df = dnsService.enableDomainFronting;
-    final String host = Uri.parse(this).host;
-    if (host.isEmpty) {
-      return this;
-    }
-    if (df) {
-      final realHost = dnsService.getHost(host);
-      final String realUrl = replaceFirst(host, realHost);
-      logger.v('realUrl: $realUrl');
-      return realUrl;
-    }
-
-    return this;
+    return _handleThumbUrlToEh;
   }
 
   String get _handleThumbUrlResolution {
