@@ -84,6 +84,16 @@ class DomainFronting {
     interceptors.add(DomainFrontingInterceptorRequest(this));
     interceptors.insert(0, DomainFrontingInterceptorResponse(this));
   }
+
+
+  static RequestOptions getRawOptions(RequestOptions options) {
+    final rawOptions = options.extra['domainFrontingRawOptions'];
+    if (rawOptions != null && rawOptions is RequestOptions) {
+      return getRawOptions(rawOptions);
+    }
+    return options;
+  }
+
 }
 
 class DomainFrontingInterceptorResponse extends Interceptor {
@@ -100,8 +110,7 @@ class DomainFrontingInterceptorResponse extends Interceptor {
       handler.next(e);
       return;
     }
-    final rawOptions = e.requestOptions.extra['domainFrontingRawOptions'];
-    e.requestOptions = rawOptions as RequestOptions;
+    e.requestOptions = DomainFronting.getRawOptions(e.requestOptions);
     handler.next(e);
   }
 }
@@ -124,7 +133,9 @@ class DomainFrontingInterceptorRequest extends Interceptor {
 
     final String domainFronting =
         options.extra['domainFronting'] as String? ?? 'dns';
-    final host = options.uri.host;
+
+    var host = DomainFronting.getRawOptions(options).uri.host;
+
     String? ip;
     if (domainFronting != 'dns') {
       ip = domainFronting;
