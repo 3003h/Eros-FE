@@ -76,7 +76,7 @@ dependencies:
     git:
       url: https://github.com/honjow/flutter_downloader.git
       ref: dev
-  copy_with_extension: ^4.0.0
+  copy_with_extension: ^5.0.0
   package_info: ^2.0.0
   pretty_dio_logger: ^1.2.0-beta-1
   translator: ^0.1.7
@@ -194,7 +194,7 @@ dev_dependencies:
   json_serializable: ^6.0.1
   json_annotation: ^4.3.0
 
-  copy_with_extension_gen: ^4.0.0
+  copy_with_extension_gen: ^5.0.0
 
   # git hook 相关
   process_run: ^0.12.1+1

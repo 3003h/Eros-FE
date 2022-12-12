@@ -289,14 +289,14 @@ packages:
       name: copy_with_extension
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.4"
+    version: "5.0.0"
   copy_with_extension_gen:
     dependency: "direct dev"
     description:
       name: copy_with_extension_gen
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.4"
+    version: "5.0.0"
   cross_file:
     dependency: "direct main"
     description:
@@ -352,7 +352,7 @@ packages:
       name: decimal
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   device_info:
     dependency: "direct main"
     description:
@@ -401,7 +401,7 @@ packages:
       name: dio_smart_retry
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.3.2"
+    version: "1.4.0"
   easy_animated_tabbar:
     dependency: "direct main"
     description:
@@ -450,7 +450,7 @@ packages:
       name: extended_image
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.3.2"
+    version: "6.3.4"
   extended_image_library:
     dependency: transitive
     description:
@@ -506,7 +506,7 @@ packages:
       name: file_picker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.2.2"
+    version: "5.2.3"
   fixnum:
     dependency: transitive
     description:
@@ -534,7 +534,7 @@ packages:
       name: fluentui_system_icons
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.186"
+    version: "1.1.189"
   flustars:
     dependency: "direct main"
     description:
@@ -617,7 +617,7 @@ packages:
       name: flutter_inappwebview
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.7.2"
+    version: "5.7.2+2"
   flutter_isolate:
     dependency: transitive
     description:
@@ -687,7 +687,7 @@ packages:
       name: flutter_list_view
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.18"
+    version: "1.1.21"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -765,7 +765,7 @@ packages:
       name: font_awesome_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "10.2.1"
+    version: "10.3.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -918,10 +918,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "6676c04a858761736dc6b166ef14887578c6218f"
+      resolved-ref: e319bc600a8c3e5ab4d414b890dc7844f6f9d6d9
       url: "https://github.com/hui-z/image_gallery_saver.git"
     source: git
-    version: "1.7.1"
+    version: "2.0.0"
   image_save:
     dependency: "direct main"
     description:
@@ -1156,7 +1156,7 @@ packages:
       name: mime
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   modal_bottom_sheet:
     dependency: "direct main"
     description:
@@ -1193,7 +1193,7 @@ packages:
       name: open_filex
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.3.1"
+    version: "4.3.2"
   orientation:
     dependency: "direct main"
     description:
@@ -1431,7 +1431,7 @@ packages:
       name: rational
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.2"
   receive_sharing_intent:
     dependency: "direct main"
     description:
@@ -1487,14 +1487,14 @@ packages:
       name: sentry
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.16.1"
+    version: "6.18.0"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.16.1"
+    version: "6.18.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -1648,7 +1648,7 @@ packages:
       name: sqflite
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.0+3"
+    version: "2.2.2"
   sqflite_common:
     dependency: transitive
     description:
