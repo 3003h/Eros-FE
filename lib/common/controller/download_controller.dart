@@ -52,6 +52,7 @@ Future<String> getAndroidDefaultDownloadPath() async {
   return downloadPath;
 }
 
+@immutable
 class TaskStatus {
   const TaskStatus(this.value);
   final int value;
@@ -120,8 +121,8 @@ class DownloadController extends GetxController {
       return;
     }
 
-    final uri = safMakeUriString(path: customDownloadPath, isTreeUri: true);
-    ehConfigService.downloadLocatino = uri;
+    final uri = safMakeUri(path: customDownloadPath, isTreeUri: true);
+    ehConfigService.downloadLocatino = uri.toString();
     restoreGalleryTasks();
 
     logger.d('updateCustomDownloadPath $uri');
@@ -133,7 +134,7 @@ class DownloadController extends GetxController {
 
     if (Platform.isAndroid) {
       final uriList = await ss.persistedUriPermissions();
-      logger.d('uriList:$uriList');
+      logger.d('uriList:\n${uriList?.map((e) => e.toString()).join('\n')}');
       if (uriList == null || uriList.isEmpty) {
         logger.e('allowMediaScan uriList is null');
       }
@@ -215,7 +216,8 @@ class DownloadController extends GetxController {
     }
 
     final String _galleryDirName = path.join(
-        '$gid - ${path.split(title).join('_').replaceAll(RegExp(r'[/:*"<>|,?]'), '_')}');
+      '$gid - ${path.split(title).join('_').replaceAll(RegExp(r'[/:*"<>|,?]'), '_')}',
+    );
     String _dirPath;
     try {
       _dirPath = await _getGalleryDownloadPath(dirName: _galleryDirName);
@@ -761,23 +763,15 @@ class DownloadController extends GetxController {
           // read file
           final File file = File(tempSavePath);
           final bytes = await file.readAsBytes();
-          // final mimeType =
-          //     lookupMimeType(file.path, headerBytes: bytes.take(8).toList());
 
-          // late String ext;
-          // if (url.contains('/fullimg.php?')) {
-          //   logger.d('mimeType $mimeType, url $url');
-          //   ext = '.${mimeType?.split(' / ').last ?? '.jpg'}';
-          // } else {
-          //   ext = path.extension(url);
-          //   logger.d('not fullimg ext $ext');
-          // }
           final extension = path.extension(tempSavePath);
+
+          final parentUri = Uri.parse(parentPath);
 
           // SAF write file
           final fileName = '$fileNameWithoutExtension$extension';
           await ss.createFileAsBytes(
-            Uri.parse(parentPath),
+            parentUri,
             mimeType: '*/*',
             displayName: fileName,
             bytes: bytes,
@@ -889,20 +883,26 @@ class DownloadController extends GetxController {
       {String? uri, bool saveDownloadPath = false}) async {
     if (Platform.isAndroid) {
       final String checkUri = uri ?? ehConfigService.downloadLocatino;
+      Future<void> openDocumentTree() async {
+        final uri =
+            await ss.openDocumentTree(initialUri: Uri.tryParse(checkUri));
+        logger.d('uri $uri');
+        if (uri != null && saveDownloadPath) {
+          ehConfigService.downloadLocatino = uri.toString();
+        }
+      }
+
       final uriList = await ss.persistedUriPermissions();
       if (uriList == null || uriList.isEmpty) {
         logger.e('persisted uriList is null');
+        await openDocumentTree();
       } else {
         if (!uriList.any((element) => element.uri.toString() == checkUri)) {
           logger.e('uriList not contains $checkUri');
-          final uri =
-              await ss.openDocumentTree(initialUri: Uri.tryParse(checkUri));
-          logger.d('uri $uri');
-          if (uri != null && saveDownloadPath) {
-            ehConfigService.downloadLocatino = uri.toString();
-          }
+          await openDocumentTree();
         }
       }
+      await safCreateDirectory(Uri.parse(checkUri));
     }
   }
 
@@ -942,6 +942,7 @@ class DownloadController extends GetxController {
         return galleryDirUrl;
       }
 
+      logger.d('galleryDirUrl $galleryDirUrl');
       final parentUri = Uri.parse(ehConfigService.downloadLocatino);
       try {
         final result = await ss.createDirectory(parentUri, dirName);
@@ -1118,13 +1119,6 @@ class DownloadController extends GetxController {
     await isarHelper
         .putGalleryTask(galleryTask.copyWith(completCount: completeCount));
 
-    // if (completeCount == galleryTask.fileCount) {
-    //   logger.v('complete ${galleryTask.gid}  ${galleryTask.title}');
-    //   await galleryTaskComplete(galleryTask.gid);
-    //   _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
-    //   return;
-    // }
-
     logger.v(
         '${imageTasksOri.where((element) => element.status != TaskStatus.complete.value).map((e) => e.toString()).join('\n')} ');
 
@@ -1147,6 +1141,11 @@ class DownloadController extends GetxController {
     }
 
     final String downloadParentPath = galleryTask.realDirPath!;
+
+    if (downloadParentPath.isContentUri) {
+      await safCreateDirectory(Uri.parse(downloadParentPath),
+          documentToTree: true);
+    }
 
     final List<int> _completeSerList = imageTasksOri
         .where((element) => element.status == TaskStatus.complete.value)

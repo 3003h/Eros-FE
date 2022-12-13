@@ -67,7 +67,7 @@ final DioHttpConfig exDioConfig = DioHttpConfig(
   connectTimeout: 15000,
   sendTimeout: 8000,
   receiveTimeout: 25000,
-  maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost,
+  // maxConnectionsPerHost: EHConst.exMaxConnectionsPerHost,
 );
 
 final EhHttpOverrides ehHttpOverrides = EhHttpOverrides();

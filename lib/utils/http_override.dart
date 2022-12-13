@@ -16,7 +16,7 @@ class DFHttpOverrides extends HttpOverrides {
 
 class EhHttpOverrides extends HttpOverrides {
   EhHttpOverrides({
-    this.maxConnectionsPerHost = EHConst.exMaxConnectionsPerHost,
+    // this.maxConnectionsPerHost = EHConst.exMaxConnectionsPerHost,
     this.skipCertificateCheck,
   });
 

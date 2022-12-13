@@ -8,6 +8,14 @@ import 'package:shared_storage/shared_storage.dart' as ss;
 
 const kSafCacheDir = 'saf_cache';
 
+const kDocumentFileColumns = <ss.DocumentFileColumn>[
+  ss.DocumentFileColumn.displayName,
+  ss.DocumentFileColumn.size,
+  ss.DocumentFileColumn.lastModified,
+  ss.DocumentFileColumn.id,
+  ss.DocumentFileColumn.mimeType,
+];
+
 Future<String> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
   final exists = await ss.exists(cacheUri) ?? false;
   if (!exists) {
@@ -30,19 +38,11 @@ Future<String> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
 }
 
 Future<String> safCache(Uri cacheUri, {bool overwrite = false}) async {
-  const columns = <ss.DocumentFileColumn>[
-    ss.DocumentFileColumn.displayName,
-    ss.DocumentFileColumn.size,
-    ss.DocumentFileColumn.lastModified,
-    ss.DocumentFileColumn.id,
-    ss.DocumentFileColumn.mimeType,
-  ];
-
   final cachePath = await _makeExternalStorageTempPath(cacheUri);
   logger.d('cache to cachePath: $cachePath');
 
   final Stream<ss.DocumentFile> onNewFileLoaded =
-      ss.listFiles(cacheUri, columns: columns);
+      ss.listFiles(cacheUri, columns: kDocumentFileColumns);
 
   await for (final ss.DocumentFile documentFile in onNewFileLoaded) {
     logger.d(
@@ -103,23 +103,108 @@ String _makeDirectoryPathToName(String path) {
   return path.replaceAll('/', '_').replaceAll(':', '_');
 }
 
-String safMakeUriString({String path = '', bool isTreeUri = false}) {
-  path = path.replaceAll(RegExp(r'^(/storage/emulated/\d+/|/sdcard/)'), '');
+Uri safMakeUri({String path = '', bool isTreeUri = false}) {
+  final fullPath =
+      path.replaceAll(RegExp(r'^(/storage/emulated/\d+/|/sdcard/)'), '');
+  final directoryPath = fullPath.replaceAll(RegExp(r'[^/]+$'), '');
 
-  String uri = '';
-  String base =
-      'content://com.android.externalstorage.documents/tree/primary%3A';
-  String documentUri = '/document/primary%3A' +
-      path.replaceAll('/', '%2F').replaceAll(' ', '%20');
-  if (isTreeUri) {
-    uri = base + path.replaceAll('/', '%2F').replaceAll(' ', '%20');
-  } else {
-    var pathSegments = path.split('/');
-    var fileName = pathSegments[pathSegments.length - 1];
-    var directory = path.split('/$fileName')[0];
-    uri = base +
-        directory.replaceAll('/', '%2F').replaceAll(' ', '%20') +
-        documentUri;
+  const scheme = 'content';
+  const host = 'com.android.externalstorage.documents';
+
+  Uri uri = Uri(
+    scheme: scheme,
+    host: host,
+    pathSegments: [
+      'tree',
+      if (isTreeUri) 'primary:$fullPath' else 'primary:$directoryPath',
+      if (!isTreeUri) 'document',
+      if (!isTreeUri) 'primary:$fullPath',
+    ],
+  );
+
+  final url = uri.toString();
+  final urlWithReplace = url.replaceAll('primary:', 'primary%3A');
+
+  return Uri.parse(urlWithReplace);
+}
+
+Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
+  // final ss.DocumentFile? documentFile = await uri.toDocumentFile();
+  // if (await documentFile?.exists() ?? false) {
+  //   logger.d('safCreateDirectory: ${documentFile?.id} exists');
+  //   return;
+  // }
+
+  if (uri.scheme != 'content' ||
+      uri.host != 'com.android.externalstorage.documents') {
+    logger.e('uri is not saf uri');
+    throw Exception('uri is not saf uri');
   }
-  return uri;
+
+  final pathSegments = uri.pathSegments;
+  if (pathSegments[0] != 'tree') {
+    logger.e('uri is not saf tree uri');
+    throw Exception('uri is not saf tree uri');
+  }
+
+  logger.v('pathSegments: $pathSegments');
+
+  late final String path;
+  if (pathSegments.length == 2) {
+    logger.v('safCreateDirectory: ${pathSegments[1]}');
+    path = pathSegments[1];
+  } else if (pathSegments.length == 4) {
+    logger.v('safCreateDirectory: ${pathSegments[1]}');
+    if (!documentToTree) {
+      path = pathSegments[1];
+    } else {
+      path = pathSegments[3];
+    }
+  } else {
+    logger.e('uri is not saf uri');
+    throw Exception('uri is not saf uri');
+  }
+
+  final pathList = Uri.decodeFull(path).split(':');
+  if (pathList.length != 2 || pathList[0] != 'primary') {
+    logger.e('uri is not saf tree uri');
+    throw Exception('uri is not saf tree uri');
+  }
+
+  logger.v('pathList: $pathList');
+
+  final dirPath = pathList[1];
+  final dirPathList = dirPath.split('/');
+
+  logger.d('dirPathList: $dirPathList');
+
+  for (int i = 1; i < dirPathList.length; i++) {
+    final dirName = dirPathList[i];
+    final parentUri =
+        safMakeUri(path: dirPathList.sublist(0, i).join('/'), isTreeUri: true);
+
+    logger.d('parentUri: ${parentUri.toString()} dirName: $dirName');
+
+    // TODO
+    final Stream<ss.DocumentFile> onNewFileLoaded =
+        ss.listFiles(parentUri, columns: kDocumentFileColumns);
+
+    // await for (final ss.DocumentFile documentFile in onNewFileLoaded) {
+    //   logger.d(
+    //       'documentFile \n${documentFile.uri}\n${documentFile.name} \n${documentFile.size} \n'
+    //       '${documentFile.lastModified} \n${documentFile.id} \n${documentFile.type}');
+    //   if (documentFile.name == dirName) {
+    //     logger.d('safCreateDirectory: ${documentFile.id} exists');
+    //     return;
+    //   }
+    // }
+
+    final documentFile = await ss.findFile(parentUri, dirName);
+    // if (documentFile == null) {
+    //   logger.d('************ createDirectory: $dirName');
+    //   await ss.createDirectory(parentUri, dirName);
+    // } else {
+    //   logger.d('************ createDirectory: $dirName exists');
+    // }
+  }
 }

@@ -15,6 +15,7 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
 import 'package:fehviewer/store/db/entity/tag_translat.dart';
+import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
@@ -430,6 +431,8 @@ class Api {
 
     if (parentPath.isContentUri) {
       // SAF 方式
+
+      // await safCreateDirectory(Uri.parse(parentPath));
 
       final result = await ss.createFileAsBytes(
         Uri.parse(parentPath),

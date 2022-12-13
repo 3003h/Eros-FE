@@ -174,8 +174,8 @@ dependencies:
   fluentui_system_icons: ^1.1.185
   flutter_keyboard_visibility: ^5.4.0
   extended_nested_scroll_view: ^5.1.3
-  shared_storage: #^0.6.0
-    git: https://github.com/alexrintt/shared-storage.git
+  shared_storage: ^0.7.0
+#    git: https://github.com/alexrintt/shared-storage.git
   mime: ^1.0.2
   saf: ^1.0.3+4
   flutter_widget_from_html_core: ^0.9.0+1
