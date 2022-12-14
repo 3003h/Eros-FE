@@ -272,7 +272,7 @@ class DownloadController extends GetxController {
     if (dState.galleryTaskMap[gid]?.status == TaskStatus.complete.value) {
       return null;
     }
-    logger.d('更新任务为已完成');
+    logger.v('更新任务为已完成');
     _cancelDownloadStateChkTimer(gid: gid);
     if (!((dState.taskCancelTokens[gid]?.isCancelled) ?? true)) {
       dState.taskCancelTokens[gid]?.cancel();
@@ -299,7 +299,7 @@ class DownloadController extends GetxController {
 
     String jsonImageTaskList = jsonEncode(imageTaskList);
     String jsonGalleryTask = jsonEncode(galleryTask.copyWith(dirPath: ''));
-    logger.d('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
+    logger.v('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
 
     final dirPath = galleryTask.realDirPath;
     if (dirPath == null || dirPath.isEmpty) {
@@ -1143,6 +1143,7 @@ class DownloadController extends GetxController {
     final String downloadParentPath = galleryTask.realDirPath!;
 
     if (downloadParentPath.isContentUri) {
+      logger.d('downloadParentPath $downloadParentPath');
       await safCreateDirectory(Uri.parse(downloadParentPath),
           documentToTree: true);
     }

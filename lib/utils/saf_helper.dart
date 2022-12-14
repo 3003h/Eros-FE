@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pp;
+import 'package:shared_storage/saf.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
 
 const kSafCacheDir = 'saf_cache';
@@ -129,9 +130,16 @@ Uri safMakeUri({String path = '', bool isTreeUri = false}) {
 }
 
 Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
-  // final ss.DocumentFile? documentFile = await uri.toDocumentFile();
-  // if (await documentFile?.exists() ?? false) {
-  //   logger.d('safCreateDirectory: ${documentFile?.id} exists');
+  final List<UriPermission>? persistedUriList =
+      await ss.persistedUriPermissions();
+  logger.d('persistedUriList:\n\n${persistedUriList?.join('\n')}');
+  if (persistedUriList == null || persistedUriList.isEmpty) {
+    logger.e('persistedUriList is null');
+    showToast('persistedUriList is null');
+    return;
+  }
+  // if (persistedUriList.any((e) => e.uri == uri)) {
+  //   logger.d('persistedUriList contains uri');
   //   return;
   // }
 
@@ -147,14 +155,14 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
     throw Exception('uri is not saf tree uri');
   }
 
-  logger.v('pathSegments: $pathSegments');
+  logger.d('pathSegments:\n\n${pathSegments.join('\n')}');
 
   late final String path;
   if (pathSegments.length == 2) {
-    logger.v('safCreateDirectory: ${pathSegments[1]}');
+    logger.d('from tree uri: [${pathSegments[1]}]');
     path = pathSegments[1];
   } else if (pathSegments.length == 4) {
-    logger.v('safCreateDirectory: ${pathSegments[1]}');
+    logger.d('from tree_document uri: [${pathSegments[1]}]');
     if (!documentToTree) {
       path = pathSegments[1];
     } else {
@@ -165,46 +173,67 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
     throw Exception('uri is not saf uri');
   }
 
-  final pathList = Uri.decodeFull(path).split(':');
+  logger.v('primary path: [$path]');
+
+  final pathList = path.split(':');
   if (pathList.length != 2 || pathList[0] != 'primary') {
     logger.e('uri is not saf tree uri');
     throw Exception('uri is not saf tree uri');
   }
 
-  logger.v('pathList: $pathList');
+  logger.v('path split:\n\n${pathList.join('\n')}');
 
   final dirPath = pathList[1];
   final dirPathList = dirPath.split('/');
 
-  logger.d('dirPathList: $dirPathList');
+  logger.d('dirPathList:\n\n${dirPathList.join('\n')}');
 
-  for (int i = 1; i < dirPathList.length; i++) {
+  for (int i = dirPathList.length - 1; i > 0; i--) {
     final dirName = dirPathList[i];
-    final parentUri =
-        safMakeUri(path: dirPathList.sublist(0, i).join('/'), isTreeUri: true);
+    final parentPath = dirPathList.sublist(0, i).join('/');
+    final parentUri = safMakeUri(path: parentPath, isTreeUri: true);
 
-    logger.d('parentUri: ${parentUri.toString()} dirName: $dirName');
+    final childDocumentFile = await ss.findFile(parentUri, dirName);
+    if (childDocumentFile != null && (childDocumentFile.isDirectory ?? false)) {
+      logger.d('childDocumentFile is directory');
+      continue;
+    }
 
-    // TODO
-    final Stream<ss.DocumentFile> onNewFileLoaded =
-        ss.listFiles(parentUri, columns: kDocumentFileColumns);
+    logger.v('dirName: $dirName');
+    logger.d('parentPath: $parentPath');
+    logger.v('parentUri: $parentUri');
+    if (!persistedUriList.any(
+        (element) => element.uri == parentUri && element.isWritePermission)) {
+      if (parentPath == 'Download' || parentPath == 'Android') {
+        continue;
+      }
+      logger.d('parentUri: $parentUri not persisted');
+      showToast('parentUri: $parentUri not persisted');
+      await openDocumentTree(initialUri: parentUri);
+    }
 
-    // await for (final ss.DocumentFile documentFile in onNewFileLoaded) {
-    //   logger.d(
-    //       'documentFile \n${documentFile.uri}\n${documentFile.name} \n${documentFile.size} \n'
-    //       '${documentFile.lastModified} \n${documentFile.id} \n${documentFile.type}');
-    //   if (documentFile.name == dirName) {
-    //     logger.d('safCreateDirectory: ${documentFile.id} exists');
-    //     return;
-    //   }
-    // }
+    for (int j = i; j < dirPathList.length; j++) {
+      final dirName = dirPathList[j];
+      final parentPath = dirPathList.sublist(0, j).join('/');
+      final parentUri = safMakeUri(path: parentPath, isTreeUri: true);
 
-    final documentFile = await ss.findFile(parentUri, dirName);
-    // if (documentFile == null) {
-    //   logger.d('************ createDirectory: $dirName');
-    //   await ss.createDirectory(parentUri, dirName);
-    // } else {
-    //   logger.d('************ createDirectory: $dirName exists');
-    // }
+      logger.v(
+          '#########\nparentUri: ${parentUri.toString()} \nchildDocumentFile dirName: $dirName');
+
+      final documentFile = await ss.findFile(parentUri, dirName);
+      if (documentFile != null) {
+        // logger.d('isDirectory ${documentFile.isDirectory}');
+        // logger.d('safCreateDirectory: ${documentFile.id} exists');
+        continue;
+      } else {
+        logger.d('safCreateDirectory: $parentUri => $dirName not exists');
+        if (!persistedUriList.any((element) => element.uri == parentUri)) {
+          logger.d('parentUri: $parentUri not persisted');
+          showToast('parentUri: $parentUri not persisted');
+          return;
+        }
+        await ss.createDirectory(parentUri, dirName);
+      }
+    }
   }
 }

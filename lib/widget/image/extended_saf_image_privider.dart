@@ -46,7 +46,7 @@ class ExtendedSafImageProvider extends SafUriImage
       SafUriImage key, DecoderBufferCallback decode) async {
     assert(key == this);
 
-    logger.d('loadAsync ${uri.toString()}');
+    logger.v('loadAsync ${uri.toString()}');
     if (!(await ss.exists(uri) ?? false)) {
       PaintingBinding.instance.imageCache.evict(key);
       throw StateError('File does not exist: ${uri.toString()}');
