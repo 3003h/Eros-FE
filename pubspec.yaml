@@ -198,7 +198,7 @@ dev_dependencies:
 
   # git hook 相关
   process_run: ^0.12.1+1
-  git_hooks: ^0.1.6
+  git_hooks: ^1.0.0
 
   isar_generator: ^3.0.0-dev.8
 
