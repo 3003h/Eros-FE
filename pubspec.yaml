@@ -190,7 +190,7 @@ dev_dependencies:
   intl_utils: ^2.5.1
   # flutter pub run apn_json2model
   apn_json2model: ^2.3.0
-  build_runner: ^2.0.3
+  build_runner: ^2.3.3
   json_serializable: ^6.0.1
   json_annotation: ^4.3.0
 
