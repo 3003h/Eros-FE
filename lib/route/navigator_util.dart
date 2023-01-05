@@ -44,11 +44,13 @@ class NavigatorUtil {
 
     Get.find<ControllerTagService>().pushSearchPageCtrl(searchText: _search);
     Get.replace(
-        SearchRepository(searchText: _search, advanceSearch: advanceSearch));
+      SearchRepository(searchText: _search, advanceSearch: advanceSearch),
+    );
 
     Get.put(
       SearchPageController(),
       tag: searchPageCtrlTag,
+      permanent: true,
     );
 
     if (replace) {
@@ -65,6 +67,10 @@ class NavigatorUtil {
     }
 
     Get.find<ControllerTagService>().popSearchPageCtrl();
+    if ((int.tryParse(searchPageCtrlTag) ?? 0) > 0) {
+      logger.d('remove searchPageCtrlTag $searchPageCtrlTag');
+      Get.delete<SearchPageController>(tag: searchPageCtrlTag);
+    }
   }
 
   /// 打开搜索页面 指定搜索类型
@@ -80,6 +86,7 @@ class NavigatorUtil {
     Get.put(
       SearchPageController(),
       tag: searchPageCtrlTag,
+      permanent: true,
     );
 
     await Get.toNamed(
@@ -88,6 +95,10 @@ class NavigatorUtil {
     );
 
     Get.find<ControllerTagService>().popSearchPageCtrl();
+    if ((int.tryParse(searchPageCtrlTag) ?? 0) > 0) {
+      logger.d('remove searchPageCtrlTag $searchPageCtrlTag');
+      Get.delete<SearchPageController>(tag: searchPageCtrlTag);
+    }
   }
 
   /// 转到画廊页面

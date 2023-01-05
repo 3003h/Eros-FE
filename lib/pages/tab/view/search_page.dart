@@ -851,12 +851,14 @@ class SearchTextFieldIn extends StatelessWidget {
     this.iconOpacity = 0.0,
   }) : super(key: key);
 
-  SearchPageController get controller => Get.find(tag: searchPageCtrlTag);
+  // SearchPageController get controller => Get.find(tag: searchPageCtrlTag);
   final bool multiline;
   final double iconOpacity;
 
   @override
   Widget build(BuildContext context) {
+    SearchPageController controller = Get.find(tag: searchPageCtrlTag);
+
     return Obx(() {
       ehTheme.isDarkMode;
       return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
