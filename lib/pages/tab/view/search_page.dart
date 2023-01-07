@@ -552,18 +552,18 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
       tag: searchPageCtrlTag,
       id: GetIds.SEARCH_INIT_VIEW,
       builder: (SearchPageController sPageController) {
-        final List<Widget> _btnList =
+        final List<Widget> searchHistoryButtonList =
             List<Widget>.from(sPageController.searchHistory
                 .map(
                   (String text) => _searchHistoryBtnAnimated(
                     text,
                     () => sPageController.removeHistory(text),
-                    sPageController.translateSerachHistory,
+                    sPageController.translateSearchHistory,
                   ),
                 )
                 .toList());
 
-        final Widget _searchHistory = SliverToBoxAdapter(
+        final Widget searchHistoryBox = SliverToBoxAdapter(
           child: Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
@@ -592,10 +592,12 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                                   vertical: 6.0,
                                   horizontal: 16,
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.language,
                                   size: 17,
-                                  color: CupertinoColors.activeBlue,
+                                  color: sPageController.translateSearchHistory
+                                      ? CupertinoColors.activeBlue
+                                      : CupertinoColors.systemGrey,
                                 ),
                               ),
                             ),
@@ -618,17 +620,22 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                       ),
                     ],
                   ),
-                Wrap(
-                  spacing: 8, //主轴上子控件的间距
-                  runSpacing: 8, //交叉轴上子控件之间的间距
-                  children: _btnList.sublist(
-                      0, min<int>(20, _btnList.length)), //要显示的子控件集合
-                ).paddingSymmetric(vertical: 8.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Wrap(
+                    spacing: 8, //主轴上子控件的间距
+                    runSpacing: 8, //交叉轴上子控件之间的间距
+                    children: searchHistoryButtonList.sublist(
+                        0,
+                        min<int>(
+                            30, searchHistoryButtonList.length)), //要显示的子控件集合
+                  ),
+                ),
               ],
             ),
           ),
         );
-        return _searchHistory;
+        return searchHistoryBox;
       },
     );
   }

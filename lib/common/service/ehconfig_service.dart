@@ -273,6 +273,11 @@ class EhConfigService extends ProfileService {
   bool get readViewCompatibleMode => _readViewCompatibleMode.value;
   set readViewCompatibleMode(bool val) => _readViewCompatibleMode.value = val;
 
+  // translateSearchHistory
+  final _translateSearchHistory = true.obs;
+  bool get translateSearchHistory => _translateSearchHistory.value;
+  set translateSearchHistory(bool val) => _translateSearchHistory.value = val;
+
   @override
   void onInit() {
     super.onInit();
@@ -285,6 +290,13 @@ class EhConfigService extends ProfileService {
       if (Get.isRegistered<ViewExtController>()) {
         Get.find<ViewExtController>().update([idSlidePage]);
       }
+    });
+
+    // translateSearchHistory
+    translateSearchHistory =
+        ehConfig.translateSearchHistory ?? translateSearchHistory;
+    everProfile<bool>(_translateSearchHistory, (val) {
+      ehConfig = ehConfig.copyWith(translateSearchHistory: val);
     });
 
     _itemConfigList(layoutConfig.itemConfigs);

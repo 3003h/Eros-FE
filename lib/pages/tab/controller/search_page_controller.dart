@@ -44,7 +44,9 @@ class SearchPageController extends DefaultTabViewController {
   bool textIsGalleryUrl = false;
   String? _jumpToUrl;
 
-  bool translateSerachHistory = false;
+  bool get translateSearchHistory => ehConfigService.translateSearchHistory;
+  set translateSearchHistory(bool value) =>
+      ehConfigService.translateSearchHistory = value;
 
   final TagTransController tagTransController = Get.find<TagTransController>();
 
@@ -266,7 +268,7 @@ class SearchPageController extends DefaultTabViewController {
   }
 
   void switchTranslateHistory() {
-    translateSerachHistory = !translateSerachHistory;
+    translateSearchHistory = !translateSearchHistory;
     update([GetIds.SEARCH_INIT_VIEW]);
   }
 

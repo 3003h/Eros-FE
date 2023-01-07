@@ -58,5 +58,6 @@
   "proxyPassword?": "",
   "webDAVMaxConnections?": 2,
   "hideTopBarOnScroll?": false,
-  "readViewCompatibleMode?": true
+  "readViewCompatibleMode?": true,
+  "translateSearchHistory?": false
 }
