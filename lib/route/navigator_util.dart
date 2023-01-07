@@ -47,10 +47,15 @@ class NavigatorUtil {
       SearchRepository(searchText: _search, advanceSearch: advanceSearch),
     );
 
-    Get.put(
-      SearchPageController(),
+    // Get.put(
+    //   SearchPageController(),
+    //   tag: searchPageCtrlTag,
+    //   // permanent: true,
+    // );
+
+    Get.lazyPut(
+      () => SearchPageController(),
       tag: searchPageCtrlTag,
-      permanent: true,
     );
 
     if (replace) {
@@ -83,10 +88,15 @@ class NavigatorUtil {
 
     Get.replace(SearchRepository(searchType: searchType));
 
-    Get.put(
-      SearchPageController(),
+    // Get.put(
+    //   SearchPageController(),
+    //   tag: searchPageCtrlTag,
+    //   // permanent: true,
+    // );
+
+    Get.lazyPut(
+      () => SearchPageController(),
       tag: searchPageCtrlTag,
-      permanent: true,
     );
 
     await Get.toNamed(
