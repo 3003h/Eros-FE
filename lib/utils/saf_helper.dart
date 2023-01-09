@@ -104,7 +104,7 @@ String _makeDirectoryPathToName(String path) {
   return path.replaceAll('/', '_').replaceAll(':', '_');
 }
 
-Uri safMakeUri({String path = '', bool isTreeUri = false}) {
+Uri safMakeUri({String path = '', String device='primary',  bool isTreeUri = false}) {
   final fullPath =
       path.replaceAll(RegExp(r'^(/storage/emulated/\d+/|/sdcard/)'), '');
   final directoryPath = fullPath.replaceAll(RegExp(r'[^/]+$'), '');
@@ -117,14 +117,14 @@ Uri safMakeUri({String path = '', bool isTreeUri = false}) {
     host: host,
     pathSegments: [
       'tree',
-      if (isTreeUri) 'primary:$fullPath' else 'primary:$directoryPath',
+      if (isTreeUri) '$device:$fullPath' else '$device:$directoryPath',
       if (!isTreeUri) 'document',
-      if (!isTreeUri) 'primary:$fullPath',
+      if (!isTreeUri) '$device:$fullPath',
     ],
   );
 
   final url = uri.toString();
-  final urlWithReplace = url.replaceAll('primary:', 'primary%3A');
+  final urlWithReplace = url.replaceAll('$device:', '$device%3A');
 
   return Uri.parse(urlWithReplace);
 }
@@ -145,14 +145,15 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
 
   if (uri.scheme != 'content' ||
       uri.host != 'com.android.externalstorage.documents') {
-    logger.e('uri is not saf uri');
-    throw Exception('uri is not saf uri');
+    logger.e('uri $uri is not saf uri');
+    throw Exception('uri $uri is not saf uri');
   }
 
   final pathSegments = uri.pathSegments;
+  // 路径必须是 tree 开头
   if (pathSegments[0] != 'tree') {
-    logger.e('uri is not saf tree uri');
-    throw Exception('uri is not saf tree uri');
+    logger.e('uri $uri is not saf tree uri');
+    throw Exception('uri $uri is not saf tree uri');
   }
 
   logger.d('pathSegments:\n\n${pathSegments.join('\n')}');
@@ -169,19 +170,22 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
       path = pathSegments[3];
     }
   } else {
-    logger.e('uri is not saf uri');
-    throw Exception('uri is not saf uri');
+    logger.e('uri $uri is not saf uri');
+    throw Exception('uri $uri is not saf uri');
   }
 
-  logger.v('primary path: [$path]');
+  logger.v('device path: [$path]');
 
   final pathList = path.split(':');
-  if (pathList.length != 2 || pathList[0] != 'primary') {
-    logger.e('uri is not saf tree uri');
-    throw Exception('uri is not saf tree uri');
+  if (pathList.length != 2) {
+    logger.e('uri $uri is not external saf tree uri');
+    throw Exception('uri $uri is not external saf tree uri');
   }
 
   logger.v('path split:\n\n${pathList.join('\n')}');
+
+  final device = pathList[0];
+  logger.d('device: $device');
 
   final dirPath = pathList[1];
   final dirPathList = dirPath.split('/');
@@ -191,7 +195,7 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
   for (int i = dirPathList.length - 1; i > 0; i--) {
     final dirName = dirPathList[i];
     final parentPath = dirPathList.sublist(0, i).join('/');
-    final parentUri = safMakeUri(path: parentPath, isTreeUri: true);
+    final parentUri = safMakeUri(path: parentPath, device: device, isTreeUri: true);
 
     final childDocumentFile = await ss.findFile(parentUri, dirName);
     if (childDocumentFile != null && (childDocumentFile.isDirectory ?? false)) {
@@ -201,7 +205,7 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
 
     logger.v('dirName: $dirName');
     logger.d('parentPath: $parentPath');
-    logger.v('parentUri: $parentUri');
+    logger.d('parentUri: $parentUri');
     if (!persistedUriList.any(
         (element) => element.uri == parentUri && element.isWritePermission)) {
       if (parentPath == 'Download' || parentPath == 'Android') {

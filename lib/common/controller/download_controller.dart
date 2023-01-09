@@ -55,6 +55,7 @@ Future<String> getAndroidDefaultDownloadPath() async {
 @immutable
 class TaskStatus {
   const TaskStatus(this.value);
+
   final int value;
 
   static TaskStatus from(int value) => TaskStatus(value);
@@ -223,7 +224,7 @@ class DownloadController extends GetxController {
       _dirPath = await _getGalleryDownloadPath(dirName: _galleryDirName);
     } catch (err, stack) {
       logger.e('创建目录失败', err, stack);
-      showToast('创建目录失败, $err');
+      showToast('create Directory error, $err');
       return;
     }
 
@@ -902,7 +903,7 @@ class DownloadController extends GetxController {
           await openDocumentTree();
         }
       }
-      await safCreateDirectory(Uri.parse(checkUri));
+      // await safCreateDirectory(Uri.parse(checkUri));
     }
   }
 
@@ -1143,9 +1144,11 @@ class DownloadController extends GetxController {
     final String downloadParentPath = galleryTask.realDirPath!;
 
     if (downloadParentPath.isContentUri) {
-      logger.d('downloadParentPath $downloadParentPath');
-      await safCreateDirectory(Uri.parse(downloadParentPath),
-          documentToTree: true);
+      logger.d('^^^^^^^^^^ downloadParentPath $downloadParentPath');
+      // await safCreateDirectory(
+      //   Uri.parse(downloadParentPath),
+      //   documentToTree: true,
+      // );
     }
 
     final List<int> _completeSerList = imageTasksOri
