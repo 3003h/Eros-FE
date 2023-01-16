@@ -197,7 +197,7 @@ dev_dependencies:
   copy_with_extension_gen: ^5.0.0
 
   # git hook 相关
-  process_run: ^0.12.1+1
+  process_run: ^0.12.5+2
   git_hooks: ^1.0.0
 
   isar_generator: ^3.0.0-dev.8
