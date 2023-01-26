@@ -2,7 +2,7 @@ name: fehviewer
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.3.8+498
+version: 1.3.9+499
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -63,7 +63,7 @@ dependencies:
   # 滑动删除
   flutter_slidable: ^2.0.0
   scrollable_positioned_list: ^0.3.2
-  reorderables: ^0.5.0
+  reorderables: ^0.6.0
   basic_utils: ^5.2.2
   # 震动
   flutter_vibrate: ^1.3.0
@@ -95,7 +95,7 @@ dependencies:
   executor: ^2.2.2
   synchronized: ^3.0.0
   isolate_handler: ^1.0.0
-  worker_manager: ^4.2.4
+  worker_manager: ^5.0.0
   collection: ^1.15.0
   zoom_widget: ^2.0.0
   english_words: ^4.0.0
@@ -111,7 +111,7 @@ dependencies:
       path: packages/learning_language
   encrypt: ^5.0.1
   wakelock: ^0.6.1+1
-  jinja: ^0.3.4
+  jinja: ^0.4.2
   image: ^3.0.8
   palette_generator: ^0.3.2
   getwidget: ^3.0.1
@@ -173,7 +173,8 @@ dependencies:
   image_save: ^5.0.0
   fluentui_system_icons: ^1.1.185
   flutter_keyboard_visibility: ^5.4.0
-  extended_nested_scroll_view: ^5.1.3
+  extended_nested_scroll_view: #^5.1.3
+    git: https://github.com/VB10/extended_nested_scroll_view.git
   shared_storage: ^0.7.0
 #    git: https://github.com/alexrintt/shared-storage.git
   mime: ^1.0.2

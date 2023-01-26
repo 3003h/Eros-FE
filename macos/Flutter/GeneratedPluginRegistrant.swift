@@ -9,10 +9,10 @@ import bitsdojo_window_macos
 import isar_flutter_libs
 import package_info
 import package_info_plus
-import path_provider_macos
+import path_provider_foundation
 import sentry_flutter
 import share_plus
-import shared_preferences_macos
+import shared_preferences_foundation
 import sqflite
 import url_launcher_macos
 import wakelock_macos

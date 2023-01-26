@@ -204,9 +204,9 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
 
   // 写入index
   for (final _imgFile in fileNameList) {
-    final _xhtml = indexTemplate.render(
-      fileName: _imgFile['name'],
-    );
+    final _xhtml = indexTemplate.render({
+      'fileName': _imgFile['name'],
+    });
     final _xhtmlFile = File(
         path.join(contentPath, 'index_${_imgFile['withoutExtension']}.xhtml'));
     _xhtmlFile.createSync(recursive: true);
@@ -214,16 +214,17 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   }
 
   // 写入 metadata.opf
-  final metadata = metadataTemplate.render(
-      mainTitle: htmlEscape.convert(task.title.shortTitle),
-      fileNameList: fileNameList,
-      coverName: coverName,
-      coverExtension: path.extension(coverName) == '.jpg'
-          ? 'jpeg'
-          : path.extension(coverName).split('.').last.toLowerCase());
+  final metadata = metadataTemplate.render({
+    'mainTitle': htmlEscape.convert(task.title.shortTitle),
+    'fileNameList': fileNameList,
+    'coverName': coverName,
+    'coverExtension': path.extension(coverName) == '.jpg'
+        ? 'jpeg'
+        : path.extension(coverName).split('.').last.toLowerCase(),
+  });
   final metadataFile = File(path.join(oebpsPath, 'metadata.opf'));
   metadataFile.createSync();
-  metadataFile.writeAsStringSync('$metadata');
+  metadataFile.writeAsStringSync(metadata);
 
   // 写入 toc.ncx
   final toc = tocTemplate.render();
