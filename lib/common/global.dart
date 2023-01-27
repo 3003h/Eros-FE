@@ -125,19 +125,16 @@ class Global {
       canCheckBiometrics = await localAuth.canCheckBiometrics;
     }
 
-    // if (Platform.isWindows || Platform.isLinux) {
-    //   // Initialize FFI
-    //   sqfliteFfiInit();
-    //   // Change the default factory
-    //   databaseFactory = databaseFactoryFfi;
-    // }
-
     //statusBar设置为透明，去除半透明遮罩
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarDividerColor: Colors.transparent,
       statusBarColor: Colors.transparent,
     ));
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+    );
 
     appSupportPath = (await getApplicationSupportDirectory()).path;
     final defaultAppDocPath = (await getApplicationDocumentsDirectory()).path;
