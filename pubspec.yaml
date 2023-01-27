@@ -63,7 +63,7 @@ dependencies:
   # 滑动删除
   flutter_slidable: ^2.0.0
   scrollable_positioned_list: ^0.3.2
-  reorderables: ^0.5.0
+  reorderables: ^0.6.0
   basic_utils: ^5.2.2
   # 震动
   flutter_vibrate: ^1.3.0
