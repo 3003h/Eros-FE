@@ -60,6 +60,8 @@
 	<string>用于保存图片 add photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>用于保存图片</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -90,7 +92,5 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>

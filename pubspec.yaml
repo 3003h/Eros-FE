@@ -40,7 +40,7 @@ dependencies:
   get_storage: ^2.0.3
   photo_view: ^0.14.0
   cached_network_image: ^3.0.0
-  extended_image: ^6.0.1
+  extended_image: ^7.0.0
   liquid_progress_indicator_ns: ^1.0.0
   logger: ^1.0.0
   waterfall_flow: ^3.0.1
@@ -63,7 +63,7 @@ dependencies:
   # 滑动删除
   flutter_slidable: ^2.0.0
   scrollable_positioned_list: ^0.3.2
-  reorderables: ^0.5.0
+  reorderables: ^0.6.0
   basic_utils: ^5.2.2
   # 震动
   flutter_vibrate: ^1.3.0
@@ -173,10 +173,8 @@ dependencies:
   image_save: ^5.0.0
   fluentui_system_icons: ^1.1.185
   flutter_keyboard_visibility: ^5.4.0
-  extended_nested_scroll_view: #^5.1.3
-    git: https://github.com/VB10/extended_nested_scroll_view.git
+  extended_nested_scroll_view: ^6.0.0
   shared_storage: ^0.7.0
-#    git: https://github.com/alexrintt/shared-storage.git
   mime: ^1.0.2
   saf: ^1.0.3+4
   flutter_widget_from_html_core: ^0.9.0+1
