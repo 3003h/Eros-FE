@@ -20,51 +20,53 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
       color: CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
     );
 
+    Widget buildNormalItem(CustomProfile element) {
+      return Slidable(
+        key: ValueKey(element.uuid),
+        child: SelectorSettingItem(
+          key: ValueKey(element.uuid),
+          title: element.name,
+          selector: (element.hideTab ?? false) ? L10n.of(context).hide : '',
+          maxLines: 2,
+          onTap: () {
+            controller.toEditPage(uuid: element.uuid);
+          },
+        ),
+        endActionPane: ActionPane(
+          extentRatio: 0.25,
+          motion: const ScrollMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (_) => controller.deleteProfile(uuid: element.uuid),
+              backgroundColor: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemRed, context),
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              // label: L10n.of(context).delete,
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget buildReorderableItem(CustomProfile element) {
+      return BarsItem(
+        title: element.name,
+        maxLines: 2,
+        key: ValueKey(element.uuid),
+      );
+    }
+
     Widget normalView = Obx(() {
       return Column(
-        children: controller.profiles
-            .map((element) => SelectorSettingItem(
-                  title: element.name,
-                  selector:
-                      (element.hideTab ?? false) ? L10n.of(context).hide : '',
-                  maxLines: 2,
-                  onTap: () {
-                    controller.toEditPage(uuid: element.uuid);
-                  },
-                ))
-            .toList(),
+        children: controller.profiles.map(buildNormalItem).toList(),
       );
     });
 
     Widget reorderableView = Obx(() {
       return ReorderableColumn(
         onReorder: controller.onReorder,
-        children: controller.profiles
-            .map(
-              (element) => Slidable(
-                  key: ValueKey(element.uuid),
-                  child: BarsItem(
-                    title: element.name,
-                    maxLines: 2,
-                    key: ValueKey(element.uuid),
-                  ),
-                  endActionPane: ActionPane(
-                    extentRatio: 0.25,
-                    motion: const ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (_) =>
-                            controller.deleteProfile(uuid: element.uuid),
-                        backgroundColor: CupertinoDynamicColor.resolve(
-                            CupertinoColors.systemRed, context),
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        // label: L10n.of(context).delete,
-                      ),
-                    ],
-                  )),
-            )
-            .toList(),
+        children: controller.profiles.map(buildReorderableItem).toList(),
       );
     });
 

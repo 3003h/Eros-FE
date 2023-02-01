@@ -21,7 +21,7 @@ class TabSettingController extends GetxController {
   void onInit() {
     super.onInit();
     scrollController =
-        PrimaryScrollController.of(Get.context!) ?? ScrollController();
+        PrimaryScrollController.maybeOf(Get.context!) ?? ScrollController();
   }
 
   void onChanged(bool val, String key) {
