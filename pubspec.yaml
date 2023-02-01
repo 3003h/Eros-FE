@@ -131,7 +131,7 @@ dependencies:
   flex_color_picker: ^3.0.0
   bitsdojo_window: ^0.1.1
 #  image_picker: ^0.8.5
-  sliver_tools: ^0.2.6
+  sliver_tools: ^0.2.9
   flutter_boring_avatars:
     git:
       url: https://github.com/xioxin/flutter_boring_avatars.git
