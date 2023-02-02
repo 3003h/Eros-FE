@@ -1,12 +1,10 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/update_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -158,26 +156,26 @@ class ListViewAbout extends StatelessWidget {
                                   mode: LaunchMode.externalApplication,
                                 );
                               }),
-                          CupertinoButton(
-                            child: Column(
-                              children: [
-                                ExtendedImage.asset(
-                                  'assets/images/dundun.png',
-                                  width: 40,
-                                ).paddingSymmetric(vertical: 6),
-                                const Text(
-                                  '顿顿饭',
-                                  textScaleFactor: 0.8,
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              launchUrlString(
-                                'https://dun.mianbaoduo.com/@honjow',
-                                mode: LaunchMode.externalApplication,
-                              );
-                            },
-                          ),
+                          // CupertinoButton(
+                          //   child: Column(
+                          //     children: [
+                          //       ExtendedImage.asset(
+                          //         'assets/images/dundun.png',
+                          //         width: 40,
+                          //       ).paddingSymmetric(vertical: 6),
+                          //       const Text(
+                          //         '顿顿饭',
+                          //         textScaleFactor: 0.8,
+                          //       ),
+                          //     ],
+                          //   ),
+                          //   onPressed: () {
+                          //     launchUrlString(
+                          //       'https://dun.mianbaoduo.com/@honjow',
+                          //       mode: LaunchMode.externalApplication,
+                          //     );
+                          //   },
+                          // ),
                         ],
                       ),
                     ),

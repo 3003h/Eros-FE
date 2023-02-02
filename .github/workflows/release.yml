@@ -29,22 +29,26 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: '3.7.0'
+            flutter_version: '3.7'
+            flutter_channel: 'stable'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
             os: macos-12
-            flutter_version: '3.7.0'
+            flutter_version: '3.7'
+            flutter_channel: 'stable'
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
           - target: macos
             os: macos-12
-            flutter_version: '3.7.0'
+            flutter_version: '3.7'
+            flutter_channel: 'stable'
             artifact_name: release-mac
             artifact_path: build/macos/*.zip
           - target: windows
             os: windows-latest
-            flutter_version: '3.7.0'
+            flutter_version: '3.7'
+            flutter_channel: 'stable'
             artifact_name: release-windows
             artifact_path: build/windows/*.zip
 
@@ -177,6 +181,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ matrix.flutter_version }}
+          channel: ${{ matrix.flutter_channel }}
 
       - name: Build resolve Swift dependencies
         if: matrix.os == 'macos-12'
@@ -216,7 +221,7 @@ jobs:
       - name: Build ipa
         if: matrix.target == 'ios'
         run: |
-          sed -i '' 's/cn.dev.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
+#          sed -i '' 's/cn.dev.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
           cd ios && pod update && pod install && cd ..
           flutter build ipa --export-options-plist=ExportOptions.plist
           cd build/ios/ipa/
