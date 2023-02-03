@@ -92,7 +92,7 @@ dependencies:
   blur: ^3.0.0
   sprintf: ^7.0.0
   keframe: ^3.0.0
-  executor: ^2.2.2
+  executor: ^2.2.3
   synchronized: ^3.0.0
   isolate_handler: ^1.0.0
   worker_manager: ^5.0.0
