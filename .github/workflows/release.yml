@@ -221,7 +221,7 @@ jobs:
       - name: Build ipa
         if: matrix.target == 'ios'
         run: |
-#          sed -i '' 's/cn.dev.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
+          sed -i '' 's/cn.dev.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
           cd ios && pod update && pod install && cd ..
           flutter build ipa --export-options-plist=ExportOptions.plist
           cd build/ios/ipa/
