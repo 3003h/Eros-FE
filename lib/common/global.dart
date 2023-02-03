@@ -17,7 +17,6 @@ import 'package:fehviewer/store/hive/hive_cache.dart';
 import 'package:fehviewer/utils/http_override.dart';
 import 'package:fehviewer/utils/storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' as iaw;
@@ -126,11 +125,11 @@ class Global {
     }
 
     //statusBar设置为透明，去除半透明遮罩
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
-      statusBarColor: Colors.transparent,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.transparent,
+    //   systemNavigationBarDividerColor: Colors.transparent,
+    //   statusBarColor: Colors.transparent,
+    // ));
 
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.edgeToEdge,

@@ -11,7 +11,7 @@
         <!-- 原生系统下, 启用后 状态栏半透明，停用或者不写 全透明 -->
 <!--        <item name="android:windowTranslucentStatus">false</item>-->
         <!-- 启用后 原生系统：导航栏半透明，小白条办透明，MIUI：都透明 -->
-        <item name="android:windowTranslucentNavigation">true</item>
+<!--        <item name="android:windowTranslucentNavigation">true</item>-->
         <!-- 只开启这项 原生系统：导航栏半透明，小白条透明，MIUI：都透明 -->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>

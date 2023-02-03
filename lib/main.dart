@@ -10,6 +10,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/get_store.dart';
+import 'package:fehviewer/widget/system_ui_overlay.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -151,15 +152,27 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           //         styleBuilder: (child) => child,
           //       )
           //     : null,
-          builder: FlutterSmartDialog.init(
-            styleBuilder: (child) {
-              if (GetPlatform.isDesktop) {
-                return Desktop(child: child);
-              } else {
-                return child;
-              }
-            },
+          // builder: FlutterSmartDialog.init(
+          //   styleBuilder: (child) {
+          //     if (GetPlatform.isDesktop) {
+          //       return Desktop(child: child);
+          //     } else {
+          //       return child;
+          //     }
+          //   },
+          // ),
+          builder: SystemUIOverlay.init(
+            builder: FlutterSmartDialog.init(
+              styleBuilder: (child) {
+                if (GetPlatform.isDesktop) {
+                  return Desktop(child: child);
+                } else {
+                  return child;
+                }
+              },
+            ),
           ),
+
           getPages: AppPages.routes,
           defaultTransition: Transition.cupertino,
           initialRoute: EHRoutes.root,
