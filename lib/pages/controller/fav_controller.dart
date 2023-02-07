@@ -202,7 +202,7 @@ class FavController extends GetxController {
     String oriFavnote = '',
   }) async {
     logger.d('bbb add fav $gid $token');
-    final String? _lastFavcat = _ehConfigService.lastFavcat.value;
+    final String? _lastFavcat = _ehConfigService.lastFavcat;
 
     _favnoteController.text = oriFavnote;
 

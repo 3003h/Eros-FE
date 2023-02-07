@@ -50,9 +50,6 @@ ehentai译文数据库
 翻译
 - [KeepSOBP](https://github.com/KeepSOBP) 韩语翻译
 
-其它
-- [xioxin](https://github.com/xioxin) Dio Domain Fronting 拦截器
-
 ## 应用截图
 
 ### 主页列表
@@ -91,7 +88,6 @@ ehentai译文数据库
 - [x] 评论显示论坛头像，快速@回复(带锚点)，自动显示引用评论
 - [x] EH设置，同步网站
 - [x] Mytag设置，编辑关注、隐藏、颜色、权重等。长按Tag快速设置
-- [x] Domain Fronting 域前置 支持直连，自定义hosts
 - [x] 下载，下载原图，归档包下载，直接阅读已下载
 - [x] WebDAV同步历史，快速搜索，阅读进度，分组配置
 - [x] 可屏蔽带二维码的图片。可标记广告图片，记录pHash值，后续屏蔽相似图片

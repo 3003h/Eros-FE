@@ -22,7 +22,8 @@ class DnsService extends ProfileService {
   set enableDoH(bool val) => _enableDoH.value = val;
 
   final _enableDomainFronting = false.obs;
-  bool get enableDomainFronting => _enableDomainFronting.value;
+  // bool get enableDomainFronting => _enableDomainFronting.value;
+  bool get enableDomainFronting => false;
   set enableDomainFronting(bool val) => _enableDomainFronting.value = val;
 
   final RxList<DnsCache> _hosts = <DnsCache>[].obs;

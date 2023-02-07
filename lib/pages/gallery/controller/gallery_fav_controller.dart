@@ -76,6 +76,11 @@ class GalleryFavController extends GetxController {
   void setFav(String favcat, String favtitle) {
     _favTitle.value = favtitle;
     _favcat.value = favcat;
+    logger.d('setFav $favcat $favtitle');
+    if (favcat.isNotEmpty) {
+      _ehConfigService.lastFavcat = favcat;
+    }
+
     try {
       if (isRegItemController) {
         _itemController.setFavTitleAndFavcat(
@@ -92,7 +97,7 @@ class GalleryFavController extends GetxController {
     isLoading = true;
 
     final String _favTitleFromProfile =
-        Global.profile.user.favcat![int.parse(_lastFavcat)].favTitle;
+        Global.profile.user.favcat![int.parse(_lastFavcat) + 1].favTitle;
 
     try {
       await favController.addToLastFavcat(
@@ -100,6 +105,7 @@ class GalleryFavController extends GetxController {
         _pageState.galleryProvider?.token ?? '',
         _lastFavcat,
       );
+      setFav(_lastFavcat, _favTitleFromProfile);
       _removeGalleryCache();
     } catch (e) {
       return false;
@@ -125,15 +131,16 @@ class GalleryFavController extends GetxController {
       delFav();
     } else {
       logger.d(' add fav');
-      final String _lastFavcat = _ehConfigService.lastFavcat.value;
+      final String _lastFavcat = _ehConfigService.lastFavcat;
+      logger.d('上次收藏夹 $_lastFavcat');
 
       // 添加到上次收藏夹
       if ((_ehConfigService.isFavLongTap.value) && _lastFavcat.isNotEmpty) {
-        logger.v('添加到上次收藏夹 $_lastFavcat');
+        logger.d('添加到上次收藏夹 $_lastFavcat');
         _addToLastFavcat(_lastFavcat);
       } else {
         // 手选收藏夹
-        logger.v('手选收藏夹');
+        logger.d('手选收藏夹');
         await _selectToSave();
       }
     }
@@ -142,15 +149,17 @@ class GalleryFavController extends GetxController {
   // 选择并收藏
   Future<void> _selectToSave() async {
     try {
+      // 进行收藏
       final result = await favController.selectToSave(
         _pageState.galleryProvider?.gid ?? '0',
         _pageState.galleryProvider?.token ?? '',
         oriFavcat: favcat,
         startLoading: () => isLoading = true,
       );
+      // 收藏后处理
       if (result != null) {
         final _favcatFromRult = result.favId;
-        final _favnoteFromRult = result.note ?? '';
+        // final _favnoteFromRult = result.note ?? '';
         final _favTitleFromRult = result.favTitle;
         _favTitle.value = _favTitleFromRult;
         _favcat.value = _favcatFromRult;

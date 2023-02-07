@@ -35,7 +35,6 @@ class EhConfigService extends ProfileService {
   Rx<FavoriteOrder> favoriteOrder = FavoriteOrder.fav.obs;
   RxBool isSafeMode = false.obs;
   RxString tagTranslatVer = ''.obs;
-  RxString lastFavcat = '0'.obs;
   RxBool isFavPicker = false.obs;
   RxBool isPureDarkTheme = false.obs;
   RxBool isClipboardLink = true.obs;
@@ -46,6 +45,10 @@ class EhConfigService extends ProfileService {
   final _viewColumnMode = ViewColumnMode.single.obs;
   ViewColumnMode get viewColumnMode => _viewColumnMode.value;
   set viewColumnMode(ViewColumnMode val) => _viewColumnMode.value = val;
+
+  final _lastFavcat = '0'.obs;
+  String get lastFavcat => _lastFavcat.value;
+  set lastFavcat(String val) => _lastFavcat.value = val;
 
   final LocaleService localeService = Get.find();
 
@@ -522,9 +525,9 @@ class EhConfigService extends ProfileService {
       isarHelper.putTagTranslateVersion(value);
     });
 
-    lastFavcat.value = ehConfig.lastFavcat ?? lastFavcat.value;
-    everProfile<String>(
-        lastFavcat, (value) => ehConfig = ehConfig.copyWith(lastFavcat: value));
+    lastFavcat = ehConfig.lastFavcat ?? lastFavcat;
+    everProfile<String>(_lastFavcat,
+        (value) => ehConfig = ehConfig.copyWith(lastFavcat: value));
 
     isFavPicker.value = ehConfig.favPicker ?? isFavPicker.value;
     everProfile<bool>(

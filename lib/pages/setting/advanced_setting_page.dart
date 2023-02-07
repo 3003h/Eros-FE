@@ -10,7 +10,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/webview/mode.dart';
 import 'package:fehviewer/utils/import_export.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../component/setting_base.dart';
@@ -120,33 +119,34 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 id: isLayoutLarge ? 2 : null,
               );
             },
-          )),
-      TextSwitchItem(
-        L10n.of(context).domain_fronting,
-        value: _dnsService.enableDomainFronting,
-        onChanged: _handleDFChanged,
-        desc: 'By pass SNI',
-      ),
-
-      Obx(() => SelectorSettingItem(
-            title: L10n.of(context).custom_hosts,
-            selector: _dnsService.enableCustomHosts
-                ? L10n.of(context).on
-                : L10n.of(context).off,
-            onTap: () {
-              if (!_dnsService.enableDomainFronting) {
-                return;
-              }
-              Get.toNamed(
-                EHRoutes.customHosts,
-                id: isLayoutLarge ? 2 : null,
-              );
-            },
-            titleColor: !_dnsService.enableDomainFronting
-                ? CupertinoColors.secondaryLabel
-                : null,
             hideDivider: true,
           )),
+      // TextSwitchItem(
+      //   L10n.of(context).domain_fronting,
+      //   value: _dnsService.enableDomainFronting,
+      //   onChanged: _handleDFChanged,
+      //   desc: 'By pass SNI',
+      // ),
+
+      // Obx(() => SelectorSettingItem(
+      //       title: L10n.of(context).custom_hosts,
+      //       selector: _dnsService.enableCustomHosts
+      //           ? L10n.of(context).on
+      //           : L10n.of(context).off,
+      //       onTap: () {
+      //         if (!_dnsService.enableDomainFronting) {
+      //           return;
+      //         }
+      //         Get.toNamed(
+      //           EHRoutes.customHosts,
+      //           id: isLayoutLarge ? 2 : null,
+      //         );
+      //       },
+      //       titleColor: !_dnsService.enableDomainFronting
+      //           ? CupertinoColors.secondaryLabel
+      //           : null,
+      //       hideDivider: true,
+      //     )),
       // TextSwitchItem(
       //   'DNS-over-HTTPS',
       //   intValue: _dnsConfigController.enableDoH.value,

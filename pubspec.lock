@@ -502,10 +502,10 @@ packages:
     dependency: "direct main"
     description:
       name: executor
-      sha256: "98bd8ef6584d5f9e208badc4f4145ad7daeaa1bd0d398ead62a156ebdc4ed02b"
+      sha256: "87d935b31b2bdf7fe2af0b77dd8ffe8864eaade25715e9c68bc49497e48c9851"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.2.2"
+    version: "2.2.3"
   extended_image:
     dependency: "direct main"
     description:
@@ -820,10 +820,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_smart_dialog
-      sha256: "404f55412d5799886eb2ba18f1ddf92855cbb59d66993e67e97fd74aa6758dd6"
+      sha256: "581167787fc40e3e5edf2b00b29a1589019964d9e168be2545956fc81b94f56a"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.8.2"
+    version: "4.8.2+3"
   flutter_socks_proxy:
     dependency: "direct main"
     description:
@@ -1225,10 +1225,10 @@ packages:
     dependency: transitive
     description:
       name: local_auth_android
-      sha256: ba48fe0e1cae140a0813ce68c2540250d7f573a8ae4d4b6c681b2d2583584953
+      sha256: cfcbc4936e288d61ef85a04feef6b95f49ba496d4fd98364e6abafb462b06a1f
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.17"
+    version: "1.0.18"
   local_auth_ios:
     dependency: transitive
     description:
@@ -2047,10 +2047,10 @@ packages:
     dependency: "direct main"
     description:
       name: url_launcher
-      sha256: "698fa0b4392effdc73e9e184403b627362eb5fbf904483ac9defbb1c2191d809"
+      sha256: e8f2efc804810c0f2f5b485f49e7942179f56eabcfe81dce3387fec4bb55876b
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.1.8"
+    version: "6.1.9"
   url_launcher_android:
     dependency: transitive
     description:
@@ -2063,10 +2063,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_ios
-      sha256: bb328b24d3bccc20bdf1024a0990ac4f869d57663660de9c936fb8c043edefe3
+      sha256: "0a5af0aefdd8cf820dd739886efb1637f1f24489900204f50984634c07a54815"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.0.18"
+    version: "6.1.0"
   url_launcher_linux:
     dependency: transitive
     description:
