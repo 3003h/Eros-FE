@@ -162,9 +162,9 @@ PODS:
   - Protobuf (3.21.12)
   - receive_sharing_intent (0.0.1):
     - Flutter
-  - SDWebImage (5.15.0):
-    - SDWebImage/Core (= 5.15.0)
-  - SDWebImage/Core (5.15.0)
+  - SDWebImage (5.15.2):
+    - SDWebImage/Core (= 5.15.2)
+  - SDWebImage/Core (5.15.2)
   - Sentry/HybridSDK (7.31.5)
   - sentry_flutter (0.0.1):
     - Flutter
@@ -363,7 +363,7 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   Protobuf: 120350fc38646e2dedc26f49ecba778184ea1de2
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
-  SDWebImage: 9bec4c5cdd9579e1f57104735ee0c37df274d593
+  SDWebImage: 8ab87d4b3e5cc4927bd47f78db6ceb0b94442577
   Sentry: 4c9babff9034785067c896fd580b1f7de44da020
   sentry_flutter: b10ae7a5ddcbc7f04648eeb2672b5747230172f1
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
@@ -372,7 +372,7 @@ SPEC CHECKSUMS:
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   system_network_proxy: 6f63fddb34a28776f091b1221a17850170c59e01
   system_proxy: bec1a5c5af67dd3e3ebf43979400a8756c04cc44
-  url_launcher_ios: ae1517e5e344f5544fb090b079e11f399dfbe4d2
+  url_launcher_ios: fb12c43172927bb5cf75aeebd073f883801f1993
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_cookie_manager: eaf920722b493bd0f7611b5484771ca53fed03f7

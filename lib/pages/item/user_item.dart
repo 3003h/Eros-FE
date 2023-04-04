@@ -144,7 +144,7 @@ class _UserItem extends State<UserItem> {
 }
 
 const double kAvatarSize = 40.0;
-const double kNameTextSize = 11.0;
+const double kNameTextSize = 13.0;
 
 class UserWidget extends GetView<UserController> {
   Widget _buildAvastat() {
