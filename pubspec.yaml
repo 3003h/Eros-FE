@@ -2,7 +2,7 @@ name: fehviewer
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.3.11+501
+version: 1.3.12+502
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -103,7 +103,8 @@ dependencies:
   throttling: ^1.0.0
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
-  webdav_client: ^1.1.0
+  webdav_client: #^1.1.0
+    path: /Users/honjow/git/webdav_client
   auto_animated: ^3.0.0
   learning_language:
     git:

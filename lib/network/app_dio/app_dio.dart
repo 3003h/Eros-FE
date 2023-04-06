@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
@@ -29,9 +29,15 @@ class AppDio with DioMixin implements Dio {
     options ??= BaseOptions(
       baseUrl: dioConfig?.baseUrl ?? '',
       contentType: dioConfig?.contentType ?? Headers.formUrlEncodedContentType,
-      connectTimeout: dioConfig?.connectTimeout,
-      sendTimeout: dioConfig?.sendTimeout,
-      receiveTimeout: dioConfig?.receiveTimeout,
+      connectTimeout: dioConfig?.connectTimeout != null
+          ? Duration(seconds: dioConfig!.connectTimeout)
+          : null,
+      sendTimeout: dioConfig?.sendTimeout != null
+          ? Duration(seconds: dioConfig!.sendTimeout)
+          : null,
+      receiveTimeout: dioConfig?.receiveTimeout != null
+          ? Duration(seconds: dioConfig!.receiveTimeout)
+          : null,
       headers: <String, String>{
         'User-Agent': EHConst.CHROME_USER_AGENT,
         'Accept': EHConst.CHROME_ACCEPT,
@@ -124,16 +130,17 @@ class AppDio with DioMixin implements Dio {
 
   /// DioMixin 没有实现下载
   /// 从 [DioForNative] 复制过来的
+
   @override
   Future<Response> download(
     String urlPath,
-    savePath, {
+    dynamic savePath, {
     ProgressCallback? onReceiveProgress,
     Map<String, dynamic>? queryParameters,
     CancelToken? cancelToken,
     bool deleteOnError = true,
     String lengthHeader = Headers.contentLengthHeader,
-    data,
+    Object? data,
     Options? options,
   }) async {
     // We set the `responseType` to [ResponseType.STREAM] to retrieve the
@@ -152,9 +159,9 @@ class AppDio with DioMixin implements Dio {
         cancelToken: cancelToken ?? CancelToken(),
       );
     } on DioError catch (e) {
-      if (e.type == DioErrorType.response) {
+      if (e.type == DioErrorType.badResponse) {
         if (e.response!.requestOptions.receiveDataWhenStatusError == true) {
-          var res = await transformer.transformResponse(
+          final res = await transformer.transformResponse(
             e.response!.requestOptions..responseType = ResponseType.json,
             e.response!.data as ResponseBody,
           );
@@ -165,42 +172,43 @@ class AppDio with DioMixin implements Dio {
       }
       rethrow;
     }
-
-    response.headers = Headers.fromMap(response.data!.headers);
-
-    File file;
-    if (savePath is Function) {
-      assert(savePath is String Function(Headers),
-          'savePath callback type must be `String Function(HttpHeaders)`');
-
-      // Add real uri and redirect information to headers
+    final File file;
+    if (savePath is FutureOr<String> Function(Headers)) {
+      // Add real Uri and redirect information to headers.
       response.headers
         ..add('redirects', response.redirects.length.toString())
         ..add('uri', response.realUri.toString());
-
-      file = File(savePath(response.headers) as String);
+      file = File(await savePath(response.headers));
+    } else if (savePath is String) {
+      file = File(savePath);
     } else {
-      file = File(savePath.toString());
+      throw ArgumentError.value(
+        savePath.runtimeType,
+        'savePath',
+        'The type must be `String` or `FutureOr<String> Function(Headers)`.',
+      );
     }
 
-    //If directory (or file) doesn't exist yet, the entire method fails
+    // If the directory (or file) doesn't exist yet, the entire method fails.
     file.createSync(recursive: true);
 
     // Shouldn't call file.writeAsBytesSync(list, flush: flush),
-    // because it can write all bytes by once. Consider that the
-    // file with a very big size(up 1G), it will be expensive in memory.
-    var raf = file.openSync(mode: FileMode.write);
+    // because it can write all bytes by once. Consider that the file is
+    // a very big size (up to 1 Gigabytes), it will be expensive in memory.
+    RandomAccessFile raf = file.openSync(mode: FileMode.write);
 
-    //Create a Completer to notify the success/error state.
-    var completer = Completer<Response>();
-    var future = completer.future;
-    var received = 0;
+    // Create a Completer to notify the success/error state.
+    final completer = Completer<Response>();
+    Future<Response> future = completer.future;
+    int received = 0;
 
     // Stream<Uint8List>
-    var stream = response.data!.stream;
-    var compressed = false;
-    var total = 0;
-    var contentEncoding = response.headers.value(Headers.contentEncodingHeader);
+    final stream = response.data!.stream;
+    bool compressed = false;
+    int total = 0;
+    final contentEncoding = response.headers.value(
+      Headers.contentEncodingHeader,
+    );
     if (contentEncoding != null) {
       compressed = ['gzip', 'deflate', 'compress'].contains(contentEncoding);
     }
@@ -210,40 +218,39 @@ class AppDio with DioMixin implements Dio {
       total = int.parse(response.headers.value(lengthHeader) ?? '-1');
     }
 
-    late StreamSubscription subscription;
-    Future? asyncWrite;
-    var closed = false;
-    Future _closeAndDelete() async {
+    Future<void>? asyncWrite;
+    bool closed = false;
+    Future<void> closeAndDelete() async {
       if (!closed) {
         closed = true;
         await asyncWrite;
         await raf.close();
-        if (deleteOnError) await file.delete();
+        if (deleteOnError && file.existsSync()) {
+          await file.delete();
+        }
       }
     }
 
+    late StreamSubscription subscription;
     subscription = stream.listen(
       (data) {
         subscription.pause();
         // Write file asynchronously
-        asyncWrite = raf.writeFrom(data).then((_raf) {
+        asyncWrite = raf.writeFrom(data).then((result) {
           // Notify progress
           received += data.length;
-
           onReceiveProgress?.call(received, total);
-
-          raf = _raf;
+          raf = result;
           if (cancelToken == null || !cancelToken.isCancelled) {
             subscription.resume();
           }
-        }).catchError((err, StackTrace stackTrace) async {
+        }).catchError((Object e) async {
           try {
             await subscription.cancel();
           } finally {
-            completer.completeError(DioMixin.assureDioError(
-              err,
-              response.requestOptions,
-            ));
+            completer.completeError(
+              DioMixin.assureDioError(e, response.requestOptions),
+            );
           }
         });
       },
@@ -254,49 +261,44 @@ class AppDio with DioMixin implements Dio {
           await raf.close();
           completer.complete(response);
         } catch (e) {
-          completer.completeError(DioMixin.assureDioError(
-            e,
-            response.requestOptions,
-          ));
+          completer.completeError(
+            DioMixin.assureDioError(e, response.requestOptions),
+          );
         }
       },
-      onError: (e) async {
+      onError: (Object e) async {
         try {
-          await _closeAndDelete();
+          await closeAndDelete();
         } finally {
-          completer.completeError(DioMixin.assureDioError(
-            e,
-            response.requestOptions,
-          ));
+          completer.completeError(
+            DioMixin.assureDioError(e, response.requestOptions),
+          );
         }
       },
       cancelOnError: true,
     );
-    // ignore: unawaited_futures
     cancelToken?.whenCancel.then((_) async {
       await subscription.cancel();
-      await _closeAndDelete();
+      await closeAndDelete();
     });
 
-    if (response.requestOptions.receiveTimeout > 0) {
-      future = future
-          .timeout(Duration(
-        milliseconds: response.requestOptions.receiveTimeout,
-      ))
-          .catchError((Object err) async {
-        await subscription.cancel();
-        await _closeAndDelete();
-        if (err is TimeoutException) {
-          throw DioError(
-            requestOptions: response.requestOptions,
-            error:
-                'Receiving data timeout[${response.requestOptions.receiveTimeout}ms]',
-            type: DioErrorType.receiveTimeout,
-          );
-        } else {
-          throw err;
-        }
-      });
+    final timeout = response.requestOptions.receiveTimeout;
+    if (timeout != null) {
+      future = future.timeout(timeout).catchError(
+        (Object e, StackTrace s) async {
+          await subscription.cancel();
+          await closeAndDelete();
+          if (e is TimeoutException) {
+            throw DioError.receiveTimeout(
+              timeout: timeout,
+              requestOptions: response.requestOptions,
+              error: e,
+            );
+          } else {
+            throw e;
+          }
+        },
+      );
     }
     return DioMixin.listenCancelForAsyncTask(cancelToken, future);
   }
@@ -325,7 +327,7 @@ class AppDio with DioMixin implements Dio {
   }
 }
 
-extension DefaultHttpClientAdapterExt on DefaultHttpClientAdapter {
+extension DefaultHttpClientAdapterExt on IOHttpClientAdapter {
   void addOnHttpClientCreate(void Function(HttpClient client) onCreate) {
     final old = onHttpClientCreate;
     onHttpClientCreate = (client) {

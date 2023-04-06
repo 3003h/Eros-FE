@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:blur/blur.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -169,12 +167,15 @@ class GalleryItemFlowLarge extends StatelessWidget {
                     topRight: Radius.circular(kRadius),
                   ),
                   child: Container(
-                    foregroundDecoration: RotatedCornerDecoration(
+                    foregroundDecoration: RotatedCornerDecoration.withColor(
                       color: _colorCategory.withOpacity(0.8),
-                      labelInsets:
-                          const LabelInsets(baselineShift: 0.5, start: 2),
-                      geometry: const BadgeGeometry(
-                          width: kCategoryWidth, height: kCategoryHeight),
+                      // labelInsets:
+                      //     const LabelInsets(baselineShift: 0.5, start: 2),
+                      // geometry: const BadgeGeometry(
+                      //     width: kCategoryWidth, height: kCategoryHeight),
+                      spanBaselineShift: 0.5,
+                      spanHorizontalOffset: 2,
+                      badgeSize: const Size(kCategoryWidth, kCategoryHeight),
                       textSpan: TextSpan(
                         text: galleryProvider.translated ?? '',
                         style: const TextStyle(

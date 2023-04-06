@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui show Codec, ImmutableBuffer;
 
 import 'package:dio/dio.dart';
@@ -171,8 +170,7 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
                     expectedTotalBytes: total));
               });
         } on DioError catch (e) {
-          if (e.type == DioErrorType.response &&
-              e.response?.statusCode == 403) {
+          if (e.response?.statusCode == 403) {
             logger
                 .d('403 ${key.pageInfo.gid}.${key.pageInfo.ser}下载链接已经失效 需要更新');
             final imageFetched = await _fetchImageInfo(galleryImage.href!,

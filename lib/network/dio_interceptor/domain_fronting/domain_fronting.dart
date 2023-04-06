@@ -85,7 +85,6 @@ class DomainFronting {
     interceptors.insert(0, DomainFrontingInterceptorResponse(this));
   }
 
-
   static RequestOptions getRawOptions(RequestOptions options) {
     final rawOptions = options.extra['domainFrontingRawOptions'];
     if (rawOptions != null && rawOptions is RequestOptions) {
@@ -93,7 +92,6 @@ class DomainFronting {
     }
     return options;
   }
-
 }
 
 class DomainFrontingInterceptorResponse extends Interceptor {
@@ -143,8 +141,8 @@ class DomainFrontingInterceptorRequest extends Interceptor {
       try {
         ip = await df.lookup(host);
       } catch (error, stackTrace) {
-        final err = DioError(requestOptions: options, error: error);
-        err.stackTrace = stackTrace;
+        final err = DioError(
+            requestOptions: options, error: error, stackTrace: stackTrace);
         handler.reject(err, true);
         return;
       }
@@ -155,8 +153,8 @@ class DomainFrontingInterceptorRequest extends Interceptor {
         }
         final err = DioError(
             requestOptions: options,
-            error: '[DomainFronting] Unable to get IP address');
-        err.stackTrace = StackTrace.current;
+            error: '[DomainFronting] Unable to get IP address',
+            stackTrace: StackTrace.current);
         handler.reject(err, true);
         return;
       }

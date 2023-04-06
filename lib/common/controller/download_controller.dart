@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
@@ -649,7 +648,7 @@ class DownloadController extends GetxController {
         progressCallback: _progressCallback,
       );
     } on DioError catch (e) {
-      if (e.type == DioErrorType.response && e.response?.statusCode == 403) {
+      if (e.response?.statusCode == 403) {
         logger.d('403 $gid.${image.ser}下载链接已经失效 需要更新 ${image.href}');
         final GalleryImage imageFetched = await _fetchImageInfo(
           image.href!,

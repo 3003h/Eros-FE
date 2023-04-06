@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:dio/adapter.dart';
+import 'package:dio/io.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter_socks_proxy/socks_proxy.dart';
 import 'package:get/get.dart';
 import 'package:system_network_proxy/system_network_proxy.dart';
 import 'package:system_proxy/system_proxy.dart';
 
-class HttpProxyAdapter extends DefaultHttpClientAdapter {
+class HttpProxyAdapter extends IOHttpClientAdapter {
   HttpProxyAdapter({required this.proxy, bool? skipCertificate}) {
     onHttpClientCreate = (HttpClient client) {
       final _client = createProxyHttpClient();

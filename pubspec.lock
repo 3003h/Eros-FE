@@ -574,10 +574,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: d8e9ca7e5d1983365c277f12c21b4362df6cf659c99af146ad4d04eb33033013
+      sha256: "0d923fb610d0abf67f2149c3a50ef85f78bebecfc4d645719ca70bcf4abc788f"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.2.6"
+    version: "5.2.7"
   fixnum:
     dependency: transitive
     description:
@@ -820,10 +820,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_smart_dialog
-      sha256: de4c4ff47ee2c859df5bdcbf607ef9251ff1e8e698aaa533efb6de5ea4a56323
+      sha256: f574fe88af6af8ca5d54a4e2e1df60ba87091b8ee2ddfc712664306eb29b766b
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.9.0+4"
+    version: "4.9.0+5"
   flutter_socks_proxy:
     dependency: "direct main"
     description:
@@ -2206,10 +2206,9 @@ packages:
   webdav_client:
     dependency: "direct main"
     description:
-      name: webdav_client
-      sha256: bfd8e4a9dc8fe5014d3f6e681e00a3e54fad710e33938d6746d97f67614b5bda
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "/Users/honjow/git/webdav_client"
+      relative: false
+    source: path
     version: "1.2.0"
   webview_cookie_manager:
     dependency: "direct main"

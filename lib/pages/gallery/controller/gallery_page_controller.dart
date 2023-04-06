@@ -17,7 +17,7 @@ import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:synchronized/extension.dart';
+import 'package:synchronized/synchronized.dart';
 
 import 'all_previews_controller.dart';
 import 'gallery_fav_controller.dart';
@@ -235,7 +235,7 @@ class GalleryPageController extends GetxController
     } on HttpException catch (e) {
       throw EhError(error: e.message);
     } on DioError catch (e) {
-      if (e.type == DioErrorType.response && e.response?.statusCode == 404) {
+      if (e.response?.statusCode == 404) {
         logger.e('data: ${e.response?.data}');
         final errMsg = parseErrGallery('${e.response?.data ?? ''}');
         logger.e('errMsg: $errMsg');

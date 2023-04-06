@@ -1,9 +1,5 @@
-import 'dart:io';
-
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/utils/logger.dart';
-import 'package:flutter_socks_proxy/socks_proxy.dart';
 
 import 'app_dio.dart';
 import 'http_response.dart';
