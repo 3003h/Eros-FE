@@ -3,7 +3,6 @@ import 'dart:io' as io;
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:cross_file/cross_file.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
@@ -15,7 +14,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
 import 'package:fehviewer/store/db/entity/tag_translat.dart';
-import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';

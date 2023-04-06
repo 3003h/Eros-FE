@@ -9,12 +9,14 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
+import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:fehviewer/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:native_dio_adapter/native_dio_adapter.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../api.dart';
@@ -48,10 +50,12 @@ class AppDio with DioMixin implements Dio {
 
     logger.v('dioConfig ${dioConfig?.toString()}');
 
-    httpClientAdapter = AppHttpAdapter(
-      proxy: dioConfig?.proxy ?? '',
-      skipCertificate: dioConfig?.domainFronting,
-    );
+    httpClientAdapter = Get.find<EhConfigService>().debugMode
+        ? NativeAdapter()
+        : AppHttpAdapter(
+            proxy: dioConfig?.proxy ?? '',
+            skipCertificate: dioConfig?.domainFronting,
+          );
 
     interceptors.add(DioCacheInterceptor(options: Api.cacheOption));
 

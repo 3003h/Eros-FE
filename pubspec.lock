@@ -338,6 +338,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.0.2"
+  cronet_http:
+    dependency: transitive
+    description:
+      name: cronet_http
+      sha256: a9aae580099ba1df89f27f4c0a6cba179e3e1135bbe23a22b9664d2c0c24d4e7
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.0"
   cross_file:
     dependency: "direct main"
     description:
@@ -362,6 +370,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.17.2"
+  cupertino_http:
+    dependency: transitive
+    description:
+      name: cupertino_http
+      sha256: "25ccac265488d64cd868e311567b874cdc1aefcbef02033108d679c3f83a3108"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.2"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -1317,6 +1333,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.2"
+  native_dio_adapter:
+    dependency: "direct main"
+    description:
+      name: native_dio_adapter
+      sha256: "1ff361deaca3c26a8fc56571f7f0809785a248d1bc0c9123be829baaebf986e0"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.0"
   octo_image:
     dependency: "direct main"
     description:
@@ -2206,9 +2230,11 @@ packages:
   webdav_client:
     dependency: "direct main"
     description:
-      path: "/Users/honjow/git/webdav_client"
-      relative: false
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: d7e9cf137747151511aeed4718796027dd58677e
+      url: "https://github.com/honjow/webdav_client.git"
+    source: git
     version: "1.2.0"
   webview_cookie_manager:
     dependency: "direct main"

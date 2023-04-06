@@ -6,6 +6,7 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -38,6 +39,11 @@ class ListViewAbout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const String debugLabel = kDebugMode
+        ? 'Debug'
+        : kProfileMode
+            ? 'Profile'
+            : '';
     return Container(
       child: ListView(
         children: <Widget>[
@@ -72,7 +78,7 @@ class ListViewAbout extends StatelessWidget {
             TextItem(
               L10n.of(context).version,
               subTitle:
-                  '${Global.packageInfo.version}(${Global.packageInfo.buildNumber})',
+                  '${Global.packageInfo.version}(${Global.packageInfo.buildNumber}) $debugLabel',
               onTap: null,
             ),
           if (!GetPlatform.isWindows)

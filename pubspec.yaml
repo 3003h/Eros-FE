@@ -104,7 +104,8 @@ dependencies:
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
   webdav_client: #^1.1.0
-    path: /Users/honjow/git/webdav_client
+    git:
+      url: https://github.com/honjow/webdav_client.git
   auto_animated: ^3.0.0
   learning_language:
     git:
@@ -180,6 +181,7 @@ dependencies:
   saf: ^1.0.3+4
   flutter_widget_from_html_core: ^0.10.0
   quiver: ^3.1.0
+  native_dio_adapter: ^0.1.0
 
 
 dev_dependencies:
