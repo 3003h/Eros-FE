@@ -111,6 +111,8 @@ class ViewKeyboardListener extends GetView<ViewExtController> {
           LogicalKeyboardKey.arrowUp: controller.toPrev,
           LogicalKeyboardKey.arrowRight: controller.tapRight,
           LogicalKeyboardKey.arrowDown: controller.toNext,
+          LogicalKeyboardKey.pageUp: controller.toPrev,
+          LogicalKeyboardKey.pageDown: controller.toNext,
           LogicalKeyboardKey.space: controller.handOnTapCent,
           LogicalKeyboardKey.enter: controller.handOnTapCent,
           LogicalKeyboardKey.escape: Get.back,
