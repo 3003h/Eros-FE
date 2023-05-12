@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.3.12+502
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -17,7 +17,7 @@ dependencies:
   # 图标
   cupertino_icons: ^1.0.3
 
-  intl: ^0.17.0
+  intl: ^0.18.0
   font_awesome_flutter: ^10.1.0
 #  line_icons: ^2.0.1
 
@@ -103,9 +103,9 @@ dependencies:
   throttling: ^1.0.0
   sleek_circular_slider: ^2.0.1
   linked_scroll_controller: ^0.2.0
-  webdav_client: #^1.1.0
-    git:
-      url: https://github.com/honjow/webdav_client.git
+  webdav_client: ^1.1.0
+#    git:
+#      url: https://github.com/honjow/webdav_client.git
   auto_animated: ^3.0.0
   learning_language:
     git:

@@ -7,21 +7,21 @@ part of 'gallery_image_task.dart';
 // **************************************************************************
 
 abstract class _$GalleryImageTaskCWProxy {
-  GalleryImageTask filePath(String? filePath);
-
   GalleryImageTask gid(int gid);
 
+  GalleryImageTask token(String token);
+
   GalleryImageTask href(String? href);
+
+  GalleryImageTask sourceId(String? sourceId);
 
   GalleryImageTask imageUrl(String? imageUrl);
 
   GalleryImageTask ser(int ser);
 
-  GalleryImageTask sourceId(String? sourceId);
+  GalleryImageTask filePath(String? filePath);
 
   GalleryImageTask status(int? status);
-
-  GalleryImageTask token(String token);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `GalleryImageTask(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -30,31 +30,34 @@ abstract class _$GalleryImageTaskCWProxy {
   /// GalleryImageTask(...).copyWith(id: 12, name: "My name")
   /// ````
   GalleryImageTask call({
-    String? filePath,
     int? gid,
+    String? token,
     String? href,
+    String? sourceId,
     String? imageUrl,
     int? ser,
-    String? sourceId,
+    String? filePath,
     int? status,
-    String? token,
   });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfGalleryImageTask.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfGalleryImageTask.copyWith.fieldName(...)`
 class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
-  final GalleryImageTask _value;
-
   const _$GalleryImageTaskCWProxyImpl(this._value);
 
-  @override
-  GalleryImageTask filePath(String? filePath) => this(filePath: filePath);
+  final GalleryImageTask _value;
 
   @override
   GalleryImageTask gid(int gid) => this(gid: gid);
 
   @override
+  GalleryImageTask token(String token) => this(token: token);
+
+  @override
   GalleryImageTask href(String? href) => this(href: href);
+
+  @override
+  GalleryImageTask sourceId(String? sourceId) => this(sourceId: sourceId);
 
   @override
   GalleryImageTask imageUrl(String? imageUrl) => this(imageUrl: imageUrl);
@@ -63,13 +66,10 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
   GalleryImageTask ser(int ser) => this(ser: ser);
 
   @override
-  GalleryImageTask sourceId(String? sourceId) => this(sourceId: sourceId);
+  GalleryImageTask filePath(String? filePath) => this(filePath: filePath);
 
   @override
   GalleryImageTask status(int? status) => this(status: status);
-
-  @override
-  GalleryImageTask token(String token) => this(token: token);
 
   @override
 
@@ -80,28 +80,32 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
   /// GalleryImageTask(...).copyWith(id: 12, name: "My name")
   /// ````
   GalleryImageTask call({
-    Object? filePath = const $CopyWithPlaceholder(),
     Object? gid = const $CopyWithPlaceholder(),
+    Object? token = const $CopyWithPlaceholder(),
     Object? href = const $CopyWithPlaceholder(),
+    Object? sourceId = const $CopyWithPlaceholder(),
     Object? imageUrl = const $CopyWithPlaceholder(),
     Object? ser = const $CopyWithPlaceholder(),
-    Object? sourceId = const $CopyWithPlaceholder(),
+    Object? filePath = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
-    Object? token = const $CopyWithPlaceholder(),
   }) {
     return GalleryImageTask(
-      filePath: filePath == const $CopyWithPlaceholder()
-          ? _value.filePath
-          // ignore: cast_nullable_to_non_nullable
-          : filePath as String?,
       gid: gid == const $CopyWithPlaceholder() || gid == null
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
           : gid as int,
+      token: token == const $CopyWithPlaceholder() || token == null
+          ? _value.token
+          // ignore: cast_nullable_to_non_nullable
+          : token as String,
       href: href == const $CopyWithPlaceholder()
           ? _value.href
           // ignore: cast_nullable_to_non_nullable
           : href as String?,
+      sourceId: sourceId == const $CopyWithPlaceholder()
+          ? _value.sourceId
+          // ignore: cast_nullable_to_non_nullable
+          : sourceId as String?,
       imageUrl: imageUrl == const $CopyWithPlaceholder()
           ? _value.imageUrl
           // ignore: cast_nullable_to_non_nullable
@@ -110,18 +114,14 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
           ? _value.ser
           // ignore: cast_nullable_to_non_nullable
           : ser as int,
-      sourceId: sourceId == const $CopyWithPlaceholder()
-          ? _value.sourceId
+      filePath: filePath == const $CopyWithPlaceholder()
+          ? _value.filePath
           // ignore: cast_nullable_to_non_nullable
-          : sourceId as String?,
+          : filePath as String?,
       status: status == const $CopyWithPlaceholder()
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
           : status as int?,
-      token: token == const $CopyWithPlaceholder() || token == null
-          ? _value.token
-          // ignore: cast_nullable_to_non_nullable
-          : token as String,
     );
   }
 }
@@ -137,7 +137,7 @@ extension $GalleryImageTaskCopyWith on GalleryImageTask {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
 extension GetGalleryImageTaskCollection on Isar {
   IsarCollection<GalleryImageTask> get galleryImageTasks => this.collection();
@@ -231,7 +231,7 @@ const GalleryImageTaskSchema = CollectionSchema(
   getId: _galleryImageTaskGetId,
   getLinks: _galleryImageTaskGetLinks,
   attach: _galleryImageTaskAttach,
-  version: '3.0.5',
+  version: '3.1.0+1',
 );
 
 int _galleryImageTaskEstimateSize(

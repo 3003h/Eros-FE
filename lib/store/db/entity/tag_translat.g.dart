@@ -7,17 +7,17 @@ part of 'tag_translat.dart';
 // **************************************************************************
 
 abstract class _$TagTranslatCWProxy {
-  TagTranslat intro(String? intro);
+  TagTranslat namespace(String namespace);
 
   TagTranslat key(String key);
 
-  TagTranslat lastUseTime(int lastUseTime);
+  TagTranslat name(String? name);
+
+  TagTranslat intro(String? intro);
 
   TagTranslat links(String? links);
 
-  TagTranslat name(String? name);
-
-  TagTranslat namespace(String namespace);
+  TagTranslat lastUseTime(int lastUseTime);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TagTranslat(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -26,38 +26,38 @@ abstract class _$TagTranslatCWProxy {
   /// TagTranslat(...).copyWith(id: 12, name: "My name")
   /// ````
   TagTranslat call({
-    String? intro,
-    String? key,
-    int? lastUseTime,
-    String? links,
-    String? name,
     String? namespace,
+    String? key,
+    String? name,
+    String? intro,
+    String? links,
+    int? lastUseTime,
   });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfTagTranslat.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfTagTranslat.copyWith.fieldName(...)`
 class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
-  final TagTranslat _value;
-
   const _$TagTranslatCWProxyImpl(this._value);
 
+  final TagTranslat _value;
+
   @override
-  TagTranslat intro(String? intro) => this(intro: intro);
+  TagTranslat namespace(String namespace) => this(namespace: namespace);
 
   @override
   TagTranslat key(String key) => this(key: key);
 
   @override
-  TagTranslat lastUseTime(int lastUseTime) => this(lastUseTime: lastUseTime);
+  TagTranslat name(String? name) => this(name: name);
+
+  @override
+  TagTranslat intro(String? intro) => this(intro: intro);
 
   @override
   TagTranslat links(String? links) => this(links: links);
 
   @override
-  TagTranslat name(String? name) => this(name: name);
-
-  @override
-  TagTranslat namespace(String namespace) => this(namespace: namespace);
+  TagTranslat lastUseTime(int lastUseTime) => this(lastUseTime: lastUseTime);
 
   @override
 
@@ -68,39 +68,39 @@ class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
   /// TagTranslat(...).copyWith(id: 12, name: "My name")
   /// ````
   TagTranslat call({
-    Object? intro = const $CopyWithPlaceholder(),
-    Object? key = const $CopyWithPlaceholder(),
-    Object? lastUseTime = const $CopyWithPlaceholder(),
-    Object? links = const $CopyWithPlaceholder(),
-    Object? name = const $CopyWithPlaceholder(),
     Object? namespace = const $CopyWithPlaceholder(),
+    Object? key = const $CopyWithPlaceholder(),
+    Object? name = const $CopyWithPlaceholder(),
+    Object? intro = const $CopyWithPlaceholder(),
+    Object? links = const $CopyWithPlaceholder(),
+    Object? lastUseTime = const $CopyWithPlaceholder(),
   }) {
     return TagTranslat(
-      intro: intro == const $CopyWithPlaceholder()
-          ? _value.intro
+      namespace: namespace == const $CopyWithPlaceholder() || namespace == null
+          ? _value.namespace
           // ignore: cast_nullable_to_non_nullable
-          : intro as String?,
+          : namespace as String,
       key: key == const $CopyWithPlaceholder() || key == null
           ? _value.key
           // ignore: cast_nullable_to_non_nullable
           : key as String,
+      name: name == const $CopyWithPlaceholder()
+          ? _value.name
+          // ignore: cast_nullable_to_non_nullable
+          : name as String?,
+      intro: intro == const $CopyWithPlaceholder()
+          ? _value.intro
+          // ignore: cast_nullable_to_non_nullable
+          : intro as String?,
+      links: links == const $CopyWithPlaceholder()
+          ? _value.links
+          // ignore: cast_nullable_to_non_nullable
+          : links as String?,
       lastUseTime:
           lastUseTime == const $CopyWithPlaceholder() || lastUseTime == null
               ? _value.lastUseTime
               // ignore: cast_nullable_to_non_nullable
               : lastUseTime as int,
-      links: links == const $CopyWithPlaceholder()
-          ? _value.links
-          // ignore: cast_nullable_to_non_nullable
-          : links as String?,
-      name: name == const $CopyWithPlaceholder()
-          ? _value.name
-          // ignore: cast_nullable_to_non_nullable
-          : name as String?,
-      namespace: namespace == const $CopyWithPlaceholder() || namespace == null
-          ? _value.namespace
-          // ignore: cast_nullable_to_non_nullable
-          : namespace as String,
     );
   }
 }
@@ -116,7 +116,7 @@ extension $TagTranslatCopyWith on TagTranslat {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
 extension GetTagTranslatCollection on Isar {
   IsarCollection<TagTranslat> get tagTranslats => this.collection();
@@ -239,7 +239,7 @@ const TagTranslatSchema = CollectionSchema(
   getId: _tagTranslatGetId,
   getLinks: _tagTranslatGetLinks,
   attach: _tagTranslatAttach,
-  version: '3.0.5',
+  version: '3.1.0+1',
 );
 
 int _tagTranslatEstimateSize(

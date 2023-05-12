@@ -7,11 +7,11 @@ part of 'view_history.dart';
 // **************************************************************************
 
 abstract class _$ViewHistoryCWProxy {
-  ViewHistory galleryProviderText(String galleryProviderText);
-
   ViewHistory gid(int gid);
 
   ViewHistory lastViewTime(int lastViewTime);
+
+  ViewHistory galleryProviderText(String galleryProviderText);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ViewHistory(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -20,21 +20,17 @@ abstract class _$ViewHistoryCWProxy {
   /// ViewHistory(...).copyWith(id: 12, name: "My name")
   /// ````
   ViewHistory call({
-    String? galleryProviderText,
     int? gid,
     int? lastViewTime,
+    String? galleryProviderText,
   });
 }
 
 /// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfViewHistory.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfViewHistory.copyWith.fieldName(...)`
 class _$ViewHistoryCWProxyImpl implements _$ViewHistoryCWProxy {
-  final ViewHistory _value;
-
   const _$ViewHistoryCWProxyImpl(this._value);
 
-  @override
-  ViewHistory galleryProviderText(String galleryProviderText) =>
-      this(galleryProviderText: galleryProviderText);
+  final ViewHistory _value;
 
   @override
   ViewHistory gid(int gid) => this(gid: gid);
@@ -44,6 +40,10 @@ class _$ViewHistoryCWProxyImpl implements _$ViewHistoryCWProxy {
       this(lastViewTime: lastViewTime);
 
   @override
+  ViewHistory galleryProviderText(String galleryProviderText) =>
+      this(galleryProviderText: galleryProviderText);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ViewHistory(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -52,17 +52,11 @@ class _$ViewHistoryCWProxyImpl implements _$ViewHistoryCWProxy {
   /// ViewHistory(...).copyWith(id: 12, name: "My name")
   /// ````
   ViewHistory call({
-    Object? galleryProviderText = const $CopyWithPlaceholder(),
     Object? gid = const $CopyWithPlaceholder(),
     Object? lastViewTime = const $CopyWithPlaceholder(),
+    Object? galleryProviderText = const $CopyWithPlaceholder(),
   }) {
     return ViewHistory(
-      galleryProviderText:
-          galleryProviderText == const $CopyWithPlaceholder() ||
-                  galleryProviderText == null
-              ? _value.galleryProviderText
-              // ignore: cast_nullable_to_non_nullable
-              : galleryProviderText as String,
       gid: gid == const $CopyWithPlaceholder() || gid == null
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
@@ -72,6 +66,12 @@ class _$ViewHistoryCWProxyImpl implements _$ViewHistoryCWProxy {
               ? _value.lastViewTime
               // ignore: cast_nullable_to_non_nullable
               : lastViewTime as int,
+      galleryProviderText:
+          galleryProviderText == const $CopyWithPlaceholder() ||
+                  galleryProviderText == null
+              ? _value.galleryProviderText
+              // ignore: cast_nullable_to_non_nullable
+              : galleryProviderText as String,
     );
   }
 }
@@ -87,7 +87,7 @@ extension $ViewHistoryCopyWith on ViewHistory {
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
 
 extension GetViewHistoryCollection on Isar {
   IsarCollection<ViewHistory> get viewHistorys => this.collection();
@@ -133,7 +133,7 @@ const ViewHistorySchema = CollectionSchema(
   getId: _viewHistoryGetId,
   getLinks: _viewHistoryGetLinks,
   attach: _viewHistoryAttach,
-  version: '3.0.5',
+  version: '3.1.0+1',
 );
 
 int _viewHistoryEstimateSize(

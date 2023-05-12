@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
@@ -15,7 +14,6 @@ import 'package:shared_storage/shared_storage.dart' as ss;
 import '../../network/app_dio/dio_http_cli.dart';
 import '../../network/app_dio/http_response.dart';
 import '../../network/app_dio/http_transformer.dart';
-import '../../utils/logger.dart';
 
 class DioFileService extends FileService {
   DioFileService({this.ser});

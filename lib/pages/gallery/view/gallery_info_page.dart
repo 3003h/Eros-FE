@@ -90,7 +90,7 @@ class TextItem extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () {
         showToast('Copied to clipboard');
-        Clipboard.setData(ClipboardData(text: initialValue));
+        Clipboard.setData(ClipboardData(text: initialValue ?? ''));
       },
       child: CupertinoFormRow(
         prefix: Text(

@@ -16,7 +16,7 @@ class AppCupertinoLocalizations extends DefaultCupertinoLocalizations {
   }
 
   @override
-  String datePickerDayOfMonth(int dayIndex) {
+  String datePickerDayOfMonth(int dayIndex, [int? weekDay]) {
     return '$dayIndex';
   }
 }
