@@ -8,10 +8,10 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
+import 'package:fehviewer/utils/orientation_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:orientation/orientation.dart';
 
 class ReadSettingPage extends StatelessWidget {
   const ReadSettingPage({Key? key}) : super(key: key);
@@ -232,13 +232,13 @@ class ReadOrientationItem extends StatelessWidget {
               ehConfigService.orientation.value = _result;
               if (_result != ReadOrientation.system &&
                   _result != ReadOrientation.auto) {
-                OrientationPlugin.setPreferredOrientations(
+                OrientationHelper.setPreferredOrientations(
                     [orientationMap[_result] ?? DeviceOrientation.portraitUp]);
                 // OrientationPlugin.forceOrientation(orientationMap[_result]!);
               } else if (_result == ReadOrientation.system) {
                 // OrientationPlugin.forceOrientation(
                 //     DeviceOrientation.portraitUp);
-                OrientationPlugin.setPreferredOrientations(
+                OrientationHelper.setPreferredOrientations(
                     DeviceOrientation.values);
               }
             }

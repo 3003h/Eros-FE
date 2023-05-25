@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:archive_async/archive_async.dart';
 import 'package:collection/collection.dart';
@@ -16,13 +15,13 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/store/archive_async.dart';
+import 'package:fehviewer/utils/orientation_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_android_volume_keydown/flutter_android_volume_keydown.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:get/get.dart';
-import 'package:orientation/orientation.dart';
 import 'package:path/path.dart' as path;
 import 'package:photo_view/photo_view.dart';
 import 'package:preload_page_view/preload_page_view.dart';
@@ -249,7 +248,7 @@ class ViewExtController extends GetxController {
     // logger.d(' $_orientation');
     if (_orientation != ReadOrientation.system &&
         _orientation != ReadOrientation.auto) {
-      OrientationPlugin.setPreferredOrientations(
+      OrientationHelper.setPreferredOrientations(
           [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
     }
 
@@ -280,7 +279,7 @@ class ViewExtController extends GetxController {
 
     // 恢复系统旋转设置
     logger.v('恢复系统旋转设置');
-    OrientationPlugin.setPreferredOrientations(DeviceOrientation.values);
+    OrientationHelper.setPreferredOrientations(DeviceOrientation.values);
 
     vState.asyncInputStreamMap.values.map((e) => e.close());
 
