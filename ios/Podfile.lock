@@ -1,4 +1,6 @@
 PODS:
+  - cupertino_http (0.0.1):
+    - Flutter
   - device_info (0.0.1):
     - Flutter
   - DKImagePickerController/Core (4.3.4):
@@ -54,25 +56,25 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - google_mlkit_barcode_scanning (0.5.0):
+  - google_mlkit_barcode_scanning (0.6.0):
     - Flutter
     - google_mlkit_commons
-    - GoogleMLKit/BarcodeScanning (~> 3.2.0)
-  - google_mlkit_commons (0.2.0):
+    - GoogleMLKit/BarcodeScanning (~> 4.0.0)
+  - google_mlkit_commons (0.3.0):
     - Flutter
     - MLKitVision
-  - GoogleDataTransport (9.2.1):
+  - GoogleDataTransport (9.2.3):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleMLKit/BarcodeScanning (3.2.0):
+  - GoogleMLKit/BarcodeScanning (4.0.0):
     - GoogleMLKit/MLKitCore
-    - MLKitBarcodeScanning (~> 2.2.0)
-  - GoogleMLKit/LanguageID (3.2.0):
+    - MLKitBarcodeScanning (~> 3.0.0)
+  - GoogleMLKit/LanguageID (4.0.0):
     - GoogleMLKit/MLKitCore
-    - MLKitLanguageID (~> 3.2.0)
-  - GoogleMLKit/MLKitCore (3.2.0):
-    - MLKitCommon (~> 8.0.0)
+    - MLKitLanguageID (~> 4.0.0)
+  - GoogleMLKit/MLKitCore (4.0.0):
+    - MLKitCommon (~> 9.0.0)
   - GoogleToolboxForMac/DebugUtils (2.3.2):
     - GoogleToolboxForMac/Defines (= 2.3.2)
   - GoogleToolboxForMac/Defines (2.3.2)
@@ -87,15 +89,15 @@ PODS:
   - "GoogleToolboxForMac/NSString+URLArguments (2.3.2)"
   - GoogleToolboxForMac/StringEncoding (2.3.2):
     - GoogleToolboxForMac/Defines (= 2.3.2)
-  - GoogleUtilities/Environment (7.11.0):
+  - GoogleUtilities/Environment (7.11.1):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.11.0):
+  - GoogleUtilities/Logger (7.11.1):
     - GoogleUtilities/Environment
-  - GoogleUtilities/UserDefaults (7.11.0):
+  - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
   - GoogleUtilitiesComponents (1.1.0):
     - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.7.2)
+  - GTMSessionFetcher/Core (2.3.0)
   - image_gallery_saver (1.5.0):
     - Flutter
   - image_save (0.0.1):
@@ -104,39 +106,36 @@ PODS:
     - Flutter
   - learning_language (0.0.2):
     - Flutter
-    - GoogleMLKit/LanguageID (~> 3.2.0)
+    - GoogleMLKit/LanguageID (~> 4.0.0)
   - local_auth_ios (0.0.1):
     - Flutter
-  - MLImage (1.0.0-beta3)
-  - MLKitBarcodeScanning (2.2.0):
-    - MLKitCommon (~> 8.0)
-    - MLKitVision (~> 4.2)
-  - MLKitCommon (8.0.0):
+  - MLImage (1.0.0-beta4)
+  - MLKitBarcodeScanning (3.0.0):
+    - MLKitCommon (~> 9.0)
+    - MLKitVision (~> 5.0)
+  - MLKitCommon (9.0.0):
     - GoogleDataTransport (~> 9.0)
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - GoogleUtilities/UserDefaults (~> 7.0)
     - GoogleUtilitiesComponents (~> 1.0)
-    - GTMSessionFetcher/Core (~> 1.1)
-    - Protobuf (~> 3.12)
-  - MLKitLanguageID (3.2.0):
-    - MLKitNaturalLanguage (~> 4.2)
-  - MLKitNaturalLanguage (4.2.0):
+    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
+  - MLKitLanguageID (4.0.0):
+    - MLKitNaturalLanguage (~> 5.0)
+  - MLKitNaturalLanguage (5.0.0):
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - GoogleToolboxForMac/StringEncoding (~> 2.1)
-    - GTMSessionFetcher/Core (~> 1.1)
-    - MLKitCommon (~> 8.0)
-    - Protobuf (~> 3.12)
-  - MLKitVision (4.2.0):
+    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
+    - MLKitCommon (~> 9.0)
+  - MLKitVision (5.0.0):
     - GoogleToolboxForMac/Logger (~> 2.1)
     - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-    - GTMSessionFetcher/Core (~> 1.1)
-    - MLImage (= 1.0.0-beta3)
-    - MLKitCommon (~> 8.0)
-    - Protobuf (~> 3.12)
+    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
+    - MLImage (= 1.0.0-beta4)
+    - MLKitCommon (~> 9.0)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -147,8 +146,6 @@ PODS:
   - open_filex (0.0.2):
     - Flutter
   - OrderedSet (5.0.0)
-  - orientation (0.0.1):
-    - Flutter
   - package_info (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
@@ -158,24 +155,25 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.0.4):
     - Flutter
-  - PromisesObjC (2.1.1)
-  - Protobuf (3.21.12)
+  - PromisesObjC (2.2.0)
   - receive_sharing_intent (0.0.1):
     - Flutter
-  - SDWebImage (5.15.2):
-    - SDWebImage/Core (= 5.15.2)
-  - SDWebImage/Core (5.15.2)
-  - Sentry/HybridSDK (7.31.5)
+  - SDWebImage (5.15.8):
+    - SDWebImage/Core (= 5.15.8)
+  - SDWebImage/Core (5.15.8)
+  - Sentry/HybridSDK (8.7.2):
+    - SentryPrivate (= 8.7.2)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 7.31.5)
+    - Sentry/HybridSDK (= 8.7.2)
+  - SentryPrivate (8.7.2)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sqflite (0.0.2):
+  - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.4)
@@ -193,6 +191,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - cupertino_http (from `.symlinks/plugins/cupertino_http/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
@@ -210,15 +209,14 @@ DEPENDENCIES:
   - local_auth_ios (from `.symlinks/plugins/local_auth_ios/ios`)
   - open_by_default (from `.symlinks/plugins/open_by_default/ios`)
   - open_filex (from `.symlinks/plugins/open_filex/ios`)
-  - orientation (from `.symlinks/plugins/orientation/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - receive_sharing_intent (from `.symlinks/plugins/receive_sharing_intent/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - system_network_proxy (from `.symlinks/plugins/system_network_proxy/ios`)
   - system_proxy (from `.symlinks/plugins/system_proxy/ios`)
@@ -247,12 +245,14 @@ SPEC REPOS:
     - nanopb
     - OrderedSet
     - PromisesObjC
-    - Protobuf
     - SDWebImage
     - Sentry
+    - SentryPrivate
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  cupertino_http:
+    :path: ".symlinks/plugins/cupertino_http/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
   file_picker:
@@ -287,14 +287,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/open_by_default/ios"
   open_filex:
     :path: ".symlinks/plugins/open_filex/ios"
-  orientation:
-    :path: ".symlinks/plugins/orientation/ios"
   package_info:
     :path: ".symlinks/plugins/package_info/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/ios"
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   receive_sharing_intent:
@@ -304,7 +302,7 @@ EXTERNAL SOURCES:
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   system_network_proxy:
@@ -321,6 +319,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_cookie_manager/ios"
 
 SPEC CHECKSUMS:
+  cupertino_http: 5f8b1161107fe6c8d94a0c618735a033d93fa7db
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
@@ -332,51 +331,50 @@ SPEC CHECKSUMS:
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_mlkit_barcode_scanning: 5c18504510a7b3a326c2ab19758457633248b7b6
-  google_mlkit_commons: e9070f57232c3a3e4bd42fdfa621bb1f4bb3e709
-  GoogleDataTransport: ea169759df570f4e37bdee1623ec32a7e64e67c4
-  GoogleMLKit: 0017a6a8372e1a182139b9def4d89be5d87ca5a7
+  google_mlkit_barcode_scanning: 9f397872c1e109f95b014de14afbca22dc05c854
+  google_mlkit_commons: a4f893c1b9708fc697b2194728013a1ed0f50b6b
+  GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
+  GoogleMLKit: 2bd0dc6253c4d4f227aad460f69215a504b2980e
   GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
-  GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
+  GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
-  GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
+  GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
   image_save: 66ab41fa2c60bc9569e55563ea287cced7b79fd1
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
-  learning_language: a69f9bea702eac31bf46a2afacf82bb5b72a5e6f
-  local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
-  MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
-  MLKitBarcodeScanning: d92fe1911001ec36870162c5a0eb206f612b7169
-  MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175
-  MLKitLanguageID: 395b867dd9105709789c32b3bac8449cccd44332
-  MLKitNaturalLanguage: 3350ebe7436046cd3146b8df9a2e06d6ba7a6439
-  MLKitVision: 96c96571190b7f63eddf4a12068ce8a8689e0d2c
+  learning_language: c426aaaa4de81079a115d0f5e238e8461834dee7
+  local_auth_ios: c6cf091ded637a88f24f86a8875d8b0f526e2605
+  MLImage: 7bb7c4264164ade9bf64f679b40fb29c8f33ee9b
+  MLKitBarcodeScanning: 04e264482c5f3810cb89ebc134ef6b61e67db505
+  MLKitCommon: c1b791c3e667091918d91bda4bba69a91011e390
+  MLKitLanguageID: 9d37b66ae77a2e04190a9c69acdc8df0dbbeb41c
+  MLKitNaturalLanguage: cf9de96911516fc83297429b7d7b6b33bfa56a93
+  MLKitVision: 8baa5f46ee3352614169b85250574fde38c36f49
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   open_by_default: a696353e830a8f8b4b1df1a92e7122275675f983
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  orientation: 6c9203efe86ce4cff379756910f18b2d745628c3
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider_foundation: 37748e03f12783f9de2cb2c4eadfaa25fe6d4852
+  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
-  Protobuf: 120350fc38646e2dedc26f49ecba778184ea1de2
+  PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
-  SDWebImage: 8ab87d4b3e5cc4927bd47f78db6ceb0b94442577
-  Sentry: 4c9babff9034785067c896fd580b1f7de44da020
-  sentry_flutter: b10ae7a5ddcbc7f04648eeb2672b5747230172f1
+  SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
+  Sentry: c43b6d1d51bf96edbaeac7772c4178aa54f4f450
+  sentry_flutter: 354c51276054f9f8a9b276967172aeb2e91d8a69
+  SentryPrivate: 760a9fd5d134c4d926c4c0afe9c4deceadbf4557
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
-  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   system_network_proxy: 6f63fddb34a28776f091b1221a17850170c59e01
   system_proxy: bec1a5c5af67dd3e3ebf43979400a8756c04cc44
-  url_launcher_ios: fb12c43172927bb5cf75aeebd073f883801f1993
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_cookie_manager: eaf920722b493bd0f7611b5484771ca53fed03f7
 
 PODFILE CHECKSUM: e2948cfb174bc558a485a48ee218a9eb75baffba
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

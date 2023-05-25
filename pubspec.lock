@@ -1176,7 +1176,7 @@ packages:
     description:
       path: "packages/learning_language"
       ref: HEAD
-      resolved-ref: b69a654dd3038bd97c09c0aa591702ea8f05f1d6
+      resolved-ref: af93d4c36b6fcd6dcaf74cb067bfdcea39c11ad4
       url: "https://github.com/honjow/learning.git"
     source: git
     version: "0.0.4"
