@@ -148,7 +148,7 @@ class DioHttpClient {
         deleteOnError: deleteOnError,
         lengthHeader: lengthHeader,
         data: data,
-        options: data as Options?,
+        options: options,
       );
       return response;
     } catch (e) {

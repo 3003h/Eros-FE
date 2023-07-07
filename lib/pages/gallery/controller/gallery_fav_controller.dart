@@ -76,7 +76,7 @@ class GalleryFavController extends GetxController {
   void setFav(String favcat, String favtitle) {
     _favTitle.value = favtitle;
     _favcat.value = favcat;
-    logger.d('setFav $favcat $favtitle');
+    // logger.d('setFav $favcat $favtitle');
     if (favcat.isNotEmpty) {
       _ehConfigService.lastFavcat = favcat;
     }

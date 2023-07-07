@@ -20,7 +20,7 @@ import 'app_dio/pdio.dart';
 Options getCacheOptions({bool forceRefresh = false}) {
   final options = Api.cacheOption
       .copyWith(
-        policy: forceRefresh ? CachePolicy.refresh : null,
+        policy: forceRefresh ? CachePolicy.refresh : CachePolicy.request,
       )
       .toOptions();
 
@@ -694,6 +694,7 @@ Future<void> ehDownload({
         }
       },
       cancelToken: cancelToken,
+      options: getCacheOptions(forceRefresh: false),
     );
   } on CancelException catch (e) {
     logger.d('cancel');
