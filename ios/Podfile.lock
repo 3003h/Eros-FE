@@ -56,11 +56,11 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - google_mlkit_barcode_scanning (0.6.0):
+  - google_mlkit_barcode_scanning (0.8.0):
     - Flutter
     - google_mlkit_commons
     - GoogleMLKit/BarcodeScanning (~> 4.0.0)
-  - google_mlkit_commons (0.3.0):
+  - google_mlkit_commons (0.5.0):
     - Flutter
     - MLKitVision
   - GoogleDataTransport (9.2.3):
@@ -98,7 +98,7 @@ PODS:
   - GoogleUtilitiesComponents (1.1.0):
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (2.3.0)
-  - image_gallery_saver (1.5.0):
+  - image_gallery_saver (2.0.2):
     - Flutter
   - image_save (0.0.1):
     - Flutter
@@ -153,21 +153,21 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.0.4):
+  - permission_handler_apple (9.1.1):
     - Flutter
   - PromisesObjC (2.2.0)
   - receive_sharing_intent (0.0.1):
     - Flutter
-  - SDWebImage (5.15.8):
-    - SDWebImage/Core (= 5.15.8)
-  - SDWebImage/Core (5.15.8)
-  - Sentry/HybridSDK (8.7.2):
-    - SentryPrivate (= 8.7.2)
+  - SDWebImage (5.16.0):
+    - SDWebImage/Core (= 5.16.0)
+  - SDWebImage/Core (5.16.0)
+  - Sentry/HybridSDK (8.8.0):
+    - SentryPrivate (= 8.8.0)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.7.2)
-  - SentryPrivate (8.7.2)
+    - Sentry/HybridSDK (= 8.8.0)
+  - SentryPrivate (8.8.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -331,15 +331,15 @@ SPEC CHECKSUMS:
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
   flutter_vibrate: 9f4c2ab57008965f78969472367c329dd77eb801
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  google_mlkit_barcode_scanning: 9f397872c1e109f95b014de14afbca22dc05c854
-  google_mlkit_commons: a4f893c1b9708fc697b2194728013a1ed0f50b6b
+  google_mlkit_barcode_scanning: 86952fd0b6f2ae30ad8b0faa65ca813ffd91876e
+  google_mlkit_commons: 9765447bd869c5d4f750dbd01475c8c42fd47aec
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleMLKit: 2bd0dc6253c4d4f227aad460f69215a504b2980e
   GoogleToolboxForMac: 8bef7c7c5cf7291c687cf5354f39f9db6399ad34
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
-  image_gallery_saver: 259eab68fb271cfd57d599904f7acdc7832e7ef2
+  image_gallery_saver: cb43cc43141711190510e92c460eb1655cd343cb
   image_save: 66ab41fa2c60bc9569e55563ea287cced7b79fd1
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
   learning_language: c426aaaa4de81079a115d0f5e238e8461834dee7
@@ -357,15 +357,15 @@ SPEC CHECKSUMS:
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
-  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   receive_sharing_intent: c0d87310754e74c0f9542947e7cbdf3a0335a3b1
-  SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
-  Sentry: c43b6d1d51bf96edbaeac7772c4178aa54f4f450
-  sentry_flutter: 354c51276054f9f8a9b276967172aeb2e91d8a69
-  SentryPrivate: 760a9fd5d134c4d926c4c0afe9c4deceadbf4557
+  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
+  Sentry: 927dfb29d18a14d924229a59cc2ad149f43349f2
+  sentry_flutter: cf7da03b65520b631330ecb498deb592aa7640be
+  SentryPrivate: 4350d865f898224ab9fa02b37d6ee7fbb623f47e
   share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
-  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   system_network_proxy: 6f63fddb34a28776f091b1221a17850170c59e01
