@@ -31,7 +31,7 @@ class DioHttpClient {
         onReceiveProgress: onReceiveProgress,
       );
       return handleResponse(response, httpTransformer: httpTransformer);
-    } on DioError catch (e, stack) {
+    } on DioException catch (e, stack) {
       // logger.e('DioError:\n$e\n$stack');
       return handleException(e, data: e.response?.data);
     } on Exception catch (e, stack) {

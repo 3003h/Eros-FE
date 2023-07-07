@@ -25,6 +25,7 @@ import 'network/app_dio/pdio.dart';
 import 'widget/desktop.dart';
 
 Future<void> main() async {
+  // BindingBase.debugZoneErrorsAreFatal = true;
   WidgetsFlutterBinding.ensureInitialized();
   runZonedGuarded<Future<void>>(() async {
     final dsn = await getSentryDsn();

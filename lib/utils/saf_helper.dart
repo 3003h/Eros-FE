@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pp;
-import 'package:shared_storage/saf.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
 
 const kSafCacheDir = 'saf_cache';
@@ -104,7 +103,8 @@ String _makeDirectoryPathToName(String path) {
   return path.replaceAll('/', '_').replaceAll(':', '_');
 }
 
-Uri safMakeUri({String path = '', String device='primary',  bool isTreeUri = false}) {
+Uri safMakeUri(
+    {String path = '', String device = 'primary', bool isTreeUri = false}) {
   final fullPath =
       path.replaceAll(RegExp(r'^(/storage/emulated/\d+/|/sdcard/)'), '');
   final directoryPath = fullPath.replaceAll(RegExp(r'[^/]+$'), '');
@@ -130,7 +130,7 @@ Uri safMakeUri({String path = '', String device='primary',  bool isTreeUri = fal
 }
 
 Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
-  final List<UriPermission>? persistedUriList =
+  final List<ss.UriPermission>? persistedUriList =
       await ss.persistedUriPermissions();
   logger.d('persistedUriList:\n\n${persistedUriList?.join('\n')}');
   if (persistedUriList == null || persistedUriList.isEmpty) {
@@ -195,7 +195,8 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
   for (int i = dirPathList.length - 1; i > 0; i--) {
     final dirName = dirPathList[i];
     final parentPath = dirPathList.sublist(0, i).join('/');
-    final parentUri = safMakeUri(path: parentPath, device: device, isTreeUri: true);
+    final parentUri =
+        safMakeUri(path: parentPath, device: device, isTreeUri: true);
 
     final childDocumentFile = await ss.findFile(parentUri, dirName);
     if (childDocumentFile != null && (childDocumentFile.isDirectory ?? false)) {
@@ -213,7 +214,7 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
       }
       logger.d('parentUri: $parentUri not persisted');
       showToast('parentUri: $parentUri not persisted');
-      await openDocumentTree(initialUri: parentUri);
+      await ss.openDocumentTree(initialUri: parentUri);
     }
 
     for (int j = i; j < dirPathList.length; j++) {

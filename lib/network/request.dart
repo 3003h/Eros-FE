@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -21,7 +20,7 @@ import 'app_dio/pdio.dart';
 Options getCacheOptions({bool forceRefresh = false}) {
   final options = Api.cacheOption
       .copyWith(
-        policy: forceRefresh ? CachePolicy.refreshForceCache : null,
+        policy: forceRefresh ? CachePolicy.refresh : null,
       )
       .toOptions();
 

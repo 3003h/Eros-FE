@@ -30,8 +30,7 @@ class ExtendedSafImageProvider extends SafUriImage
   final String? imageCacheName;
 
   @override
-  ImageStreamCompleter loadBuffer(
-      SafUriImage key, DecoderBufferCallback decode) {
+  ImageStreamCompleter loadImage(SafUriImage key, ImageDecoderCallback decode) {
     return MultiFrameImageStreamCompleter(
       codec: _loadAsync(key, decode),
       scale: key.scale,
@@ -43,7 +42,7 @@ class ExtendedSafImageProvider extends SafUriImage
   }
 
   Future<ui.Codec> _loadAsync(
-      SafUriImage key, DecoderBufferCallback decode) async {
+      SafUriImage key, ImageDecoderCallback decode) async {
     assert(key == this);
 
     logger.v('loadAsync ${uri.toString()}');

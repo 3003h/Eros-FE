@@ -56,6 +56,10 @@ class AppDio with DioMixin implements Dio {
             proxy: dioConfig?.proxy ?? '',
             skipCertificate: dioConfig?.domainFronting,
           );
+    // httpClientAdapter = AppHttpAdapter(
+    //   proxy: dioConfig?.proxy ?? '',
+    //   skipCertificate: dioConfig?.domainFronting,
+    // );
 
     interceptors.add(DioCacheInterceptor(options: Api.cacheOption));
 
@@ -135,6 +139,7 @@ class AppDio with DioMixin implements Dio {
   /// DioMixin 没有实现下载
   /// 从 [DioForNative] 复制过来的
 
+  /// {@macro dio.Dio.download}
   @override
   Future<Response> download(
     String urlPath,
@@ -162,8 +167,8 @@ class AppDio with DioMixin implements Dio {
         queryParameters: queryParameters,
         cancelToken: cancelToken ?? CancelToken(),
       );
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.badResponse) {
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.badResponse) {
         if (e.response!.requestOptions.receiveDataWhenStatusError == true) {
           final res = await transformer.transformResponse(
             e.response!.requestOptions..responseType = ResponseType.json,
@@ -253,7 +258,7 @@ class AppDio with DioMixin implements Dio {
             await subscription.cancel();
           } finally {
             completer.completeError(
-              DioMixin.assureDioError(e, response.requestOptions),
+              DioMixin.assureDioException(e, response.requestOptions),
             );
           }
         });
@@ -266,16 +271,16 @@ class AppDio with DioMixin implements Dio {
           completer.complete(response);
         } catch (e) {
           completer.completeError(
-            DioMixin.assureDioError(e, response.requestOptions),
+            DioMixin.assureDioException(e, response.requestOptions),
           );
         }
       },
-      onError: (Object e) async {
+      onError: (e) async {
         try {
           await closeAndDelete();
         } finally {
           completer.completeError(
-            DioMixin.assureDioError(e, response.requestOptions),
+            DioMixin.assureDioException(e as Object, response.requestOptions),
           );
         }
       },
@@ -289,54 +294,21 @@ class AppDio with DioMixin implements Dio {
     final timeout = response.requestOptions.receiveTimeout;
     if (timeout != null) {
       future = future.timeout(timeout).catchError(
-        (Object e, StackTrace s) async {
+        (dynamic e, StackTrace s) async {
           await subscription.cancel();
           await closeAndDelete();
           if (e is TimeoutException) {
-            throw DioError.receiveTimeout(
+            throw DioException.receiveTimeout(
               timeout: timeout,
               requestOptions: response.requestOptions,
               error: e,
             );
           } else {
-            throw e;
+            throw e as Object;
           }
         },
       );
     }
     return DioMixin.listenCancelForAsyncTask(cancelToken, future);
-  }
-
-  @override
-  Future<Response> downloadUri(
-    Uri uri,
-    savePath, {
-    ProgressCallback? onReceiveProgress,
-    CancelToken? cancelToken,
-    bool deleteOnError = true,
-    lengthHeader = Headers.contentLengthHeader,
-    data,
-    Options? options,
-  }) {
-    return download(
-      uri.toString(),
-      savePath,
-      onReceiveProgress: onReceiveProgress,
-      lengthHeader: lengthHeader,
-      deleteOnError: deleteOnError,
-      cancelToken: cancelToken,
-      data: data,
-      options: options,
-    );
-  }
-}
-
-extension DefaultHttpClientAdapterExt on IOHttpClientAdapter {
-  void addOnHttpClientCreate(void Function(HttpClient client) onCreate) {
-    final old = onHttpClientCreate;
-    onHttpClientCreate = (client) {
-      old?.call(client);
-      onCreate(client);
-    };
   }
 }

@@ -47,7 +47,7 @@ class Api {
       primary: MemCacheStore(),
       secondary: HiveCacheStore(Global.appSupportPath),
     ),
-    // store: HiveCacheStore(Global.appSupportPath),
+    // store: MemCacheStore(),
     policy: CachePolicy.forceCache,
     hitCacheOnErrorExcept: [401, 403, 503],
     maxStale: const Duration(days: 7),

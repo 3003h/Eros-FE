@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
@@ -37,15 +38,26 @@ class DioFileService extends FileService {
     Map<String, String>? headers,
   }) async {
     DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
-    final res = await dioHttpClient.get(url,
-        options: Options(
-          headers: headers,
-          responseType: ResponseType.stream,
-        ), httpTransformer: HttpTransformerBuilder(
-      (response) {
-        return DioHttpResponse.success(response);
-      },
-    ));
+    final options = CacheOptions(
+      policy: CachePolicy.request,
+      store: MemCacheStore(),
+    ).toOptions()
+      ..headers = headers
+      ..responseType = ResponseType.stream;
+
+    final res = await dioHttpClient.get(
+      url,
+      // options: Options(
+      //   headers: headers,
+      //   responseType: ResponseType.stream,
+      // ),
+      options: options,
+      httpTransformer: HttpTransformerBuilder(
+        (response) {
+          return DioHttpResponse.success(response);
+        },
+      ),
+    );
 
     if (res.data == null) {
       throw Exception('Response is null');
