@@ -75,16 +75,24 @@ bool _isRequestSuccess(int? statusCode) {
 }
 
 HttpException _parseException(Exception error, {dynamic data}) {
-  if (error is DioError) {
+  if (error is DioException) {
+    // if (error.error is Exception) {
+    //   return _parseException(error.error as Exception, data: data);
+    // }
+    //
+    // if (error.error is SocketException) {
+    //   return NetworkException(message: error.message);
+    // }
+
     switch (error.type) {
-      case DioErrorType.connectionTimeout:
-      case DioErrorType.receiveTimeout:
-      case DioErrorType.sendTimeout:
-        return NetworkException(message: error.error as String?);
-      case DioErrorType.cancel:
-        return CancelException(error.error as String?);
-      case DioErrorType.badCertificate:
-        return BadServiceException(message: error.error as String?);
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.receiveTimeout:
+      case DioExceptionType.sendTimeout:
+        return NetworkException(message: error.message);
+      case DioExceptionType.cancel:
+        return CancelException(error.message);
+      case DioExceptionType.badCertificate:
+        return BadServiceException(message: error.message);
       default:
         try {
           int? errCode = error.response?.statusCode;
@@ -112,7 +120,12 @@ HttpException _parseException(Exception error, {dynamic data}) {
             case 505:
               return UnauthorisedException(message: '505', code: errCode);
             default:
-              return UnknownException(error.error as String?);
+              if (error.error is Exception) {
+                final Exception _error = error.error as Exception;
+                return UnknownException(_error.toString());
+              } else {
+                return UnknownException(error.message);
+              }
           }
         } on Exception catch (_) {
           if (error.error is SocketException) {

@@ -164,6 +164,9 @@ Future<GalleryList?> getGallery({
     return httpResponse.data as GalleryList;
   } else {
     logger.d('${httpResponse.error.runtimeType}');
+    if (httpResponse.error is CancelException) {
+      return const GalleryList();
+    }
     throw httpResponse.error ?? EhError(error: 'getGallery error');
   }
 }

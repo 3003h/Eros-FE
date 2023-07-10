@@ -9,7 +9,7 @@ import 'package:system_proxy/system_proxy.dart';
 
 class HttpProxyAdapter extends IOHttpClientAdapter {
   HttpProxyAdapter({required this.proxy, bool? skipCertificate}) {
-    onHttpClientCreate = (HttpClient client) {
+    createHttpClient = () {
       final _client = createProxyHttpClient();
       if (proxy.isNotEmpty) {
         // logger.d('set proxy $proxy');
