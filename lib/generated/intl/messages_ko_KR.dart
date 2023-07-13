@@ -216,6 +216,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "morePreviews": MessageLookupByLibrary.simpleMessage("미리 보기 더 보기"),
         "multi_download": MessageLookupByLibrary.simpleMessage("다중 다운로드"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("사이트에서 설정하기"),
+        "native_http_client_adapter":
+            MessageLookupByLibrary.simpleMessage("Native HTTP Client Adapter"),
         "never": MessageLookupByLibrary.simpleMessage("Never"),
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),

@@ -183,6 +183,13 @@ class ListViewAdvancedSetting extends StatelessWidget {
         hideDivider: true,
       ),
       const ItemSpace(),
+      if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
+        TextSwitchItem(
+          L10n.of(context).native_http_client_adapter,
+          value: _ehConfigService.nativeHttpClientAdapter,
+          onChanged: (bool val) =>
+              _ehConfigService.nativeHttpClientAdapter = val,
+        ),
       SelectorSettingItem(
         title: 'Log',
         onTap: () {

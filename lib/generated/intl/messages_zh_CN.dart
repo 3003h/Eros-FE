@@ -195,6 +195,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "morePreviews": MessageLookupByLibrary.simpleMessage("更多预览"),
         "multi_download": MessageLookupByLibrary.simpleMessage("同时下载图片数量"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("网页上的标签设置"),
+        "native_http_client_adapter":
+            MessageLookupByLibrary.simpleMessage("使用原生 HTTP 客户端"),
         "never": MessageLookupByLibrary.simpleMessage("禁用"),
         "newGroup": MessageLookupByLibrary.simpleMessage("新建分组"),
         "newText": MessageLookupByLibrary.simpleMessage("新关键词"),

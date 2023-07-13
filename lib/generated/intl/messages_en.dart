@@ -233,6 +233,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("My Tags on Website"),
+        "native_http_client_adapter":
+            MessageLookupByLibrary.simpleMessage("Native HTTP Client Adapter"),
         "never": MessageLookupByLibrary.simpleMessage("Never"),
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),

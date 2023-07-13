@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:fehviewer/config/config.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/utils/openl/openl_translator.dart';
+import 'package:google_translator/translator.dart';
 import 'package:learning_language/learning_language.dart';
-import 'package:translator/translator.dart';
 
 import 'language.dart';
 

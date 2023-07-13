@@ -281,9 +281,21 @@ class EhConfigService extends ProfileService {
   bool get translateSearchHistory => _translateSearchHistory.value;
   set translateSearchHistory(bool val) => _translateSearchHistory.value = val;
 
+  // nativeHttpClientAdapter
+  final _nativeHttpClientAdapter = true.obs;
+  bool get nativeHttpClientAdapter => _nativeHttpClientAdapter.value;
+  set nativeHttpClientAdapter(bool val) => _nativeHttpClientAdapter.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    // nativeHttpClientAdapter
+    nativeHttpClientAdapter =
+        ehConfig.nativeHttpClientAdapter ?? nativeHttpClientAdapter;
+    everProfile<bool>(_nativeHttpClientAdapter, (val) {
+      ehConfig = ehConfig.copyWith(nativeHttpClientAdapter: val);
+    });
 
     // readViewCompatibleModes
     readViewCompatibleMode =

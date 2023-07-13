@@ -29,7 +29,8 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:throttling/throttling.dart';
-import 'package:wakelock/wakelock.dart';
+// import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'view_state.dart';
 
@@ -1028,7 +1029,7 @@ class ViewExtController extends GetxController {
   }
 
   void cancelAutoRead() {
-    Wakelock.disable();
+    WakelockPlus.disable();
     vState.autoRead = false;
     vState.lastAutoNextSer = null;
     autoNextTimer?.cancel();
@@ -1038,7 +1039,7 @@ class ViewExtController extends GetxController {
   final debNextPage = Debouncing(duration: const Duration(seconds: 1));
 
   void _startAutoRead() {
-    Wakelock.enable();
+    WakelockPlus.enable();
     final duration = Duration(milliseconds: _ehConfigService.turnPageInv);
     autoNextTimer = Timer.periodic(duration, (timer) {
       _autoTunToPage();

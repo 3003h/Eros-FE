@@ -4244,6 +4244,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Native HTTP Client Adapter`
+  String get native_http_client_adapter {
+    return Intl.message(
+      'Native HTTP Client Adapter',
+      name: 'native_http_client_adapter',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

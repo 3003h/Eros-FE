@@ -59,5 +59,6 @@
   "webDAVMaxConnections?": 2,
   "hideTopBarOnScroll?": false,
   "readViewCompatibleMode?": true,
-  "translateSearchHistory?": false
+  "translateSearchHistory?": false,
+  "nativeHttpClientAdapter?": false
 }

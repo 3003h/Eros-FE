@@ -246,6 +246,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Многопоточная загрузка"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("Мои теги на сайте"),
+        "native_http_client_adapter":
+            MessageLookupByLibrary.simpleMessage("Native HTTP Client Adapter"),
         "never": MessageLookupByLibrary.simpleMessage("Никогда"),
         "newGroup": MessageLookupByLibrary.simpleMessage("Новая категория"),
         "newText": MessageLookupByLibrary.simpleMessage("Новый тег"),

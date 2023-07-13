@@ -41,7 +41,7 @@ class MessageLookup extends MessageLookupByLibrary {
             'temp': '',
           })}";
 
-  static String m4(version) => "Update to ${version}";
+  static String m4(version) => "更新至 ${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -64,13 +64,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "always": MessageLookupByLibrary.simpleMessage("總是如此"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
         "ask_me": MessageLookupByLibrary.simpleMessage("每次都詢問我"),
-        "auth_biometricHint": MessageLookupByLibrary.simpleMessage("验证身份"),
-        "auth_signInTitle": MessageLookupByLibrary.simpleMessage("需要进行身份验证"),
-        "author": MessageLookupByLibrary.simpleMessage("Author"),
+        "auth_biometricHint": MessageLookupByLibrary.simpleMessage("驗證身份"),
+        "auth_signInTitle": MessageLookupByLibrary.simpleMessage("需要進行身份驗證"),
+        "author": MessageLookupByLibrary.simpleMessage("作者"),
         "autoLock": MessageLookupByLibrary.simpleMessage("自動上鎖"),
         "auto_select_profile":
             MessageLookupByLibrary.simpleMessage("Auto select profile"),
-        "automatic": MessageLookupByLibrary.simpleMessage("自动"),
+        "automatic": MessageLookupByLibrary.simpleMessage("自動"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("退回"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
@@ -78,8 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("更改為收藏夾"),
         "chapter": MessageLookupByLibrary.simpleMessage("Chapter"),
-        "check_for_update":
-            MessageLookupByLibrary.simpleMessage("Check for Update"),
+        "check_for_update": MessageLookupByLibrary.simpleMessage("檢查更新"),
         "clear_cache": MessageLookupByLibrary.simpleMessage("清除緩存"),
         "clear_filter": MessageLookupByLibrary.simpleMessage("重置"),
         "clear_search_history": MessageLookupByLibrary.simpleMessage("清除搜尋紀錄"),
@@ -94,7 +93,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "current_site": m0,
         "current_version": MessageLookupByLibrary.simpleMessage("當前版本"),
         "custom_hosts": MessageLookupByLibrary.simpleMessage("自定hosts文件"),
-        "custom_width": MessageLookupByLibrary.simpleMessage("自定义宽度"),
+        "custom_width": MessageLookupByLibrary.simpleMessage("自定義寬度"),
         "dark": MessageLookupByLibrary.simpleMessage("深色模式"),
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("深色模式效果"),
         "date_or_offset": MessageLookupByLibrary.simpleMessage("日期或偏移量"),
@@ -106,10 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete_task_and_content":
             MessageLookupByLibrary.simpleMessage("刪除工作與內容"),
         "delete_task_only": MessageLookupByLibrary.simpleMessage("只刪除工作"),
-        "direct": MessageLookupByLibrary.simpleMessage("Direct"),
+        "direct": MessageLookupByLibrary.simpleMessage("直連"),
         "disabled": MessageLookupByLibrary.simpleMessage("停用"),
         "domain_fronting": MessageLookupByLibrary.simpleMessage("域前置"),
-        "donate": MessageLookupByLibrary.simpleMessage("Donate"),
+        "donate": MessageLookupByLibrary.simpleMessage("捐款"),
         "done": MessageLookupByLibrary.simpleMessage("完成"),
         "double_click_back": MessageLookupByLibrary.simpleMessage("再按一次返回退出"),
         "double_page_model": MessageLookupByLibrary.simpleMessage("雙頁模式"),
@@ -127,12 +126,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的標籤"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 設置"),
         "enter_date_or_offset_or_gid":
-            MessageLookupByLibrary.simpleMessage("输入具体日期或偏移量 / GID"),
+            MessageLookupByLibrary.simpleMessage("輸入具體日期或偏移量 / GID"),
         "expand": MessageLookupByLibrary.simpleMessage("Expand"),
         "export": MessageLookupByLibrary.simpleMessage("導出"),
-        "export_app_data": MessageLookupByLibrary.simpleMessage("导出应用数据"),
+        "export_app_data": MessageLookupByLibrary.simpleMessage("導出應用數據"),
         "export_app_data_summary":
-            MessageLookupByLibrary.simpleMessage("导出应用数据到本地文件"),
+            MessageLookupByLibrary.simpleMessage("導出應用數據到本地文件"),
         "favcat": MessageLookupByLibrary.simpleMessage("收藏夾"),
         "favorites_order": MessageLookupByLibrary.simpleMessage("收藏夾排序"),
         "favorites_order_Use_favorited":
@@ -142,7 +141,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "fixed_height_of_list_items":
             MessageLookupByLibrary.simpleMessage("Fixed height of list items"),
         "follow_system": MessageLookupByLibrary.simpleMessage("跟隨系統"),
-        "fullscreen": MessageLookupByLibrary.simpleMessage("Fullscreen"),
+        "fullscreen": MessageLookupByLibrary.simpleMessage("全螢幕"),
         "galery_site": MessageLookupByLibrary.simpleMessage("畫廊站點"),
         "gallery_comments": MessageLookupByLibrary.simpleMessage("畫廊評論"),
         "global_setting":
@@ -153,32 +152,31 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hide": MessageLookupByLibrary.simpleMessage("Hide"),
         "hide_top_bar_on_scroll":
-            MessageLookupByLibrary.simpleMessage("滚动时隐藏顶栏"),
+            MessageLookupByLibrary.simpleMessage("滾動時隱藏頂欄"),
         "host": MessageLookupByLibrary.simpleMessage("地址"),
         "hours": MessageLookupByLibrary.simpleMessage("小時"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
         "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
-        "import_app_data": MessageLookupByLibrary.simpleMessage("导入应用数据"),
+        "import_app_data": MessageLookupByLibrary.simpleMessage("導入應用數據"),
         "import_app_data_summary":
-            MessageLookupByLibrary.simpleMessage("从本地文件导入应用数据, 重启应用后生效"),
+            MessageLookupByLibrary.simpleMessage("從本地文件導入應用數據, 重啟應用後生效"),
         "input_empty": MessageLookupByLibrary.simpleMessage("空白輸入"),
         "input_error": MessageLookupByLibrary.simpleMessage("輸入錯誤"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
-        "jump_next": MessageLookupByLibrary.simpleMessage("后面"),
-        "jump_or_seek": MessageLookupByLibrary.simpleMessage("跳转/搜寻"),
+        "jump_next": MessageLookupByLibrary.simpleMessage("後面"),
+        "jump_or_seek": MessageLookupByLibrary.simpleMessage("跳轉/搜尋"),
         "jump_prev": MessageLookupByLibrary.simpleMessage("前面"),
         "jump_to_page": MessageLookupByLibrary.simpleMessage("跳至該頁"),
         "landscape": MessageLookupByLibrary.simpleMessage("横屏"),
         "language": MessageLookupByLibrary.simpleMessage("語言設定"),
         "last_favorites":
             MessageLookupByLibrary.simpleMessage("最後的收藏夾（長按來手動選擇）"),
-        "latest_version":
-            MessageLookupByLibrary.simpleMessage("Latest version"),
-        "layout": MessageLookupByLibrary.simpleMessage("Layout"),
+        "latest_version": MessageLookupByLibrary.simpleMessage("最新版本"),
+        "layout": MessageLookupByLibrary.simpleMessage("介面佈局"),
         "left_to_right": MessageLookupByLibrary.simpleMessage("從左至右"),
-        "license": MessageLookupByLibrary.simpleMessage("License"),
+        "license": MessageLookupByLibrary.simpleMessage("授權證書"),
         "light": MessageLookupByLibrary.simpleMessage("淺色模式"),
         "link_redirect": MessageLookupByLibrary.simpleMessage("Link redirect"),
         "link_redirect_summary": MessageLookupByLibrary.simpleMessage(
@@ -196,8 +194,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("登入"),
         "login_web": MessageLookupByLibrary.simpleMessage("透過網頁登入"),
-        "mange_hidden_images":
-            MessageLookupByLibrary.simpleMessage("Manage Hidden Images"),
+        "mange_hidden_images": MessageLookupByLibrary.simpleMessage("管理隱藏圖片"),
         "manually_sel_favorites":
             MessageLookupByLibrary.simpleMessage("手動選擇收藏夾"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大歷史紀錄"),
@@ -206,6 +203,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "morePreviews": MessageLookupByLibrary.simpleMessage("更多預覽"),
         "multi_download": MessageLookupByLibrary.simpleMessage("多線程下載"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("網頁上的標籤設置"),
+        "native_http_client_adapter":
+            MessageLookupByLibrary.simpleMessage("Native HTTP Client Adapter"),
         "never": MessageLookupByLibrary.simpleMessage("禁用"),
         "newGroup": MessageLookupByLibrary.simpleMessage("New Group"),
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
@@ -251,7 +250,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "previews": MessageLookupByLibrary.simpleMessage("預覽"),
         "processing": MessageLookupByLibrary.simpleMessage("處理中"),
         "proxy": MessageLookupByLibrary.simpleMessage("代理"),
-        "proxy_type": MessageLookupByLibrary.simpleMessage("代理类型"),
+        "proxy_type": MessageLookupByLibrary.simpleMessage("代理類型"),
         "pure_black": MessageLookupByLibrary.simpleMessage("純黑"),
         "quick_search": MessageLookupByLibrary.simpleMessage("快速搜尋"),
         "read": MessageLookupByLibrary.simpleMessage("閱讀"),
@@ -325,7 +324,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sync_history": MessageLookupByLibrary.simpleMessage("同步紀錄"),
         "sync_quick_search": MessageLookupByLibrary.simpleMessage("同步快速搜索"),
         "sync_read_progress": MessageLookupByLibrary.simpleMessage("同步讀取進度"),
-        "system_proxy": MessageLookupByLibrary.simpleMessage("系统代理"),
+        "system_proxy": MessageLookupByLibrary.simpleMessage("系統代理"),
         "system_share": MessageLookupByLibrary.simpleMessage("系統分享"),
         "t_Clear_all_history": MessageLookupByLibrary.simpleMessage("清除所有紀錄"),
         "tab_download": MessageLookupByLibrary.simpleMessage("下載"),
@@ -361,7 +360,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("過去一年內"),
         "tolist_yesterday": MessageLookupByLibrary.simpleMessage("昨天"),
         "top_to_bottom": MessageLookupByLibrary.simpleMessage("從上到下"),
-        "turn_page_anima": MessageLookupByLibrary.simpleMessage("翻页动画"),
+        "turn_page_anima": MessageLookupByLibrary.simpleMessage("翻頁動畫"),
         "uc_Chinese": MessageLookupByLibrary.simpleMessage("中文"),
         "uc_Dutch": MessageLookupByLibrary.simpleMessage("荷蘭文"),
         "uc_English": MessageLookupByLibrary.simpleMessage("英文"),
@@ -450,10 +449,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_language": MessageLookupByLibrary.simpleMessage("語言"),
         "uc_lt_0": MessageLookupByLibrary.simpleMessage(
             "On mouse-over (pages load faster, but there may be a slight delay before a thumb appears)"),
-        "uc_lt_0_s": MessageLookupByLibrary.simpleMessage("鼠标悬停时"),
+        "uc_lt_0_s": MessageLookupByLibrary.simpleMessage("游標懸停時"),
         "uc_lt_1": MessageLookupByLibrary.simpleMessage(
             "On page load (pages take longer to load, but there is no delay for loading a thumb after the page has loaded)"),
-        "uc_lt_1_s": MessageLookupByLibrary.simpleMessage("页面加载时"),
+        "uc_lt_1_s": MessageLookupByLibrary.simpleMessage("頁面載入時"),
         "uc_male": MessageLookupByLibrary.simpleMessage("男性角色標籤"),
         "uc_mose_over_thumb":
             MessageLookupByLibrary.simpleMessage("mouse-over thumbnails"),
@@ -552,16 +551,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploader": MessageLookupByLibrary.simpleMessage("上傳者"),
         "user_login": MessageLookupByLibrary.simpleMessage("用戶登入"),
         "user_name": MessageLookupByLibrary.simpleMessage("用戶名"),
-        "version": MessageLookupByLibrary.simpleMessage("Version"),
+        "version": MessageLookupByLibrary.simpleMessage("版本"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("震動"),
-        "volume_key_turn_page": MessageLookupByLibrary.simpleMessage("音量键翻页"),
+        "volume_key_turn_page": MessageLookupByLibrary.simpleMessage("音量鍵翻頁"),
         "vote_down_successfully": MessageLookupByLibrary.simpleMessage("已送出負評"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("評價成功"),
         "vote_up_successfully": MessageLookupByLibrary.simpleMessage("已送出好評"),
         "webdav_Account": MessageLookupByLibrary.simpleMessage("WebDAV 帳號"),
         "webdav_max_connections":
-            MessageLookupByLibrary.simpleMessage("WebDAV 最大连接数"),
+            MessageLookupByLibrary.simpleMessage("WebDAV 最大連接數"),
         "welcome_text":
-            MessageLookupByLibrary.simpleMessage("尻槍並非壞事~上癮並非好事~過度縱慾者腎虧~~")
+            MessageLookupByLibrary.simpleMessage("尻槍並非壞事~上癮絕非好事~過度縱慾者腎虧~~")
       };
 }

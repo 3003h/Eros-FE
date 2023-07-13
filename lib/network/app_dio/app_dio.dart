@@ -50,7 +50,7 @@ class AppDio with DioMixin implements Dio {
 
     logger.v('dioConfig ${dioConfig?.toString()}');
 
-    httpClientAdapter = Get.find<EhConfigService>().debugMode
+    httpClientAdapter = Get.find<EhConfigService>().nativeHttpClientAdapter
         ? NativeAdapter()
         : AppHttpAdapter(
             proxy: dioConfig?.proxy ?? '',
