@@ -341,8 +341,19 @@ class UserLoginTransformer extends HttpTransformer {
     final List<String> setcookie = response.headers['set-cookie'] ?? [];
     logger.d('setcookie: $setcookie');
 
-    final _cookies =
-        setcookie.map((str) => Cookie.fromSetCookieValue(str)).toList();
+    late final List<Cookie> _cookies;
+    if (setcookie.length > 1) {
+      _cookies =
+          setcookie.map((str) => Cookie.fromSetCookieValue(str)).toList();
+    } else {
+      final List<String> _setcookie = setcookie[0]
+          .split(RegExp(r'[,;]'))
+          .where((element) => element.contains('='))
+          .toList();
+      _cookies =
+          _setcookie.map((str) => Cookie.fromSetCookieValue(str)).toList();
+    }
+    logger.d('_cookies: $_cookies');
 
     final cookieStr =
         _cookies.map((cookie) => '${cookie.name}=${cookie.value}').join('; ');
