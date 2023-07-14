@@ -3,6 +3,8 @@ PODS:
     - Flutter
   - device_info (0.0.1):
     - Flutter
+  - device_info_plus (0.0.1):
+    - Flutter
   - DKImagePickerController/Core (4.3.4):
     - DKImagePickerController/ImageDataManager
     - DKImagePickerController/Resource
@@ -185,7 +187,7 @@ PODS:
     - Flutter
   - vibration (1.7.5):
     - Flutter
-  - wakelock (0.0.1):
+  - wakelock_plus (0.0.1):
     - Flutter
   - webview_cookie_manager (0.0.1):
     - Flutter
@@ -193,6 +195,7 @@ PODS:
 DEPENDENCIES:
   - cupertino_http (from `.symlinks/plugins/cupertino_http/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
   - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
@@ -222,7 +225,7 @@ DEPENDENCIES:
   - system_proxy (from `.symlinks/plugins/system_proxy/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - vibration (from `.symlinks/plugins/vibration/ios`)
-  - wakelock (from `.symlinks/plugins/wakelock/ios`)
+  - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
   - webview_cookie_manager (from `.symlinks/plugins/webview_cookie_manager/ios`)
 
 SPEC REPOS:
@@ -255,6 +258,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cupertino_http/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
@@ -313,14 +318,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   vibration:
     :path: ".symlinks/plugins/vibration/ios"
-  wakelock:
-    :path: ".symlinks/plugins/wakelock/ios"
+  wakelock_plus:
+    :path: ".symlinks/plugins/wakelock_plus/ios"
   webview_cookie_manager:
     :path: ".symlinks/plugins/webview_cookie_manager/ios"
 
 SPEC CHECKSUMS:
   cupertino_http: 5f8b1161107fe6c8d94a0c618735a033d93fa7db
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
@@ -355,7 +361,7 @@ SPEC CHECKSUMS:
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
-  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
+  package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
@@ -372,7 +378,7 @@ SPEC CHECKSUMS:
   system_proxy: bec1a5c5af67dd3e3ebf43979400a8756c04cc44
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   vibration: 7d883d141656a1c1a6d8d238616b2042a51a1241
-  wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
+  wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
   webview_cookie_manager: eaf920722b493bd0f7611b5484771ca53fed03f7
 
 PODFILE CHECKSUM: 8e772d27a21069ae44e3293f10dc70ddd4f6f431

@@ -123,6 +123,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     // logger.v('_buildSearchRult');
     return SizeCacheWidget(
       child: CustomScrollView(
+        key: UniqueKey(),
         // cacheExtent: context.height * 2,
         slivers: <Widget>[
           // todo android上会有一次删除多个字符的问题
@@ -148,6 +149,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             key: centerKey,
           ),
           Obx(() => SliverSafeArea(
+                // key: UniqueKey(),
                 bottom: false,
                 top: false,
                 sliver: () {
@@ -155,6 +157,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
                     case ListType.gallery:
                       return _buildListView(context);
                     case ListType.tag:
+                      logger.d('tag list');
                       return _getTagQryList();
                     case ListType.init:
                       return _getInitView();
@@ -864,7 +867,15 @@ class SearchTextFieldIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SearchPageController controller = Get.find(tag: searchPageCtrlTag);
+    SearchPageController controller;
+    if (Get.isRegistered(tag: searchPageCtrlTag)) {
+      controller = Get.find(tag: searchPageCtrlTag);
+    } else {
+      controller = Get.put(
+        SearchPageController(),
+        tag: searchPageCtrlTag,
+      );
+    }
 
     return Obx(() {
       ehTheme.isDarkMode;

@@ -185,7 +185,7 @@ class SearchPageController extends DefaultTabViewController {
       listType = ListType.tag;
 
       // url 直接打开
-      if (await canLaunchUrlString(searchText)) {
+      if (searchText.isURL && await canLaunchUrlString(searchText)) {
         if (regGalleryUrl.hasMatch(searchText) ||
             regGalleryPageUrl.hasMatch(searchText)) {
           _jumpToUrl = regGalleryUrl.firstMatch(searchText)?.group(0) ??
@@ -202,6 +202,7 @@ class SearchPageController extends DefaultTabViewController {
       }
 
       currQryText = searchTextController.text.split(RegExp(r'[ ;"]')).last;
+      logger.d('currQryText $currQryText');
       if (currQryText.isEmpty) {
         qryTags([]);
         return;

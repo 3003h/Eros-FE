@@ -262,6 +262,7 @@ class TagTransController extends GetxController {
 
   Future<List<TagTranslat>> getTagTranslatesLike(
       {String text = '', int limit = 100}) async {
+    logger.d('getTagTranslatesLike $text');
     if (text.isEmpty) {
       return [];
     }
