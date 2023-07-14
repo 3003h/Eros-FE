@@ -11,8 +11,6 @@ import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
-import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
-import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -93,24 +91,36 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
   @override
   Widget build(BuildContext context) {
     final Widget cpf = CupertinoPageScaffold(
-      navigationBar: GetPlatform.isAndroid || GetPlatform.isDesktop
-          ? getNavigationBar(context)
-          : null,
+      // navigationBar: GetPlatform.isAndroid || GetPlatform.isDesktop
+      //     ? getNavigationBar(context)
+      //     : null,
+      navigationBar: getNavigationBar(context),
       child: Column(
         children: [
-          if (GetPlatform.isAndroid || GetPlatform.isDesktop)
-            SafeArea(
-              bottom: false,
-              child: Container(
-                decoration: BoxDecoration(
-                  border: _kDefaultNavBarBorder,
-                  color: CupertinoTheme.of(context).barBackgroundColor,
-                ),
-                child:
-                    const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
-                        .paddingSymmetric(horizontal: 12, vertical: 4),
+          // if (GetPlatform.isAndroid || GetPlatform.isDesktop)
+          //   SafeArea(
+          //     bottom: false,
+          //     child: Container(
+          //       decoration: BoxDecoration(
+          //         border: _kDefaultNavBarBorder,
+          //         color: CupertinoTheme.of(context).barBackgroundColor,
+          //       ),
+          //       child:
+          //           const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
+          //               .paddingSymmetric(horizontal: 12, vertical: 4),
+          //     ),
+          //   ),
+          SafeArea(
+            bottom: false,
+            child: Container(
+              decoration: BoxDecoration(
+                border: _kDefaultNavBarBorder,
+                color: CupertinoTheme.of(context).barBackgroundColor,
               ),
+              child: const SearchTextFieldIn(iconOpacity: 1.0, multiline: true)
+                  .paddingSymmetric(horizontal: 12, vertical: 4),
             ),
+          ),
           Expanded(child: _buildSearchRult(context)),
         ],
       ),
@@ -123,21 +133,20 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
     // logger.v('_buildSearchRult');
     return SizeCacheWidget(
       child: CustomScrollView(
-        key: UniqueKey(),
         // cacheExtent: context.height * 2,
         slivers: <Widget>[
           // todo android上会有一次删除多个字符的问题
-          if (GetPlatform.isIOS)
-            SliverFloatingPinnedPersistentHeader(
-              delegate: SliverFloatingPinnedPersistentHeaderBuilder(
-                minExtentProtoType: SizedBox(
-                  height: context.mediaQueryPadding.top,
-                ),
-                maxExtentProtoType: _maxExtentProtoTypeBar(context),
-                builder: (_, __, maxExtent) =>
-                    _buildSearchBar(_, __, maxExtent),
-              ),
-            ),
+          // if (GetPlatform.isIOS)
+          //   SliverFloatingPinnedPersistentHeader(
+          //     delegate: SliverFloatingPinnedPersistentHeaderBuilder(
+          //       minExtentProtoType: SizedBox(
+          //         height: context.mediaQueryPadding.top,
+          //       ),
+          //       maxExtentProtoType: _maxExtentProtoTypeBar(context),
+          //       builder: (_, __, maxExtent) =>
+          //           _buildSearchBar(_, __, maxExtent),
+          //     ),
+          //   ),
           Obx(() {
             return EhCupertinoSliverRefreshControl(
                 onRefresh: controller.listType == ListType.gallery
@@ -149,7 +158,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
             key: centerKey,
           ),
           Obx(() => SliverSafeArea(
-                // key: UniqueKey(),
+                key: UniqueKey(),
                 bottom: false,
                 top: false,
                 sliver: () {
