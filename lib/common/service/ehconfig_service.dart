@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/service/base_service.dart';
@@ -291,8 +293,12 @@ class EhConfigService extends ProfileService {
     super.onInit();
 
     // nativeHttpClientAdapter
-    nativeHttpClientAdapter =
-        ehConfig.nativeHttpClientAdapter ?? nativeHttpClientAdapter;
+    if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS) {
+      nativeHttpClientAdapter =
+          ehConfig.nativeHttpClientAdapter ?? nativeHttpClientAdapter;
+    } else {
+      nativeHttpClientAdapter = false;
+    }
     everProfile<bool>(_nativeHttpClientAdapter, (val) {
       ehConfig = ehConfig.copyWith(nativeHttpClientAdapter: val);
     });
