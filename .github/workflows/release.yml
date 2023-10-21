@@ -143,7 +143,7 @@ jobs:
       # 安装证书
       - name: Install Apple Certificate
         if: matrix.os == 'macos-12'
-        uses: apple-actions/import-codesign-certs@v1
+        uses: apple-actions/import-codesign-certs@v2
         with:
           p12-file-base64: ${{ secrets.P12_BASE64 }}
           p12-password: ${{ secrets.P12_PASSWORD }}
