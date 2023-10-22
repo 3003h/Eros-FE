@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
@@ -11,7 +10,7 @@ import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 const String kGithubUrl =
-    'https://api.github.com/repos/honjow/FEhViewer/releases/latest';
+    'https://api.github.com/repos/3003h/FEhViewer/releases/latest';
 
 class UpdateController extends GetxController {
   final _canUpdate = false.obs;
@@ -82,15 +81,18 @@ class UpdateController extends GetxController {
                     fontSize: 14,
                     color: CupertinoColors.systemGrey,
                   ),
-                  code: CupertinoTheme.of(Get.context!).textTheme.textStyle.copyWith(
-                      backgroundColor: Colors.transparent,
-                      color: CupertinoColors.systemPink,
-                      fontSize: CupertinoTheme.of(Get.context!)
-                              .textTheme
-                              .textStyle
-                              .fontSize! *
-                          0.8,
-                      fontFamilyFallback: EHConst.monoFontFamilyFallback),
+                  code: CupertinoTheme.of(Get.context!)
+                      .textTheme
+                      .textStyle
+                      .copyWith(
+                          backgroundColor: Colors.transparent,
+                          color: CupertinoColors.systemPink,
+                          fontSize: CupertinoTheme.of(Get.context!)
+                                  .textTheme
+                                  .textStyle
+                                  .fontSize! *
+                              0.8,
+                          fontFamilyFallback: EHConst.monoFontFamilyFallback),
                 ),
               ),
             ),

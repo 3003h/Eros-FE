@@ -1,4 +1,3 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/update_controller.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
@@ -8,7 +7,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class AboutPage extends StatelessWidget {
   @override
@@ -93,36 +91,8 @@ class ListViewAbout extends StatelessWidget {
               );
             }),
           TextItem(
-            L10n.of(context).author,
-            subTitle: 'honjow  <honjow311@gmail.com>',
-            onTap: () => launchUrlString('mailto:honjow311@gmail.com'),
-          ),
-          if (!_ehConfigService.isSafeMode.value)
-            TextItem(
-              'Github',
-              subTitle: 'https://github.com/honjow/FEhViewer',
-              onTap: () => launchUrlString(
-                'https://github.com/honjow/FEhViewer',
-                mode: LaunchMode.externalApplication,
-              ),
-            ),
-          TextItem(
-            'Telegram',
-            onTap: () => launchUrlString(
-              'https://t.me/joinchat/AEj27KMQe0JiMmUx',
-              mode: LaunchMode.externalApplication,
-            ),
-          ),
-          TextItem(
-            'Telegram Channel',
-            subTitle: 'https://t.me/fehviewer',
-            onTap: () => launchUrlString(
-              'https://t.me/fehviewer',
-              mode: LaunchMode.externalApplication,
-            ),
-          ),
-          TextItem(
             L10n.of(context).license,
+            hideDivider: true,
             onTap: () {
               Get.toNamed(
                 EHRoutes.license,
@@ -130,73 +100,73 @@ class ListViewAbout extends StatelessWidget {
               );
             },
           ),
-          TextItem(
-            L10n.of(context).donate,
-            onTap: () {
-              showCupertinoDialog(
-                context: context,
-                builder: (context) {
-                  return CupertinoAlertDialog(
-                    title: Text(L10n.of(context).donate),
-                    content: Container(
-                      // padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          CupertinoButton(
-                              child: Column(
-                                children: [
-                                  ExtendedImage.asset(
-                                    'assets/images/afdian.png',
-                                    width: 50,
-                                  ),
-                                  const Text(
-                                    '爱发电',
-                                    textScaleFactor: 0.8,
-                                  ),
-                                ],
-                              ),
-                              onPressed: () {
-                                launchUrlString(
-                                  'https://afdian.net/@honjow',
-                                  mode: LaunchMode.externalApplication,
-                                );
-                              }),
-                          // CupertinoButton(
-                          //   child: Column(
-                          //     children: [
-                          //       ExtendedImage.asset(
-                          //         'assets/images/dundun.png',
-                          //         width: 40,
-                          //       ).paddingSymmetric(vertical: 6),
-                          //       const Text(
-                          //         '顿顿饭',
-                          //         textScaleFactor: 0.8,
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   onPressed: () {
-                          //     launchUrlString(
-                          //       'https://dun.mianbaoduo.com/@honjow',
-                          //       mode: LaunchMode.externalApplication,
-                          //     );
-                          //   },
-                          // ),
-                        ],
-                      ),
-                    ),
-                    actions: [
-                      CupertinoDialogAction(
-                        child: Text(L10n.of(context).cancel),
-                        onPressed: Get.back,
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            hideDivider: true,
-          ),
+          // TextItem(
+          //   L10n.of(context).donate,
+          //   onTap: () {
+          //     showCupertinoDialog(
+          //       context: context,
+          //       builder: (context) {
+          //         return CupertinoAlertDialog(
+          //           title: Text(L10n.of(context).donate),
+          //           content: Container(
+          //             // padding: const EdgeInsets.symmetric(vertical: 12),
+          //             child: Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //               children: [
+          //                 CupertinoButton(
+          //                     child: Column(
+          //                       children: [
+          //                         ExtendedImage.asset(
+          //                           'assets/images/afdian.png',
+          //                           width: 50,
+          //                         ),
+          //                         const Text(
+          //                           '爱发电',
+          //                           textScaleFactor: 0.8,
+          //                         ),
+          //                       ],
+          //                     ),
+          //                     onPressed: () {
+          //                       launchUrlString(
+          //                         'https://afdian.net/@honjow',
+          //                         mode: LaunchMode.externalApplication,
+          //                       );
+          //                     }),
+          //                 // CupertinoButton(
+          //                 //   child: Column(
+          //                 //     children: [
+          //                 //       ExtendedImage.asset(
+          //                 //         'assets/images/dundun.png',
+          //                 //         width: 40,
+          //                 //       ).paddingSymmetric(vertical: 6),
+          //                 //       const Text(
+          //                 //         '顿顿饭',
+          //                 //         textScaleFactor: 0.8,
+          //                 //       ),
+          //                 //     ],
+          //                 //   ),
+          //                 //   onPressed: () {
+          //                 //     launchUrlString(
+          //                 //       'https://dun.mianbaoduo.com/@honjow',
+          //                 //       mode: LaunchMode.externalApplication,
+          //                 //     );
+          //                 //   },
+          //                 // ),
+          //               ],
+          //             ),
+          //           ),
+          //           actions: [
+          //             CupertinoDialogAction(
+          //               child: Text(L10n.of(context).cancel),
+          //               onPressed: Get.back,
+          //             ),
+          //           ],
+          //         );
+          //       },
+          //     );
+          //   },
+          //   hideDivider: true,
+          // ),
         ],
       ),
     );

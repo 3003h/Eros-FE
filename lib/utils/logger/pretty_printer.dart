@@ -27,12 +27,12 @@ class EhPrettyPrinter extends LogPrinter {
   };
 
   static final levelEmojis = {
-    Level.verbose: '',
+    Level.trace: '',
     Level.debug: '[D] ',
     Level.info: '[I] ',
     Level.warning: '[W] ',
     Level.error: '[E] ',
-    Level.wtf: '[WTF] ',
+    Level.fatal: '[WTF] ',
   };
 
   /// Matches a stacktrace line as generated on Android/iOS devices.
