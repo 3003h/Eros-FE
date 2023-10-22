@@ -59,7 +59,7 @@ class DomainFronting {
 
   //
   Future<String?> lookup(String hostname) async {
-    logger.v('hostname: $hostname');
+    logger.t('hostname: $hostname');
 
     if (_dnsLookup == null) {
       if (hosts.containsKey(hostname)) {
@@ -163,8 +163,8 @@ class DomainFrontingInterceptorRequest extends Interceptor {
     final headers = {...options.headers, 'host': host};
     final extra = {...options.extra, 'domainFrontingRawOptions': options};
 
-    logger.v('options.uri ${options.uri}');
-    logger.v('newUri $newUri');
+    logger.t('options.uri ${options.uri}');
+    logger.t('newUri $newUri');
     handler.next(options.copyWith(
         path: newUri.toString(), headers: headers, extra: extra));
   }

@@ -140,7 +140,7 @@ class GalleryInfoBarSliver extends StatelessWidget {
     //     getTextSize(_pageState.galleryProvider?.postTime ?? '', _hearTextStyle);
     final postTimeTextSize = getTextSize('0000-00-00 00:00', _hearTextStyle);
     final _maxCrossAxisExtent = max(160.0, postTimeTextSize.width + 60.0);
-    logger.v('_maxCrossAxisExtent $_maxCrossAxisExtent  $postTimeTextSize');
+    logger.t('_maxCrossAxisExtent $_maxCrossAxisExtent  $postTimeTextSize');
 
     Widget infoWidget() => Container(
           // constraints: const BoxConstraints(maxHeight: 50),

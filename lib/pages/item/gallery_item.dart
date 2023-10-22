@@ -169,7 +169,7 @@ class GalleryItemWidget extends StatelessWidget {
                             ),
                             // 收藏图标
                             Obx(() {
-                              logger.v(
+                              logger.t(
                                   '${itemController.galleryProvider.gid} favCat ${itemController.favCat}');
                               return _FavcatIcon(
                                 favCat: itemController.favCat,
@@ -255,7 +255,7 @@ class _CoverImage extends StatelessWidget {
       }
     }
 
-    logger.v('iRatio:$imageRatio\n'
+    logger.t('iRatio:$imageRatio\n'
         'w:${_item.imgWidth} h:${_item.imgHeight}\n'
         'cW:$coverImageWidth  cH:$coverImageHeigth');
 

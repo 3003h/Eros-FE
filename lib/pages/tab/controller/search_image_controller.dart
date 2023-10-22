@@ -33,7 +33,7 @@ class SearchImageController extends DefaultTabViewController {
     try {
       result = await FilePicker.platform.pickFiles(type: FileType.image);
     } on Exception catch (e) {
-      logger.e('Pick file failed', e);
+      logger.e('Pick file failed', error: e);
     }
     imagePath = result?.files.single.path ?? '';
     if (imagePath.isEmpty) {

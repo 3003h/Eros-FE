@@ -9,7 +9,6 @@ import 'package:fehviewer/pages/controller/fav_controller.dart';
 import 'package:fehviewer/pages/item/item_base.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GalleryItemController extends GetxController {
@@ -46,7 +45,7 @@ class GalleryItemController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.v(
+    logger.t(
         'init GalleryProviderController ${galleryProvider.gid}  ${galleryProvider.englishTitle}');
     if (galleryProvider.favTitle != null &&
         galleryProvider.favTitle!.isNotEmpty) {
@@ -57,10 +56,10 @@ class GalleryItemController extends GetxController {
     colorRating = galleryProvider.colorRating ?? '';
 
     ratingFallBack = galleryProvider.ratingFallBack ?? 0.00;
-    logger.v('ratingFB=$ratingFallBack');
+    logger.t('ratingFB=$ratingFallBack');
 
     favCat = galleryProvider.favcat ?? '';
-    logger.v('favCat=$favCat');
+    logger.t('favCat=$favCat');
   }
 
   int get tagLine => max(
@@ -74,14 +73,14 @@ class GalleryItemController extends GetxController {
 
   /// 设置收藏夹
   void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
-    logger.v('设置收藏夹, 原 isFav :[$isFav]');
+    logger.t('设置收藏夹, 原 isFav :[$isFav]');
     galleryProvider.copyWith(favTitle: favTitle);
     isFav = favTitle.isNotEmpty;
-    logger.v('设置收藏夹, 当前 isFav :[$isFav]');
+    logger.t('设置收藏夹, 当前 isFav :[$isFav]');
     if (favcat != null || (favcat?.isNotEmpty ?? false)) {
       favCat = favcat!;
       galleryProvider.copyWith(favcat: favcat);
-      logger.v('item set favcat [$favcat]');
+      logger.t('item set favcat [$favcat]');
     } else {
       favCat = '';
       galleryProvider.copyWith(favcat: '', favTitle: '');
@@ -102,7 +101,7 @@ class GalleryItemController extends GetxController {
 
   /// 点击item
   void onTap(dynamic tabTag) {
-    logger.v('${galleryProvider.englishTitle} ');
+    logger.t('${galleryProvider.englishTitle} ');
     NavigatorUtil.goGalleryPage(
         galleryProvider: galleryProvider, tabTag: tabTag);
   }
@@ -146,9 +145,9 @@ class GalleryItemController extends GetxController {
   Future<void> _showLongPressSheet() async {
     final BuildContext context = Get.overlayContext!;
     final curPage = Get.currentRoute;
-    logger.v('curPage $curPage');
+    logger.t('curPage $curPage');
     final curTab = _tabHomeController.currRoute;
-    logger.v('curTab $curTab');
+    logger.t('curTab $curTab');
     final topRoute = MainNavigatorObserver().history.lastOrNull?.settings.name;
 
     final isHistoryItem = curPage == EHRoutes.history ||

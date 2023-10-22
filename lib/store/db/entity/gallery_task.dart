@@ -62,7 +62,7 @@ class GalleryTask {
     }
     if (GetPlatform.isIOS) {
       final List<String> pathList = path.split(dirPath!).reversed.toList();
-      // logger.v('$pathList');
+      // logger.t('$pathList');
       return path.join(Global.appDocPath, pathList[1], pathList[0]);
     } else {
       return dirPath;

@@ -61,7 +61,7 @@ Future<String> safCache(Uri cacheUri, {bool overwrite = false}) async {
         }
       }
     } catch (e, stack) {
-      logger.e('safCache error', e, stack);
+      logger.e('safCache error', error: e, stackTrace: stack);
     }
   }
 
@@ -174,7 +174,7 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
     throw Exception('uri $uri is not saf uri');
   }
 
-  logger.v('device path: [$path]');
+  logger.t('device path: [$path]');
 
   final pathList = path.split(':');
   if (pathList.length != 2) {
@@ -182,7 +182,7 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
     throw Exception('uri $uri is not external saf tree uri');
   }
 
-  logger.v('path split:\n\n${pathList.join('\n')}');
+  logger.t('path split:\n\n${pathList.join('\n')}');
 
   final device = pathList[0];
   logger.d('device: $device');
@@ -204,7 +204,7 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
       continue;
     }
 
-    logger.v('dirName: $dirName');
+    logger.t('dirName: $dirName');
     logger.d('parentPath: $parentPath');
     logger.d('parentUri: $parentUri');
     if (!persistedUriList.any(
@@ -222,7 +222,7 @@ Future<void> safCreateDirectory(Uri uri, {bool documentToTree = false}) async {
       final parentPath = dirPathList.sublist(0, j).join('/');
       final parentUri = safMakeUri(path: parentPath, isTreeUri: true);
 
-      logger.v(
+      logger.t(
           '#########\nparentUri: ${parentUri.toString()} \nchildDocumentFile dirName: $dirName');
 
       final documentFile = await ss.findFile(parentUri, dirName);

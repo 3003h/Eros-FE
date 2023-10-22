@@ -12,15 +12,15 @@ class EhCookieInterceptor extends Interceptor {
       final cookieHeader =
           options.headers[HttpHeaders.cookieHeader] as String? ?? '';
       final cookiesString = cookieHeader.isNotEmpty ? cookieHeader : 'nw=1';
-      logger.v('${options.uri} befor checkCookies:$cookiesString');
+      logger.t('${options.uri} befor checkCookies:$cookiesString');
       final _cookies = cookiesString
           .split(';')
           .map((str) => Cookie.fromSetCookieValue(str))
           .toList();
-      logger.v('_cookies:$_cookies');
+      logger.t('_cookies:$_cookies');
 
       checkCookies(_cookies);
-      logger.v('after checkCookies:$_cookies');
+      logger.t('after checkCookies:$_cookies');
       options.headers[HttpHeaders.cookieHeader] = getCookies(_cookies);
     } catch (e, stack) {
       logger.e('$e\n$stack');
@@ -48,10 +48,10 @@ class EhCookieInterceptor extends Interceptor {
     final cookies = response.headers[HttpHeaders.setCookieHeader];
 
     if (cookies != null) {
-      logger.v('set-cookie:$cookies');
+      logger.t('set-cookie:$cookies');
       final _cookies =
           cookies.map((str) => Cookie.fromSetCookieValue(str)).toList();
-      logger.v('_set cookies $_cookies');
+      logger.t('_set cookies $_cookies');
 
       final igneous = getCookiesValue(_cookies, 'igneous');
       final _newSk = getCookiesValue(_cookies, 'sk') ?? '';
@@ -66,9 +66,9 @@ class EhCookieInterceptor extends Interceptor {
         yay: getCookiesValue(_cookies, 'yay'),
       ));
 
-      // logger.v('new sk $_newSk');
+      // logger.t('new sk $_newSk');
 
-      logger.v('${userController.user.value.toJson()}');
+      logger.t('${userController.user.value.toJson()}');
     }
   }
 

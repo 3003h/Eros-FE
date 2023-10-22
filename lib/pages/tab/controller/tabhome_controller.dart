@@ -2,24 +2,18 @@ import 'dart:math';
 
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/store/get_store.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../../common/service/layout_service.dart';
 import '../../../route/first_observer.dart';
-import '../../../route/second_observer.dart';
 import '../comm.dart';
 import '../view/setting_page.dart';
 
@@ -290,7 +284,7 @@ class TabHomeController extends GetxController {
 
   /// 连按两次返回退出
   Future<bool> doubleClickBack() async {
-    logger.v('click back');
+    logger.t('click back');
     if (lastPressedAt == null ||
         DateTime.now().difference(lastPressedAt ?? DateTime.now()) >
             const Duration(seconds: 1)) {
@@ -307,18 +301,18 @@ class TabHomeController extends GetxController {
       return await doubleClickBack();
     }
 
-    logger.v(
+    logger.t(
         'history first ${FirstNavigatorObserver().history.map((e) => e.settings.name).join(', ')} ');
 
-    logger.v(
+    logger.t(
         'history second ${SecondNavigatorObserver().history.map((e) => e.settings.name).join(', ')} ');
 
-    logger.v(
+    logger.t(
         '${FirstNavigatorObserver().history.length} ${SecondNavigatorObserver().history.length} ');
 
     final history = SecondNavigatorObserver().history;
     final prevSecondRoute = history[max(0, history.length - 2)].settings.name;
-    logger.v('prevSecondRoute $prevSecondRoute');
+    logger.t('prevSecondRoute $prevSecondRoute');
 
     if (SecondNavigatorObserver().history.length > 1 &&
         prevSecondRoute != EHRoutes.root) {

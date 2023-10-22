@@ -359,7 +359,7 @@ Widget buildAnimatedGallerySliverListView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
-  logger.v('buildAnimatedGallerySliverListView');
+  logger.t('buildAnimatedGallerySliverListView');
   return SliverAnimatedList(
     key: key,
     initialItemCount: galleryProviders.length,
@@ -421,7 +421,7 @@ Widget buildGallerySliverListView(
   int? lastTopitemIndex,
   bool keepPosition = false,
 }) {
-  logger.v('buildGallerySliverListView');
+  logger.t('buildGallerySliverListView');
 
   return FlutterSliverList(
     delegate: FlutterListViewDelegate(
@@ -476,7 +476,7 @@ Widget buildAnimatedGallerySliverListSimpleView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
-  logger.v('buildGallerySliverListSimpleView');
+  logger.t('buildGallerySliverListSimpleView');
 
   return SliverAnimatedList(
     key: key,
@@ -525,7 +525,7 @@ Widget buildGallerySliverListSimpleView(
   int? lastTopitemIndex,
   bool keepPosition = false,
 }) {
-  logger.v('buildGallerySliverListSimpleView');
+  logger.t('buildGallerySliverListSimpleView');
 
   return FlutterSliverList(
     delegate: FlutterListViewDelegate(
@@ -586,7 +586,7 @@ Widget getGallerySliverList(
     final mod = listMode?.value != ListModeEnum.global
         ? listMode?.value ?? ehConfigService.listMode.value
         : ehConfigService.listMode.value;
-    logger.v('mod $mod');
+    logger.t('mod $mod');
 
     switch (mod) {
       case ListModeEnum.list:

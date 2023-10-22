@@ -163,11 +163,11 @@ Widget _buildViewModeItem(BuildContext context) {
         title: _title,
         selector: modeMap[ehConfigService.viewMode.value] ?? '',
         onTap: () async {
-          logger.v('tap ModeItem');
+          logger.t('tap ModeItem');
           final ViewMode? _result = await _showDialog(context);
           if (_result != null) {
             // ignore: unnecessary_string_interpolations
-            logger.v('${EnumToString.convertToString(_result)}');
+            logger.t('${EnumToString.convertToString(_result)}');
             ehConfigService.viewMode.value = _result;
             if (Get.isRegistered<ViewExtController>()) {
               Get.find<ViewExtController>().handOnViewModeChanged(_result);
@@ -224,11 +224,11 @@ class ReadOrientationItem extends StatelessWidget {
           title: _title,
           selector: modeMap[ehConfigService.orientation.value] ?? '',
           onTap: () async {
-            logger.v('tap ModeItem');
+            logger.t('tap ModeItem');
             final ReadOrientation? _result = await _showDialog(context);
             if (_result != null) {
               // ignore: unnecessary_string_interpolations
-              // logger.v('${EnumToString.convertToString(_result)}');
+              // logger.t('${EnumToString.convertToString(_result)}');
               ehConfigService.orientation.value = _result;
               if (_result != ReadOrientation.system &&
                   _result != ReadOrientation.auto) {

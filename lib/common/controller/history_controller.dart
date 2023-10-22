@@ -86,7 +86,7 @@ class HistoryController extends GetxController {
       isarHelper.addHistory(_item);
     }
 
-    logger.v('add ${galleryProvider.gid} update1');
+    logger.t('add ${galleryProvider.gid} update1');
     update();
     // if (!isListView) {
     //   update();
@@ -95,7 +95,7 @@ class HistoryController extends GetxController {
     if (sync) {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
-        logger.v('throttle syncHistory');
+        logger.t('throttle syncHistory');
         return syncHistory();
       });
 
@@ -126,7 +126,7 @@ class HistoryController extends GetxController {
     if (sync) {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
-        logger.v('throttle syncHistory');
+        logger.t('throttle syncHistory');
         return syncHistory();
       });
 
@@ -171,7 +171,7 @@ class HistoryController extends GetxController {
 
   Future<void> historyMigration() async {
     final isMigrationed = hiveHelper.getViewHistoryMigration();
-    logger.v('historyMigration $isMigrationed');
+    logger.t('historyMigration $isMigrationed');
     if (!isMigrationed) {
       logger.d('start history Migration');
       await isarHelper.addHistorys(hiveHelper.getAllHistory());
@@ -193,8 +193,8 @@ class HistoryController extends GetxController {
     final List<HistoryIndexGid?> listLocal = historys
         .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
         .toList();
-    logger.v('listLocal ${listLocal.length} \n${listLocal.map((e) => e?.g)}');
-    logger.v('${jsonEncode(listLocal)} ');
+    logger.t('listLocal ${listLocal.length} \n${listLocal.map((e) => e?.g)}');
+    logger.t('${jsonEncode(listLocal)} ');
 
     // 下载远程列表
     final listRemote = await webdavController.getRemoteHistoryList();
@@ -203,7 +203,7 @@ class HistoryController extends GetxController {
       return;
     }
 
-    logger.v('listRemote size ${listRemote.length}');
+    logger.t('listRemote size ${listRemote.length}');
     // yield true;
 
     // 比较远程和本地的差异
@@ -213,7 +213,7 @@ class HistoryController extends GetxController {
             !listRemote.contains(element) || !listLocal.contains(element))
         .toList()
         .toSet();
-    logger.v('diff ${diff.map((e) => e?.toJson())}');
+    logger.t('diff ${diff.map((e) => e?.toJson())}');
 
     // 本地时间更大的画廊
     final localNewer = listLocal.where(
@@ -230,7 +230,7 @@ class HistoryController extends GetxController {
         return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
       },
     );
-    logger.v('localNewer count ${localNewer.length}');
+    logger.t('localNewer count ${localNewer.length}');
 
     // 远程时间更大的画廊
     final remoteNewer = listRemote.where(
@@ -252,7 +252,7 @@ class HistoryController extends GetxController {
         return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
       },
     );
-    logger.v('remoteNewer ${remoteNewer.map((e) => e.g).toList()}');
+    logger.t('remoteNewer ${remoteNewer.map((e) => e.g).toList()}');
 
     await _downloadHistorys(remoteNewer.toSet().toList());
 

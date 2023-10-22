@@ -52,13 +52,13 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    logger.v('ViewPage initState');
+    logger.t('ViewPage initState');
   }
 
   @override
   void dispose() {
     super.dispose();
-    logger.v('ViewPage dispose');
+    logger.t('ViewPage dispose');
   }
 
   @override
@@ -126,7 +126,7 @@ class ViewKeyboardListener extends GetView<ViewExtController> {
               controller.tapAutoRead(context, setInv: false),
         };
 
-        logger.v('logicalKey: ${event.logicalKey}');
+        logger.t('logicalKey: ${event.logicalKey}');
         actionMap[event.logicalKey]?.call();
       },
       child: child,
@@ -142,7 +142,7 @@ class ImageView extends StatelessWidget {
     return GetBuilder<ViewExtController>(
       id: idImagePageView,
       builder: (logic) {
-        logger.v('build ImageView');
+        logger.t('build ImageView');
         switch (logic.vState.viewMode) {
           case ViewMode.topToBottom:
             return const ImageListView();
@@ -255,7 +255,7 @@ class _DoublePageViewState extends State<DoublePageView> {
   Widget build(BuildContext context) {
     final reverse = vState.viewMode == ViewMode.rightToLeft;
 
-    logger.v(
+    logger.t(
         '_ratioStart:$_ratioStart, _ratioEnd:$_ratioEnd, _ratioBoth:$_ratioBoth');
 
     final showStart = serStart > 0;
@@ -341,7 +341,7 @@ class _DoublePageViewState extends State<DoublePageView> {
           });
         }
 
-        logger.v('${controller.vState.galleryPageController == null}');
+        logger.t('${controller.vState.galleryPageController == null}');
 
         vState.imageSizeMap[serStart] = size;
 

@@ -304,7 +304,7 @@ class _CoverImage extends StatelessWidget {
     // 图片高宽比
     final ratio = (_provider.imgHeight ?? 0) / (_provider.imgWidth ?? 1);
 
-    logger.v('iRatio:$ratio\n'
+    logger.t('iRatio:$ratio\n'
         'w:${_provider.imgWidth} h:${_provider.imgHeight}\n'
         'cW:$coverImageWidth  cH:$coverImageHeigth');
 

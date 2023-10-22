@@ -34,7 +34,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
   @override
   void initState() {
     super.initState();
-    logger.v('initState pageCtrlTag:$pageCtrlTag');
+    logger.t('initState pageCtrlTag:$pageCtrlTag');
     initPageController(tag: _tag);
   }
 

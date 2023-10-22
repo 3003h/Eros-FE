@@ -38,7 +38,7 @@ class HiveHelper {
     await Hive.openBox<String>(
       historyBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.v('entries $entries');
+        logger.t('entries $entries');
         return entries > 10;
       },
     );
@@ -47,7 +47,7 @@ class HiveHelper {
     await Hive.openBox<String>(
       galleryCacheBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.v('entries $entries');
+        logger.t('entries $entries');
         return entries > 10;
       },
     );
@@ -55,20 +55,20 @@ class HiveHelper {
     await Hive.openBox<String>(
       historyDelBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.v('entries $entries');
+        logger.t('entries $entries');
         return entries > 10;
       },
     );
     await Hive.openBox<String>(searchHistoryBox,
         compactionStrategy: (int entries, int deletedEntries) {
-      logger.v('$searchHistoryBox entries $entries');
+      logger.t('$searchHistoryBox entries $entries');
       return true;
     });
 
     await Hive.openBox<String>(
       archiverTaskBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.v('entries $entries');
+        logger.t('entries $entries');
         return entries > 10;
       },
     );
@@ -76,7 +76,7 @@ class HiveHelper {
     await Hive.openBox<String>(
       configBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.v('$configBox entries $entries');
+        logger.t('$configBox entries $entries');
         return entries > 2;
       },
     );
@@ -229,7 +229,7 @@ class HiveHelper {
       Map<String, DownloadArchiverTaskInfo>? taskInfoMap) {
     // len
     logger.d('set archiverTaskMap len ${taskInfoMap?.length}');
-    logger.v('set archiverDlMap \n'
+    logger.t('set archiverDlMap \n'
         '${taskInfoMap?.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
 
     if (taskInfoMap == null) {
@@ -245,7 +245,7 @@ class HiveHelper {
     if (taskInfo == null) {
       return;
     }
-    logger.v('set archiverTask ${taskInfo.toJson()}');
+    logger.t('set archiverTask ${taskInfo.toJson()}');
     _archiverTaskBox.put(taskInfo.tag, jsonEncode(taskInfo));
   }
 

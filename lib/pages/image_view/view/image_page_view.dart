@@ -183,7 +183,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 onPageChanged: (pageIndex) =>
                     controller.handOnPageChanged(pageIndex),
                 itemBuilder: (BuildContext context, int index) {
-                  logger.v('pageIndex $index ser ${index + 1}');
+                  logger.t('pageIndex $index ser ${index + 1}');
 
                   return Obx(() {
                     logic.vState.showPageInterval;
@@ -216,7 +216,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 physics: const CustomScrollPhysics(),
                 reverse: reverse,
                 itemBuilder: (BuildContext context, int index) {
-                  logger.v('pageIndex $index ser ${index + 1}');
+                  logger.t('pageIndex $index ser ${index + 1}');
 
                   /// 单页
                   ///

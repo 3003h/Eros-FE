@@ -36,7 +36,7 @@ class GalleryFilterView extends StatelessWidget {
 
   SearchPageController? get _searchPageController {
     if (int.parse(searchPageCtrlTag) > 0) {
-      logger.v('searchPageCtrlDepth $searchPageCtrlTag');
+      logger.t('searchPageCtrlDepth $searchPageCtrlTag');
       return Get.find<SearchPageController>(tag: searchPageCtrlTag);
     }
     return null;

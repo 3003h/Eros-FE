@@ -57,12 +57,12 @@ class ListViewAbout extends StatelessWidget {
           //     if (Platform.isIOS) {
           //       if (_ehConfigService.isSafeMode.value) {
           //         // showToast('你发现了不得了的东西');
-          //         logger.v('safeMode off');
+          //         logger.t('safeMode off');
           //         _ehConfigService.isSafeMode.value = false;
           //         Vibrate.feedback(FeedbackType.success);
           //       } else {
           //         // showToast('ヾ(￣▽￣)Bye~Bye~');
-          //         logger.v('safeMode on');
+          //         logger.t('safeMode on');
           //         _ehConfigService.isSafeMode.value = true;
           //         Vibrate.feedback(FeedbackType.error);
           //       }

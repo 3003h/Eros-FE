@@ -157,7 +157,7 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
         final imageUrl = downloadOrigImage
             ? galleryImage.originImageUrl
             : galleryImage.imageUrl;
-        logger.v('imageUrl... $imageUrl');
+        logger.t('imageUrl... $imageUrl');
         try {
           await ehDownload(
               url: '$imageUrl',
@@ -241,7 +241,7 @@ Future<GalleryImage> _fetchImageInfo(
     cancelToken: cancelToken,
   );
 
-  logger.v('_image from fetch ${_image?.toJson()}');
+  logger.t('_image from fetch ${_image?.toJson()}');
 
   if (_image == null) {
     return image;

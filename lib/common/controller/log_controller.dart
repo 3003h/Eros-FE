@@ -68,7 +68,7 @@ class LogService extends GetxController {
           final _diff = _nowTime.difference(_fileTime);
           // print('diff $_diff');
           if (_diff.compareTo(_kMaxTime) > 0) {
-            // logger.v('delete $_fileName');
+            // logger.t('delete $_fileName');
             _logFile.delete();
           }
           // update();

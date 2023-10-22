@@ -73,7 +73,7 @@ class EhMyTagsController extends GetxController
     firstLoad();
 
     debounce(_inputSearchText, (String val) async {
-      logger.v('debounce _inputSearchText $val');
+      logger.t('debounce _inputSearchText $val');
       if (val.trim().isEmpty) {
         // searchTags.clear();
         searchNewTags.clear();

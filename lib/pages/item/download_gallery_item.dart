@@ -131,7 +131,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
               .toList();
         }
 
-        logger.v('pics: ${pics.map((e) => e).join('\n')}');
+        logger.t('pics: ${pics.map((e) => e).join('\n')}');
 
         // 读取进度
         int? lastIndex = 0;
@@ -239,7 +239,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         cardType: cardType,
       ).paddingOnly(right: 8),
       onTap: () async {
-        logger.v('${galleryTask.url} ');
+        logger.t('${galleryTask.url} ');
         String? url = galleryTask.url;
         if (url == null) {
           return;
@@ -520,7 +520,7 @@ class DownloadItemCoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.v('$filePath  $url');
+    logger.t('$filePath  $url');
 
     Widget image = () {
       if (filePath != null) {

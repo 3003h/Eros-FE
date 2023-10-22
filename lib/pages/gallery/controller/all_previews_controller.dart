@@ -52,7 +52,7 @@ class AllPreviewsPageController extends GetxController
     change(Tuple2([], _images), status: RxStatus.success());
 
     WidgetsBinding.instance.addPostFrameCallback((Duration callback) {
-      logger.v('addPostFrameCallback be invoke');
+      logger.t('addPostFrameCallback be invoke');
       _autoJumpTo();
     });
   }
@@ -114,7 +114,7 @@ class AllPreviewsPageController extends GetxController
       return;
     }
     //
-    logger.v('获取更多预览 ${_pageState.galleryProvider?.url}');
+    logger.t('获取更多预览 ${_pageState.galleryProvider?.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
@@ -164,7 +164,7 @@ class AllPreviewsPageController extends GetxController
       return;
     }
     //
-    logger.v('获取上一页预览 ${_pageState.galleryProvider?.url}');
+    logger.t('获取上一页预览 ${_pageState.galleryProvider?.url}');
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
 

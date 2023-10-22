@@ -44,7 +44,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
       // 解析时间
       final Element? timeElem = comment.querySelector('div.c2 > div.c3');
       final String postTime = timeElem?.text.trim() ?? '';
-      // logger.v(postTime);
+      // logger.t(postTime);
       // 示例: Posted on 29 June 2020, 05:41 UTC by:
       // 20201027 修复评论问题
       // Posted on 29 June 2020, 05:41 by:
@@ -104,7 +104,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
       final Element? contextElem = comment.querySelector('div.c6');
 
       final rawContent = contextElem?.innerHtml ?? '';
-      logger.v('rawContent: $rawContent');
+      logger.t('rawContent: $rawContent');
 
       // 识别URL，并修改为 a href 元素
       final linkifyContent = rawContent.replaceAllMapped(
@@ -411,7 +411,7 @@ List<GalleryImage> parseGalleryImage(Document document) {
       final array = picSrcUrl.split('-');
       final String width = array[array.length - 3];
       final String height = array[array.length - 2];
-      logger.v('picSrcUrl: $picSrcUrl, width: $width, height: $height');
+      logger.t('picSrcUrl: $picSrcUrl, width: $width, height: $height');
 
       galleryImages.add(GalleryImage(
         ser: int.parse(picSer),

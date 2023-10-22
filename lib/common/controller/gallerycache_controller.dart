@@ -26,7 +26,7 @@ class GalleryCacheController extends GetxController {
   }
 
   void setGalleryProviderCache(String? gid, GalleryProvider? galleryProvider) {
-    logger.v('setGalleryProviderCache');
+    logger.t('setGalleryProviderCache');
     // clone一个新的对象 避免后续加载更多image影响
     _galleryProviderCache[gid ?? ''] = galleryProvider?.clone();
   }
@@ -49,16 +49,16 @@ class GalleryCacheController extends GetxController {
     if (sync && webdavController.syncReadProgress) {
       try {
         final remotelist = await webdavController.getRemotReadList();
-        logger.v('remotelist $remotelist');
+        logger.t('remotelist $remotelist');
         if (remotelist.contains(gid)) {
           final remote = await webdavController.downloadRead(gid);
-          logger.v('远程 ${remote?.toJson()}');
+          logger.t('远程 ${remote?.toJson()}');
           if (_localCache == null && remote != null) {
-            logger.v('local null');
+            logger.t('local null');
             gCacheMap[gid] = GalleryCache(lastIndex: remote.lastIndex);
             yield gCacheMap[gid];
           } else if (_localCache != null && remote != null) {
-            logger.v('both not null');
+            logger.t('both not null');
             if ((remote.time ?? 0) > (_localCache.time ?? 0)) {
               gCacheMap[gid] = _localCache.copyWith(
                   lastIndex: remote.lastIndex, time: remote.time);
@@ -108,7 +108,7 @@ class GalleryCacheController extends GetxController {
   }
 
   void saveAll() {
-    logger.v(
+    logger.t(
         'save All GalleryCache \n${gCacheMap.entries.map((e) => jsonEncode(e.value)).join('\n')}');
     gCacheMap.forEach((key, value) {
       // gStore.saveCache(value);
@@ -147,7 +147,7 @@ class GalleryCacheController extends GetxController {
       }
       pageStateList.add(state);
     }
-    logger.v(
+    logger.t(
         'pageStateList\n${pageStateList.map((e) => '${e.mainTitle} - ${e.galleryProvider?.favcat}').join('\n')}');
   }
 

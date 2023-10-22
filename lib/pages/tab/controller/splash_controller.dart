@@ -37,7 +37,7 @@ class SplashController extends GetxController {
       ReceiveSharingIntent.getInitialText().then((String? value) {
         // logger.i('value(closed): $value');
         sharedText = value ?? '';
-        logger.v('Shared: $sharedText');
+        logger.t('Shared: $sharedText');
         _startHome(sharedText ?? '');
       });
     }

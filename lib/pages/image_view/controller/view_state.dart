@@ -23,7 +23,7 @@ class ViewExtState {
     // 设置加载类型
     if (Get.arguments is ViewRepository) {
       final ViewRepository vr = Get.arguments as ViewRepository;
-      logger.v('vr.loadType ${vr.loadType}, index: ${vr.index}');
+      logger.t('vr.loadType ${vr.loadType}, index: ${vr.index}');
       loadFrom = vr.loadType;
 
       switch (loadFrom) {

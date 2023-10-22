@@ -27,7 +27,7 @@ void initPageController({String? tag}) {
 
 void deletePageController({String? tag}) {
   return;
-  logger.v('deletePageController ${tag ?? pageCtrlTag}');
+  logger.t('deletePageController ${tag ?? pageCtrlTag}');
 
   // GalleryPageController
   if (Get.isRegistered<GalleryPageController>(tag: tag ?? pageCtrlTag))

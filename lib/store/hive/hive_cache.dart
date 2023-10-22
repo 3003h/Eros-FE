@@ -27,7 +27,7 @@ class HiveCacheHelper {
     await Hive.openBox<String>(
       kCacheBox,
       compactionStrategy: (int entries, int deletedEntries) {
-        logger.v('entries $entries');
+        logger.t('entries $entries');
         return entries > 10;
       },
     );

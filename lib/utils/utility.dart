@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -125,7 +123,7 @@ Future<bool> requestPhotosPermission({
   // android
   if (GetPlatform.isAndroid) {
     final PermissionStatus status = await Permission.storage.status;
-    logger.v(status);
+    logger.t(status);
 
     // 永久拒绝 直接跳转到设置
     if (status.isPermanentlyDenied) {
@@ -249,22 +247,22 @@ double? initScale({
   final double n2 = size.height / size.width;
 
   final FittedSizes fittedSizes = applyBoxFit(BoxFit.contain, imageSize, size);
-  logger.v(
+  logger.t(
       'source: ${fittedSizes.source}  destination:${fittedSizes.destination}');
 
   // logger.d('n2/n1 ${n2 / n1}');
   if (n2 / n1 > 1 / initialScale) {
-    logger.v('H');
+    logger.t('H');
     return initialScale;
   }
 
   // logger.d('n1/n2 ${n1 / n2}');
   if (n1 / n2 > 1 / initialScale) {
-    logger.v('fitHeight');
+    logger.t('fitHeight');
     return 1.0;
   }
 
-  logger.v('other ${size.height / fittedSizes.destination.height}');
+  logger.t('other ${size.height / fittedSizes.destination.height}');
 
   return fittedSizes.destination.height / size.height;
 }
@@ -333,7 +331,7 @@ Future<bool> _launchEhUrl(String? url) async {
       RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
   if (regExp.hasMatch(_openUrl!)) {
     final String? _realUrl = regExp.firstMatch(_openUrl)?.group(0);
-    logger.v('in $_realUrl');
+    logger.t('in $_realUrl');
     NavigatorUtil.goGalleryPage(
       url: _realUrl,
     );

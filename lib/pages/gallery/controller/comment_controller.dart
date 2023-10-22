@@ -7,7 +7,6 @@ import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/openl/translator_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
@@ -26,7 +25,7 @@ class CommentController extends GetxController {
   CommentController();
 
   GalleryPageController get pageController {
-    logger.v('CommentController -> pageCtrlDepth: $pageCtrlTag');
+    logger.t('CommentController -> pageCtrlDepth: $pageCtrlTag');
     return Get.find(tag: pageCtrlTag);
   }
 
@@ -63,7 +62,7 @@ class CommentController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.v('CommentController onInit');
+    logger.t('CommentController onInit');
   }
 
   @override
@@ -187,7 +186,7 @@ class CommentController extends GetxController {
           commentsSorted.getRange(curIndex, commentsSorted.length).toList();
 
       for (int i = 0; i < match.groupCount + 1; i++) {
-        logger.v('($i)  ${match.group(i)}');
+        logger.t('($i)  ${match.group(i)}');
       }
 
       final reptyUserName = match.group(1);
@@ -213,7 +212,7 @@ class CommentController extends GetxController {
         // reptyUserName发表的离当前评论最进的评论
         repty =
             fill.firstWhereOrNull((element) => element.name == reptyUserName);
-        logger.v('没有明确的评论id 或id和所 @用户名 对应不上的\n${repty?.toJson()}');
+        logger.t('没有明确的评论id 或id和所 @用户名 对应不上的\n${repty?.toJson()}');
       }
 
       if (repty == null) {
@@ -257,7 +256,7 @@ class CommentController extends GetxController {
 
   // 翻译评论内容
   Future<void> commitTranslate(String _id) async {
-    logger.v('commitTranslate');
+    logger.t('commitTranslate');
     final int? _commentIndex =
         comments?.indexWhere((element) => element.id == _id.toString());
     final comment = comments?[_commentIndex!];
@@ -329,7 +328,7 @@ class CommentController extends GetxController {
       return;
     }
 
-    logger.v('commit up id $_id');
+    logger.t('commit up id $_id');
     final int? _commentIndex =
         comments?.indexWhere((element) => element.id == _id.toString());
     comments![_commentIndex!] = comments![_commentIndex].copyWith(vote: 1);
@@ -351,7 +350,7 @@ class CommentController extends GetxController {
 
   // 点踩
   Future<void> commitVoteDown(String _id) async {
-    logger.v('commit down id $_id');
+    logger.t('commit down id $_id');
     final int? _commentIndex =
         comments?.indexWhere((element) => element.id == _id.toString());
     comments![_commentIndex!] = comments![_commentIndex].copyWith(vote: -1);
@@ -372,7 +371,7 @@ class CommentController extends GetxController {
 
   // 点赞和踩的响应处理
   void _paraRes(CommitVoteRes rult) {
-    logger.v('${rult.toJson()}');
+    logger.t('${rult.toJson()}');
 
     final int? _commentIndex = comments?.indexWhere(
         (GalleryComment element) => element.id == rult.commentId.toString());
@@ -380,7 +379,7 @@ class CommentController extends GetxController {
         .copyWith(vote: rult.commentVote, score: '${rult.commentScore}');
 
     update();
-    logger.v('update CommentController id ${rult.commentId}');
+    logger.t('update CommentController id ${rult.commentId}');
   }
 
   // 推送评论
@@ -431,7 +430,7 @@ class CommentController extends GetxController {
         );
         pressCancle();
         // await Future.delayed(const Duration(seconds: 3));
-        logger.v('_postComment $comment');
+        logger.t('_postComment $comment');
       },
     );
   }
@@ -455,7 +454,7 @@ class CommentController extends GetxController {
     SmartDialog.showLoading(builder: (_) => indicator, backDismiss: false);
 
     // await Future.delayed(const Duration(seconds: 2));
-    logger.v('_postComment $comment');
+    logger.t('_postComment $comment');
     try {
       await _postComment(
         comment,
@@ -521,7 +520,7 @@ Future<void> showLoadingDialog(
   Completer completer,
   Function function,
 ) async {
-  logger.v('showLoadingDialog');
+  logger.t('showLoadingDialog');
 
   Future<void> runFunc() async {
     try {

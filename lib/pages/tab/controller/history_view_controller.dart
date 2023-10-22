@@ -5,7 +5,6 @@ import 'package:fehviewer/pages/tab/controller/default_tabview_controller.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class HistoryViewController extends DefaultTabViewController {
@@ -24,7 +23,7 @@ class HistoryViewController extends DefaultTabViewController {
   }
 
   Future<List<GalleryProvider>> loadData() async {
-    logger.v('_loadData ');
+    logger.t('_loadData ');
     final List<GalleryProvider> historys = historyController.historys;
 
     return Future<List<GalleryProvider>>.value(historys);

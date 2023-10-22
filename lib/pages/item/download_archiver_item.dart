@@ -7,7 +7,6 @@ import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/archive_async.dart';
 import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -126,8 +125,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                   final tuple = await readAsyncArchive(archiverPath);
                   final asyncArchive = tuple.item1;
                   final inputStream = tuple.item2;
-                  logger.v('${asyncArchive.length}');
-                  logger.v(
+                  logger.t('${asyncArchive.length}');
+                  logger.t(
                       '${asyncArchive.files.map((e) => e.name).join('\n')} ');
 
                   // 进入阅读
@@ -246,7 +245,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
               ),
       ),
       onTap: () async {
-        logger.v('$galleryUrl ');
+        logger.t('$galleryUrl ');
         String? url = galleryUrl;
         if (url == null) {
           return;

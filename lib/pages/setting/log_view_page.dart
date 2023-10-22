@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cross_file/cross_file.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
@@ -31,7 +30,7 @@ class _LogViewPageState extends State<LogViewPage> {
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       // build完成后的回调
-      logger.v('to end');
+      logger.t('to end');
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent, //滚动到底部
         duration: const Duration(milliseconds: 500),

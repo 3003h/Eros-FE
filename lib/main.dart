@@ -48,7 +48,7 @@ Future<void> main() async {
 
     if (Get.find<EhConfigService>().debugMode || kDebugMode) {
       Logger.level = Level.debug;
-      logger.v('Level.debug');
+      logger.t('Level.debug');
     } else {
       Logger.level = Level.error;
     }
@@ -193,7 +193,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ],
           // localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
           //   final Locale _locale = window.locale;
-          //   logger.v(
+          //   logger.t(
           //       'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
           //   // logger.d('${_locale} ${supportedLocales}');
           //   if (locale != null) {
@@ -201,7 +201,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           //     //如果已经选定语言，则不跟随系统
           //     return locale;
           //   } else {
-          //     logger.v('语言跟随系统语言  $_locale');
+          //     logger.t('语言跟随系统语言  $_locale');
           //     return null;
           //   }
           // },
@@ -222,7 +222,7 @@ Future<void> updateTagTranslate() async {
 
   if (ehConfigService.tagTranslateDataUpdateMode ==
       TagTranslateDataUpdateMode.everyStartApp) {
-    logger.v('updateTagTranslate everyStartApp');
+    logger.t('updateTagTranslate everyStartApp');
     if (await tagTransController.checkUpdate()) {
       await tagTransController.updateDB();
     }

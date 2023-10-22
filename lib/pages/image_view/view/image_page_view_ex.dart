@@ -94,7 +94,7 @@ class ImagePhotoView extends GetView<ViewExtController> {
 
         imageView = GestureDetector(
           onLongPress: () async {
-            logger.v('long press');
+            logger.t('long press');
             vibrateUtil.medium();
             final imageSer = vState.currentItemIndex + 1;
             final GalleryImage? _currentImage =

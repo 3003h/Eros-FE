@@ -48,7 +48,7 @@ class AppDio with DioMixin implements Dio {
     );
     this.options = options;
 
-    logger.v('dioConfig ${dioConfig?.toString()}');
+    logger.t('dioConfig ${dioConfig?.toString()}');
 
     httpClientAdapter = Get.find<EhConfigService>().nativeHttpClientAdapter
         ? NativeAdapter()

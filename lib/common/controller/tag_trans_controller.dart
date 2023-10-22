@@ -64,13 +64,13 @@ class TagTransController extends GetxController {
     }
     _dbUrl = assMap['db.raw.json.gz'] ?? '';
 
-    logger.v(_dbUrl);
+    logger.t(_dbUrl);
     return true;
   }
 
   /// 获取数据
   Future<List> _fetchData({bool silence = false}) async {
-    logger.v('_fetchData start');
+    logger.t('_fetchData start');
     if (ehConfigService.enableTagTranslateCDN) {
       _dbUrl = kCDNurl;
     }
@@ -91,7 +91,7 @@ class TagTransController extends GetxController {
     final head = dbdataMap['head'] as Map;
     final committer = head['committer'] as Map;
     _remoteVer = committer['when'] as String;
-    logger.v('_remoteVer $_remoteVer');
+    logger.t('_remoteVer $_remoteVer');
 
     return listData;
   }
@@ -180,9 +180,9 @@ class TagTransController extends GetxController {
     if (!text.trim().contains(' ')) {
       return await getTranTagWithNameSpase(text);
     }
-    logger.v(text);
+    logger.t(text);
     final array = text.split(RegExp(r'\s+'));
-    logger.v(array.map((e) => '[$e]').join(','));
+    logger.t(array.map((e) => '[$e]').join(','));
 
     for (int i = 0; i < array.length; i++) {
       if (array[i].startsWith(RegExp(r'-?\w+:"?'))) {
@@ -198,7 +198,7 @@ class TagTransController extends GetxController {
       }
     }
 
-    logger.v(array.map((e) => '[$e]').join(''));
+    logger.t(array.map((e) => '[$e]').join(''));
 
     final _translateList = [];
     for (final text in array) {
@@ -238,7 +238,7 @@ class TagTransController extends GetxController {
     final TagTranslat? _translates =
         await isarHelper.findTagTranslate(text, namespace: namespace);
 
-    logger.v(_translates?.intro);
+    logger.t(_translates?.intro);
     // 查询code字段
     final qryMap = {};
     final RegExp regCode = RegExp(r'`((\w+\s+?)*\w+)`');
@@ -255,7 +255,7 @@ class TagTransController extends GetxController {
 
     final _intro = _translates?.intro?.replaceAllMapped(
         regCode, (match) => ' `${qryMap[match.group(1)]}(${match.group(1)})` ');
-    logger.v(_intro);
+    logger.t(_intro);
 
     return _translates?.copyWith(intro: _intro);
   }

@@ -51,7 +51,7 @@ class GalleryPageController extends GetxController
   void onInit() {
     super.onInit();
 
-    logger.v('GalleryPageController $pageCtrlTag onInit');
+    logger.t('GalleryPageController $pageCtrlTag onInit');
 
     final galleryRepository = Get.find<GalleryRepository>();
     bool isStateFromCache = false;
@@ -88,7 +88,7 @@ class GalleryPageController extends GetxController
     gState.hideNavigationBtn = true;
 
     if (!isStateFromCache) {
-      logger.v('state new load');
+      logger.t('state new load');
       gState.galleryRepository = galleryRepository;
       _loadData();
 
@@ -110,7 +110,7 @@ class GalleryPageController extends GetxController
   @override
   void onClose() {
     scrollController?.dispose();
-    logger.v('onClose GalleryPageController $pageCtrlTag');
+    logger.t('onClose GalleryPageController $pageCtrlTag');
     super.onClose();
     // _galleryCacheController.addGalleryPageState(gState);
   }
@@ -452,7 +452,7 @@ class GalleryPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 0));
 
-    logger.v(
+    logger.t(
         '获取更多预览 ${gState.galleryProvider?.url} : ${gState.currentImagePage}');
 
     final List<GalleryImage> _moreGalleryImageList = await getGalleryImage(
@@ -546,7 +546,7 @@ class GalleryPageController extends GetxController
         final String? _sourceId =
             changeSource ? gState.imageMap[itemSer]?.sourceId : '';
 
-        logger.v(
+        logger.t(
             'ser:$itemSer ,href: ${gState.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
         try {
@@ -564,7 +564,7 @@ class GalleryPageController extends GetxController
             debugLabel: 'fetchAndParserImageInfo 加载当前页信息',
           );
 
-          logger.v('fetch _image ${_image?.toJson()}');
+          logger.t('fetch _image ${_image?.toJson()}');
 
           // 换源加载
           if (changeSource) {
@@ -658,7 +658,7 @@ class GalleryPageController extends GetxController
       id: isLayoutLarge ? 2 : null,
     );
     if (_rult != null && _rult is String) {
-      logger.v('addTag $_rult');
+      logger.t('addTag $_rult');
       final TagInfoController? controller =
           Get.put(TagInfoController(), tag: pageCtrlTag);
       controller?.tagVoteUp(_rult);

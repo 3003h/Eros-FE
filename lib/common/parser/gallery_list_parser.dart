@@ -20,7 +20,7 @@ bool isGalleryListDmL(String response) {
         ?.parent
         ?.nextElementSibling
         ?.querySelectorAll('option');
-    logger.v('searchnav optionElms length ${optionElms?.length}');
+    logger.t('searchnav optionElms length ${optionElms?.length}');
   }
 
   for (final dom.Element elm in optionElms ?? []) {
@@ -43,7 +43,7 @@ bool? isFavoriteOrder(String response) {
       document.querySelector('.searchnav')?.children.firstOrNull;
 
   if (orderElm != null) {
-    logger.v('ooo ${orderElm.text}');
+    logger.t('ooo ${orderElm.text}');
     final options = orderElm.querySelectorAll('option');
     return (options
                 .where((e) => e.attributes['selected'] == 'selected')
@@ -57,7 +57,7 @@ bool? isFavoriteOrder(String response) {
 
     if (domList.length > 2) {
       final dom.Element? orderElm = domList[2].querySelector('div > span');
-      logger.v('${orderElm?.text}');
+      logger.t('${orderElm?.text}');
       return orderElm?.text.trim() == 'Favorited';
     }
 
@@ -124,7 +124,7 @@ GalleryList parseGalleryList(
               0) -
           1;
 
-  logger.v('$_curPage , _nextPage:$_nextPage , _prevPage:$_prevPage');
+  logger.t('$_curPage , _nextPage:$_nextPage , _prevPage:$_prevPage');
 
   const searchnavSelector = '.searchnav';
   final searchnavElm = document.querySelector(searchnavSelector);
@@ -139,7 +139,7 @@ GalleryList parseGalleryList(
   final nextHref = nextElm?.attributes['href'];
   final _next = nextHref?.split('=').last;
 
-  logger.v('parse next:$_next, prev:$_prev');
+  logger.t('parse next:$_next, prev:$_prev');
 
 // 画廊列表
   List<dom.Element> gallerys = document.querySelectorAll(_listSelector);

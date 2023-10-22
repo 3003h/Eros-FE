@@ -6,7 +6,6 @@ import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -66,7 +65,7 @@ class GalleryPara {
     for (int add = 1; add < max + 1; add++) {
       final int _ser = itemSer + add;
 
-      logger.v('开始预载 ser $_ser');
+      logger.t('开始预载 ser $_ser');
 
       if (_processingSerSet.contains(_ser)) {
         continue;
@@ -81,12 +80,12 @@ class GalleryPara {
       GalleryImage _image = _imageTemp;
 
       if (_image.completeCache ?? false) {
-        logger.v('ser $_ser 已预载完成 跳过');
+        logger.t('ser $_ser 已预载完成 跳过');
         continue;
       }
 
       if (_image.startPrecache ?? false) {
-        logger.v('ser $_ser 已开始预载 跳过');
+        logger.t('ser $_ser 已开始预载 跳过');
         continue;
       }
 

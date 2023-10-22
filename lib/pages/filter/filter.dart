@@ -8,7 +8,6 @@ import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:fehviewer/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 /// 筛选画廊类型的按钮
@@ -94,7 +93,7 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
   }
 
   void _onPressed() {
-    // logger.v('_pressBtn ${widget.text}');
+    // logger.t('_pressBtn ${widget.text}');
     vibrateUtil.light();
     _value = !_value;
     _textColor = _value ? widget.onTextColor : widget.offTextColor;
@@ -153,7 +152,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
             offTextColor: CupertinoColors.systemGrey,
             value: _catMap[catName] ?? true,
             onChanged: (bool value) {
-              logger.v('$catName changed to ${!value}');
+              logger.t('$catName changed to ${!value}');
               setState(() {
                 final tempMap = _catMap;
                 tempMap[catName] = !value;
@@ -164,7 +163,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
             onLongPress: () {
               final tempMap = _catMap;
               final bool _selState = tempMap[catName] ?? true;
-              logger.v('onLongPress [$catName] [$_selState]');
+              logger.t('onLongPress [$catName] [$_selState]');
 
               tempMap.forEach((key, value) {
                 if (key != catName) {
@@ -188,7 +187,7 @@ class _GalleryCatFilterState extends State<GalleryCatFilter> {
 
   @override
   Widget build(BuildContext context) {
-    // logger.v('build GalleryCatFilter $_catNum');
+    // logger.t('build GalleryCatFilter $_catNum');
 
     late Widget _gridView;
 

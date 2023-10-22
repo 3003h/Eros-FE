@@ -150,7 +150,7 @@ class DefaultTabViewController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchMoreData() async {
-    logger.v('fetchMoreData nextPage $nextPage');
+    logger.t('fetchMoreData nextPage $nextPage');
     cancelToken = CancelToken();
     final fetchConfig = FetchParams(
       pageType: PageType.next,

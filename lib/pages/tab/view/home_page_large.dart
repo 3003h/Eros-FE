@@ -44,7 +44,6 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../route/first_observer.dart';
@@ -71,7 +70,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
     }
 
     _width = kMinWidth + (context.width - 2 * kMinWidth) * sideProportion;
-    logger.v('width:${context.width} $_width}');
+    logger.t('width:${context.width} $_width}');
     return min(max(_width, kMinWidth), context.width - kMinWidth);
   }
 

@@ -6,7 +6,6 @@ import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -277,7 +276,7 @@ Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
   return GetBuilder<DownloadViewController>(
     id: '${idDownloadGalleryItem}_$gid',
     builder: (logic) {
-      logger.v('rebuild DownloadGalleryItem_$gid');
+      logger.t('rebuild DownloadGalleryItem_$gid');
 
       final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
       final String? _speed = logic.downloadSpeedMap[_taskInfo.gid];

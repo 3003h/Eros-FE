@@ -42,7 +42,7 @@ Future<void> importQuickSearchFromFile() async {
   }
 
   if (_fileText.contains('#FEhViewer')) {
-    logger.v(_fileText);
+    logger.t(_fileText);
     final List<String> _importTexts = _fileText.split('\n');
     for (final element in _importTexts) {
       if (element.trim().isNotEmpty && !element.startsWith('#')) {
@@ -179,7 +179,7 @@ Future<String?> writeQuickSearchTempFile() async {
   final List<String> _searchTextList = quickSearchController.searchTextList;
   if (_searchTextList.isNotEmpty) {
     final String _searchText = '#FEhViewer\n${_searchTextList.join('\n')}';
-    logger.v(_searchText);
+    logger.t(_searchText);
 
     final File _tempFile = await getTempQuickSearchFile();
     _tempFile.writeAsStringSync(_searchText);

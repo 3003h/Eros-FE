@@ -59,7 +59,7 @@ class GStore {
 
   @Deprecated('hive archiverTaskMap')
   set archiverTaskMap(Map<String, DownloadArchiverTaskInfo>? taskInfoMap) {
-    logger.v('set archiverDlMap \n'
+    logger.t('set archiverDlMap \n'
         '${taskInfoMap?.entries.map((e) => '${e.key} = ${e.value.toJson().toString().split(', ').join('\n')}').join('\n')} ');
 
     if (taskInfoMap == null) {
@@ -98,7 +98,7 @@ class GStore {
     final String val = ReadWriteValue('profile', '{}', _profileStore).val;
     final Profile _profileObj =
         Profile.fromJson(jsonDecode(val) as Map<String, dynamic>);
-    // logger.v('_initProfile \n${_profileObj.toJson()}');
+    // logger.t('_initProfile \n${_profileObj.toJson()}');
     final Profile _profile = kDefProfile.copyWith(
       user: _profileObj.user,
       ehConfig: _profileObj.ehConfig,

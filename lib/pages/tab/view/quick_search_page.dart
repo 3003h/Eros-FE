@@ -268,21 +268,21 @@ class QuickSearchListPage extends StatelessWidget {
     final UserController _userController = Get.find();
 
     final User _user = _userController.user.value;
-    logger.v(_user.cookie);
+    logger.t(_user.cookie);
 
     final String memberId = _user.memberId ?? '';
     if (memberId.isNotEmpty) {
-      logger.v('memberId $memberId');
+      logger.t('memberId $memberId');
       return memberId;
     }
 
     if (Platform.isIOS) {
       final IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
-      logger.v('ios唯一设备码：' + iosDeviceInfo.identifierForVendor);
+      logger.t('ios唯一设备码：' + iosDeviceInfo.identifierForVendor);
       return iosDeviceInfo.identifierForVendor; // unique ID on iOS
     } else {
       final AndroidDeviceInfo androidDeviceInfo = await deviceInfo.androidInfo;
-      logger.v('android唯一设备码：' + androidDeviceInfo.androidId);
+      logger.t('android唯一设备码：' + androidDeviceInfo.androidId);
       return androidDeviceInfo.androidId; // unique ID on Android
     }
   }

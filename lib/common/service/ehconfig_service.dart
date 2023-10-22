@@ -614,7 +614,7 @@ class EhConfigService extends ProfileService {
       ehConfig = ehConfig.copyWith(debugMode: value, debugCount: 3);
       if (value) {
         Logger.level = Level.debug;
-        logger.v('Level.debug');
+        logger.t('Level.debug');
         ehConfig = ehConfig.copyWith(debugCount: 3);
       } else {
         Logger.level = Level.error;
@@ -785,7 +785,7 @@ class EhConfigService extends ProfileService {
         });
 
     if (_result != null) {
-      logger.v('to ${EnumToString.convertToString(_result)}');
+      logger.t('to ${EnumToString.convertToString(_result)}');
       if (favoriteOrder.value != _result) {
         return favoriteOrder.value = _result;
       } else {
@@ -844,7 +844,7 @@ class EhConfigService extends ProfileService {
         });
 
     if (_result != null) {
-      logger.v('to ${EnumToString.convertToString(_result)}');
+      logger.t('to ${EnumToString.convertToString(_result)}');
       if (toplist != _result) {
         return toplist = _result;
       } else {

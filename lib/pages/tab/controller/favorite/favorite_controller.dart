@@ -82,7 +82,7 @@ class FavoriteViewController extends DefaultTabViewController {
       //   ehConfigService.lastShowFavTitle = L10n.of(Get.context!).local_favorite;
       // }
       // 本地收藏夹
-      logger.v('本地收藏');
+      logger.t('本地收藏');
       final List<GalleryProvider> localFav = _localFavController.loacalFavs;
 
       return Future<GalleryList>.value(GalleryList(gallerys: localFav));

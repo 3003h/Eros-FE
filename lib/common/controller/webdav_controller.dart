@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
@@ -177,7 +176,7 @@ class WebdavController extends GetxController {
   }
 
   webdav.Client initClient() {
-    logger.v('initClient');
+    logger.t('initClient');
     _client = webdav.newClient(
       webdavProfile.url,
       user: webdavProfile.user ?? '',
@@ -211,7 +210,7 @@ class WebdavController extends GetxController {
   Future<void> checkDir({String dir = kDirPath}) async {
     try {
       final list = await client.readDir(dir);
-      logger.v('$dir\n${list.map((e) => '${e.name} ${e.mTime}').join('\n')}');
+      logger.t('$dir\n${list.map((e) => '${e.name} ${e.mTime}').join('\n')}');
     } on DioError catch (err) {
       if (err.response?.statusCode == 404) {
         logger.d('dir $dir 404, mkdir...');
@@ -280,7 +279,7 @@ class WebdavController extends GetxController {
 
   // 上传历史记录
   Future<void> uploadHistory(GalleryProvider his) async {
-    logger.v('uploadHistory');
+    logger.t('uploadHistory');
     final _path = path.join(Global.tempPath, his.gid);
     final File _file = File(_path);
     final _his = his.copyWith(
@@ -293,7 +292,7 @@ class WebdavController extends GetxController {
       final _text = jsonEncode(_his);
       // final base64Text = base64Encode(utf8.encode(_text));
       final encrypted = _encrypter.encrypt(_text, iv: _iv);
-      logger.v('encrypted.base64 ${encrypted.base64}');
+      logger.t('encrypted.base64 ${encrypted.base64}');
       _file.writeAsStringSync(encrypted.base64);
 
       await client.writeFromFile(
@@ -314,7 +313,7 @@ class WebdavController extends GetxController {
 
   // 下载历史记录
   Future<GalleryProvider?> downloadHistory(String fileName) async {
-    logger.v('downloadHistory');
+    logger.t('downloadHistory');
     final _path = path.join(Global.tempPath, fileName);
     try {
       await client.read2File('$kHistoryDtlDirPath/$fileName.json', _path);
@@ -356,7 +355,7 @@ class WebdavController extends GetxController {
       return;
     }
 
-    logger.v('upload Read [${read.toJson()}] ');
+    logger.t('upload Read [${read.toJson()}] ');
     chkTempDir(kLocalReadDirPath);
 
     final _path = path.join(Global.tempPath, 'read', read.gid);
@@ -386,7 +385,7 @@ class WebdavController extends GetxController {
 
   // 下载进度
   Future<GalleryCache?> downloadRead(String gid) async {
-    logger.v('downloadRead');
+    logger.t('downloadRead');
     chkTempDir(kLocalReadDirPath);
     final _path = path.join(Global.tempPath, 'read', gid);
     try {
@@ -463,7 +462,7 @@ class WebdavController extends GetxController {
 
   // 下载分组
   Future<CustomProfile?> downloadGroupProfile(CustomProfile profile) async {
-    logger.v('download group ${profile.syncFileName}');
+    logger.t('download group ${profile.syncFileName}');
     chkTempDir(kLocalGroupDirPath);
     final _path =
         path.join(Global.tempPath, kLocalGroupDirPath, profile.syncFileName);
@@ -497,7 +496,7 @@ class WebdavController extends GetxController {
     final profiles = list.map((e) {
       final name = e.name?.substring(0, e.name?.lastIndexOf('.'));
       final arr = name?.split(kGroupSeparator);
-      logger.v('getRemoteGroupList $arr');
+      logger.t('getRemoteGroupList $arr');
       // 名称
       final profileName = arr?.first ?? '';
       // uuid

@@ -28,7 +28,7 @@ class CustomSubListController extends TabViewController {
   CustomProfile? get profile => _customTabbarController.profileMap[profileUuid];
 
   FetchListClient getFetchListClient(FetchParams fetchParams) {
-    logger.v('CustomSubListController getFetchListClient $fetchParams');
+    logger.t('CustomSubListController getFetchListClient $fetchParams');
     return SearchFetchListClient(fetchParams: fetchParams);
   }
 
@@ -52,7 +52,7 @@ class CustomSubListController extends TabViewController {
   Future<GalleryList?> fetchData({bool refresh = false}) async {
     cancelToken = CancelToken();
 
-    logger.v(' ${jsonEncode(profile)}');
+    logger.t(' ${jsonEncode(profile)}');
 
     // 普通搜索
     final fetchConfig = FetchParams(

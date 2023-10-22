@@ -2,7 +2,6 @@ import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +24,7 @@ class HomePage extends GetView<TabHomeController> {
           final half = layoutServices.half;
           final vOffset = layoutServices.sideProportion;
 
-          logger.v(' ${context.width} ${context.height}');
+          logger.t(' ${context.width} ${context.height}');
 
           layoutServices.layoutMode = getLayoutMode(context, tabletLayoutType);
 

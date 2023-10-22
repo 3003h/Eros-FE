@@ -116,10 +116,10 @@ class CoverImage extends StatelessWidget {
           width: kWidth,
           margin: const EdgeInsets.only(right: 10),
           child: Container(
-            decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(6.0), //圆角
-                    // ignore: prefer_const_literals_to_create_immutables
-                    boxShadow: [
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6.0), //圆角
+                // ignore: prefer_const_literals_to_create_immutables
+                boxShadow: [
                   //阴影
                   const BoxShadow(
                     color: CupertinoColors.systemGrey2,
@@ -215,7 +215,7 @@ class GalleryUploader extends StatelessWidget {
         ),
       ),
       onTap: () {
-        logger.v('search uploader:$uploader');
+        logger.t('search uploader:$uploader');
         NavigatorUtil.goSearchPageWithParam(simpleSearch: 'uploader:$uploader');
       },
     );
@@ -444,7 +444,7 @@ class TagGroupItem extends StatelessWidget {
               }
             }(),
             onPressed: () {
-              logger.v('search type[${tag.type}] tag[${tag.title}]');
+              logger.t('search type[${tag.type}] tag[${tag.title}]');
               NavigatorUtil.goSearchPageWithParam(
                   simpleSearch: '${tag.type}:${tag.title.trim()}');
             },
@@ -468,7 +468,7 @@ class TagGroupItem extends StatelessWidget {
         _initTagBtnList(tagGroupData.galleryTags, context);
     final String? _tagType = tagGroupData.tagType;
 
-    logger.v('tagType $_tagType');
+    logger.t('tagType $_tagType');
 
     final Container container = Container(
       padding: const EdgeInsets.symmetric(vertical: 4),

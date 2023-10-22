@@ -74,7 +74,7 @@ class Api {
   static _printCookie() async {
     final List<io.Cookie> _cookies =
         await (await cookieJar).loadForRequest(Uri.parse(getBaseUrl()));
-    logger.v('${_cookies.map((e) => '$e').join('\n')} ');
+    logger.t('${_cookies.map((e) => '$e').join('\n')} ');
   }
 
   /// 通过api请求获取更多信息
@@ -352,7 +352,7 @@ class Api {
     final bool existFEhProfile = fepIndex > -1;
 
     if (ehProfiles.isNotEmpty)
-      logger.v('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
+      logger.t('ehProfiles\n${ehProfiles.map((e) => e.toJson()).join('\n')} ');
 
     if (existFEhProfile) {
       // 存在名称为 FEhViewer 的配置
@@ -383,9 +383,9 @@ class Api {
   }) async {
     final RegExp urlRex =
         RegExp(r'(http?s://e([-x])hentai.org)?/g/(\d+)/(\w+)/?$');
-    // logger.v(galleryProvider.url);
+    // logger.t(galleryProvider.url);
     final RegExpMatch? urlRult = urlRex.firstMatch(galleryProvider.url ?? '');
-    // logger.v(urlRult.groupCount);
+    // logger.t(urlRult.groupCount);
 
     final String gid = urlRult?.group(3) ?? '';
     final String token = urlRult?.group(4) ?? '';
@@ -493,7 +493,7 @@ class Api {
     final double width = double.parse(rultJson['x'].toString());
     final double height = double.parse(rultJson['y'].toString());
 
-//    logger.v('$imageUrl');
+//    logger.t('$imageUrl');
 
     final GalleryImage _reImage = GalleryImage(
       imageUrl: imageUrl,
@@ -638,7 +638,7 @@ class Api {
         throw EhError(error: 'Save image fail');
       }
     } catch (e, s) {
-      logger.e('保存图片到相册失败', e, s);
+      logger.e('保存图片到相册失败', error: e, stackTrace: s);
       throw EhError(error: '保存失败');
     }
   }

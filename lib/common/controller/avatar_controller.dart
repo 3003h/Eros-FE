@@ -1,5 +1,4 @@
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:get/get.dart';
 
@@ -34,7 +33,7 @@ class AvatarController extends GetxController {
       return userFromCache;
     }
 
-    logger.v('fetch new UserInfo $userId');
+    logger.t('fetch new UserInfo $userId');
     final user = await getUserInfo(userId, forceRefresh: true);
     if (user != null) {
       _addUser(user.copyWith(

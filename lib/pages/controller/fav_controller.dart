@@ -150,7 +150,7 @@ class FavController extends GetxController {
               },
             ))).toList();
 
-    logger.v(_favcatList.length);
+    logger.t(_favcatList.length);
 
     return showCupertinoDialog<Favcat?>(
       barrierDismissible: true,
@@ -210,11 +210,11 @@ class FavController extends GetxController {
     if ((_ehConfigService.isFavLongTap.value) &&
         _lastFavcat != null &&
         _lastFavcat.isNotEmpty) {
-      logger.v('添加到上次收藏夹');
+      logger.t('添加到上次收藏夹');
       return addToLastFavcat(gid, token, _lastFavcat, oriFavcat: oriFavcat);
     } else {
       // 手选收藏夹
-      logger.v('手选收藏夹');
+      logger.t('手选收藏夹');
       return await selectToSave(gid, token, oriFavcat: oriFavcat);
     }
   }
@@ -251,11 +251,11 @@ class FavController extends GetxController {
       logger.e('$e\n$stack');
     }
 
-    logger.v('$result  ${result.runtimeType}');
+    logger.t('$result  ${result.runtimeType}');
 
     if (result != null) {
       startLoading?.call();
-      logger.v('add fav $result');
+      logger.t('add fav $result');
 
       final String _favcat = result.favId;
       final String _favnote = result.note ?? '';
@@ -314,10 +314,10 @@ class FavController extends GetxController {
   /// 删除收藏
   Future<void> delFav(String favcat, String gid, String token) async {
     if (favcat.isNotEmpty && favcat != 'l') {
-      logger.v('取消网络收藏');
+      logger.t('取消网络收藏');
       await galleryAddFavorite(gid, token);
     } else {
-      logger.v('取消本地收藏');
+      logger.t('取消本地收藏');
       _localFavController.removeFavByGid(gid);
     }
     _favoriteSelectorController.decrease(favcat);

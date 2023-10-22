@@ -25,14 +25,14 @@ class ControllerTagService extends GetxService {
     if (gid != null) {
       pageGids.add(gid);
     }
-    // logger.v('pushPageCtrl to $pageCtrlDepth');
+    // logger.t('pushPageCtrl to $pageCtrlDepth');
   }
 
   // 出栈 深度-1 放在onClose事件中
   void popPageCtrl() {
     pageCtrlDepth--;
     pageGids.removeLast();
-    // logger.v('popPageCtrl to $pageCtrlDepth');
+    // logger.t('popPageCtrl to $pageCtrlDepth');
   }
 
   final searchTextList = <String>[];

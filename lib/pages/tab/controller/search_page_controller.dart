@@ -58,7 +58,7 @@ class SearchPageController extends DefaultTabViewController {
 
   String get placeholderText {
     final BuildContext context = Get.context!;
-    // logger.v('$searchType');
+    // logger.t('$searchType');
     switch (searchType) {
       case SearchType.favorite:
         return '${L10n.of(context).search} ${L10n.of(context).tab_favorite}';
@@ -159,7 +159,7 @@ class SearchPageController extends DefaultTabViewController {
   Future<void> _delayedSearch() async {
     searchText = searchTextController.text.trim();
     update([GetIds.SEARCH_CLEAR_BTN]);
-    logger.v(' _delayedSearch');
+    logger.t(' _delayedSearch');
     const Duration _duration = Duration(milliseconds: 500);
     _lastInputCompleteAt = DateTime.now();
     await Future<void>.delayed(_duration);
@@ -167,7 +167,7 @@ class SearchPageController extends DefaultTabViewController {
     if (lastSearchText.trim() != searchTextController.text.trim() &&
         DateTime.now().difference(_lastInputCompleteAt) >= _duration) {
       if (searchTextController.text.trim().isEmpty) {
-        logger.v('ListType to ListType.init');
+        logger.t('ListType to ListType.init');
         listType = ListType.init;
         textIsGalleryUrl = false;
         update([GetIds.SEARCH_CLEAR_BTN]);

@@ -174,7 +174,7 @@ class ViewExtController extends GetxController {
 
     // 竖屏模式初始页码
     if (vState.viewMode == ViewMode.topToBottom) {
-      // logger.v('竖屏模式初始页码: ${vState.itemIndex}');
+      // logger.t('竖屏模式初始页码: ${vState.itemIndex}');
       Future.delayed(const Duration(milliseconds: 50)).then((value) =>
           itemScrollController.jumpTo(index: vState.currentItemIndex));
 
@@ -222,13 +222,13 @@ class ViewExtController extends GetxController {
   void onReady() {
     super.onReady();
 
-    logger.v('Read onReady');
+    logger.t('Read onReady');
 
     /// 初始预载
     /// 后续的预载触发放在翻页事件中
     if (vState.loadFrom == LoadFrom.gallery) {
       // 预载
-      logger.v('初始预载');
+      logger.t('初始预载');
 
       GalleryPara.instance
           .ehPrecacheImages(
@@ -244,7 +244,7 @@ class ViewExtController extends GetxController {
       });
     }
 
-    logger.v('旋转设置');
+    logger.t('旋转设置');
     final ReadOrientation? _orientation = _ehConfigService.orientation.value;
     // logger.d(' $_orientation');
     if (_orientation != ReadOrientation.system &&
@@ -279,7 +279,7 @@ class ViewExtController extends GetxController {
     400.milliseconds.delay(() => unsetFullscreen());
 
     // 恢复系统旋转设置
-    logger.v('恢复系统旋转设置');
+    logger.t('恢复系统旋转设置');
     OrientationHelper.setPreferredOrientations(DeviceOrientation.values);
 
     vState.asyncInputStreamMap.values.map((e) => e.close());
@@ -308,7 +308,7 @@ class ViewExtController extends GetxController {
 
   Future<void> initArchiveFuture(int ser, {AsyncArchiveFile? asyncFile}) async {
     final file = asyncFile ?? vState.asyncArchiveFiles[ser - 1];
-    logger.v('load ${file.name}');
+    logger.t('load ${file.name}');
     imageArchiveFutureMap[ser] = getArchiveFile(vState.gid, file);
   }
 
@@ -370,7 +370,7 @@ class ViewExtController extends GetxController {
 
     if (vState.loadFrom == LoadFrom.gallery) {
       // 预载图片
-      // logger.v('页码切换时的回调 预载图片');
+      // logger.t('页码切换时的回调 预载图片');
       GalleryPara.instance
           .ehPrecacheImages(
         imageMap: _galleryPageStat?.imageMap,
@@ -401,7 +401,7 @@ class ViewExtController extends GetxController {
   /// 切换单页双页模式
   Future<void> switchColumnMode() async {
     vibrateUtil.light();
-    logger.v('切换单页双页模式');
+    logger.t('切换单页双页模式');
     late final int _toIndex;
     switch (vState.columnMode) {
       case ViewColumnMode.single:
@@ -522,7 +522,7 @@ class ViewExtController extends GetxController {
     image = _getImageFromImageTasks(itemSer, vState.dirPath);
     image ??= _getImageFromImageTasks(itemSer, vState.dirPath, reloadDB: true);
     if (image != null) {
-      logger.v('fetchImage ser:$itemSer 从下载记录中获取');
+      logger.t('fetchImage ser:$itemSer 从下载记录中获取');
       return image;
     }
 
@@ -749,7 +749,7 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> tapLeft() async {
-    logger.v('${vState.viewMode} tap left');
+    logger.t('${vState.viewMode} tap left');
     final enableAnimate = _ehConfigService.turnPageAnimations;
     vState.fade = false;
 
@@ -764,7 +764,7 @@ class ViewExtController extends GetxController {
     //     itemScrollController.isAttached &&
     //     !vState.isScrolling &&
     //     vState.pageIndex > 0) {
-    //   logger.v('${vState.minImageIndex}');
+    //   logger.t('${vState.minImageIndex}');
     //   itemScrollController.scrollTo(
     //     index: vState.minImageIndex - 1,
     //     duration: const Duration(milliseconds: 200),
@@ -784,7 +784,7 @@ class ViewExtController extends GetxController {
   }
 
   Future<void> tapRight() async {
-    logger.v('${vState.viewMode} tap right');
+    logger.t('${vState.viewMode} tap right');
     vState.fade = false;
     // if (vState.viewMode == ViewMode.LeftToRight &&
     //     vState.pageIndex < vState.filecount) {
@@ -1296,7 +1296,7 @@ class ViewExtController extends GetxController {
     Duration durationTime = const Duration(milliseconds: 200),
   }) {
     if (debounceTimer?.isActive ?? false) {
-      logger.v('timer.cancel');
+      logger.t('timer.cancel');
       debounceTimer?.cancel();
     }
 

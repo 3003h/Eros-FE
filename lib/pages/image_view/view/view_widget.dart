@@ -181,7 +181,7 @@ class ViewLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (debugLable != null && kDebugMode) {
-      logger.v('build ViewLoading $debugLable');
+      logger.t('build ViewLoading $debugLable');
     }
     final _loadWidget = _ViewLoadingCupertion(
       ser: ser,
@@ -243,7 +243,7 @@ class ImageExt extends GetView<ViewExtController> {
 
   @override
   Widget build(BuildContext context) {
-    logger.v('ser:$ser, url:$url');
+    logger.t('ser:$ser, url:$url');
 
     return ExtendedImage.network(
       url,
@@ -1340,7 +1340,7 @@ class _FutureThumblArchiveState extends State<FutureThumblArchive> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             final _data = snapshot.data;
-            logger.v('${_data.runtimeType}');
+            logger.t('${_data.runtimeType}');
             if (_data != null) {
               return ExtendedImage.file(
                 _data,
@@ -1411,7 +1411,7 @@ class _FutureThumblState extends State<FutureThumbl> {
             if (_image != null &&
                 _image.thumbUrl != null &&
                 _image.thumbUrl!.isNotEmpty) {
-              logger.v('${_image.ser}  ${_image.thumbUrl}');
+              logger.t('${_image.ser}  ${_image.thumbUrl}');
 
               if (_image.largeThumb ?? false) {
                 return EhNetworkImage(
@@ -1634,10 +1634,10 @@ Future<void> showSaveActionSheet(
                     logger.d('下载完成');
                     showToast(L10n.current.saved_successfully);
                   } on EhError catch (e, stack) {
-                    logger.e('下载失败', e, stack);
+                    logger.e('下载失败', error: e, stackTrace: stack);
                     showToast(e.message);
                   } catch (e, stack) {
-                    logger.e('下载失败', e, stack);
+                    logger.e('下载失败', error: e, stackTrace: stack);
                     showToast(e.toString());
                   } finally {
                     SmartDialog.dismiss();
@@ -1675,7 +1675,7 @@ Future<void> showShareActionSheet(
           actions: <Widget>[
             CupertinoActionSheetAction(
               onPressed: () async {
-                logger.v('重采样图片');
+                logger.t('重采样图片');
                 Get.back();
                 if (filePath != null && filePath.isNotEmpty) {
                   await Api.shareLocalImage(
@@ -1700,7 +1700,7 @@ Future<void> showShareActionSheet(
             if (!isLocal && origImageUrl != null && origImageUrl.isNotEmpty)
               CupertinoActionSheetAction(
                 onPressed: () async {
-                  logger.v('原图');
+                  logger.t('原图');
                   Get.back();
 
                   if (origImageUrl.isEmpty) {
@@ -1726,10 +1726,10 @@ Future<void> showShareActionSheet(
                     logger.d('下载完成');
                     // showToast(L10n.current.saved_successfully);
                   } on EhError catch (e, stack) {
-                    logger.e('下载失败', e, stack);
+                    logger.e('下载失败', error: e, stackTrace: stack);
                     showToast(e.message);
                   } catch (e, stack) {
-                    logger.e('下载失败', e, stack);
+                    logger.e('下载失败', error: e, stackTrace: stack);
                     showToast(e.toString());
                   } finally {
                     SmartDialog.dismiss();

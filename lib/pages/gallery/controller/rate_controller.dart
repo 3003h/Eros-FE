@@ -29,9 +29,9 @@ class RateController extends GetxController {
       return;
     }
 
-    logger.v('rating $rate');
-    logger.v('${_item?.apiuid} ${_item?.apikey}');
-    logger.v('${(rate * 2).round()}');
+    logger.t('rating $rate');
+    logger.t('${_item?.apiuid} ${_item?.apikey}');
+    logger.t('${(rate * 2).round()}');
     final Map<String, dynamic> rultMap = await Api.setRating(
       apikey: _item!.apikey ?? '',
       apiuid: _item!.apiuid ?? '',

@@ -38,7 +38,7 @@ class DefaultFetchListClient extends FetchListClient {
 
   @override
   Future<GalleryList?> fetch() async {
-    logger.v('DefaultFetchListClient fetchParams ${fetchParams.toString()}');
+    logger.t('DefaultFetchListClient fetchParams ${fetchParams.toString()}');
     return await getGallery(
       pageType: fetchParams.pageType,
       gid: fetchParams.gid,
@@ -167,7 +167,7 @@ class ToplistFetchListClient extends FetchListClient {
         ?.where((element) => tagController.needHide(element.simpleTags ?? []))
         .map((e) => e.gid);
     if (gidList != null && gidList.isNotEmpty) {
-      logger.v('${fetchParams.galleryListType} remove gallery $gidList');
+      logger.t('${fetchParams.galleryListType} remove gallery $gidList');
       result?.gallerys?.removeWhere((element) => gidList.contains(element.gid));
     }
 

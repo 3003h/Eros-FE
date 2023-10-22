@@ -125,7 +125,7 @@ class NavigatorUtil {
         MainNavigatorObserver().history.lastOrNull?.settings.name;
     late final String? _gid;
 
-    logger.v('topMainRoute $topMainRoute');
+    logger.t('topMainRoute $topMainRoute');
 
     // url跳转方式
     if (url != null && url.isNotEmpty) {
@@ -195,7 +195,7 @@ class NavigatorUtil {
       }
     } else {
       // item点击跳转方式
-      logger.v('goGalleryPage fromItem tabTag=$tabTag');
+      logger.t('goGalleryPage fromItem tabTag=$tabTag');
       _gid = galleryProvider?.gid;
 
       Get.replace(GalleryRepository(item: galleryProvider, tabTag: tabTag));
@@ -204,11 +204,11 @@ class NavigatorUtil {
       if (isLayoutLarge) {
         Get.find<ControllerTagService>().pushPageCtrl(gid: _gid);
 
-        logger.v('topSecondRoute: $topSecondRoute');
+        logger.t('topSecondRoute: $topSecondRoute');
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
           final curTag = pageCtrlTag;
-          logger.v(
+          logger.t(
               'curTag $curTag  isReg:${Get.isRegistered<GalleryPageController>(tag: curTag)}');
           if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
               Get.find<GalleryPageController>(tag: curTag).gState.gid == _gid) {

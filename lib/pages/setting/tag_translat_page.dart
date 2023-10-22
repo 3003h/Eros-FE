@@ -45,7 +45,7 @@ class ListViewTagTranslate extends StatelessWidget {
           await transController.updateDB();
           showToast('更新完成');
         } else {
-          logger.v('do not need update');
+          logger.t('do not need update');
         }
       } catch (e) {
         logger.e('更新翻译异常 $e');

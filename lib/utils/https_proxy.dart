@@ -145,13 +145,13 @@ class ClientConnectionHandler {
     } else {
       // debugPrint('${data.runtimeType}');
       final String hex = EHUtils.formatBytesAsHexString(data as Uint8List);
-      // logger.v(hex);
+      // logger.t(hex);
       // logger.d(EHUtils.stringToHex('e-hentai.org'));
       if (hex.contains(EHUtils.stringToHex('e-hentai.org')) ||
           hex.contains(EHUtils.stringToHex('exhentai.org')) ||
           hex.contains(EHUtils.stringToHex('ehgt.org')) ||
           hex.contains(EHUtils.stringToHex('hath.network'))) {
-        logger.v('client hello [$hex]');
+        logger.t('client hello [$hex]');
         // final String _newHex = hex.replaceFirst(
         //     EHUtils.stringToHex('e-hentai.org'),
         //     EHUtils.stringToHex('12345678.org'));
@@ -206,7 +206,7 @@ class ServerConnectionHandler {
     try {
       client?.add(data);
     } on Exception catch (e) {
-      logger.v('client has been shut down $e');
+      logger.t('client has been shut down $e');
       handler.closeSockets();
     }
   }

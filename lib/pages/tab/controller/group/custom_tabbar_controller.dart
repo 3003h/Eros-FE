@@ -68,7 +68,7 @@ class CustomTabbarController extends DefaultTabViewController {
   void onInit() {
     super.onInit();
 
-    logger.v('CustomProfile onInit');
+    logger.t('CustomProfile onInit');
 
     heroTag = EHRoutes.gallery;
 
@@ -261,7 +261,7 @@ class CustomTabbarController extends DefaultTabViewController {
   }
 
   void addProfile(CustomProfile profile) {
-    logger.v(' ${jsonEncode(profile)}');
+    logger.t(' ${jsonEncode(profile)}');
 
     final oriIndexOfSameUuid =
         profiles.indexWhere((element) => element.uuid == profile.uuid);
@@ -298,8 +298,8 @@ class CustomTabbarController extends DefaultTabViewController {
       return;
     }
     final listLocal = List<CustomProfile>.from(profiles);
-    logger.v('listLocal ${listLocal.length} \n${listLocal.map((e) => e.uuid)}');
-    logger.v('${jsonEncode(listLocal)} ');
+    logger.t('listLocal ${listLocal.length} \n${listLocal.map((e) => e.uuid)}');
+    logger.t('${jsonEncode(listLocal)} ');
 
     // 下载远程文件名列表 包含： 分组名 uuid 时间戳
     final listRemote = await webdavController.getRemoteGroupList();
@@ -309,7 +309,7 @@ class CustomTabbarController extends DefaultTabViewController {
       return;
     }
 
-    logger.v('listRemote size ${listRemote.length}');
+    logger.t('listRemote size ${listRemote.length}');
 
     // 比较远程和本地的差异
     // 合并列表
@@ -321,7 +321,7 @@ class CustomTabbarController extends DefaultTabViewController {
         )
         .toList()
         .toSet();
-    logger.v('diff ${diff.map((e) => e?.toJson())}');
+    logger.t('diff ${diff.map((e) => e?.toJson())}');
 
     // 本地分组中 编辑时间更靠后的
     final localNewer = listLocal.where(
@@ -335,7 +335,7 @@ class CustomTabbarController extends DefaultTabViewController {
         return (eLocal.lastEditTime ?? 0) > (_eRemote.lastEditTime ?? 0);
       },
     );
-    logger.v('localNewer count ${localNewer.length}');
+    logger.t('localNewer count ${localNewer.length}');
 
     // 远程 编辑时间更靠后的
     final remoteNewer = listRemote.where(
@@ -359,7 +359,7 @@ class CustomTabbarController extends DefaultTabViewController {
         return (eRemote.lastEditTime ?? 0) > (_eLocal.lastEditTime ?? 0);
       },
     );
-    logger.v('remoteNewer ${remoteNewer.map((e) => e.name).toList()}');
+    logger.t('remoteNewer ${remoteNewer.map((e) => e.name).toList()}');
 
     await _downloadProfiles(remoteNewer.toSet().toList());
 

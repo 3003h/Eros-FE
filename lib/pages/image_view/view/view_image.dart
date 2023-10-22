@@ -304,7 +304,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                     widget.imageSer, (int value) => value + 1,
                     ifAbsent: () => 1);
 
-                logger.v('${vState.errCountMap}');
+                logger.t('${vState.errCountMap}');
                 logger.d(
                     '${widget.imageSer} 重试 第 ${vState.errCountMap[widget.imageSer]} 次');
               }
@@ -346,7 +346,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onLongPress: () async {
-              logger.v('long press');
+              logger.t('long press');
               vibrateUtil.medium();
               final GalleryImage? _currentImage =
                   vState.pageState?.imageMap[widget.imageSer];
@@ -372,7 +372,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
   Widget _buildViewImageWidget() {
     final GalleryImage? _image = vState.pageState?.imageMap[widget.imageSer];
-    logger.v('_image ${_image?.toJson()}');
+    logger.t('_image ${_image?.toJson()}');
 
     if (_image?.hide ?? false) {
       return ViewAD(ser: widget.imageSer);
@@ -381,7 +381,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     if ((_image?.completeCache ?? false) && !(_image?.changeSource ?? false)) {
       // 图片文件已下载 加载显示本地图片文件
       if (_image?.tempPath?.isNotEmpty ?? false) {
-        logger.v('${widget.imageSer} filePath 不为空，加载图片文件');
+        logger.t('${widget.imageSer} filePath 不为空，加载图片文件');
         return fileImage(_image!.tempPath!);
       }
 
@@ -445,13 +445,13 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
   Widget _buildViewImageWidgetProvider() {
     final GalleryImage? _image = vState.pageState?.imageMap[widget.imageSer];
-    logger.v('_image ${_image?.toJson()}');
+    logger.t('_image ${_image?.toJson()}');
 
     if (_image?.hide ?? false) {
       return ViewAD(ser: widget.imageSer);
     }
 
-    logger.v('return FutureBuilder ser:${widget.imageSer}');
+    logger.t('return FutureBuilder ser:${widget.imageSer}');
     return FutureBuilder<GalleryImage?>(
         future: controller.imageFutureMap[widget.imageSer],
         builder: (context, snapshot) {
@@ -468,7 +468,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             }
 
             if (_image?.tempPath?.isNotEmpty ?? false) {
-              logger.v('tempPath file... ${_image?.tempPath}');
+              logger.t('tempPath file... ${_image?.tempPath}');
               return fileImage(_image!.tempPath!);
             }
 
@@ -490,7 +490,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                         image.copyWith(completeHeight: true),
                   );
 
-                  logger.v('upt _tmpImage ${_tmpImage.ser}');
+                  logger.t('upt _tmpImage ${_tmpImage.ser}');
                   Future.delayed(const Duration(milliseconds: 100)).then(
                       (value) => controller.update(
                           [idSlidePage, '$idImageListView${_image.ser}']));
@@ -516,7 +516,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               );
             }
 
-            logger.v('ImageExtProvider');
+            logger.t('ImageExtProvider');
             Widget image = ImageExtProvider(
               image: ExtendedResizeImage.resizeIfNeeded(
                 provider: ExtendedNetworkImageProvider(
@@ -582,7 +582,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       vState.errCountMap
           .update(widget.imageSer, (int value) => value + 1, ifAbsent: () => 1);
 
-      logger.v('${vState.errCountMap}');
+      logger.t('${vState.errCountMap}');
       logger.d(
           '${widget.imageSer} 重试 第 ${vState.errCountMap[widget.imageSer]} 次');
     }

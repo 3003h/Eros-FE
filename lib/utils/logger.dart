@@ -176,7 +176,7 @@ class _FileOutput extends LogOutput {
   IOSink? _sink;
 
   @override
-  void init() {
+  Future<void> init() async {
     _sink = file.openWrite(
       mode: overrideExisting ? FileMode.writeOnly : FileMode.writeOnlyAppend,
       encoding: encoding,
@@ -216,7 +216,7 @@ class _FileOutput extends LogOutput {
   }
 
   @override
-  void destroy() async {
+  Future<void> destroy() async {
     await _sink?.flush();
     await _sink?.close();
   }

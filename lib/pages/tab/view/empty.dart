@@ -11,7 +11,7 @@ class EmptyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.v('isDarkMode ${ehTheme.isDarkMode}');
+    logger.t('isDarkMode ${ehTheme.isDarkMode}');
     return Obx(() {
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: ehTheme.isDarkMode

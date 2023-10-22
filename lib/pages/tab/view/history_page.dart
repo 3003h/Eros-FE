@@ -41,7 +41,7 @@ class _HistoryTabState extends State<HistoryTab> {
 
   @override
   Widget build(BuildContext context) {
-    logger.v('build Historyview');
+    logger.t('build Historyview');
     final String _title = L10n.of(context).tab_history;
 
     bool isRefresh = false;

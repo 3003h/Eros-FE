@@ -130,7 +130,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
   }
 
   Widget _buildSearchRult(BuildContext context) {
-    // logger.v('_buildSearchRult');
+    // logger.t('_buildSearchRult');
     return SizeCacheWidget(
       child: CustomScrollView(
         // cacheExtent: context.height * 2,
@@ -218,7 +218,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
 
   Widget _buildSearchBar(
       BuildContext context, double offset, double maxExtentCallBackValue) {
-    // logger.v('offset $offset');
+    // logger.t('offset $offset');
     double iconOpacity = 0.0;
     final transparentOffset = maxExtentCallBackValue - 60;
     if (offset < transparentOffset) {
@@ -285,7 +285,7 @@ class _GallerySearchPageState extends State<GallerySearchPage> {
   }
 
   Widget _maxExtentProtoTypeBar(BuildContext context) {
-    // logger.v(' _maxExtentProtoTypeBar');
+    // logger.t(' _maxExtentProtoTypeBar');
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

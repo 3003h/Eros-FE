@@ -464,7 +464,7 @@ class _CommentUser extends StatelessWidget {
     });
 
     void tapName() {
-      logger.v('search uploader:$_name');
+      logger.t('search uploader:$_name');
       NavigatorUtil.goSearchPageWithParam(simpleSearch: 'uploader:$_name');
     }
 
@@ -701,7 +701,7 @@ void _showScoreDetail(List<String>? scores, BuildContext context) {
     return;
   }
   vibrateUtil.light();
-  logger.v(scores.join('   '));
+  logger.t(scores.join('   '));
   showCupertinoDialog(
     context: context,
     barrierDismissible: true,

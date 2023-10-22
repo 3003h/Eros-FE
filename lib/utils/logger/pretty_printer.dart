@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:logger/src/ansi_color.dart';
-import 'package:logger/src/log_printer.dart';
-import 'package:logger/src/logger.dart';
+import 'package:logger/logger.dart';
 
 class EhPrettyPrinter extends LogPrinter {
   // static const topLeftCorner = '┌';
@@ -281,7 +279,9 @@ class EhPrettyPrinter extends LogPrinter {
     }
 
     if (time != null) {
-      buffer..add(color('$verticalLine $time'))..add(color(_middleBorder));
+      buffer
+        ..add(color('$verticalLine $time'))
+        ..add(color(_middleBorder));
     }
 
     var emoji = _getEmoji(level);

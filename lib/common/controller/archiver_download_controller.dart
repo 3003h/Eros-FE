@@ -32,7 +32,7 @@ class ArchiverDownloadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    logger.v('ArchiverDownloadController onInit');
+    logger.t('ArchiverDownloadController onInit');
     bindBackgroundIsolate(updateTask);
 
     // 初始化 taskMap
@@ -67,20 +67,20 @@ class ArchiverDownloadController extends GetxController {
       bindBackgroundIsolate(callback);
       return;
     }
-    // logger.v('flutterDownloaderPort.listen');
+    // logger.t('flutterDownloaderPort.listen');
     _port.listen((dynamic data) {
-      // logger.v('update listen');
+      // logger.t('update listen');
       final dataList = data as List<dynamic>;
       String taskId = dataList[0] as String;
       DownloadTaskStatus status = dataList[1] as DownloadTaskStatus;
       int progress = dataList[2] as int;
 
-      logger.v('$taskId $status $progress%');
+      logger.t('$taskId $status $progress%');
 
       // 更新任务状态
       callback(taskId, status, progress);
     });
-    // logger.v('FlutterDownloader.registerCallback');
+    // logger.t('FlutterDownloader.registerCallback');
     FlutterDownloader.registerCallback(flutterDownloadCallback);
   }
 
@@ -97,7 +97,7 @@ class ArchiverDownloadController extends GetxController {
     final _key = archiverTaskMap.entries
         .firstWhereOrNull((element) => element.value.taskId == taskId)
         ?.key;
-    logger.v('updateTask _key $_key');
+    logger.t('updateTask _key $_key');
 
     if (_key == null) {
       return;
@@ -178,7 +178,7 @@ class ArchiverDownloadController extends GetxController {
       logger.d('copyFileToSAF success');
       return result?.uri;
     } catch (e, s) {
-      logger.e('copyFileToSAF', e, s);
+      logger.e('copyFileToSAF', error: e, stackTrace: s);
     } finally {
       tempFile.deleteSync();
     }
@@ -341,7 +341,7 @@ class ArchiverDownloadController extends GetxController {
   /// 不在 archiverDlMap 中的任务
   Future<void> _getArchiverTask() async {
     final List<DownloadTask> tasks = await FlutterDownloader.loadTasks() ?? [];
-    logger.v(
+    logger.t(
         'loadTasks \n${tasks.map((DownloadTask e) => e.toString().split(', ').join('\n')).join('\n----------\n')} ');
 
     for (final DownloadTask downloadTask in tasks) {

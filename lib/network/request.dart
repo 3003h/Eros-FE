@@ -47,7 +47,7 @@ Future<GalleryList?> getGallery({
   final AdvanceSearchController _searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
-  logger.v('globalSearch $globalSearch');
+  logger.t('globalSearch $globalSearch');
 
   late final String _url;
   switch (galleryListType) {
@@ -98,7 +98,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(gidOrTimeParams);
   }
 
-  logger.v('advanceSearch ${advanceSearch?.param}  refresh $refresh');
+  logger.t('advanceSearch ${advanceSearch?.param}  refresh $refresh');
 
   /// 高级搜索处理
   if (advanceSearch != null) {
@@ -115,7 +115,7 @@ Future<GalleryList?> getGallery({
     _params.addAll(_searchController.favSearchMap);
   }
 
-  logger.v('url:$_url $_params');
+  logger.t('url:$_url $_params');
 
   DioHttpResponse httpResponse = await dioHttpClient.get(
     _url,
@@ -217,7 +217,7 @@ Future<GalleryProvider?> getGalleryDetail({
     options: getCacheOptions(forceRefresh: refresh),
     cancelToken: cancelToken,
   );
-  logger.v('httpResponse.ok ${httpResponse.ok}');
+  logger.t('httpResponse.ok ${httpResponse.ok}');
   if (httpResponse.ok && httpResponse.data is GalleryProvider) {
     return httpResponse.data as GalleryProvider;
   } else {
@@ -243,7 +243,7 @@ Future<GalleryImage?> fetchImageInfo(
     if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
   };
 
-  logger.v('fetchImageInfo: href $href, refresh $refresh, sourceId $sourceId, '
+  logger.t('fetchImageInfo: href $href, refresh $refresh, sourceId $sourceId, '
       'debugLabel $debugLabel');
 
   String mpvSer = '1';
@@ -252,7 +252,7 @@ Future<GalleryImage?> fetchImageInfo(
     mpvSer = regGalleryMpvPageUrl.firstMatch(href)?.group(3) ?? '1';
   }
 
-  logger.v('url $href  isMpv:$isMpv');
+  logger.t('url $href  isMpv:$isMpv');
 
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
@@ -369,13 +369,13 @@ Future<String> postArchiverLocalDownload(
 
 Future<EhSettings?> getEhSettings(
     {bool refresh = false, String? selectProfile}) async {
-  logger.v('getEhSettings ${ehDioConfig.baseUrl}');
+  logger.t('getEhSettings ${ehDioConfig.baseUrl}');
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   const String url = '/uconfig.php';
 
   late DioHttpResponse httpResponse;
   for (int i = 0; i < 3; i++) {
-    logger.v('getUconfig sp:$selectProfile idx:$i');
+    logger.t('getUconfig sp:$selectProfile idx:$i');
     httpResponse = await dioHttpClient.get(
       url,
       httpTransformer: UconfigHttpTransformer(),
@@ -684,7 +684,7 @@ Future<void> ehDownload({
   } else {
     downloadUrl = url;
   }
-  logger.v('downloadUrl $downloadUrl');
+  logger.t('downloadUrl $downloadUrl');
   try {
     await dioHttpClient.download(
       downloadUrl,

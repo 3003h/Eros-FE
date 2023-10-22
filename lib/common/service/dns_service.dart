@@ -97,7 +97,7 @@ class DnsService extends ProfileService {
         _hosts[index] = _hosts[index].copyWith(addr: addr);
       }
 
-      logger.v('add $host => $addr');
+      logger.t('add $host => $addr');
       // notifyListeners();
       return true;
     } else {
