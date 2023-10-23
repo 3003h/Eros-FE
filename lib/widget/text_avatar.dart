@@ -8,7 +8,8 @@ const List<Color> kDefaultAvatarsColors = [
   Color(0xffEDB92E),
   Color(0xffF85931),
   Color(0xffCE1836),
-  Color(0xff009989)
+  Color(0xff009989),
+  Color(0xff0060B3),
 ];
 
 const kBorderWidth = 1.5;

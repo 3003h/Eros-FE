@@ -399,7 +399,7 @@ class _Title extends StatelessWidget {
           overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: const TextStyle(
             fontSize: 14.5,
-            fontWeight: FontWeight.w500,
+            // fontWeight: FontWeight.normal,
             // color: CupertinoColors.label,
           ),
         ));

@@ -1,13 +1,14 @@
 import 'package:fehviewer/common/colors.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import 'const.dart';
 
 final ehTextTheme = const CupertinoTextThemeData().copyWith(
-    textStyle: const CupertinoTextThemeData().textStyle.copyWith(
-          fontFamilyFallback: EHConst.fontFamilyFallback,
-        ));
+  textStyle: const CupertinoTextThemeData().textStyle.copyWith(
+        // fontFamily: EHConst.fontFamily,
+        fontFamilyFallback: EHConst.fontFamilyFallback,
+      ),
+);
 
 enum ThemesModeEnum {
   system,

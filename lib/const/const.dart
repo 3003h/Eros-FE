@@ -448,11 +448,23 @@ class EHConst {
     'vietnamese': 'VI',
   };
 
-  static final List<String> fontFamilyFallback = [
-    'miui',
-    // if (GetPlatform.isAndroid) 'SourceHanSansSC',
-    'sans-serif',
-  ];
+  static const String fontFamily = 'miui';
+
+  static final List<String> fontFamilyFallback = GetPlatform.isIOS
+      ? [
+          '.SF Pro Text',
+          'PingFang SC',
+          'Heiti SC',
+        ]
+      : [
+          // 'miui',
+          'Inter',
+          'Source Han Sans SC VF',
+          'Noto Sans CJK SC',
+          if (GetPlatform.isAndroid) 'Roboto',
+          if (GetPlatform.isAndroid) 'SourceHanSansSC',
+          'sans-serif',
+        ];
   static const List<String> monoFontFamilyFallback = [
     'monaco',
     'monospace',
