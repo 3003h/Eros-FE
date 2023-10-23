@@ -38,7 +38,7 @@ jobs:
             flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-ios
-            artifact_path: build/ios/ipa/*.ipa
+            artifact_path: build/**/*.ipa
           - target: macos
             os: macos-12
             flutter_version: '3.13'
@@ -55,7 +55,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
