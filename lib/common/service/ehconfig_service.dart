@@ -282,7 +282,7 @@ class EhConfigService extends ProfileService {
   set translateSearchHistory(bool val) => _translateSearchHistory.value = val;
 
   // nativeHttpClientAdapter
-  final _nativeHttpClientAdapter = true.obs;
+  final _nativeHttpClientAdapter = false.obs;
   bool get nativeHttpClientAdapter => _nativeHttpClientAdapter.value;
   set nativeHttpClientAdapter(bool val) => _nativeHttpClientAdapter.value = val;
 
