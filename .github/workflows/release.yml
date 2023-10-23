@@ -29,25 +29,25 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: '3.10'
+            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/*.apk
           - target: ios
             os: macos-12
-            flutter_version: '3.10'
+            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-ios
             artifact_path: build/ios/ipa/*.ipa
           - target: macos
             os: macos-12
-            flutter_version: '3.10'
+            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-mac
             artifact_path: build/macos/*.zip
           - target: windows
             os: windows-latest
-            flutter_version: '3.10'
+            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-windows
             artifact_path: build/windows/*.zip
@@ -140,26 +140,6 @@ jobs:
           echo "${{ secrets.ENCODED_GIT_CRYPT }}" | openssl base64 -d -out git-crypt.key
           .\git-crypt.exe unlock .\git-crypt.key
 
-      # 安装证书
-      - name: Install Apple Certificate
-        if: matrix.os == 'macos-12'
-        uses: apple-actions/import-codesign-certs@v1
-        with:
-          p12-file-base64: ${{ secrets.P12_BASE64 }}
-          p12-password: ${{ secrets.P12_PASSWORD }}
-
-      # 安装描述文件
-      - name: Install the provisioning profile
-        if: matrix.os == 'macos-12'
-        run: |
-          echo $PROVISIONING_CERTIFICATE_BASE64 | base64 -d -o $APP_DEV_PROVISION_PATH
-          app_dev_uuid=`grep UUID -A1 -a $APP_DEV_PROVISION_PATH | grep -io "[-A-F0-9]\{36\}"`
-          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp $APP_DEV_PROVISION_PATH ~/Library/MobileDevice/Provisioning\ Profiles/$app_dev_uuid.mobileprovision
-          ls ~/Library/MobileDevice/Provisioning\ Profiles
-        env:
-          PROVISIONING_CERTIFICATE_BASE64: ${{ secrets.PROVISIONING_PROFILE_BASE64 }}
-
       - name: Decode keystore
         if: matrix.target == 'android'
         run: |
@@ -218,14 +198,23 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD}}
 
       # 打包 ipa
-      - name: Build ipa
+      - name: Build ios app
         if: matrix.target == 'ios'
         run: |
-          sed -i '' 's/cn.dev.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
+          sed -i '' 's/dev2.cn.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
           cd ios && pod update && pod install && cd ..
-          flutter build ipa --export-options-plist=ExportOptions.plist
-          cd build/ios/ipa/
-          mv FEhViewer.ipa FEhViewer_${{ steps.get_version.outputs.version }}.ipa
+          flutter build ios --release --no-codesign
+      - name: Thin app
+        if: matrix.target == 'ios'
+        run: sh scripts/thin-payload.sh build/ios/iphoneos/*.app
+
+      - name: Build ipa file
+        if: matrix.target == 'ios'
+        run: |
+          cd build
+          mkdir -p Payload
+          mv ios/iphoneos/*.app Payload
+          zip -9 FEhViewer_${{ env.app_version }}.ipa -r Payload
 
       # 打包 mac
       - name: Build mac app

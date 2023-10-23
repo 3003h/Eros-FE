@@ -559,8 +559,8 @@ class TagItem extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             height: 1,
-            fontWeight:
-                backgrondColor == null ? FontWeight.w400 : FontWeight.w500,
+            // fontWeight:
+            //     backgrondColor == null ? FontWeight.w400 : FontWeight.w500,
             color: color ??
                 CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
           ),

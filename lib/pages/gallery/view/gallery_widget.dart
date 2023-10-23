@@ -547,7 +547,7 @@ class TagButton extends StatelessWidget {
                       CupertinoDynamicColor.resolve(
                           ThemeColors.tagText, context),
                   fontSize: 13,
-                  fontWeight: textColor != null ? FontWeight.w500 : null,
+                  // fontWeight: textColor != null ? FontWeight.w600 : null,
                   height: 1.3,
                 ),
                 strutStyle: const StrutStyle(height: 1),
