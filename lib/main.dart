@@ -114,13 +114,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangePlatformBrightness() {
     themeService.platformBrightness.value =
-        WidgetsBinding.instance.window.platformBrightness;
+        View.of(context).platformDispatcher.platformBrightness;
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state != AppLifecycleState.resumed) {
+    logger.d('state: $state');
+    _autoLockController.updateStat(state);
+    if (state == AppLifecycleState.paused) {
       // went to Background
       // loggerTime.d('paused');
       _autoLockController.paused();

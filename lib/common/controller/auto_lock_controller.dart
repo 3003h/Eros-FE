@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -67,7 +69,7 @@ class AutoLockController extends GetxController {
     if (!_isLocking) {
       resetLastLeaveTime();
       _isResumed = false;
-      logger.t('更新最后离开时间 $lastLeaveTime');
+      logger.d('更新最后离开时间 $lastLeaveTime');
     } else {
       logger.t('保持原离开时间 不更新');
     }
@@ -78,17 +80,18 @@ class AutoLockController extends GetxController {
     final subTime = nowTime - lastLeaveTime;
     final autoLockTimeOut = _ehConfigService.autoLockTimeOut.value;
 
-    final _needUnLock =
-        autoLockTimeOut >= 0 && (subTime / 1000 > autoLockTimeOut || forceLock);
-    logger
-        .v('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_needUnLock');
+    logger.d('now time ${nowTime}, lastLeaveTime: ${lastLeaveTime}');
 
-    if (_needUnLock && !_isResumed) {
+    final _locked =
+        autoLockTimeOut >= 0 && (subTime / 1000 > autoLockTimeOut || forceLock);
+    logger.d('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_locked');
+
+    if (_locked && !_isResumed) {
       _isLocking = true;
 
-      final rult = await Get.toNamed(EHRoutes.unlockPage);
-      if (rult is bool) {
-        final bool didAuthenticate = rult;
+      final result = await Get.toNamed(EHRoutes.unlockPage);
+      if (result is bool) {
+        final bool didAuthenticate = result;
         if (didAuthenticate) {
           localAuth.stopAuthentication();
           _isResumed = true;
@@ -97,4 +100,6 @@ class AutoLockController extends GetxController {
       }
     }
   }
+
+  void updateStat(AppLifecycleState state) {}
 }
