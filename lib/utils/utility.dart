@@ -327,8 +327,8 @@ Future<void> onOpenUrl({String? url}) async {
 
 Future<bool> _launchEhUrl(String? url) async {
   final String? _openUrl = Uri.encodeFull(url ?? '');
-  final RegExp regExp =
-      RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
+  final RegExp regExp = RegExp(
+      r'https?://e[-x]hentai.org/(g/[0-9]+/[0-9a-z]+|s/[0-9a-z]+/\d+-\d+)/?');
   if (regExp.hasMatch(_openUrl!)) {
     final String? _realUrl = regExp.firstMatch(_openUrl)?.group(0);
     logger.t('in $_realUrl');

@@ -344,8 +344,8 @@ class GalleryPageController extends GetxController
       builder: (context) {
         return CupertinoAlertDialog(
           // title: Text(L10n.of(context).jump_to_page),
-          // title: Text('${L10n.of(context).jump_to_page} $ser?'),
-          title: Text('Start reading on page $ser ?'),
+          title: Text('${L10n.of(context).jump_to_page} $ser?'),
+          // title: Text('Start reading on page $ser ?'),
           actions: [
             CupertinoDialogAction(
               child: Text(L10n.of(Get.context!).cancel),

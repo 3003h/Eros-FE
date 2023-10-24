@@ -132,9 +132,9 @@ class NavigatorUtil {
       logger.d('goGalleryPage fromUrl $url');
 
       final RegExp regGalleryUrl =
-          RegExp(r'https?://e[-x]hentai.org/g/([0-9]+)/[0-9a-z]+/?');
+          RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');
       final RegExp regGalleryPageUrl =
-          RegExp(r'https?://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+');
+          RegExp(r'https?://e[-x]hentai.org/s/[0-9a-z]+/\d+-\d+/?');
 
       if (regGalleryUrl.hasMatch(url)) {
         // url为画廊链接
