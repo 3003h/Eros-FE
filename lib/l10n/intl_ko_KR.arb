@@ -417,5 +417,7 @@
   "import_app_data": "Import App Data",
   "import_app_data_summary": "Import App Data From Backup File, need restart app",
   "webdav_max_connections": "WebDAV Max Connections",
-  "native_http_client_adapter": "Native HTTP Client Adapter"
+  "native_http_client_adapter": "Native HTTP Client Adapter",
+  "japanese_title_in_gallery": "Japanese Title in Gallery",
+  "japanese_title_in_gallery_summary": "Only effective in gallery page"
 }

@@ -176,6 +176,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "input_empty": MessageLookupByLibrary.simpleMessage("인풋 비어있음"),
         "input_error": MessageLookupByLibrary.simpleMessage("인풋 에러"),
         "instantly": MessageLookupByLibrary.simpleMessage("즉시"),
+        "japanese_title_in_gallery":
+            MessageLookupByLibrary.simpleMessage("Japanese Title in Gallery"),
+        "japanese_title_in_gallery_summary":
+            MessageLookupByLibrary.simpleMessage(
+                "Only effective in gallery page"),
         "jump_next": MessageLookupByLibrary.simpleMessage("Next"),
         "jump_or_seek": MessageLookupByLibrary.simpleMessage("Jump or Seek"),
         "jump_prev": MessageLookupByLibrary.simpleMessage("Prev"),

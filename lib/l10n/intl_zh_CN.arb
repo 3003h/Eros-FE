@@ -417,5 +417,7 @@
   "import_app_data": "导入应用数据",
   "import_app_data_summary": "从本地文件导入应用数据, 重启应用后生效",
   "webdav_max_connections": "WebDAV 最大连接数",
-  "native_http_client_adapter": "使用原生 HTTP 客户端"
+  "native_http_client_adapter": "使用原生 HTTP 客户端",
+  "japanese_title_in_gallery": "画廊页面显示日文标题",
+  "japanese_title_in_gallery_summary": "仅在画廊页面有效"
 }

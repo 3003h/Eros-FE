@@ -156,7 +156,7 @@ const GalleryImage kDefGalleryImage = GalleryImage(
 );
 
 const EhConfig kDefEhConfig = EhConfig(
-  jpnTitle: false,
+  jpnTitleInGalleryPage: false,
   tagTranslat: false,
   tagTranslatVer: '',
   favoritesOrder: '',

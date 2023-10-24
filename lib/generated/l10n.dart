@@ -4254,6 +4254,26 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Japanese Title in Gallery`
+  String get japanese_title_in_gallery {
+    return Intl.message(
+      'Japanese Title in Gallery',
+      name: 'japanese_title_in_gallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only effective in gallery page`
+  String get japanese_title_in_gallery_summary {
+    return Intl.message(
+      'Only effective in gallery page',
+      name: 'japanese_title_in_gallery_summary',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

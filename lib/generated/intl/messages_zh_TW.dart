@@ -165,6 +165,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "input_empty": MessageLookupByLibrary.simpleMessage("空白輸入"),
         "input_error": MessageLookupByLibrary.simpleMessage("輸入錯誤"),
         "instantly": MessageLookupByLibrary.simpleMessage("立即"),
+        "japanese_title_in_gallery":
+            MessageLookupByLibrary.simpleMessage("在畫廊中顯示日文標題"),
+        "japanese_title_in_gallery_summary":
+            MessageLookupByLibrary.simpleMessage(
+                "Only effective in gallery page"),
         "jump_next": MessageLookupByLibrary.simpleMessage("後面"),
         "jump_or_seek": MessageLookupByLibrary.simpleMessage("跳轉/搜尋"),
         "jump_prev": MessageLookupByLibrary.simpleMessage("前面"),

@@ -286,9 +286,21 @@ class EhConfigService extends ProfileService {
   bool get nativeHttpClientAdapter => _nativeHttpClientAdapter.value;
   set nativeHttpClientAdapter(bool val) => _nativeHttpClientAdapter.value = val;
 
+  // jpnTitleInGalleryPage
+  final _jpnTitleInGalleryPage = false.obs;
+  bool get jpnTitleInGalleryPage => _jpnTitleInGalleryPage.value;
+  set jpnTitleInGalleryPage(bool val) => _jpnTitleInGalleryPage.value = val;
+
   @override
   void onInit() {
     super.onInit();
+
+    // jpnTitleInGalleryPage
+    jpnTitleInGalleryPage =
+        ehConfig.jpnTitleInGalleryPage ?? jpnTitleInGalleryPage;
+    everProfile<bool>(_jpnTitleInGalleryPage, (val) {
+      ehConfig = ehConfig.copyWith(jpnTitleInGalleryPage: val);
+    });
 
     // nativeHttpClientAdapter
     nativeHttpClientAdapter =

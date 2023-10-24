@@ -99,13 +99,20 @@ class ListViewLayoutSetting extends StatelessWidget {
           );
         }),
       TextSwitchItem(
+        L10n.of(context).japanese_title_in_gallery,
+        desc: L10n.of(context).japanese_title_in_gallery_summary,
+        value: _ehConfigService.jpnTitleInGalleryPage,
+        onChanged: (val) => _ehConfigService.jpnTitleInGalleryPage = val,
+      ),
+      TextSwitchItem(
         L10n.of(context).hide_top_bar_on_scroll,
         value: _ehConfigService.hideTopBarOnScroll,
         onChanged: (val) => _ehConfigService.hideTopBarOnScroll = val,
+        hideDivider: !localeService.isLanguageCodeZh,
       ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
-          '画廊封面模糊',
+          '画廊列表封面模糊处理',
           value: _ehConfigService.isGalleryImgBlur.value,
           onChanged: _handleGalleryListImgBlurChanged,
           hideDivider: true,

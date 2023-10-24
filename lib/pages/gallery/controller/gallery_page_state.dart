@@ -99,42 +99,50 @@ class GalleryPageState {
   String get subTitle {
     // logger.d('${galleryProvider.japaneseTitle} ${galleryProvider.englishTitle}');
 
-    // if ((_ehConfigService.isJpnTitle.value) &&
-    //     (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
-    //   return galleryProvider?.englishTitle ?? '';
-    // } else {
-    //   return galleryProvider?.japaneseTitle ?? '';
-    // }
-
-    if (firstMainTitle == galleryProvider?.englishTitle) {
-      return galleryProvider?.japaneseTitle ?? '';
-    } else {
+    if ((_ehConfigService.jpnTitleInGalleryPage) &&
+        (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryProvider?.englishTitle ?? '';
+    } else {
+      return galleryProvider?.japaneseTitle ?? '';
     }
+
+    // if (_subTitle.value.isNotEmpty) {
+    //   return _subTitle.value;
+    // }
+    //
+    // if (firstMainTitle == galleryProvider?.englishTitle) {
+    //   _subTitle.value = galleryProvider?.japaneseTitle ?? '';
+    //   // return galleryProvider?.japaneseTitle ?? '';
+    // } else {
+    //   // return galleryProvider?.englishTitle ?? '';
+    //   _subTitle.value = galleryProvider?.englishTitle ?? '';
+    // }
+    //
+    // return _subTitle.value;
   }
 
   String firstMainTitle = '';
 
   // 根据设置的语言显示的标题
   String get mainTitle {
-    // if ((_ehConfigService.isJpnTitle.value) &&
-    //     (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
-    //   return galleryProvider?.japaneseTitle ?? '';
-    // } else {
-    //   return galleryProvider?.englishTitle ?? '';
-    // }
-
-    if (firstMainTitle.isEmpty) {
-      firstMainTitle = galleryProvider?.englishTitle ?? '';
-    }
-
-    if (firstMainTitle == galleryProvider?.englishTitle) {
-      return galleryProvider?.englishTitle ?? '';
+    if ((_ehConfigService.jpnTitleInGalleryPage) &&
+        (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
+      return galleryProvider?.japaneseTitle ?? '';
     } else {
-      return galleryProvider?.japaneseTitle ??
-          galleryProvider?.englishTitle ??
-          '';
+      return galleryProvider?.englishTitle ?? '';
     }
+
+    // if (firstMainTitle.isEmpty) {
+    //   firstMainTitle = galleryProvider?.englishTitle ?? '';
+    // }
+    //
+    // if (firstMainTitle == galleryProvider?.englishTitle) {
+    //   return galleryProvider?.englishTitle ?? '';
+    // } else {
+    //   return galleryProvider?.japaneseTitle ??
+    //       galleryProvider?.englishTitle ??
+    //       '';
+    // }
   }
 
   GalleryItemController? get itemController {
