@@ -443,7 +443,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_hath_local_host":
             MessageLookupByLibrary.simpleMessage("Hentai@Home 本地網路主機"),
         "uc_hath_local_host_desc": MessageLookupByLibrary.simpleMessage(
-            "    This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n    If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work."),
+            "This setting can be used if you have a H@H client running on your local network with the same public IP you browse the site with. Some routers are buggy and cannot route requests back to its own IP; this allows you to work around this problem.\n    If you are running the client on the same PC you browse from, use the loopback address (127.0.0.1:port). If the client is running on another computer on your network, use its local network IP. Some browser configurations prevent external web sites from accessing URLs with local network IPs, the site must then be whitelisted for this to work."),
         "uc_img_cussize_desc": MessageLookupByLibrary.simpleMessage(
             "While the site will automatically scale down images to fit your screen width, you can also manually restrict the maximum display size of an image. Like the automatic scaling, this does not resample the image, as the resizing is done browser-side. (0 = no limit)"),
         "uc_img_horiz": MessageLookupByLibrary.simpleMessage("水平的"),
@@ -476,11 +476,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_name_display": MessageLookupByLibrary.simpleMessage("顯示畫廊名稱"),
         "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
             "Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?"),
-        "uc_oi_0": MessageLookupByLibrary.simpleMessage("Nope"),
-        "uc_oi_1": MessageLookupByLibrary.simpleMessage("Yup, I can take it"),
+        "uc_oi_0":
+            MessageLookupByLibrary.simpleMessage("Prefer resampled images"),
+        "uc_oi_1":
+            MessageLookupByLibrary.simpleMessage("Prefer original images"),
         "uc_ori_image": MessageLookupByLibrary.simpleMessage("原圖"),
         "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
-            "Use original images instead of the resampled versions where applicable?"),
+            "使用原始图像而不是重采样版本？如果您选择的水平分辨率不同于上述的 \"自动\"，且相关图像较宽，或者原始图像大于 10MB（一年以上的图库为 4MB），则仍将使用重采样图像。"),
         "uc_parody": MessageLookupByLibrary.simpleMessage("二創來源"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("像素"),
         "uc_pn_0": MessageLookupByLibrary.simpleMessage("No"),
@@ -495,7 +497,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_rename": MessageLookupByLibrary.simpleMessage("重新命名"),
         "uc_res_res": MessageLookupByLibrary.simpleMessage("重採樣分辨率"),
         "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
-            "Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000."),
+            "Images are normally resampled to 1280 pixels of horizontal resolution for online viewing. You can select one of the above alternative resolutions."),
         "uc_sc_0":
             MessageLookupByLibrary.simpleMessage("On score hover or click"),
         "uc_sc_1": MessageLookupByLibrary.simpleMessage("Always"),

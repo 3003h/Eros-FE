@@ -2011,10 +2011,10 @@ class L10n {
     );
   }
 
-  /// `Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000.`
+  /// `Images are normally resampled to 1280 pixels of horizontal resolution for online viewing. You can select one of the above alternative resolutions.`
   String get uc_res_res_desc {
     return Intl.message(
-      'Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000.',
+      'Images are normally resampled to 1280 pixels of horizontal resolution for online viewing. You can select one of the above alternative resolutions.',
       name: 'uc_res_res_desc',
       desc: '',
       args: [],
@@ -2541,10 +2541,10 @@ class L10n {
     );
   }
 
-  /// `Use original images instead of the resampled versions where applicable?`
+  /// `Use original images instead of the resampled versions? Resampled images will still be used if you select a horizonal resolution different than "Auto" above and the image in question is wider, or if the original image is larger than 10 MiB (or 4 MiB for galleries older than one year).`
   String get uc_ori_image_desc {
     return Intl.message(
-      'Use original images instead of the resampled versions where applicable?',
+      'Use original images instead of the resampled versions? Resampled images will still be used if you select a horizonal resolution different than "Auto" above and the image in question is wider, or if the original image is larger than 10 MiB (or 4 MiB for galleries older than one year).',
       name: 'uc_ori_image_desc',
       desc: '',
       args: [],
@@ -3191,20 +3191,20 @@ class L10n {
     );
   }
 
-  /// `Nope`
+  /// `Prefer resampled images`
   String get uc_oi_0 {
     return Intl.message(
-      'Nope',
+      'Prefer resampled images',
       name: 'uc_oi_0',
       desc: '',
       args: [],
     );
   }
 
-  /// `Yup, I can take it`
+  /// `Prefer original images`
   String get uc_oi_1 {
     return Intl.message(
-      'Yup, I can take it',
+      'Prefer original images',
       name: 'uc_oi_1',
       desc: '',
       args: [],

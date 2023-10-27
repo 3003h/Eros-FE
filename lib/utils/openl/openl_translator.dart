@@ -77,5 +77,6 @@ class OpenLTranslator {
         return service;
       }
     }
+    return null;
   }
 }

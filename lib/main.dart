@@ -120,7 +120,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    logger.d('state: $state');
+    logger.t('state: $state');
     _autoLockController.updateStat(state);
     if (state == AppLifecycleState.paused) {
       // went to Background

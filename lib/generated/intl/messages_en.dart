@@ -545,11 +545,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Gallery Name Display"),
         "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
             "Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?"),
-        "uc_oi_0": MessageLookupByLibrary.simpleMessage("Nope"),
-        "uc_oi_1": MessageLookupByLibrary.simpleMessage("Yup, I can take it"),
+        "uc_oi_0":
+            MessageLookupByLibrary.simpleMessage("Prefer resampled images"),
+        "uc_oi_1":
+            MessageLookupByLibrary.simpleMessage("Prefer original images"),
         "uc_ori_image": MessageLookupByLibrary.simpleMessage("Original Images"),
         "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
-            "Use original images instead of the resampled versions where applicable?"),
+            "Use original images instead of the resampled versions? Resampled images will still be used if you select a horizonal resolution different than \"Auto\" above and the image in question is wider, or if the original image is larger than 10 MiB (or 4 MiB for galleries older than one year)."),
         "uc_parody": MessageLookupByLibrary.simpleMessage("parody"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
         "uc_pn_0": MessageLookupByLibrary.simpleMessage("No"),
@@ -565,7 +567,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_res_res":
             MessageLookupByLibrary.simpleMessage("Resample Resolution"),
         "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
-            "Normally, images are resampled to 1280 pixels of horizontal resolution for online viewing. You can alternatively select one of the following resample resolutions. To avoid murdering the staging servers, resolutions above 1280x are temporarily restricted to donators, people with any hath perk, and people with a UID below 3,000,000."),
+            "Images are normally resampled to 1280 pixels of horizontal resolution for online viewing. You can select one of the above alternative resolutions."),
         "uc_sc_0":
             MessageLookupByLibrary.simpleMessage("On score hover or click"),
         "uc_sc_1": MessageLookupByLibrary.simpleMessage("Always"),

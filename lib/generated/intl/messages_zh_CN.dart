@@ -444,11 +444,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_name_display": MessageLookupByLibrary.simpleMessage("图库的名字显示"),
         "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
             "很多图库都同时拥有英文或者日文标题，你想默认显示哪一个？"),
-        "uc_oi_0": MessageLookupByLibrary.simpleMessage("否"),
-        "uc_oi_1": MessageLookupByLibrary.simpleMessage("好的，我可以接受更多的配额消耗"),
+        "uc_oi_0": MessageLookupByLibrary.simpleMessage("优先重新采样图像"),
+        "uc_oi_1": MessageLookupByLibrary.simpleMessage("优先原图"),
         "uc_ori_image": MessageLookupByLibrary.simpleMessage("原始图像"),
-        "uc_ori_image_desc":
-            MessageLookupByLibrary.simpleMessage("当可用的时候，使用原始图像代替压缩过的版本?"),
+        "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
+            "使用原始图像而不是重采样版本？如果您选择的水平分辨率不同于上述的 \"自动\"，且相关图像较宽，或者原始图像大于 10MB（一年以上的图库为 4MB），则仍将使用重采样图像。"),
         "uc_parody": MessageLookupByLibrary.simpleMessage("原作"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("像素"),
         "uc_pn_0": MessageLookupByLibrary.simpleMessage("否"),
@@ -463,7 +463,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_rename": MessageLookupByLibrary.simpleMessage("重命名"),
         "uc_res_res": MessageLookupByLibrary.simpleMessage("重新采样分辨率"),
         "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
-            "通常情况，图像将重采样到 1280 像素宽度以用于在线浏览，您也可以选择以下重新采样分辨率。但是为了避免负载过高，高于 1280 像素将只供给于赞助者、特殊贡献者，以及 UID 小于 3,000,000 的用户。"),
+            "图像通常会重新取样为 1280 像素的水平分辨率，以便在线查看。您可以选择以上分辨率。"),
         "uc_sc_0": MessageLookupByLibrary.simpleMessage("悬停或点击时"),
         "uc_sc_1": MessageLookupByLibrary.simpleMessage("总是"),
         "uc_search_r_count": MessageLookupByLibrary.simpleMessage("搜索结果数"),

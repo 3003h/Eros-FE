@@ -182,6 +182,11 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         child: _buildImageSizeItem(context, hideLine: true),
       ),
       GroupItem(
+        // title: 'Original Images',
+        desc: L10n.of(context).uc_ori_image_desc,
+        child: _buildOriginalImages(context, hideLine: true),
+      ),
+      GroupItem(
         desc: L10n.of(context).uc_img_cussize_desc,
         child: Column(
           children: [
@@ -218,11 +223,11 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         desc: L10n.of(context).uc_rating_desc,
         child: _buildRatingsItem(context, hideLine: true),
       ),
-      GroupItem(
-        title: L10n.of(context).uc_tag_namesp,
-        child: _buildTagNamespaces(context),
-        desc: L10n.of(context).uc_xt_desc,
-      ),
+      // GroupItem(
+      //   title: L10n.of(context).uc_tag_namesp,
+      //   child: _buildTagNamespaces(context),
+      //   desc: L10n.of(context).uc_xt_desc,
+      // ),
       GroupItem(
         child: _buildTagFilteringThreshold(context),
         desc: L10n.of(context).uc_tag_ft_desc,
@@ -294,11 +299,6 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
       //   child: _buildHatHLocalNetworkHost(context),
       //   desc: L10n.of(context).uc_hath_local_host_desc,
       // ),
-      GroupItem(
-        // title: 'Original Images',
-        desc: L10n.of(context).uc_ori_image_desc,
-        child: _buildOriginalImages(context, hideLine: true),
-      ),
       GroupItem(
         title: L10n.of(context).uc_mpv,
         child: Column(

@@ -578,12 +578,14 @@ class MessageLookup extends MessageLookupByLibrary {
             "Отображение названия галереи"),
         "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
             "Многие галереи имеют как английское/латинизированное название, так и название, написанное японским шрифтом. Какое название галереи вы хотели бы видеть по умолчанию?"),
-        "uc_oi_0": MessageLookupByLibrary.simpleMessage("Неа"),
-        "uc_oi_1": MessageLookupByLibrary.simpleMessage("Yup, I can take it"),
+        "uc_oi_0":
+            MessageLookupByLibrary.simpleMessage("Prefer resampled images"),
+        "uc_oi_1":
+            MessageLookupByLibrary.simpleMessage("Prefer original images"),
         "uc_ori_image":
             MessageLookupByLibrary.simpleMessage("Исходные изображения"),
         "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
-            "Использовать исходные изображения вместо сжатых, где это применимо?"),
+            "Use original images instead of the resampled versions? Resampled images will still be used if you select a horizonal resolution different than \"Auto\" above and the image in question is wider, or if the original image is larger than 10 MiB (or 4 MiB for galleries older than one year)."),
         "uc_parody": MessageLookupByLibrary.simpleMessage("parody"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
         "uc_pn_0": MessageLookupByLibrary.simpleMessage("Нет"),
@@ -598,7 +600,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_rename": MessageLookupByLibrary.simpleMessage("Переименовать"),
         "uc_res_res": MessageLookupByLibrary.simpleMessage("Сжатие"),
         "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
-            "Обычно изображения сжимаются до 1280 пикселей по горизонтали для просмотра в режиме онлайн. В качестве альтернативы вы можете выбрать одно из следующих разрешений. Чтобы избежать нагрузки на сервера, разрешение выше 1280x доступно лишь для донатеров, владельцев hath perk и людей с UID ниже 3 000 000"),
+            "Images are normally resampled to 1280 pixels of horizontal resolution for online viewing. You can select one of the following alternative resolutions."),
         "uc_sc_0":
             MessageLookupByLibrary.simpleMessage("При наведении или нажатии"),
         "uc_sc_1": MessageLookupByLibrary.simpleMessage("Всегда"),

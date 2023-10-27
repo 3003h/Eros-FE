@@ -80,11 +80,11 @@ class AutoLockController extends GetxController {
     final subTime = nowTime - lastLeaveTime;
     final autoLockTimeOut = _ehConfigService.autoLockTimeOut.value;
 
-    logger.d('now time ${nowTime}, lastLeaveTime: ${lastLeaveTime}');
+    logger.t('now time ${nowTime}, lastLeaveTime: ${lastLeaveTime}');
 
     final _locked =
         autoLockTimeOut >= 0 && (subTime / 1000 > autoLockTimeOut || forceLock);
-    logger.d('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_locked');
+    logger.t('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_locked');
 
     if (_locked && !_isResumed) {
       _isLocking = true;
