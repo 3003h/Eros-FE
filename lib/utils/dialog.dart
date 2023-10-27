@@ -63,7 +63,9 @@ Future<Uri?> showSAFPermissionRequiredDialog({
       return await _showDialog();
     }
   } else {
-    return await _showDialog();
+    if (!(await ss.isPersistedUri(uri))) {
+      return await _showDialog();
+    }
   }
   return null;
 }

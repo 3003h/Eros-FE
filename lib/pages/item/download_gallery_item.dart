@@ -118,6 +118,24 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         final dirPath = gTask.realDirPath;
 
         if (dirPath?.isContentUri ?? false) {
+          if (dirPath != null) {
+            logger.t('^^^^ before read, dirPath: $dirPath');
+
+            late final String parentPath;
+            if (dirPath.contains('/document/primary')) {
+              parentPath = dirPath.substring(
+                  0, dirPath.lastIndexOf('/document/primary'));
+            } else {
+              parentPath = dirPath.substring(0, dirPath.lastIndexOf('%2F'));
+            }
+
+            logger.t('^^^^ before read, parentPath: $parentPath');
+
+            if (parentPath.isNotEmpty) {
+              await showSAFPermissionRequiredDialog(uri: Uri.parse(parentPath));
+            }
+          }
+
           pics = imageTasks
               .where((element) =>
                   element.filePath != null && element.filePath!.isNotEmpty)
