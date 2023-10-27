@@ -6,22 +6,18 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:executor/executor.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehconfig_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/component/quene_task/quene_task.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/saf_helper.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -884,9 +880,14 @@ class DownloadController extends GetxController {
     if (Platform.isAndroid) {
       final String checkUri = uri ?? ehConfigService.downloadLocatino;
       Future<void> openDocumentTree() async {
+        // final uri =
+        //     await ss.openDocumentTree(initialUri: Uri.tryParse(checkUri));
+
         final uri =
-            await ss.openDocumentTree(initialUri: Uri.tryParse(checkUri));
+            await showSAFPermissionRequiredDialog(uri: Uri.parse(checkUri));
+
         logger.d('uri $uri');
+
         if (uri != null && saveDownloadPath) {
           ehConfigService.downloadLocatino = uri.toString();
         }
@@ -902,6 +903,9 @@ class DownloadController extends GetxController {
           await openDocumentTree();
         }
       }
+
+      // await showSAFPermissionRequiredDialog(uri: Uri.parse(checkUri));
+
       // await safCreateDirectory(Uri.parse(checkUri));
     }
   }

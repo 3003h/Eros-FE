@@ -260,9 +260,14 @@ class ArchiverDownloadController extends GetxController {
       logger.d('domFile name:${domFile?.name}, type:${domFile?.type}');
       if (domFile == null) {
         final parentUri = Uri.parse(customDownloadPath);
+        logger.d('parentUri $parentUri');
+
+        // loop until the user grants permission
+        await showSAFPermissionRequiredDialog(loop: true, uri: parentUri);
+
         final result = await ss.createDirectory(parentUri, 'Archiver');
         logger.d('create dir result ${result?.uri}');
-        return result?.uri.toString() ?? '';
+        dirPath = result?.uri.toString() ?? '';
       } else {
         dirPath = domFile.uri.toString();
       }

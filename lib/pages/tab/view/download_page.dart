@@ -6,6 +6,7 @@ import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -74,21 +75,23 @@ class _DownloadTabState extends State<DownloadTab> {
       navigationBar: CupertinoNavigationBar(
         padding: const EdgeInsetsDirectional.only(end: 16),
         middle: middle,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                CupertinoIcons.arrow_up_arrow_down_square_fill,
-                size: 28,
-              ),
-              onPressed: _showExportDialog,
-            ),
-          ],
-        ),
+        trailing: !kReleaseMode
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CupertinoButton(
+                    minSize: 40,
+                    padding: const EdgeInsets.all(0),
+                    child: const Icon(
+                      CupertinoIcons.arrow_up_arrow_down_square_fill,
+                      size: 28,
+                    ),
+                    onPressed: _showExportDialog,
+                  ),
+                ],
+              )
+            : null,
       ),
       child: PageView(
         controller: pageController,

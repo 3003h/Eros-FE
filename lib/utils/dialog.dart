@@ -1,6 +1,7 @@
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:shared_storage/shared_storage.dart' as ss;
 
 Future<T?> showSimpleEhDiglog<T>({
   required BuildContext context,
@@ -9,6 +10,7 @@ Future<T?> showSimpleEhDiglog<T>({
   String? contentText,
   Widget? content,
   TextAlign textAlign = TextAlign.start,
+  bool autoClose = true,
 }) async {
   return await showCupertinoDialog<T>(
       context: context,
@@ -28,11 +30,40 @@ Future<T?> showSimpleEhDiglog<T>({
             CupertinoDialogAction(
               child: Text(L10n.of(context).ok),
               onPressed: () {
-                Get.back();
-                onOk?.call();
+                if (autoClose) {
+                  Get.back();
+                }
+                return onOk?.call();
               },
             ),
           ],
         );
       });
+}
+
+Future<Uri?> showSAFPermissionRequiredDialog({
+  bool loop = false,
+  required Uri uri,
+  String contentText = 'Please grant permission to access the path',
+}) async {
+  Future<Uri?> _showDialog() async {
+    return await showSimpleEhDiglog<Uri?>(
+      context: Get.overlayContext!,
+      contentText: contentText,
+      autoClose: false,
+      onOk: () async {
+        final resultUri = await ss.openDocumentTree(initialUri: uri);
+        Get.back(result: resultUri);
+      },
+    );
+  }
+
+  if (loop) {
+    while (!(await ss.isPersistedUri(uri))) {
+      return await _showDialog();
+    }
+  } else {
+    return await _showDialog();
+  }
+  return null;
 }
