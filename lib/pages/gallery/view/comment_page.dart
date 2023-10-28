@@ -1,12 +1,9 @@
-import 'dart:ui';
-
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -171,7 +168,7 @@ class _CommentPageState extends State<CommentPage>
                   // FontAwesomeIcons.solidCheckCircle,
                   size: 24,
                 ),
-                onPressed: controller.pressCancle,
+                onPressed: controller.pressCancel,
               )
             ],
           );

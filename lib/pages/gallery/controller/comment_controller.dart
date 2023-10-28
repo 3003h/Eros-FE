@@ -386,7 +386,7 @@ class CommentController extends GetxController {
   Future<void> _postComment(String comment,
       {bool isEdit = false, String? commentId}) async {
     logger.d('_postComment\n$comment');
-    // final bool rult = await Api.postComment(
+    // final bool result = await Api.postComment(
     //   gid: pageController.gid,
     //   token: pageController.galleryProvider?.token ?? '',
     //   comment: comment,
@@ -394,10 +394,10 @@ class CommentController extends GetxController {
     //   isEdit: isEdit,
     // );
     //
-    // if (rult) {
+    // if (result) {
     //   await pageController.handOnRefresh();
     // }
-    final rult = await postComment(
+    final result = await postComment(
       gid: _pageState.gid,
       token: _pageState.galleryProvider?.token ?? '',
       comment: comment,
@@ -405,7 +405,7 @@ class CommentController extends GetxController {
       isEdit: isEdit,
     );
 
-    if (rult ?? false) {
+    if (result ?? false) {
       logger.d('_postComment handOnRefresh');
       await pageController.handOnRefresh();
     }
@@ -428,7 +428,7 @@ class CommentController extends GetxController {
           isEdit: editState == EditState.editComment,
           commentId: commentId,
         );
-        pressCancle();
+        pressCancel();
         // await Future.delayed(const Duration(seconds: 3));
         logger.t('_postComment $comment');
       },
@@ -462,12 +462,12 @@ class CommentController extends GetxController {
         commentId: commentId,
       );
     } finally {
-      pressCancle();
+      pressCancel();
       SmartDialog.dismiss();
     }
   }
 
-  void pressCancle() {
+  void pressCancel() {
     oriComment = '';
     commentTextController.clear();
     editState = EditState.newComment;

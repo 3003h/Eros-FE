@@ -783,11 +783,11 @@ Future<bool?> postComment({
     httpTransformer: HttpTransformerBuilder(
       (response) {
         logger.d('statusCode ${response.statusCode}');
-        return DioHttpResponse<bool>.success(response.statusCode == 302);
+        return DioHttpResponse<bool>.success(response.statusCode == 200);
       },
     ),
     options: getCacheOptions(forceRefresh: true)
-      ..followRedirects = false
+      ..followRedirects = true
       ..validateStatus = (status) => (status ?? 0) < 500,
   );
 
