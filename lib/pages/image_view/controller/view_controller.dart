@@ -820,13 +820,13 @@ class ViewExtController extends GetxController {
     if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
-        vState.pageIndex < vState.filecount) {
+        vState.pageIndex < vState.filecount - 1) {
       itemScrollController.scrollTo(
         index: vState.minImageIndex + 1,
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
       );
-    } else if (vState.pageIndex < vState.filecount) {
+    } else if (vState.pageIndex < vState.filecount - 1) {
       final toPage = vState.pageIndex + 1;
       changePage(toPage);
     }
