@@ -168,13 +168,24 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   // 获取主色
   final dColor = paletteGenerator.darkMutedColor?.color ?? Colors.black;
 
-  final backgroundImage =
-      pimage.Image(image.width, (image.width * 4 / 3).round()).fill(
-    pimage.Color.fromRgba(dColor.red, dColor.green, dColor.blue, dColor.alpha),
+  final backgroundImage = pimage.Image(
+    image.width,
+    (image.width * 4 / 3).round(),
+  ).fill(
+    pimage.Color.fromRgba(
+      dColor.red,
+      dColor.green,
+      dColor.blue,
+      dColor.alpha,
+    ),
   );
 
   final pimage.Image cover = pimage.copyResize(
-      pimage.copyInto(backgroundImage, image, center: true),
+      pimage.copyInto(
+        backgroundImage,
+        image,
+        center: true,
+      ),
       width: 1200);
 
   logger.d('${cover.width} ${cover.height}');
@@ -182,6 +193,7 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   final List<int> coverImage = name.endsWith('.jpg') || name.endsWith('.jpeg')
       ? pimage.encodeJpg(cover, quality: 80)
       : pimage.encodeNamedImage(cover, name)!;
+
   File(path.join(resourcesPath, coverName)).writeAsBytesSync(coverImage);
 
   // 模板操作

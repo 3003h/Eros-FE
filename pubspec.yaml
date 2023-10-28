@@ -55,7 +55,7 @@ dependencies:
   # 分享
   share_plus: ^7.2.1
   # 权限检查
-  permission_handler: ^10.0.0
+  permission_handler: ^11.0.0
   # 缓存
   flutter_cache_manager: ^3.0.2
   # 图片保存
@@ -99,7 +99,7 @@ dependencies:
   synchronized: ^3.0.0
   isolate_handler: ^1.0.0
   worker_manager: ^6.0.1
-  collection: ^1.15.0
+  collection: ^1.17.0
   zoom_widget: ^2.0.0
   english_words: ^4.0.0
   scroll_to_index: ^3.0.1
@@ -115,16 +115,14 @@ dependencies:
       url: https://github.com/honjow/learning.git
       path: packages/learning_language
   encrypt: ^5.0.1
-#  wakelock: ^0.6.1+1
   wakelock_plus: ^1.1.1
   jinja: ^0.5.0
   image: ^3.0.8
   palette_generator: ^0.3.2
   getwidget: ^4.0.0
-#  open_file: ^3.2.1
   open_filex: ^4.1.1
   flustars: ^2.0.1
-  dio_smart_retry: ^5.0.0
+  dio_smart_retry: ^6.0.0
   flutter_smart_dialog: ^4.5.4
   system_proxy: ^0.1.0
   easy_animated_tabbar: ^0.0.1
@@ -144,7 +142,7 @@ dependencies:
   archive_async:
     git:
       url: https://github.com/xioxin/archive_async.git
-  image_compare: ^1.1.2
+#  image_compare: ^1.1.2
   isolate: ^2.1.1
   octo_image: ^2.0.0
   google_mlkit_barcode_scanning: ^0.9.0
@@ -185,10 +183,10 @@ dependencies:
   extended_nested_scroll_view: ^6.0.0
   shared_storage: ^0.8.0
   mime: ^1.0.2
-  saf: ^1.0.3+4
+#  saf: ^1.0.3+4 # TODO 使用这个包重写SAF部分
   flutter_widget_from_html_core: ^0.14.4
-  quiver: ^3.1.0
-  native_dio_adapter: ^1.0.0
+  quiver: ^3.1.0 # 工具库
+  native_dio_adapter: ^1.0.0+2
 
 dev_dependencies:
   # flutter pub run build_runner build --delete-conflicting-outputs
@@ -205,20 +203,20 @@ dev_dependencies:
   copy_with_extension_gen: ^5.0.0
 
   # git hook 相关
-  process_run: ^0.13.0
-  git_hooks: ^1.0.0
+#  process_run: ^0.13.0
 
-  isar_generator: ^3.0.0-dev.8
+  git_hooks: ^1.0.0
+  isar_generator: ^3.0.0
+  flutter_lints: ^3.0.0
 
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
 
 dependency_overrides:
-#  json_serializable: ^6.0.1
-#  analyzer: ^4.0.0
-#  ffi: ^2.0.0
-  string_scanner: ^1.2.0
+#  permission_handler: ^11.0.0
+#  image: ^4.1.3
+  collection: ^1.18.0
+  cronet_http: ^0.4.0
   win32: ^4.0.0
 
 flutter_intl:

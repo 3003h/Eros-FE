@@ -94,7 +94,7 @@ class AppDio with DioMixin implements Dio {
     // RetryInterceptor
     interceptors.add(RetryInterceptor(
       dio: this,
-      logPrint: logger.v, // specify log function (optional)
+      logPrint: logger.t, // specify log function (optional)
       retries: 3, // retry count (optional)
       retryDelays: const [
         // set delays between retries (optional)
