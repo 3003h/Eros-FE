@@ -45,9 +45,6 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
 
     defaultConfig {
         applicationId "com.honjow.fehviewer"
@@ -101,6 +98,10 @@ android {
             minifyEnabled true
             shrinkResources true
         }
+    }
+    namespace 'com.honjow.fehviewer'
+    lint {
+        disable 'InvalidPackage'
     }
 }
 

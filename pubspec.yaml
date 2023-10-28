@@ -18,7 +18,7 @@ dependencies:
   cupertino_icons: ^1.0.3
 
   intl: ^0.18.0
-  font_awesome_flutter: ^10.1.0
+  font_awesome_flutter: ^10.4.0
 #  line_icons: ^2.0.1
 
   # 网络请求
@@ -50,7 +50,8 @@ dependencies:
     git:
       url: https://github.com/honjow/flutter_egg.git
   # 从分享菜单打开
-  receive_sharing_intent: ^1.4.5
+  receive_sharing_intent: #^1.4.5
+    git: https://github.com/Nahrawene-ben-hmida/receive_sharing_intent
   # 分享
   share_plus: ^7.2.1
   # 权限检查
@@ -170,7 +171,10 @@ dependencies:
       url: https://github.com/honjow/flutter_android_volume_keydown.git
       ref: dev
   sentry_flutter: ^7.4.0
-  system_network_proxy: ^1.0.2
+  system_network_proxy: #^1.0.2
+    git:
+      url: https://github.com/honjow/system_network_proxy.git
+      path: system_network_proxy
   flutter_socks_proxy: ^0.0.2
   gesture_zoom_box: ^0.0.4
   rotated_corner_decoration: ^2.0.0

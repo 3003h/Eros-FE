@@ -1625,11 +1625,12 @@ packages:
   receive_sharing_intent:
     dependency: "direct main"
     description:
-      name: receive_sharing_intent
-      sha256: "912bebb551bce75a14098891fd750305b30d53eba0d61cc70cd9973be9866e8d"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.4.5"
+      path: "."
+      ref: HEAD
+      resolved-ref: "6ad8f582d7bc7e2fd5a258399e7dbe8c39245d32"
+      url: "https://github.com/Nahrawene-ben-hmida/receive_sharing_intent"
+    source: git
+    version: "1.4.6"
   reorderables:
     dependency: "direct main"
     description:
@@ -1918,10 +1919,11 @@ packages:
   system_network_proxy:
     dependency: "direct main"
     description:
-      name: system_network_proxy
-      sha256: d24394993d60150918d00f8fd1fe940e37faaa602dbd790eb5cc8858d3309e83
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: system_network_proxy
+      ref: HEAD
+      resolved-ref: "2be220557ac039118c2039bd58ef1a16b3c8aeae"
+      url: "https://github.com/honjow/system_network_proxy.git"
+    source: git
     version: "1.0.2"
   system_network_proxy_linux:
     dependency: transitive
