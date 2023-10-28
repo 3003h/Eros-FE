@@ -522,7 +522,7 @@ class ViewExtController extends GetxController {
     image = _getImageFromImageTasks(itemSer, vState.dirPath);
     image ??= _getImageFromImageTasks(itemSer, vState.dirPath, reloadDB: true);
     if (image != null) {
-      logger.t('fetchImage ser:$itemSer 从下载记录中获取');
+      logger.d('fetchImage ser:$itemSer 从下载记录中获取');
       return image;
     }
 

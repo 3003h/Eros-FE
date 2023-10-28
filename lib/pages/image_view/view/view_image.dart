@@ -350,12 +350,16 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               vibrateUtil.medium();
               final GalleryImage? _currentImage =
                   vState.pageState?.imageMap[widget.imageSer];
+
+              logger.d('_currentImage ${_currentImage?.toJson()}');
+
+              // TODO(3003h): 对于已下载的图片，保存到相册时，从已下载读取.
               showImageSheet(
                 context,
                 () =>
                     controller.reloadImage(widget.imageSer, changeSource: true),
                 imageUrl: _currentImage?.imageUrl ?? '',
-                filePath: _currentImage?.filePath,
+                filePath: _currentImage?.filePath ?? _currentImage?.tempPath,
                 origImageUrl: _currentImage?.originImageUrl,
                 title: '${vState.pageState?.mainTitle} [${widget.imageSer}]',
                 ser: widget.imageSer,
@@ -461,16 +465,36 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             }
             final GalleryImage? _image = snapshot.data;
 
+            final GalleryImage? _currentImage =
+                vState.pageState?.imageMap[widget.imageSer];
+
+            logger.d(
+                '_currentImage ${_currentImage?.toJson()}\n_image ${_image?.toJson()}');
+
             // 图片文件已下载 加载显示本地图片文件
             if (_image?.filePath?.isNotEmpty ?? false) {
               logger.d('图片文件已下载 file... ${_image?.filePath}');
+              controller.vState.galleryPageController?.uptImageBySer(
+                ser: widget.imageSer,
+                imageCallback: (image) => image.copyWith(
+                  filePath: _image?.filePath,
+                ),
+              );
               return fileImage(_image!.filePath!);
             }
 
             if (_image?.tempPath?.isNotEmpty ?? false) {
               logger.t('tempPath file... ${_image?.tempPath}');
+              controller.vState.galleryPageController?.uptImageBySer(
+                ser: widget.imageSer,
+                imageCallback: (image) => image.copyWith(
+                  tempPath: _image?.tempPath,
+                ),
+              );
               return fileImage(_image!.tempPath!);
             }
+
+            // 常规情况 加载网络图片
 
             // 图片加载完成
             final _onLoadCompleted = (ExtendedImageState state) {
@@ -561,8 +585,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   Widget _buildErr(Object? e) {
     String _errInfo = '';
     logger.e('${e.runtimeType}');
-    if (e is DioError) {
-      final DioError dioErr = e;
+    if (e is DioException) {
+      final DioException dioErr = e;
       logger.e('${dioErr.error}');
       _errInfo = dioErr.type.toString();
     } else if (e is EhError) {

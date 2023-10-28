@@ -18,7 +18,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:image_save/image_save.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
@@ -581,11 +580,11 @@ class Api {
     logger.d('imageUrl $imageUrl');
 
     // 权限检查
-    // final permission =
-    //     await requestPhotosPermission(context: context, addOnly: true);
-    // if (!permission) {
-    //   throw EhError(error: 'Permission denied');
-    // }
+    final permission =
+        await requestPhotosPermission(context: context, addOnly: true);
+    if (!permission) {
+      throw EhError(error: 'Permission denied');
+    }
 
     logger.d('开始下载图片');
 
@@ -618,25 +617,28 @@ class Api {
     if (gid != null) {
       realFileName = '$gid-$realFileName';
     }
-    logger.d('保存图片到相册 $realFileName lengthSync:${file.lengthSync()}');
+    logger.d('^^^^ 保存图片到相册 $realFileName lengthSync:${file.lengthSync()}');
 
     try {
-      // final result =
-      //     await ImageGallerySaver.saveFile(file.path, name: realFileName);
-      // logger.d('${result.runtimeType} $result');
-      // if (result == null || result == '') {
-      //   throw EhError(error: 'Save image fail');
-      // }
-
-      final result = await ImageSave.saveImage(
-        file.readAsBytesSync(),
-        realFileName,
-        albumName: EHConst.appTitle,
-        overwriteSameNameFile: false,
+      final result = await ImageGallerySaver.saveFile(
+        file.path,
+        name: realFileName,
+        isReturnPathOfIOS: GetPlatform.isIOS,
       );
-      if (result == null || !result) {
+      logger.d('${result.runtimeType} $result');
+      if (result == null || result == '') {
         throw EhError(error: 'Save image fail');
       }
+
+      // final result = await ImageSave.saveImage(
+      //   file.readAsBytesSync(),
+      //   realFileName,
+      //   albumName: EHConst.appTitle,
+      //   overwriteSameNameFile: false,
+      // );
+      // if (result == null || !result) {
+      //   throw EhError(error: 'Save image fail');
+      // }
     } catch (e, s) {
       logger.e('保存图片到相册失败', error: e, stackTrace: s);
       throw EhError(error: '保存失败');

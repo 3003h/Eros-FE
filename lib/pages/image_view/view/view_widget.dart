@@ -1584,6 +1584,7 @@ Future<void> showSaveActionSheet(
                 logger.d('重采样图片');
                 Get.back();
                 if (filePath != null && filePath.isNotEmpty) {
+                  logger.d('重采样图片 filePath: $filePath');
                   await Api.saveLocalImageToPhoto(
                     filePath,
                     context: context,
@@ -1591,6 +1592,7 @@ Future<void> showSaveActionSheet(
                   );
                   showToast(L10n.of(context).saved_successfully);
                 } else if (imageUrl != null && imageUrl.isNotEmpty) {
+                  logger.d('重采样图片 imageUrl: $imageUrl');
                   await Api.saveNetworkImageToPhoto(
                     imageUrl,
                     context: context,

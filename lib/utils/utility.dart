@@ -122,26 +122,40 @@ Future<bool> requestPhotosPermission({
 
   // android
   if (GetPlatform.isAndroid) {
-    final PermissionStatus status = await Permission.storage.status;
-    logger.t(status);
+    final PermissionStatus statusStorage = await Permission.storage.status;
+    logger.d('statusStorage $statusStorage');
+    final PermissionStatus statusPhotos = await Permission.photos.status;
+    logger.d('statusPhotos $statusPhotos');
 
-    // 永久拒绝 直接跳转到设置
-    if (status.isPermanentlyDenied) {
-      if (await Permission.storage.request().isGranted) {
-        return await Permission.storage.status.isGranted;
-      } else if (context != null) {
-        await _jumpToAppSettings(context);
-        return false;
-      } else {
-        throw EhError(
-            error: 'Permission is permanently denied, open App Settings');
+    final _androidInfo = await deviceInfo.androidInfo;
+
+    // SDK 33 以上, 申请照片权限
+    if (_androidInfo.version.sdkInt >= 33) {
+      // 非永久拒绝 申请权限
+      if (!statusPhotos.isPermanentlyDenied) {
+        if (await Permission.photos.request().isGranted) {
+          return await Permission.photos.status.isGranted;
+        } else {
+          throw EhError(error: 'Photos Permission is denied');
+        }
       }
     } else {
-      if (await Permission.storage.request().isGranted) {
-        return await Permission.storage.status.isGranted;
-      } else {
-        throw EhError(error: 'Unable to download, please authorize first~');
+      // 存储权限申请
+      if (!statusStorage.isPermanentlyDenied) {
+        if (await Permission.storage.request().isGranted) {
+          return await Permission.storage.status.isGranted;
+        } else {
+          throw EhError(error: 'Storage Permission is denied');
+        }
       }
+    }
+
+    if (context != null) {
+      await _jumpToAppSettings(context);
+      return false;
+    } else {
+      throw EhError(
+          error: 'Permission is permanently denied, open App Settings');
     }
   }
 

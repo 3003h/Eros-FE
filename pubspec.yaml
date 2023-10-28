@@ -58,8 +58,8 @@ dependencies:
   # 缓存
   flutter_cache_manager: ^3.0.2
   # 图片保存
-  image_gallery_saver: #any
-    git: https://github.com/hui-z/image_gallery_saver.git
+  image_gallery_saver: '^2.0.3'
+#    git: https://github.com/hui-z/image_gallery_saver.git
   # 滑动删除
   flutter_slidable: ^3.0.0
   scrollable_positioned_list: ^0.3.2
@@ -175,7 +175,7 @@ dependencies:
   gesture_zoom_box: ^0.0.4
   rotated_corner_decoration: ^2.0.0
   cross_file: ^0.3.3+2
-  image_save: ^5.0.0
+#  image_save: ^5.0.0
   fluentui_system_icons: ^1.1.185
   flutter_keyboard_visibility: ^5.4.0
   extended_nested_scroll_view: ^6.0.0
