@@ -331,13 +331,13 @@ packages:
     source: hosted
     version: "5.0.4"
   cronet_http:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: cronet_http
-      sha256: c2408f25d9b4a60b5e7c0518400611272c4cc891c6d28be350ea06f3527db612
+      sha256: "5bc88e2ea1a42f60ef69713468c08e2c6c318a3373246e35cb3d0a9e40f536d6"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.0"
+    version: "0.2.1"
   cross_file:
     dependency: "direct main"
     description:
@@ -878,10 +878,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_widget_from_html_core
-      sha256: bb7211d534c600f5a8a9a604f78cb8bc47c8e2478d0b7520a31c870e7e7347db
+      sha256: dd585321db498911414a9b08659b8aa965f8f0375b39856429220fbcacdf59bd
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.14.5+1"
+    version: "0.14.6"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -1131,14 +1131,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.0"
-  jni:
-    dependency: transitive
-    description:
-      name: jni
-      sha256: "6b3227764b3d8a1d848c5e8067a9cff17a6a428b96a7258488ef0611831baa72"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.7.0"
   js:
     dependency: transitive
     description:
