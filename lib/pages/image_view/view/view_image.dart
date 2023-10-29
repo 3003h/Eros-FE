@@ -468,8 +468,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             final GalleryImage? _currentImage =
                 vState.pageState?.imageMap[widget.imageSer];
 
-            logger.d(
-                '_currentImage ${_currentImage?.toJson()}\n_image ${_image?.toJson()}');
+            // logger.d(
+            //     '_currentImage ${_currentImage?.toJson()}\n_image ${_image?.toJson()}');
 
             // 图片文件已下载 加载显示本地图片文件
             if (_image?.filePath?.isNotEmpty ?? false) {

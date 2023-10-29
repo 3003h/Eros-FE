@@ -696,6 +696,7 @@ class ViewExtController extends GetxController {
     final enableAnimate = animate ?? _ehConfigService.turnPageAnimations;
 
     if (enableAnimate) {
+      // 竖向卷轴模式
       if (vState.viewMode == ViewMode.topToBottom) {
         itemScrollController.scrollTo(
           index: page,
@@ -705,6 +706,7 @@ class ViewExtController extends GetxController {
         return;
       }
 
+      // 横向翻页模式
       switch (pageViewType) {
         case PageViewType.photoView:
           pageController.animateToPage(
@@ -713,7 +715,7 @@ class ViewExtController extends GetxController {
             curve: Curves.ease,
           );
           break;
-        case PageViewType.preloadPageView:
+        case PageViewType.preloadPageView: // 预载模式（不启用兼容时）
           preloadPageController.animateToPage(
             page,
             duration: duration,
@@ -721,13 +723,24 @@ class ViewExtController extends GetxController {
           );
           break;
         default:
-          extendedPageController.animateToPage(
-            page,
-            duration: duration,
-            curve: Curves.ease,
-          );
+          if (vState.columnMode == ViewColumnMode.single) {
+            // 单页模式 使用 extendedImageGesturePageView
+            extendedPageController.animateToPage(
+              page,
+              duration: duration,
+              curve: Curves.ease,
+            );
+          } else {
+            // 双页模式 实际还是使用preloadPageView
+            preloadPageController.animateToPage(
+              page,
+              duration: duration,
+              curve: Curves.ease,
+            );
+          }
       }
     } else {
+      // 竖向卷轴模式
       if (vState.viewMode == ViewMode.topToBottom) {
         itemScrollController.jumpTo(
           index: page,
@@ -735,6 +748,7 @@ class ViewExtController extends GetxController {
         return;
       }
 
+      // 横向翻页模式
       switch (pageViewType) {
         case PageViewType.photoView:
           pageController.jumpToPage(page);
@@ -743,7 +757,14 @@ class ViewExtController extends GetxController {
           preloadPageController.jumpToPage(page);
           break;
         default:
-          extendedPageController.jumpToPage(page);
+          // extendedPageController.jumpToPage(page);
+          if (vState.columnMode == ViewColumnMode.single) {
+            // 单页模式 使用 extendedImageGesturePageView
+            extendedPageController.jumpToPage(page);
+          } else {
+            // 双页模式 实际还是使用preloadPageView
+            preloadPageController.jumpToPage(page);
+          }
       }
     }
   }
@@ -1237,7 +1258,7 @@ class ViewExtController extends GetxController {
         } else {
           // 双页阅读
           logger.d('双页阅读 自动翻页');
-          final int serLeftNext = vState.serStart + 2;
+          final int serLeftNext = vState.serFirst + 2;
           if (vState.filecount > serLeftNext) {
             if (serLeftNext > 0 &&
                 !(vState.loadCompleMap[serLeftNext] ?? false)) {
@@ -1250,7 +1271,7 @@ class ViewExtController extends GetxController {
             }
           }
 
-          final int serLeftCur = vState.serStart;
+          final int serLeftCur = vState.serFirst;
           if ((vState.loadCompleMap[serLeftCur] ?? false) &&
               (vState.loadCompleMap[serLeftCur + 1] ?? false)) {
             // 翻页
