@@ -77,7 +77,7 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
 
   late final Uint8List imageData;
   late final String coverName;
-  late final String name;
+  late final String filePath;
   late final List<Map<String, String>> fileNameList;
 
   // 画廊图片
@@ -92,10 +92,13 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
 
     final List<ss.DocumentFile> fileList = (await onFileLoaded.toList())
         .whereNot((e) => e.name?.startsWith('.') ?? false)
-        .toList();
+        .toList()
+      ..sort((a, b) => a.name!.compareTo(b.name!));
     imageData = (await fileList.first.getContent())!;
     coverName = '#cover${path.extension(fileList.first.name!)}';
-    name = fileList.first.name!.toLowerCase();
+    filePath = fileList.first.name!.toLowerCase();
+
+    logger.t('fileList: ${fileList.map((e) => e.name).toList()}');
 
     // 模板数据
     fileNameList = fileList
@@ -132,7 +135,7 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
     // 封面图片数据
     imageData = fileList.first.readAsBytesSync();
     coverName = '#cover${path.extension(fileList.first.path)}';
-    name = fileList.first.path.toLowerCase();
+    filePath = fileList.first.path.toLowerCase();
 
     // 模板数据
     fileNameList = fileList
@@ -168,31 +171,44 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   // 获取主色
   final dColor = paletteGenerator.darkMutedColor?.color ?? Colors.black;
 
-  final backgroundImage = pimage.Image(
-    image.width,
-    (image.width * 4 / 3).round(),
-  ).fill(
-    pimage.Color.fromRgba(
-      dColor.red,
-      dColor.green,
-      dColor.blue,
-      dColor.alpha,
-    ),
+  // final backgroundImage = pimage.Image(
+  //   width: image.width,
+  //   height: (image.width * 4 / 3).round(),
+  // );
+
+  // final backgroundImage_ = backgroundImage.fill(
+  //   pimage.ColorRgba8(
+  //     dColor.red,
+  //     dColor.green,
+  //     dColor.blue,
+  //     dColor.alpha,
+  //   ),
+  // );
+
+  // final pimage.Image cover = pimage.copyResize(
+  //   pimage.copyInto(
+  //     backgroundImage,
+  //     image,
+  //     center: true,
+  //   ),
+  //   width: 1200,
+  // );
+
+  final backgroundColor = pimage.ColorRgba8(
+    dColor.red,
+    dColor.green,
+    dColor.blue,
+    dColor.alpha,
   );
 
-  final pimage.Image cover = pimage.copyResize(
-      pimage.copyInto(
-        backgroundImage,
-        image,
-        center: true,
-      ),
-      width: 1200);
+  final cover = _buildCover(image, backgroundColor);
 
   logger.d('${cover.width} ${cover.height}');
 
-  final List<int> coverImage = name.endsWith('.jpg') || name.endsWith('.jpeg')
-      ? pimage.encodeJpg(cover, quality: 80)
-      : pimage.encodeNamedImage(cover, name)!;
+  final List<int> coverImage =
+      filePath.endsWith('.jpg') || filePath.endsWith('.jpeg')
+          ? pimage.encodeJpg(cover, quality: 80)
+          : pimage.encodeNamedImage(filePath, cover)!;
 
   File(path.join(resourcesPath, coverName)).writeAsBytesSync(coverImage);
 
@@ -245,6 +261,143 @@ Future<String> buildEpub(GalleryTask task, {String? tempPath}) async {
   tocFile.writeAsStringSync('$toc');
 
   return _tempPath;
+}
+
+enum CoverTransformType {
+  // 缩放
+  resize,
+
+  // 高宽比低于最大值，大于目标，按宽度缩放后，裁切高度
+  cropHeight,
+
+  // 高宽比低于目标，大于最小值，按高度缩放后，裁切宽度
+  cropWidth,
+
+  // 按宽度缩放后，填充高度
+  fillHeight,
+
+  // 高宽比超出最大值，按高度缩放后，填充宽度
+  fillWidth,
+}
+
+pimage.Image _buildCover(
+  pimage.Image image,
+  pimage.Color backgroundColor,
+) {
+  pimage.Image cover = image;
+
+  const coverAspectRatio = 3 / 2;
+  const maxAspectRatio = 16 / 9;
+  const minAspectRatio = 1.0;
+
+  const coverWidth = 600;
+  final coverHeight = (coverWidth * coverAspectRatio).round();
+
+  // 源图片高宽比
+  final double _aspectRatio = image.height / image.width;
+
+  CoverTransformType _transformType = CoverTransformType.resize;
+
+  if (_aspectRatio > maxAspectRatio) {
+    // 高宽比超出最大值，按高度缩放后，填充宽度
+    _transformType = CoverTransformType.fillWidth;
+  } else if (_aspectRatio <= maxAspectRatio &&
+      _aspectRatio > coverAspectRatio) {
+    // 高宽比低于最大值，大于目标，按宽度缩放后，裁切高度
+    _transformType = CoverTransformType.cropHeight;
+  } else if (_aspectRatio == coverAspectRatio) {
+    // 目标比例一致， 只进行缩放
+    _transformType = CoverTransformType.resize;
+  } else if (_aspectRatio < coverAspectRatio &&
+      _aspectRatio >= minAspectRatio) {
+    // 高宽比低于目标，大于最小值，按高度缩放后，裁切宽度
+    _transformType = CoverTransformType.cropWidth;
+  } else if (_aspectRatio < minAspectRatio) {
+    // 高宽比低于最小值，按宽度缩放后，填充高度
+    _transformType = CoverTransformType.fillHeight;
+  }
+
+  switch (_transformType) {
+    case CoverTransformType.resize:
+      // 只进行缩放
+      cover = pimage.copyResize(
+        cover,
+        width: coverWidth,
+        interpolation: pimage.Interpolation.cubic,
+      );
+      break;
+    case CoverTransformType.cropHeight:
+      // 按宽度缩放后，裁切高度
+      // 按照 coverWidth copyResize
+      cover = pimage.copyResize(
+        cover,
+        width: coverWidth,
+        interpolation: pimage.Interpolation.cubic,
+      );
+
+      final int _cropHeight = (cover.height - coverHeight) ~/ 2;
+      cover = pimage.copyCrop(
+        cover,
+        x: 0,
+        y: _cropHeight,
+        width: cover.width,
+        height: coverHeight,
+      );
+      break;
+    case CoverTransformType.cropWidth:
+      // 裁切宽度超过的部分
+      // 按照 coverHeight copyResize
+      cover = pimage.copyResize(
+        cover,
+        height: coverHeight,
+        interpolation: pimage.Interpolation.cubic,
+      );
+
+      // 裁切宽度
+      final int _cropWidth = (cover.width - coverWidth) ~/ 2;
+      cover = pimage.copyCrop(
+        cover,
+        x: _cropWidth,
+        y: 0,
+        width: coverWidth,
+        height: cover.height,
+      );
+      break;
+    case CoverTransformType.fillHeight:
+      // 按照 coverWidth copyResize
+      cover = pimage.copyResize(
+        cover,
+        width: coverWidth,
+        interpolation: pimage.Interpolation.cubic,
+      );
+
+      // 填充
+      cover = pimage.copyExpandCanvas(
+        cover,
+        newWidth: coverWidth,
+        newHeight: coverHeight,
+        backgroundColor: backgroundColor,
+      );
+
+      break;
+    case CoverTransformType.fillWidth:
+      // 按照 coverHeight copyResize
+      cover = pimage.copyResize(
+        cover,
+        height: coverHeight,
+        interpolation: pimage.Interpolation.cubic,
+      );
+      // 填充
+      cover = pimage.copyExpandCanvas(
+        cover,
+        newWidth: coverWidth,
+        newHeight: coverHeight,
+        backgroundColor: backgroundColor,
+      );
+      break;
+  }
+
+  return cover;
 }
 
 void _createDir(String path) {

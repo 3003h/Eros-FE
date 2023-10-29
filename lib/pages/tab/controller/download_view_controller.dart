@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:cross_file/cross_file.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
@@ -532,9 +531,9 @@ class DownloadViewController extends GetxController {
   }
 
   Future<String?> _buildEpub(GalleryTask task) async {
-    loggerTime.d('start buildEpub');
+    loggerTime.t('start buildEpub');
     final _tempEpubPath = await buildEpub(task);
-    loggerTime.d('end buildEpub');
+    loggerTime.t('end buildEpub');
 
     final title = task.title.replaceAll(RegExp(r'[/:*"<>|]'), '_');
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:image/image.dart';
 
 class Pixel {
@@ -159,7 +160,7 @@ int hammingDistance(BigInt x, BigInt y) {
 Image getValidImage(List<int> bytes) {
   Image? image;
   try {
-    image = decodeImage(bytes);
+    image = decodeImage(Uint8List.fromList(bytes));
   } on Exception {
     throw const FormatException(
         'Insufficient data provided to identify image.');

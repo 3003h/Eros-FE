@@ -117,7 +117,7 @@ dependencies:
   encrypt: ^5.0.1
   wakelock_plus: ^1.1.1
   jinja: ^0.5.0
-  image: ^3.0.8
+  image: ^4.1.3
   palette_generator: ^0.3.2
   getwidget: ^4.0.0
   open_filex: ^4.1.1

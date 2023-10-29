@@ -272,7 +272,7 @@ class _CoverImage extends StatelessWidget {
       _fit = BoxFit.cover;
     }
 
-    loggerSimple.v('imageRatio:$imageRatio  containRatio:$containRatio  $_fit');
+    loggerSimple.t('imageRatio:$imageRatio  containRatio:$containRatio  $_fit');
 
     Widget image = CoverImg(
       imgUrl: _item.imgUrl ?? '',
