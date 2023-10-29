@@ -9,7 +9,6 @@ import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page_sliver.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
@@ -181,16 +180,16 @@ class GalleryNavigationBar extends StatelessWidget {
 
             CupertinoButton(
               padding: const EdgeInsets.all(0),
-              minSize: 40,
+              minSize: 38,
               child: const MouseRegionClick(
-                child: Icon(CupertinoIcons.tags, size: 24),
+                child: Icon(CupertinoIcons.tag_circle, size: 28),
               ),
               onPressed: () {
                 controller.addTag();
               },
             ),
             CupertinoButton(
-              padding: const EdgeInsets.all(0),
+              padding: const EdgeInsets.only(bottom: 4),
               minSize: 38,
               child: const MouseRegionClick(
                 child: Icon(CupertinoIcons.share, size: 26),
