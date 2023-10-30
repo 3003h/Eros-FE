@@ -1,7 +1,7 @@
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/group/custom_sublist_controller.dart';
@@ -26,7 +26,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
   final CustomTabbarController controller = Get.find();
 
   final EhTabController ehTabController = EhTabController();
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
+      final hideTopBarOnScroll = _ehSettingService.hideTopBarOnScroll;
 
       final Widget scrollView =
           buildNestedScrollView(context, hideTopBarOnScroll);
@@ -90,7 +90,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           controller.linkScrollBarController.enableScrollToItem();
         },
         child: Obx(() {
-          final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
+          final hideTopBarOnScroll = _ehSettingService.hideTopBarOnScroll;
           return PageView(
             // CustomScrollPhysics对于改善滑动问题没有帮助
             // physics: const CustomScrollPhysics(),

@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/update_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
@@ -32,7 +32,7 @@ class AboutPage extends StatelessWidget {
 class ListViewAbout extends StatelessWidget {
   ListViewAbout({Key? key}) : super(key: key);
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final UpdateController _updateController = Get.put(UpdateController());
 
   @override
@@ -53,15 +53,15 @@ class ListViewAbout extends StatelessWidget {
           //   ),
           //   onTrigger: (int tapNum, int neededNum) {
           //     if (Platform.isIOS) {
-          //       if (_ehConfigService.isSafeMode.value) {
+          //       if (_ehSettingService.isSafeMode.value) {
           //         // showToast('你发现了不得了的东西');
           //         logger.t('safeMode off');
-          //         _ehConfigService.isSafeMode.value = false;
+          //         _ehSettingService.isSafeMode.value = false;
           //         Vibrate.feedback(FeedbackType.success);
           //       } else {
           //         // showToast('ヾ(￣▽￣)Bye~Bye~');
           //         logger.t('safeMode on');
-          //         _ehConfigService.isSafeMode.value = true;
+          //         _ehSettingService.isSafeMode.value = true;
           //         Vibrate.feedback(FeedbackType.error);
           //       }
           //     }

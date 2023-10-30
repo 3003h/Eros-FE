@@ -1,6 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -30,7 +30,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
   final controller = Get.find<FavoriteTabberController>();
   late PageController pageController;
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
     final headerMaxHeight = context.mediaQueryPadding.top + kHeaderMaxHeight;
 
     return Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
+      final hideTopBarOnScroll = _ehSettingService.hideTopBarOnScroll;
 
       final scrollView =
           buildNestedScrollView(headerMaxHeight, hideTopBarOnScroll);
@@ -139,7 +139,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
           linkScrollBarController.enableScrollToItem();
         },
         child: Obx(() {
-          final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
+          final hideTopBarOnScroll = _ehSettingService.hideTopBarOnScroll;
           return PageView(
             key: ValueKey(controller.showBarsBtn), // 登录状态变化后能刷新
             controller: pageController,

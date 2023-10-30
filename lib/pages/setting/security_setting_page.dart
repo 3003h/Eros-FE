@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/const/const.dart';
@@ -30,7 +30,7 @@ class SecuritySettingPage extends StatelessWidget {
 }
 
 class ListViewSecuritySetting extends StatelessWidget {
-  EhConfigService get _ehConfigService => Get.find<EhConfigService>();
+  EhSettingService get _ehSettingService => Get.find<EhSettingService>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +38,9 @@ class ListViewSecuritySetting extends StatelessWidget {
       if (GetPlatform.isIOS)
         TextSwitchItem(
           L10n.of(context).security_blurredInRecentTasks,
-          value: _ehConfigService.blurredInRecentTasks.value,
-          onChanged: (val) => _ehConfigService.blurredInRecentTasks.value = val,
+          value: _ehSettingService.blurredInRecentTasks.value,
+          onChanged: (val) =>
+              _ehSettingService.blurredInRecentTasks.value = val,
         ),
       _buildAutoLockItem(context, hideLine: true),
     ];
@@ -55,7 +56,7 @@ class ListViewSecuritySetting extends StatelessWidget {
 /// 自动锁定时间设置
 Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
   final String _title = L10n.of(context).autoLock;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   final AutoLockController autoLockController = Get.find();
 
   String _getTimeText(int seconds) {
@@ -111,28 +112,28 @@ Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
   }
 
   void _setAutoLockTimeOut(int timeOut) {
-    if (timeOut == ehConfigService.autoLockTimeOut.value) {
+    if (timeOut == ehSettingService.autoLockTimeOut.value) {
       return;
     }
 
-    if (timeOut == -1 || ehConfigService.autoLockTimeOut.value == -1) {
+    if (timeOut == -1 || ehSettingService.autoLockTimeOut.value == -1) {
       Future.delayed(const Duration(milliseconds: 400))
           .then((_) => autoLockController.checkBiometrics())
           .then((bool value) {
         autoLockController.resetLastLeaveTime();
         if (value) {
-          ehConfigService.autoLockTimeOut(timeOut);
+          ehSettingService.autoLockTimeOut(timeOut);
         }
       });
     } else {
-      ehConfigService.autoLockTimeOut(timeOut);
+      ehSettingService.autoLockTimeOut(timeOut);
     }
   }
 
   return Obx(() => SelectorSettingItem(
         title: _title,
         hideDivider: hideLine,
-        selector: _getTimeText(ehConfigService.autoLockTimeOut.value),
+        selector: _getTimeText(ehSettingService.autoLockTimeOut.value),
         onTap: () async {
           final int? _result = await _showActionSheet(context);
           if (_result != null) {

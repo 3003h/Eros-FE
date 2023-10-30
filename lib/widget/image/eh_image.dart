@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:ui' as ui show Codec, ImmutableBuffer;
 
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
@@ -124,7 +124,7 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
   Future<Uint8List> getImageData(EhImageProvider key,
       StreamController<ImageChunkEvent> chunkEvents) async {
     Uint8List? bytes;
-    final downloadOrigImage = Get.find<EhConfigService>().downloadOrigImage;
+    final downloadOrigImage = Get.find<EhSettingService>().downloadOrigImage;
 
     chunkEvents.sink.add(EhImageChunkEvent(
         stage: '加载画廊', ser: key.pageInfo.ser, cumulativeBytesLoaded: 0));

@@ -1,5 +1,4 @@
-import 'package:fehviewer/common/enum.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -15,7 +14,7 @@ class ProxyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String _title = L10n.of(context).proxy;
-    final EhConfigService ehConfigService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
 
     return Obx(() {
       return CupertinoPageScaffold(
@@ -36,27 +35,28 @@ class ProxyPage extends StatelessWidget {
                 TextInputItem(
                   title: L10n.of(context).host,
                   textAlign: TextAlign.right,
-                  initValue: ehConfigService.proxyHost,
-                  onChanged: (val) => ehConfigService.proxyHost = val,
+                  initValue: ehSettingService.proxyHost,
+                  onChanged: (val) => ehSettingService.proxyHost = val,
                 ),
                 TextInputItem(
                   title: L10n.of(context).port,
                   textAlign: TextAlign.right,
-                  initValue: ehConfigService.proxyPort.toString(),
-                  onChanged: (val) => ehConfigService.proxyPort = int.parse(val),
+                  initValue: ehSettingService.proxyPort.toString(),
+                  onChanged: (val) =>
+                      ehSettingService.proxyPort = int.parse(val),
                   keyboardType: TextInputType.number,
                 ),
                 TextInputItem(
                   title: L10n.of(context).user_name,
                   textAlign: TextAlign.right,
-                  initValue: ehConfigService.proxyUsername,
-                  onChanged: (val) => ehConfigService.proxyUsername = val,
+                  initValue: ehSettingService.proxyUsername,
+                  onChanged: (val) => ehSettingService.proxyUsername = val,
                 ),
                 TextInputItem(
                   title: L10n.of(context).passwd,
                   textAlign: TextAlign.right,
-                  initValue: ehConfigService.proxyPassword,
-                  onChanged: (val) => ehConfigService.proxyPassword = val,
+                  initValue: ehSettingService.proxyPassword,
+                  onChanged: (val) => ehSettingService.proxyPassword = val,
                   obscureText: true,
                   hideDivider: true,
                 ),
@@ -71,15 +71,15 @@ class ProxyPage extends StatelessWidget {
 
 Widget _buildProxyTypeItem(BuildContext context, {bool hideDivider = false}) {
   final String _title = L10n.of(context).proxy_type;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   return Obx(() {
     return SelectorItem<ProxyType>(
       title: _title,
       hideDivider: hideDivider,
       actionMap: getProxyTypeModeMap(context),
-      initVal: ehConfigService.proxyType,
-      onValueChanged: (val) => ehConfigService.proxyType = val,
+      initVal: ehSettingService.proxyType,
+      onValueChanged: (val) => ehSettingService.proxyType = val,
     );
   });
 }

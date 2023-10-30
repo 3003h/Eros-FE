@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/controller/base_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -20,7 +20,7 @@ class UserController extends ProfileController {
 
   Rx<User> user = kDefUser.obs;
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
 
   void _logOut() {
     user(kDefUser);
@@ -65,7 +65,7 @@ class UserController extends ProfileController {
                 (await Api.cookieJar).deleteAll();
                 // userController.user(User());
                 _logOut();
-                _ehConfigService.isSiteEx.value = false;
+                _ehSettingService.isSiteEx.value = false;
                 Get.back();
               },
             ),

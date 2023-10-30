@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
@@ -23,15 +23,15 @@ class HistoryController extends GetxController {
   // 登记删除gid和删除时间，用于同步远程时筛选
   final List<HistoryIndexGid> _delHistorys = <HistoryIndexGid>[];
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final WebdavController webdavController = Get.find();
 
   final thrSync = Throttling(duration: const Duration(seconds: 60));
   final debSync = Debouncing(duration: const Duration(seconds: 80));
 
   bool get isListView =>
-      _ehConfigService.listMode.value == ListModeEnum.list ||
-      _ehConfigService.listMode.value == ListModeEnum.simpleList;
+      _ehSettingService.listMode.value == ListModeEnum.list ||
+      _ehSettingService.listMode.value == ListModeEnum.simpleList;
 
   void addHistory(
     GalleryProvider galleryProvider, {

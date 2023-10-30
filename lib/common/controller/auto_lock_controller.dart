@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/route/routes.dart';
@@ -15,7 +15,7 @@ class AutoLockController extends GetxController {
   AutoLock get autoLock => Global.profile.autoLock;
   set autoLock(AutoLock val) =>
       Global.profile = Global.profile.copyWith(autoLock: val);
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
 
   static final IOSAuthMessages iOSAuthMessages = IOSAuthMessages(
       cancelButton: L10n.of(Get.context!).cancel,
@@ -78,7 +78,7 @@ class AutoLockController extends GetxController {
   Future<void> resumed({bool forceLock = false}) async {
     final nowTime = DateTime.now().millisecondsSinceEpoch;
     final subTime = nowTime - lastLeaveTime;
-    final autoLockTimeOut = _ehConfigService.autoLockTimeOut.value;
+    final autoLockTimeOut = _ehSettingService.autoLockTimeOut.value;
 
     logger.t('now time ${nowTime}, lastLeaveTime: ${lastLeaveTime}');
 

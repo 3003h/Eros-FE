@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:executor/executor.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -40,7 +40,7 @@ class WebdavController extends GetxController {
   webdav.Client? _client;
   webdav.Client get client => _client ?? initClient();
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
 
   WebdavProfile get webdavProfile =>
       Global.profile.webdav ?? const WebdavProfile(url: '');
@@ -121,7 +121,7 @@ class WebdavController extends GetxController {
 
   void initExecutor() {
     webDAVExecutor =
-        Executor(concurrency: _ehConfigService.webDAVMaxConnections);
+        Executor(concurrency: _ehSettingService.webDAVMaxConnections);
   }
 
   void resetExecutorConcurrency(int concurrency) {

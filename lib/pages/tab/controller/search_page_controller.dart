@@ -44,9 +44,9 @@ class SearchPageController extends DefaultTabViewController {
   bool textIsGalleryUrl = false;
   String? _jumpToUrl;
 
-  bool get translateSearchHistory => ehConfigService.translateSearchHistory;
+  bool get translateSearchHistory => ehSettingService.translateSearchHistory;
   set translateSearchHistory(bool value) =>
-      ehConfigService.translateSearchHistory = value;
+      ehSettingService.translateSearchHistory = value;
 
   final TagTransController tagTransController = Get.find<TagTransController>();
 
@@ -93,12 +93,12 @@ class SearchPageController extends DefaultTabViewController {
   final QuickSearchController quickSearchController = Get.find();
   final LocaleService localeService = Get.find();
 
-  bool get isTagTranslat => ehConfigService.isTagTranslat;
+  bool get isTagTranslat => ehSettingService.isTagTranslate;
 
   /// 控制右侧按钮展开折叠
-  bool get isSearchBarComp => ehConfigService.isSearchBarComp.value;
+  bool get isSearchBarComp => ehSettingService.isSearchBarComp.value;
 
-  set isSearchBarComp(bool val) => ehConfigService.isSearchBarComp.value = val;
+  set isSearchBarComp(bool val) => ehSettingService.isSearchBarComp.value = val;
 
   @override
   FetchListClient getFetchListClient(FetchParams fetchParams) {

@@ -8,7 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
@@ -58,16 +58,16 @@ class Api {
 
   static String getBaseUrl({bool? isSiteEx}) {
     return EHConst.getBaseSite(
-        isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value);
+        isSiteEx ?? Get.find<EhSettingService>().isSiteEx.value);
   }
 
   static String getBaseHost({bool? isSiteEx}) {
     return EHConst.getBaseHost(
-        isSiteEx ?? Get.find<EhConfigService>().isSiteEx.value);
+        isSiteEx ?? Get.find<EhSettingService>().isSiteEx.value);
   }
 
   static String getSiteFlg() {
-    return (Get.find<EhConfigService>().isSiteEx.value) ? 'EH' : 'EX';
+    return (Get.find<EhSettingService>().isSiteEx.value) ? 'EH' : 'EX';
   }
 
   static _printCookie() async {
@@ -317,7 +317,7 @@ class Api {
 
   //
   static Future<bool?> selEhProfile() async {
-    if (!Get.find<EhConfigService>().autoSelectProfile) {
+    if (!Get.find<EhSettingService>().autoSelectProfile) {
       logger.d('do not to select profile');
       return null;
     }

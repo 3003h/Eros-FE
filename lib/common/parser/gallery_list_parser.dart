@@ -336,7 +336,7 @@ GalleryList parseGalleryList(
     _addIiem();
 
 // safeMode检查
-//     if (Platform.isIOS && (ehConfigService.isSafeMode.value)) {
+//     if (Platform.isIOS && (ehSettingService.isSafeMode.value)) {
 //       if (category.trim() == 'Non-H') {
 //         _addIiem();
 //       }

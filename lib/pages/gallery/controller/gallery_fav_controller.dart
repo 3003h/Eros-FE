@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
@@ -22,7 +22,7 @@ class GalleryFavController extends GetxController {
   set isLoading(bool value) => _isLoading.value = value;
   String favnote = '';
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
 
   late GalleryPageController _pageController;
   GalleryPageState get _pageState => _pageController.gState;
@@ -78,7 +78,7 @@ class GalleryFavController extends GetxController {
     _favcat.value = favcat;
     // logger.d('setFav $favcat $favtitle');
     if (favcat.isNotEmpty) {
-      _ehConfigService.lastFavcat = favcat;
+      _ehSettingService.lastFavcat = favcat;
     }
 
     try {
@@ -131,11 +131,11 @@ class GalleryFavController extends GetxController {
       delFav();
     } else {
       logger.d(' add fav');
-      final String _lastFavcat = _ehConfigService.lastFavcat;
+      final String _lastFavcat = _ehSettingService.lastFavcat;
       logger.d('上次收藏夹 $_lastFavcat');
 
       // 添加到上次收藏夹
-      if ((_ehConfigService.isFavLongTap.value) && _lastFavcat.isNotEmpty) {
+      if ((_ehSettingService.isFavLongTap.value) && _lastFavcat.isNotEmpty) {
         logger.d('添加到上次收藏夹 $_lastFavcat');
         _addToLastFavcat(_lastFavcat);
       } else {

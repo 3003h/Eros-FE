@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -9,7 +9,6 @@ import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/login/controller/login_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:open_by_default/open_by_default.dart';
 
@@ -41,7 +40,7 @@ class EhSettingPage extends StatelessWidget {
 class ListViewEhSetting extends StatelessWidget {
   ListViewEhSetting({Key? key}) : super(key: key);
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final UserController userController = Get.find();
   final TagTransController transController = Get.find();
   final LocaleService localeService = Get.find();
@@ -49,14 +48,14 @@ class ListViewEhSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool _favLongTap = _ehConfigService.isFavLongTap.value;
+    final bool _favLongTap = _ehSettingService.isFavLongTap.value;
     final bool _isLogin = userController.isLogin;
-    final bool _isClipboar = _ehConfigService.isClipboardLink.value;
+    final bool _isClipboar = _ehSettingService.isClipboardLink.value;
 
-    final bool _autoSelectProfile = _ehConfigService.autoSelectProfile;
+    final bool _autoSelectProfile = _ehSettingService.autoSelectProfile;
 
     Future<void> _handleSiteChanged(bool newValue) async {
-      _ehConfigService.isSiteEx(newValue);
+      _ehSettingService.isSiteEx(newValue);
       Global.forceRefreshUconfig = true;
       if (newValue) {
         getExIgneous();
@@ -66,11 +65,11 @@ class ListViewEhSetting extends StatelessWidget {
     }
 
     void _handleFavLongTapChanged(bool newValue) {
-      _ehConfigService.isFavLongTap.value = newValue;
+      _ehSettingService.isFavLongTap.value = newValue;
     }
 
     void _handleClipboarLinkTapChange(bool val) {
-      _ehConfigService.isClipboardLink.value = val;
+      _ehSettingService.isClipboardLink.value = val;
     }
 
     Future<EhHome?> _futureImageLimits = getEhHome(refresh: true);
@@ -82,7 +81,7 @@ class ListViewEhSetting extends StatelessWidget {
       //       onLongPress: Api.selEhProfile,
       //       child: TextSwitchItem(
       //         L10n.of(context).galery_site,
-      //         intValue: _ehConfigService.isSiteEx.value,
+      //         intValue: _ehSettingService.isSiteEx.value,
       //         onChanged: _handleSiteChanged,
       //         desc: L10n.of(context).current_site('E-Hentai'),
       //         descOn: L10n.of(context).current_site('ExHentai'),
@@ -93,7 +92,7 @@ class ListViewEhSetting extends StatelessWidget {
         Obx(() {
           return SlidingSegmentedItem<String>(
             L10n.of(context).galery_site,
-            intValue: _ehConfigService.isSiteEx.value
+            intValue: _ehSettingService.isSiteEx.value
                 ? EHConst.EX_BASE_HOST
                 : EHConst.EH_BASE_HOST,
             onValueChanged: (val) {
@@ -108,14 +107,14 @@ class ListViewEhSetting extends StatelessWidget {
         }),
       TextSwitchItem(
         L10n.of(context).link_redirect,
-        value: _ehConfigService.linkRedirect,
-        onChanged: (val) => _ehConfigService.linkRedirect = val,
+        value: _ehSettingService.linkRedirect,
+        onChanged: (val) => _ehSettingService.linkRedirect = val,
         desc: L10n.of(context).link_redirect_summary,
       ),
       TextSwitchItem(
         L10n.of(context).redirect_thumb_link,
-        value: _ehConfigService.redirectThumbLink,
-        onChanged: (val) => _ehConfigService.redirectThumbLink = val,
+        value: _ehSettingService.redirectThumbLink,
+        onChanged: (val) => _ehSettingService.redirectThumbLink = val,
         desc: L10n.of(context).redirect_thumb_link_summary,
       ),
       if (_isLogin)
@@ -128,7 +127,7 @@ class ListViewEhSetting extends StatelessWidget {
         L10n.of(context).auto_select_profile,
         value: _autoSelectProfile,
         hideDivider: !_isLogin,
-        onChanged: (val) => _ehConfigService.autoSelectProfile = val,
+        onChanged: (val) => _ehSettingService.autoSelectProfile = val,
       ),
       if (_isLogin)
         SelectorSettingItem(

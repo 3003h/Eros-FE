@@ -7,7 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:executor/executor.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/component/quene_task/quene_task.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -84,15 +84,15 @@ class TaskStatus {
 class DownloadController extends GetxController {
   final DownloadState dState = DownloadState();
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   final CacheController cacheController = Get.find();
 
   @override
   void onInit() {
     super.onInit();
     // logger.d(
-    //     'DownloadController onInit multiDownload:${ehConfigService.multiDownload}');
-    dState.executor = Executor(concurrency: ehConfigService.multiDownload);
+    //     'DownloadController onInit multiDownload:${ehSettingService.multiDownload}');
+    dState.executor = Executor(concurrency: ehSettingService.multiDownload);
     asyncInit();
   }
 
@@ -104,12 +104,12 @@ class DownloadController extends GetxController {
 
   Future<void> asyncInit() async {
     await updateCustomDownloadPath();
-    allowMediaScan(ehConfigService.allowMediaScan);
+    allowMediaScan(ehSettingService.allowMediaScan);
     initGalleryTasks();
   }
 
   Future<void> updateCustomDownloadPath() async {
-    final customDownloadPath = ehConfigService.downloadLocatino;
+    final customDownloadPath = ehSettingService.downloadLocatino;
     logger.d('customDownloadPath:$customDownloadPath');
     if (!GetPlatform.isAndroid ||
         customDownloadPath.isEmpty ||
@@ -118,7 +118,7 @@ class DownloadController extends GetxController {
     }
 
     final uri = safMakeUri(path: customDownloadPath, isTreeUri: true);
-    ehConfigService.downloadLocatino = uri.toString();
+    ehSettingService.downloadLocatino = uri.toString();
     restoreGalleryTasks();
 
     logger.d('updateCustomDownloadPath $uri');
@@ -452,8 +452,8 @@ class DownloadController extends GetxController {
       }
     }
     _cancelDownloadStateChkTimer();
-    logger.d('reset multiDownload ${ehConfigService.multiDownload}');
-    dState.executor = Executor(concurrency: ehConfigService.multiDownload);
+    logger.d('reset multiDownload ${ehSettingService.multiDownload}');
+    dState.executor = Executor(concurrency: ehSettingService.multiDownload);
 
     // 重新加入
     initGalleryTasks();
@@ -656,7 +656,7 @@ class DownloadController extends GetxController {
           changeSource: true,
         );
 
-        _targetImageUrl = ehConfigService.downloadOrigImage
+        _targetImageUrl = ehSettingService.downloadOrigImage
             ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
             : imageFetched.imageUrl!;
 
@@ -878,7 +878,7 @@ class DownloadController extends GetxController {
   Future<void> checkSafPath(
       {String? uri, bool saveDownloadPath = false}) async {
     if (Platform.isAndroid) {
-      final String checkUri = uri ?? ehConfigService.downloadLocatino;
+      final String checkUri = uri ?? ehSettingService.downloadLocatino;
       Future<void> openDocumentTree() async {
         // final uri =
         //     await ss.openDocumentTree(initialUri: Uri.tryParse(checkUri));
@@ -889,7 +889,7 @@ class DownloadController extends GetxController {
         logger.d('uri $uri');
 
         if (uri != null && saveDownloadPath) {
-          ehConfigService.downloadLocatino = uri.toString();
+          ehSettingService.downloadLocatino = uri.toString();
         }
       }
 
@@ -915,10 +915,10 @@ class DownloadController extends GetxController {
     late final String saveDirPath;
     late final Directory savedDir;
 
-    if (ehConfigService.downloadLocatino.isNotEmpty) {
+    if (ehSettingService.downloadLocatino.isNotEmpty) {
       // 自定义路径
       logger.t('自定义下载路径');
-      saveDirPath = path.join(ehConfigService.downloadLocatino, dirName);
+      saveDirPath = path.join(ehSettingService.downloadLocatino, dirName);
       savedDir = Directory(saveDirPath);
     } else if (!GetPlatform.isIOS) {
       saveDirPath = path.join(await defDownloadPath, dirName);
@@ -938,7 +938,7 @@ class DownloadController extends GetxController {
     if (saveDirPath.isContentUri) {
       await checkSafPath(saveDownloadPath: true);
 
-      final galleryDirUrl = '${ehConfigService.downloadLocatino}%2F$dirName';
+      final galleryDirUrl = '${ehSettingService.downloadLocatino}%2F$dirName';
       final uri = Uri.parse(galleryDirUrl);
       final exists = await ss.exists(uri) ?? false;
 
@@ -947,7 +947,7 @@ class DownloadController extends GetxController {
       }
 
       logger.d('galleryDirUrl $galleryDirUrl');
-      final parentUri = Uri.parse(ehConfigService.downloadLocatino);
+      final parentUri = Uri.parse(ehSettingService.downloadLocatino);
       try {
         final result = await ss.createDirectory(parentUri, dirName);
         if (result != null) {

@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/controller/tag_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
@@ -48,7 +48,7 @@ class EhMyTagsController extends GetxController
 
   RxList<EhUsertag> searchNewTags = <EhUsertag>[].obs;
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   final LocaleService localeService = Get.find();
 
   String get apikey => ehMyTags.apikey ?? '';
@@ -61,7 +61,7 @@ class EhMyTagsController extends GetxController
   set isSearchUserTags(bool val) => _isSearchUser.value = val;
 
   bool get isTagTranslat =>
-      ehConfigService.isTagTranslat && localeService.isLanguageCodeZh;
+      ehSettingService.isTagTranslate && localeService.isLanguageCodeZh;
 
   final _inputSearchText = ''.obs;
   String get inputSearchText => _inputSearchText.value;
@@ -94,7 +94,7 @@ class EhMyTagsController extends GetxController
           await Api.tagSuggest(text: val.trim());
 
       // 中文从翻译库匹配
-      if (localeService.isLanguageCodeZh && ehConfigService.isTagTranslat) {
+      if (localeService.isLanguageCodeZh && ehSettingService.isTagTranslate) {
         List<TagTranslat> qryTagsList = await Get.find<TagTransController>()
             .getTagTranslatesLike(text: val.trim(), limit: 200);
 

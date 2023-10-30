@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
-import '../../common/service/ehconfig_service.dart';
+import '../../common/service/ehsetting_service.dart';
 import '../../common/service/layout_service.dart';
 import '../../common/service/theme_service.dart';
 import '../../const/theme_colors.dart';
@@ -23,7 +23,7 @@ const double kCoverRatio = 4 / 3;
 const double kMinFixCoverRatio = 0.8;
 const double kMaxFixCoverRatio = 2.2;
 
-final EhConfigService _ehConfigService = Get.find();
+final EhSettingService _ehSettingService = Get.find();
 
 class GalleryItemGrid extends StatelessWidget {
   const GalleryItemGrid({Key? key, this.tabTag, required this.galleryProvider})

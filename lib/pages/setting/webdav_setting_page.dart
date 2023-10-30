@@ -7,7 +7,6 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +15,7 @@ class WebDavSetting extends GetView<WebdavController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = 'WebDAV';
+    const String _title = 'WebDAV';
     return Obx(() {
       return CupertinoPageScaffold(
         backgroundColor: !ehTheme.isDarkMode

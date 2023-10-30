@@ -3,7 +3,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/get_store.dart';
@@ -27,7 +27,7 @@ class ArchiverDownloadController extends GetxController {
 
   final GStore _gStore = Get.find();
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   @override
   void onInit() {
@@ -243,7 +243,7 @@ class ArchiverDownloadController extends GetxController {
   }
 
   Future<String> _getArchiverDownloadPath() async {
-    final customDownloadPath = ehConfigService.downloadLocatino;
+    final customDownloadPath = ehSettingService.downloadLocatino;
     late String dirPath;
     if (GetPlatform.isIOS) {
       dirPath = path.join(Global.appDocPath, 'Download', 'Archiver');
@@ -285,11 +285,11 @@ class ArchiverDownloadController extends GetxController {
   Future<String> _getArchiverDownloadPath_Old() async {
     late String _dirPath;
 
-    if (GetPlatform.isAndroid && ehConfigService.downloadLocatino.isNotEmpty) {
+    if (GetPlatform.isAndroid && ehSettingService.downloadLocatino.isNotEmpty) {
       // 自定义路径
       logger.d('自定义下载路径');
       await requestManageExternalStoragePermission();
-      _dirPath = path.join(ehConfigService.downloadLocatino, 'Archiver');
+      _dirPath = path.join(ehSettingService.downloadLocatino, 'Archiver');
     } else if (GetPlatform.isAndroid) {
       logger.d('无自定义下载路径');
       _dirPath =

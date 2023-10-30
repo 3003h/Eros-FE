@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
@@ -23,7 +23,7 @@ class ToplistTab extends StatefulWidget {
 class _ToplistTabState extends State<ToplistTab> {
   final controller = Get.find<TopListViewController>();
   final EhTabController ehTabController = EhTabController();
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
 
   GlobalKey centerKey = GlobalKey();
 
@@ -149,7 +149,7 @@ class _ToplistTabState extends State<ToplistTab> {
     );
 
     final customScrollView = Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
+      final hideTopBarOnScroll = _ehSettingService.hideTopBarOnScroll;
       return CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
@@ -188,7 +188,7 @@ class _ToplistTabState extends State<ToplistTab> {
     });
 
     return Obx(() {
-      final hideTopBarOnScroll = _ehConfigService.hideTopBarOnScroll;
+      final hideTopBarOnScroll = _ehSettingService.hideTopBarOnScroll;
       return CupertinoPageScaffold(
         navigationBar: hideTopBarOnScroll ? null : navigationBar,
         child: SizeCacheWidget(child: customScrollView),

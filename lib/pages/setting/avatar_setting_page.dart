@@ -1,6 +1,6 @@
 import 'package:english_words/english_words.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -38,7 +38,7 @@ class AvatarSettingPage extends StatelessWidget {
 
 class _ListView extends StatelessWidget {
   _ListView({Key? key}) : super(key: key);
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final UserController _userController = Get.find();
   final avatarSize = 32.0;
 
@@ -51,7 +51,7 @@ class _ListView extends StatelessWidget {
 
     final _username = name ?? _word;
     final _borderRadiusType =
-        borderRadiusType ?? _ehConfigService.avatarBorderRadiusType;
+        borderRadiusType ?? _ehSettingService.avatarBorderRadiusType;
     final borderRadius = BorderRadius.circular(
         _borderRadiusType == AvatarBorderRadiusType.roundedRect
             ? 8
@@ -85,7 +85,7 @@ class _ListView extends StatelessWidget {
 
     final _username = name ?? _word;
     final _borderRadiusType =
-        borderRadiusType ?? _ehConfigService.avatarBorderRadiusType;
+        borderRadiusType ?? _ehSettingService.avatarBorderRadiusType;
     final radius = _borderRadiusType == AvatarBorderRadiusType.roundedRect
         ? 8.0
         : avatarSize / 2;
@@ -120,8 +120,8 @@ class _ListView extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       TextSwitchItem(
         L10n.of(context).show_comment_avatar,
-        value: _ehConfigService.showCommentAvatar,
-        onChanged: (val) => _ehConfigService.showCommentAvatar = val,
+        value: _ehSettingService.showCommentAvatar,
+        onChanged: (val) => _ehSettingService.showCommentAvatar = val,
         hideDivider: true,
       ),
       const ItemSpace(),
@@ -148,37 +148,38 @@ class _ListView extends StatelessWidget {
                   return CupertinoSlidingSegmentedControl<
                       AvatarBorderRadiusType>(
                     children: <AvatarBorderRadiusType, Widget>{
-                      AvatarBorderRadiusType.circle: _ehConfigService
+                      AvatarBorderRadiusType.circle: _ehSettingService
                                   .avatarType ==
                               AvatarType.boringAvatar
                           ? boringAvatar(
-                              _ehConfigService.boringAvatarsType,
+                              _ehSettingService.boringAvatarsType,
                               borderRadiusType: AvatarBorderRadiusType.circle,
                               name: _username,
                             )
                           : textAvatar(
-                              _ehConfigService.textAvatarsType,
+                              _ehSettingService.textAvatarsType,
                               borderRadiusType: AvatarBorderRadiusType.circle,
                               name: _username,
                             ),
                       AvatarBorderRadiusType.roundedRect:
-                          _ehConfigService.avatarType == AvatarType.boringAvatar
+                          _ehSettingService.avatarType ==
+                                  AvatarType.boringAvatar
                               ? boringAvatar(
-                                  _ehConfigService.boringAvatarsType,
+                                  _ehSettingService.boringAvatarsType,
                                   borderRadiusType:
                                       AvatarBorderRadiusType.roundedRect,
                                   name: _username,
                                 )
                               : textAvatar(
-                                  _ehConfigService.textAvatarsType,
+                                  _ehSettingService.textAvatarsType,
                                   borderRadiusType:
                                       AvatarBorderRadiusType.roundedRect,
                                   name: _username,
                                 ),
                     },
-                    groupValue: _ehConfigService.avatarBorderRadiusType,
+                    groupValue: _ehSettingService.avatarBorderRadiusType,
                     onValueChanged: (AvatarBorderRadiusType? value) {
-                      _ehConfigService.avatarBorderRadiusType =
+                      _ehSettingService.avatarBorderRadiusType =
                           value ?? AvatarBorderRadiusType.circle;
                     },
                   );
@@ -210,37 +211,37 @@ class _ListView extends StatelessWidget {
                         BoringAvatarsType.beam: boringAvatar(
                           BoringAvatarsType.beam,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         BoringAvatarsType.bauhaus: boringAvatar(
                           BoringAvatarsType.bauhaus,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         BoringAvatarsType.sunset: boringAvatar(
                           BoringAvatarsType.sunset,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         BoringAvatarsType.marble: boringAvatar(
                           BoringAvatarsType.marble,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         BoringAvatarsType.pixel: boringAvatar(
                           BoringAvatarsType.pixel,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         BoringAvatarsType.ring: boringAvatar(
                           BoringAvatarsType.ring,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                       },
-                      groupValue: _ehConfigService.boringAvatarsType,
+                      groupValue: _ehSettingService.boringAvatarsType,
                       onValueChanged: (BoringAvatarsType? value) {
-                        _ehConfigService.boringAvatarsType =
+                        _ehSettingService.boringAvatarsType =
                             value ?? BoringAvatarsType.beam;
                       },
                     ),
@@ -248,9 +249,10 @@ class _ListView extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           logger.d('boringAvatars');
-                          _ehConfigService.avatarType = AvatarType.boringAvatar;
+                          _ehSettingService.avatarType =
+                              AvatarType.boringAvatar;
                         },
-                        child: _ehConfigService.avatarType ==
+                        child: _ehSettingService.avatarType ==
                                 AvatarType.boringAvatar
                             ? Container(
                                     alignment: Alignment.centerRight,
@@ -282,37 +284,37 @@ class _ListView extends StatelessWidget {
                         TextAvatarsType.firstText: textAvatar(
                           TextAvatarsType.firstText,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         TextAvatarsType.firstTowText: textAvatar(
                           TextAvatarsType.firstTowText,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         TextAvatarsType.noText: textAvatar(
                           TextAvatarsType.noText,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         TextAvatarsType.borderFirstText: textAvatar(
                           TextAvatarsType.borderFirstText,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         TextAvatarsType.borderFirstTowText: textAvatar(
                           TextAvatarsType.borderFirstTowText,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                         TextAvatarsType.onlyBorder: textAvatar(
                           TextAvatarsType.onlyBorder,
                           borderRadiusType:
-                              _ehConfigService.avatarBorderRadiusType,
+                              _ehSettingService.avatarBorderRadiusType,
                         ),
                       },
-                      groupValue: _ehConfigService.textAvatarsType,
+                      groupValue: _ehSettingService.textAvatarsType,
                       onValueChanged: (TextAvatarsType? value) {
-                        _ehConfigService.textAvatarsType =
+                        _ehSettingService.textAvatarsType =
                             value ?? TextAvatarsType.firstText;
                       },
                     ),
@@ -320,9 +322,9 @@ class _ListView extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () {
                           logger.d('textAvatars');
-                          _ehConfigService.avatarType = AvatarType.textAvatar;
+                          _ehSettingService.avatarType = AvatarType.textAvatar;
                         },
-                        child: _ehConfigService.avatarType ==
+                        child: _ehSettingService.avatarType ==
                                 AvatarType.textAvatar
                             ? Container(
                                     alignment: Alignment.centerRight,

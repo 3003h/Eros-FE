@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
@@ -14,13 +14,13 @@ class HomePage extends GetView<TabHomeController> {
   Widget build(BuildContext context) {
     controller.init(inContext: context);
     final LayoutServices layoutServices = Get.find();
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
 
     final WillPopScope willPopScope = WillPopScope(
       onWillPop: controller.onWillPop,
       child: Obx(
         () {
-          final tabletLayoutType = _ehConfigService.tabletLayoutType;
+          final tabletLayoutType = _ehSettingService.tabletLayoutType;
           final half = layoutServices.half;
           final vOffset = layoutServices.sideProportion;
 

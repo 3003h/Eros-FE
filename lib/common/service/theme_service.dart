@@ -6,10 +6,10 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import 'ehconfig_service.dart';
+import 'ehsetting_service.dart';
 
 class ThemeService extends ProfileService {
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final Rx<ThemesModeEnum> _themeModel = ThemesModeEnum.system.obs;
   Rx<Brightness?> platformBrightness =
       WidgetsBinding.instance.window.platformBrightness.obs;
@@ -22,9 +22,10 @@ class ThemeService extends ProfileService {
     return _themeModel.value;
   }
 
-  CupertinoThemeData get _getDarkTheme => _ehConfigService.isPureDarkTheme.value
-      ? ThemeColors.darkPureTheme
-      : ThemeColors.darkGrayTheme;
+  CupertinoThemeData get _getDarkTheme =>
+      _ehSettingService.isPureDarkTheme.value
+          ? ThemeColors.darkPureTheme
+          : ThemeColors.darkGrayTheme;
 
   CupertinoThemeData? get themeData {
     switch (themeModel) {
@@ -47,7 +48,7 @@ class ThemeService extends ProfileService {
     _themeModel.value =
         EnumToString.fromString(ThemesModeEnum.values, Global.profile.theme) ??
             ThemesModeEnum.system;
-    everFromEunm(_themeModel, (String value) {
+    everFromEnum(_themeModel, (String value) {
       Global.profile = Global.profile.copyWith(theme: value);
     });
   }
@@ -57,10 +58,10 @@ final EHTheme ehTheme = EHTheme();
 
 class EHTheme {
   ThemeService get _themeService => Get.find();
-  EhConfigService get _ehConfigService => Get.find();
+  EhSettingService get _ehSettingService => Get.find();
 
   Color? _getColorWithTheme(EhDynamicColor ehcolor) {
-    final Color effDarkColor = _ehConfigService.isPureDarkTheme.value
+    final Color effDarkColor = _ehSettingService.isPureDarkTheme.value
         ? ehcolor.darkColor
         : ehcolor.darkGrayColor;
 

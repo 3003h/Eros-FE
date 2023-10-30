@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
 import 'package:vibration/vibration.dart';
@@ -19,10 +19,10 @@ class VibrateUtil {
   /// 设备是否能够按照自定义的持续时间，模式或强度振动
   Future<bool?> get _hasAmplitudeControl => Vibration.hasAmplitudeControl();
 
-  EhConfigService get _ehConfigService => Get.find();
+  EhSettingService get _ehSettingService => Get.find();
 
   Future<void> impact() async {
-    if (!_ehConfigService.vibrate.value) {
+    if (!_ehSettingService.vibrate.value) {
       return;
     }
     if (Platform.isIOS || (await _hasAmplitudeControl ?? false)) {
@@ -33,7 +33,7 @@ class VibrateUtil {
   }
 
   Future<void> light() async {
-    if (!_ehConfigService.vibrate.value) {
+    if (!_ehSettingService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {
@@ -50,7 +50,7 @@ class VibrateUtil {
         .v('_hasCustomVibrationsSupport:${await _hasCustomVibrationsSupport}\n'
             '_hasAmplitudeControl:${await _hasAmplitudeControl}');
 
-    if (!_ehConfigService.vibrate.value) {
+    if (!_ehSettingService.vibrate.value) {
       return;
     }
 
@@ -64,7 +64,7 @@ class VibrateUtil {
   }
 
   Future<void> heavy() async {
-    if (!_ehConfigService.vibrate.value) {
+    if (!_ehSettingService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {
@@ -77,7 +77,7 @@ class VibrateUtil {
   }
 
   Future<void> success() async {
-    if (!_ehConfigService.vibrate.value) {
+    if (!_ehSettingService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {
@@ -86,7 +86,7 @@ class VibrateUtil {
   }
 
   Future<void> error() async {
-    if (!_ehConfigService.vibrate.value) {
+    if (!_ehSettingService.vibrate.value) {
       return;
     }
     if (Platform.isIOS) {

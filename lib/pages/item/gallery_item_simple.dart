@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
@@ -307,10 +307,10 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
     if (imgUrl.isNotEmpty) {
       return Obx(() {
-        final bool _isBlur = _ehConfigService.isGalleryImgBlur.value;
+        final bool _isBlur = _ehSettingService.isGalleryImgBlur.value;
         return LayoutBuilder(
           builder: (context, constraints) {
             return BlurImage(

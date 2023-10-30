@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
@@ -11,9 +11,9 @@ class ProfileEditController extends GetxController {
   final TagTransController tagTransController = Get.find();
   final LocaleService localeService = Get.find();
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   bool get isTagTranslat =>
-      ehConfigService.isTagTranslat && localeService.isLanguageCodeZh;
+      ehSettingService.isTagTranslate && localeService.isLanguageCodeZh;
 
   final _searchText = ''.obs;
   String get searchText => _searchText.value;

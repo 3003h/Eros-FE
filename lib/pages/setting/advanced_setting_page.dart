@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -44,7 +44,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
     final DnsService _dnsService = Get.find();
     final CacheController _cacheController = Get.find();
 
@@ -112,7 +112,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
       Obx(() => SelectorSettingItem(
             title: L10n.of(context).proxy,
             selector:
-                getProxyTypeModeMap(context)[_ehConfigService.proxyType] ?? '',
+                getProxyTypeModeMap(context)[_ehSettingService.proxyType] ?? '',
             onTap: () {
               Get.toNamed(
                 EHRoutes.proxySetting,
@@ -159,8 +159,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
       const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).vibrate_feedback,
-        value: _ehConfigService.vibrate.value,
-        onChanged: (bool val) => _ehConfigService.vibrate.value = val,
+        value: _ehSettingService.vibrate.value,
+        onChanged: (bool val) => _ehSettingService.vibrate.value = val,
         hideDivider: true,
       ),
       const ItemSpace(),
@@ -186,9 +186,9 @@ class ListViewAdvancedSetting extends StatelessWidget {
       if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
         TextSwitchItem(
           L10n.of(context).native_http_client_adapter,
-          value: _ehConfigService.nativeHttpClientAdapter,
+          value: _ehSettingService.nativeHttpClientAdapter,
           onChanged: (bool val) =>
-              _ehConfigService.nativeHttpClientAdapter = val,
+              _ehSettingService.nativeHttpClientAdapter = val,
         ),
       SelectorSettingItem(
         title: 'Log',
@@ -201,8 +201,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
       ),
       TextSwitchItem(
         'Log debugMode',
-        value: _ehConfigService.debugMode,
-        onChanged: (bool val) => _ehConfigService.debugMode = val,
+        value: _ehSettingService.debugMode,
+        onChanged: (bool val) => _ehSettingService.debugMode = val,
         hideDivider: true,
       ),
     ];
@@ -219,7 +219,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 Widget _buildWebDAVMaxConnectionsItem(BuildContext context,
     {bool hideDivider = false}) {
   final String _title = L10n.of(context).webdav_max_connections;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   // map from EHConst.webDAVConnections
   final Map<int, String> actionMap = Map.fromEntries(
@@ -230,8 +230,8 @@ Widget _buildWebDAVMaxConnectionsItem(BuildContext context,
       title: _title,
       hideDivider: hideDivider,
       actionMap: actionMap,
-      initVal: ehConfigService.webDAVMaxConnections,
-      onValueChanged: (val) => ehConfigService.webDAVMaxConnections = val,
+      initVal: ehSettingService.webDAVMaxConnections,
+      onValueChanged: (val) => ehSettingService.webDAVMaxConnections = val,
     );
   });
 }

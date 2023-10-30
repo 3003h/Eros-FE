@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -424,12 +424,12 @@ class TagGroupItem extends StatelessWidget {
     List<GalleryTag> galleryTags,
     BuildContext context,
   ) {
-    final EhConfigService ehConfigService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
 
     return galleryTags.map((e) {
       final tag = e.setColor();
       return Obx(() => TagButton(
-            text: ehConfigService.isTagTranslat ? tag.tagTranslat : tag.title,
+            text: ehSettingService.isTagTranslate ? tag.tagTranslat : tag.title,
             color: ColorsUtil.hexStringToColor(tag.backgrondColor),
             textColor: () {
               switch (tag.vote) {
@@ -462,7 +462,7 @@ class TagGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
 
     final List<Widget> _tagBtnList =
         _initTagBtnList(tagGroupData.galleryTags, context);
@@ -485,7 +485,7 @@ class TagGroupItem extends StatelessWidget {
                             randomList<Color>(
                                 ThemeColors.tagColorTagType.values),
                         context),
-                    text: ehConfigService.isTagTranslat
+                    text: ehSettingService.isTagTranslate
                         ? EHConst.translateTagType[_tagType.trim()] ?? _tagType
                         : _tagType,
                   )

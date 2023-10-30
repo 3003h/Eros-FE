@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/history_page.dart';
@@ -101,10 +101,10 @@ class TabHomeController extends GetxController {
   int currentIndex = 0;
   bool tapAwait = false;
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final GStore gStore = Get.find();
 
-  bool get isSafeMode => _ehConfigService.isSafeMode.value;
+  bool get isSafeMode => _ehSettingService.isSafeMode.value;
 
   final CupertinoTabController tabController = CupertinoTabController();
 

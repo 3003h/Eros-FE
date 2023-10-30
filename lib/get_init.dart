@@ -18,7 +18,7 @@ import 'common/controller/user_controller.dart';
 import 'common/controller/webdav_controller.dart';
 import 'common/service/controller_tag_service.dart';
 import 'common/service/dns_service.dart';
-import 'common/service/ehconfig_service.dart';
+import 'common/service/ehsetting_service.dart';
 import 'common/service/layout_service.dart';
 import 'common/service/locale_service.dart';
 import 'common/service/theme_service.dart';
@@ -42,7 +42,7 @@ import 'pages/tab/controller/unlock_page_controller.dart';
 import 'pages/tab/controller/watched_controller.dart';
 
 void getinit() {
-  Get.lazyPut(() => EhConfigService(), fenix: true);
+  Get.lazyPut(() => EhSettingService(), fenix: true);
   Get.lazyPut(() => LocaleService(), fenix: true);
   Get.lazyPut(() => ThemeService(), fenix: true);
   Get.put(DnsService(), permanent: true);

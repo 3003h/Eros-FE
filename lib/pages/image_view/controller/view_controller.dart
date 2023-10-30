@@ -7,7 +7,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/archiver_download_controller.dart';
 import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -98,12 +98,12 @@ class ViewExtController extends GetxController {
 
   GalleryPageState? get _galleryPageStat => vState.pageState;
 
-  EhConfigService get _ehConfigService => vState.ehConfigService;
+  EhSettingService get _ehSettingService => vState.ehSettingService;
 
   late final ArchiverDownloadController archiverDownloadController;
 
   // 使用 PhotoView
-  PageViewType get pageViewType => _ehConfigService.readViewCompatibleMode
+  PageViewType get pageViewType => _ehSettingService.readViewCompatibleMode
       ? PageViewType.extendedImageGesturePageView
       : PageViewType.preloadPageView;
 
@@ -234,7 +234,7 @@ class ViewExtController extends GetxController {
           .ehPrecacheImages(
         imageMap: vState.imageMap,
         itemSer: vState.currentItemIndex,
-        max: _ehConfigService.preloadImage.value,
+        max: _ehSettingService.preloadImage.value,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
@@ -245,7 +245,7 @@ class ViewExtController extends GetxController {
     }
 
     logger.t('旋转设置');
-    final ReadOrientation? _orientation = _ehConfigService.orientation.value;
+    final ReadOrientation? _orientation = _ehSettingService.orientation.value;
     // logger.d(' $_orientation');
     if (_orientation != ReadOrientation.system &&
         _orientation != ReadOrientation.auto) {
@@ -288,7 +288,7 @@ class ViewExtController extends GetxController {
   }
 
   void addVolumeKeydownListen() {
-    if (_ehConfigService.volumnTurnPage) {
+    if (_ehSettingService.volumnTurnPage) {
       _volumeKeyDownSubscription =
           FlutterAndroidVolumeKeydown.stream.listen((event) {
         if (event == HardwareButton.volume_down) {
@@ -375,7 +375,7 @@ class ViewExtController extends GetxController {
           .ehPrecacheImages(
         imageMap: _galleryPageStat?.imageMap,
         itemSer: vState.currentItemIndex,
-        max: _ehConfigService.preloadImage.value,
+        max: _ehSettingService.preloadImage.value,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
@@ -545,7 +545,7 @@ class ViewExtController extends GetxController {
           .ehPrecacheImages(
         imageMap: _galleryPageStat?.imageMap,
         itemSer: itemSer,
-        max: _ehConfigService.preloadImage.value,
+        max: _ehSettingService.preloadImage.value,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
@@ -675,7 +675,7 @@ class ViewExtController extends GetxController {
   }
 
   void setFullscreen() {
-    if (_ehConfigService.viewFullscreen) {
+    if (_ehSettingService.viewFullscreen) {
       SystemChrome.setEnabledSystemUIMode(
         SystemUiMode.immersiveSticky,
       );
@@ -693,7 +693,7 @@ class ViewExtController extends GetxController {
     Duration duration = const Duration(milliseconds: 200),
     bool? animate,
   }) {
-    final enableAnimate = animate ?? _ehConfigService.turnPageAnimations;
+    final enableAnimate = animate ?? _ehSettingService.turnPageAnimations;
 
     if (enableAnimate) {
       // 竖向卷轴模式
@@ -771,7 +771,7 @@ class ViewExtController extends GetxController {
 
   Future<void> tapLeft() async {
     logger.t('${vState.viewMode} tap left');
-    final enableAnimate = _ehConfigService.turnPageAnimations;
+    final enableAnimate = _ehSettingService.turnPageAnimations;
     vState.fade = false;
 
     // if (vState.viewMode == ViewMode.LeftToRight && vState.pageIndex > 0) {
@@ -975,17 +975,17 @@ class ViewExtController extends GetxController {
     bool setInv = true,
   }) async {
     final initIndex = EHConst.invList
-        .indexWhere((int element) => element == _ehConfigService.turnPageInv);
+        .indexWhere((int element) => element == _ehSettingService.turnPageInv);
     final int? inv = setInv
         ? await _showAutoReadInvPicker(
             context,
             EHConst.invList,
             initIndex: initIndex,
           )
-        : _ehConfigService.turnPageInv;
+        : _ehSettingService.turnPageInv;
 
     if (inv != null) {
-      _ehConfigService.turnPageInv = inv;
+      _ehSettingService.turnPageInv = inv;
       vState.autoRead = !vState.autoRead;
     }
   }
@@ -1061,7 +1061,7 @@ class ViewExtController extends GetxController {
 
   void _startAutoRead() {
     WakelockPlus.enable();
-    final duration = Duration(milliseconds: _ehConfigService.turnPageInv);
+    final duration = Duration(milliseconds: _ehSettingService.turnPageInv);
     autoNextTimer = Timer.periodic(duration, (timer) {
       _autoTunToPage();
     });

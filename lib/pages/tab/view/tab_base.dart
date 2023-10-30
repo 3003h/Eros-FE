@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -39,11 +39,11 @@ SliverPadding buildWaterfallFlow(
   final double _padding = large
       ? EHConst.waterfallFlowLargeCrossAxisSpacing
       : EHConst.waterfallFlowCrossAxisSpacing;
-  EhConfigService _ehConfigService = Get.find();
+  EhSettingService _ehSettingService = Get.find();
   double getMaxCrossAxisExtent() {
     if (large) {
       final itemConfig =
-          _ehConfigService.getItemConfig(ListModeEnum.waterfallLarge);
+          _ehSettingService.getItemConfig(ListModeEnum.waterfallLarge);
       const defaultMaxCrossAxisExtent =
           EHConst.waterfallFlowLargeMaxCrossAxisExtent;
       if (itemConfig?.enableCustomWidth ?? false) {
@@ -52,7 +52,8 @@ SliverPadding buildWaterfallFlow(
         return defaultMaxCrossAxisExtent;
       }
     } else {
-      final itemConfig = _ehConfigService.getItemConfig(ListModeEnum.waterfall);
+      final itemConfig =
+          _ehSettingService.getItemConfig(ListModeEnum.waterfall);
       final defaultMaxCrossAxisExtent = Get.context!.isPhone
           ? EHConst.waterfallFlowMaxCrossAxisExtent
           : EHConst.waterfallFlowMaxCrossAxisExtentTablet;
@@ -140,9 +141,9 @@ SliverPadding buildGridView(
   Key? centerKey,
   int? lastTopitemIndex,
 }) {
-  EhConfigService _ehConfigService = Get.find();
+  EhSettingService _ehSettingService = Get.find();
   double getMaxCrossAxisExtent() {
-    final itemConfig = _ehConfigService.getItemConfig(ListModeEnum.grid);
+    final itemConfig = _ehSettingService.getItemConfig(ListModeEnum.grid);
     const defaultMaxCrossAxisExtent = EHConst.gridMaxCrossAxisExtent;
     if (itemConfig?.enableCustomWidth ?? false) {
       return itemConfig?.customWidth?.toDouble() ?? defaultMaxCrossAxisExtent;
@@ -577,15 +578,15 @@ Widget getGallerySliverList(
   Rx<ListModeEnum>? listMode,
   bool keepPosition = false,
 }) {
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   final _key = key ?? ValueKey(galleryProviders.hashCode);
 
   // logger.d('next $next');
 
   return Obx(() {
     final mod = listMode?.value != ListModeEnum.global
-        ? listMode?.value ?? ehConfigService.listMode.value
-        : ehConfigService.listMode.value;
+        ? listMode?.value ?? ehSettingService.listMode.value
+        : ehSettingService.listMode.value;
     logger.t('mod $mod');
 
     switch (mod) {

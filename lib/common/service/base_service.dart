@@ -22,6 +22,11 @@ class ProfileService extends GetxService {
   set layoutConfig(LayoutConfig val) =>
       Global.profile = Global.profile.copyWith(layoutConfig: val);
 
+  BlockConfig get blockConfig =>
+      Global.profile.blockConfig ?? const BlockConfig();
+  set blockConfig(BlockConfig val) =>
+      Global.profile = Global.profile.copyWith(blockConfig: val);
+
   Worker everProfile<T>(RxInterface<T> listener, ValueChanged<T> onChange) {
     return ever<T>(listener, (value) {
       onChange(value);
@@ -29,7 +34,7 @@ class ProfileService extends GetxService {
     });
   }
 
-  Worker everFromEunm<T>(
+  Worker everFromEnum<T>(
       RxInterface<T> listener, ValueChanged<String> onChange) {
     return ever<T>(listener, (T value) {
       onChange(EnumToString.convertToString(value));

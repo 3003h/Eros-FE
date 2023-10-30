@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -38,10 +38,10 @@ class ReadSettingPage extends StatelessWidget {
 }
 
 class ViewSettingList extends StatelessWidget {
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   Future<void> onViewFullscreenChanged(bool val) async {
-    ehConfigService.viewFullscreen = val;
+    ehSettingService.viewFullscreen = val;
     final history = MainNavigatorObserver().history;
     final prevMainRoute = history[max(0, history.length - 2)].settings.name;
     logger.d('prevMainRoute $prevMainRoute');
@@ -70,9 +70,9 @@ class ViewSettingList extends StatelessWidget {
       _buildDoublePageItem(context),
       TextSwitchItem(
         L10n.of(context).show_page_interval,
-        value: ehConfigService.showPageInterval.value,
+        value: ehSettingService.showPageInterval.value,
         onChanged: (bool val) {
-          ehConfigService.showPageInterval.value = val;
+          ehSettingService.showPageInterval.value = val;
           if (Get.isRegistered<ViewExtController>()) {
             Get.find<ViewExtController>().resetPageController();
             Get.find<ViewExtController>().update([idSlidePage]);
@@ -81,22 +81,22 @@ class ViewSettingList extends StatelessWidget {
       ),
       TextSwitchItem(
         L10n.of(context).turn_page_anima,
-        value: ehConfigService.turnPageAnimations,
+        value: ehSettingService.turnPageAnimations,
         onChanged: (bool val) {
-          ehConfigService.turnPageAnimations = val;
+          ehSettingService.turnPageAnimations = val;
         },
       ),
       if (GetPlatform.isAndroid)
         TextSwitchItem(
           L10n.of(context).volume_key_turn_page,
-          value: ehConfigService.volumnTurnPage,
+          value: ehSettingService.volumnTurnPage,
           onChanged: (bool val) {
-            ehConfigService.volumnTurnPage = val;
+            ehSettingService.volumnTurnPage = val;
           },
         ),
       TextSwitchItem(
         L10n.of(context).fullscreen,
-        value: ehConfigService.viewFullscreen,
+        value: ehSettingService.viewFullscreen,
         onChanged: onViewFullscreenChanged,
         hideDivider: true,
       ),
@@ -104,10 +104,10 @@ class ViewSettingList extends StatelessWidget {
       // CompatibleMode
       TextSwitchItem(
         L10n.of(context).read_view_compatible_mode,
-        value: ehConfigService.readViewCompatibleMode,
+        value: ehSettingService.readViewCompatibleMode,
         hideDivider: true,
         onChanged: (bool val) {
-          ehConfigService.readViewCompatibleMode = val;
+          ehSettingService.readViewCompatibleMode = val;
         },
       ),
     ];
@@ -123,7 +123,7 @@ class ViewSettingList extends StatelessWidget {
 /// 阅读方向模式切换
 Widget _buildViewModeItem(BuildContext context) {
   final String _title = L10n.of(context).reading_direction;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
     ViewMode.LeftToRight: L10n.of(context).left_to_right,
@@ -161,14 +161,14 @@ Widget _buildViewModeItem(BuildContext context) {
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector: modeMap[ehConfigService.viewMode.value] ?? '',
+        selector: modeMap[ehSettingService.viewMode.value] ?? '',
         onTap: () async {
           logger.t('tap ModeItem');
           final ViewMode? _result = await _showDialog(context);
           if (_result != null) {
             // ignore: unnecessary_string_interpolations
             logger.t('${EnumToString.convertToString(_result)}');
-            ehConfigService.viewMode.value = _result;
+            ehSettingService.viewMode.value = _result;
             if (Get.isRegistered<ViewExtController>()) {
               Get.find<ViewExtController>().handOnViewModeChanged(_result);
             }
@@ -179,7 +179,7 @@ Widget _buildViewModeItem(BuildContext context) {
 
 class ReadOrientationItem extends StatelessWidget {
   final String _title = L10n.of(Get.context!).screen_orientation;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   final Map<ReadOrientation, String> modeMap = <ReadOrientation, String>{
     ReadOrientation.system: L10n.of(Get.context!).orientation_system,
@@ -222,14 +222,14 @@ class ReadOrientationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => SelectorSettingItem(
           title: _title,
-          selector: modeMap[ehConfigService.orientation.value] ?? '',
+          selector: modeMap[ehSettingService.orientation.value] ?? '',
           onTap: () async {
             logger.t('tap ModeItem');
             final ReadOrientation? _result = await _showDialog(context);
             if (_result != null) {
               // ignore: unnecessary_string_interpolations
               // logger.t('${EnumToString.convertToString(_result)}');
-              ehConfigService.orientation.value = _result;
+              ehSettingService.orientation.value = _result;
               if (_result != ReadOrientation.system &&
                   _result != ReadOrientation.auto) {
                 OrientationHelper.setPreferredOrientations(
@@ -250,7 +250,7 @@ class ReadOrientationItem extends StatelessWidget {
 /// 双页设置切换
 Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
   final String _title = L10n.of(context).double_page_model;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   final Map<ViewColumnMode, String> actionMap = <ViewColumnMode, String>{
     ViewColumnMode.single: L10n.of(context).off,
@@ -324,7 +324,7 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
           child: Obx(() {
             return ListView(
               scrollDirection: Axis.horizontal,
-              reverse: ehConfigService.viewMode.value == ViewMode.rightToLeft,
+              reverse: ehSettingService.viewMode.value == ViewMode.rightToLeft,
               children: modeA,
             );
           }),
@@ -343,7 +343,7 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
           child: Obx(() {
             return ListView(
               scrollDirection: Axis.horizontal,
-              reverse: ehConfigService.viewMode.value == ViewMode.rightToLeft,
+              reverse: ehSettingService.viewMode.value == ViewMode.rightToLeft,
               children: modeB,
             );
           }),
@@ -358,8 +358,8 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
       hideDivider: hideLine,
       actionMap: actionMap,
       actionWidgetMap: actionWidgetMap,
-      initVal: ehConfigService.viewColumnMode,
-      onValueChanged: (val) => ehConfigService.viewColumnMode = val,
+      initVal: ehSettingService.viewColumnMode,
+      onValueChanged: (val) => ehSettingService.viewColumnMode = val,
     );
   });
 }

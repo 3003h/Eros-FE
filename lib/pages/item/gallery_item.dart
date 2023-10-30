@@ -1,6 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:fehviewer/common/exts.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -26,7 +26,7 @@ const double kCardRadius = 12.0;
 
 const double kFixedHeight = 204.0;
 
-final EhConfigService _ehConfigService = Get.find();
+final EhSettingService _ehSettingService = Get.find();
 
 /// 画廊列表项
 class GalleryItemWidget extends StatelessWidget {
@@ -47,7 +47,7 @@ class GalleryItemWidget extends StatelessWidget {
         child: Stack(
           children: [
             _buildCardItem(),
-            if (Get.find<EhConfigService>().debugMode)
+            if (Get.find<EhSettingService>().debugMode)
               Positioned(
                 left: 4,
                 top: 4,
@@ -79,7 +79,8 @@ class GalleryItemWidget extends StatelessWidget {
     return Obx(
       () {
         return Container(
-          height: _ehConfigService.fixedHeightOfListItems ? kFixedHeight : null,
+          height:
+              _ehSettingService.fixedHeightOfListItems ? kFixedHeight : null,
           decoration: BoxDecoration(
             boxShadow: ehTheme.isDarkMode
                 ? null
@@ -141,7 +142,7 @@ class GalleryItemWidget extends StatelessWidget {
                         const Spacer(),
                         const SizedBox(height: 6),
                         // 标签
-                        if (_ehConfigService.fixedHeightOfListItems)
+                        if (_ehSettingService.fixedHeightOfListItems)
                           TagWaterfallFlowViewBox(
                             simpleTags: galleryProvider.simpleTags,
                             crossAxisCount: itemController.tagLine,
@@ -228,7 +229,7 @@ class _CoverImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
     final GalleryProvider _item = galleryProviderController.galleryProvider;
 
     // 图片高宽比
@@ -242,7 +243,7 @@ class _CoverImage extends StatelessWidget {
     // 计算图片容器高度
     late double? coverImageHeigth;
 
-    if (_ehConfigService.fixedHeightOfListItems) {
+    if (_ehSettingService.fixedHeightOfListItems) {
       coverImageHeigth = kFixedHeight;
     } else {
       if ((_item.imgWidth ?? 0) >= coverImageWidth) {
@@ -346,7 +347,7 @@ class _CoverImage extends StatelessWidget {
           Obx(() {
             return coverBackground(
               _fit,
-              ehConfigService.blurringOfCoverBackground,
+              ehSettingService.blurringOfCoverBackground,
             );
           }),
           Center(
@@ -394,7 +395,7 @@ class _Title extends StatelessWidget {
 
     return Obx(() => Text(
           galleryItemController.title,
-          maxLines: _ehConfigService.fixedHeightOfListItems ? maxLine : 4,
+          maxLines: _ehSettingService.fixedHeightOfListItems ? maxLine : 4,
           textAlign: TextAlign.left, // 对齐方式
           overflow: TextOverflow.ellipsis, // 超出部分省略号
           style: const TextStyle(
@@ -580,11 +581,11 @@ class TagBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
 
     return Obx(() {
       List<SimpleTag>? _simpleTags =
-          getLimitSimpleTags(simpleTags, _ehConfigService.listViewTagLimit);
+          getLimitSimpleTags(simpleTags, _ehSettingService.listViewTagLimit);
 
       if (_simpleTags == null || _simpleTags.isEmpty) {
         return const SizedBox.shrink();
@@ -596,7 +597,7 @@ class TagBox extends StatelessWidget {
           spacing: 4, //主轴上子控件的间距
           runSpacing: 4, //交叉轴上子控件之间的间距
           children: List<Widget>.from(_simpleTags.map((SimpleTag _simpleTag) {
-            final String? _text = _ehConfigService.isTagTranslat
+            final String? _text = _ehSettingService.isTagTranslate
                 ? _simpleTag.translat
                 : _simpleTag.text;
             return TagItem(
@@ -629,7 +630,7 @@ class CoverImg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService ehConfigService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
 
     Widget image() {
       if (imgUrl.isNotEmpty) {
@@ -654,7 +655,7 @@ class CoverImg extends StatelessWidget {
     return Obx(
       () => BlurImage(
         child: image(),
-        isBlur: ehConfigService.isGalleryImgBlur.value,
+        isBlur: ehSettingService.isGalleryImgBlur.value,
       ),
     );
   }

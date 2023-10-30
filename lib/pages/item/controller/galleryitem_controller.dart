@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 class GalleryItemController extends GetxController {
   GalleryItemController({required this.galleryProvider});
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final FavController _favDialogController = Get.find();
   final TabHomeController _tabHomeController = Get.find();
   final HistoryController _historyController = Get.find();
@@ -65,7 +65,7 @@ class GalleryItemController extends GetxController {
   int get tagLine => max(
           1,
           (getLimitSimpleTags(galleryProvider.simpleTags,
-                          _ehConfigService.listViewTagLimit)
+                          _ehSettingService.listViewTagLimit)
                       ?.length ??
                   0) /
               4)
@@ -88,7 +88,7 @@ class GalleryItemController extends GetxController {
   }
 
   String get title {
-    // if ((_ehConfigService.isJpnTitle.value) &&
+    // if ((_ehSettingService.isJpnTitle.value) &&
     //     (galleryProvider.japaneseTitle?.isNotEmpty ?? false)) {
     //   return galleryProvider.japaneseTitle ?? '';
     // } else {

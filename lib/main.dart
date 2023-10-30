@@ -4,7 +4,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -46,7 +46,7 @@ Future<void> main() async {
     getinit();
     Global.proxyInit();
 
-    if (Get.find<EhConfigService>().debugMode || kDebugMode) {
+    if (Get.find<EhSettingService>().debugMode || kDebugMode) {
       Logger.level = Level.debug;
       logger.t('Level.debug');
     } else {
@@ -95,7 +95,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final LocaleService localeService = Get.find();
   final ThemeService themeService = Get.find();
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final AutoLockController _autoLockController = Get.find();
 
   @override
@@ -132,7 +132,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // loggerTime.d('resumed');
       _autoLockController.resumed();
 
-      _ehConfigService.chkClipboardLink(context);
+      _ehSettingService.chkClipboardLink(context);
     }
   }
 
@@ -219,10 +219,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
 Future<void> updateTagTranslate() async {
   await 10.seconds.delay();
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   final TagTransController tagTransController = Get.find();
 
-  if (ehConfigService.tagTranslateDataUpdateMode ==
+  if (ehSettingService.tagTranslateDataUpdateMode ==
       TagTranslateDataUpdateMode.everyStartApp) {
     logger.t('updateTagTranslate everyStartApp');
     if (await tagTransController.checkUpdate()) {

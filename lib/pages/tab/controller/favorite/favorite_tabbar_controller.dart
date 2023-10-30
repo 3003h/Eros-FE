@@ -55,10 +55,10 @@ class FavoriteTabberController extends DefaultTabViewController {
   }
 
   String get orderText =>
-      ehConfigService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
+      ehSettingService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
 
   Future<void> setOrder(BuildContext context) async {
-    final FavoriteOrder? order = await ehConfigService.showFavOrder(context);
+    final FavoriteOrder? order = await ehSettingService.showFavOrder(context);
     if (order != null) {
       _currSubController?.change(state, status: RxStatus.loading());
       _currSubController?.reloadData();

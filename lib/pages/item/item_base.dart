@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/utils/utility.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,7 @@ class TagListViewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
     return simpleTags != null && simpleTags!.isNotEmpty
         ? Obx(() => SizedBox(
               height: tagBoxHeight,
@@ -25,7 +25,7 @@ class TagListViewBox extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 children:
                     List<Widget>.from(simpleTags!.map((SimpleTag _simpleTag) {
-                  final String? _text = _ehConfigService.isTagTranslat
+                  final String? _text = _ehSettingService.isTagTranslate
                       ? _simpleTag.translat
                       : _simpleTag.text;
                   return FrameSeparateWidget(
@@ -60,11 +60,11 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScrollController controller = ScrollController();
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
 
     return Obx(() {
       List<SimpleTag>? _simpleTags =
-          getLimitSimpleTags(simpleTags, _ehConfigService.listViewTagLimit);
+          getLimitSimpleTags(simpleTags, _ehSettingService.listViewTagLimit);
 
       if (_simpleTags == null || _simpleTags.isEmpty) {
         return const SizedBox.shrink();
@@ -89,7 +89,7 @@ class TagWaterfallFlowViewBox extends StatelessWidget {
               return Obx(
                 () {
                   final _simpleTag = _simpleTags[index];
-                  final String? _text = _ehConfigService.isTagTranslat
+                  final String? _text = _ehSettingService.isTagTranslate
                       ? _simpleTag.translat
                       : _simpleTag.text;
                   Widget _item = TagItem(

@@ -24,7 +24,7 @@ import 'package:logger/logger.dart';
 import 'controller_tag_service.dart';
 import 'locale_service.dart';
 
-class EhConfigService extends ProfileService {
+class EhSettingService extends ProfileService {
   // RxBool isJpnTitle = false.obs;
   // RxBool isTagTranslat = false.obs;
   RxBool isGalleryImgBlur = false.obs;
@@ -54,12 +54,12 @@ class EhConfigService extends ProfileService {
 
   final LocaleService localeService = Get.find();
 
-  final _isTagTranslat = false.obs;
-  bool get isTagTranslat {
-    return localeService.isLanguageCodeZh && _isTagTranslat.value;
+  final _isTagTranslate = false.obs;
+  bool get isTagTranslate {
+    return localeService.isLanguageCodeZh && _isTagTranslate.value;
   }
 
-  set isTagTranslat(bool val) => _isTagTranslat.value = val;
+  set isTagTranslate(bool val) => _isTagTranslate.value = val;
 
   String _lastClipboardLink = '';
 
@@ -293,11 +293,8 @@ class EhConfigService extends ProfileService {
   bool get jpnTitleInGalleryPage => _jpnTitleInGalleryPage.value;
   set jpnTitleInGalleryPage(bool val) => _jpnTitleInGalleryPage.value = val;
 
-  @override
-  void onInit() {
-    super.onInit();
-
-    // jpnTitleInGalleryPage
+  void _initEhConfig() {
+// jpnTitleInGalleryPage
     jpnTitleInGalleryPage =
         ehConfig.jpnTitleInGalleryPage ?? jpnTitleInGalleryPage;
     everProfile<bool>(_jpnTitleInGalleryPage, (val) {
@@ -332,18 +329,6 @@ class EhConfigService extends ProfileService {
       ehConfig = ehConfig.copyWith(translateSearchHistory: val);
     });
 
-    _itemConfigList(layoutConfig.itemConfigs);
-    for (final itemConfig in _itemConfigList) {
-      _itemConfigMap[
-          EnumToString.fromString(ListModeEnum.values, itemConfig.type) ??
-              ListModeEnum.grid] = itemConfig;
-    }
-
-    everProfile<List<ItemConfig>>(_itemConfigList, (val) {
-      logger.d('itemConfigList changed: ${val.map((e) => e.toJson())}');
-      layoutConfig = layoutConfig.copyWith(itemConfigs: val);
-    });
-
     // hideTopBarOnScroll
     hideTopBarOnScroll = ehConfig.hideTopBarOnScroll ?? hideTopBarOnScroll;
     everProfile<bool>(_hideTopBarOnScroll, (value) {
@@ -363,7 +348,7 @@ class EhConfigService extends ProfileService {
     proxyType =
         EnumToString.fromString(ProxyType.values, ehConfig.proxyType ?? '') ??
             proxyType;
-    everFromEunm(_proxyType, (String value) {
+    everFromEnum(_proxyType, (String value) {
       ehConfig = ehConfig.copyWith(proxyType: value);
       setProxy();
     });
@@ -410,14 +395,14 @@ class EhConfigService extends ProfileService {
     avatarType =
         EnumToString.fromString(AvatarType.values, ehConfig.avatarType ?? '') ??
             _kAvatarType;
-    everFromEunm(_avatarType, (String value) {
+    everFromEnum(_avatarType, (String value) {
       ehConfig = ehConfig.copyWith(avatarType: value);
     });
 
     textAvatarsType = EnumToString.fromString(
             TextAvatarsType.values, ehConfig.textAvatarsType ?? '') ??
         _kTextAvatarsType;
-    everFromEunm(_textAvatarsType, (String value) {
+    everFromEnum(_textAvatarsType, (String value) {
       ehConfig = ehConfig.copyWith(textAvatarsType: value);
     });
 
@@ -446,7 +431,7 @@ class EhConfigService extends ProfileService {
     boringAvatarsType = EnumToString.fromString(
             BoringAvatarsType.values, ehConfig.boringAvatarsType ?? '') ??
         BoringAvatarsType.beam;
-    everFromEunm(_boringAvatarsType, (String value) {
+    everFromEnum(_boringAvatarsType, (String value) {
       ehConfig = ehConfig.copyWith(boringAvatarsType: value);
     });
 
@@ -455,40 +440,15 @@ class EhConfigService extends ProfileService {
             AvatarBorderRadiusType.values,
             ehConfig.avatarBorderRadiusType ?? '') ??
         avatarBorderRadiusType;
-    everFromEunm(_avatarBorderRadiusType, (String value) {
+    everFromEnum(_avatarBorderRadiusType, (String value) {
       ehConfig = ehConfig.copyWith(avatarBorderRadiusType: value);
-    });
-
-    /// 预载图片数量
-    preloadImage.value = downloadConfig.preloadImage ?? preloadImage.value;
-    everProfile<int>(preloadImage, (value) {
-      downloadConfig = downloadConfig.copyWith(preloadImage: value);
-    });
-
-    // downloadLocatino
-    downloadLocatino = downloadConfig.downloadLocation ?? downloadLocatino;
-    everProfile<String>(_downloadLocatino, (value) {
-      downloadConfig = downloadConfig.copyWith(downloadLocation: value);
-    });
-
-    multiDownload = (downloadConfig.multiDownload != null &&
-            downloadConfig.multiDownload! > 0)
-        ? downloadConfig.multiDownload!
-        : multiDownload;
-    everProfile<int>(_multiDownload, (value) {
-      downloadConfig = downloadConfig.copyWith(multiDownload: value);
-    });
-
-    allowMediaScan = downloadConfig.allowMediaScan ?? allowMediaScan;
-    everProfile<bool>(_allowMediaScan, (value) {
-      downloadConfig = downloadConfig.copyWith(allowMediaScan: value);
     });
 
     /// 阅读方向
     viewMode.value =
         EnumToString.fromString(ViewMode.values, ehConfig.viewModel) ??
             viewMode.value;
-    everFromEunm(viewMode, (String value) {
+    everFromEnum(viewMode, (String value) {
       ehConfig = ehConfig.copyWith(viewModel: value);
     });
 
@@ -504,8 +464,8 @@ class EhConfigService extends ProfileService {
     //   ehConfig = ehConfig.copyWith(jpnTitle: value);
     // });
 
-    isTagTranslat = ehConfig.tagTranslat ?? isTagTranslat;
-    everProfile<bool>(_isTagTranslat,
+    isTagTranslate = ehConfig.tagTranslat ?? isTagTranslate;
+    everProfile<bool>(_isTagTranslate,
         (value) => ehConfig = ehConfig.copyWith(tagTranslat: value));
 
     isGalleryImgBlur.value = ehConfig.galleryImgBlur ?? isGalleryImgBlur.value;
@@ -536,7 +496,7 @@ class EhConfigService extends ProfileService {
     listMode.value =
         EnumToString.fromString(ListModeEnum.values, ehConfig.listMode) ??
             listMode.value;
-    everFromEunm(listMode,
+    everFromEnum(listMode,
         (String value) => ehConfig = ehConfig.copyWith(listMode: value));
 
     isSearchBarComp.value = ehConfig.searchBarComp ?? isSearchBarComp.value;
@@ -546,7 +506,7 @@ class EhConfigService extends ProfileService {
     favoriteOrder.value = EnumToString.fromString(
             FavoriteOrder.values, ehConfig.favoritesOrder) ??
         favoriteOrder.value;
-    everFromEunm(favoriteOrder,
+    everFromEnum(favoriteOrder,
         (String value) => ehConfig = ehConfig.copyWith(favoritesOrder: value));
 
     tagTranslatVer.value = isarHelper.getTranslateVersion();
@@ -595,7 +555,7 @@ class EhConfigService extends ProfileService {
     orientation.value = EnumToString.fromString(
             ReadOrientation.values, ehConfig.favoritesOrder) ??
         orientation.value;
-    everFromEunm(orientation,
+    everFromEnum(orientation,
         (String value) => ehConfig = ehConfig.copyWith(orientation: value));
 
     // vibrate
@@ -607,14 +567,14 @@ class EhConfigService extends ProfileService {
     tagIntroImgLv.value = EnumToString.fromString(
             TagIntroImgLv.values, ehConfig.tagIntroImgLv ?? 'nonh') ??
         tagIntroImgLv.value;
-    everFromEunm(tagIntroImgLv,
+    everFromEnum(tagIntroImgLv,
         (String value) => ehConfig = ehConfig.copyWith(tagIntroImgLv: value));
 
     // viewColumnMode
     viewColumnMode = EnumToString.fromString(
             ViewColumnMode.values, ehConfig.viewColumnMode ?? '') ??
         viewColumnMode;
-    everFromEunm(_viewColumnMode,
+    everFromEnum(_viewColumnMode,
         (String value) => ehConfig = ehConfig.copyWith(viewColumnMode: value));
 
     debugCount = ehConfig.debugCount ?? debugCount;
@@ -654,7 +614,7 @@ class EhConfigService extends ProfileService {
     toplist =
         EnumToString.fromString(ToplistType.values, ehConfig.toplist ?? '') ??
             toplist;
-    everFromEunm(_toplist,
+    everFromEnum(_toplist,
         (String value) => ehConfig = ehConfig.copyWith(toplist: value));
 
     // tabletLayout = ehConfig.tabletLayout ?? tabletLayout;
@@ -680,22 +640,6 @@ class EhConfigService extends ProfileService {
         (bool value) =>
             ehConfig = ehConfig.copyWith(turnPageAnimations: value));
 
-    // downloadOrigImage
-    downloadOrigImage = downloadConfig.downloadOrigImage ?? downloadOrigImage;
-    everProfile<bool>(_downloadOrigImage, (value) {
-      downloadConfig = downloadConfig.copyWith(downloadOrigImage: value);
-    });
-
-    // _downloadOrigType
-    downloadOrigType = EnumToString.fromString(DownloadOrigImageType.values,
-            downloadConfig.downloadOrigImageType ?? '') ??
-        (downloadOrigImage
-            ? DownloadOrigImageType.askMe
-            : DownloadOrigImageType.no);
-    everFromEunm(_downloadOrigType, (String value) {
-      downloadConfig = downloadConfig.copyWith(downloadOrigImageType: value);
-    });
-
     // _selectProfile
     selectProfile = ehConfig.selectProfile ?? selectProfile;
     everProfile<String>(_selectProfile, (value) {
@@ -720,7 +664,7 @@ class EhConfigService extends ProfileService {
             TagTranslateDataUpdateMode.values,
             ehConfig.tagTranslateDataUpdateMode ?? '') ??
         tagTranslateDataUpdateMode;
-    everFromEunm(
+    everFromEnum(
         _tagTranslateDataUpdateMode,
         (String value) =>
             ehConfig = ehConfig.copyWith(tagTranslateDataUpdateMode: value));
@@ -729,7 +673,7 @@ class EhConfigService extends ProfileService {
     tabletLayoutType = EnumToString.fromString(
             TabletLayout.values, ehConfig.tabletLayoutValue ?? '') ??
         tabletLayoutType;
-    everFromEunm(
+    everFromEnum(
         _tabletLayoutType,
         (String value) =>
             ehConfig = ehConfig.copyWith(tabletLayoutValue: value));
@@ -739,6 +683,82 @@ class EhConfigService extends ProfileService {
     everProfile<bool>(_showCommentAvatar, (value) {
       ehConfig = ehConfig.copyWith(showCommentAvatar: value);
     });
+  }
+
+  ///
+  void _initDownloadConfig() {
+    /// downloadConfig
+    /// 预载图片数量
+    preloadImage.value = downloadConfig.preloadImage ?? preloadImage.value;
+    everProfile<int>(preloadImage, (value) {
+      downloadConfig = downloadConfig.copyWith(preloadImage: value);
+    });
+
+    // downloadLocatino
+    downloadLocatino = downloadConfig.downloadLocation ?? downloadLocatino;
+    everProfile<String>(_downloadLocatino, (value) {
+      downloadConfig = downloadConfig.copyWith(downloadLocation: value);
+    });
+
+    multiDownload = (downloadConfig.multiDownload != null &&
+            downloadConfig.multiDownload! > 0)
+        ? downloadConfig.multiDownload!
+        : multiDownload;
+    everProfile<int>(_multiDownload, (value) {
+      downloadConfig = downloadConfig.copyWith(multiDownload: value);
+    });
+
+    allowMediaScan = downloadConfig.allowMediaScan ?? allowMediaScan;
+    everProfile<bool>(_allowMediaScan, (value) {
+      downloadConfig = downloadConfig.copyWith(allowMediaScan: value);
+    });
+
+    // downloadOrigImage
+    downloadOrigImage = downloadConfig.downloadOrigImage ?? downloadOrigImage;
+    everProfile<bool>(_downloadOrigImage, (value) {
+      downloadConfig = downloadConfig.copyWith(downloadOrigImage: value);
+    });
+
+    // _downloadOrigType
+    downloadOrigType = EnumToString.fromString(DownloadOrigImageType.values,
+            downloadConfig.downloadOrigImageType ?? '') ??
+        (downloadOrigImage
+            ? DownloadOrigImageType.askMe
+            : DownloadOrigImageType.no);
+    everFromEnum(_downloadOrigType, (String value) {
+      downloadConfig = downloadConfig.copyWith(downloadOrigImageType: value);
+    });
+
+    /// downloadConfig end
+  }
+
+  void _initLayoutConfig() {
+    _itemConfigList(layoutConfig.itemConfigs);
+    for (final itemConfig in _itemConfigList) {
+      _itemConfigMap[
+          EnumToString.fromString(ListModeEnum.values, itemConfig.type) ??
+              ListModeEnum.grid] = itemConfig;
+    }
+
+    everProfile<List<ItemConfig>>(_itemConfigList, (val) {
+      logger.d('itemConfigList changed: ${val.map((e) => e.toJson())}');
+      layoutConfig = layoutConfig.copyWith(itemConfigs: val);
+    });
+  }
+
+  void _initBlockConfig() {}
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    _initDownloadConfig();
+
+    _initLayoutConfig();
+
+    _initBlockConfig();
+
+    _initEhConfig();
   }
 
   Future<void> setProxy() async {

@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
@@ -51,10 +51,10 @@ extension EhString on String {
   }
 
   String get _handleThumbUrlToEh {
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
 
     if (startsWith(EHConst.URL_PREFIX_THUMB_EX) &&
-        _ehConfigService.redirectThumbLink) {
+        _ehSettingService.redirectThumbLink) {
       return replaceFirst(
           EHConst.URL_PREFIX_THUMB_EX, EHConst.URL_PREFIX_THUMB_E);
     }

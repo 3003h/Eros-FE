@@ -15,5 +15,6 @@
   "favConfig?": "$fav_config",
   "customTabConfig?": "$custom_tab_config",
   "tabConfig?": "$tab_config",
-  "layoutConfig?": "$layout_config"
+  "layoutConfig?": "$layout_config",
+  "blockConfig?": "$block_config"
 }

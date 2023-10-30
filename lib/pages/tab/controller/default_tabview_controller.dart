@@ -3,7 +3,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:collection/collection.dart';
 import 'package:custom_pop_up_menu/custom_pop_up_menu.dart';
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -48,14 +48,14 @@ class DefaultTabViewController extends TabViewController {
   String? _curFavcat;
 
   String get curFavcat {
-    return _curFavcat ?? ehConfigService.lastShowFavcat ?? 'a';
+    return _curFavcat ?? ehSettingService.lastShowFavcat ?? 'a';
   }
 
   set curFavcat(String? val) {
     _curFavcat = val;
   }
 
-  String get currToplist => topListVal[ehConfigService.toplist] ?? '15';
+  String get currToplist => topListVal[ehSettingService.toplist] ?? '15';
 
   int lastTopitemIndex = 0;
 
@@ -86,7 +86,7 @@ class DefaultTabViewController extends TabViewController {
 
   @override
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    final int _catNum = ehConfigService.catFilter.value;
+    final int _catNum = ehSettingService.catFilter.value;
     cancelToken = CancelToken();
 
     final fetchConfig = FetchParams(
@@ -155,7 +155,7 @@ class DefaultTabViewController extends TabViewController {
     final fetchConfig = FetchParams(
       pageType: PageType.next,
       gid: nextPage > -1 ? (state?.lastOrNull?.gid ?? '') : nextGid,
-      cats: cats ?? ehConfigService.catFilter.value,
+      cats: cats ?? ehSettingService.catFilter.value,
       refresh: true,
       cancelToken: cancelToken,
       favcat: curFavcat,
@@ -175,7 +175,7 @@ class DefaultTabViewController extends TabViewController {
     final fetchConfig = FetchParams(
       pageType: PageType.prev,
       gid: prevGid,
-      cats: cats ?? ehConfigService.catFilter.value,
+      cats: cats ?? ehSettingService.catFilter.value,
       refresh: true,
       cancelToken: cancelToken,
       favcat: curFavcat,
@@ -208,7 +208,7 @@ class DefaultTabViewController extends TabViewController {
     final fetchConfig = FetchParams(
       pageType: pageType,
       gid: gid,
-      cats: cats ?? ehConfigService.catFilter.value,
+      cats: cats ?? ehSettingService.catFilter.value,
       refresh: true,
       cancelToken: cancelToken,
       favcat: curFavcat,
@@ -362,7 +362,7 @@ class DefaultTabViewController extends TabViewController {
     }
 
     return Obx(() {
-      if (enablePopupMenu && (!Get.find<EhConfigService>().isSafeMode.value)) {
+      if (enablePopupMenu && (!Get.find<EhSettingService>().isSafeMode.value)) {
         return buildLeadingCustomPopupMenu(context);
       }
 

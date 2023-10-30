@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:file_picker/file_picker.dart';
@@ -33,11 +33,11 @@ class DownloadSettingPage extends StatelessWidget {
 }
 
 class ListViewDownloadSetting extends StatelessWidget {
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   final DownloadController downloadController = Get.find();
 
   void _handleAllowMediaScanChanged(bool newValue) {
-    ehConfigService.allowMediaScan = newValue;
+    ehSettingService.allowMediaScan = newValue;
     downloadController.allowMediaScan(newValue);
   }
 
@@ -47,16 +47,16 @@ class ListViewDownloadSetting extends StatelessWidget {
       // 下载路径
       if (!GetPlatform.isIOS)
         Obx(() {
-          ehConfigService.downloadLocatino;
+          ehSettingService.downloadLocatino;
           return FutureBuilder<String>(
               future: defDownloadPath,
               builder: (context, snapshot) {
                 late String path;
                 if (snapshot.connectionState == ConnectionState.done) {
-                  if (ehConfigService.downloadLocatino.isEmpty) {
+                  if (ehSettingService.downloadLocatino.isEmpty) {
                     path = snapshot.data ?? '';
                   } else {
-                    path = ehConfigService.downloadLocatino;
+                    path = ehSettingService.downloadLocatino;
                   }
                 } else {
                   path = '';
@@ -69,7 +69,7 @@ class ListViewDownloadSetting extends StatelessWidget {
                     padding: const EdgeInsets.all(0),
                     minSize: 36,
                     child: const Icon(CupertinoIcons.refresh),
-                    onPressed: () async => ehConfigService.downloadLocatino =
+                    onPressed: () async => ehSettingService.downloadLocatino =
                         await defDownloadPath,
                   ),
                   onTap: () async {
@@ -78,7 +78,7 @@ class ListViewDownloadSetting extends StatelessWidget {
                       final uri = await ss.openDocumentTree();
                       logger.d('uri $uri');
                       if (uri != null) {
-                        ehConfigService.downloadLocatino = uri.toString();
+                        ehSettingService.downloadLocatino = uri.toString();
                       }
                     } else {
                       final String? result =
@@ -86,7 +86,7 @@ class ListViewDownloadSetting extends StatelessWidget {
                       logger.d('set $result');
 
                       if (result != null) {
-                        ehConfigService.downloadLocatino = result;
+                        ehSettingService.downloadLocatino = result;
                       }
                     }
                   },
@@ -96,7 +96,7 @@ class ListViewDownloadSetting extends StatelessWidget {
       if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
         TextSwitchItem(
           L10n.of(context).allow_media_scan,
-          value: ehConfigService.allowMediaScan,
+          value: ehSettingService.allowMediaScan,
           onChanged: _handleAllowMediaScanChanged,
         ),
       _buildPreloadImageItem(context),
@@ -132,7 +132,7 @@ class ListViewDownloadSetting extends StatelessWidget {
 Widget _buildDownloadOrigImageItem(BuildContext context,
     {bool hideDivider = false}) {
   final String _title = L10n.of(context).download_ori_image;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   final Map<DownloadOrigImageType, String> modeMap =
       <DownloadOrigImageType, String>{
@@ -145,8 +145,8 @@ Widget _buildDownloadOrigImageItem(BuildContext context,
       title: _title,
       hideDivider: hideDivider,
       actionMap: modeMap,
-      initVal: ehConfigService.downloadOrigType,
-      onValueChanged: (val) => ehConfigService.downloadOrigType = val,
+      initVal: ehSettingService.downloadOrigType,
+      onValueChanged: (val) => ehSettingService.downloadOrigType = val,
     );
   });
 }
@@ -155,7 +155,7 @@ Widget _buildDownloadOrigImageItem(BuildContext context,
 Widget _buildPreloadImageItem(BuildContext context,
     {bool hideDivider = false}) {
   final String _title = L10n.of(context).preload_image;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
     return List<Widget>.from(EHConst.preloadImage.map((int element) {
@@ -187,11 +187,11 @@ Widget _buildPreloadImageItem(BuildContext context,
 
   return Obx(() => SelectorSettingItem(
         title: _title,
-        selector: ehConfigService.preloadImage.toString(),
+        selector: ehSettingService.preloadImage.toString(),
         onTap: () async {
           final int? _result = await _showActionSheet(context);
           if (_result != null) {
-            ehConfigService.preloadImage(_result);
+            ehSettingService.preloadImage(_result);
           }
         },
       ));
@@ -200,7 +200,7 @@ Widget _buildPreloadImageItem(BuildContext context,
 /// 同时下载图片数量
 Widget _buildMultiDownloadItem(BuildContext context, {bool hideLine = false}) {
   final String _title = L10n.of(context).multi_download;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
     return List<Widget>.from(EHConst.multiDownload.map((int element) {
@@ -233,12 +233,12 @@ Widget _buildMultiDownloadItem(BuildContext context, {bool hideLine = false}) {
   return Obx(() => SelectorSettingItem(
         title: _title,
         hideDivider: hideLine,
-        selector: ehConfigService.multiDownload.toString(),
+        selector: ehSettingService.multiDownload.toString(),
         onTap: () async {
           final int? _result = await _showActionSheet(context);
           if (_result != null) {
-            if (ehConfigService.multiDownload != _result) {
-              ehConfigService.multiDownload = _result;
+            if (ehSettingService.multiDownload != _result) {
+              ehSettingService.multiDownload = _result;
               Get.find<DownloadController>().resetConcurrency();
             }
           }

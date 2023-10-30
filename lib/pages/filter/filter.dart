@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/const/theme_colors.dart';
@@ -272,7 +272,7 @@ class AdvanceSearchSwitchItem extends StatelessWidget {
 /// 设置类型筛选
 /// 弹出toast 全局维护cat的值
 Future<void> showFilterSetting() async {
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   return showCupertinoDialog<void>(
     context: Get.overlayContext!,
     barrierDismissible: true,
@@ -280,9 +280,9 @@ Future<void> showFilterSetting() async {
       return CupertinoAlertDialog(
         title: Text(L10n.of(context).search),
         content: GalleryFilterView(
-          catNum: _ehConfigService.catFilter.value,
+          catNum: _ehSettingService.catFilter.value,
           catNumChanged: (int toNum) {
-            _ehConfigService.catFilter.value = toNum;
+            _ehSettingService.catFilter.value = toNum;
           },
         ),
         actions: [],

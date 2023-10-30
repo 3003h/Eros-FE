@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/download_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:get/get.dart';
@@ -10,7 +10,7 @@ import '../../item/controller/galleryitem_controller.dart';
 class GalleryPageState {
   GalleryPageState();
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   DownloadController get _downloadController => Get.find();
 
   late final GalleryRepository? galleryRepository;
@@ -99,7 +99,7 @@ class GalleryPageState {
   String get subTitle {
     // logger.d('${galleryProvider.japaneseTitle} ${galleryProvider.englishTitle}');
 
-    if ((_ehConfigService.jpnTitleInGalleryPage) &&
+    if ((_ehSettingService.jpnTitleInGalleryPage) &&
         (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryProvider?.englishTitle ?? '';
     } else {
@@ -125,7 +125,7 @@ class GalleryPageState {
 
   // 根据设置的语言显示的标题
   String get mainTitle {
-    if ((_ehConfigService.jpnTitleInGalleryPage) &&
+    if ((_ehSettingService.jpnTitleInGalleryPage) &&
         (galleryProvider?.japaneseTitle?.isNotEmpty ?? false)) {
       return galleryProvider?.japaneseTitle ?? '';
     } else {

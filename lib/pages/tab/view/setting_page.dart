@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/user_item.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
@@ -33,7 +33,7 @@ class SettingTab extends GetView<SettingViewController> {
                   _title,
                 ),
                 const Spacer(),
-                if (Get.find<EhConfigService>().isSafeMode.value)
+                if (Get.find<EhSettingService>().isSafeMode.value)
                   Container()
                 else
                   UserWidget().paddingOnly(right: 20),

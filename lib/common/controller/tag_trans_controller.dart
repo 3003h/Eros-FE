@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/network/request.dart';
@@ -22,7 +22,7 @@ const int kConnectTimeout = 20000;
 const int kReceiveTimeout = 30000;
 
 class TagTransController extends GetxController {
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   String? _dbUrl;
   String? _remoteVer;
@@ -45,7 +45,7 @@ class TagTransController extends GetxController {
   /// 检查更新
   Future<bool> checkUpdate({bool force = false}) async {
     late final String apiUrl;
-    if (ehConfigService.enableTagTranslateCDN) {
+    if (ehSettingService.enableTagTranslateCDN) {
       apiUrl = kCDNApiUrl;
     } else {
       apiUrl = kApiUrl;
@@ -56,7 +56,7 @@ class TagTransController extends GetxController {
     _remoteVer = _urlJson['published_at']?.trim() as String;
 
     // 获取当前本地版本
-    final String localVer = ehConfigService.tagTranslatVer.value;
+    final String localVer = ehSettingService.tagTranslatVer.value;
 
     if (_remoteVer == localVer && force == false) {
       return false;
@@ -70,7 +70,7 @@ class TagTransController extends GetxController {
     }
     _dbUrl = assMap['db.raw.json.gz'] ?? '';
 
-    if (ehConfigService.enableTagTranslateCDN) {
+    if (ehSettingService.enableTagTranslateCDN) {
       _dbUrl = '$kCDNPrefix$_dbUrl';
     }
 
@@ -137,7 +137,7 @@ class TagTransController extends GetxController {
 
     // await isarHelper.removeAllTagTranslate();
     await isarHelper.putAllTagTranslate(tagTranslats);
-    ehConfigService.tagTranslatVer.value = _remoteVer ?? '';
+    ehSettingService.tagTranslatVer.value = _remoteVer ?? '';
   }
 
   /// 获取翻译结果

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/controller/tag_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
@@ -194,7 +194,7 @@ extension ExtTagTranlat on TagTranslat {
   }
 
   String? get introMDimage {
-    final EhConfigService ehConfigService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
 
     // 匹配R18g
     final regR18g = RegExp(r'!\[((\S+)?)\]\(##\s+?"(.+?)"\)');
@@ -205,7 +205,7 @@ extension ExtTagTranlat on TagTranslat {
     // 匹配所有级别图片
     final regAll = RegExp(r'!\[((\S+)?)\]\((.+?)\)');
 
-    final lv = ehConfigService.tagIntroImgLv.value;
+    final lv = ehSettingService.tagIntroImgLv.value;
 
     String? _remove(RegExp regExp, String? text) {
       final match = regExp.allMatches(text ?? '');
@@ -256,10 +256,10 @@ extension ExtTagTranlat on TagTranslat {
 }
 
 extension ExtString on String {
-  EhConfigService get _ehConfigService => Get.find();
+  EhSettingService get _ehSettingService => Get.find();
 
   String get linkRedirect {
-    if (_ehConfigService.linkRedirect) {
+    if (_ehSettingService.linkRedirect) {
       final uri = Uri.parse(this);
       if (uri.host.contains(RegExp(r'e[-x]hentai.org'))) {
         return uri.replace(host: Api.getBaseHost()).toString();

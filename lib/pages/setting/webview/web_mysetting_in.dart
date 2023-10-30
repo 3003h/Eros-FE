@@ -1,7 +1,7 @@
 import 'dart:io' as io;
 
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/extension.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/network/api.dart';
@@ -16,7 +16,7 @@ import 'eh_webview.dart';
 
 class InWebMySetting extends StatelessWidget {
   final CookieManager _cookieManager = CookieManager.instance();
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class InWebMySetting extends StatelessWidget {
             Global.cookieJar
                 .saveFromResponse(Uri.parse(Api.getBaseUrl()), ioCookies);
 
-            ehConfigService.selectProfile = ioCookies
+            ehSettingService.selectProfile = ioCookies
                     .firstWhereOrNull((element) => element.name == 'sp')
                     ?.value ??
                 '';
@@ -126,7 +126,7 @@ class InWebMySetting extends StatelessWidget {
             //   Global.cookieJar
             //       .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
             //
-            //   ehConfigService.selectProfile = _cookies
+            //   ehSettingService.selectProfile = _cookies
             //           .firstWhereOrNull((element) => element.name == 'sp')
             //           ?.value ??
             //       '';

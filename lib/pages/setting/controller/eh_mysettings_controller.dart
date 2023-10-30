@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
@@ -18,7 +18,7 @@ class EhMySettingsController extends GetxController {
   bool get isLoading => _isLoading.value;
   set isLoading(bool val) => _isLoading.value = val;
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   void printParam() {
     logger.d('${_ehSetting.value.postParam}');
@@ -55,7 +55,7 @@ class EhMySettingsController extends GetxController {
     ehSetting = kEhSettings;
     try {
       await setCookie('sp', profileSet);
-      ehConfigService.selectProfile = profileSet;
+      ehSettingService.selectProfile = profileSet;
       // await loadData(refresh: true);
       // await showCookie();
       final uconfig = await changeEhProfile(profileSet, refresh: true);
@@ -137,7 +137,7 @@ class EhMySettingsController extends GetxController {
     ehSetting = kEhSettings;
     try {
       await setCookie('sp', _selected);
-      ehConfigService.selectProfile = _selected;
+      ehSettingService.selectProfile = _selected;
       final uconfig = await deleteEhProfile(_selected);
       isLoading = false;
       if (uconfig != null) {

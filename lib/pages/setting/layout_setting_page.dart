@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import '../../common/controller/tag_trans_controller.dart';
 import '../../common/controller/user_controller.dart';
-import '../../common/service/ehconfig_service.dart';
+import '../../common/service/ehsetting_service.dart';
 import '../../common/service/layout_service.dart';
 import '../../common/service/locale_service.dart';
 import '../../component/setting_base.dart';
@@ -41,7 +41,7 @@ class LayoutSettingPage extends StatelessWidget {
 class ListViewLayoutSetting extends StatelessWidget {
   ListViewLayoutSetting({Key? key}) : super(key: key);
 
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final UserController userController = Get.find();
   final TagTransController transController = Get.find();
   final LocaleService localeService = Get.find();
@@ -50,11 +50,11 @@ class ListViewLayoutSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void _handleGalleryListImgBlurChanged(bool newValue) {
-      _ehConfigService.isGalleryImgBlur.value = newValue;
+      _ehSettingService.isGalleryImgBlur.value = newValue;
     }
 
     void _handlePureDarkChanged(bool newValue) {
-      _ehConfigService.isPureDarkTheme.value = newValue;
+      _ehSettingService.isPureDarkTheme.value = newValue;
     }
 
     final List<Widget> _list = <Widget>[
@@ -63,13 +63,13 @@ class ListViewLayoutSetting extends StatelessWidget {
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
             L10n.of(context).dark_mode_effect,
-            value: _ehConfigService.isPureDarkTheme.value,
+            value: _ehSettingService.isPureDarkTheme.value,
             onChanged: _handlePureDarkChanged,
             desc: L10n.of(context).gray_black,
             descOn: L10n.of(context).pure_black,
           )),
       if (context.isTablet) _buildTableLayoutItem(context),
-      if (!Get.find<EhConfigService>().isSafeMode.value)
+      if (!Get.find<EhSettingService>().isSafeMode.value)
         SelectorSettingItem(
           hideDivider: true,
           title: L10n.of(context).tabbar_setting,
@@ -88,32 +88,41 @@ class ListViewLayoutSetting extends StatelessWidget {
             title: '标签翻译',
             onTap: () {
               Get.toNamed(
-                EHRoutes.tagTranslat,
+                EHRoutes.tagTranslate,
                 id: isLayoutLarge ? 2 : null,
               );
             },
-            selector: _ehConfigService.isTagTranslat
+            selector: _ehSettingService.isTagTranslate
                 ? L10n.of(context).on
                 : L10n.of(context).off,
-            desc: '当前版本:${_ehConfigService.tagTranslatVer.value}',
+            desc: '当前版本:${_ehSettingService.tagTranslatVer.value}',
           );
         }),
+      SelectorSettingItem(
+        title: 'Blockers',
+        onTap: () {
+          Get.toNamed(
+            EHRoutes.blockers,
+            id: isLayoutLarge ? 2 : null,
+          );
+        },
+      ),
       TextSwitchItem(
         L10n.of(context).japanese_title_in_gallery,
         desc: L10n.of(context).japanese_title_in_gallery_summary,
-        value: _ehConfigService.jpnTitleInGalleryPage,
-        onChanged: (val) => _ehConfigService.jpnTitleInGalleryPage = val,
+        value: _ehSettingService.jpnTitleInGalleryPage,
+        onChanged: (val) => _ehSettingService.jpnTitleInGalleryPage = val,
       ),
       TextSwitchItem(
         L10n.of(context).hide_top_bar_on_scroll,
-        value: _ehConfigService.hideTopBarOnScroll,
-        onChanged: (val) => _ehConfigService.hideTopBarOnScroll = val,
+        value: _ehSettingService.hideTopBarOnScroll,
+        onChanged: (val) => _ehSettingService.hideTopBarOnScroll = val,
         hideDivider: !localeService.isLanguageCodeZh,
       ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
           '画廊列表封面模糊处理',
-          value: _ehConfigService.isGalleryImgBlur.value,
+          value: _ehSettingService.isGalleryImgBlur.value,
           onChanged: _handleGalleryListImgBlurChanged,
           hideDivider: true,
           // desc: '画廊列表封面模糊效果',
@@ -132,7 +141,7 @@ class ListViewLayoutSetting extends StatelessWidget {
       Obx(() {
         return AnimatedCrossFade(
           alignment: Alignment.center,
-          crossFadeState: _ehConfigService.listMode.value == ListModeEnum.list
+          crossFadeState: _ehSettingService.listMode.value == ListModeEnum.list
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
           firstCurve: Curves.easeIn,
@@ -141,17 +150,17 @@ class ListViewLayoutSetting extends StatelessWidget {
           firstChild: const SizedBox(),
           secondChild: TextSwitchItem(
             L10n.of(context).blurring_cover_background,
-            value: _ehConfigService.blurringOfCoverBackground,
+            value: _ehSettingService.blurringOfCoverBackground,
             onChanged: (val) =>
-                _ehConfigService.blurringOfCoverBackground = val,
-            hideDivider: _ehConfigService.listMode.value != ListModeEnum.list,
+                _ehSettingService.blurringOfCoverBackground = val,
+            hideDivider: _ehSettingService.listMode.value != ListModeEnum.list,
           ),
         );
       }),
       Obx(() {
         return AnimatedCrossFade(
           alignment: Alignment.center,
-          crossFadeState: _ehConfigService.listMode.value == ListModeEnum.list
+          crossFadeState: _ehSettingService.listMode.value == ListModeEnum.list
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
           firstCurve: Curves.easeIn,
@@ -160,8 +169,8 @@ class ListViewLayoutSetting extends StatelessWidget {
           firstChild: const SizedBox(),
           secondChild: TextSwitchItem(
             L10n.of(context).fixed_height_of_list_items,
-            value: _ehConfigService.fixedHeightOfListItems,
-            onChanged: (val) => _ehConfigService.fixedHeightOfListItems = val,
+            value: _ehSettingService.fixedHeightOfListItems,
+            onChanged: (val) => _ehSettingService.fixedHeightOfListItems = val,
             hideDivider: true,
           ),
         );
@@ -177,7 +186,7 @@ class ListViewLayoutSetting extends StatelessWidget {
               id: isLayoutLarge ? 2 : null,
             );
           },
-          selector: _ehConfigService.showCommentAvatar
+          selector: _ehSettingService.showCommentAvatar
               ? L10n.of(context).on
               : L10n.of(context).off,
         );
@@ -185,9 +194,9 @@ class ListViewLayoutSetting extends StatelessWidget {
       if (localeService.isLanguageCodeZh && GetPlatform.isMobile)
         TextSwitchItem(
           '评论机翻按钮',
-          value: _ehConfigService.commentTrans.value,
+          value: _ehSettingService.commentTrans.value,
           onChanged: (bool newValue) =>
-              _ehConfigService.commentTrans.value = newValue,
+              _ehSettingService.commentTrans.value = newValue,
           desc: '关闭',
           descOn: '用机器翻译将评论翻译为简体中文',
           hideDivider: true,
@@ -250,7 +259,7 @@ Widget _buildThemeItem(BuildContext context, {bool hideLine = false}) {
 /// 列表模式切换
 Widget _buildListModeItem(BuildContext context, {bool hideDivider = false}) {
   final String _title = L10n.of(context).list_mode;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
     ListModeEnum.list: L10n.of(context).listmode_medium,
@@ -258,7 +267,7 @@ Widget _buildListModeItem(BuildContext context, {bool hideDivider = false}) {
     ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
     ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
     ListModeEnum.grid: L10n.of(context).listmode_grid,
-    if (kDebugMode || ehConfigService.debugMode)
+    if (kDebugMode || ehSettingService.debugMode)
       ListModeEnum.debugSimple: 'debugSimple',
   };
   return Obx(() {
@@ -266,8 +275,8 @@ Widget _buildListModeItem(BuildContext context, {bool hideDivider = false}) {
       title: _title,
       hideDivider: hideDivider,
       actionMap: modeMap,
-      initVal: ehConfigService.listMode.value,
-      onValueChanged: (val) => ehConfigService.listMode.value = val,
+      initVal: ehSettingService.listMode.value,
+      onValueChanged: (val) => ehSettingService.listMode.value = val,
     );
   });
 }
@@ -275,7 +284,7 @@ Widget _buildListModeItem(BuildContext context, {bool hideDivider = false}) {
 /// 平板布局
 Widget _buildTableLayoutItem(BuildContext context, {bool hideLine = false}) {
   final String _title = L10n.of(context).tablet_layout;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   final localeMap = <TabletLayout, String>{
     TabletLayout.automatic: L10n.of(context).automatic,
@@ -288,8 +297,8 @@ Widget _buildTableLayoutItem(BuildContext context, {bool hideLine = false}) {
       title: _title,
       hideDivider: hideLine,
       actionMap: localeMap,
-      initVal: ehConfigService.tabletLayoutType,
-      onValueChanged: (val) => ehConfigService.tabletLayoutType = val,
+      initVal: ehSettingService.tabletLayoutType,
+      onValueChanged: (val) => ehSettingService.tabletLayoutType = val,
     );
   });
 }
@@ -297,7 +306,7 @@ Widget _buildTableLayoutItem(BuildContext context, {bool hideLine = false}) {
 /// tag上限
 Widget _buildTagLimitItem(BuildContext context, {bool hideDivider = false}) {
   final String _title = L10n.of(context).tag_limit;
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   Map<int, String> modeMap = {};
 
@@ -311,8 +320,8 @@ Widget _buildTagLimitItem(BuildContext context, {bool hideDivider = false}) {
       title: _title,
       hideDivider: hideDivider,
       actionMap: modeMap,
-      initVal: ehConfigService.listViewTagLimit,
-      onValueChanged: (val) => ehConfigService.listViewTagLimit = val,
+      initVal: ehSettingService.listViewTagLimit,
+      onValueChanged: (val) => ehSettingService.listViewTagLimit = val,
     );
   });
 }

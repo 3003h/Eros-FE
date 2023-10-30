@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -38,7 +38,7 @@ class ItemWidthSettingPage extends StatefulWidget {
 }
 
 class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
-  EhConfigService get _ehConfigService => Get.find();
+  EhSettingService get _ehSettingService => Get.find();
   late ListModeEnum selectedMode;
   late double customWidth;
   late bool enableCustomWidth;
@@ -46,7 +46,7 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
   @override
   void initState() {
     super.initState();
-    selectedMode = _ehConfigService.listMode.value;
+    selectedMode = _ehSettingService.listMode.value;
     if (![
       ListModeEnum.grid,
       ListModeEnum.waterfall,
@@ -70,12 +70,14 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
   void _onModeChange(ListModeEnum mode) {
     selectedMode = mode;
     enableCustomWidth =
-        _ehConfigService.getItemConfig(selectedMode)?.enableCustomWidth ??
+        _ehSettingService.getItemConfig(selectedMode)?.enableCustomWidth ??
             false;
-    customWidth =
-        _ehConfigService.getItemConfig(selectedMode)?.customWidth?.toDouble() ??
-            defaultWidthMap()[mode] ??
-            200.0;
+    customWidth = _ehSettingService
+            .getItemConfig(selectedMode)
+            ?.customWidth
+            ?.toDouble() ??
+        defaultWidthMap()[mode] ??
+        200.0;
   }
 
   @override
@@ -112,7 +114,7 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                     key: ValueKey(selectedMode),
                     value: enableCustomWidth,
                     onChanged: (bool val) {
-                      _ehConfigService.setItemConfig(
+                      _ehSettingService.setItemConfig(
                           selectedMode,
                           (ItemConfig itemConfig) =>
                               itemConfig.copyWith(enableCustomWidth: val));
@@ -155,7 +157,7 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                                   },
                                   onChangeEnd: (double val) {
                                     logger.d('onChangeEnd $val');
-                                    _ehConfigService.setItemConfig(
+                                    _ehSettingService.setItemConfig(
                                         selectedMode,
                                         (ItemConfig itemConfig) =>
                                             itemConfig.copyWith(

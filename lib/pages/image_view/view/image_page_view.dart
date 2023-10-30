@@ -105,7 +105,7 @@ class ImagePageView extends GetView<ViewExtController> {
             scrollPhysics: const CustomScrollPhysics(),
             reverse: reverse,
             preloadPagesCount:
-                max(0, logic.vState.ehConfigService.preloadImage.value),
+                max(0, logic.vState.ehSettingService.preloadImage.value),
             builder: (BuildContext context, int pageIndex) {
               return PhotoViewGalleryPageOptions.customChild(
                 initialScale: PhotoViewComputedScale.contained,
@@ -133,7 +133,7 @@ class ImagePageView extends GetView<ViewExtController> {
           itemCount: logic.vState.pageCount,
           scrollDirection: Axis.horizontal,
           preloadPagesCount:
-              max(0, logic.vState.ehConfigService.preloadImage.value),
+              max(0, logic.vState.ehSettingService.preloadImage.value),
           onPageChanged: (pageIndex) => controller.handOnPageChanged(pageIndex),
           itemBuilder: (BuildContext context, int index) {
             logger.t('pageIndex $index ser ${index + 1}');
@@ -248,7 +248,7 @@ class ImagePageView extends GetView<ViewExtController> {
           itemCount: logic.vState.pageCount,
           scrollDirection: Axis.horizontal,
           preloadPagesCount:
-              max(0, logic.vState.ehConfigService.preloadImage.value ~/ 2),
+              max(0, logic.vState.ehSettingService.preloadImage.value ~/ 2),
           onPageChanged: (pageIndex) => controller.handOnPageChanged(pageIndex),
           itemBuilder: (BuildContext context, int pageIndex) {
             return Obx(() {

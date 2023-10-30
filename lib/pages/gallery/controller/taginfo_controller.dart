@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -32,8 +32,8 @@ class TagInfoController extends GetxController {
 
   bool get showClearButton => tagsTextController.text.isNotEmpty;
 
-  final EhConfigService _ehConfigService = Get.find();
-  bool get isTagTranslat => _ehConfigService.isTagTranslat;
+  final EhSettingService _ehSettingService = Get.find();
+  bool get isTagTranslat => _ehSettingService.isTagTranslate;
 
   @override
   void onInit() {

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:clock/clock.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -67,7 +67,7 @@ class DioFileService extends FileService {
   }
 
   Future<FileServiceResponse> loadAsync(int ser) async {
-    final downloadOrigImage = Get.find<EhConfigService>().downloadOrigImage;
+    final downloadOrigImage = Get.find<EhSettingService>().downloadOrigImage;
     final ViewExtController viewExtController = Get.find();
     final galleryImage = await viewExtController.fetchImage(ser);
     if (galleryImage == null) {

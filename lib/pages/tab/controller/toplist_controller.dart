@@ -34,7 +34,7 @@ class TopListViewController extends DefaultTabViewController {
   }
 
   String get toplistText {
-    switch (ehConfigService.toplist) {
+    switch (ehSettingService.toplist) {
       case ToplistType.yesterday:
         return 'D';
       case ToplistType.month:
@@ -53,12 +53,12 @@ class TopListViewController extends DefaultTabViewController {
       ToplistType.year: L10n.of(Get.context!).tolist_past_year,
       ToplistType.all: L10n.of(Get.context!).tolist_alltime,
     };
-    return toplistTextMap[ehConfigService.toplist] ??
+    return toplistTextMap[ehSettingService.toplist] ??
         L10n.of(Get.context!).tab_toplist;
   }
 
   Future<void> setToplist(BuildContext context) async {
-    final ToplistType? type = await ehConfigService.showToplistsSel(context);
+    final ToplistType? type = await ehSettingService.showToplistsSel(context);
     if (type != null) {
       change(state, status: RxStatus.loading());
       reloadData();

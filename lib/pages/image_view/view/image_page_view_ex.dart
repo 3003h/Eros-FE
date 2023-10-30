@@ -49,7 +49,7 @@ class ImagePhotoView extends GetView<ViewExtController> {
                 // scrollPhysics: const CustomScrollPhysics(),
                 reverse: reverse,
                 preloadPagesCount:
-                    max(0, logic.vState.ehConfigService.preloadImage.value),
+                    max(0, logic.vState.ehSettingService.preloadImage.value),
                 // preloadPagesCount: 0,
                 // gaplessPlayback: true,
                 // wantKeepAlive: true,

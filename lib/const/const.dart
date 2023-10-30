@@ -1,6 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -268,7 +268,7 @@ class EHConst {
       isEx ? EX_BASE_HOST : EH_BASE_HOST;
 
   static String get torrentBaseUrl =>
-      (Get.find<EhConfigService>().isSiteEx.value)
+      (Get.find<EhSettingService>().isSiteEx.value)
           ? EX_TORRENT_URL
           : EH_TORRENT_URL;
 

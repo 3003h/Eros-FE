@@ -6,7 +6,7 @@ import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/parser/eh_parser.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -39,7 +39,7 @@ class GalleryPageController extends GetxController
   ScrollController? scrollController;
 
   // eh设置
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final HistoryController _historyController = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
   DownloadController get _downloadController => Get.find();
@@ -600,7 +600,7 @@ class GalleryPageController extends GetxController
   }
 
   void downloadGallery(BuildContext context) {
-    switch (_ehConfigService.downloadOrigType) {
+    switch (_ehSettingService.downloadOrigType) {
       case DownloadOrigImageType.no:
         _downloadGallery();
         break;

@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 
 class ImageHidePage extends GetView<ImageHideController> {
   const ImageHidePage({Key? key}) : super(key: key);
-  EhConfigService get _ehConfigService => Get.find();
+  EhSettingService get _ehSettingService => Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +31,17 @@ class ImageHidePage extends GetView<ImageHideController> {
               children: [
                 Obx(() => TextSwitchItem(
                       L10n.of(context).QR_code_block,
-                      value: _ehConfigService.enableQRCodeCheck,
+                      value: _ehSettingService.enableQRCodeCheck,
                       onChanged: (bool val) =>
-                          _ehConfigService.enableQRCodeCheck = val,
+                          _ehSettingService.enableQRCodeCheck = val,
                       hideDivider: true,
                     )),
                 const ItemSpace(),
                 Obx(() => TextSwitchItem(
                       L10n.of(context).phash_check,
-                      value: _ehConfigService.enablePHashCheck,
+                      value: _ehSettingService.enablePHashCheck,
                       onChanged: (bool val) =>
-                          _ehConfigService.enablePHashCheck = val,
+                          _ehSettingService.enablePHashCheck = val,
                     )),
                 SelectorSettingItem(
                   hideDivider: true,

@@ -5,7 +5,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/storages.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
@@ -215,7 +215,7 @@ class Global {
     // globalDioConfig = globalDioConfig.copyWith(
     //   proxy: proxy,
     // );
-    Get.find<EhConfigService>().setProxy();
+    Get.find<EhSettingService>().setProxy();
   }
 
   static void creatDirs() {

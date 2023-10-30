@@ -6,7 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/controller/gallerycache_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
@@ -56,7 +56,7 @@ class ViewExtState {
 
   GalleryPageState? get pageState => galleryPageController?.gState;
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
   final GalleryCacheController _galleryCacheController = Get.find();
 
   final CancelToken getMoreCancelToken = CancelToken();
@@ -94,10 +94,10 @@ class ViewExtState {
   }
 
   /// 单页双页模式
-  ViewColumnMode get columnMode => ehConfigService.viewColumnMode;
+  ViewColumnMode get columnMode => ehSettingService.viewColumnMode;
 
   set columnMode(ViewColumnMode val) {
-    ehConfigService.viewColumnMode = val;
+    ehSettingService.viewColumnMode = val;
   }
 
   /// pageview下实际的index
@@ -153,7 +153,7 @@ class ViewExtState {
   List<double> doubleTapScales = <double>[1.0, 2.0, 3.0];
 
   /// 显示页面间隔
-  RxBool get _showPageInterval => ehConfigService.showPageInterval;
+  RxBool get _showPageInterval => ehSettingService.showPageInterval;
 
   bool get showPageInterval => _showPageInterval.value;
 
@@ -192,7 +192,7 @@ class ViewExtState {
   int serFirst = 0;
 
   /// 阅读模式
-  Rx<ViewMode> get _viewMode => ehConfigService.viewMode;
+  Rx<ViewMode> get _viewMode => ehSettingService.viewMode;
   ViewMode get viewMode => _viewMode.value;
   set viewMode(ViewMode val) => _viewMode.value = val;
 

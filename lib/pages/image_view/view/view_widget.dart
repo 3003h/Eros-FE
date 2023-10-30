@@ -5,7 +5,7 @@ import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
@@ -235,11 +235,11 @@ class ImageExt extends GetView<ViewExtController> {
   final ExtendedImageMode mode;
   final bool enableSlideOutPage;
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
-  bool get checkPHashHide => ehConfigService.enablePHashCheck;
+  bool get checkPHashHide => ehSettingService.enablePHashCheck;
 
-  bool get checkQRCodeHide => ehConfigService.enableQRCodeCheck;
+  bool get checkQRCodeHide => ehSettingService.enableQRCodeCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -385,7 +385,7 @@ class ImageExtProvider extends GetView<ViewExtController> {
   final ExtendedImageMode mode;
   final bool enableSlideOutPage;
 
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   @override
   Widget build(BuildContext context) {

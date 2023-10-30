@@ -9,7 +9,7 @@ import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/network/app_dio/proxy.dart';
 import 'package:fehviewer/network/dio_interceptor/domain_fronting/domain_fronting.dart';
@@ -50,7 +50,7 @@ class AppDio with DioMixin implements Dio {
 
     logger.t('dioConfig ${dioConfig?.toString()}');
 
-    httpClientAdapter = Get.find<EhConfigService>().nativeHttpClientAdapter
+    httpClientAdapter = Get.find<EhSettingService>().nativeHttpClientAdapter
         ? NativeAdapter()
         : AppHttpAdapter(
             proxy: dioConfig?.proxy ?? '',

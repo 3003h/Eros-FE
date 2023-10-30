@@ -120,7 +120,7 @@ class FavoriteSubListController extends TabViewController {
   }
 
   Future<void> setOrder(BuildContext context) async {
-    final FavoriteOrder? order = await ehConfigService.showFavOrder(context);
+    final FavoriteOrder? order = await ehSettingService.showFavOrder(context);
     if (order != null) {
       change(state, status: RxStatus.loading());
       reloadData();

@@ -29,7 +29,8 @@ class EHRoutes {
   static const String mySettings = '/mySettings';
   static const String myTags = '/myTags';
   static const String userTags = '/userTags';
-  static const String tagTranslat = '/tagTranslat';
+  static const String tagTranslate = '/tagTranslate';
+  static const String blockers = '/blockers';
 
   static const String imageHide = '/imageHide';
   static const String mangaHidedImage = '/imageHide/mangaHidedImage';

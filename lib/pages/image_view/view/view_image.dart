@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -45,7 +45,7 @@ class ViewImage extends StatefulWidget {
 
 class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   final ViewExtController controller = Get.find();
-  final EhConfigService ehConfigService = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   late AnimationController _doubleClickAnimationController;
   Animation<double>? _doubleClickAnimation;
@@ -55,9 +55,9 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
   ViewExtState get vState => controller.vState;
 
-  bool get checkPHashHide => ehConfigService.enablePHashCheck;
+  bool get checkPHashHide => ehSettingService.enablePHashCheck;
 
-  bool get checkQRCodeHide => ehConfigService.enableQRCodeCheck;
+  bool get checkQRCodeHide => ehSettingService.enableQRCodeCheck;
 
   @override
   void initState() {

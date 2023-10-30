@@ -1,6 +1,6 @@
 import 'package:fehviewer/common/controller/avatar_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -434,7 +434,7 @@ class _CommentUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EhConfigService _ehConfigService = Get.find();
+    final EhSettingService _ehSettingService = Get.find();
     final AvatarController avatarController = Get.find();
 
     final _name = comment.name;
@@ -443,22 +443,22 @@ class _CommentUser extends StatelessWidget {
     final _future = avatarController.getUser(_userId);
 
     final _placeHold = Obx(() {
-      final radius = _ehConfigService.avatarBorderRadiusType ==
+      final radius = _ehSettingService.avatarBorderRadiusType ==
               AvatarBorderRadiusType.roundedRect
           ? 8.0
           : avatarSize / 2;
 
-      return _ehConfigService.avatarType == AvatarType.boringAvatar
+      return _ehSettingService.avatarType == AvatarType.boringAvatar
           ? BoringAvatars(
               name: _name,
               colors: [...ThemeColors.catColorList],
-              type: _ehConfigService.boringAvatarsType,
+              type: _ehSettingService.boringAvatarsType,
               square: true,
             )
           : TextAvatar(
               name: _name,
               colors: [...ThemeColors.catColorList],
-              type: _ehConfigService.textAvatarsType,
+              type: _ehSettingService.textAvatarsType,
               radius: radius,
             );
     });
@@ -470,7 +470,7 @@ class _CommentUser extends StatelessWidget {
 
     return Obx(() {
       final avatarUrl = avatarController.getAvatarUrl(_userId);
-      final radius = _ehConfigService.avatarBorderRadiusType ==
+      final radius = _ehSettingService.avatarBorderRadiusType ==
               AvatarBorderRadiusType.roundedRect
           ? 8.0
           : avatarSize / 2;
@@ -479,7 +479,7 @@ class _CommentUser extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_ehConfigService.showCommentAvatar)
+            if (_ehSettingService.showCommentAvatar)
               Container(
                 width: avatarSize,
                 height: avatarSize,
@@ -617,7 +617,7 @@ class _CommentHead extends StatelessWidget {
           child: Row(
             children: <Widget>[
               // 翻译
-              if (Get.find<EhConfigService>().commentTrans.value && !simple)
+              if (Get.find<EhSettingService>().commentTrans.value && !simple)
                 CupertinoTheme(
                   data: ehTheme.themeData!,
                   child: TranslateButton(

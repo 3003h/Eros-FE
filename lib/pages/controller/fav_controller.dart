@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/controller/localfav_controller.dart';
 import 'package:fehviewer/common/controller/user_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/ehconfig_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/generated/l10n.dart';
@@ -18,7 +18,7 @@ import 'package:get/get.dart';
 import 'favorite_sel_controller.dart';
 
 class FavController extends GetxController {
-  final EhConfigService _ehConfigService = Get.find();
+  final EhSettingService _ehSettingService = Get.find();
   final UserController _userController = Get.find();
   final LocalFavController _localFavController = Get.find();
 
@@ -33,7 +33,7 @@ class FavController extends GetxController {
     BuildContext context,
     List<Favcat> favList,
   ) async {
-    return _ehConfigService.isFavPicker.value
+    return _ehSettingService.isFavPicker.value
         ? await _showAddFavPicker(context, favList)
         : await _showAddFavList(context, favList);
   }
@@ -81,7 +81,7 @@ class FavController extends GetxController {
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
-              _ehConfigService.isFavPicker.value = false;
+              _ehSettingService.isFavPicker.value = false;
               showToast('切换样式');
             },
             child: Text(L10n.of(context).add_to_favorites),
@@ -159,7 +159,7 @@ class FavController extends GetxController {
         return CupertinoAlertDialog(
           title: GestureDetector(
             onLongPress: () {
-              _ehConfigService.isFavPicker.value = true;
+              _ehSettingService.isFavPicker.value = true;
               showToast('切换样式');
             },
             child: Text(L10n.of(context).add_to_favorites),
@@ -202,12 +202,12 @@ class FavController extends GetxController {
     String oriFavnote = '',
   }) async {
     logger.d('bbb add fav $gid $token');
-    final String? _lastFavcat = _ehConfigService.lastFavcat;
+    final String? _lastFavcat = _ehSettingService.lastFavcat;
 
     _favnoteController.text = oriFavnote;
 
     // 添加到上次收藏夹
-    if ((_ehConfigService.isFavLongTap.value) &&
+    if ((_ehSettingService.isFavLongTap.value) &&
         _lastFavcat != null &&
         _lastFavcat.isNotEmpty) {
       logger.t('添加到上次收藏夹');

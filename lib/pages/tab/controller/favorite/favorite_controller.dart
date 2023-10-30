@@ -21,7 +21,7 @@ class FavoriteViewController extends DefaultTabViewController {
     if (_title.value.isNotEmpty) {
       return _title.value;
     } else {
-      return ehConfigService.lastShowFavTitle ?? '';
+      return ehSettingService.lastShowFavTitle ?? '';
     }
   }
 
@@ -78,8 +78,8 @@ class FavoriteViewController extends DefaultTabViewController {
       return rult;
     } else {
       // if (first) {
-      //   ehConfigService.lastShowFavcat = 'l';
-      //   ehConfigService.lastShowFavTitle = L10n.of(Get.context!).local_favorite;
+      //   ehSettingService.lastShowFavcat = 'l';
+      //   ehSettingService.lastShowFavTitle = L10n.of(Get.context!).local_favorite;
       // }
       // 本地收藏夹
       logger.t('本地收藏');
@@ -90,7 +90,7 @@ class FavoriteViewController extends DefaultTabViewController {
   }
 
   Future<void> setOrder(BuildContext context) async {
-    final FavoriteOrder? order = await ehConfigService.showFavOrder(context);
+    final FavoriteOrder? order = await ehSettingService.showFavOrder(context);
     if (order != null) {
       change(state, status: RxStatus.loading());
       reloadData();
@@ -98,5 +98,5 @@ class FavoriteViewController extends DefaultTabViewController {
   }
 
   String get orderText =>
-      ehConfigService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
+      ehSettingService.favoriteOrder.value == FavoriteOrder.fav ? 'F' : 'P';
 }
