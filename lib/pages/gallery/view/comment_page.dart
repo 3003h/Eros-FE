@@ -87,7 +87,7 @@ class _CommentPageState extends State<CommentPage>
 
             final hideComment = _ehSettingService.filterCommentsByScore &&
                 comment != null &&
-                (comment.score.isEmpty ||
+                (comment.score.isNotEmpty &&
                     (int.tryParse(comment.score) ?? 0) <=
                         _ehSettingService.scoreFilteringThreshold);
 
