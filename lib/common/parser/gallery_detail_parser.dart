@@ -164,17 +164,17 @@ Future<List<TagGroup>> parseGalleryTags(Document document) async {
       for (final Element tagElm in tags) {
         String title = tagElm.text.trim();
         if (title.contains('|')) {
-          title = title.split('|')[0];
+          title = title.split('|')[0].trim();
         }
-        final String tagTranslat = await Get.find<TagTransController>()
+        final String tagTranslate = await Get.find<TagTransController>()
                 .getTagTranslateText(title, namespace: type) ??
             title;
 
         int tagVote = 0;
-        final String? tagclass = tagElm.attributes['class'];
-        if (tagclass == 'tup') {
+        final String? tagClass = tagElm.attributes['class'];
+        if (tagClass == 'tup') {
           tagVote = 1;
-        } else if (tagclass == 'tdn') {
+        } else if (tagClass == 'tdn') {
           tagVote = -1;
         }
 
@@ -182,7 +182,7 @@ Future<List<TagGroup>> parseGalleryTags(Document document) async {
           title: title,
           type: type,
           vote: tagVote,
-          tagTranslat: tagTranslat,
+          tagTranslat: tagTranslate,
         ));
       }
 

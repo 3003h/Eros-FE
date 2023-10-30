@@ -307,7 +307,7 @@ class MyTagsHttpTransformer extends HttpTransformer {
   @override
   FutureOr<DioHttpResponse<EhMytags>> parse(Response<dynamic> response) async {
     final html = response.data as String;
-    final EhMytags mytags = await parseMyTags(html);
+    final EhMytags mytags = parseMyTags(html);
     // 查询翻译
     final userTags = await mytags.qryFullTagTranslate;
     return DioHttpResponse<EhMytags>.success(

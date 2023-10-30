@@ -94,6 +94,7 @@ class IsarHelper {
     return result;
   }
 
+  // 查询 tag
   Future<TagTranslat?> findTagTranslate(String key, {String? namespace}) async {
     if (namespace != null && namespace.isNotEmpty) {
       final result = await isar.tagTranslats
@@ -114,7 +115,7 @@ class IsarHelper {
     }
   }
 
-  // 模糊查询
+  // 模糊查询 通过tag或者tag翻译的部分内容
   Future<List<TagTranslat>> findTagTranslateContains(
       String text, int limit) async {
     final result = await isar.tagTranslats
@@ -135,12 +136,12 @@ class IsarHelper {
     return result;
   }
 
-  Future<void> tapTagTranslate(TagTranslat tagTranslat) async {
-    final newTagTranslat = tagTranslat.copyWith(
+  Future<void> tapTagTranslate(TagTranslat tagTranslate) async {
+    final newTagTranslate = tagTranslate.copyWith(
       lastUseTime: DateTime.now().millisecondsSinceEpoch,
     );
     await isar.writeTxn(() async {
-      await isar.tagTranslats.putByKeyNamespace(newTagTranslat);
+      await isar.tagTranslats.putByKeyNamespace(newTagTranslate);
     });
   }
 
