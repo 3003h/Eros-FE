@@ -420,5 +420,8 @@
   "webdav_max_connections": "WebDAV 最大连接数",
   "native_http_client_adapter": "使用原生 HTTP 客户端",
   "japanese_title_in_gallery": "画廊页面显示日文标题",
-  "japanese_title_in_gallery_summary": "仅在画廊页面有效"
+  "japanese_title_in_gallery_summary": "仅在画廊页面有效",
+  "blockers": "本地屏蔽",
+  "filter_comments_by_score": "根据评分过滤评论",
+  "filter_comments_by_score_summary": "低于/等于此分数的评论将被隐藏"
 }

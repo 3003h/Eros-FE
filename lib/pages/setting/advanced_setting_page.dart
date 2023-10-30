@@ -77,7 +77,6 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
     final List<Widget> _list = <Widget>[
       SelectorSettingItem(
-        hideDivider: true,
         title: L10n.of(context).image_block,
         selector: '',
         onTap: () {
@@ -87,6 +86,17 @@ class ListViewAdvancedSetting extends StatelessWidget {
           );
         },
       ),
+      SelectorSettingItem(
+        hideDivider: true,
+        title: L10n.of(context).blockers,
+        onTap: () {
+          Get.toNamed(
+            EHRoutes.blockers,
+            id: isLayoutLarge ? 2 : null,
+          );
+        },
+      ),
+
       const ItemSpace(),
       // 清除缓存
       _cacheController.obx(

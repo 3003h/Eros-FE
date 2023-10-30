@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/comment_controller.dart';
@@ -30,6 +31,8 @@ class CommentPage extends StatefulWidget {
 class _CommentPageState extends State<CommentPage>
     with AutomaticKeepAliveClientMixin {
   late CommentController controller;
+
+  EhSettingService get _ehSettingService => Get.find();
 
   @override
   void initState() {
@@ -81,7 +84,9 @@ class _CommentPageState extends State<CommentPage>
             }
 
             final comment = controller.comments?[index];
-            if (comment != null) {
+            if (comment != null &&
+                (int.tryParse(comment.score) ?? 0) >
+                    _ehSettingService.scoreFilteringThreshold) {
               return CommentItem(
                 galleryComment: comment,
               ).autoCompressKeyboard(context);

@@ -139,11 +139,6 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                               ehTheme.itemBackgroundColor!, context),
                           child: Row(
                             children: [
-                              Container(
-                                width: 50,
-                                alignment: Alignment.center,
-                                child: Text('${customWidth.toInt()}'),
-                              ),
                               Expanded(
                                 child: CupertinoSlider(
                                   value: customWidth,
@@ -164,6 +159,11 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                                                 customWidth: val.toInt()));
                                   },
                                 ),
+                              ),
+                              Container(
+                                width: 50,
+                                alignment: Alignment.center,
+                                child: Text('${customWidth.toInt()}'),
                               ),
                             ],
                           ),

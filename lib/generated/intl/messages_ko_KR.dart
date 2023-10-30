@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("뒤로"),
+        "blockers": MessageLookupByLibrary.simpleMessage("Blockers"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
             "Blurring of cover background"),
         "cancel": MessageLookupByLibrary.simpleMessage("취소"),
@@ -151,6 +152,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("즐겨찾기된 순"),
         "favorites_order_Use_posted":
             MessageLookupByLibrary.simpleMessage("게시된 순"),
+        "filter_comments_by_score":
+            MessageLookupByLibrary.simpleMessage("Filter Comments By Score"),
+        "filter_comments_by_score_summary":
+            MessageLookupByLibrary.simpleMessage(
+                "Comments below/equal to this score will be hidden"),
         "fixed_height_of_list_items":
             MessageLookupByLibrary.simpleMessage("Fixed height of list items"),
         "follow_system": MessageLookupByLibrary.simpleMessage("시스템 기본값"),

@@ -1,4 +1,4 @@
 {
   "filter_comments_by_score?": false,
-  "filtering_threshold?": 0
+  "score_filtering_threshold?": -20
 }

@@ -73,6 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("自动"),
         "avatar": MessageLookupByLibrary.simpleMessage("头像"),
         "back": MessageLookupByLibrary.simpleMessage("返回"),
+        "blockers": MessageLookupByLibrary.simpleMessage("本地屏蔽"),
         "blurring_cover_background":
             MessageLookupByLibrary.simpleMessage("封面背景模糊化"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
@@ -136,6 +137,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("按照收藏时间"),
         "favorites_order_Use_posted":
             MessageLookupByLibrary.simpleMessage("按照发布时间"),
+        "filter_comments_by_score":
+            MessageLookupByLibrary.simpleMessage("根据评分过滤评论"),
+        "filter_comments_by_score_summary":
+            MessageLookupByLibrary.simpleMessage("低于/等于此分数的评论将被隐藏"),
         "fixed_height_of_list_items":
             MessageLookupByLibrary.simpleMessage("固定列表项高度"),
         "follow_system": MessageLookupByLibrary.simpleMessage("跟随系统"),

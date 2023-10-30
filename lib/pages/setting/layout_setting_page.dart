@@ -98,15 +98,6 @@ class ListViewLayoutSetting extends StatelessWidget {
             desc: '当前版本:${_ehSettingService.tagTranslatVer.value}',
           );
         }),
-      SelectorSettingItem(
-        title: 'Blockers',
-        onTap: () {
-          Get.toNamed(
-            EHRoutes.blockers,
-            id: isLayoutLarge ? 2 : null,
-          );
-        },
-      ),
       TextSwitchItem(
         L10n.of(context).japanese_title_in_gallery,
         desc: L10n.of(context).japanese_title_in_gallery_summary,

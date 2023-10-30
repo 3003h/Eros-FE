@@ -746,19 +746,43 @@ class EhSettingService extends ProfileService {
     });
   }
 
-  void _initBlockConfig() {}
+  // _filterCommentsByScore
+  final _filterCommentsByScore = false.obs;
+  bool get filterCommentsByScore => _filterCommentsByScore.value;
+  set filterCommentsByScore(bool val) => _filterCommentsByScore.value = val;
+
+  // _scoreFilteringThreshold
+  final _scoreFilteringThreshold = (-20).obs;
+  int get scoreFilteringThreshold => _scoreFilteringThreshold.value;
+  set scoreFilteringThreshold(int val) => _scoreFilteringThreshold.value = val;
+
+  void _initBlockConfig() {
+    // _filterCommentsByScore
+    filterCommentsByScore =
+        blockConfig.filterCommentsByScore ?? filterCommentsByScore;
+    everProfile<bool>(_filterCommentsByScore, (val) {
+      blockConfig = blockConfig.copyWith(filterCommentsByScore: val);
+    });
+
+    // _scoreFilteringThreshold
+    scoreFilteringThreshold =
+        blockConfig.scoreFilteringThreshold ?? scoreFilteringThreshold;
+    everProfile<int>(_scoreFilteringThreshold, (val) {
+      blockConfig = blockConfig.copyWith(scoreFilteringThreshold: val);
+    });
+  }
 
   @override
   void onInit() {
     super.onInit();
+
+    _initEhConfig();
 
     _initDownloadConfig();
 
     _initLayoutConfig();
 
     _initBlockConfig();
-
-    _initEhConfig();
   }
 
   Future<void> setProxy() async {

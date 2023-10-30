@@ -299,25 +299,27 @@ class HiveHelper {
 
     // logger.d(' ${_profileObj.layoutConfig?.toJson()}');
 
-    final Profile _profile = kDefProfile.copyWith(
-      user: _profileObj.user,
-      ehConfig: _profileObj.ehConfig,
-      lastLogin: _profileObj.lastLogin,
-      locale: _profileObj.locale,
-      theme: _profileObj.theme,
-      searchText: _profileObj.searchText,
-      localFav: _profileObj.localFav,
-      enableAdvanceSearch: _profileObj.enableAdvanceSearch,
-      advanceSearch: _profileObj.advanceSearch,
-      dnsConfig: _profileObj.dnsConfig,
-      downloadConfig: _profileObj.downloadConfig,
-      webdav: _profileObj.webdav,
-      autoLock: _profileObj.autoLock,
-      favConfig: _profileObj.favConfig,
-      customTabConfig: _profileObj.customTabConfig,
-      layoutConfig: _profileObj.layoutConfig,
-    );
-    return _profile;
+    // final Profile _profile = kDefProfile.copyWith(
+    //   user: _profileObj.user,
+    //   ehConfig: _profileObj.ehConfig,
+    //   lastLogin: _profileObj.lastLogin,
+    //   locale: _profileObj.locale,
+    //   theme: _profileObj.theme,
+    //   searchText: _profileObj.searchText,
+    //   localFav: _profileObj.localFav,
+    //   enableAdvanceSearch: _profileObj.enableAdvanceSearch,
+    //   advanceSearch: _profileObj.advanceSearch,
+    //   dnsConfig: _profileObj.dnsConfig,
+    //   downloadConfig: _profileObj.downloadConfig,
+    //   webdav: _profileObj.webdav,
+    //   autoLock: _profileObj.autoLock,
+    //   favConfig: _profileObj.favConfig,
+    //   customTabConfig: _profileObj.customTabConfig,
+    //   layoutConfig: _profileObj.layoutConfig,
+    // );
+    // return _profile;
+
+    return _profileObj;
   }
 
   set profile(Profile? val) {

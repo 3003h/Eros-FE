@@ -6,40 +6,40 @@ class BlockConfig {
   
   const BlockConfig({
     this.filterCommentsByScore,
-    this.filteringThreshold,
+    this.scoreFilteringThreshold,
   });
 
   final bool? filterCommentsByScore;
-  final int? filteringThreshold;
+  final int? scoreFilteringThreshold;
 
   factory BlockConfig.fromJson(Map<String,dynamic> json) => BlockConfig(
     filterCommentsByScore: json['filter_comments_by_score'] != null ? json['filter_comments_by_score'] as bool : null,
-    filteringThreshold: json['filtering_threshold'] != null ? json['filtering_threshold'] as int : null
+    scoreFilteringThreshold: json['score_filtering_threshold'] != null ? json['score_filtering_threshold'] as int : null
   );
   
   Map<String, dynamic> toJson() => {
     'filter_comments_by_score': filterCommentsByScore,
-    'filtering_threshold': filteringThreshold
+    'score_filtering_threshold': scoreFilteringThreshold
   };
 
   BlockConfig clone() => BlockConfig(
     filterCommentsByScore: filterCommentsByScore,
-    filteringThreshold: filteringThreshold
+    scoreFilteringThreshold: scoreFilteringThreshold
   );
 
     
   BlockConfig copyWith({
     bool? filterCommentsByScore,
-    int? filteringThreshold
+    int? scoreFilteringThreshold
   }) => BlockConfig(
     filterCommentsByScore: filterCommentsByScore ?? this.filterCommentsByScore,
-    filteringThreshold: filteringThreshold ?? this.filteringThreshold,
+    scoreFilteringThreshold: scoreFilteringThreshold ?? this.scoreFilteringThreshold,
   );  
 
   @override
   bool operator ==(Object other) => identical(this, other) 
-    || other is BlockConfig && filterCommentsByScore == other.filterCommentsByScore && filteringThreshold == other.filteringThreshold;
+    || other is BlockConfig && filterCommentsByScore == other.filterCommentsByScore && scoreFilteringThreshold == other.scoreFilteringThreshold;
 
   @override
-  int get hashCode => filterCommentsByScore.hashCode ^ filteringThreshold.hashCode;
+  int get hashCode => filterCommentsByScore.hashCode ^ scoreFilteringThreshold.hashCode;
 }

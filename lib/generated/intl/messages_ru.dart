@@ -83,6 +83,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Аватар"),
         "back": MessageLookupByLibrary.simpleMessage("Назад"),
+        "blockers": MessageLookupByLibrary.simpleMessage("Blockers"),
         "blurring_cover_background":
             MessageLookupByLibrary.simpleMessage("Размытие фона обложки"),
         "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
@@ -169,6 +170,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "По дате добавления в избранное"),
         "favorites_order_Use_posted":
             MessageLookupByLibrary.simpleMessage("По дате обновления галереи"),
+        "filter_comments_by_score":
+            MessageLookupByLibrary.simpleMessage("Filter Comments By Score"),
+        "filter_comments_by_score_summary":
+            MessageLookupByLibrary.simpleMessage(
+                "Comments below/equal to this score will be hidden"),
         "fixed_height_of_list_items": MessageLookupByLibrary.simpleMessage(
             "Фиксированная высота элементов списка"),
         "follow_system": MessageLookupByLibrary.simpleMessage("Как в системе"),

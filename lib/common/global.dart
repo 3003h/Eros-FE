@@ -241,7 +241,7 @@ class Global {
 
   // 持久化Profile信息
   static void saveProfile() {
-    // logger.d(profile.layoutConfig?.toJson());
+    // logger.d(profile.blockConfig?.toJson());
     hiveHelper.profile = profile;
   }
 

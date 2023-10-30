@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -67,7 +68,7 @@ void getinit() {
     Get.put(ArchiverDownloadController());
   }
 
-  debugPrint('getinit');
+  debugPrint('getInit');
   Get.put(TabHomeController(), permanent: true);
 
   Get.lazyPut(() => PopularViewController(), fenix: true);
@@ -91,4 +92,5 @@ void getinit() {
   Get.lazyPut(() => EhMyTagsController(), fenix: true);
   Get.lazyPut(() => TagController(), fenix: true);
   Get.lazyPut(() => SearchImageController(), fenix: true);
+  Get.lazyPut(() => BlockController(), fenix: true);
 }

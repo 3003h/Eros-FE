@@ -14,6 +14,8 @@ const double kCupertinoItemHeight = 36.0;
 
 const double kDividerHeight = 1.0;
 
+const double kSummaryFontSize = 12.0;
+
 class BarsItem extends StatelessWidget {
   const BarsItem({
     Key? key,
@@ -33,7 +35,9 @@ class BarsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const _kDescStyle = TextStyle(
-        fontSize: 12.5, height: 1.1, color: CupertinoColors.systemGrey);
+        fontSize: kSummaryFontSize,
+        height: 1.1,
+        color: CupertinoColors.systemGrey);
 
     return Column(
       children: [
@@ -147,7 +151,9 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
     }
 
     const _kDescStyle = TextStyle(
-        fontSize: 12.5, height: 1.1, color: CupertinoColors.systemGrey);
+        fontSize: kSummaryFontSize,
+        height: 1.1,
+        color: CupertinoColors.systemGrey);
 
     Widget titleWidget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -358,7 +364,7 @@ class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
                             Text(
                               _desc ?? widget.desc ?? '',
                               style: const TextStyle(
-                                  fontSize: 12.5,
+                                  fontSize: kSummaryFontSize,
                                   color: CupertinoColors.systemGrey),
                             ).paddingOnly(top: 2.0),
                         ]),
@@ -503,7 +509,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
                             Text(
                               _desc ?? widget.desc ?? '',
                               style: const TextStyle(
-                                  fontSize: 12.5,
+                                  fontSize: kSummaryFontSize,
                                   color: CupertinoColors.systemGrey),
                             ).paddingOnly(top: 2.0),
                         ]),
@@ -630,7 +636,8 @@ class _TextItemState extends State<TextItem> {
                     Text(
                       widget.subTitle ?? '',
                       style: const TextStyle(
-                          fontSize: 12.5, color: CupertinoColors.systemGrey),
+                          fontSize: kSummaryFontSize,
+                          color: CupertinoColors.systemGrey),
                     ).paddingOnly(top: 2.0),
                 ]),
           ),
@@ -995,7 +1002,7 @@ class GroupItem extends StatelessWidget {
             child: Text(
               descTop!,
               style: TextStyle(
-                fontSize: 12.5,
+                fontSize: kSummaryFontSize,
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.secondaryLabel, context),
               ),
@@ -1015,7 +1022,7 @@ class GroupItem extends StatelessWidget {
             child: Text(
               desc!,
               style: TextStyle(
-                fontSize: 12.5,
+                fontSize: kSummaryFontSize,
                 color: CupertinoDynamicColor.resolve(
                     CupertinoColors.secondaryLabel, context),
               ),

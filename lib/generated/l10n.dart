@@ -4284,6 +4284,36 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Blockers`
+  String get blockers {
+    return Intl.message(
+      'Blockers',
+      name: 'blockers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter Comments By Score`
+  String get filter_comments_by_score {
+    return Intl.message(
+      'Filter Comments By Score',
+      name: 'filter_comments_by_score',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comments below/equal to this score will be hidden`
+  String get filter_comments_by_score_summary {
+    return Intl.message(
+      'Comments below/equal to this score will be hidden',
+      name: 'filter_comments_by_score_summary',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

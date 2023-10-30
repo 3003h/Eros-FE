@@ -420,5 +420,8 @@
   "webdav_max_connections": "WebDAV Max Connections",
   "native_http_client_adapter": "Native HTTP Client Adapter",
   "japanese_title_in_gallery": "Japanese Title in Gallery",
-  "japanese_title_in_gallery_summary": "Only effective in gallery page"
+  "japanese_title_in_gallery_summary": "Only effective in gallery page",
+  "blockers": "Blockers",
+  "filter_comments_by_score": "Filter Comments By Score",
+  "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden"
 }
