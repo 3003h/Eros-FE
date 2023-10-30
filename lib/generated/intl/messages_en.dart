@@ -46,7 +46,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("KEEP IT SAFE"),
-        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
+        "QR_code_block": MessageLookupByLibrary.simpleMessage(
+            "Block images containing QR codes"),
         "about": MessageLookupByLibrary.simpleMessage("About"),
         "add_quick_search":
             MessageLookupByLibrary.simpleMessage("Add to search"),
@@ -55,6 +56,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_tags": MessageLookupByLibrary.simpleMessage("Add tags"),
         "add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Add to favorites"),
+        "add_to_phash_block_list": MessageLookupByLibrary.simpleMessage(
+            "Add to Perceptual Hash Block List"),
         "advanced": MessageLookupByLibrary.simpleMessage("Advanced"),
         "aggregate": MessageLookupByLibrary.simpleMessage("Aggregate"),
         "aggregate_groups":
@@ -178,9 +181,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
         "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
+        "image_block": MessageLookupByLibrary.simpleMessage("Image Block"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download Type"),
-        "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "import_app_data":
             MessageLookupByLibrary.simpleMessage("Import App Data"),
@@ -226,8 +229,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Local Favorites"),
         "login": MessageLookupByLibrary.simpleMessage("Sign"),
         "login_web": MessageLookupByLibrary.simpleMessage("Sign in on the Web"),
-        "mange_hidden_images":
-            MessageLookupByLibrary.simpleMessage("Manage Hidden Images"),
         "manually_sel_favorites":
             MessageLookupByLibrary.simpleMessage("Manually select favorites"),
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum History"),
@@ -279,8 +280,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Page range error"),
         "passwd": MessageLookupByLibrary.simpleMessage("Password"),
         "paused": MessageLookupByLibrary.simpleMessage("Paused"),
-        "phash_check":
-            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
+        "phash_block_list":
+            MessageLookupByLibrary.simpleMessage("Perceptual Hash Block List"),
+        "phash_check": MessageLookupByLibrary.simpleMessage(
+            "Perceptual Hash Check (Block similar images)"),
         "pls_i_passwd":
             MessageLookupByLibrary.simpleMessage("Please enter your password"),
         "pls_i_username":

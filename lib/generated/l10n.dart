@@ -3825,41 +3825,51 @@ class L10n {
     );
   }
 
-  /// `Image Hide`
-  String get image_hide {
+  /// `Image Block`
+  String get image_block {
     return Intl.message(
-      'Image Hide',
-      name: 'image_hide',
+      'Image Block',
+      name: 'image_block',
       desc: '',
       args: [],
     );
   }
 
-  /// `QR code Check`
-  String get QR_code_check {
+  /// `Block images containing QR codes`
+  String get QR_code_block {
     return Intl.message(
-      'QR code Check',
-      name: 'QR_code_check',
+      'Block images containing QR codes',
+      name: 'QR_code_block',
       desc: '',
       args: [],
     );
   }
 
-  /// `Perceptual Hash Check`
+  /// `Perceptual Hash Check (Block similar images)`
   String get phash_check {
     return Intl.message(
-      'Perceptual Hash Check',
+      'Perceptual Hash Check (Block similar images)',
       name: 'phash_check',
       desc: '',
       args: [],
     );
   }
 
-  /// `Manage Hidden Images`
-  String get mange_hidden_images {
+  /// `Perceptual Hash Block List`
+  String get phash_block_list {
     return Intl.message(
-      'Manage Hidden Images',
-      name: 'mange_hidden_images',
+      'Perceptual Hash Block List',
+      name: 'phash_block_list',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add to Perceptual Hash Block List`
+  String get add_to_phash_block_list {
+    return Intl.message(
+      'Add to Perceptual Hash Block List',
+      name: 'add_to_phash_block_list',
       desc: '',
       args: [],
     );

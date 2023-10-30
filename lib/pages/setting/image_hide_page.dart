@@ -4,7 +4,6 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/route/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +13,7 @@ class ImageHidePage extends GetView<ImageHideController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = L10n.of(context).image_hide;
+    final String _title = L10n.of(context).image_block;
     return Obx(() {
       return CupertinoPageScaffold(
         backgroundColor: !ehTheme.isDarkMode
@@ -31,7 +30,7 @@ class ImageHidePage extends GetView<ImageHideController> {
             child: ListView(
               children: [
                 Obx(() => TextSwitchItem(
-                      L10n.of(context).QR_code_check,
+                      L10n.of(context).QR_code_block,
                       value: _ehConfigService.enableQRCodeCheck,
                       onChanged: (bool val) =>
                           _ehConfigService.enableQRCodeCheck = val,
@@ -46,7 +45,7 @@ class ImageHidePage extends GetView<ImageHideController> {
                     )),
                 SelectorSettingItem(
                   hideDivider: true,
-                  title: L10n.of(context).mange_hidden_images,
+                  title: L10n.of(context).phash_block_list,
                   selector: '',
                   onTap: () {
                     Get.toNamed(

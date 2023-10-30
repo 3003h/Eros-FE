@@ -46,13 +46,15 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("注意數據安全"),
-        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
+        "QR_code_block": MessageLookupByLibrary.simpleMessage("屏蔽含有二维码的图片"),
         "about": MessageLookupByLibrary.simpleMessage("關於"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("添加搜尋"),
         "add_tag_placeholder":
             MessageLookupByLibrary.simpleMessage("輸入新標籤（以半形逗號分隔）"),
         "add_tags": MessageLookupByLibrary.simpleMessage("加入標籤"),
         "add_to_favorites": MessageLookupByLibrary.simpleMessage("加入收藏"),
+        "add_to_phash_block_list": MessageLookupByLibrary.simpleMessage(
+            "Add to Perceptual Hash Block List"),
         "advanced": MessageLookupByLibrary.simpleMessage("高級"),
         "aggregate": MessageLookupByLibrary.simpleMessage("Aggregate"),
         "aggregate_groups":
@@ -155,9 +157,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("滾動時隱藏頂欄"),
         "host": MessageLookupByLibrary.simpleMessage("地址"),
         "hours": MessageLookupByLibrary.simpleMessage("小時"),
+        "image_block": MessageLookupByLibrary.simpleMessage("图片屏蔽"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
-        "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "import_app_data": MessageLookupByLibrary.simpleMessage("導入應用數據"),
         "import_app_data_summary":
@@ -199,7 +201,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("登入"),
         "login_web": MessageLookupByLibrary.simpleMessage("透過網頁登入"),
-        "mange_hidden_images": MessageLookupByLibrary.simpleMessage("管理隱藏圖片"),
         "manually_sel_favorites":
             MessageLookupByLibrary.simpleMessage("手動選擇收藏夾"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大歷史紀錄"),
@@ -246,8 +247,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error": MessageLookupByLibrary.simpleMessage("頁數範圍錯誤"),
         "passwd": MessageLookupByLibrary.simpleMessage("密碼"),
         "paused": MessageLookupByLibrary.simpleMessage("暫停"),
-        "phash_check":
-            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
+        "phash_block_list": MessageLookupByLibrary.simpleMessage("感知哈希屏蔽列表"),
+        "phash_check": MessageLookupByLibrary.simpleMessage("感知哈希检查 (屏蔽相似图片)"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("請輸入密碼"),
         "pls_i_username": MessageLookupByLibrary.simpleMessage("請輸入用戶名"),
         "port": MessageLookupByLibrary.simpleMessage("端口"),

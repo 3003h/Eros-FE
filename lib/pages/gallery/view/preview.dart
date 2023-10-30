@@ -152,7 +152,7 @@ class _PreviewContainerState extends State<PreviewContainer> {
                             widget.galleryImage.thumbUrl ?? '');
                         setState(() {});
                       },
-                      child: Text('Add to block list'),
+                      child: Text(L10n.of(context).add_to_phash_block_list),
                     ),
                   ],
                 );

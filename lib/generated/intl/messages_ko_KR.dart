@@ -46,13 +46,16 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("안전하게 보관하세요!"),
-        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
+        "QR_code_block": MessageLookupByLibrary.simpleMessage(
+            "Block images containing QR codes"),
         "about": MessageLookupByLibrary.simpleMessage("정보"),
         "add_quick_search": MessageLookupByLibrary.simpleMessage("빠른 검색 추가"),
         "add_tag_placeholder":
             MessageLookupByLibrary.simpleMessage("새로운 태그를 입력해주세요, 쉼표로 구분됩니다."),
         "add_tags": MessageLookupByLibrary.simpleMessage("태그 추가"),
         "add_to_favorites": MessageLookupByLibrary.simpleMessage("즐겨찾기에 추가"),
+        "add_to_phash_block_list": MessageLookupByLibrary.simpleMessage(
+            "Add to Perceptual Hash Block List"),
         "advanced": MessageLookupByLibrary.simpleMessage("고급"),
         "aggregate": MessageLookupByLibrary.simpleMessage("Aggregate"),
         "aggregate_groups":
@@ -165,9 +168,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
         "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
+        "image_block": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Download type"),
-        "image_hide": MessageLookupByLibrary.simpleMessage("Image Hide"),
         "image_limits": MessageLookupByLibrary.simpleMessage("Image Limits"),
         "import_app_data":
             MessageLookupByLibrary.simpleMessage("Import App Data"),
@@ -211,8 +214,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("로컬 즐겨찾기"),
         "login": MessageLookupByLibrary.simpleMessage("로그인"),
         "login_web": MessageLookupByLibrary.simpleMessage("웹 로그인"),
-        "mange_hidden_images":
-            MessageLookupByLibrary.simpleMessage("Manage Hidden Images"),
         "manually_sel_favorites":
             MessageLookupByLibrary.simpleMessage("수동으로 즐겨찾기 선택"),
         "max_history": MessageLookupByLibrary.simpleMessage("최대 방문 기록"),
@@ -257,8 +258,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range_error": MessageLookupByLibrary.simpleMessage("페이지 범위 오류"),
         "passwd": MessageLookupByLibrary.simpleMessage("비밀번호"),
         "paused": MessageLookupByLibrary.simpleMessage("Paused"),
-        "phash_check":
-            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
+        "phash_block_list":
+            MessageLookupByLibrary.simpleMessage("Perceptual Hash Block List"),
+        "phash_check": MessageLookupByLibrary.simpleMessage(
+            "Perceptual Hash Check (Block similar images)"),
         "pls_i_passwd": MessageLookupByLibrary.simpleMessage("비밀번호를 입력하여 주세요."),
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("사용자 이름을 입력하여 주세요."),

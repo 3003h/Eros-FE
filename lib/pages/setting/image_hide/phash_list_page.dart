@@ -11,7 +11,7 @@ class PHashImageListPage extends GetView<ImageHideController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = L10n.of(context).mange_hidden_images;
+    final String _title = L10n.of(context).phash_block_list;
     return Obx(() {
       return CupertinoPageScaffold(
         backgroundColor: !ehTheme.isDarkMode

@@ -47,7 +47,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "KEEP_IT_SAFE":
             MessageLookupByLibrary.simpleMessage("Никому не показывайте"),
-        "QR_code_check": MessageLookupByLibrary.simpleMessage("QR code Check"),
+        "QR_code_block": MessageLookupByLibrary.simpleMessage(
+            "Block images containing QR codes"),
         "about": MessageLookupByLibrary.simpleMessage("О приложении"),
         "add_quick_search":
             MessageLookupByLibrary.simpleMessage("Добавить в БП"),
@@ -56,6 +57,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "add_tags": MessageLookupByLibrary.simpleMessage("Добавить теги"),
         "add_to_favorites":
             MessageLookupByLibrary.simpleMessage("Добавить в избранное"),
+        "add_to_phash_block_list": MessageLookupByLibrary.simpleMessage(
+            "Add to Perceptual Hash Block List"),
         "advanced": MessageLookupByLibrary.simpleMessage("Дополнительно"),
         "aggregate": MessageLookupByLibrary.simpleMessage("Объединить"),
         "aggregate_groups":
@@ -184,10 +187,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
         "host": MessageLookupByLibrary.simpleMessage("Узел"),
         "hours": MessageLookupByLibrary.simpleMessage("час(ов)"),
+        "image_block": MessageLookupByLibrary.simpleMessage("Image Block"),
         "image_download_type":
             MessageLookupByLibrary.simpleMessage("Тип загрузки"),
-        "image_hide":
-            MessageLookupByLibrary.simpleMessage("Скрыть изображение"),
         "image_limits":
             MessageLookupByLibrary.simpleMessage("Ограничения изображения"),
         "import_app_data":
@@ -239,8 +241,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("Войти"),
         "login_web":
             MessageLookupByLibrary.simpleMessage("Войти через браузер"),
-        "mange_hidden_images": MessageLookupByLibrary.simpleMessage(
-            "Управление скрытыми изображениями"),
         "manually_sel_favorites": MessageLookupByLibrary.simpleMessage(
             "Вручную выбирать группу избранного"),
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
@@ -292,8 +292,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Ошибка в диапазоне страниц"),
         "passwd": MessageLookupByLibrary.simpleMessage("Пароль"),
         "paused": MessageLookupByLibrary.simpleMessage("На паузе"),
-        "phash_check":
-            MessageLookupByLibrary.simpleMessage("Perceptual Hash Check"),
+        "phash_block_list":
+            MessageLookupByLibrary.simpleMessage("Perceptual Hash Block List"),
+        "phash_check": MessageLookupByLibrary.simpleMessage(
+            "Perceptual Hash Check (Block similar images)"),
         "pls_i_passwd":
             MessageLookupByLibrary.simpleMessage("Пожалуйста, введите пароль"),
         "pls_i_username":

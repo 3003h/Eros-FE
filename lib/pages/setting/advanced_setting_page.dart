@@ -78,7 +78,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
     final List<Widget> _list = <Widget>[
       SelectorSettingItem(
         hideDivider: true,
-        title: L10n.of(context).image_hide,
+        title: L10n.of(context).image_block,
         selector: '',
         onTap: () {
           Get.toNamed(
