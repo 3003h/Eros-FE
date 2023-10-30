@@ -13,10 +13,11 @@ import 'package:path/path.dart' as path;
 
 import '../global.dart';
 
-const String kUrl =
+const String kApiUrl =
     'https://api.github.com/repos/EhTagTranslation/Database/releases/latest';
-const String kCDNurl =
-    'https://fastly.jsdelivr.net/gh/EhTagTranslation/DatabaseReleases/db.raw.json.gz';
+const String kCDNApiUrl =
+    'https://ghproxy.homeboyc.cn/https://api.github.com/repos/EhTagTranslation/Database/releases/latest';
+const String kCDNPrefix = 'https://ghproxy.homeboyc.cn/';
 const int kConnectTimeout = 20000;
 const int kReceiveTimeout = 30000;
 
@@ -43,12 +44,14 @@ class TagTransController extends GetxController {
 
   /// 检查更新
   Future<bool> checkUpdate({bool force = false}) async {
+    late final String apiUrl;
     if (ehConfigService.enableTagTranslateCDN) {
-      logger.d('use CND');
-      return true;
+      apiUrl = kCDNApiUrl;
+    } else {
+      apiUrl = kApiUrl;
     }
 
-    final _urlJson = await getGithubApi(kUrl);
+    final _urlJson = await getGithubApi(apiUrl);
     // 获取发布时间 作为远程版本号
     _remoteVer = _urlJson['published_at']?.trim() as String;
 
@@ -67,16 +70,17 @@ class TagTransController extends GetxController {
     }
     _dbUrl = assMap['db.raw.json.gz'] ?? '';
 
-    logger.t(_dbUrl);
+    if (ehConfigService.enableTagTranslateCDN) {
+      _dbUrl = '$kCDNPrefix$_dbUrl';
+    }
+
+    logger.d(_dbUrl);
     return true;
   }
 
   /// 获取数据
   Future<List> _fetchData({bool silence = false}) async {
     logger.t('_fetchData start');
-    if (ehConfigService.enableTagTranslateCDN) {
-      _dbUrl = kCDNurl;
-    }
 
     if (_dbUrl == null) {
       return [];
@@ -88,13 +92,13 @@ class TagTransController extends GetxController {
     List<int> data = GZipDecoder().decodeBytes(bytes);
     final String dbJson = utf8.decode(data);
 
-    final dbdataMap = jsonDecode(dbJson);
-    final List listData = dbdataMap['data'] as List;
+    final dbDataMap = jsonDecode(dbJson);
+    final List listData = dbDataMap['data'] as List;
 
-    final head = dbdataMap['head'] as Map;
+    final head = dbDataMap['head'] as Map;
     final committer = head['committer'] as Map;
     _remoteVer = committer['when'] as String;
-    logger.t('_remoteVer $_remoteVer');
+    logger.d('_remoteVer $_remoteVer');
 
     return listData;
   }
@@ -224,9 +228,6 @@ class TagTransController extends GetxController {
 
       return _transTag != null ? '$pfx:$_transTag' : text;
     } else {
-      if (text.contains('ahemaru')) {
-        logger.d('findTagTranslate $text $namespace');
-      }
       // logger.d('namespace $namespace');
       String? _tempNamespace;
       if (_namespaces.contains(namespace)) {
