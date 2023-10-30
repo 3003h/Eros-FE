@@ -85,8 +85,9 @@ class _CommentPageState extends State<CommentPage>
 
             final comment = controller.comments?[index];
             if (comment != null &&
-                (int.tryParse(comment.score) ?? 0) >
-                    _ehSettingService.scoreFilteringThreshold) {
+                (comment.score.isEmpty ||
+                    (int.tryParse(comment.score) ?? 0) >
+                        _ehSettingService.scoreFilteringThreshold)) {
               return CommentItem(
                 galleryComment: comment,
               ).autoCompressKeyboard(context);

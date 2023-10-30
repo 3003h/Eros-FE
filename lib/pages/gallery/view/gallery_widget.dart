@@ -342,11 +342,19 @@ class TopCommentEx extends StatelessWidget {
   final List<GalleryComment>? comments;
   final int max;
 
+  EhSettingService get _ehSettingService => Get.find();
+
   @override
   Widget build(BuildContext context) {
     // 显示最前面两条
     List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
-      final Iterable<GalleryComment> _comments = comments?.take(max) ?? [];
+      final Iterable<GalleryComment> _comments = comments
+              ?.where((comment) =>
+                  comment.score.isEmpty ||
+                  (int.tryParse(comment.score) ?? 0) >
+                      _ehSettingService.scoreFilteringThreshold)
+              .take(max) ??
+          [];
       return _comments
           .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
