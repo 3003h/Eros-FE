@@ -78,7 +78,9 @@ class _PreviewContainerState extends State<PreviewContainer> {
                   applyBoxFit(BoxFit.contain, imageSize, size);
 
               return ExtendedImageRect(
-                httpHeaders: {if (widget.referer != null) 'Referer': widget.referer!},
+                httpHeaders: {
+                  if (widget.referer != null) 'Referer': widget.referer!
+                },
                 url: widget.galleryImage.thumbUrl!,
                 height: fittedSizes.destination.height,
                 width: fittedSizes.destination.width,
@@ -150,7 +152,7 @@ class _PreviewContainerState extends State<PreviewContainer> {
                             widget.galleryImage.thumbUrl ?? '');
                         setState(() {});
                       },
-                      child: Text(L10n.of(context).hide),
+                      child: Text('Add to block list'),
                     ),
                   ],
                 );

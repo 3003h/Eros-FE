@@ -20,6 +20,7 @@ class Pixel {
 const int _kSize = 32;
 
 BigInt calculatePHash(Image image) {
+  // print('^^^^ calculatePHash ${image.width} ${image.height}');
   image = copyResize(image, width: 32, height: 32);
   final List<Pixel> pixelList = [];
   const bytesPerPixel = 4;
@@ -27,7 +28,14 @@ BigInt calculatePHash(Image image) {
   for (var i = 0; i <= bytes.length - bytesPerPixel; i += bytesPerPixel) {
     pixelList.add(Pixel(bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]));
   }
-  return _calcPhash(pixelList);
+
+  try {
+    final BigInt pHash = _calcPhash(pixelList);
+    return pHash;
+  } catch (e, s) {
+    print('^^^^ calculatePHash error $e\n$s');
+    rethrow;
+  }
 }
 
 BigInt calculateFromList(List<int> data) {
@@ -35,6 +43,7 @@ BigInt calculateFromList(List<int> data) {
 }
 
 BigInt calculateFromFile(String path) {
+  // print('^^^^ calculateFromFile $path');
   final imageFile = File(path);
   final List<int> data = imageFile.readAsBytesSync();
   return calculatePHash(getValidImage(data));
@@ -53,6 +62,8 @@ List<List<Pixel>> _unit8ListToMatrix(List<Pixel> pixelList) {
 
       if (i < copy.length) {
         res.add(copy[i]);
+      } else {
+        res.add(Pixel(0, 0, 0, 0));
       }
     }
 
@@ -64,6 +75,7 @@ List<List<Pixel>> _unit8ListToMatrix(List<Pixel> pixelList) {
 
 /// Helper function which computes a binary hash of a [List] of [Pixel]
 BigInt _calcPhash(List<Pixel> pixelList) {
+  // print('^^^^ _calcPhash ${pixelList.length}');
   String bitString = '';
   final matrix = List<List<num>>.filled(32, []);
   final row = List<num>.filled(32, 0);
@@ -72,15 +84,19 @@ BigInt _calcPhash(List<Pixel> pixelList) {
 
   final data = _unit8ListToMatrix(pixelList); //returns a matrix used for DCT
 
+  // print('^^^^ data ${data.map((e) => e.length).toList()}}');
+
   for (int y = 0; y < _kSize; y++) {
     for (int x = 0; x < _kSize; x++) {
+      // print('^^^^ color $x $y');
       final color = data[x][y];
-
+      // print('^^^^ color $x $y $color');
       row[x] = getLuminanceRgb(color._red, color._green, color._blue);
     }
 
     rows[y] = _calculateDCT(row);
   }
+
   for (int x = 0; x < _kSize; x++) {
     for (int y = 0; y < _kSize; y++) {
       col[y] = rows[y][x];
@@ -88,6 +104,8 @@ BigInt _calcPhash(List<Pixel> pixelList) {
 
     matrix[x] = _calculateDCT(col);
   }
+
+  // print('^^^^ matrix ${matrix.length} ${matrix[0].length}');
 
   // Extract the top 8x8 pixels.
   var pixels = <num>[];
@@ -109,6 +127,8 @@ BigInt _calcPhash(List<Pixel> pixelList) {
   bits.forEach((element) {
     bitString += (1 * element).toString();
   });
+
+  // print('^^^^ bitString $bitString');
 
   return BigInt.parse(bitString, radix: 2);
 }
@@ -169,6 +189,8 @@ Image getValidImage(List<int> bytes) {
   if (image == null) {
     throw const FormatException('image null');
   }
+
+  // print('^^^^ image width: ${image.width}, height: ${image.height}');
 
   return image;
 }

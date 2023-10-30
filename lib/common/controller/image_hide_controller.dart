@@ -68,6 +68,7 @@ class ImageHideController extends GetxController {
   }
 
   Future<BigInt> calculatePHash(String url) async {
+    logger.d('calculatePHash url:$url');
     BigInt? hash;
     if (pHashMap.containsKey(url)) {
       hash = pHashMap[url]!;
