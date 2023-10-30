@@ -31,7 +31,10 @@ class TagTransController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getNamespace().then((value) => _namespaces = value);
+    getNamespace().then((value) {
+      logger.d('getNamespace $value');
+      return _namespaces = value;
+    });
   }
 
   Future<List<String?>> getNamespace() async {
@@ -221,6 +224,10 @@ class TagTransController extends GetxController {
 
       return _transTag != null ? '$pfx:$_transTag' : text;
     } else {
+      if (text.contains('ahemaru')) {
+        logger.d('findTagTranslate $text $namespace');
+      }
+      // logger.d('namespace $namespace');
       String? _tempNamespace;
       if (_namespaces.contains(namespace)) {
         _tempNamespace = namespace;

@@ -79,9 +79,9 @@ class IsarHelper {
   Future<void> putAllTagTranslate(
     List<TagTranslat> tagTranslates,
   ) async {
-    final tagTranslats = isar.tagTranslats;
+    final tagTranslate = isar.tagTranslats;
     await isar.writeTxn(() async {
-      await tagTranslats.putAll(tagTranslates);
+      await tagTranslate.putAll(tagTranslates);
     });
   }
 
@@ -89,7 +89,7 @@ class IsarHelper {
     final result = await isar.tagTranslats
         .where()
         .distinctByNamespace()
-        .nameProperty()
+        .namespaceProperty()
         .findAll();
     return result;
   }
