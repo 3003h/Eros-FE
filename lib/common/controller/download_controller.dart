@@ -203,7 +203,7 @@ class DownloadController extends GetxController {
 
     // 先查询任务是否已存在
     final GalleryTask? _oriTask =
-        await isarHelper.findGalleryTaskByGid(gid ?? -1);
+        await isarHelper.findGalleryTaskByGidIsolate(gid ?? -1);
     if (_oriTask != null) {
       showToast('Download task existed');
       logger.i('$gid 任务已存在');
@@ -243,7 +243,7 @@ class DownloadController extends GetxController {
     );
 
     logger.d('add NewTask ${galleryTask.toString()}');
-    isarHelper.putGalleryTask(galleryTask, replaceOnConflict: false);
+    isarHelper.putGalleryTaskIsolate(galleryTask, replaceOnConflict: false);
     dState.galleryTaskMap[galleryTask.gid] = galleryTask;
     downloadViewAnimateListAdd();
     showToast('${galleryTask.gid} Download task start');
@@ -289,7 +289,7 @@ class DownloadController extends GetxController {
     }
 
     final imageTaskList =
-        (await isarHelper.findImageTaskAllByGid(galleryTask.gid))
+        (await isarHelper.findImageTaskAllByGidIsolate(galleryTask.gid))
             .map((e) => e.copyWith(imageUrl: ''))
             .toList();
 
@@ -339,7 +339,8 @@ class DownloadController extends GetxController {
 
   /// 恢复任务
   Future<void> galleryTaskResume(int gid) async {
-    final GalleryTask? galleryTask = await isarHelper.findGalleryTaskByGid(gid);
+    final GalleryTask? galleryTask =
+        await isarHelper.findGalleryTaskByGidIsolate(gid);
     if (galleryTask != null) {
       logger.d('恢复任务 $gid');
       _addGalleryTask(galleryTask);
@@ -350,7 +351,8 @@ class DownloadController extends GetxController {
   Future<void> galleryTaskRestart(int gid) async {
     isarHelper.removeImageTask(gid);
 
-    final GalleryTask? galleryTask = await isarHelper.findGalleryTaskByGid(gid);
+    final GalleryTask? galleryTask =
+        await isarHelper.findGalleryTaskByGidIsolate(gid);
     if (galleryTask != null) {
       logger.d('重下任务 $gid ${galleryTask.url}');
       cacheController.clearDioCache(
@@ -395,7 +397,7 @@ class DownloadController extends GetxController {
 
       final _task = dState.galleryTaskMap[gid];
       if (_task != null) {
-        isarHelper.putGalleryTask(_task);
+        isarHelper.putGalleryTaskIsolate(_task);
       }
     }
 
@@ -405,7 +407,7 @@ class DownloadController extends GetxController {
   /// 根据gid获取任务
   Future<List<GalleryImageTask>> getImageTasks(int gid) async {
     final List<GalleryImageTask> tasks =
-        await isarHelper.findImageTaskAllByGid(gid);
+        await isarHelper.findImageTaskAllByGidIsolate(gid);
     return tasks;
   }
 
@@ -1009,7 +1011,7 @@ class DownloadController extends GetxController {
   // 初始化任务列表
   Future<void> initGalleryTasks() async {
     await downloadTaskMigration();
-    final _tasks = await isarHelper.findAllGalleryTasks();
+    final _tasks = await isarHelper.findAllGalleryTasksIsolate();
 
     // 添加到map中
     for (final _task in _tasks) {
@@ -1071,8 +1073,8 @@ class DownloadController extends GetxController {
             galleryImageTaskList.add(galleryImageTask);
           }
 
-          await isarHelper.putAllImageTask(galleryImageTaskList);
-          await isarHelper.putGalleryTask(galleryTask);
+          await isarHelper.putAllImageTaskIsolate(galleryImageTaskList);
+          await isarHelper.putGalleryTaskIsolate(galleryTask);
         } catch (e, stack) {
           logger.e('$e\n$stack');
           continue;
@@ -1087,7 +1089,7 @@ class DownloadController extends GetxController {
   }
 
   Future<void> rebuildGalleryTasks() async {
-    final _tasks = await isarHelper.findAllGalleryTasks();
+    final _tasks = await isarHelper.findAllGalleryTasksIsolate();
 
     _tasks.forEach((task) => _writeTaskInfoFile(task));
   }
@@ -1114,14 +1116,14 @@ class DownloadController extends GetxController {
     _initDownloadStateChkTimer(galleryTask.gid);
 
     final List<GalleryImageTask> imageTasksOri =
-        await isarHelper.findImageTaskAllByGid(galleryTask.gid);
+        await isarHelper.findImageTaskAllByGidIsolate(galleryTask.gid);
 
     final completeCount = imageTasksOri
         .where((element) => element.status == TaskStatus.complete.value)
         .length;
 
-    await isarHelper
-        .putGalleryTask(galleryTask.copyWith(completCount: completeCount));
+    await isarHelper.putGalleryTaskIsolate(
+        galleryTask.copyWith(completCount: completeCount));
 
     logger.t(
         '${imageTasksOri.where((element) => element.status != TaskStatus.complete.value).map((e) => e.toString()).join('\n')} ');
@@ -1236,7 +1238,7 @@ class DownloadController extends GetxController {
 
     // 下载完成 更新数据库明细
     // logger.t('下载完成 更新数据库明细');
-    await isarHelper.updateImageTaskStatus(
+    await isarHelper.updateImageTaskStatusIsolate(
       gid,
       itemSer,
       TaskStatus.complete.value,
@@ -1244,7 +1246,7 @@ class DownloadController extends GetxController {
 
     // 更新ui
     final List<GalleryImageTask> listComplete = await isarHelper
-        .finaAllImageTaskByGidAndStatus(gid, TaskStatus.complete.value);
+        .finaAllImageTaskByGidAndStatusIsolate(gid, TaskStatus.complete.value);
 
     logger.t(
         'listComplete:  ${listComplete.length}: ${listComplete.map((e) => e.ser).join(',')}');
@@ -1259,7 +1261,7 @@ class DownloadController extends GetxController {
     }
 
     if (_task != null) {
-      await isarHelper.putGalleryTask(_task);
+      await isarHelper.putGalleryTaskIsolate(_task);
     }
     _updateDownloadView(['DownloadGalleryItem_$gid']);
   }
@@ -1345,7 +1347,7 @@ class DownloadController extends GetxController {
     int? status,
   }) async {
     final GalleryImageTask? oriImageTask =
-        await isarHelper.findImageTaskAllByGidSer(gid, image.ser);
+        await isarHelper.findImageTaskAllByGidSerIsolate(gid, image.ser);
 
     final GalleryImageTask newImageTask = GalleryImageTask(
       gid: gid,
@@ -1371,7 +1373,7 @@ class DownloadController extends GetxController {
     logger.t(
         'putImageTask => statue:${imageTask.status} name:${imageTask.filePath}');
 
-    await isarHelper.putImageTask(imageTask);
+    await isarHelper.putImageTaskIsolate(imageTask);
   }
 
   Future<int> _updateImageTasksByGid(int gid,
@@ -1391,7 +1393,7 @@ class DownloadController extends GetxController {
 
     if (_galleryImageTasks != null) {
       logger.t('插入所有任务明细 $gid ${_galleryImageTasks.length}');
-      await isarHelper.putAllImageTask(_galleryImageTasks);
+      await isarHelper.putAllImageTaskIsolate(_galleryImageTasks);
     }
 
     return _galleryImageTasks?.length ?? 0;

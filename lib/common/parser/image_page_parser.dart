@@ -57,7 +57,7 @@ GalleryImage paraImage(String htmlText) {
     originImageUrl =
         '${htmlUnescape.convert(match!.group(1)!)}fullimg${htmlUnescape.convert(match.group(2)!)}';
   }
-  print('====================>$originImageUrl');
+  // print('====================>$originImageUrl');
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
     imageUrl: imageUrl,

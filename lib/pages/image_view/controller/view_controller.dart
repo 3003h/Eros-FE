@@ -468,17 +468,17 @@ class ViewExtController extends GetxController {
     return image;
   }
 
-  GalleryImage? _getImageFromImageTasks(
+  Future<GalleryImage?> _getImageFromImageTasks(
     int itemSer,
     String? dir, {
     bool reloadDB = false,
-  }) {
+  }) async {
     if (dir == null) {
       return null;
     }
 
     if (reloadDB) {
-      vState.imageTasks = isarHelper.findImageTaskAllByGidSync(
+      vState.imageTasks = await isarHelper.findImageTaskAllByGidIsolate(
           int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
     }
 
@@ -503,7 +503,7 @@ class ViewExtController extends GetxController {
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
-    final gtask = await isarHelper.findGalleryTaskByGid(gid);
+    final gtask = await isarHelper.findGalleryTaskByGidIsolate(gid);
     return gtask?.realDirPath;
   }
 
@@ -519,8 +519,9 @@ class ViewExtController extends GetxController {
     late GalleryImage? image;
 
     // 检查是否已下载
-    image = _getImageFromImageTasks(itemSer, vState.dirPath);
-    image ??= _getImageFromImageTasks(itemSer, vState.dirPath, reloadDB: true);
+    image = await _getImageFromImageTasks(itemSer, vState.dirPath);
+    image ??=
+        await _getImageFromImageTasks(itemSer, vState.dirPath, reloadDB: true);
     if (image != null) {
       logger.d('fetchImage ser:$itemSer 从下载记录中获取');
       return image;

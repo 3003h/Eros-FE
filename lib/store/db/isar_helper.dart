@@ -54,7 +54,8 @@ class IsarHelper {
   }
 
   Future<void> addHistoryIsolate(GalleryProvider galleryProvider) async {
-    compute(addHistory, galleryProvider.toJson());
+    // return;
+    compute(iAddHistory, galleryProvider);
   }
 
   Future<void> removeHistory(String gid) async {
@@ -83,6 +84,10 @@ class IsarHelper {
     });
   }
 
+  Future<void> addHistoriesIsolate(List<GalleryProvider> allHistory) async {
+    compute(iAddHistories, allHistory);
+  }
+
   Future<void> putAllTagTranslate(
     List<TagTranslat> tagTranslates,
   ) async {
@@ -90,6 +95,12 @@ class IsarHelper {
     await isar.writeTxn(() async {
       await tagTranslate.putAll(tagTranslates);
     });
+  }
+
+  Future<void> putAllTagTranslateIsolate(
+    List<TagTranslat> tagTranslates,
+  ) async {
+    compute(iPutAllTagTranslate, tagTranslates);
   }
 
   Future<List<String?>> findAllTagNamespace() async {
@@ -161,12 +172,19 @@ class IsarHelper {
 
   /// GalleryTasks
   Future<List<GalleryTask>> findAllGalleryTasks() async {
-    final taks = await isar.galleryTasks.where().sortByAddTimeDesc().findAll();
-    return taks;
+    return await isar.galleryTasks.where().sortByAddTimeDesc().findAll();
+  }
+
+  Future<List<GalleryTask>> findAllGalleryTasksIsolate() async {
+    return compute(iFindAllGalleryTasks, null);
   }
 
   Future<GalleryTask?> findGalleryTaskByGid(int gid) async {
     return await isar.galleryTasks.get(gid);
+  }
+
+  Future<GalleryTask?> findGalleryTaskByGidIsolate(int gid) async {
+    return compute(iFindGalleryTaskByGid, gid);
   }
 
   Future<void> putGalleryTask(GalleryTask galleryTask,
@@ -187,13 +205,24 @@ class IsarHelper {
     }
   }
 
-  Future<void> putAllGalleryTasks(
-    List<GalleryTask> galleryTasks, {
+  Future<void> putGalleryTaskIsolate(
+    GalleryTask galleryTask, {
     bool replaceOnConflict = true,
   }) async {
+    compute(iPutGalleryTaskIsolate, (galleryTask, replaceOnConflict));
+  }
+
+  Future<void> putAllGalleryTasks(List<GalleryTask> galleryTasks) async {
     await isar.writeTxn(() async {
       await isar.galleryTasks.putAll(galleryTasks);
     });
+  }
+
+  Future<void> putAllGalleryTasksIsolate(
+    List<GalleryTask> galleryTasks, {
+    bool replaceOnConflict = true,
+  }) async {
+    compute(iPutAllGalleryTasks, galleryTasks);
   }
 
   Future<void> removeGalleryTask(int gid) async {
@@ -209,6 +238,10 @@ class IsarHelper {
         .gidEqualTo(gid)
         .sortBySer()
         .findAll();
+  }
+
+  Future<List<GalleryImageTask>> findImageTaskAllByGidIsolate(int gid) async {
+    return compute(iFindImageTaskAllByGid, gid);
   }
 
   List<GalleryImageTask> findImageTaskAllByGidSync(int gid) {
@@ -227,16 +260,28 @@ class IsarHelper {
     return isar.galleryImageTasks.getByGidSer(gid, ser);
   }
 
+  Future<GalleryImageTask?> findImageTaskAllByGidSerIsolate(int gid, int ser) {
+    return compute(iFindImageTaskAllByGidSer, (gid, ser));
+  }
+
   Future<void> putImageTask(GalleryImageTask imageTask) async {
     await isar.writeTxn(() async {
       await isar.galleryImageTasks.putByGidSer(imageTask);
     });
   }
 
+  Future<void> putImageTaskIsolate(GalleryImageTask imageTask) async {
+    compute(iPutImageTask, imageTask);
+  }
+
   Future<void> putAllImageTask(List<GalleryImageTask> imageTasks) async {
     await isar.writeTxn(() async {
       await isar.galleryImageTasks.putAllByGidSer(imageTasks);
     });
+  }
+
+  Future<void> putAllImageTaskIsolate(List<GalleryImageTask> imageTasks) async {
+    compute(iPutAllImageTask, imageTasks);
   }
 
   Future<void> removeImageTask(int gid) async {
@@ -255,14 +300,28 @@ class IsarHelper {
     });
   }
 
+  Future<void> updateImageTaskStatusIsolate(
+      int gid, int ser, int status) async {
+    compute(iUpdateImageTaskStatus, (gid, ser, status));
+  }
+
   Future<List<GalleryImageTask>> finaAllImageTaskByGidAndStatus(
-      int gid, int status) async {
+    int gid,
+    int status,
+  ) async {
     return await isar.galleryImageTasks
         .where()
         .gidEqualTo(gid)
         .filter()
         .statusEqualTo(status)
         .findAll();
+  }
+
+  Future<List<GalleryImageTask>> finaAllImageTaskByGidAndStatusIsolate(
+    int gid,
+    int status,
+  ) async {
+    return compute(iFinaAllImageTaskByGidAndStatus, (gid, status));
   }
 
   Future<void> putTagTranslateVersion(String version) async {

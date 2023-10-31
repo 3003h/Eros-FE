@@ -135,8 +135,8 @@ class TagTransController extends GetxController {
 
     // tagTranslatDao.insertAllTagTranslats(tagTranslats);
 
-    // await isarHelper.removeAllTagTranslate();
-    await isarHelper.putAllTagTranslate(tagTranslats);
+    // await isarHelper.putAllTagTranslate(tagTranslats);
+    await isarHelper.putAllTagTranslateIsolate(tagTranslats);
     ehSettingService.tagTranslatVer.value = _remoteVer ?? '';
   }
 
