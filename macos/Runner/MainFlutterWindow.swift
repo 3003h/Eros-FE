@@ -1,6 +1,6 @@
 import Cocoa
 import FlutterMacOS
-import bitsdojo_window_macos_v3
+import bitsdojo_window_macos
 
 class MainFlutterWindow: BitsdojoWindow {
   override func bitsdojo_window_configure() -> UInt {

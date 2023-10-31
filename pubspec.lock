@@ -82,46 +82,46 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.7.0"
-  bitsdojo_window_linux_v3:
-    dependency: transitive
-    description:
-      name: bitsdojo_window_linux_v3
-      sha256: "7ba40de4f48799b19fa0e993b21cfd341787447d78eff748adfd38042140e2eb"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.1"
-  bitsdojo_window_macos_v3:
-    dependency: transitive
-    description:
-      name: bitsdojo_window_macos_v3
-      sha256: "34d6b95a28f82b72933af656bc4152ad2cebacbbf90f047c9301a86a30ac2fde"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.0"
-  bitsdojo_window_platform_interface_v3:
-    dependency: transitive
-    description:
-      name: bitsdojo_window_platform_interface_v3
-      sha256: "13c60bab4f4209700c5eb4bc0f4a648cc1abaa33a4c1c3c6fbb503ff5966e636"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.0"
-  bitsdojo_window_v3:
+  bitsdojo_window:
     dependency: "direct main"
     description:
-      name: bitsdojo_window_v3
-      sha256: "96b9852769b2381646fcd50ad6307e6b61d960b265ac23ed762cda1a518ed213"
+      name: bitsdojo_window
+      sha256: "1118bc1cd16e6f358431ca4473af57cc1b287d2ceab46dfab6d59a9463160622"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0"
-  bitsdojo_window_windows_v3:
+    version: "0.1.5"
+  bitsdojo_window_linux:
     dependency: transitive
     description:
-      name: bitsdojo_window_windows_v3
-      sha256: "543663080ced14e35b9b068e8de8ff785dc285858fe34d19d648ac9c70d25809"
+      name: bitsdojo_window_linux
+      sha256: d3804a30315fcbb43b28acc86d1180ce0be22c0c738ad2da9e5ade4d8dbd9655
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.1"
+    version: "0.1.3"
+  bitsdojo_window_macos:
+    dependency: transitive
+    description:
+      name: bitsdojo_window_macos
+      sha256: d2a9886c74516c5b84c1dd65ab8ee5d1c52055b265ebf0e7d664dee28366b521
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.3"
+  bitsdojo_window_platform_interface:
+    dependency: transitive
+    description:
+      name: bitsdojo_window_platform_interface
+      sha256: "65daa015a0c6dba749bdd35a0f092e7a8ba8b0766aa0480eb3ef808086f6e27c"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.2"
+  bitsdojo_window_windows:
+    dependency: transitive
+    description:
+      name: bitsdojo_window_windows
+      sha256: "8766a40aac84a6d7bdcaa716b24997e028fc9a9a1800495fc031721fd5a22ed0"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.5"
   blur:
     dependency: "direct main"
     description:
@@ -270,10 +270,10 @@ packages:
     dependency: "direct main"
     description:
       name: collection
-      sha256: f092b211a4319e98e5ff58223576de6c2803db36221657b46c82574721240687
+      sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.17.2"
+    version: "1.18.0"
   common_utils:
     dependency: transitive
     description:
@@ -1329,10 +1329,10 @@ packages:
     dependency: "direct main"
     description:
       name: native_dio_adapter
-      sha256: "506efc7f9c75ecc07742e26d1fd72510908cd940ee315295710b87075047bcb0"
+      sha256: "1967cabe3e9ea68ea5ad6da7a0ed25fa75cf335ec6b92cdf6f32185efa93364b"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0+2"
+    version: "1.1.0"
   octo_image:
     dependency: "direct main"
     description:
@@ -1506,10 +1506,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: cb3798bef7fc021ac45b308f4b51208a152792445cce0448c9a4ba5879dd8750
+      sha256: eeb2d1428ee7f4170e2bd498827296a18d4e7fc462b71727d111c0ac7707cfa6
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.4.0"
+    version: "6.0.1"
   photo_view:
     dependency: "direct main"
     description:
@@ -2174,13 +2174,13 @@ packages:
     source: hosted
     version: "2.0.6"
   win32:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: win32
-      sha256: "350a11abd2d1d97e0cc7a28a81b781c08002aa2864d9e3f192ca0ffa18b06ed3"
+      sha256: "5a751eddf9db89b3e5f9d50c20ab8612296e4e8db69009788d6c8b060a84191c"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "5.0.9"
+    version: "4.1.4"
   win32_registry:
     dependency: transitive
     description:
@@ -2218,10 +2218,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: "5bc72e1e45e941d825fd7468b9b4cc3b9327942649aeb6fc5cdbf135f0a86e84"
+      sha256: af5e77e9b83f2f4adc5d3f0a4ece1c7f45a2467b695c2540381bac793e34e556
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "6.3.0"
+    version: "6.4.2"
   xxh3:
     dependency: transitive
     description:

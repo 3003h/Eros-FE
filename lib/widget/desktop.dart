@@ -1,4 +1,4 @@
-import 'package:bitsdojo_window_v3/bitsdojo_window_v3.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
