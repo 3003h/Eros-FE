@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/controller_tag_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
@@ -266,6 +267,8 @@ class GalleryBody extends StatelessWidget {
 
   final GalleryPageController controller;
 
+  EhSettingService get _ehSettingService => Get.find();
+
   GalleryPageState get pageState => controller.gState;
 
   @override
@@ -275,13 +278,14 @@ class GalleryBody extends StatelessWidget {
         return GallerySliverSafeArea(
           child: MultiSliver(children: [
             GalleryActions(controller: controller, provider: state),
-            TagTile(provider: state),
+            if (_ehSettingService.showGalleryTags) TagTile(provider: state),
             ChapterTile(controller: controller, provider: state),
-            CommentTile(controller: controller, provider: state),
+            if (_ehSettingService.showComments)
+              CommentTile(controller: controller, provider: state),
             ThumbTile(
               controller: controller,
               provider: state,
-              horizontal: false,
+              // horizontal: true,
             ),
           ]),
         );
@@ -390,6 +394,7 @@ class CommentTile extends StatelessWidget {
               key: ValueKey(
                   controller.gState.comments.map((e) => e.id).join('')),
               comments: controller.gState.comments,
+              uploader: controller.gState.galleryProvider?.uploader,
             );
           }),
         ),
@@ -414,23 +419,25 @@ class ThumbTile extends StatelessWidget {
     final pageState = controller.gState;
 
     if (horizontal) {
-      return MultiSliver(children: [
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {},
-          child: Row(
-            children: [
-              MiniTitle(title: 'Thumbs'),
-              const Spacer(),
-            ],
+      return MultiSliver(
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {},
+            child: Row(
+              children: [
+                MiniTitle(title: 'Thumbs'),
+                const Spacer(),
+              ],
+            ),
           ),
-        ),
-        ThumbHorizontalList(
-          images: pageState.firstPageImage,
-          gid: provider.gid ?? '',
-          referer: controller.gState.url,
-        )
-      ]);
+          ThumbHorizontalList(
+            images: pageState.firstPageImage,
+            gid: provider.gid ?? '',
+            referer: controller.gState.url,
+          ),
+        ],
+      );
     } else {
       return MultiSliver(children: [
         SliverPadding(

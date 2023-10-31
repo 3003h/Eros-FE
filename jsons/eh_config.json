@@ -60,5 +60,8 @@
   "hideTopBarOnScroll?": false,
   "readViewCompatibleMode?": true,
   "translateSearchHistory?": false,
-  "nativeHttpClientAdapter?": false
+  "nativeHttpClientAdapter?": false,
+  "showComments?": true,
+  "showOnlyUploaderComment?": false,
+  "showGalleryTags?": true
 }

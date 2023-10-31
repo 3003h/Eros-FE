@@ -398,9 +398,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Поделиться изображением"),
         "show_comment_avatar": MessageLookupByLibrary.simpleMessage(
             "Показать аватар комментатора"),
+        "show_comments": MessageLookupByLibrary.simpleMessage("Show Comments"),
         "show_filter": MessageLookupByLibrary.simpleMessage("Показать фильтр"),
+        "show_gallery_tags":
+            MessageLookupByLibrary.simpleMessage("Show Gallery Tags"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage(
             "Показывать названия на японском"),
+        "show_only_uploader_comment":
+            MessageLookupByLibrary.simpleMessage("Show Only Uploader Comment"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage(
             "Показывать интервал между страницами"),
         "skip": MessageLookupByLibrary.simpleMessage("Пропустить"),

@@ -104,21 +104,50 @@ class ListViewLayoutSetting extends StatelessWidget {
         value: _ehSettingService.jpnTitleInGalleryPage,
         onChanged: (val) => _ehSettingService.jpnTitleInGalleryPage = val,
       ),
+      // showComments
+      TextSwitchItem(
+        L10n.of(context).show_comments,
+        value: _ehSettingService.showComments,
+        onChanged: (val) => _ehSettingService.showComments = val,
+      ),
+      // showOnlyUploaderComment
+      Obx(() {
+        return AnimatedCrossFade(
+          firstChild: const SizedBox(),
+          secondChild: TextSwitchItem(
+            L10n.of(context).show_only_uploader_comment,
+            value: _ehSettingService.showOnlyUploaderComment,
+            onChanged: (val) => _ehSettingService.showOnlyUploaderComment = val,
+          ),
+          crossFadeState: _ehSettingService.showComments
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          secondCurve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+        );
+      }),
+      // showGalleryTags
+      TextSwitchItem(
+        L10n.of(context).show_gallery_tags,
+        value: _ehSettingService.showGalleryTags,
+        onChanged: (val) => _ehSettingService.showGalleryTags = val,
+        hideDivider: true,
+      ),
+      const ItemSpace(),
       TextSwitchItem(
         L10n.of(context).hide_top_bar_on_scroll,
         value: _ehSettingService.hideTopBarOnScroll,
         onChanged: (val) => _ehSettingService.hideTopBarOnScroll = val,
-        hideDivider: !localeService.isLanguageCodeZh,
+        // hideDivider: !localeService.isLanguageCodeZh,
       ),
       if (localeService.isLanguageCodeZh)
         TextSwitchItem(
           '画廊列表封面模糊处理',
           value: _ehSettingService.isGalleryImgBlur.value,
           onChanged: _handleGalleryListImgBlurChanged,
-          hideDivider: true,
+          // hideDivider: true,
           // desc: '画廊列表封面模糊效果',
         ),
-      const ItemSpace(),
       _buildListModeItem(
         context,
       ),

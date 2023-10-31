@@ -381,9 +381,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "share_image": MessageLookupByLibrary.simpleMessage("Share image"),
         "show_comment_avatar":
             MessageLookupByLibrary.simpleMessage("Show comment avatar"),
+        "show_comments": MessageLookupByLibrary.simpleMessage("Show Comments"),
         "show_filter": MessageLookupByLibrary.simpleMessage("Show filter"),
+        "show_gallery_tags":
+            MessageLookupByLibrary.simpleMessage("Show Gallery Tags"),
         "show_jpn_title":
             MessageLookupByLibrary.simpleMessage("Show Japanese Title"),
+        "show_only_uploader_comment":
+            MessageLookupByLibrary.simpleMessage("Show Only Uploader Comment"),
         "show_page_interval":
             MessageLookupByLibrary.simpleMessage("Show page interval"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),

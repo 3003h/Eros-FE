@@ -328,8 +328,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "share_image": MessageLookupByLibrary.simpleMessage("分享圖片"),
         "show_comment_avatar":
             MessageLookupByLibrary.simpleMessage("Show comment avatar"),
+        "show_comments": MessageLookupByLibrary.simpleMessage("Show Comments"),
         "show_filter": MessageLookupByLibrary.simpleMessage("顯示篩選"),
+        "show_gallery_tags":
+            MessageLookupByLibrary.simpleMessage("Show Gallery Tags"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("顯示日文標題"),
+        "show_only_uploader_comment":
+            MessageLookupByLibrary.simpleMessage("Show Only Uploader Comment"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("顯示頁面間隔"),
         "skip": MessageLookupByLibrary.simpleMessage("跳過"),
         "sync_group": MessageLookupByLibrary.simpleMessage("同步分组"),
@@ -348,7 +353,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_sort": MessageLookupByLibrary.simpleMessage("長按並拖曳以進行排序"),
         "tab_toplist": MessageLookupByLibrary.simpleMessage("Toplists"),
         "tab_watched": MessageLookupByLibrary.simpleMessage("關注"),
-        "tabbar_setting": MessageLookupByLibrary.simpleMessage("主頁標籤設置"),
+        "tabbar_setting": MessageLookupByLibrary.simpleMessage("主頁設置"),
         "tablet_layout": MessageLookupByLibrary.simpleMessage("Tablet layout"),
         "tagNamespace": m3,
         "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("添加到我的標籤"),

@@ -4314,6 +4314,36 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Show Comments`
+  String get show_comments {
+    return Intl.message(
+      'Show Comments',
+      name: 'show_comments',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Only Uploader Comment`
+  String get show_only_uploader_comment {
+    return Intl.message(
+      'Show Only Uploader Comment',
+      name: 'show_only_uploader_comment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Gallery Tags`
+  String get show_gallery_tags {
+    return Intl.message(
+      'Show Gallery Tags',
+      name: 'show_gallery_tags',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

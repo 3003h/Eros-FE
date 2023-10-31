@@ -112,7 +112,7 @@
   "left_to_right": "從左至右",
   "right_to_left": "從右至左",
   "top_to_bottom": "從上到下",
-  "tabbar_setting": "主頁標籤設置",
+  "tabbar_setting": "主頁設置",
   "tab_sort": "長按並拖曳以進行排序",
   "add_to_favorites": "加入收藏",
   "remove_from_favorites": "從收藏中刪除",
@@ -423,5 +423,8 @@
   "japanese_title_in_gallery_summary": "Only effective in gallery page",
   "blockers": "Blockers",
   "filter_comments_by_score": "Filter Comments By Score",
-  "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden"
+  "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden",
+  "show_comments": "Show Comments",
+  "show_only_uploader_comment": "Show Only Uploader Comment",
+  "show_gallery_tags": "Show Gallery Tags"
 }

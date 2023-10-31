@@ -34,6 +34,8 @@ class CommentController extends GetxController {
   GalleryPageState get _pageState => pageController.gState;
   List<GalleryComment>? get comments => _pageState.comments;
 
+  String? get uploader => _pageState.galleryProvider?.uploader;
+
   // id降序排序
   List<GalleryComment> get commentsSorted => List<GalleryComment>.from(
       comments ?? [])

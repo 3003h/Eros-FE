@@ -423,5 +423,8 @@
   "japanese_title_in_gallery_summary": "Only effective in gallery page",
   "blockers": "Blockers",
   "filter_comments_by_score": "Filter Comments By Score",
-  "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden"
+  "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden",
+  "show_comments": "Show Comments",
+  "show_only_uploader_comment": "Show Only Uploader Comment",
+  "show_gallery_tags": "Show Gallery Tags"
 }

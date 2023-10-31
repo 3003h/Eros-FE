@@ -293,8 +293,42 @@ class EhSettingService extends ProfileService {
   bool get jpnTitleInGalleryPage => _jpnTitleInGalleryPage.value;
   set jpnTitleInGalleryPage(bool val) => _jpnTitleInGalleryPage.value = val;
 
+  // _showComments
+  final _showComments = true.obs;
+  bool get showComments => _showComments.value;
+  set showComments(bool val) => _showComments.value = val;
+
+  // showGalleryTags
+  final _showGalleryTags = true.obs;
+  bool get showGalleryTags => _showGalleryTags.value;
+  set showGalleryTags(bool val) => _showGalleryTags.value = val;
+
+  // showOnlyUploaderComment
+  final _showOnlyUploaderComment = false.obs;
+  bool get showOnlyUploaderComment => _showOnlyUploaderComment.value;
+  set showOnlyUploaderComment(bool val) => _showOnlyUploaderComment.value = val;
+
   void _initEhConfig() {
-// jpnTitleInGalleryPage
+    // showComments
+    showComments = ehConfig.showComments ?? showComments;
+    everProfile<bool>(_showComments, (val) {
+      ehConfig = ehConfig.copyWith(showComments: val);
+    });
+
+    // showOnlyUploaderComment
+    showOnlyUploaderComment =
+        ehConfig.showOnlyUploaderComment ?? showOnlyUploaderComment;
+    everProfile<bool>(_showOnlyUploaderComment, (val) {
+      ehConfig = ehConfig.copyWith(showOnlyUploaderComment: val);
+    });
+
+    // showGalleryTags
+    showGalleryTags = ehConfig.showGalleryTags ?? showGalleryTags;
+    everProfile<bool>(_showGalleryTags, (val) {
+      ehConfig = ehConfig.copyWith(showGalleryTags: val);
+    });
+
+    // jpnTitleInGalleryPage
     jpnTitleInGalleryPage =
         ehConfig.jpnTitleInGalleryPage ?? jpnTitleInGalleryPage;
     everProfile<bool>(_jpnTitleInGalleryPage, (val) {

@@ -112,7 +112,7 @@
   "left_to_right": "从左到右",
   "right_to_left": "从右到左",
   "top_to_bottom": "从上到下",
-  "tabbar_setting": "主页标签设置",
+  "tabbar_setting": "主页栏位设置",
   "tab_sort": "长按并拖动以进行排序",
   "add_to_favorites": "添加收藏夹",
   "remove_from_favorites": "从收藏夹中删除",
@@ -423,5 +423,8 @@
   "japanese_title_in_gallery_summary": "仅在画廊页面有效",
   "blockers": "本地屏蔽",
   "filter_comments_by_score": "根据评分过滤评论",
-  "filter_comments_by_score_summary": "低于/等于此分数的评论将被隐藏"
+  "filter_comments_by_score_summary": "低于/等于此分数的评论将被隐藏",
+  "show_comments": "显示画廊评论",
+  "show_only_uploader_comment": "仅显示上传者评论",
+  "show_gallery_tags": "显示画廊标签"
 }

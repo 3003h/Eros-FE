@@ -187,6 +187,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
                           .map((e) => e.id)
                           .join('')),
                       comments: _controller.gState.comments,
+                      uploader: _controller.gState.galleryProvider?.uploader,
                     );
                   }),
                 ),

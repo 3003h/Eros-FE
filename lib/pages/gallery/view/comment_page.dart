@@ -24,6 +24,7 @@ const Border _kDefaultEditBorder = Border(
 );
 
 class CommentPage extends StatefulWidget {
+  const CommentPage({Key? key}) : super(key: key);
   @override
   State<CommentPage> createState() => _CommentPageState();
 }
@@ -68,8 +69,34 @@ class _CommentPageState extends State<CommentPage>
 
   // 评论列表
   Widget commentListView(BuildContext context) {
+    if (!_ehSettingService.showComments) {
+      return const SizedBox();
+    }
+
     return Obx(() {
       logger.d('build commentListView');
+
+      late final List<GalleryComment>? _comments;
+
+      if (_ehSettingService.showOnlyUploaderComment) {
+        final _uploaderId = controller.comments
+            ?.firstWhere((element) => element.score.isEmpty)
+            .memberId;
+
+        if (_uploaderId != null) {
+          _comments = controller.comments
+              ?.where((element) => element.memberId == _uploaderId)
+              .toList();
+        } else {
+          _comments = controller.comments
+              ?.where((element) => element.name == controller.uploader)
+              .toList();
+        }
+      } else {
+        _comments = controller.comments;
+      }
+      // _comments = controller.comments;
+
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: kPadding),
         child: ListView.builder(
@@ -79,19 +106,18 @@ class _CommentPageState extends State<CommentPage>
                 kMinInteractiveDimensionCupertino,
           ),
           itemBuilder: (context, index) {
-            if (controller.comments == null || controller.comments!.isEmpty) {
+            if (_comments == null || _comments.isEmpty) {
               return const SizedBox();
             }
 
-            final comment = controller.comments?[index];
+            final comment = _comments[index];
 
             final hideComment = _ehSettingService.filterCommentsByScore &&
-                comment != null &&
                 (comment.score.isNotEmpty &&
                     (int.tryParse(comment.score) ?? 0) <=
                         _ehSettingService.scoreFilteringThreshold);
 
-            if (comment != null && !hideComment) {
+            if (!hideComment) {
               return CommentItem(
                 galleryComment: comment,
               ).autoCompressKeyboard(context);
@@ -99,7 +125,7 @@ class _CommentPageState extends State<CommentPage>
               return const SizedBox();
             }
           },
-          itemCount: controller.comments?.length ?? 0,
+          itemCount: _comments?.length ?? 0,
         ),
       );
     });

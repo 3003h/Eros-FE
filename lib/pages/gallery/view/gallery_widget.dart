@@ -338,9 +338,15 @@ class GalleryRating extends StatelessWidget {
 }
 
 class TopCommentEx extends StatelessWidget {
-  const TopCommentEx({Key? key, this.comments, this.max = 2}) : super(key: key);
+  const TopCommentEx({
+    Key? key,
+    this.comments,
+    this.max = 2,
+    required this.uploader,
+  }) : super(key: key);
   final List<GalleryComment>? comments;
   final int max;
+  final String? uploader;
 
   EhSettingService get _ehSettingService => Get.find();
 
@@ -348,14 +354,30 @@ class TopCommentEx extends StatelessWidget {
   Widget build(BuildContext context) {
     // 显示最前面两条
     List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
-      Iterable<GalleryComment> _comments = comments?.take(max) ?? [];
+      Iterable<GalleryComment> _comments = comments ?? [];
 
-      if (_ehSettingService.filterCommentsByScore) {
+      // 如果启用了仅显示上传者评论 则只显示上传者的评论，并且忽略评分筛选
+      if (_ehSettingService.showOnlyUploaderComment) {
+        final _uploaderId =
+            _comments.firstWhere((element) => element.score.isEmpty).memberId;
+        logger.d('_uploaderId $_uploaderId');
+        if (_uploaderId != null) {
+          _comments =
+              _comments.where((element) => element.memberId == _uploaderId);
+        } else {
+          _comments =
+              _comments.where((element) => element.name == uploader?.trim());
+        }
+
+        logger.d('_comments.length ${_comments.length}');
+      } else if (_ehSettingService.filterCommentsByScore) {
         _comments = _comments.where((comment) =>
             comment.score.isEmpty ||
             (int.tryParse(comment.score) ?? 0) >
                 _ehSettingService.scoreFilteringThreshold);
       }
+
+      _comments = _comments.take(max);
 
       return _comments
           .map((GalleryComment comment) => CommentItem(

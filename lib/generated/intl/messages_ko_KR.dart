@@ -347,8 +347,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "share_image": MessageLookupByLibrary.simpleMessage("이미지 공유"),
         "show_comment_avatar":
             MessageLookupByLibrary.simpleMessage("Show comment avatar"),
+        "show_comments": MessageLookupByLibrary.simpleMessage("Show Comments"),
         "show_filter": MessageLookupByLibrary.simpleMessage("필터 표시"),
+        "show_gallery_tags":
+            MessageLookupByLibrary.simpleMessage("Show Gallery Tags"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("일본어 제목 표시"),
+        "show_only_uploader_comment":
+            MessageLookupByLibrary.simpleMessage("Show Only Uploader Comment"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("페이지 간격 표시"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
         "sync_group": MessageLookupByLibrary.simpleMessage("Sync group"),
