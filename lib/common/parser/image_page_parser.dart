@@ -50,14 +50,14 @@ GalleryImage paraImage(String htmlText) {
   final int ser = int.parse(serElms[0].text);
 
   // 原图链接
-  final regExpOriginImageUrl = RegExp(r'<a href="([^"]+)fullimg.php([^"]+)">');
+  final regExpOriginImageUrl = RegExp(r'<a href="([^"]+)fullimg([^"]+)">');
   final match = regExpOriginImageUrl.firstMatch(htmlText);
   String? originImageUrl;
   if (match?.groupCount == 2) {
     originImageUrl =
-        '${htmlUnescape.convert(match!.group(1)!)}fullimg.php${htmlUnescape.convert(match.group(2)!)}';
+        '${htmlUnescape.convert(match!.group(1)!)}fullimg${htmlUnescape.convert(match.group(2)!)}';
   }
-  // print('====================>$originImageUrl');
+  print('====================>$originImageUrl');
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
     imageUrl: imageUrl,

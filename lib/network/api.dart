@@ -515,7 +515,7 @@ class Api {
     String? saveDir;
     io.File? saveFile;
     late String realSavePath;
-    if (imageUrl.contains('/fullimg.php?')) {
+    if (imageUrl.contains('/fullimg')) {
       saveDir = path.join(
           Global.tempPath, 'ori_image_temp', gid ?? '0', '${ser ?? 0}');
       if (!io.Directory(saveDir).existsSync()) {
@@ -605,7 +605,7 @@ class Api {
         ser: ser,
         fileName: filename,
         progressCallback: (count, total) {
-          logger.d('count $count, total $total');
+          logger.t('count $count, total $total');
           progressCallback?.call(count, total);
         },
       );
