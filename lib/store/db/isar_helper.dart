@@ -5,6 +5,8 @@ import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:fehviewer/store/db/entity/tag_translate_info.dart';
 import 'package:fehviewer/store/db/entity/view_history.dart';
 import 'package:fehviewer/store/db/isar.dart';
+import 'package:fehviewer/store/db/isar_isolate.dart';
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 
 import '../../fehviewer.dart';
@@ -19,18 +21,18 @@ class IsarHelper {
   }
 
   Future<List<GalleryProvider>> getAllHistory() async {
-    final viewHistorys =
-        await isar.viewHistorys.where().sortByLastViewTimeDesc().findAll();
-    final _historys = viewHistorys
+    final viewHistories =
+        await isar.viewHistories.where().sortByLastViewTimeDesc().findAll();
+    final _histories = viewHistories
         .map((e) => GalleryProvider.fromJson(
             jsonDecode(e.galleryProviderText) as Map<String, dynamic>))
         .toList();
-    return _historys;
+    return _histories;
   }
 
   Future<GalleryProvider?> getHistory(String gid) async {
     final _gid = int.tryParse(gid) ?? 0;
-    final viewHistory = await isar.viewHistorys.get(_gid);
+    final viewHistory = await isar.viewHistories.get(_gid);
     if (viewHistory == null) {
       return null;
     }
@@ -38,33 +40,38 @@ class IsarHelper {
         jsonDecode(viewHistory.galleryProviderText) as Map<String, dynamic>);
   }
 
-  Future<void> addHistory(GalleryProvider galleryProvider) async {
+  Future<void> addHistoryAsync(GalleryProvider galleryProvider) async {
+    // return;
     final gid = int.tryParse(galleryProvider.gid ?? '0') ?? 0;
     final lastViewTime = galleryProvider.lastViewTime ?? 0;
 
     await isar.writeTxn(() async {
-      await isar.viewHistorys.put(ViewHistory(
+      await isar.viewHistories.put(ViewHistory(
           gid: gid,
           lastViewTime: lastViewTime,
           galleryProviderText: jsonEncode(galleryProvider)));
     });
   }
 
+  Future<void> addHistoryIsolate(GalleryProvider galleryProvider) async {
+    compute(addHistory, galleryProvider.toJson());
+  }
+
   Future<void> removeHistory(String gid) async {
     final _gid = int.tryParse(gid) ?? 0;
     await isar.writeTxn(() async {
-      await isar.viewHistorys.delete(_gid);
+      await isar.viewHistories.delete(_gid);
     });
   }
 
   Future<void> cleanHistory() async {
     await isar.writeTxn(() async {
-      await isar.viewHistorys.where().deleteAll();
+      await isar.viewHistories.where().deleteAll();
     });
   }
 
-  Future<void> addHistorys(List<GalleryProvider> allHistory) async {
-    final viewHistorys = allHistory
+  Future<void> addHistoriesAsync(List<GalleryProvider> allHistory) async {
+    final viewHistories = allHistory
         .map((e) => ViewHistory(
             gid: int.tryParse(e.gid ?? '0') ?? 0,
             lastViewTime: e.lastViewTime ?? 0,
@@ -72,7 +79,7 @@ class IsarHelper {
         .toList();
 
     await isar.writeTxn(() async {
-      await isar.viewHistorys.putAll(viewHistorys);
+      await isar.viewHistories.putAll(viewHistories);
     });
   }
 

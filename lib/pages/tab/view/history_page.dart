@@ -122,7 +122,7 @@ class _HistoryTabState extends State<HistoryTab> {
             init: HistoryController(),
             builder: (logic) {
               return getGallerySliverList(
-                logic.historys,
+                logic.histories,
                 controller.heroTag,
                 key: controller.sliverAnimatedListKey,
               );

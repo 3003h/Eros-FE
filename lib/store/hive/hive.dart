@@ -83,14 +83,14 @@ class HiveHelper {
   }
 
   List<GalleryProvider> getAllHistory() {
-    final _historys = <GalleryProvider>[];
+    final _histories = <GalleryProvider>[];
     for (final val in _historyBox.values) {
-      _historys.add(
+      _histories.add(
           GalleryProvider.fromJson(jsonDecode(val) as Map<String, dynamic>));
     }
-    _historys
+    _histories
         .sort((a, b) => (a.lastViewTime ?? 0).compareTo(b.lastViewTime ?? 0));
-    return _historys;
+    return _histories;
   }
 
   List<String> getAllSearchHistory() {
@@ -110,12 +110,12 @@ class HiveHelper {
   }
 
   List<HistoryIndexGid> getAllHistoryDel() {
-    final _delHistorys = <HistoryIndexGid>[];
+    final _delHistories = <HistoryIndexGid>[];
     for (final val in _historyDelBox.values) {
-      _delHistorys.add(
+      _delHistories.add(
           HistoryIndexGid.fromJson(jsonDecode(val) as Map<String, dynamic>));
     }
-    return _delHistorys;
+    return _delHistories;
   }
 
   Future<void> removeHistoryDel(String gid) async {

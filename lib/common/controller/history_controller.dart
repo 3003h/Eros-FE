@@ -13,15 +13,15 @@ import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
 
 class HistoryController extends GetxController {
-  final List<GalleryProvider> _historys = <GalleryProvider>[];
-  List<GalleryProvider> get historys {
-    _historys
+  final List<GalleryProvider> _histories = <GalleryProvider>[];
+  List<GalleryProvider> get histories {
+    _histories
         .sort((a, b) => (b.lastViewTime ?? 0).compareTo(a.lastViewTime ?? 0));
-    return _historys;
+    return _histories;
   }
 
   // 登记删除gid和删除时间，用于同步远程时筛选
-  final List<HistoryIndexGid> _delHistorys = <HistoryIndexGid>[];
+  final List<HistoryIndexGid> _delHistories = <HistoryIndexGid>[];
 
   final EhSettingService _ehSettingService = Get.find();
   final WebdavController webdavController = Get.find();
@@ -48,17 +48,17 @@ class HistoryController extends GetxController {
     );
 
     final _eDelFlg =
-        _delHistorys.firstWhereOrNull((eDel) => eDel.g == galleryProvider.gid);
+        _delHistories.firstWhereOrNull((eDel) => eDel.g == galleryProvider.gid);
     if (nowTime > (_eDelFlg?.t ?? 0)) {
       _removeHistoryDelFlg(galleryProvider.gid ?? '');
     }
 
-    final int _curIndex = historys.indexWhere((element) {
+    final int _curIndex = histories.indexWhere((element) {
       return element.gid == _item.gid;
     });
 
     if (_curIndex >= 0) {
-      historys.removeAt(_curIndex);
+      histories.removeAt(_curIndex);
       if (_curIndex > 0 && isListView) {
         // removeItem 动画
         _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
@@ -67,23 +67,24 @@ class HistoryController extends GetxController {
                 buildDelGallerySliverListItem(_item, _curIndex, animation));
       }
 
-      _historys.add(_item);
+      _histories.add(_item);
       if (_curIndex > 0 && isListView) {
         // insertItem 动画
         _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
       }
 
-      // hiveHelper.addHistory(_item);
-      isarHelper.addHistory(_item);
+      // isarHelper.addHistory(_item);
+      isarHelper.addHistoryIsolate(_item);
     } else {
-      _historys.add(_item);
-      final insertIndex = historys.indexOf(_item);
+      _histories.add(_item);
+      final insertIndex = histories.indexOf(_item);
       if (isListView) {
         _hisViewController.sliverAnimatedListKey.currentState
             ?.insertItem(insertIndex);
       }
-      // hiveHelper.addHistory(_item);
-      isarHelper.addHistory(_item);
+
+      // isarHelper.addHistory(_item);
+      isarHelper.addHistoryIsolate(_item);
     }
 
     logger.t('add ${galleryProvider.gid} update1');
@@ -106,9 +107,9 @@ class HistoryController extends GetxController {
   void removeHistory(String gid, {bool sync = true}) {
     final _hisViewController = Get.find<HistoryViewController>();
 
-    final _index = historys.indexWhere((element) => element.gid == gid);
-    final _item = historys[_index];
-    historys.removeAt(_index);
+    final _index = histories.indexWhere((element) => element.gid == gid);
+    final _item = histories[_index];
+    histories.removeAt(_index);
     if (isListView) {
       _hisViewController.sliverAnimatedListKey.currentState?.removeItem(
           _index,
@@ -137,17 +138,17 @@ class HistoryController extends GetxController {
   void _addHistoryDelFlg(String gid) {
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
     final _del = HistoryIndexGid(t: nowTime, g: gid);
-    _delHistorys.add(_del);
+    _delHistories.add(_del);
     hiveHelper.addHistoryDel(_del);
   }
 
   void _removeHistoryDelFlg(String gid) {
-    _delHistorys.removeWhere((element) => element.g == gid);
+    _delHistories.removeWhere((element) => element.g == gid);
     hiveHelper.removeHistoryDel(gid);
   }
 
   void cleanHistory() {
-    historys.clear();
+    histories.clear();
     update();
     // hiveHelper.cleanHistory();
     isarHelper.cleanHistory();
@@ -157,16 +158,16 @@ class HistoryController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // _historys.addAll(hiveHelper.getAllHistory());
-    // _delHistorys.addAll(hiveHelper.getAllHistoryDel());
-    initHistorys();
+    // _histories.addAll(hiveHelper.getAllHistory());
+    // _delHistories.addAll(hiveHelper.getAllHistoryDel());
+    initHistories();
   }
 
-  Future<void> initHistorys() async {
+  Future<void> initHistories() async {
     // 历史迁移
     await historyMigration();
-    final historys = await isarHelper.getAllHistory();
-    _historys.addAll(historys);
+    final histories = await isarHelper.getAllHistory();
+    _histories.addAll(histories);
   }
 
   Future<void> historyMigration() async {
@@ -174,7 +175,7 @@ class HistoryController extends GetxController {
     logger.t('historyMigration $isMigrationed');
     if (!isMigrationed) {
       logger.d('start history Migration');
-      await isarHelper.addHistorys(hiveHelper.getAllHistory());
+      await isarHelper.addHistoriesAsync(hiveHelper.getAllHistory());
       hiveHelper.setViewHistoryMigration(true);
     }
   }
@@ -190,7 +191,7 @@ class HistoryController extends GetxController {
       return;
     }
 
-    final List<HistoryIndexGid?> listLocal = historys
+    final List<HistoryIndexGid?> listLocal = histories
         .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
         .toList();
     logger.t('listLocal ${listLocal.length} \n${listLocal.map((e) => e?.g)}');
@@ -199,7 +200,7 @@ class HistoryController extends GetxController {
     // 下载远程列表
     final listRemote = await webdavController.getRemoteHistoryList();
     if (listRemote.isEmpty) {
-      await _uploadHistorys(listLocal.toList());
+      await _uploadHistories(listLocal.toList());
       return;
     }
 
@@ -238,7 +239,7 @@ class HistoryController extends GetxController {
         final _eLocal = listLocal
             .firstWhereOrNull((eLocal) => (eLocal?.g ?? '') == eRemote.g);
 
-        final _eDelFlg = _delHistorys
+        final _eDelFlg = _delHistories
             .firstWhereOrNull((eDel) => (eDel.g ?? '') == eRemote.g);
 
         if (_eDelFlg != null) {
@@ -254,12 +255,12 @@ class HistoryController extends GetxController {
     );
     logger.t('remoteNewer ${remoteNewer.map((e) => e.g).toList()}');
 
-    await _downloadHistorys(remoteNewer.toSet().toList());
+    await _downloadHistories(remoteNewer.toSet().toList());
 
-    await _uploadHistorys(localNewer.toList(), listRemote: listRemote);
+    await _uploadHistories(localNewer.toList(), listRemote: listRemote);
   }
 
-  Future _downloadHistorys(List<HistoryIndexGid> hisList) async {
+  Future _downloadHistories(List<HistoryIndexGid> hisList) async {
     webdavController.initExecutor();
     for (final gid in hisList) {
       webdavController.webDAVExecutor.scheduleTask(() async {
@@ -267,7 +268,7 @@ class HistoryController extends GetxController {
           final _image =
               await webdavController.downloadHistory('${gid.g!}_${gid.t}');
           if (_image != null) {
-            final ori = historys
+            final ori = histories
                 .firstWhereOrNull((element) => element.gid == _image.gid);
             if (ori != null && (gid.t ?? 0) <= (ori.lastViewTime ?? 0)) {
               return;
@@ -281,7 +282,7 @@ class HistoryController extends GetxController {
     await webdavController.webDAVExecutor.join(withWaiting: true);
   }
 
-  Future _uploadHistorys(
+  Future _uploadHistories(
     List<HistoryIndexGid?> localHisList, {
     List<HistoryIndexGid?>? listRemote,
   }) async {
@@ -289,7 +290,7 @@ class HistoryController extends GetxController {
     for (final his in localHisList) {
       webdavController.webDAVExecutor.scheduleTask(() async {
         final GalleryProvider? _his =
-            historys.firstWhereOrNull((element) => element.gid == his?.g);
+            histories.firstWhereOrNull((element) => element.gid == his?.g);
 
         final _oriRemote =
             listRemote?.firstWhereOrNull((element) => element?.g == his?.g);

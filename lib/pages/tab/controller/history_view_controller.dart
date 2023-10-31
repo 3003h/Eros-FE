@@ -24,9 +24,9 @@ class HistoryViewController extends DefaultTabViewController {
 
   Future<List<GalleryProvider>> loadData() async {
     logger.t('_loadData ');
-    final List<GalleryProvider> historys = historyController.historys;
+    final List<GalleryProvider> histories = historyController.histories;
 
-    return Future<List<GalleryProvider>>.value(historys);
+    return Future<List<GalleryProvider>>.value(histories);
   }
 
   Future<void> reloadData() async {
