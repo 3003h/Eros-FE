@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  bitsdojo_window_windows
+  bitsdojo_window_windows_v3
   isar_flutter_libs
   local_auth_windows
   permission_handler_windows

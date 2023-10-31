@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:bitsdojo_window_v3/bitsdojo_window_v3.dart';
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
