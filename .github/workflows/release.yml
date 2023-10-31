@@ -175,15 +175,15 @@ jobs:
           channel: ${{ matrix.flutter_channel }}
 
       - name: Build resolve Swift dependencies
-        if: matrix.os == 'macos-12'
+        if: matrix.target == 'macos'
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
 
-#      - name: replace isar
-#        if: matrix.target == 'windows'
-#        shell: bash
-#        run: |
-#          sed -i "s#isar: ^3.0.2'#isar: 3.0.0-dev.8#g" pubspec.yaml
-#          git stash
+      - name: replace cronet_http
+        if: matrix.target == 'macos'
+        shell: bash
+        run: |
+          sed -i "s,#cronet_http: ^0.2.1,cronet_http: ^0.2.1,g" pubspec.yaml
+          git stash
 
       - name: Flutter pub get
         run: |

@@ -198,10 +198,10 @@ packages:
     dependency: transitive
     description:
       name: built_value
-      sha256: a8de5955205b4d1dbbbc267daddf2178bd737e4bab8987c04a500478c9651e74
+      sha256: "723b4021e903217dfc445ec4cf5b42e27975aece1fc4ebbc1ca6329c2d9fb54e"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "8.6.3"
+    version: "8.7.0"
   buttons_tabbar:
     dependency: "direct main"
     description:
@@ -334,10 +334,10 @@ packages:
     dependency: transitive
     description:
       name: cronet_http
-      sha256: "5bc88e2ea1a42f60ef69713468c08e2c6c318a3373246e35cb3d0a9e40f536d6"
+      sha256: c2408f25d9b4a60b5e7c0518400611272c4cc891c6d28be350ea06f3527db612
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.1"
+    version: "0.4.0"
   cross_file:
     dependency: "direct main"
     description:
@@ -1131,6 +1131,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.0"
+  jni:
+    dependency: transitive
+    description:
+      name: jni
+      sha256: "6b3227764b3d8a1d848c5e8067a9cff17a6a428b96a7258488ef0611831baa72"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.7.0"
   js:
     dependency: transitive
     description:
@@ -1329,10 +1337,10 @@ packages:
     dependency: "direct main"
     description:
       name: native_dio_adapter
-      sha256: "506efc7f9c75ecc07742e26d1fd72510908cd940ee315295710b87075047bcb0"
+      sha256: "1967cabe3e9ea68ea5ad6da7a0ed25fa75cf335ec6b92cdf6f32185efa93364b"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0+2"
+    version: "1.1.0"
   octo_image:
     dependency: "direct main"
     description:
@@ -1651,18 +1659,18 @@ packages:
     dependency: transitive
     description:
       name: sentry
-      sha256: "80cc1b38c7219c8072c8a79f124838bd668e0bc840e8a98c0fbf9f55a432997d"
+      sha256: "9cfd325611ab54b57d5e26957466823f05bea9d6cfcc8d48f11817b8bcedf0d1"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "7.11.0"
+    version: "7.12.0"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
-      sha256: "01dffb216873d1d31436bc50585fb222d4e7d8bcefcf84ccc8f145dac546c1d5"
+      sha256: "0cd7d622cb63c94fd1b2f87ab508e158b950bd281e2a80f327ebf73bb217eaf3"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "7.11.0"
+    version: "7.12.0"
   share_plus:
     dependency: "direct main"
     description:
