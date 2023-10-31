@@ -22,7 +22,7 @@ class IsarHelper {
 
   Future<List<GalleryProvider>> getAllHistory() async {
     final viewHistories =
-        await isar.viewHistories.where().sortByLastViewTimeDesc().findAll();
+        await isar.viewHistorys.where().sortByLastViewTimeDesc().findAll();
     final _histories = viewHistories
         .map((e) => GalleryProvider.fromJson(
             jsonDecode(e.galleryProviderText) as Map<String, dynamic>))
@@ -32,7 +32,7 @@ class IsarHelper {
 
   Future<GalleryProvider?> getHistory(String gid) async {
     final _gid = int.tryParse(gid) ?? 0;
-    final viewHistory = await isar.viewHistories.get(_gid);
+    final viewHistory = await isar.viewHistorys.get(_gid);
     if (viewHistory == null) {
       return null;
     }
@@ -46,7 +46,7 @@ class IsarHelper {
     final lastViewTime = galleryProvider.lastViewTime ?? 0;
 
     await isar.writeTxn(() async {
-      await isar.viewHistories.put(ViewHistory(
+      await isar.viewHistorys.put(ViewHistory(
           gid: gid,
           lastViewTime: lastViewTime,
           galleryProviderText: jsonEncode(galleryProvider)));
@@ -61,13 +61,13 @@ class IsarHelper {
   Future<void> removeHistory(String gid) async {
     final _gid = int.tryParse(gid) ?? 0;
     await isar.writeTxn(() async {
-      await isar.viewHistories.delete(_gid);
+      await isar.viewHistorys.delete(_gid);
     });
   }
 
   Future<void> cleanHistory() async {
     await isar.writeTxn(() async {
-      await isar.viewHistories.where().deleteAll();
+      await isar.viewHistorys.where().deleteAll();
     });
   }
 
@@ -80,7 +80,7 @@ class IsarHelper {
         .toList();
 
     await isar.writeTxn(() async {
-      await isar.viewHistories.putAll(viewHistories);
+      await isar.viewHistorys.putAll(viewHistories);
     });
   }
 

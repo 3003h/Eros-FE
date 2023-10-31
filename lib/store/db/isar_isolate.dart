@@ -14,7 +14,7 @@ Future<void> iAddHistory(GalleryProvider galleryProvider) async {
   final lastViewTime = galleryProvider.lastViewTime ?? 0;
   final isar = await openIsar();
   isar.writeTxnSync(() {
-    isar.viewHistories.putSync(ViewHistory(
+    isar.viewHistorys.putSync(ViewHistory(
         gid: gid,
         lastViewTime: lastViewTime,
         galleryProviderText: jsonEncode(galleryProvider)));
@@ -31,7 +31,7 @@ Future<void> iAddHistories(List<GalleryProvider> allHistory) async {
       .toList();
 
   isar.writeTxnSync(() async {
-    isar.viewHistories.putAllSync(viewHistories);
+    isar.viewHistorys.putAllSync(viewHistories);
   });
 }
 
