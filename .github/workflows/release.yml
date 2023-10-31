@@ -178,15 +178,16 @@ jobs:
         if: matrix.target == 'macos'
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
 
-      - name: replace cronet_http
-        if: matrix.target == 'macos'
-        shell: bash
-        run: |
-          brew install gnu-sed
-          export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-          which sed
-          sed -i "s/#cronet_http: ^0.2.1/cronet_http: ^0.2.1/g" pubspec.yaml
-          git stash
+#      - name: replace cronet_http
+#        if: matrix.target == 'macos'
+#        shell: bash
+#        run: |
+#          brew install gnu-sed
+#          export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+#          which sed
+#          which gsed
+#          gsed -i "s/#cronet_http: ^0.2.1/cronet_http: ^0.2.1/g" pubspec.yaml
+#          git stash
 
       - name: Flutter pub get
         run: |

@@ -331,13 +331,13 @@ packages:
     source: hosted
     version: "5.0.4"
   cronet_http:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: cronet_http
-      sha256: c2408f25d9b4a60b5e7c0518400611272c4cc891c6d28be350ea06f3527db612
+      sha256: "5bc88e2ea1a42f60ef69713468c08e2c6c318a3373246e35cb3d0a9e40f536d6"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.0"
+    version: "0.2.1"
   cross_file:
     dependency: "direct main"
     description:
@@ -844,10 +844,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_smart_dialog
-      sha256: "8ffa51d55591227dbfe9fc2b1ff396b37bec7d09c241d875b9b932db99d2d5ea"
+      sha256: "0449cbcc6299877e98e0b4c8d5e3baf634012840531ede4b2975e81f26e90e8e"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.9.4"
+    version: "4.9.5"
   flutter_socks_proxy:
     dependency: "direct main"
     description:
@@ -1131,14 +1131,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.0"
-  jni:
-    dependency: transitive
-    description:
-      name: jni
-      sha256: "6b3227764b3d8a1d848c5e8067a9cff17a6a428b96a7258488ef0611831baa72"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.7.0"
   js:
     dependency: transitive
     description:
