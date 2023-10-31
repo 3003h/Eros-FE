@@ -26,10 +26,10 @@
   "read": "Read",
   "gallery_comments": "Gallery Comments",
   "all_comment": "All Comment",
-  "all_preview": "All Preview",
-  "morePreviews": "More previews",
-  "noMorePreviews": "No more previews",
-  "previews": "Previews",
+  "all_thumbnails": "All Thumbnails",
+  "more_thumbnails": "More Thumbnails",
+  "no_more_thumbnails": "No more Thumbnails",
+  "thumbnails": "Thumbnails",
   "eh": "E·H",
   "download": "Download",
   "advanced": "Advanced",
@@ -426,5 +426,8 @@
   "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden",
   "show_comments": "Show Comments",
   "show_only_uploader_comment": "Show Only Uploader Comment",
-  "show_gallery_tags": "Show Gallery Tags"
+  "show_gallery_tags": "Show Gallery Tags",
+  "hide_thumbnails": "Hide Thumbnails",
+  "hide_gallery_thumbnails": "Hide Gallery Thumbnails",
+  "horizontal_thumbnails": "Horizontal Thumbnails"
 }

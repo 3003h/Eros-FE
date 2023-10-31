@@ -26,10 +26,10 @@
   "read": "阅读",
   "gallery_comments": "画廊评论",
   "all_comment": "所有评论",
-  "all_preview": "所有预览",
-  "morePreviews": "更多预览",
-  "noMorePreviews": "无更多预览",
-  "previews": "预览",
+  "all_thumbnails": "所有缩略图",
+  "more_thumbnails": "更多缩略图",
+  "no_more_thumbnails": "无更多缩略图",
+  "thumbnails": "缩略图",
   "eh": "E·H",
   "download": "下载",
   "advanced": "高级",
@@ -426,5 +426,8 @@
   "filter_comments_by_score_summary": "低于/等于此分数的评论将被隐藏",
   "show_comments": "显示画廊评论",
   "show_only_uploader_comment": "仅显示上传者评论",
-  "show_gallery_tags": "显示画廊标签"
+  "show_gallery_tags": "显示画廊标签",
+  "hide_thumbnails": "隐藏缩略图",
+  "hide_gallery_thumbnails": "隐藏画廊缩略图",
+  "horizontal_thumbnails": "水平缩略图"
 }

@@ -6,8 +6,8 @@ import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart'
 import 'package:fehviewer/pages/gallery/controller/gallery_page_state.dart';
 import 'package:fehviewer/pages/gallery/view/archiver_dialog.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_widget.dart';
-import 'package:fehviewer/pages/gallery/view/preview.dart';
 import 'package:fehviewer/pages/gallery/view/rate_dialog.dart';
+import 'package:fehviewer/pages/gallery/view/thumb_box.dart';
 import 'package:fehviewer/pages/gallery/view/torrent_dialog.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:flutter/cupertino.dart';
@@ -290,7 +290,7 @@ class ThumbHorizontalList extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: kPadding),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return PreviewContainer(
+          return ThumbBox(
             galleryImageList: images,
             index: index,
             gid: gid,
@@ -329,7 +329,7 @@ class ThumbSliverGrid extends StatelessWidget {
           ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return PreviewContainer(
+          return ThumbBox(
             galleryImageList: images,
             index: index,
             gid: gid,

@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 const double kScale = 1.0;
 
-class PreviewImageClipper extends StatelessWidget {
-  const PreviewImageClipper(
+class ThumbImageClipper extends StatelessWidget {
+  const ThumbImageClipper(
       {Key? key,
       required this.imgUrl,
       required this.offset,

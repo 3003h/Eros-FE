@@ -308,7 +308,31 @@ class EhSettingService extends ProfileService {
   bool get showOnlyUploaderComment => _showOnlyUploaderComment.value;
   set showOnlyUploaderComment(bool val) => _showOnlyUploaderComment.value = val;
 
+  // hideGalleryThumbnails
+  final _hideGalleryThumbnails = false.obs;
+  bool get hideGalleryThumbnails => _hideGalleryThumbnails.value;
+  set hideGalleryThumbnails(bool val) => _hideGalleryThumbnails.value = val;
+
+  // horizontalThumbnails
+  final _horizontalThumbnails = false.obs;
+  bool get horizontalThumbnails => _horizontalThumbnails.value;
+  set horizontalThumbnails(bool val) => _horizontalThumbnails.value = val;
+
   void _initEhConfig() {
+    // hideGalleryThumbnails
+    hideGalleryThumbnails =
+        ehConfig.hideGalleryThumbnails ?? hideGalleryThumbnails;
+    everProfile<bool>(_hideGalleryThumbnails, (val) {
+      ehConfig = ehConfig.copyWith(hideGalleryThumbnails: val);
+    });
+
+    // horizontalThumbnails
+    horizontalThumbnails =
+        ehConfig.horizontalThumbnails ?? horizontalThumbnails;
+    everProfile<bool>(_horizontalThumbnails, (val) {
+      ehConfig = ehConfig.copyWith(horizontalThumbnails: val);
+    });
+
     // showComments
     showComments = ehConfig.showComments ?? showComments;
     everProfile<bool>(_showComments, (val) {
@@ -852,7 +876,7 @@ class EhSettingService extends ProfileService {
                 if (element == favoriteOrder.value)
                   const SizedBox(
                     width: 40,
-                    child: Icon(FontAwesomeIcons.checkCircle),
+                    child: Icon(FontAwesomeIcons.circleCheck),
                   ),
                 Text(_orderMap[element] ?? ''),
                 if (element == favoriteOrder.value)
@@ -912,7 +936,7 @@ class EhSettingService extends ProfileService {
                 if (element == toplist)
                   const SizedBox(
                     width: 40,
-                    child: Icon(FontAwesomeIcons.checkCircle),
+                    child: Icon(FontAwesomeIcons.circleCheck),
                   ),
                 Text(toplistTextMap[element] ?? ''),
                 if (element == toplist)

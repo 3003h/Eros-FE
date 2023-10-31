@@ -26,10 +26,10 @@
   "read": "閱讀",
   "gallery_comments": "畫廊評論",
   "all_comment": "所有評論",
-  "all_preview": "所有預覽",
-  "morePreviews": "更多預覽",
-  "noMorePreviews": "沒有更多預覽",
-  "previews": "預覽",
+  "all_thumbnails": "所有預覽",
+  "more_thumbnails": "更多預覽",
+  "no_more_thumbnails": "沒有更多預覽",
+  "thumbnails": "預覽",
   "eh": "E·H",
   "download": "下載",
   "advanced": "高級",
@@ -426,5 +426,8 @@
   "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden",
   "show_comments": "Show Comments",
   "show_only_uploader_comment": "Show Only Uploader Comment",
-  "show_gallery_tags": "Show Gallery Tags"
+  "show_gallery_tags": "Show Gallery Tags",
+  "hide_thumbnails": "Hide Thumbnails",
+  "hide_gallery_thumbnails": "Hide Gallery Thumbnails",
+  "horizontal_thumbnails": "Horizontal Thumbnails"
 }

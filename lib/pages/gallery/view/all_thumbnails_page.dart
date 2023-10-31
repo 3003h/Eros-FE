@@ -1,20 +1,20 @@
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/gallery/controller/all_previews_controller.dart';
-import 'package:fehviewer/pages/gallery/view/preview.dart';
+import 'package:fehviewer/pages/gallery/controller/all_thumbnails_controller.dart';
+import 'package:fehviewer/pages/gallery/view/thumb_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:tuple/tuple.dart';
 
 import 'const.dart';
 
-class AllPreviewPage extends StatefulWidget {
-  const AllPreviewPage();
+class AllThumbnailsPage extends StatefulWidget {
+  const AllThumbnailsPage();
 
   @override
-  _AllPreviewPageState createState() => _AllPreviewPageState();
+  _AllThumbnailsPageState createState() => _AllThumbnailsPageState();
 }
 
-class _AllPreviewPageState extends State<AllPreviewPage> {
+class _AllThumbnailsPageState extends State<AllThumbnailsPage> {
   final Map<String, bool> _loadComplets = {};
 
   GlobalKey centerKey = GlobalKey();
@@ -22,26 +22,26 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
   @override
   void dispose() {
     super.dispose();
-    if (Get.isRegistered<AllPreviewsPageController>()) {
-      Get.delete<AllPreviewsPageController>();
+    if (Get.isRegistered<AllThumbnailsPageController>()) {
+      Get.delete<AllThumbnailsPageController>();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final AllPreviewsPageController controller =
-        Get.put(AllPreviewsPageController());
+    final AllThumbnailsPageController controller =
+        Get.put(AllThumbnailsPageController());
 
     final int _count = int.parse(controller.filecount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: GestureDetector(
           onTap: controller.scrollToTop,
-          child: Text(L10n.of(context).all_preview),
+          child: Text(L10n.of(context).all_thumbnails),
         ),
         previousPageTitle: L10n.of(context).back,
         trailing: controller.canShowJumpDialog
-            ? GetBuilder<AllPreviewsPageController>(
+            ? GetBuilder<AllThumbnailsPageController>(
                 id: 'trailing',
                 builder: (logic) {
                   return Row(
@@ -57,7 +57,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                           ),
                           onPressed: () async {
                             // controller.fetchPriviewsPrevious();
-                            logic.fetchPriviewsFromPage(1);
+                            logic.fetchThumbnailsFromPage(1);
                           },
                         ),
                       CupertinoButton(
@@ -72,7 +72,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                           if (rult is int) {
                             logger.d('jump to page $rult');
                             controller.scrollToTop();
-                            controller.fetchPriviewsFromPage(rult);
+                            controller.fetchThumbnailsFromPage(rult);
                           }
                         },
                       ),
@@ -122,7 +122,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               return Center(
-                                child: PreviewContainer(
+                                child: ThumbBox(
                                   galleryImageList: previewPreviousList,
                                   index: index,
                                   gid: controller.gid,
@@ -179,13 +179,13 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                                             previewList[index].ser >
                                         1) &&
                                 previewList[index].ser < _count) {
-                              controller.fetchPriviewsNext();
+                              controller.fetchThumbnailsNext();
                             } else if (previewList[index].ser >= _count) {
                               controller.fetchFinsh();
                             }
                             return Center(
                               key: index == 0 ? controller.globalKey : null,
-                              child: PreviewContainer(
+                              child: ThumbBox(
                                 galleryImageList: previewList,
                                 index: index,
                                 gid: controller.gid,
@@ -231,7 +231,7 @@ class _AllPreviewPageState extends State<AllPreviewPage> {
                             Container(
                               padding: const EdgeInsets.only(top: 0),
                               child: Text(
-                                L10n.of(context).noMorePreviews,
+                                L10n.of(context).no_more_thumbnails,
                                 style: const TextStyle(fontSize: 14),
                               ),
                             )

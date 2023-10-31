@@ -64,7 +64,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Aggregate groups"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("All Favorites"),
         "all_comment": MessageLookupByLibrary.simpleMessage("All Comment"),
-        "all_preview": MessageLookupByLibrary.simpleMessage("All Preview"),
+        "all_thumbnails":
+            MessageLookupByLibrary.simpleMessage("All Thumbnails"),
         "allow_media_scan":
             MessageLookupByLibrary.simpleMessage("Allow media scan"),
         "always": MessageLookupByLibrary.simpleMessage("Always"),
@@ -183,8 +184,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group Name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group Type"),
         "hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "hide_gallery_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Gallery Thumbnails"),
+        "hide_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Thumbnails"),
         "hide_top_bar_on_scroll":
             MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
+        "horizontal_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Horizontal Thumbnails"),
         "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("hours"),
         "image_block": MessageLookupByLibrary.simpleMessage("Image Block"),
@@ -240,7 +247,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum History"),
         "min": MessageLookupByLibrary.simpleMessage("min"),
         "model": m1,
-        "morePreviews": MessageLookupByLibrary.simpleMessage("More previews"),
+        "more_thumbnails":
+            MessageLookupByLibrary.simpleMessage("More Thumbnails"),
         "multi_download":
             MessageLookupByLibrary.simpleMessage("multi Download"),
         "mytags_on_website":
@@ -252,9 +260,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "no": MessageLookupByLibrary.simpleMessage("No"),
-        "noMorePreviews":
-            MessageLookupByLibrary.simpleMessage("No more previews"),
         "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
+        "no_more_thumbnails":
+            MessageLookupByLibrary.simpleMessage("No more Thumbnails"),
         "notFav": MessageLookupByLibrary.simpleMessage("Not Favorited"),
         "not_login": MessageLookupByLibrary.simpleMessage("Not Login"),
         "off": MessageLookupByLibrary.simpleMessage("Off"),
@@ -296,7 +304,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter user name"),
         "port": MessageLookupByLibrary.simpleMessage("Port"),
         "preload_image": MessageLookupByLibrary.simpleMessage("Preload Image"),
-        "previews": MessageLookupByLibrary.simpleMessage("Previews"),
         "processing": MessageLookupByLibrary.simpleMessage("Processing"),
         "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
         "proxy_type": MessageLookupByLibrary.simpleMessage("Proxy Type"),
@@ -434,6 +441,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tap_to_turn_page_anima":
             MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+        "thumbnails": MessageLookupByLibrary.simpleMessage("Thumbnails"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("Past Month"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),

@@ -65,7 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Объединить группы"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("Все"),
         "all_comment": MessageLookupByLibrary.simpleMessage("Все комментарии"),
-        "all_preview": MessageLookupByLibrary.simpleMessage("Все превью"),
+        "all_thumbnails": MessageLookupByLibrary.simpleMessage("Все превью"),
         "allow_media_scan": MessageLookupByLibrary.simpleMessage(
             "Разрешить видеть папку извне"),
         "always": MessageLookupByLibrary.simpleMessage("Постоянно"),
@@ -189,8 +189,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Название категории"),
         "groupType": MessageLookupByLibrary.simpleMessage("Тип категории"),
         "hide": MessageLookupByLibrary.simpleMessage("Скрыть"),
+        "hide_gallery_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Gallery Thumbnails"),
+        "hide_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Thumbnails"),
         "hide_top_bar_on_scroll":
             MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
+        "horizontal_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Horizontal Thumbnails"),
         "host": MessageLookupByLibrary.simpleMessage("Узел"),
         "hours": MessageLookupByLibrary.simpleMessage("час(ов)"),
         "image_block": MessageLookupByLibrary.simpleMessage("Image Block"),
@@ -252,7 +258,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
         "min": MessageLookupByLibrary.simpleMessage("минут"),
         "model": m1,
-        "morePreviews": MessageLookupByLibrary.simpleMessage("Показать ещё"),
+        "more_thumbnails": MessageLookupByLibrary.simpleMessage("Показать ещё"),
         "multi_download":
             MessageLookupByLibrary.simpleMessage("Многопоточная загрузка"),
         "mytags_on_website":
@@ -265,8 +271,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "new_comment":
             MessageLookupByLibrary.simpleMessage("Новый комментарий"),
         "no": MessageLookupByLibrary.simpleMessage("Нет"),
-        "noMorePreviews": MessageLookupByLibrary.simpleMessage("Конец списка"),
         "no_limit": MessageLookupByLibrary.simpleMessage("Без лимита"),
+        "no_more_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Конец списка"),
         "notFav": MessageLookupByLibrary.simpleMessage("Добавить в избранное"),
         "not_login": MessageLookupByLibrary.simpleMessage("Not Login"),
         "off": MessageLookupByLibrary.simpleMessage("Выключены"),
@@ -309,7 +316,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "port": MessageLookupByLibrary.simpleMessage("Порт"),
         "preload_image": MessageLookupByLibrary.simpleMessage(
             "Предварительная загрузка изображений"),
-        "previews": MessageLookupByLibrary.simpleMessage("Превью"),
         "processing": MessageLookupByLibrary.simpleMessage("В процессе"),
         "proxy": MessageLookupByLibrary.simpleMessage("Прокси"),
         "proxy_type": MessageLookupByLibrary.simpleMessage("Тип прокси"),
@@ -457,6 +463,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tap_to_turn_page_anima": MessageLookupByLibrary.simpleMessage(
             "Анимированные переходы страниц"),
         "theme": MessageLookupByLibrary.simpleMessage("Тема"),
+        "thumbnails": MessageLookupByLibrary.simpleMessage("Превью"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("За всё время"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("За месяц"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("За год"),

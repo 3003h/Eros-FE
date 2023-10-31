@@ -26,10 +26,10 @@
   "read": "Чтение",
   "gallery_comments": "Комментарии галереи",
   "all_comment": "Все комментарии",
-  "all_preview": "Все превью",
-  "morePreviews": "Показать ещё",
-  "noMorePreviews": "Конец списка",
-  "previews": "Превью",
+  "all_thumbnails": "Все превью",
+  "more_thumbnails": "Показать ещё",
+  "no_more_thumbnails": "Конец списка",
+  "thumbnails": "Превью",
   "eh": "E·H",
   "download": "Загрузки",
   "advanced": "Дополнительно",
@@ -426,5 +426,8 @@
   "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden",
   "show_comments": "Show Comments",
   "show_only_uploader_comment": "Show Only Uploader Comment",
-  "show_gallery_tags": "Show Gallery Tags"
+  "show_gallery_tags": "Show Gallery Tags",
+  "hide_thumbnails": "Hide Thumbnails",
+  "hide_gallery_thumbnails": "Hide Gallery Thumbnails",
+  "horizontal_thumbnails": "Horizontal Thumbnails"
 }

@@ -43,8 +43,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
     super.didChangeDependencies();
     _controller = Get.put(GalleryPageController(), tag: _tag);
 
-    _controller.scrollController =
-        PrimaryScrollController.of(context) ?? ScrollController();
+    _controller.scrollController = PrimaryScrollController.of(context);
     _controller.scrollController
         ?.addListener(_controller.scrollControllerLister);
   }
@@ -241,7 +240,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
         onLoad: () async {
           if (pageState.images.isNotEmpty) {
             Get.toNamed(
-              EHRoutes.galleryAllPreviews,
+              EHRoutes.galleryAllThumbnails,
               id: isLayoutLarge ? 2 : null,
             );
           }

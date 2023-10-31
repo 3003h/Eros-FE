@@ -61,7 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Aggregate groups"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("所有收藏"),
         "all_comment": MessageLookupByLibrary.simpleMessage("所有評論"),
-        "all_preview": MessageLookupByLibrary.simpleMessage("所有預覽"),
+        "all_thumbnails": MessageLookupByLibrary.simpleMessage("所有預覽"),
         "allow_media_scan": MessageLookupByLibrary.simpleMessage("允許媒體掃描"),
         "always": MessageLookupByLibrary.simpleMessage("總是如此"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
@@ -159,8 +159,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "hide_gallery_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Gallery Thumbnails"),
+        "hide_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Thumbnails"),
         "hide_top_bar_on_scroll":
             MessageLookupByLibrary.simpleMessage("滾動時隱藏頂欄"),
+        "horizontal_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Horizontal Thumbnails"),
         "host": MessageLookupByLibrary.simpleMessage("地址"),
         "hours": MessageLookupByLibrary.simpleMessage("小時"),
         "image_block": MessageLookupByLibrary.simpleMessage("图片屏蔽"),
@@ -212,7 +218,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "max_history": MessageLookupByLibrary.simpleMessage("最大歷史紀錄"),
         "min": MessageLookupByLibrary.simpleMessage("分鐘"),
         "model": m1,
-        "morePreviews": MessageLookupByLibrary.simpleMessage("更多預覽"),
+        "more_thumbnails": MessageLookupByLibrary.simpleMessage("更多預覽"),
         "multi_download": MessageLookupByLibrary.simpleMessage("多線程下載"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("網頁上的標籤設置"),
         "native_http_client_adapter":
@@ -222,8 +228,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "no": MessageLookupByLibrary.simpleMessage("永遠不要"),
-        "noMorePreviews": MessageLookupByLibrary.simpleMessage("沒有更多預覽"),
         "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
+        "no_more_thumbnails": MessageLookupByLibrary.simpleMessage("沒有更多預覽"),
         "notFav": MessageLookupByLibrary.simpleMessage("未收藏"),
         "not_login": MessageLookupByLibrary.simpleMessage("未登入"),
         "off": MessageLookupByLibrary.simpleMessage("關閉"),
@@ -259,7 +265,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "pls_i_username": MessageLookupByLibrary.simpleMessage("請輸入用戶名"),
         "port": MessageLookupByLibrary.simpleMessage("端口"),
         "preload_image": MessageLookupByLibrary.simpleMessage("預載圖片數量"),
-        "previews": MessageLookupByLibrary.simpleMessage("預覽"),
         "processing": MessageLookupByLibrary.simpleMessage("處理中"),
         "proxy": MessageLookupByLibrary.simpleMessage("代理"),
         "proxy_type": MessageLookupByLibrary.simpleMessage("代理類型"),
@@ -372,6 +377,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tap_to_turn_page_anima":
             MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("主題"),
+        "thumbnails": MessageLookupByLibrary.simpleMessage("預覽"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("過去一個月內"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("過去一年內"),

@@ -131,6 +131,18 @@ class ListViewLayoutSetting extends StatelessWidget {
         L10n.of(context).show_gallery_tags,
         value: _ehSettingService.showGalleryTags,
         onChanged: (val) => _ehSettingService.showGalleryTags = val,
+      ),
+      // hideGalleryThumbnails
+      TextSwitchItem(
+        L10n.of(context).hide_gallery_thumbnails,
+        value: _ehSettingService.hideGalleryThumbnails,
+        onChanged: (val) => _ehSettingService.hideGalleryThumbnails = val,
+      ),
+      // horizontalThumbnails
+      TextSwitchItem(
+        L10n.of(context).horizontal_thumbnails,
+        value: _ehSettingService.horizontalThumbnails,
+        onChanged: (val) => _ehSettingService.horizontalThumbnails = val,
         hideDivider: true,
       ),
       const ItemSpace(),

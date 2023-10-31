@@ -26,10 +26,10 @@
   "read": "읽기",
   "gallery_comments": "갤러리 댓글",
   "all_comment": "모든 댓글",
-  "all_preview": "모든 미리 보기",
-  "morePreviews": "미리 보기 더 보기",
-  "noMorePreviews": "미리 보기가 더 없음",
-  "previews": "미리 보기",
+  "all_thumbnails": "모든 미리 보기",
+  "more_thumbnails": "미리 보기 더 보기",
+  "no_more_thumbnails": "미리 보기가 더 없음",
+  "thumbnails": "미리 보기",
   "eh": "E·H",
   "download": "다운로드",
   "advanced": "고급",
@@ -426,5 +426,8 @@
   "filter_comments_by_score_summary": "Comments below/equal to this score will be hidden",
   "show_comments": "Show Comments",
   "show_only_uploader_comment": "Show Only Uploader Comment",
-  "show_gallery_tags": "Show Gallery Tags"
+  "show_gallery_tags": "Show Gallery Tags",
+  "hide_thumbnails": "Hide Thumbnails",
+  "hide_gallery_thumbnails": "Hide Gallery Thumbnails",
+  "horizontal_thumbnails": "Horizontal Thumbnails"
 }

@@ -62,7 +62,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Aggregate groups"),
         "all_Favorites": MessageLookupByLibrary.simpleMessage("전체 즐겨찾기"),
         "all_comment": MessageLookupByLibrary.simpleMessage("모든 댓글"),
-        "all_preview": MessageLookupByLibrary.simpleMessage("모든 미리 보기"),
+        "all_thumbnails": MessageLookupByLibrary.simpleMessage("모든 미리 보기"),
         "allow_media_scan": MessageLookupByLibrary.simpleMessage("미디어 스캔 허용"),
         "always": MessageLookupByLibrary.simpleMessage("Always"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
@@ -170,8 +170,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupName": MessageLookupByLibrary.simpleMessage("Group name"),
         "groupType": MessageLookupByLibrary.simpleMessage("Group type"),
         "hide": MessageLookupByLibrary.simpleMessage("Hide"),
+        "hide_gallery_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Gallery Thumbnails"),
+        "hide_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Hide Thumbnails"),
         "hide_top_bar_on_scroll":
             MessageLookupByLibrary.simpleMessage("Hide top bar on scroll"),
+        "horizontal_thumbnails":
+            MessageLookupByLibrary.simpleMessage("Horizontal Thumbnails"),
         "host": MessageLookupByLibrary.simpleMessage("Host"),
         "hours": MessageLookupByLibrary.simpleMessage("시간"),
         "image_block": MessageLookupByLibrary.simpleMessage("Image Hide"),
@@ -225,7 +231,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "max_history": MessageLookupByLibrary.simpleMessage("최대 방문 기록"),
         "min": MessageLookupByLibrary.simpleMessage("분"),
         "model": m1,
-        "morePreviews": MessageLookupByLibrary.simpleMessage("미리 보기 더 보기"),
+        "more_thumbnails": MessageLookupByLibrary.simpleMessage("미리 보기 더 보기"),
         "multi_download": MessageLookupByLibrary.simpleMessage("다중 다운로드"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("사이트에서 설정하기"),
         "native_http_client_adapter":
@@ -235,8 +241,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "newText": MessageLookupByLibrary.simpleMessage("New Text"),
         "new_comment": MessageLookupByLibrary.simpleMessage("New comment"),
         "no": MessageLookupByLibrary.simpleMessage("No"),
-        "noMorePreviews": MessageLookupByLibrary.simpleMessage("미리 보기가 더 없음"),
         "no_limit": MessageLookupByLibrary.simpleMessage("No Limit"),
+        "no_more_thumbnails":
+            MessageLookupByLibrary.simpleMessage("미리 보기가 더 없음"),
         "notFav": MessageLookupByLibrary.simpleMessage("즐겨찾기에 없음"),
         "not_login": MessageLookupByLibrary.simpleMessage("로그인하지 않음"),
         "off": MessageLookupByLibrary.simpleMessage("꺼짐"),
@@ -273,7 +280,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("사용자 이름을 입력하여 주세요."),
         "port": MessageLookupByLibrary.simpleMessage("Port"),
         "preload_image": MessageLookupByLibrary.simpleMessage("이미지 미리 불러오기"),
-        "previews": MessageLookupByLibrary.simpleMessage("미리 보기"),
         "processing": MessageLookupByLibrary.simpleMessage("처리 중"),
         "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
         "proxy_type": MessageLookupByLibrary.simpleMessage("Proxy Type"),
@@ -395,6 +401,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tap_to_turn_page_anima":
             MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("테마"),
+        "thumbnails": MessageLookupByLibrary.simpleMessage("미리 보기"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("Past Month"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),

@@ -321,41 +321,41 @@ class L10n {
     );
   }
 
-  /// `All Preview`
-  String get all_preview {
+  /// `All Thumbnails`
+  String get all_thumbnails {
     return Intl.message(
-      'All Preview',
-      name: 'all_preview',
+      'All Thumbnails',
+      name: 'all_thumbnails',
       desc: '',
       args: [],
     );
   }
 
-  /// `More previews`
-  String get morePreviews {
+  /// `More Thumbnails`
+  String get more_thumbnails {
     return Intl.message(
-      'More previews',
-      name: 'morePreviews',
+      'More Thumbnails',
+      name: 'more_thumbnails',
       desc: '',
       args: [],
     );
   }
 
-  /// `No more previews`
-  String get noMorePreviews {
+  /// `No more Thumbnails`
+  String get no_more_thumbnails {
     return Intl.message(
-      'No more previews',
-      name: 'noMorePreviews',
+      'No more Thumbnails',
+      name: 'no_more_thumbnails',
       desc: '',
       args: [],
     );
   }
 
-  /// `Previews`
-  String get previews {
+  /// `Thumbnails`
+  String get thumbnails {
     return Intl.message(
-      'Previews',
-      name: 'previews',
+      'Thumbnails',
+      name: 'thumbnails',
       desc: '',
       args: [],
     );
@@ -4340,6 +4340,36 @@ class L10n {
     return Intl.message(
       'Show Gallery Tags',
       name: 'show_gallery_tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide Thumbnails`
+  String get hide_thumbnails {
+    return Intl.message(
+      'Hide Thumbnails',
+      name: 'hide_thumbnails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hide Gallery Thumbnails`
+  String get hide_gallery_thumbnails {
+    return Intl.message(
+      'Hide Gallery Thumbnails',
+      name: 'hide_gallery_thumbnails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Horizontal Thumbnails`
+  String get horizontal_thumbnails {
+    return Intl.message(
+      'Horizontal Thumbnails',
+      name: 'horizontal_thumbnails',
       desc: '',
       args: [],
     );

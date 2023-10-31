@@ -44,8 +44,7 @@ class _GalleryPageState extends State<GalleryPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _controller.scrollController =
-        PrimaryScrollController.of(context) ?? ScrollController();
+    _controller.scrollController = PrimaryScrollController.of(context);
     _controller.scrollController
         ?.addListener(_controller.scrollControllerLister);
   }
@@ -70,7 +69,7 @@ class _GalleryPageState extends State<GalleryPage> {
         onLoad: () async {
           if (pageState.images.isNotEmpty) {
             Get.toNamed(
-              EHRoutes.galleryAllPreviews,
+              EHRoutes.galleryAllThumbnails,
               id: isLayoutLarge ? 2 : null,
             );
           }
@@ -282,11 +281,14 @@ class GalleryBody extends StatelessWidget {
             ChapterTile(controller: controller, provider: state),
             if (_ehSettingService.showComments)
               CommentTile(controller: controller, provider: state),
-            ThumbTile(
-              controller: controller,
-              provider: state,
-              // horizontal: true,
-            ),
+            if (!_ehSettingService.hideGalleryThumbnails)
+              ThumbTile(
+                controller: controller,
+                provider: state,
+                horizontal: _ehSettingService.horizontalThumbnails,
+              )
+            else
+              const MorePreviewButton(hasMorePreview: true),
           ]),
         );
       },
@@ -423,10 +425,15 @@ class ThumbTile extends StatelessWidget {
         children: [
           GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: () {},
+            onTap: () {
+              Get.toNamed(
+                EHRoutes.galleryAllThumbnails,
+                id: isLayoutLarge ? 2 : null,
+              );
+            },
             child: Row(
               children: [
-                MiniTitle(title: 'Thumbs'),
+                MiniTitle(title: L10n.of(context).thumbnails),
                 const Spacer(),
               ],
             ),

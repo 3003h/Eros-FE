@@ -19,7 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:synchronized/synchronized.dart';
 
-import 'all_previews_controller.dart';
+import 'all_thumbnails_controller.dart';
 import 'gallery_fav_controller.dart';
 import 'gallery_page_state.dart';
 import 'taginfo_controller.dart';
@@ -464,8 +464,8 @@ class GalleryPageController extends GetxController
 
     gState.currentImagePage++;
     addAllImages(_moreGalleryImageList);
-    if (Get.isRegistered<AllPreviewsPageController>()) {
-      Get.find<AllPreviewsPageController>().update();
+    if (Get.isRegistered<AllThumbnailsPageController>()) {
+      Get.find<AllThumbnailsPageController>().update();
     }
   }
 
@@ -497,8 +497,8 @@ class GalleryPageController extends GetxController
     if (_moreImageList != null) {
       addAllImages(_moreImageList);
     }
-    if (Get.isRegistered<AllPreviewsPageController>()) {
-      Get.find<AllPreviewsPageController>().update();
+    if (Get.isRegistered<AllThumbnailsPageController>()) {
+      Get.find<AllThumbnailsPageController>().update();
     }
     gState.mapLoadImagesForSer.remove(page);
   }

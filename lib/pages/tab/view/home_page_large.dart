@@ -5,7 +5,7 @@ import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
-import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
+import 'package:fehviewer/pages/gallery/view/all_thumbnails_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page.dart';
@@ -250,10 +250,10 @@ class TabHomeLarge extends GetView<TabHomeController> {
                               settings: settings,
                               page: () => CommentPage(),
                             );
-                          case EHRoutes.galleryAllPreviews:
+                          case EHRoutes.galleryAllThumbnails:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => const AllPreviewPage(),
+                              page: () => const AllThumbnailsPage(),
                             );
                           case EHRoutes.addTag:
                             return GetPageRoute(

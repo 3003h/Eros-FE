@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
@@ -10,9 +11,9 @@ import 'package:tuple/tuple.dart';
 import 'gallery_page_controller.dart';
 import 'gallery_page_state.dart';
 
-class AllPreviewsPageController extends GetxController
+class AllThumbnailsPageController extends GetxController
     with StateMixin<Tuple2<List<GalleryImage>, List<GalleryImage>>> {
-  AllPreviewsPageController();
+  AllThumbnailsPageController();
   late GalleryPageController _pageController;
   GalleryPageState get _pageState => _pageController.gState;
 
@@ -21,6 +22,8 @@ class AllPreviewsPageController extends GetxController
   String get filecount => _pageState.galleryProvider?.filecount ?? '0';
 
   String get gid => _pageState.gid;
+
+  EhSettingService get _ehSettingService => Get.find();
 
   CancelToken moreGalleryImageCancelToken = CancelToken();
 
@@ -58,6 +61,12 @@ class AllPreviewsPageController extends GetxController
   }
 
   Future<void> _autoJumpTo() async {
+    if (_ehSettingService.horizontalThumbnails ||
+        _ehSettingService.hideGalleryThumbnails) {
+      // scrollController.jumpTo(0);
+      return;
+    }
+
     //获取position
     final RenderBox? box =
         globalKey.currentContext!.findRenderObject() as RenderBox?;
@@ -109,7 +118,7 @@ class AllPreviewsPageController extends GetxController
   }
 
   // 获取下一页预览图
-  Future<void> fetchPriviewsNext() async {
+  Future<void> fetchThumbnailsNext() async {
     if (isLoadingNext) {
       return;
     }
@@ -135,7 +144,7 @@ class AllPreviewsPageController extends GetxController
   }
 
   // 获取预览图fromPage
-  Future<void> fetchPriviewsFromPage(int fromPage) async {
+  Future<void> fetchThumbnailsFromPage(int fromPage) async {
     if (isLoadingNext) {
       return;
     }

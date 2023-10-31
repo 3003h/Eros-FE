@@ -6,8 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PreviewContainer extends StatefulWidget {
-  PreviewContainer({
+class ThumbBox extends StatefulWidget {
+  ThumbBox({
     Key? key,
     required this.index,
     required List<GalleryImage> galleryImageList,
@@ -27,10 +27,10 @@ class PreviewContainer extends StatefulWidget {
   final String? referer;
 
   @override
-  State<PreviewContainer> createState() => _PreviewContainerState();
+  State<ThumbBox> createState() => _ThumbBoxState();
 }
 
-class _PreviewContainerState extends State<PreviewContainer> {
+class _ThumbBoxState extends State<ThumbBox> {
   final ImageHideController imageHideController = Get.find();
 
   final _galleryPageController =

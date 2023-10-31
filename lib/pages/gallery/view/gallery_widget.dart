@@ -419,9 +419,11 @@ class MorePreviewButton extends StatelessWidget {
   const MorePreviewButton({
     Key? key,
     required this.hasMorePreview,
+    this.padding,
   }) : super(key: key);
 
   final bool hasMorePreview;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -430,13 +432,13 @@ class MorePreviewButton extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
       child: Text(
         hasMorePreview
-            ? L10n.of(Get.context!).morePreviews
-            : L10n.of(Get.context!).noMorePreviews,
+            ? L10n.of(Get.context!).more_thumbnails
+            : L10n.of(Get.context!).no_more_thumbnails,
         style: const TextStyle(fontSize: 16),
       ),
       onPressed: () {
         Get.toNamed(
-          EHRoutes.galleryAllPreviews,
+          EHRoutes.galleryAllThumbnails,
           id: isLayoutLarge ? 2 : null,
         );
       },

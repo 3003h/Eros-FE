@@ -63,5 +63,7 @@
   "nativeHttpClientAdapter?": false,
   "showComments?": true,
   "showOnlyUploaderComment?": false,
-  "showGalleryTags?": true
+  "showGalleryTags?": true,
+  "hideGalleryThumbnails?": false,
+  "horizontalThumbnails?": false
 }

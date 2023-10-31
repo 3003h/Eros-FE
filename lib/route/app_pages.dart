@@ -4,7 +4,7 @@ import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
-import 'package:fehviewer/pages/gallery/view/all_preview_page.dart';
+import 'package:fehviewer/pages/gallery/view/all_thumbnails_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page.dart';
@@ -146,8 +146,8 @@ class AppPages {
       page: () => CommentPage(),
     ),
     GetPage(
-      name: EHRoutes.galleryAllPreviews,
-      page: () => const AllPreviewPage(),
+      name: EHRoutes.galleryAllThumbnails,
+      page: () => const AllThumbnailsPage(),
     ),
     GetPage(
       name: EHRoutes.addTag,
