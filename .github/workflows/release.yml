@@ -182,7 +182,7 @@ jobs:
         if: matrix.target == 'macos'
         shell: bash
         run: |
-          sed -i "s,#cronet_http: ^0.2.1,cronet_http: ^0.2.1,g" pubspec.yaml
+          sed -i "s/#cronet_http: ^0.2.1/cronet_http: ^0.2.1/g" pubspec.yaml
           git stash
 
       - name: Flutter pub get
