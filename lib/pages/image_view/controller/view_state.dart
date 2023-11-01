@@ -68,6 +68,8 @@ class ViewExtState {
 
   late final String? gid;
 
+  String? realDirPath;
+
   /// 当前的index
   final _currentItemIndex = 0.obs;
   int get currentItemIndex => _currentItemIndex.value;
@@ -116,7 +118,7 @@ class ViewExtState {
 
   /// pageview下实际能翻页的总数
   int get pageCount {
-    final int imageCount = filecount;
+    final int imageCount = fileCount;
     switch (columnMode) {
       case ViewColumnMode.single:
         return imageCount;
@@ -134,7 +136,7 @@ class ViewExtState {
   /// imagePathList
   List<String> imagePathList = <String>[];
 
-  int get filecount {
+  int get fileCount {
     if (loadFrom == LoadFrom.download) {
       return imagePathList.length;
     } else if (loadFrom == LoadFrom.gallery) {

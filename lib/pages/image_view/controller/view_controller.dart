@@ -385,8 +385,8 @@ class ViewExtController extends GetxController {
       });
     }
 
-    if (vState.currentItemIndex >= vState.filecount - 1) {
-      vState.sliderValue = (vState.filecount - 1).toDouble();
+    if (vState.currentItemIndex >= vState.fileCount - 1) {
+      vState.sliderValue = (vState.fileCount - 1).toDouble();
     } else if (vState.currentItemIndex < 0) {
       vState.sliderValue = 1.0;
     } else {
@@ -503,8 +503,20 @@ class ViewExtController extends GetxController {
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
-    final gtask = await isarHelper.findGalleryTaskByGidIsolate(gid);
-    return gtask?.realDirPath;
+    logger.t('vState.realDirPath ${vState.realDirPath} gid:${vState.gid} $gid');
+    if (vState.gid == gid.toString()) {
+      return vState.realDirPath;
+    }
+
+    final gTask = await isarHelper.findGalleryTaskByGid(gid);
+    // final gTask = await isarHelper
+    //     .findGalleryTaskByGid(int.tryParse(vState.gid ?? '') ?? 0);
+    final realDirPath = gTask?.realDirPath;
+    if (realDirPath != null && realDirPath.isNotEmpty) {
+      vState.realDirPath = realDirPath;
+    }
+
+    return gTask?.realDirPath;
   }
 
   /// 拉取图片信息
@@ -841,13 +853,13 @@ class ViewExtController extends GetxController {
     if (vState.viewMode == ViewMode.topToBottom &&
         itemScrollController.isAttached &&
         !vState.isScrolling &&
-        vState.pageIndex < vState.filecount - 1) {
+        vState.pageIndex < vState.fileCount - 1) {
       itemScrollController.scrollTo(
         index: vState.minImageIndex + 1,
         duration: const Duration(milliseconds: 200),
         curve: Curves.ease,
       );
-    } else if (vState.pageIndex < vState.filecount - 1) {
+    } else if (vState.pageIndex < vState.fileCount - 1) {
       final toPage = vState.pageIndex + 1;
       changePage(toPage);
     }
@@ -1152,7 +1164,7 @@ class ViewExtController extends GetxController {
   void thumbScrollTo({int? index}) {
     final indexRange = vState.maxThumbIndex - vState.minThumbIndex;
     final toIndex = index ?? vState.currentItemIndex;
-    if (toIndex < vState.filecount - indexRange - 1) {
+    if (toIndex < vState.fileCount - indexRange - 1) {
       thrThumbScrollTo.throttle(() => thumbScrollController.scrollTo(
             index: toIndex,
             duration: const Duration(milliseconds: 300),
@@ -1259,7 +1271,7 @@ class ViewExtController extends GetxController {
           // 双页阅读
           logger.d('双页阅读 自动翻页');
           final int serLeftNext = vState.serFirst + 2;
-          if (vState.filecount > serLeftNext) {
+          if (vState.fileCount > serLeftNext) {
             if (serLeftNext > 0 &&
                 !(vState.loadCompleMap[serLeftNext] ?? false)) {
               autoNextTimer?.cancel();

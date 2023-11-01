@@ -242,7 +242,7 @@ class _DoublePageViewState extends State<DoublePageView> {
     _ratioFirst = ratioFirst ?? 3 / 4;
 
     final ratioSecond =
-        vState.filecount <= serFirst ? 0.0 : getRatio(serFirst + 1, vState);
+        vState.fileCount <= serFirst ? 0.0 : getRatio(serFirst + 1, vState);
     if (ratioSecond == null) {
       needResizeSecond = true;
     }
@@ -259,7 +259,7 @@ class _DoublePageViewState extends State<DoublePageView> {
         '_ratioStart:$_ratioFirst, _ratioEnd:$_ratioSecond, _ratioBoth:$_ratioBoth');
 
     final showFirst = serFirst > 0;
-    final showSecond = vState.filecount > serFirst;
+    final showSecond = vState.fileCount > serFirst;
 
     Widget imageFirst() => AspectRatio(
           aspectRatio: _ratioFirst,

@@ -179,6 +179,10 @@ class IsarHelper {
     return compute(iFindAllGalleryTasks, null);
   }
 
+  GalleryTask? findGalleryTaskByGidSync(int gid) {
+    return isar.galleryTasks.getSync(gid);
+  }
+
   Future<GalleryTask?> findGalleryTaskByGid(int gid) async {
     return await isar.galleryTasks.get(gid);
   }

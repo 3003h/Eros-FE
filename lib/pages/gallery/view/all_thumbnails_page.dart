@@ -31,7 +31,7 @@ class _AllThumbnailsPageState extends State<AllThumbnailsPage> {
     final AllThumbnailsPageController controller =
         Get.put(AllThumbnailsPageController());
 
-    final int _count = int.parse(controller.filecount);
+    final int _count = int.parse(controller.fileCount);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: GestureDetector(

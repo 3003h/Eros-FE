@@ -821,7 +821,7 @@ class ViewTopBar extends GetView<ViewExtController> {
                       alignment: Alignment.center,
                       height: kTopBarButtonHeight,
                       child: Text(
-                        '${logic.vState.currentItemIndex + 1}/${logic.vState.filecount}',
+                        '${logic.vState.currentItemIndex + 1}/${logic.vState.fileCount}',
                         style: const TextStyle(
                           color: CupertinoColors.systemGrey6,
                         ),
@@ -914,9 +914,9 @@ class BottomBarControlWidget extends GetView<ViewExtController> {
                   return SizedBox(
                     height: kSliderBarHeight,
                     child: ViewPageSlider(
-                      max: logic.vState.filecount - 1.0,
+                      max: logic.vState.fileCount - 1.0,
                       sliderValue: math.min(logic.vState.sliderValue,
-                          logic.vState.filecount - 1.0),
+                          logic.vState.fileCount - 1.0),
                       onChangedEnd: logic.handOnSliderChangedEnd,
                       onChanged: logic.handOnSliderChanged,
                       reverse: logic.vState.viewMode == ViewMode.rightToLeft,
@@ -1177,7 +1177,7 @@ class ThumbnailListView extends GetView<ViewExtController> {
               child: ScrollablePositionedList.builder(
                 itemScrollController: logic.thumbScrollController,
                 itemPositionsListener: logic.thumbPositionsListener,
-                itemCount: controller.vState.filecount,
+                itemCount: controller.vState.fileCount,
                 scrollDirection: Axis.horizontal,
                 reverse: logic.vState.viewMode == ViewMode.rightToLeft,
                 itemBuilder: (context, index) {

@@ -18,7 +18,7 @@ class AllThumbnailsPageController extends GetxController
 
   List<GalleryImage> get _images => _pageState.imagesFromMap;
 
-  String get filecount => _pageState.galleryProvider?.filecount ?? '0';
+  String get fileCount => _pageState.galleryProvider?.filecount ?? '0';
 
   String get gid => _pageState.gid;
 

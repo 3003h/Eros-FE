@@ -5,7 +5,6 @@ import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/widget/image/eh_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
@@ -42,7 +41,7 @@ class _ImageListViewState extends State<ImageListView> {
       ),
       itemScrollController: controller.itemScrollController,
       itemPositionsListener: controller.itemPositionsListener,
-      itemCount: vState.filecount,
+      itemCount: vState.fileCount,
       itemBuilder: itemBuilder(),
     );
 
