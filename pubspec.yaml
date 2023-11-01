@@ -35,7 +35,6 @@ dependencies:
   html: ^0.15.0
   flutter_linkify: ^6.0.0
   url_launcher: ^6.0.3
-  tuple: ^2.0.0
   get: ^4.3.8
   get_storage: ^2.0.3
   photo_view: ^0.14.0

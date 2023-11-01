@@ -3,7 +3,6 @@ import 'package:fehviewer/pages/gallery/controller/all_thumbnails_controller.dar
 import 'package:fehviewer/pages/gallery/view/thumb_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 import 'const.dart';
 
@@ -85,9 +84,9 @@ class _AllThumbnailsPageState extends State<AllThumbnailsPage> {
       child: CupertinoScrollbar(
         controller: controller.scrollController,
         child: controller.obx(
-          (Tuple2<List<GalleryImage>, List<GalleryImage>>? state) {
-            final previewPreviousList = state?.item1;
-            final previewList = state?.item2;
+          ((List<GalleryImage>, List<GalleryImage>)? state) {
+            final previewPreviousList = state?.$1;
+            final previewList = state?.$2;
             // logger.d('${previewPreviousList?.length}  ${previewList?.length}');
             if (previewList != null) {
               return CustomScrollView(

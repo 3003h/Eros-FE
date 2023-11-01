@@ -224,7 +224,7 @@ class GalleryPageController extends GetxController
       // 加入历史
       if (gState.galleryProvider != null &&
           gState.galleryProvider?.gid != null) {
-        Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
+        Future<void>.delayed(const Duration(milliseconds: 3000)).then((_) {
           _historyController.addHistory(gState.galleryProvider!);
         });
       }
@@ -257,7 +257,7 @@ class GalleryPageController extends GetxController
       gState = stateFromCache;
       isStateFromCacheChange?.call(true);
       change(gState.galleryProvider, status: RxStatus.success());
-      Future<void>.delayed(const Duration(milliseconds: 700)).then((_) {
+      Future<void>.delayed(const Duration(milliseconds: 3000)).then((_) {
         _historyController.addHistory(gState.galleryProvider!);
       });
       return true;

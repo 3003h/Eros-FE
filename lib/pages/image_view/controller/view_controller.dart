@@ -587,9 +587,8 @@ class ViewExtController extends GetxController {
       final filePath = path.join(task.savedDir ?? '', task.fileName);
 
       // 异步读取zip
-      final tuple = await readAsyncArchive(filePath.realArchiverPath);
-      asyncArchive = tuple.item1;
-      final asyncInputStream = tuple.item2;
+      final (asyncArchive, asyncInputStream) =
+          await readAsyncArchive(filePath.realArchiverPath);
       vState.asyncArchiveMap[gid] = asyncArchive;
       vState.asyncInputStreamMap[gid] = asyncInputStream;
     }

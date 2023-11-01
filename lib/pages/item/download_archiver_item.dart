@@ -122,9 +122,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
                   }
 
                   // 异步读取zip
-                  final tuple = await readAsyncArchive(archiverPath);
-                  final asyncArchive = tuple.item1;
-                  final inputStream = tuple.item2;
+                  final (asyncArchive, inputStream) =
+                      await readAsyncArchive(archiverPath);
                   logger.t('${asyncArchive.length}');
                   logger.t(
                       '${asyncArchive.files.map((e) => e.name).join('\n')} ');

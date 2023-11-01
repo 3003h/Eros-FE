@@ -9,7 +9,6 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 import '../../fetch_list.dart';
 import '../default_tabview_controller.dart';
@@ -34,7 +33,7 @@ class FavoriteViewController extends DefaultTabViewController {
   //页码跳转的控制器
   final TextEditingController pageController = TextEditingController();
 
-  late Future<Tuple2<List<GalleryProvider>, int>> futureBuilderFuture;
+  late Future<(List<GalleryProvider>, int)> futureBuilderFuture;
   Widget? lastListWidget;
 
   final LocalFavController _localFavController = Get.find();
@@ -44,6 +43,7 @@ class FavoriteViewController extends DefaultTabViewController {
     if (Get.isRegistered<FavoriteSelectorController>()) {
       return Get.find<FavoriteSelectorController>();
     }
+    return null;
   }
 
   @override

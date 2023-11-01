@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
-import 'package:tuple/tuple.dart';
 import 'package:webdav_client/webdav_client.dart' as webdav;
 
 const String kDirPath = '/fehviewer';
@@ -555,7 +554,7 @@ class WebdavController extends GetxController {
     }
   }
 
-  Future<Tuple2<List<String>, int>?> downloadQuickSearch(int maxTime) async {
+  Future<(List<String>, int)?> downloadQuickSearch(int maxTime) async {
     logger.d('download $kQuickSearchFile');
     chkTempDir(kLocalSearchDirPath);
 
@@ -570,12 +569,13 @@ class WebdavController extends GetxController {
       }
       final String _fileText = _file.readAsStringSync();
 
-      return Tuple2(
-          _fileText
-              .split('\n')
-              .where((element) => element.trim().isNotEmpty)
-              .toList(),
-          maxTime);
+      return (
+        _fileText
+            .split('\n')
+            .where((element) => element.trim().isNotEmpty)
+            .toList(),
+        maxTime
+      );
     } catch (err) {
       logger.e('$err');
       return null;

@@ -6,13 +6,12 @@ import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:tuple/tuple.dart';
 
 import 'gallery_page_controller.dart';
 import 'gallery_page_state.dart';
 
 class AllThumbnailsPageController extends GetxController
-    with StateMixin<Tuple2<List<GalleryImage>, List<GalleryImage>>> {
+    with StateMixin<(List<GalleryImage>, List<GalleryImage>)> {
   AllThumbnailsPageController();
   late GalleryPageController _pageController;
   GalleryPageState get _pageState => _pageController.gState;
@@ -52,7 +51,7 @@ class AllThumbnailsPageController extends GetxController
 
     _pageState.currentImagePage = 0;
 
-    change(Tuple2([], _images), status: RxStatus.success());
+    change(([], _images), status: RxStatus.success());
 
     WidgetsBinding.instance.addPostFrameCallback((Duration callback) {
       logger.t('addPostFrameCallback be invoke');
@@ -140,7 +139,7 @@ class AllThumbnailsPageController extends GetxController
     _pageController.addAllImages(_nextGalleryImageList);
     isLoadingNext = false;
     _pageState.currentImagePage += 1;
-    change(Tuple2([], _images), status: RxStatus.success());
+    change(([], _images), status: RxStatus.success());
   }
 
   // 获取预览图fromPage
@@ -150,7 +149,7 @@ class AllThumbnailsPageController extends GetxController
     }
     await Future<void>.delayed(const Duration(milliseconds: 100));
 
-    change(Tuple2([], _images), status: RxStatus.loading());
+    change(([], _images), status: RxStatus.loading());
 
     final List<GalleryImage> _galleryImageList = await getGalleryImage(
       _pageState.galleryProvider?.url ?? '',
@@ -164,7 +163,7 @@ class AllThumbnailsPageController extends GetxController
     _pageState.currentImagePage = fromPage - 1;
 
     update(['trailing']);
-    change(Tuple2([], _images), status: RxStatus.success());
+    change(([], _images), status: RxStatus.success());
   }
 
   // 获取上一页预览图
@@ -200,7 +199,7 @@ class AllThumbnailsPageController extends GetxController
     //     ], _images),
     //     status: RxStatus.success());
 
-    change(Tuple2([], _images), status: RxStatus.success());
+    change(([], _images), status: RxStatus.success());
   }
 
   // 没有更多预览
@@ -211,7 +210,7 @@ class AllThumbnailsPageController extends GetxController
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 100));
     isLoadFinsh = true;
-    change(Tuple2([], _images), status: RxStatus.success());
+    change(([], _images), status: RxStatus.success());
   }
 
   // 判断是否显示跳页按钮
