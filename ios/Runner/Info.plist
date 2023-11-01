@@ -41,8 +41,8 @@
 	<string>All files have been downloaded</string>
 	<key>FDMaximumConcurrentTasks</key>
 	<integer>5</integer>
-	<key>FLTEnableImpeller</key>
-	<false/>
+<!--	<key>FLTEnableImpeller</key>-->
+<!--	<false/>-->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
