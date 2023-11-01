@@ -118,6 +118,7 @@ class GalleryPageController extends GetxController
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     try {
       final GalleryProvider? _fetchItem = await _fetchData(refresh: refresh);
+      logger.t('fetch end postTime ${_fetchItem?.postTime}');
       change(_fetchItem, status: RxStatus.success());
       time.showTime('change end');
 
@@ -150,6 +151,8 @@ class GalleryPageController extends GetxController
         gState.galleryProvider = await Api.getMoreGalleryInfoOne(
             gState.galleryProvider!,
             refresh: refresh);
+
+        logger.t('fetch end postTime ${gState.galleryProvider?.postTime}');
       }
 
       // 检查画廊是否包含在本地收藏中
@@ -177,6 +180,9 @@ class GalleryPageController extends GetxController
           url: gState.galleryProvider?.url ?? '',
           refresh: refresh,
         );
+
+        logger.t('^^ postTime ${fetchedGalleryProvider?.postTime}');
+
         _galleryCacheController.setGalleryProviderCache(
             gState.galleryProvider?.gid, fetchedGalleryProvider);
         await 200.milliseconds.delay();
@@ -222,10 +228,10 @@ class GalleryPageController extends GetxController
               gState.galleryProvider?.imgUrlL);
 
       // 加入历史
-      if (gState.galleryProvider != null &&
-          gState.galleryProvider?.gid != null) {
-        Future<void>.delayed(const Duration(milliseconds: 3000)).then((_) {
-          _historyController.addHistory(gState.galleryProvider!);
+      final _galleryProvider = gState.galleryProvider;
+      if (_galleryProvider != null && _galleryProvider.gid != null) {
+        Future<void>.delayed(const Duration(milliseconds: 5000)).then((_) {
+          _historyController.addHistory(_galleryProvider);
         });
       }
 
@@ -234,7 +240,7 @@ class GalleryPageController extends GetxController
       return gState.galleryProvider;
     } on HttpException catch (e) {
       throw EhError(error: e.message);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
         logger.e('data: ${e.response?.data}');
         final errMsg = parseErrGallery('${e.response?.data ?? ''}');
@@ -257,9 +263,14 @@ class GalleryPageController extends GetxController
       gState = stateFromCache;
       isStateFromCacheChange?.call(true);
       change(gState.galleryProvider, status: RxStatus.success());
-      Future<void>.delayed(const Duration(milliseconds: 3000)).then((_) {
-        _historyController.addHistory(gState.galleryProvider!);
-      });
+
+      // 加入历史
+      final _galleryProvider = gState.galleryProvider;
+      if (_galleryProvider != null && _galleryProvider.gid != null) {
+        Future<void>.delayed(const Duration(milliseconds: 5000)).then((_) {
+          _historyController.addHistory(_galleryProvider);
+        });
+      }
       return true;
     } else {
       return false;
@@ -267,7 +278,7 @@ class GalleryPageController extends GetxController
   }
 
   // 评分后更新ui和数据
-  void ratinged({
+  void afterRating({
     required double ratingUsr,
     required double ratingAvg,
     required int ratingCnt,
@@ -551,6 +562,7 @@ class GalleryPageController extends GetxController
 
         try {
           if (changeSource) {
+            logger.d('itemSer$itemSer 换源加载 start');
             // 删除旧缓存
             _cacheController.clearDioCache(
                 path: gState.imageMap[itemSer]?.href ?? '');
@@ -568,7 +580,7 @@ class GalleryPageController extends GetxController
 
           // 换源加载
           if (changeSource) {
-            logger5.d('itemSer$itemSer 换源加载 ${_image?.imageUrl}');
+            logger.d('itemSer$itemSer 换源加载 ${_image?.imageUrl}');
           }
 
           if (_image == null) {

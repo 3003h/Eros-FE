@@ -135,3 +135,22 @@ Future<List<GalleryTask>> iFindAllGalleryTasks(void _) async {
   final isar = await openIsar();
   return isar.galleryTasks.where().sortByAddTimeDesc().findAllSync();
 }
+
+// iOnDownloadComplete
+Future<List<GalleryImageTask>> iOnDownloadComplete((int, int, int) para) async {
+  final (gid, ser, status) = para;
+  final isar = await openIsar();
+  return isar.writeTxnSync(() {
+    final tasks = isar.galleryImageTasks.getByGidSerSync(gid, ser);
+    print('tasks $tasks');
+    if (tasks != null) {
+      isar.galleryImageTasks.putByGidSerSync(tasks.copyWith(status: status));
+    }
+    return isar.galleryImageTasks
+        .where()
+        .gidEqualTo(gid)
+        .filter()
+        .statusEqualTo(status)
+        .findAllSync();
+  });
+}

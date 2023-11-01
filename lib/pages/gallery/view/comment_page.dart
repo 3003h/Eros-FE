@@ -74,7 +74,7 @@ class _CommentPageState extends State<CommentPage>
     }
 
     return Obx(() {
-      logger.d('build commentListView');
+      logger.t('build commentListView');
 
       late final List<GalleryComment>? _comments;
 

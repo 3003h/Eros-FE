@@ -295,8 +295,8 @@ class IsarHelper {
   }
 
   Future<void> updateImageTaskStatus(int gid, int ser, int status) async {
-    final tasks = await isar.galleryImageTasks.getByGidSer(gid, ser);
     await isar.writeTxn(() async {
+      final tasks = await isar.galleryImageTasks.getByGidSer(gid, ser);
       if (tasks != null) {
         await isar.galleryImageTasks
             .putByGidSer(tasks.copyWith(status: status));
@@ -304,8 +304,40 @@ class IsarHelper {
     });
   }
 
+  Future<List<GalleryImageTask>> onDownloadComplete(
+    int gid,
+    int ser,
+    int status,
+  ) async {
+    return await isar.writeTxn(() async {
+      final tasks = await isar.galleryImageTasks.getByGidSer(gid, ser);
+      if (tasks != null) {
+        await isar.galleryImageTasks
+            .putByGidSer(tasks.copyWith(status: status));
+      }
+      return await isar.galleryImageTasks
+          .where()
+          .gidEqualTo(gid)
+          .filter()
+          .statusEqualTo(status)
+          .findAll();
+    });
+  }
+
+  // 在同一个事务中 updateImageTaskStatus 然后 finaAllImageTaskByGidAndStatus
+  Future<List<GalleryImageTask>> onDownloadCompleteIsolate(
+    int gid,
+    int ser,
+    int status,
+  ) async {
+    return compute(iOnDownloadComplete, (gid, ser, status));
+  }
+
   Future<void> updateImageTaskStatusIsolate(
-      int gid, int ser, int status) async {
+    int gid,
+    int ser,
+    int status,
+  ) async {
     compute(iUpdateImageTaskStatus, (gid, ser, status));
   }
 

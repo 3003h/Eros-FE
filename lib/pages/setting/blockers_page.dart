@@ -1,8 +1,10 @@
 import 'package:fehviewer/common/controller/block_controller.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class BlockersPage extends GetView<BlockController> {
@@ -63,6 +65,18 @@ class BlockersPage extends GetView<BlockController> {
           top: false,
           child: ListView(
             children: [
+              if (!kReleaseMode)
+                SelectorSettingItem(
+                  hideDivider: true,
+                  title: 'Block Rules',
+                  onTap: () {
+                    Get.toNamed(
+                      EHRoutes.blockRules,
+                      id: isLayoutLarge ? 2 : null,
+                    );
+                  },
+                ),
+              if (!kReleaseMode) const ItemSpace(),
               // 开关
               Obx(() {
                 return TextSwitchItem(

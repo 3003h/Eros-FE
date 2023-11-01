@@ -39,7 +39,7 @@ class RateController extends GetxController {
       token: _item!.token ?? '',
       rating: (rate * 2).round(),
     );
-    pageController.ratinged(
+    pageController.afterRating(
       ratingUsr: double.parse(rultMap['rating_usr'].toString()),
       ratingAvg: double.parse(rultMap['rating_avg'].toString()),
       ratingCnt: rultMap['rating_cnt'] as int,

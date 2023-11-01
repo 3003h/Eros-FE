@@ -1233,20 +1233,10 @@ class DownloadController extends GetxController {
   Future _onDownloadComplete(String fileName, int gid, int itemSer) async {
     logger.t('********** $itemSer complete $fileName');
 
-    // final task = await isarHelper.findImageTaskAllByGidSer(gid, itemSer);
-    // logger.d('task is null: ${task == null}');
-
     // 下载完成 更新数据库明细
     // logger.t('下载完成 更新数据库明细');
-    await isarHelper.updateImageTaskStatusIsolate(
-      gid,
-      itemSer,
-      TaskStatus.complete.value,
-    );
-
-    // 更新ui
     final List<GalleryImageTask> listComplete = await isarHelper
-        .finaAllImageTaskByGidAndStatusIsolate(gid, TaskStatus.complete.value);
+        .onDownloadCompleteIsolate(gid, itemSer, TaskStatus.complete.value);
 
     logger.t(
         'listComplete:  ${listComplete.length}: ${listComplete.map((e) => e.ser).join(',')}');
@@ -1261,7 +1251,7 @@ class DownloadController extends GetxController {
     }
 
     if (_task != null) {
-      await isarHelper.putGalleryTaskIsolate(_task);
+      await isarHelper.putGalleryTask(_task);
     }
     _updateDownloadView(['DownloadGalleryItem_$gid']);
   }
@@ -1288,7 +1278,7 @@ class DownloadController extends GetxController {
         .sublist(0, min(lastCounts.length, checkMaxCount));
 
     logger
-        .v('${lastCountsTopCheck.join(',')}\n${lastCounts.reversed.join(',')}');
+        .t('${lastCountsTopCheck.join(',')}\n${lastCounts.reversed.join(',')}');
 
     final speedCheck =
         (max(totCurCount - lastCountsTopCheck.reversed.first, 0) /

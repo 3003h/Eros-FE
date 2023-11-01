@@ -22,6 +22,7 @@
   "filesizeText?" : "",
   "visible?": "",
   "parent?": "",
+  "parentHref?": "",
   "ratingFallBack?": 4.0,
   "numberOfReviews?": "",
   "postTime?": "",
