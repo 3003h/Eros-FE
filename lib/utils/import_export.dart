@@ -126,10 +126,20 @@ Future<void> importAppDataFromFile() async {
 
   final user = Global.profile.user.clone();
 
+  final oriDownloadConfig = Global.profile.downloadConfig.clone();
+
   final Map<String, dynamic> jsonMap =
       jsonDecode(jsonStr) as Map<String, dynamic>;
   final Profile profile = Profile.fromJson(jsonMap);
-  Global.profile = profile.copyWith(user: user);
+
+  final _newDownloadConfig = profile.downloadConfig;
+
+  Global.profile = profile.copyWith(
+    user: user,
+    downloadConfig: _newDownloadConfig.copyWith(
+      downloadLocation: oriDownloadConfig.downloadLocation,
+    ),
+  );
   Global.saveProfile();
   Get.reloadAll(force: true);
   showToast('Import success');
