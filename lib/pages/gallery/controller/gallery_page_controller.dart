@@ -546,7 +546,7 @@ class GalleryPageController extends GetxController
     bool changeSource = false,
     bool refresh = false,
   }) async {
-    logger.d('fetchAndParserImageInfo $itemSer');
+    logger.t('fetchAndParserImageInfo $itemSer');
     try {
       /// 当前缩略图对象
       final GalleryImage? _curImages = gState.imageMap[itemSer];
@@ -588,7 +588,7 @@ class GalleryPageController extends GetxController
             showKey: _showKey,
           );
 
-          logger.d('fetch _image ${_image?.toJson()}');
+          logger.t('fetch _image ${_image?.toJson()}');
 
           if (_image?.showKey != null && _image?.showKey != _showKey) {
             logger.d('update showKey ${_image?.showKey}');

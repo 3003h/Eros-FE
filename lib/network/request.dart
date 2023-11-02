@@ -241,7 +241,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
 }) async {
   // 如果 showKey 为空，直接使用常规请求，解析html
   if (showKey == null || showKey.isEmpty) {
-    logger.d('fetchImageInfoByApi: showKey is null');
+    logger.t('fetchImageInfoByApi: showKey is null');
     final _image = await _fetchImageInfo(
       href,
       refresh: refresh,
@@ -251,7 +251,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
     return _image;
   }
 
-  logger.d(
+  logger.t(
       'fetchImageInfoByApi: href $href, refresh $refresh, sourceId $sourceId');
 
   String mpvSer = '1';

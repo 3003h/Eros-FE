@@ -95,6 +95,11 @@ class GalleryPara {
         _processingSerSet.add(_ser);
         final String _href = imageMap[_ser]?.href ?? '';
 
+        if (showKey == null) {
+          logger.d('showKey is null, skip precache');
+          continue;
+        }
+
         // paraImageLageInfoFromHtml
         // final GalleryImage? _imageFetch = await fetchImageInfo(_href);
         final GalleryImage? _imageFetch =

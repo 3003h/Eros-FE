@@ -20,7 +20,7 @@ GalleryImage paraShowPage(String jsonString) {
     throw EhError(type: EhErrorType.image509);
   }
 
-  logger.d('largeImageUrl $imageUrl');
+  logger.t('largeImageUrl $imageUrl');
 
   final RegExpMatch? _xy = RegExp(r'(\S+)\s+::\s+(\d+)\s+x\s+(\d+)(\s+::)?')
       .firstMatch('${jsonMap['i']}');
@@ -53,7 +53,7 @@ GalleryImage paraShowPage(String jsonString) {
     originImageUrl =
         '${htmlUnescape.convert(match!.group(1)!)}fullimg${htmlUnescape.convert(match.group(2)!)}';
   }
-  logger.d('======>>>> originImageUrl: $originImageUrl');
+  logger.t('======>>>> originImageUrl: $originImageUrl');
 
   final String _sourceId =
       RegExp(r"nl\('(.*?)'\)").firstMatch('${jsonMap['i6']}')?.group(1) ?? '';
