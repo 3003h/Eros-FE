@@ -33,6 +33,8 @@ class DownloadState {
 
   final downloadMap = <int, List<GalleryImage>>{};
   final cancelTokenMap = <int, CancelToken>{};
+  final showKeyMap = <int, String>{};
+  final showKeyCompleteMap = <int, Completer>{};
 
   final Map<int, Timer?> chkTimers = {};
   final Map<int, int> preComplete = {};

@@ -591,7 +591,7 @@ class GalleryPageController extends GetxController
           logger.t('fetch _image ${_image?.toJson()}');
 
           if (_image?.showKey != null && _image?.showKey != _showKey) {
-            logger.d('update showKey ${_image?.showKey}');
+            logger.t('update showKey ${_image?.showKey}');
             gState.galleryProvider = gState.galleryProvider?.copyWith(
               showKey: _image?.showKey,
             );
@@ -681,6 +681,7 @@ class GalleryPageController extends GetxController
       uploader: gState.galleryProvider?.uploader,
       category: gState.galleryProvider?.category,
       downloadOri: downloadOri,
+      showKey: gState.galleryProvider?.showKey,
     );
   }
 

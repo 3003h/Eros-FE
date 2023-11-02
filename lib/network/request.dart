@@ -239,9 +239,15 @@ Future<GalleryImage?> fetchImageInfoByApi(
   String? sourceId,
   CancelToken? cancelToken,
 }) async {
-  // 如果 showKey 为空，直接使用常规请求，解析html
-  if (showKey == null || showKey.isEmpty) {
-    logger.t('fetchImageInfoByApi: showKey is null');
+  final isMpv = regGalleryMpvPageUrl.hasMatch(href);
+
+  // 如果 showKey 为空 或者换源重载（sourceId不为空） ，直接使用常规请求，解析html
+  if (isMpv ||
+      showKey == null ||
+      showKey.isEmpty ||
+      (sourceId?.isNotEmpty ?? false)) {
+    logger.d(
+        'fetchImageInfoByApi: showKey $showKey, sourceId $sourceId, isMpv $isMpv');
     final _image = await _fetchImageInfo(
       href,
       refresh: refresh,
@@ -253,12 +259,6 @@ Future<GalleryImage?> fetchImageInfoByApi(
 
   logger.t(
       'fetchImageInfoByApi: href $href, refresh $refresh, sourceId $sourceId');
-
-  String mpvSer = '1';
-  final isMpv = regGalleryMpvPageUrl.hasMatch(href);
-  if (isMpv) {
-    mpvSer = regGalleryMpvPageUrl.firstMatch(href)?.group(3) ?? '1';
-  }
 
   final RegExp regExp =
       RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');

@@ -3,6 +3,7 @@ import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -294,8 +295,11 @@ class EHConst {
   static List<int> preloadImage = <int>[
     if (Global.inDebugMode) 0,
     1,
+    2,
     3,
+    4,
     5,
+    6,
     7,
   ];
 
@@ -316,8 +320,8 @@ class EHConst {
     3,
     5,
     7,
-    9,
-    11,
+    if (!kReleaseMode) 9,
+    if (!kReleaseMode) 11,
     if (Global.inDebugMode) 100,
   ];
 

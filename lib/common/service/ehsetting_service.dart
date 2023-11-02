@@ -75,10 +75,10 @@ class EhSettingService extends ProfileService {
   }
 
   /// 预载图片数量
-  RxInt preloadImage = 3.obs;
+  RxInt preloadImage = 2.obs;
 
   /// 下载线程数
-  final RxInt _multiDownload = 3.obs;
+  final RxInt _multiDownload = 1.obs;
   int get multiDownload => _multiDownload.value;
   set multiDownload(int val) => _multiDownload.value = val;
 
