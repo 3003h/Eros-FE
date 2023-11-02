@@ -153,3 +153,18 @@ Future<List<GalleryImageTask>> iOnDownloadComplete((int, int, int) para) async {
         .findAllSync();
   });
 }
+
+// iUpdateGalleryTaskIsolate
+Future<void> iUpdateGalleryTaskIsolate(
+    (int, GalleryTask Function(GalleryTask)) para) async {
+  final (gid, func) = para;
+  final isar = await openIsar();
+
+  final galleryTask = isar.galleryTasks.getSync(gid);
+  if (galleryTask != null) {
+    isar.writeTxnSync(() {
+      final _galleryTask = func(galleryTask);
+      isar.galleryTasks.putSync(_galleryTask);
+    });
+  }
+}

@@ -242,6 +242,7 @@ class DownloadController extends GetxController {
       category: category,
       uploader: uploader,
       downloadOrigImage: downloadOri,
+      showKey: showKey,
     );
 
     logger.d('add NewTask ${galleryTask.toString()}');
@@ -249,10 +250,6 @@ class DownloadController extends GetxController {
     dState.galleryTaskMap[galleryTask.gid] = galleryTask;
     downloadViewAnimateListAdd();
     showToast('${galleryTask.gid} Download task start');
-
-    if (showKey != null) {
-      _updateShowKey(galleryTask.gid, showKey);
-    }
 
     _addGalleryTask(
       galleryTask,
@@ -348,7 +345,7 @@ class DownloadController extends GetxController {
     final GalleryTask? galleryTask =
         await isarHelper.findGalleryTaskByGidIsolate(gid);
     if (galleryTask != null) {
-      logger.d('恢复任务 $gid');
+      logger.d('恢复任务 $gid showKey:${galleryTask.showKey}');
       _addGalleryTask(galleryTask);
     }
   }
@@ -486,6 +483,10 @@ class DownloadController extends GetxController {
     List<GalleryImage>? images,
   }) {
     dState.taskCancelTokens[galleryTask.gid] = TaskCancelToken();
+    final _showKey = galleryTask.showKey;
+    if (_showKey != null) {
+      _updateShowKey(galleryTask.gid, _showKey);
+    }
     dState.queueTask.add(
       ({name}) {
         logger.d('excue $name');
@@ -609,7 +610,7 @@ class DownloadController extends GetxController {
       // 更新 showkey
       final _showKey = imageFetched.showKey;
       if (_showKey != null) {
-        _updateShowKey(gid, _showKey);
+        _updateShowKey(gid, _showKey, updateDB: true);
       }
 
       // 目标下载地址
@@ -674,7 +675,7 @@ class DownloadController extends GetxController {
         // 更新 showkey
         final _showKey = imageFetched.showKey;
         if (_showKey != null) {
-          _updateShowKey(gid, _showKey);
+          _updateShowKey(gid, _showKey, updateDB: true);
         }
 
         _targetImageUrl = ehSettingService.downloadOrigImage
@@ -1118,12 +1119,24 @@ class DownloadController extends GetxController {
 
   // final Completer<bool> _showKeyCompleter = Completer<bool>();
 
-  void _updateShowKey(int gid, String showKey) {
+  void _updateShowKey(
+    int gid,
+    String showKey, {
+    bool updateDB = false,
+  }) {
     logger.d('update showKey $gid $showKey');
     dState.showKeyMap[gid] = showKey;
-    // _showKeyCompleter.complete(true);
     if (!(dState.showKeyCompleteMap[gid]?.isCompleted ?? false)) {
       dState.showKeyCompleteMap[gid]?.complete(true);
+    }
+    if (updateDB) {
+      // 如果直接操作数据库更新，不更新 map 数据，会导致后续状态更新时，直接将 map 中的 task 写入数据库，导致 showKey 丢失
+      // 所以这里需要更新 map 数据 ， 数据库的更新由后续状态更新时，自动更新
+      // TODO(3003n): 优化状态更新时，任务表的更新逻辑
+      final _task = dState.galleryTaskMap[gid];
+      if (_task != null) {
+        dState.galleryTaskMap[gid] = _task.copyWith(showKey: showKey);
+      }
     }
   }
 
@@ -1142,9 +1155,6 @@ class DownloadController extends GetxController {
       await galleryTaskComplete(galleryTask.gid);
       _updateDownloadView(['DownloadGalleryItem_${galleryTask.gid}']);
     }
-
-    // dState.showKeyCompleteMap
-    //     .putIfAbsent(galleryTask.gid, () => Completer<bool>());
 
     // 初始化下载计时控制
     _initDownloadStateChkTimer(galleryTask.gid);
@@ -1185,10 +1195,6 @@ class DownloadController extends GetxController {
 
     if (downloadParentPath.isContentUri) {
       logger.d('^^^^^^^^^^ downloadParentPath $downloadParentPath');
-      // await safCreateDirectory(
-      //   Uri.parse(downloadParentPath),
-      //   documentToTree: true,
-      // );
     }
 
     final List<int> _completeSerList = imageTasksOri
@@ -1220,6 +1226,7 @@ class DownloadController extends GetxController {
 
       logger.t('showKeyMap ${dState.showKeyMap}');
       final showKey = dState.showKeyMap[galleryTask.gid];
+
       if (index > 0 && showKey == null) {
         logger.d('loop index: $index, showKey of ${galleryTask.gid} is null');
 

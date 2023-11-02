@@ -216,6 +216,37 @@ class IsarHelper {
     compute(iPutGalleryTaskIsolate, (galleryTask, replaceOnConflict));
   }
 
+  Future<void> updateGalleryTask(
+    int gid,
+    GalleryTask Function(GalleryTask) func,
+  ) async {
+    final galleryTask = await findGalleryTaskByGid(gid);
+    if (galleryTask != null) {
+      await isar.writeTxn(() async {
+        await isar.galleryTasks.put(func(galleryTask));
+      });
+    }
+  }
+
+  Future<void> updateGalleryTaskShowKey(
+    int gid,
+    String showKey,
+  ) async {
+    final galleryTask = await findGalleryTaskByGid(gid);
+    if (galleryTask != null) {
+      await isar.writeTxn(() async {
+        await isar.galleryTasks.put(galleryTask.copyWith(showKey: showKey));
+      });
+    }
+  }
+
+  Future<void> updateGalleryTaskIsolate(
+    int gid,
+    GalleryTask Function(GalleryTask) func,
+  ) async {
+    compute(iUpdateGalleryTaskIsolate, (gid, func));
+  }
+
   Future<void> putAllGalleryTasks(List<GalleryTask> galleryTasks) async {
     await isar.writeTxn(() async {
       await isar.galleryTasks.putAll(galleryTasks);

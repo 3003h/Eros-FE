@@ -41,6 +41,8 @@ abstract class _$GalleryTaskCWProxy {
 
   GalleryTask downloadOrigImage(bool? downloadOrigImage);
 
+  GalleryTask showKey(String? showKey);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `GalleryTask(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -65,6 +67,7 @@ abstract class _$GalleryTaskCWProxy {
     String? jsonString,
     String? tag,
     bool? downloadOrigImage,
+    String? showKey,
   });
 }
 
@@ -128,6 +131,9 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
       this(downloadOrigImage: downloadOrigImage);
 
   @override
+  GalleryTask showKey(String? showKey) => this(showKey: showKey);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `GalleryTask(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -153,6 +159,7 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
     Object? jsonString = const $CopyWithPlaceholder(),
     Object? tag = const $CopyWithPlaceholder(),
     Object? downloadOrigImage = const $CopyWithPlaceholder(),
+    Object? showKey = const $CopyWithPlaceholder(),
   }) {
     return GalleryTask(
       gid: gid == const $CopyWithPlaceholder() || gid == null
@@ -223,6 +230,10 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
           ? _value.downloadOrigImage
           // ignore: cast_nullable_to_non_nullable
           : downloadOrigImage as bool?,
+      showKey: showKey == const $CopyWithPlaceholder()
+          ? _value.showKey
+          // ignore: cast_nullable_to_non_nullable
+          : showKey as String?,
     );
   }
 }
@@ -303,33 +314,38 @@ const GalleryTaskSchema = CollectionSchema(
       name: r'realDirPath',
       type: IsarType.string,
     ),
-    r'status': PropertySchema(
+    r'showKey': PropertySchema(
       id: 11,
+      name: r'showKey',
+      type: IsarType.string,
+    ),
+    r'status': PropertySchema(
+      id: 12,
       name: r'status',
       type: IsarType.long,
     ),
     r'tag': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'tag',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'title',
       type: IsarType.string,
     ),
     r'token': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'token',
       type: IsarType.string,
     ),
     r'uploader': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'uploader',
       type: IsarType.string,
     ),
     r'url': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'url',
       type: IsarType.string,
     )
@@ -391,6 +407,12 @@ int _galleryTaskEstimateSize(
     }
   }
   {
+    final value = object.showKey;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.tag;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -430,12 +452,13 @@ void _galleryTaskSerialize(
   writer.writeString(offsets[8], object.jsonString);
   writer.writeDouble(offsets[9], object.rating);
   writer.writeString(offsets[10], object.realDirPath);
-  writer.writeLong(offsets[11], object.status);
-  writer.writeString(offsets[12], object.tag);
-  writer.writeString(offsets[13], object.title);
-  writer.writeString(offsets[14], object.token);
-  writer.writeString(offsets[15], object.uploader);
-  writer.writeString(offsets[16], object.url);
+  writer.writeString(offsets[11], object.showKey);
+  writer.writeLong(offsets[12], object.status);
+  writer.writeString(offsets[13], object.tag);
+  writer.writeString(offsets[14], object.title);
+  writer.writeString(offsets[15], object.token);
+  writer.writeString(offsets[16], object.uploader);
+  writer.writeString(offsets[17], object.url);
 }
 
 GalleryTask _galleryTaskDeserialize(
@@ -456,12 +479,13 @@ GalleryTask _galleryTaskDeserialize(
     gid: id,
     jsonString: reader.readStringOrNull(offsets[8]),
     rating: reader.readDoubleOrNull(offsets[9]),
-    status: reader.readLongOrNull(offsets[11]),
-    tag: reader.readStringOrNull(offsets[12]),
-    title: reader.readString(offsets[13]),
-    token: reader.readString(offsets[14]),
-    uploader: reader.readStringOrNull(offsets[15]),
-    url: reader.readStringOrNull(offsets[16]),
+    showKey: reader.readStringOrNull(offsets[11]),
+    status: reader.readLongOrNull(offsets[12]),
+    tag: reader.readStringOrNull(offsets[13]),
+    title: reader.readString(offsets[14]),
+    token: reader.readString(offsets[15]),
+    uploader: reader.readStringOrNull(offsets[16]),
+    url: reader.readStringOrNull(offsets[17]),
   );
   return object;
 }
@@ -496,16 +520,18 @@ P _galleryTaskDeserializeProp<P>(
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readLongOrNull(offset)) as P;
-    case 12:
       return (reader.readStringOrNull(offset)) as P;
+    case 12:
+      return (reader.readLongOrNull(offset)) as P;
     case 13:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 14:
       return (reader.readString(offset)) as P;
     case 15:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 16:
+      return (reader.readStringOrNull(offset)) as P;
+    case 17:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1887,6 +1913,158 @@ extension GalleryTaskQueryFilter
     });
   }
 
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      showKeyIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'showKey',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      showKeyIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'showKey',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> showKeyEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'showKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      showKeyGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'showKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> showKeyLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'showKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> showKeyBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'showKey',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      showKeyStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'showKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> showKeyEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'showKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> showKeyContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'showKey',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> showKeyMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'showKey',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      showKeyIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'showKey',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition>
+      showKeyIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'showKey',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<GalleryTask, GalleryTask, QAfterFilterCondition> statusIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -2813,6 +2991,18 @@ extension GalleryTaskQuerySortBy
     });
   }
 
+  QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByShowKey() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'showKey', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByShowKeyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'showKey', Sort.desc);
+    });
+  }
+
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> sortByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
@@ -3035,6 +3225,18 @@ extension GalleryTaskQuerySortThenBy
     });
   }
 
+  QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByShowKey() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'showKey', Sort.asc);
+    });
+  }
+
+  QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByShowKeyDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'showKey', Sort.desc);
+    });
+  }
+
   QueryBuilder<GalleryTask, GalleryTask, QAfterSortBy> thenByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
@@ -3183,6 +3385,13 @@ extension GalleryTaskQueryWhereDistinct
     });
   }
 
+  QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByShowKey(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'showKey', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<GalleryTask, GalleryTask, QDistinct> distinctByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'status');
@@ -3300,6 +3509,12 @@ extension GalleryTaskQueryProperty
     });
   }
 
+  QueryBuilder<GalleryTask, String?, QQueryOperations> showKeyProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'showKey');
+    });
+  }
+
   QueryBuilder<GalleryTask, int?, QQueryOperations> statusProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'status');
@@ -3359,6 +3574,7 @@ GalleryTask _$GalleryTaskFromJson(Map<String, dynamic> json) => GalleryTask(
       jsonString: json['jsonString'] as String?,
       tag: json['tag'] as String?,
       downloadOrigImage: json['downloadOrigImage'] as bool?,
+      showKey: json['showKey'] as String?,
     );
 
 Map<String, dynamic> _$GalleryTaskToJson(GalleryTask instance) =>
@@ -3380,4 +3596,5 @@ Map<String, dynamic> _$GalleryTaskToJson(GalleryTask instance) =>
       'jsonString': instance.jsonString,
       'tag': instance.tag,
       'downloadOrigImage': instance.downloadOrigImage,
+      'showKey': instance.showKey,
     };
