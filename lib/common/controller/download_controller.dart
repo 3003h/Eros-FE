@@ -12,6 +12,7 @@ import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/component/quene_task/quene_task.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
+import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
@@ -1268,6 +1269,15 @@ class DownloadController extends GetxController {
           } on EhError catch (e) {
             if (e.type == EhErrorType.image509) {
               show509Toast();
+              _galleryTaskPausedAll();
+              dState.executor.close();
+              resetConcurrency();
+            }
+            rethrow;
+          } on HttpException catch (e) {
+            logger.e('$e');
+            if (e is BadRequestException && e.code == 429) {
+              show429Toast();
               _galleryTaskPausedAll();
               dState.executor.close();
               resetConcurrency();

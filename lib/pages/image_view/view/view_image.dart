@@ -6,6 +6,7 @@ import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/pages/image_view/controller/view_state.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:fehviewer/utils/utility.dart';
@@ -289,6 +290,13 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 _errInfo = ehErr.type.toString();
                 if (ehErr.type == EhErrorType.image509) {
                   return ViewErr509(ser: widget.imageSer);
+                }
+              } else if (snapshot.error is HttpException) {
+                final HttpException e = snapshot.error as HttpException;
+                if (e is BadRequestException && e.code == 429) {
+                  return ViewErr429(ser: widget.imageSer);
+                } else {
+                  _errInfo = e.message;
                 }
               } else {
                 logger.e(
@@ -595,6 +603,12 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       _errInfo = ehErr.type.toString();
       if (ehErr.type == EhErrorType.image509) {
         return ViewErr509(ser: widget.imageSer);
+      }
+    } else if (e is HttpException) {
+      if (e is BadRequestException && e.code == 429) {
+        return ViewErr429(ser: widget.imageSer);
+      } else {
+        _errInfo = e.message;
       }
     } else {
       _errInfo = e.toString();

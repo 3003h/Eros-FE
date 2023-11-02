@@ -75,6 +75,55 @@ class ViewErr509 extends StatelessWidget {
   }
 }
 
+class ViewErr429 extends StatelessWidget {
+  const ViewErr429({Key? key, required this.ser}) : super(key: key);
+  final int ser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 100,
+            width: 100,
+            constraints: const BoxConstraints(
+              maxHeight: 100,
+              maxWidth: 100,
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  '429 - Too Many Requests',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: CupertinoColors.systemPink.darkColor,
+                  ),
+                ),
+                Expanded(
+                  child: Icon(
+                    FontAwesomeIcons.roadBarrier,
+                    size: 77,
+                    color: CupertinoColors.systemPink.darkColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            '$ser',
+            style: const TextStyle(
+                color: CupertinoColors.secondarySystemBackground),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class ViewAD extends StatelessWidget {
   const ViewAD({Key? key, required this.ser}) : super(key: key);
   final int ser;

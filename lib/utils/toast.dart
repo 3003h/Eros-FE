@@ -97,6 +97,47 @@ void show509Toast() {
   );
 }
 
+bool _isShowing429 = false;
+void show429Toast() {
+  if (_isShowing429) {
+    return;
+  }
+  _isShowing429 = true;
+  final Widget widget = ClipRect(
+    child: CupertinoTheme(
+      data: Get.find<ThemeService>().themeData!,
+      child: CupertinoPopupSurface(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                // LineIcons.toriiGate,
+                FontAwesomeIcons.roadBarrier,
+                size: 80,
+                color: CupertinoColors.systemPink,
+              ),
+              Text(
+                '429, Too Many Requests',
+                textScaleFactor: 0.8,
+                style: CupertinoTheme.of(Get.context!).textTheme.textStyle,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+
+  oktoast.showToastWidget(
+    widget,
+    position: oktoast.ToastPosition.center,
+    onDismiss: () => _isShowing509 = false,
+    duration: 3.seconds,
+  );
+}
+
 void showActionToast(String msg, {IconData? icon, VoidCallback? onPressed}) {
   SmartDialog.show(
     alignment: Alignment.bottomCenter,
