@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/fehviewer.dart';
 
 GalleryImage parserMpvImageDispatch(String json) {
-  // print('====================== $json');
-  final rult = jsonDecode(json) as Map<String, dynamic>;
-  final String imageUrl = rult['i'] as String;
-  final sourceId = rult['s'];
-  final width = rult['xres'] as String;
-  final height = rult['yres'] as String;
+  logger.d('================MPV json\n$json');
+  final result = jsonDecode(json) as Map<String, dynamic>;
+  final String imageUrl = '${result['i']}';
+  final sourceId = '${result['s']}';
+  final width = '${result['xres']}';
+  final height = '${result['yres']}';
 
-  final lo = rult['yres'] as String;
+  final lo = '${result['yres']}';
 
-  final originImageUrl = rult['lf'] as String;
+  final originImageUrl = '${result['lf']}';
 
   final regExpGalleryPageUrl = RegExp(r'/s/([0-9a-z]+)/(\d+)-(\d+)');
   final match = regExpGalleryPageUrl.firstMatch(lo);
@@ -23,7 +23,7 @@ GalleryImage parserMpvImageDispatch(String json) {
     ser: int.parse(ser),
     gid: gid,
     imageUrl: imageUrl,
-    sourceId: '$sourceId',
+    sourceId: sourceId,
     imageWidth: double.parse(width),
     imageHeight: double.parse(height),
     originImageUrl: originImageUrl,

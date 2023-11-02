@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:fehviewer/utils/logger.dart';
+
 typedef WorkTask = Function({String? name});
 
 class QueueTask {
@@ -44,7 +46,7 @@ class QueueTask {
       _TaskInfo _taskInfo = _queue.removeFirst();
       if (_taskInfo.taskCancelToken != null &&
           _taskInfo.taskCancelToken!.isCancelled) {
-        print('task ${_taskInfo.taskName} isCancelled');
+        logger.d('task ${_taskInfo.taskName} isCancelled');
         continue;
       }
 

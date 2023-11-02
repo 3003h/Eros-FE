@@ -325,7 +325,8 @@ class ImageDispatchTransformer extends HttpTransformer {
   FutureOr<DioHttpResponse<GalleryImage>> parse(
       Response<dynamic> response) async {
     final json = response.data as String;
-    final GalleryImage image = await compute(parserMpvImageDispatch, json);
+    // final GalleryImage image = await compute(parserMpvImageDispatch, json);
+    final GalleryImage image = parserMpvImageDispatch(json);
     return DioHttpResponse<GalleryImage>.success(image);
   }
 }

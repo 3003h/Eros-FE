@@ -17,7 +17,6 @@ Widget _buildSelectedProfileItem(BuildContext context,
       actionMap: actionMap,
       initVal: _controller.ehSetting.profileSelected ?? '',
       onValueChanged: (val) {
-        print(val);
         if (val != _controller.ehSetting.profileSelected) {
           _controller.changeProfile(val);
         }

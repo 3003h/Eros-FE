@@ -396,6 +396,6 @@ void flutterDownloadCallback(
   final SendPort sendPort =
       IsolateNameServer.lookupPortByName(flutterDownloadPortName)!;
   // print('_downloadCallback ${sendPort.runtimeType}');
-  print('$id $status $progress%');
+  logger.d('$id $status $progress%');
   sendPort.send([id, status, progress]);
 }

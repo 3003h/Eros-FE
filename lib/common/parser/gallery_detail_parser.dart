@@ -312,6 +312,9 @@ Future<GalleryProvider> parseGalleryDetail(String response) async {
   final _galleryComments = parseGalleryComment(document);
   final _chapter = _parseChapter(_galleryComments);
 
+  // eventpane
+  final _eventpane = document.querySelector('#eventpane')?.text ?? '';
+
   final galleryProvider = GalleryProvider(
     imgUrl: _imageUrl,
     tagGroup: await parseGalleryTags(document),

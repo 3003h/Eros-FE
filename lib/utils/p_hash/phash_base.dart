@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart';
 
@@ -33,7 +34,7 @@ BigInt calculatePHash(Image image) {
     final BigInt pHash = _calcPhash(pixelList);
     return pHash;
   } catch (e, s) {
-    print('^^^^ calculatePHash error $e\n$s');
+    logger.e('^^^^ calculatePHash error $e\n$s');
     rethrow;
   }
 }
@@ -43,7 +44,6 @@ BigInt calculateFromList(List<int> data) {
 }
 
 BigInt calculateFromFile(String path) {
-  // print('^^^^ calculateFromFile $path');
   final imageFile = File(path);
   final List<int> data = imageFile.readAsBytesSync();
   return calculatePHash(getValidImage(data));
@@ -75,7 +75,6 @@ List<List<Pixel>> _unit8ListToMatrix(List<Pixel> pixelList) {
 
 /// Helper function which computes a binary hash of a [List] of [Pixel]
 BigInt _calcPhash(List<Pixel> pixelList) {
-  // print('^^^^ _calcPhash ${pixelList.length}');
   String bitString = '';
   final matrix = List<List<num>>.filled(32, []);
   final row = List<num>.filled(32, 0);
@@ -84,13 +83,9 @@ BigInt _calcPhash(List<Pixel> pixelList) {
 
   final data = _unit8ListToMatrix(pixelList); //returns a matrix used for DCT
 
-  // print('^^^^ data ${data.map((e) => e.length).toList()}}');
-
   for (int y = 0; y < _kSize; y++) {
     for (int x = 0; x < _kSize; x++) {
-      // print('^^^^ color $x $y');
       final color = data[x][y];
-      // print('^^^^ color $x $y $color');
       row[x] = getLuminanceRgb(color._red, color._green, color._blue);
     }
 
@@ -104,8 +99,6 @@ BigInt _calcPhash(List<Pixel> pixelList) {
 
     matrix[x] = _calculateDCT(col);
   }
-
-  // print('^^^^ matrix ${matrix.length} ${matrix[0].length}');
 
   // Extract the top 8x8 pixels.
   var pixels = <num>[];
@@ -127,8 +120,6 @@ BigInt _calcPhash(List<Pixel> pixelList) {
   bits.forEach((element) {
     bitString += (1 * element).toString();
   });
-
-  // print('^^^^ bitString $bitString');
 
   return BigInt.parse(bitString, radix: 2);
 }
@@ -189,8 +180,6 @@ Image getValidImage(List<int> bytes) {
   if (image == null) {
     throw const FormatException('image null');
   }
-
-  // print('^^^^ image width: ${image.width}, height: ${image.height}');
 
   return image;
 }

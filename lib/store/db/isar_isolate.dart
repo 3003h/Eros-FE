@@ -86,8 +86,8 @@ Future<void> iPutImageTask(GalleryImageTask imageTask) async {
 Future<void> iUpdateImageTaskStatus((int, int, int) para) async {
   final (gid, ser, status) = para;
   final isar = await openIsar();
-  final tasks = isar.galleryImageTasks.getByGidSerSync(gid, ser);
   isar.writeTxnSync(() {
+    final tasks = isar.galleryImageTasks.getByGidSerSync(gid, ser);
     if (tasks != null) {
       isar.galleryImageTasks.putByGidSerSync(tasks.copyWith(status: status));
     }
@@ -142,7 +142,6 @@ Future<List<GalleryImageTask>> iOnDownloadComplete((int, int, int) para) async {
   final isar = await openIsar();
   return isar.writeTxnSync(() {
     final tasks = isar.galleryImageTasks.getByGidSerSync(gid, ser);
-    print('tasks $tasks');
     if (tasks != null) {
       isar.galleryImageTasks.putByGidSerSync(tasks.copyWith(status: status));
     }
