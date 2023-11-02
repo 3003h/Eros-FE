@@ -143,7 +143,7 @@ class NavigatorUtil {
         _gid = matcher?[1];
       } else if (regGalleryPageUrl.hasMatch(url)) {
         // url为画廊某一页的链接
-        final _image = await fetchImageInfo(url.linkRedirect);
+        final _image = await fetchImageInfoByApi(url.linkRedirect);
 
         if (_image == null) {
           return;

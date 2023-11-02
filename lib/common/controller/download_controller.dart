@@ -812,7 +812,7 @@ class DownloadController extends GetxController {
   }) async {
     final String? _sourceId = changeSource ? sourceId : '';
 
-    final GalleryImage? _image = await fetchImageInfo(
+    final GalleryImage? _image = await fetchImageInfoByApi(
       href,
       refresh: changeSource,
       sourceId: _sourceId,
@@ -832,6 +832,7 @@ class DownloadController extends GetxController {
       imageHeight: _image.imageHeight,
       originImageUrl: _image.originImageUrl,
       filename: _image.filename,
+      showKey: _image.showKey,
     );
 
     return _imageCopyWith;

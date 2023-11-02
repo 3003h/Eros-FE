@@ -317,7 +317,16 @@ class GalleryPageController extends GetxController
         gState.images.indexWhere((GalleryImage element) => element.ser == ser);
     if (_index != null && _index >= 0) {
       final image = imageCallback(gState.images[_index]);
-      // logger.d('${image.toJson()}');
+
+      // update showKey
+      if (image.showKey != null &&
+          image.showKey != gState.galleryProvider?.showKey) {
+        logger.d('update showKey ${image.showKey}');
+        gState.galleryProvider = gState.galleryProvider?.copyWith(
+          showKey: image.showKey,
+        );
+      }
+
       gState.images[_index] = image;
       return image;
     }
@@ -537,6 +546,7 @@ class GalleryPageController extends GetxController
     bool changeSource = false,
     bool refresh = false,
   }) async {
+    logger.d('fetchAndParserImageInfo $itemSer');
     try {
       /// 当前缩略图对象
       final GalleryImage? _curImages = gState.imageMap[itemSer];
@@ -557,6 +567,8 @@ class GalleryPageController extends GetxController
         final String? _sourceId =
             changeSource ? gState.imageMap[itemSer]?.sourceId : '';
 
+        final _showKey = gState.galleryProvider?.showKey;
+
         logger.t(
             'ser:$itemSer ,href: ${gState.imageMap[itemSer]?.href} , _sourceId: $_sourceId');
 
@@ -568,15 +580,22 @@ class GalleryPageController extends GetxController
                 path: gState.imageMap[itemSer]?.href ?? '');
           }
 
-          // 加载当前页信息
-          final GalleryImage? _image = await fetchImageInfo(
+          // 请求当前页信息
+          final GalleryImage? _image = await fetchImageInfoByApi(
             gState.imageMap[itemSer]?.href ?? '',
             sourceId: _sourceId,
             refresh: changeSource || refresh,
-            debugLabel: 'fetchAndParserImageInfo 加载当前页信息',
+            showKey: _showKey,
           );
 
-          logger.t('fetch _image ${_image?.toJson()}');
+          logger.d('fetch _image ${_image?.toJson()}');
+
+          if (_image?.showKey != null && _image?.showKey != _showKey) {
+            logger.d('update showKey ${_image?.showKey}');
+            gState.galleryProvider = gState.galleryProvider?.copyWith(
+              showKey: _image?.showKey,
+            );
+          }
 
           // 换源加载
           if (changeSource) {
@@ -598,6 +617,7 @@ class GalleryPageController extends GetxController
             errorInfo: '',
             tempPath: '',
             completeCache: false,
+            showKey: _image.showKey,
           );
 
           return uptImageBySer(ser: itemSer, imageCallback: (image) => __image);

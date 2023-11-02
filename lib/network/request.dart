@@ -232,7 +232,60 @@ Future<GalleryProvider?> getGalleryDetail({
   }
 }
 
-Future<GalleryImage?> fetchImageInfo(
+Future<GalleryImage?> fetchImageInfoByApi(
+  String href, {
+  String? showKey,
+  bool refresh = false,
+  String? sourceId,
+  CancelToken? cancelToken,
+}) async {
+  // 如果 showKey 为空，直接使用常规请求，解析html
+  if (showKey == null || showKey.isEmpty) {
+    logger.d('fetchImageInfoByApi: showKey is null');
+    final _image = await _fetchImageInfo(
+      href,
+      refresh: refresh,
+      sourceId: sourceId,
+      cancelToken: cancelToken,
+    );
+    return _image;
+  }
+
+  logger.d(
+      'fetchImageInfoByApi: href $href, refresh $refresh, sourceId $sourceId');
+
+  String mpvSer = '1';
+  final isMpv = regGalleryMpvPageUrl.hasMatch(href);
+  if (isMpv) {
+    mpvSer = regGalleryMpvPageUrl.firstMatch(href)?.group(3) ?? '1';
+  }
+
+  final RegExp regExp =
+      RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
+  final RegExpMatch? regRult = regExp.firstMatch(href);
+  final int gid = int.parse(regRult?.group(2) ?? '0');
+  final String imgkey = regRult?.group(1) ?? '';
+  final int page = int.parse(regRult?.group(3) ?? '0');
+
+  final Map<String, Object> reqMap = {
+    'method': 'showpage',
+    'gid': gid,
+    'page': page,
+    'imgkey': imgkey,
+    'showkey': showKey,
+  };
+
+  // const url = '/api.php';
+  // DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
+  final String reqJsonStr = jsonEncode(reqMap);
+
+  // 请求api
+  final response = await postEhApi(reqJsonStr, forceRefresh: refresh);
+
+  return paraShowPage(response);
+}
+
+Future<GalleryImage?> _fetchImageInfo(
   String href, {
   bool refresh = false,
   String? sourceId,
@@ -968,7 +1021,10 @@ Future<String> postEhApi(
   bool forceRefresh = true,
 }) async {
   const String url = '/api.php';
-  DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
+  DioHttpClient dioHttpClient = DioHttpClient(
+      dioConfig: globalDioConfig.copyWith(
+    contentType: Headers.jsonContentType,
+  ));
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
     data: data,

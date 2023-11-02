@@ -169,15 +169,17 @@ class EhImageProvider extends ImageProvider<EhImageProvider> {
                     cumulativeBytesLoaded: count,
                     expectedTotalBytes: total));
               });
-        } on DioError catch (e) {
+        } on DioException catch (e) {
           if (e.response?.statusCode == 403) {
             logger
                 .d('403 ${key.pageInfo.gid}.${key.pageInfo.ser}下载链接已经失效 需要更新');
-            final imageFetched = await _fetchImageInfo(galleryImage.href!,
-                itemSer: key.pageInfo.ser,
-                image: galleryImage,
-                gid: key.pageInfo.gid,
-                changeSource: true);
+            final imageFetched = await _fetchImageInfo(
+              galleryImage.href!,
+              itemSer: key.pageInfo.ser,
+              image: galleryImage,
+              gid: key.pageInfo.gid,
+              changeSource: true,
+            );
             logger.d('imageFetched... ${imageFetched.toJson()}');
             final imageUrl = downloadOrigImage
                 ? imageFetched.originImageUrl
@@ -234,7 +236,7 @@ Future<GalleryImage> _fetchImageInfo(
 }) async {
   final String? _sourceId = changeSource ? sourceId : '';
 
-  final GalleryImage? _image = await fetchImageInfo(
+  final GalleryImage? _image = await fetchImageInfoByApi(
     href,
     refresh: changeSource,
     sourceId: _sourceId,
@@ -254,6 +256,7 @@ Future<GalleryImage> _fetchImageInfo(
     imageHeight: _image.imageHeight,
     originImageUrl: _image.originImageUrl,
     filename: _image.filename,
+    showKey: _image.showKey,
   );
 
   return _imageCopyWith;

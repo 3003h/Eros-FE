@@ -24,7 +24,7 @@ class ImagePageView extends GetView<ViewExtController> {
     final imageView = GetBuilder<ViewExtController>(
       id: idSlidePage,
       builder: (logic) {
-        logger.d('logic.pageViewType ${logic.pageViewType}');
+        logger.t('logic.pageViewType ${logic.pageViewType}');
 
         if (logic.vState.columnMode != ViewColumnMode.single) {
           return _buildDoubleView(logic, context);

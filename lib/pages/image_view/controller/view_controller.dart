@@ -235,6 +235,7 @@ class ViewExtController extends GetxController {
         imageMap: vState.imageMap,
         itemSer: vState.currentItemIndex,
         max: _ehSettingService.preloadImage.value,
+        showKey: vState.pageState?.galleryProvider?.showKey,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
@@ -376,6 +377,7 @@ class ViewExtController extends GetxController {
         imageMap: _galleryPageStat?.imageMap,
         itemSer: vState.currentItemIndex,
         max: _ehSettingService.preloadImage.value,
+        showKey: vState.pageState?.galleryProvider?.showKey,
       )
           .listen((GalleryImage? event) {
         if (event != null) {
@@ -559,6 +561,7 @@ class ViewExtController extends GetxController {
         imageMap: _galleryPageStat?.imageMap,
         itemSer: itemSer,
         max: _ehSettingService.preloadImage.value,
+        showKey: vState.pageState?.galleryProvider?.showKey,
       )
           .listen((GalleryImage? event) {
         if (event != null) {

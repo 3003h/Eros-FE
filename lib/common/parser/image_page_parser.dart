@@ -1,5 +1,6 @@
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/utils/logger.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape.dart';
@@ -57,7 +58,12 @@ GalleryImage paraImage(String htmlText) {
     originImageUrl =
         '${htmlUnescape.convert(match!.group(1)!)}fullimg${htmlUnescape.convert(match.group(2)!)}';
   }
-  // print('====================>$originImageUrl');
+  logger.t('========>$originImageUrl');
+
+  // showKey 用于api请求后续图片 script中
+  final String showKey =
+      RegExp(r'showkey="(.*?)"').firstMatch(htmlText)?.group(1) ?? '';
+  logger.t('showKey $showKey');
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
     imageUrl: imageUrl,
@@ -69,6 +75,7 @@ GalleryImage paraImage(String htmlText) {
     ser: ser,
     originImageUrl: originImageUrl,
     filename: filename,
+    showKey: showKey,
   );
 
   return _reImage;

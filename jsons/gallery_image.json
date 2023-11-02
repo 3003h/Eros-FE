@@ -26,5 +26,6 @@
   "downloadProcess?": 1.0,
   "errorInfo?": "",
   "tempPath?": "",
-  "filename?": ""
+  "filename?": "",
+  "showKey?": ""
 }

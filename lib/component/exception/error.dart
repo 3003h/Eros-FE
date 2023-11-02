@@ -10,6 +10,8 @@ enum EhErrorType {
   image509,
 
   imageHide,
+
+  parse,
 }
 
 class EhError implements Exception {

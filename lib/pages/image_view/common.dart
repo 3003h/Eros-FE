@@ -57,6 +57,7 @@ class GalleryPara {
     required Map<int, GalleryImage>? imageMap,
     required int itemSer,
     required int max,
+    String? showKey,
   }) async* {
     if (imageMap == null) {
       return;
@@ -95,16 +96,19 @@ class GalleryPara {
         final String _href = imageMap[_ser]?.href ?? '';
 
         // paraImageLageInfoFromHtml
-        final GalleryImage? _imageFromPage = await fetchImageInfo(_href);
+        // final GalleryImage? _imageFetch = await fetchImageInfo(_href);
+        final GalleryImage? _imageFetch =
+            await fetchImageInfoByApi(_href, showKey: showKey);
 
-        _url = _imageFromPage?.imageUrl ?? '';
+        _url = _imageFetch?.imageUrl ?? '';
 
         _image = _image.copyWith(
           imageUrl: _url,
-          imageWidth: _imageFromPage?.imageWidth,
-          imageHeight: _imageFromPage?.imageHeight,
-          originImageUrl: _imageFromPage?.originImageUrl,
-          filename: _imageFromPage?.filename,
+          imageWidth: _imageFetch?.imageWidth,
+          imageHeight: _imageFetch?.imageHeight,
+          originImageUrl: _imageFetch?.originImageUrl,
+          filename: _imageFetch?.filename,
+          showKey: _imageFetch?.showKey,
         );
 
         _processingSerSet.remove(_ser);

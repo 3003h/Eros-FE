@@ -185,7 +185,8 @@ class GalleryMpvImageHttpTransformer extends HttpTransformer {
   FutureOr<DioHttpResponse<GalleryImage>> parse(
       Response<dynamic> response) async {
     final html = response.data as String;
-    final mpvPage = await compute(parserMpvPage, html);
+    // final mpvPage = await compute(parserMpvPage, html);
+    final mpvPage = parserMpvPage(html);
 
     if (mpvPage.mpvkey == null || mpvPage.mpvkey!.isEmpty) {
       return DioHttpResponse<GalleryImage>.failure(
