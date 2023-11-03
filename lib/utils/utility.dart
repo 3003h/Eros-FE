@@ -7,6 +7,7 @@ import 'package:fehviewer/network/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -33,6 +34,48 @@ int fastHash(String string) {
   }
 
   return hash;
+}
+
+int downloadStatusToInt(DownloadTaskStatus status) {
+  switch (status) {
+    case DownloadTaskStatus.undefined:
+      return 0;
+    case DownloadTaskStatus.enqueued:
+      return 1;
+    case DownloadTaskStatus.running:
+      return 2;
+    case DownloadTaskStatus.complete:
+      return 3;
+    case DownloadTaskStatus.failed:
+      return 4;
+    case DownloadTaskStatus.canceled:
+      return 5;
+    case DownloadTaskStatus.paused:
+      return 6;
+    default:
+      return 0;
+  }
+}
+
+DownloadTaskStatus intToDownloadStatus(int status) {
+  switch (status) {
+    case 0:
+      return DownloadTaskStatus.undefined;
+    case 1:
+      return DownloadTaskStatus.enqueued;
+    case 2:
+      return DownloadTaskStatus.running;
+    case 3:
+      return DownloadTaskStatus.complete;
+    case 4:
+      return DownloadTaskStatus.failed;
+    case 5:
+      return DownloadTaskStatus.canceled;
+    case 6:
+      return DownloadTaskStatus.paused;
+    default:
+      return DownloadTaskStatus.undefined;
+  }
 }
 
 // 请求完全读写权限

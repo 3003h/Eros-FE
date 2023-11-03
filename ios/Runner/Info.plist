@@ -55,17 +55,18 @@
 		<true/>
 	</dict>
 	<key>NSFaceIDUsageDescription</key>
-	<string>用于锁定和验证app</string>
+	<string>Unlock app with Face ID</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>用于保存图片 add photos</string>
+	<string>Save image to photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>用于保存图片</string>
+	<string>Load image from photo library</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
 		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>

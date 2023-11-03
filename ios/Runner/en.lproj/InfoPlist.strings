@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 3003n on 2023/11/4.
+  
+*/
+"NSFaceIDUsageDescription" = "Unlock app with Face ID";
+"NSPhotoLibraryAddUsageDescription" = "Save image to photo library";
+"NSPhotoLibraryUsageDescription" = "Load image from photo library";
+
+"FDAllFilesDownloadedMessage" = "All files downloaded";

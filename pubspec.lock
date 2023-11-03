@@ -798,10 +798,10 @@ packages:
     description:
       path: "."
       ref: dev
-      resolved-ref: "55d83f9190003727a9cca354438a21049e8bc075"
+      resolved-ref: "3f99d47fcd66288c9d3b8c61f695fc014ad1668e"
       url: "https://github.com/honjow/flutter_downloader.git"
     source: git
-    version: "1.8.0+1"
+    version: "1.11.4"
   flutter_easyrefresh:
     dependency: "direct main"
     description:
@@ -940,18 +940,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_slidable
-      sha256: cc4231579e3eae41ae166660df717f4bad1359c87f4a4322ad8ba1befeb3d2be
+      sha256: "19ed4813003a6ff4e9c6bcce37e792a2a358919d7603b2b31ff200229191e44c"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   flutter_smart_dialog:
     dependency: "direct main"
     description:
       name: flutter_smart_dialog
-      sha256: "0449cbcc6299877e98e0b4c8d5e3baf634012840531ede4b2975e81f26e90e8e"
+      sha256: a666d56e3348aae0a85cf3d19c1b5b18799f39e0568023f991aacd83d5d7c441
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.9.5"
+    version: "4.9.5+1"
   flutter_socks_proxy:
     dependency: "direct main"
     description:
@@ -1345,10 +1345,10 @@ packages:
     dependency: transitive
     description:
       name: local_auth_ios
-      sha256: "26a8d1ad0b4ef6f861d29921be8383000fda952e323a5b6752cf82ca9cf9a7a9"
+      sha256: "8293faf72ef0ac4710f209edd03916c2d4c1eeab0483bdcf9b2e659c2f7d737b"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.4"
+    version: "1.1.5"
   local_auth_platform_interface:
     dependency: transitive
     description:

@@ -123,9 +123,9 @@ class DownloadViewController extends GetxController {
     final int? _oriStatus = archiverTasks[index].status;
 
     String? _newTaskId;
-    if (_oriStatus == DownloadTaskStatus.paused.value) {
+    if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.paused)) {
       _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskId ?? '');
-    } else if (_oriStatus == DownloadTaskStatus.failed.value) {
+    } else if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.failed)) {
       _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskId ?? '');
     }
 
@@ -150,9 +150,9 @@ class DownloadViewController extends GetxController {
     final int? _oriStatus = archiverTasks[index].status;
 
     String? _newTaskId;
-    if (_oriStatus == DownloadTaskStatus.paused.value) {
+    if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.paused)) {
       _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
-    } else if (_oriStatus == DownloadTaskStatus.failed.value) {
+    } else if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.failed)) {
       _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
     }
 

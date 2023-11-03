@@ -71,7 +71,7 @@ class ArchiverController extends GetxController
         dlcheck: dlcheck,
       );
       logger.d('archiver downloadLoacal $_url');
-      _downloadController.downloadArchiverFile(
+      await _downloadController.downloadArchiverFile(
         gid: _pageState.galleryProvider?.gid ?? '0',
         title: _pageState.mainTitle,
         dlType: dltype,
@@ -79,8 +79,10 @@ class ArchiverController extends GetxController
         imgUrl: _pageState.galleryProvider?.imgUrl,
         galleryUrl: _pageState.galleryProvider?.url,
       );
-    } catch (e) {
+    } catch (e, stack) {
       showToast('$e');
+      logger.e('$e\n$stack');
+      rethrow;
     }
   }
 }

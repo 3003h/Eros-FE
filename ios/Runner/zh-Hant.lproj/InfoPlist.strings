@@ -1,0 +1,12 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 3003n on 2023/11/4.
+  
+*/
+"NSFaceIDUsageDescription" = "使用 FaceID 进行身份验证";
+"NSPhotoLibraryAddUsageDescription" = "保存图片到相册";
+"NSPhotoLibraryUsageDescription" = "访问相册";
+
+"FDAllFilesDownloadedMessage" = "所有文件下载完成";

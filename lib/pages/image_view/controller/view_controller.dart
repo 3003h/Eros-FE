@@ -591,7 +591,8 @@ class ViewExtController extends GetxController {
           .sorted((t1, t2) => (t1.type ?? '').compareTo(t2.type ?? ''))
           .where((element) =>
               element.gid == _galleryPageStat?.gid &&
-              element.status == DownloadTaskStatus.complete.value)
+              element.status ==
+                  downloadStatusToInt(DownloadTaskStatus.complete))
           .toList()
           .firstOrNull;
 
