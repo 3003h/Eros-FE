@@ -7,7 +7,6 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/widget/system_ui_overlay.dart';
@@ -21,75 +20,76 @@ import 'package:oktoast/oktoast.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'get_init.dart';
-import 'network/app_dio/pdio.dart';
 import 'widget/desktop.dart';
 
 Future<void> main() async {
   // BindingBase.debugZoneErrorsAreFatal = true;
-  runZonedGuarded<Future<void>>(() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    final dsn = await getSentryDsn();
-    if (dsn != null && dsn.isNotEmpty) {
-      await SentryFlutter.init(
-        (SentryFlutterOptions options) {
-          options
-            ..dsn = dsn
-            ..debug = false
-            ..diagnosticLevel = SentryLevel.warning;
-        },
-      );
-    }
+  // runZonedGuarded<Future<void>>(() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final dsn = await getSentryDsn();
 
-    Get.lazyPut(() => LogService(), fenix: true);
-    Get.lazyPut(() => GStore());
-    await Global.init();
-    getinit();
-    Global.proxyInit();
+  Get.lazyPut(() => LogService(), fenix: true);
+  Get.lazyPut(() => GStore());
+  await Global.init();
+  getinit();
+  Global.proxyInit();
 
-    if (Get.find<EhSettingService>().debugMode || kDebugMode) {
-      Logger.level = Level.debug;
-      logger.t('Level.debug');
-    } else {
-      Logger.level = Level.error;
-    }
-    resetLogLevel();
-    updateTagTranslate();
+  if (Get.find<EhSettingService>().debugMode || kDebugMode) {
+    Logger.level = Level.debug;
+    logger.t('Level.debug');
+  } else {
+    Logger.level = Level.error;
+  }
+  resetLogLevel();
+  updateTagTranslate();
 
+  if (dsn != null && dsn.isNotEmpty) {
+    await SentryFlutter.init(
+      (SentryFlutterOptions options) {
+        options
+          ..dsn = dsn
+          // ..debug = kDebugMode
+          ..diagnosticLevel = SentryLevel.warning;
+      },
+      appRunner: () => runApp(MyApp()),
+    );
+  } else {
     runApp(MyApp());
+  }
 
-    if (GetPlatform.isDesktop) {
-      doWhenWindowReady(() {
-        const minSize = Size(400, 400);
-        appWindow.minSize = minSize;
-        // appWindow.size = initialSize;
-        appWindow.alignment = Alignment.center;
-        appWindow.title = L10n.current.app_title;
-        appWindow.show();
-      });
+  if (GetPlatform.isDesktop) {
+    doWhenWindowReady(() {
+      const minSize = Size(400, 400);
+      appWindow.minSize = minSize;
+      // appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center;
+      appWindow.title = L10n.current.app_title;
+      appWindow.show();
+    });
 
-      // setWindowTitle(L10n.of(Get.context!).app_title);
-    }
-  }, (Object error, StackTrace stackTrace) async {
-    if (error is EhError && error.type == EhErrorType.image509) {
-      debugPrint('EhErrorType.image509');
-      return;
-    }
-    if (error is NetworkException) {
-      debugPrint('NetworkException');
-      return;
-    }
-    if (error is CancelException) {
-      debugPrint('CancelException');
-      return;
-    }
-
-    debugPrint(
-        'runZonedGuarded: Caught error in my root zone.\n$error\n$stackTrace');
-
-    if (!kDebugMode) {
-      await Sentry.captureException(error, stackTrace: stackTrace);
-    }
-  });
+    // setWindowTitle(L10n.of(Get.context!).app_title);
+  }
+  // }, (Object error, StackTrace stackTrace) async {
+  //   if (error is EhError && error.type == EhErrorType.image509) {
+  //     debugPrint('EhErrorType.image509');
+  //     return;
+  //   }
+  //   if (error is NetworkException) {
+  //     debugPrint('NetworkException');
+  //     return;
+  //   }
+  //   if (error is CancelException) {
+  //     debugPrint('CancelException');
+  //     return;
+  //   }
+  //
+  //   debugPrint(
+  //       'runZonedGuarded: Caught error in my root zone.\n$error\n$stackTrace');
+  //
+  //   if (!kDebugMode) {
+  //     await Sentry.captureException(error, stackTrace: stackTrace);
+  //   }
+  // });
 }
 
 class MyApp extends StatefulWidget {
