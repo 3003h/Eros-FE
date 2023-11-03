@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fehviewer/common/controller/history_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/controller/fav_controller.dart';
 import 'package:fehviewer/pages/item/item_base.dart';
@@ -121,8 +122,9 @@ class GalleryItemController extends GetxController {
   }
 
   void _updatePressedColor() {
-    colorTap.value = CupertinoDynamicColor.resolve(
-        CupertinoColors.systemGrey4, Get.context!);
+    // colorTap.value = CupertinoDynamicColor.resolve(
+    //     CupertinoColors.systemGrey4, Get.context!);
+    colorTap.value = getPressedColor(Get.context!);
   }
 
   set localFav(bool value) {

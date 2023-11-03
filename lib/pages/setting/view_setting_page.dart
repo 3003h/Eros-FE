@@ -265,8 +265,7 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
       width: 70,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6.0),
-        color:
-            CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context),
+        color: getPressedColor(context),
       ),
       alignment: Alignment.center,
       child: Text(

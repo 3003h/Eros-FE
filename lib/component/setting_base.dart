@@ -16,6 +16,10 @@ const double kDividerHeight = 1.0;
 
 const double kSummaryFontSize = 12.0;
 
+Color getPressedColor(BuildContext context) {
+  return CupertinoDynamicColor.resolve(CupertinoColors.systemGrey5, context);
+}
+
 class BarsItem extends StatelessWidget {
   const BarsItem({
     Key? key,
@@ -264,8 +268,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
 
   void _updatePressedColor() {
     setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+      _color = getPressedColor(context);
     });
   }
 }
@@ -406,8 +409,7 @@ class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
 
   void _updatePressedColor() {
     setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+      _color = getPressedColor(context);
     });
   }
 }
@@ -556,8 +558,7 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
 
   void _updatePressedColor() {
     setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+      _color = getPressedColor(context);
     });
   }
 }
@@ -681,8 +682,7 @@ class _TextItemState extends State<TextItem> {
 
   void _updatePressedColor() {
     setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+      _color = getPressedColor(context);
     });
   }
 }

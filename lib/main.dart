@@ -78,6 +78,11 @@ Future<void> main() async {
       debugPrint('NetworkException');
       return;
     }
+    if (error is CancelException) {
+      debugPrint('CancelException');
+      return;
+    }
+
     debugPrint(
         'runZonedGuarded: Caught error in my root zone.\n$error\n$stackTrace');
 

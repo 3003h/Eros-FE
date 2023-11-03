@@ -166,8 +166,7 @@ class _SingleSelectItemState extends State<SingleSelectItem> {
 
   void _updatePressedColor() {
     setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+      _color = getPressedColor(context);
     });
   }
 

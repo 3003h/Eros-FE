@@ -216,8 +216,7 @@ class _UserTagItemState extends State<UserTagItem> {
 
   void _updatePressedColor() {
     setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey4, context);
+      _color = getPressedColor(context);
     });
   }
 }

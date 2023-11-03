@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/route/second_observer.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
@@ -121,8 +122,7 @@ class _SettingItems extends State<SettingItems> {
 
   void _updatePressedColor() {
     setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(CupertinoColors.systemGrey2, context);
+      _color = getPressedColor(context);
     });
   }
 
