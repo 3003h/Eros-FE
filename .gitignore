@@ -43,9 +43,9 @@ app.*.map.json
 # Exceptions to above rules.
 /packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 /ios/build/
-/ios/Runner/GoogleService-Info.plist
-/ios/firebase_app_id_file.json
-/android/app/google-services.json
+#/ios/Runner/GoogleService-Info.plist
+#/ios/firebase_app_id_file.json
+#/android/app/google-services.json
 /android/app/asd.json
 
 #*.g.dart
@@ -57,9 +57,9 @@ app.*.map.json
 /assets/openl.json
 /assets/sentry.json
 
-GoogleService-Info.plist
-google-service.json
-/lib/firebase_options.dart
+#GoogleService-Info.plist
+#google-service.json
+#/lib/firebase_options.dart
 android/app/keystore.jks
 
 #/pubspec.lock

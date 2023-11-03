@@ -186,6 +186,8 @@ dependencies:
   flutter_widget_from_html_core: ^0.14.4
   quiver: ^3.1.0 # 工具库
   native_dio_adapter: ^1.0.0+2
+  firebase_analytics: ^10.6.3
+  firebase_crashlytics: ^3.4.3
 
 dev_dependencies:
   # flutter pub run build_runner build --delete-conflicting-outputs

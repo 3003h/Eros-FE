@@ -96,6 +96,6 @@ ehentai译文数据库
 
 ## 编译相关
 
-flutter版本为最新release版本 \
-`/lib/config/config.dart` 文件为存放敏感信息数据的文件，github里看到是加密处理的 \
-如果需要自行编译的话，复制 `/lib/config.dart.sample` 为 `/lib/config/config.dart` 进行操作
+如果需要自行编译的话 \
+复制 `lib/config.dart.sample` 为 `lib/config/config.dart` \
+复制 `lib/firebase_options_sample.dart` 为 `lib/firebase_options.dart`

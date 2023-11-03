@@ -91,4 +91,5 @@ Translation
 ## About compiling
 
 flutter version is the latest release version \
-rename `/lib/config/config.dart.sample` to `/lib/config/config.dart`
+rename `lib/config/config.dart.sample` to `lib/config/config.dart` \
+rename `lib/firebase_options_sample.dart` to `lib/firebase_options.dart`

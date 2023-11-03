@@ -16,6 +16,8 @@ import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/store/hive/hive_cache.dart';
 import 'package:fehviewer/utils/http_override.dart';
 import 'package:fehviewer/utils/storage.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -107,9 +109,14 @@ class Global {
 
   static bool canCheckBiometrics = false;
 
+  static bool enableFirebase = false;
+
   User get user => profile.user;
 
   set user(User val) => profile = profile.copyWith(user: val);
+
+  static FirebaseApp? firebaseApp;
+  static FirebaseAnalytics? analytics;
 
   // init
   static Future<void> init() async {

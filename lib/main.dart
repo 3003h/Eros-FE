@@ -10,6 +10,9 @@ import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/widget/system_ui_overlay.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,6 +22,7 @@ import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import 'firebase_options_sample.dart' as fo;
 import 'get_init.dart';
 import 'widget/desktop.dart';
 
@@ -27,6 +31,17 @@ Future<void> main() async {
   // runZonedGuarded<Future<void>>(() async {
   WidgetsFlutterBinding.ensureInitialized();
   final dsn = await getSentryDsn();
+
+  Global.enableFirebase =
+      fo.DefaultFirebaseOptions.currentPlatform.apiKey.isNotEmpty;
+
+  if (Global.enableFirebase) {
+    final FirebaseApp firebaseApp = await Firebase.initializeApp(
+      options: fo.DefaultFirebaseOptions.currentPlatform,
+    );
+    Global.firebaseApp = firebaseApp;
+    Global.analytics = FirebaseAnalytics.instanceFor(app: firebaseApp);
+  }
 
   Get.lazyPut(() => LogService(), fenix: true);
   Get.lazyPut(() => GStore());
@@ -42,6 +57,14 @@ Future<void> main() async {
   }
   resetLogLevel();
   updateTagTranslate();
+
+  if (Global.enableFirebase) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 
   if (dsn != null && dsn.isNotEmpty) {
     await SentryFlutter.init(
@@ -149,8 +172,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           debugShowCheckedModeBanner: false,
           onGenerateTitle: (BuildContext context) => L10n.of(context).app_title,
           navigatorObservers: [
-            // if (GetPlatform.isMobile)
-            //   FirebaseAnalyticsObserver(analytics: analytics),
+            if (GetPlatform.isMobile && Global.analytics != null)
+              FirebaseAnalyticsObserver(analytics: Global.analytics!),
             SentryNavigatorObserver(),
             FlutterSmartDialog.observer,
             MainNavigatorObserver(),

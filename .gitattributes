@@ -38,5 +38,8 @@
 
 GoogleService-Info.plist   filter=git-crypt diff=git-crypt binary
 google-service.json        filter=git-crypt diff=git-crypt binary
+google-services.json       filter=git-crypt diff=git-crypt binary
+firebase_app_id_file.json  filter=git-crypt diff=git-crypt binary
 /lib/firebase_options.dart filter=git-crypt diff=git-crypt binary
 /lib/config/config.dart    filter=git-crypt diff=git-crypt binary
+/lib/firebase_options.dart filter=git-crypt diff=git-crypt binary
