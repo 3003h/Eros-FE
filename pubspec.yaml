@@ -188,6 +188,7 @@ dependencies:
   native_dio_adapter: ^1.0.0+2
   firebase_analytics: ^10.6.3
   firebase_crashlytics: ^3.4.3
+  firebase_performance_dio: ^0.6.0
 
 dev_dependencies:
   # flutter pub run build_runner build --delete-conflicting-outputs

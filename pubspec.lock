@@ -682,6 +682,38 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.6.11"
+  firebase_performance:
+    dependency: transitive
+    description:
+      name: firebase_performance
+      sha256: "0bfac3d0f6dccfd8dcfe4c57f977a0d16b58e68c5c7903fb26e182d2a0aed320"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.9.3+3"
+  firebase_performance_dio:
+    dependency: "direct main"
+    description:
+      name: firebase_performance_dio
+      sha256: "544c1186d0d5aa6a88cd4e480728bda01819bedf898935abd9d6d62f3bf695d9"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.0"
+  firebase_performance_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_performance_platform_interface
+      sha256: ef9a4dfbe00609d535dce6f48d0b226146b9a956501cd3e36c5bde0223b82603
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.4+11"
+  firebase_performance_web:
+    dependency: transitive
+    description:
+      name: firebase_performance_web
+      sha256: "953aeaf0911a708b4e776374385bd37c3d96fd2aeef2ae34c37da3858f5dd3db"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.4+11"
   fixnum:
     dependency: transitive
     description:

@@ -2,9 +2,7 @@ import 'package:archive_async/archive_async.dart';
 import 'package:collection/collection.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/extension.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/comm.dart';
@@ -15,13 +13,10 @@ import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
 import 'package:fehviewer/pages/tab/view/tab_base.dart';
 import 'package:fehviewer/route/first_observer.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/route/second_observer.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get/get.dart';
 
 import '../pages/image_view/controller/view_controller.dart';
-import 'main_observer.dart';
 
 class NavigatorUtil {
   // 带搜索条件打开搜索
@@ -197,6 +192,20 @@ class NavigatorUtil {
       // item点击跳转方式
       logger.t('goGalleryPage fromItem tabTag=$tabTag');
       _gid = galleryProvider?.gid;
+
+      Global.analytics?.logSelectItem(
+        itemListName: 'GalleryList',
+        itemListId: tabTag.toString(),
+        items: [
+          AnalyticsEventItem(
+            itemId: _gid,
+            itemCategory: galleryProvider?.category,
+            itemName: galleryProvider?.englishTitle,
+            itemVariant: galleryProvider?.japaneseTitle,
+            quantity: int.tryParse(galleryProvider?.filecount ?? '0'),
+          ),
+        ],
+      );
 
       Get.replace(GalleryRepository(item: galleryProvider, tabTag: tabTag));
 

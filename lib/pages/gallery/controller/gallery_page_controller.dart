@@ -15,6 +15,7 @@ import 'package:fehviewer/network/app_dio/pdio.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:fehviewer/pages/gallery/view/const.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:synchronized/synchronized.dart';
@@ -115,11 +116,25 @@ class GalleryPageController extends GetxController
     // _galleryCacheController.addGalleryPageState(gState);
   }
 
+  void _analytics(GalleryProvider? item) {
+    Global.analytics?.logViewItem(items: [
+      AnalyticsEventItem(
+        itemListName: 'Gallery',
+        itemId: item?.gid,
+        itemCategory: item?.category,
+        quantity: int.tryParse(item?.filecount ?? '0'),
+        itemName: item?.englishTitle,
+        itemVariant: item?.japaneseTitle,
+      ),
+    ]);
+  }
+
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     try {
       final GalleryProvider? _fetchItem = await _fetchData(refresh: refresh);
       logger.t('fetch end postTime ${_fetchItem?.postTime}');
       change(_fetchItem, status: RxStatus.success());
+      _analytics(_fetchItem);
       time.showTime('change end');
 
       gState.enableRead = true;
@@ -263,6 +278,7 @@ class GalleryPageController extends GetxController
       gState = stateFromCache;
       isStateFromCacheChange?.call(true);
       change(gState.galleryProvider, status: RxStatus.success());
+      _analytics(gState.galleryProvider);
 
       // 加入历史
       final _galleryProvider = gState.galleryProvider;
