@@ -38,6 +38,9 @@ jobs:
       - name: Build ios
         run: flutter build ios --release --no-codesign
 
+      - name: upload-symbols
+        run: find build/ios/Release-iphoneos -name "*.dSYM" | xargs -I \{\} ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/Runner/GoogleService-Info.plist -p ios \{\}
+
       - name: Thin app
         run: sh scripts/thin-payload.sh build/ios/iphoneos/FEhViewer.app
 

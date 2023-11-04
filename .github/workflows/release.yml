@@ -212,6 +212,9 @@ jobs:
           sed -i '' 's/dev2.cn.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
           cd ios && pod update && pod install && cd ..
           flutter build ios --release --no-codesign
+      - name: upload-symbols
+        if: matrix.target == 'ios'
+        run: find build/ios/Release-iphoneos -name "*.dSYM" | xargs -I \{\} ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/Runner/GoogleService-Info.plist -p ios \{\}
       - name: Thin app
         if: matrix.target == 'ios'
         run: sh scripts/thin-payload.sh build/ios/iphoneos/*.app
