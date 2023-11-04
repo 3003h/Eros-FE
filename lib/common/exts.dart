@@ -43,20 +43,24 @@ extension EhString on String {
     return _handleThumbUrlToEh;
   }
 
-  String get _handleThumbUrlResolution {
-    if (startsWith(EHConst.URL_PREFIX_THUMB_E) ||
-        startsWith(EHConst.URL_PREFIX_THUMB_EX)) {}
-
-    return this;
-  }
-
   String get _handleThumbUrlToEh {
     final EhSettingService _ehSettingService = Get.find();
 
-    if (startsWith(EHConst.URL_PREFIX_THUMB_EX) &&
+    // if (startsWith(RegExp(EHConst.REG_URL_PREFIX_THUMB_EX)) &&
+    //     _ehSettingService.redirectThumbLink) {
+    //   return replaceFirst(
+    //     RegExp(EHConst.REG_URL_PREFIX_THUMB_EX),
+    //     EHConst.URL_PREFIX_THUMB_EH,
+    //   );
+    // }
+
+    if (RegExp(EHConst.REG_URL_THUMB).hasMatch(this) &&
+        contains(EHConst.EX_BASE_HOST) &&
         _ehSettingService.redirectThumbLink) {
-      return replaceFirst(
-          EHConst.URL_PREFIX_THUMB_EX, EHConst.URL_PREFIX_THUMB_E);
+      return replaceFirstMapped(
+        RegExp(EHConst.REG_URL_THUMB),
+        (Match m) => '${EHConst.URL_PREFIX_THUMB_EH}/${m.group(2)}',
+      );
     }
 
     return this;

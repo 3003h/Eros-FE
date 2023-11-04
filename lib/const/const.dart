@@ -255,8 +255,12 @@ class EHConst {
   static const String EH_TORRENT_URL = 'https://ehtracker.org/get';
   static const String EX_TORRENT_URL = 'https://exhentai.org/torrent';
 
-  static const String URL_PREFIX_THUMB_E = 'https://ehgt.org/';
-  static const String URL_PREFIX_THUMB_EX = 'https://exhentai.org/t/';
+  static const String URL_PREFIX_THUMB_EH = 'https://ehgt.org';
+
+  static const String REG_URL_PREFIX_THUMB_EX = r'https://(.*)?exhentai.org/t';
+
+  static const String REG_URL_THUMB =
+      r'(https://.+)/([0-9a-f]{2}/[0-9a-f]{2}/([(0-9a-f]{40})-(\d+)-(\d+)-(\d+)-(\w+)\.(jpg|png|gif))';
 
   static const String DB_NAME = 'feh.db';
 
