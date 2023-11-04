@@ -426,10 +426,11 @@ class ArchiverDownloadController extends GetxController {
 }
 
 /// flutterDownload下载进度回调顶级函数
+@pragma('vm:entry-point')
 void flutterDownloadCallback(String id, int status, int progress) {
   final sendPort = IsolateNameServer.lookupPortByName(flutterDownloadPortName)!;
   // print('_downloadCallback ${sendPort.runtimeType}');
-  logger.d('$id $status $progress%');
+  logger.t('$id $status $progress%');
 
   sendPort.send([id, status, progress]);
 }
