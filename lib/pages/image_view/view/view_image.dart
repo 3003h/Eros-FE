@@ -469,6 +469,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError || snapshot.data == null) {
+              logger.e('${snapshot.error}\n${snapshot.stackTrace}');
               return _buildErr(snapshot.error);
             }
             final GalleryImage? _image = snapshot.data;

@@ -233,13 +233,16 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
 
     late String archiverPath;
     if (filePath.realArchiverPath.isContentUri) {
+      logger.d('filePath.realArchiverPath ${filePath.realArchiverPath}');
       archiverPath = await safCacheSingle(Uri.parse(filePath.realArchiverPath));
     } else {
       archiverPath = filePath.realArchiverPath;
     }
 
     // 异步读取zip
-    final (asyncArchive, inputStream) = await readAsyncArchive(archiverPath);
+    final result = await readAsyncArchive(archiverPath);
+    final asyncArchive = result.asyncArchive;
+    final inputStream = result.asyncInputStream;
     logger.t('${asyncArchive.length}');
     logger.t('${asyncArchive.files.map((e) => e.name).join('\n')} ');
 

@@ -2,14 +2,17 @@ import 'dart:io';
 
 import 'package:archive_async/archive_async.dart';
 
-Future<(AsyncArchive, AsyncInputStream)> readAsyncArchive(
-    String filePath) async {
+Future<({AsyncArchive asyncArchive, AsyncInputStream asyncInputStream})>
+    readAsyncArchive(String filePath) async {
   final file = await File(filePath).open(mode: FileMode.read);
 
   final fileLength = await file.length();
 
-  final loaderHandle = LoaderHandle(fileLength,
-      (AsyncInputStream ais, int offset, int length) async {
+  final loaderHandle = LoaderHandle(fileLength, (
+    AsyncInputStream ais,
+    int offset,
+    int length,
+  ) async {
     await file.setPosition(offset);
     final buff = (await file.read(length)).buffer.asUint8List();
     return buff;
@@ -19,5 +22,8 @@ Future<(AsyncArchive, AsyncInputStream)> readAsyncArchive(
 
   final AsyncArchive archive =
       await AsyncZipDecoder().decodeBuffer(inputStream);
-  return (archive, inputStream);
+  return (
+    asyncArchive: archive,
+    asyncInputStream: inputStream,
+  );
 }

@@ -16,6 +16,7 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_widget.dart';
 import 'package:fehviewer/store/archive_async.dart';
 import 'package:fehviewer/utils/orientation_helper.dart';
+import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_android_volume_keydown/flutter_android_volume_keydown.dart';
@@ -600,11 +601,21 @@ class ViewExtController extends GetxController {
         return null;
       }
 
-      final filePath = path.join(task.savedDir ?? '', task.fileName);
+      // final filePath = path.join(task.savedDir ?? '', task.fileName);
+      late final String filePath;
+      if (task.savedDir?.isContentUri ?? false) {
+        final _uri = task.safUri ??
+            '${task.savedDir}%2F${Uri.encodeComponent(task.fileName ?? '')}';
+        filePath = await safCacheSingle(Uri.parse(_uri));
+      } else {
+        filePath = path.join(task.savedDir ?? '', task.fileName);
+      }
+      // logger.d('filePath $filePath');
 
       // 异步读取zip
-      final (asyncArchive, asyncInputStream) =
-          await readAsyncArchive(filePath.realArchiverPath);
+      final result = await readAsyncArchive(filePath.realArchiverPath);
+      final asyncArchive = result.asyncArchive;
+      final asyncInputStream = result.asyncInputStream;
       vState.asyncArchiveMap[gid] = asyncArchive;
       vState.asyncInputStreamMap[gid] = asyncInputStream;
     }
