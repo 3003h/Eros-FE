@@ -189,6 +189,7 @@ dependencies:
   firebase_analytics: ^10.6.3
   firebase_crashlytics: ^3.4.3
   firebase_performance_dio: ^0.6.0
+  pull_down_button: ^0.9.3
 
 dev_dependencies:
   # flutter pub run build_runner build --delete-conflicting-outputs

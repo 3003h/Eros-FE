@@ -44,3 +44,10 @@ enum ProxyType {
   socks4,
   direct,
 }
+
+enum BlockType {
+  title,
+  uploader,
+  commentator,
+  comment,
+}
