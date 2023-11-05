@@ -1,0 +1,154 @@
+name: Bug 反馈 / Bug report
+description: 提交一个问题报告 / Create a bug report
+labels:
+  - "bug"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您愿意为 FEhViewer 做出贡献！
+        提交问题报告前，还请首先完成文末的自查步骤
+
+        Thanks for your contribution to the FEhViewer Project!
+        Please complete the self-review steps at the end of the article before submitting the bug report
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤 / Steps to reproduce
+      description: |
+        在此处写下复现的方式，请详细描述每一个步骤，包括画廊链接、相关设置等
+        Describe how to reproduce here, please describe each step in detail, include gallery links or settings
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id : expected
+    attributes:
+      label: 预期行为 / Expected behaviour
+      description: |
+        在此处说明正常情况下应用的预期行为
+        Describe what should be happened here
+      placeholder: |
+        它应该 ...
+        It should be ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为 / Actual behaviour
+      description: |
+        在此处描绘应用的实际行为，最好附上截图或录屏
+        Describe what actually happened here, screenshots or screen recordings are better
+      placeholder: |
+        实际上它 ...
+        Actually it ...
+        [截图或录屏] / [Screenshots or screen recordings]
+    validations:
+      required: true
+
+  - type: textarea
+    id: more
+    attributes:
+      label: 备注 / Additional details
+      description: |
+        在此处写下其他您想说的内容
+        Describe additional details here
+      placeholder: |
+        其他有用的信息与附件
+        Additional details and attachments
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: FEhViewer 版本号 / FEhViewer version code
+      description: |
+        您可以在 设置 - 关于 处找到版本号
+        You can get version code in Settings - About
+      placeholder: 1.4.10
+    validations:
+      required: true
+
+  - type: input
+    id: ci
+    attributes:
+      label: FEhViewer CI 版本 / FEhViewer CI version
+      description: |
+        请确保您已经使用 [最新 CI 版本](https://github.com/3003h/FEhViewer/actions/workflows/release.yml) 测试，请填入您使用的 CI 版本网址
+        Please make sure you have tested with the [latest CI version](https://github.com/3003h/FEhViewer/actions/workflows/release.yml), simply drop GitHub Action CI download page url here
+      placeholder: https://github.com/3003h/FEhViewer/actions/runs/XXXXXXXXXX
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: 平台 / Platform
+      description: 请填入您使用的平台 / Please put your platform here
+      placeholder: iOS, Android, MacOS, Windows
+
+  - type: input
+    id: system
+    attributes:
+      label: 系统版本 / System version
+      description: 分支名称 + 版本号 / Name + version code
+      placeholder: MIUI 12.5, ArrowOS 12.1
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: 设备型号 / Device model
+      description: 在此填入设备型号 / Put device model here
+      placeholder: OnePlus 7 Pro, Xiaomi 12 Ultra
+    validations:
+      required: true
+
+  - type: input
+    id: SoC
+    attributes:
+      label: SoC 型号 / SoC model
+      description: 在此填入 SoC 型号 / Put SoC model here
+      placeholder: 骁龙 8+ Gen 1, Snapdragon 8+ Gen 1
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: 应用日志 / App logs
+      description: |
+        您可以通过设置-高级-Log 来获得日志文件，请确保日志完整，过长的日志请以文件形式上传
+        You can get logs file in Settings - Advanced - Log
+      placeholder: 2013-11-01 13:12:20.log  ...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: check
+    attributes:
+      label: 自查步骤 / Self-review steps
+      description: |
+        请确保您已经遵守以下所有必选项，否则 issue 会被立即关闭
+        Please ensure you have obtained all needed options, otherwise the issue will be closed immediately
+      options:
+        - label: 如果您有足够的时间和能力，并愿意为修复此问题提交 PR ，请勾上此复选框 / Pull request is welcome. Check this if you want to start a pull request
+          required: false
+
+        - label: 您已搜索过 [Issue Tracker](https://github.com/3003h/FEhViewer/issues)，没有找到类似的问题 / I have searched on [Issue Tracker](https://github.com/3003h/FEhViewer/issues), No duplicate or related open issue has been found
+          required: true
+
+        - label: 您确保这个 Issue 只提及一个问题。如果您有多个问题报告，烦请发起多个 Issue / Ensure there is only one bug report in this issue. Please make mutiply issue for mutiply bugs
+          required: true
+
+        - label: 您确保已使用 [最新 CI 版本](https://github.com/3003h/FEhViewer/actions/workflows/release.yml) 测试，并且该问题在最新 CI 版本中并未解决 / This bug have not solved in [latest CI version](https://github.com/3003h/FEhViewer/actions/workflows/release.yml)
+          required: true

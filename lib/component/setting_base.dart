@@ -28,6 +28,7 @@ class BarsItem extends StatelessWidget {
     this.titleSize,
     this.descSize,
     this.desc,
+    this.hideDivider = false,
   }) : super(key: key);
 
   final String title;
@@ -35,6 +36,7 @@ class BarsItem extends StatelessWidget {
   final int? maxLines;
   final double? titleSize;
   final double? descSize;
+  final bool hideDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +91,10 @@ class BarsItem extends StatelessWidget {
         Divider(
           indent: 20,
           height: kDividerHeight,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, context),
+          color: hideDivider
+              ? Colors.transparent
+              : CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey4, context),
         ),
       ],
     );
@@ -235,9 +239,8 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
             )
           else
             Container(
-              height: 0,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.systemGrey4, context),
+              height: kDividerHeight,
+              color: Colors.transparent,
             ),
         ],
       ),
