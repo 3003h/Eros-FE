@@ -35,14 +35,21 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
-      - name: Build Appimage
+      - name: Build Linux
         run: flutter build linux --release
 
-      - name: list files
-        run: ls -R build/linux/x64/release/bundle
+      - name: Build ZIP
+        run: |
+          APP_PATH=build/linux/fehviewer
+          mkdir -p $APP_PATH
+          cp -a build/linux/x64/release/bundle/* $APP_PATH
+          cd build/linux && zip -qroy FEhViewer_linux.zip fehviewer
+
+#      - name: list files
+#        run: ls -R build/linux/x64/release/bundle
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: release-linux
-          path: build/linux/x64/release/bundle/fehviewer.AppDir/*.AppImage
+          path: build/linux/FEhViewer*.zip
