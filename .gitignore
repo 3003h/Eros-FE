@@ -66,3 +66,11 @@ android/app/keystore.jks
 fonts/AppleColorEmoji.ttf
 fonts/NotoColorEmoji.ttf
 fonts/OpenMoji-Color.ttf
+
+
+#AppImage
+scripts/FEhViewer.AppDir/lib
+scripts/FEhViewer.AppDir/syslib
+scripts/FEhViewer.AppDir/data
+scripts/FEhViewer.AppDir/fehviewer
+scripts/appimagetool-x86_64.AppImage

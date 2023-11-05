@@ -2,5 +2,5 @@
 Type=Application
 Name=FEhViewer
 Exec=/fehviewer
-Icon=/sad.png
+Icon=/sad
 Categories=Utility;
