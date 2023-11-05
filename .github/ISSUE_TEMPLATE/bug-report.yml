@@ -89,6 +89,13 @@ body:
       required: true
 
   - type: input
+    id: platform
+    attributes:
+      label: 平台 / Platform
+      description: 请填入您使用的平台 / Please put your platform here
+      placeholder: iOS, Android, MacOS, Windows
+
+  - type: input
     id: system
     attributes:
       label: 系统版本 / System version
@@ -120,9 +127,9 @@ body:
     attributes:
       label: 应用日志 / App logs
       description: |
-        您可以通过设置-高级-导出日志 来获得日志文件，请确保日志完整，过长的日志请以文件形式上传
-        You can get logs file in Settings - Advanced - Dump logcat
-      placeholder: 06-15 17:44:53.704 23382 23382 E ...
+        您可以通过设置-高级-Log 来获得日志文件，请确保日志完整，过长的日志请以文件形式上传
+        You can get logs file in Settings - Advanced - Log
+      placeholder: 2013-11-01 13:12:20.log  ...
     validations:
       required: true
 
