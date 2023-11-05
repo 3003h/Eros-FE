@@ -1,0 +1,42 @@
+name: Build linux
+
+on:
+  push:
+    tags:
+      - v*linux
+
+jobs:
+  process:
+    name: Build process
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Unlock secrets
+        uses: sliteteam/github-action-git-crypt-unlock@1.2.0
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
+
+
+      - name: Flutter action
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build Appimage
+        run: flutter build linux --release
+
+      - name: list files
+        run: ls -R build/linux/x64/release/
+
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-linux
+          path: build/linux/x64/release/bundle/fehviewer.AppDir/*.AppImage
