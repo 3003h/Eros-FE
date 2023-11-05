@@ -1,8 +1,7 @@
 #!/bin/bash
 
-mkdir -p FEhViewer.AppDir/syslib
 cp -rf ../build/linux/x64/release/bundle/* FEhViewer.AppDir/
-ldd FEhViewer.AppDir/fehviewer | cut -d' ' -f3  | xargs -I {} cp {} FEhViewer.AppDir/syslib
+lddtree -l FEhViewer.AppDir/fehviewer | xargs -I {} cp {} FEhViewer.AppDir/lib
 unset SOURCE_DATE_EPOCH
 
 if [ ! -f appimagetool-x86_64.AppImage ]; then
