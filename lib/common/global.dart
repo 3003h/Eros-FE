@@ -157,7 +157,7 @@ class Global {
             extStorePath
         : '';
 
-    if (!GetPlatform.isWindows) {
+    if (!GetPlatform.isWindows && !GetPlatform.isLinux) {
       packageInfo = await PackageInfo.fromPlatform();
     }
 
