@@ -47,9 +47,8 @@ jobs:
 
       - name: Create AppDir
         run: |
-          APP_PATH=build/linux/fehviewer.AppDir
-          mkdir -p $APP_PATH
-          cp -a build/linux/x64/release/bundle/* $APP_PATH
+          cd scripts && ./build_appimage.sh
+
 
 #      - name: list files
 #        run: ls -R build/linux/x64/release/bundle
@@ -58,4 +57,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: release-linux
-          path: build/linux/FEhViewer*.*
+          path: scripts/FEhViewer-x86_64.AppImage
