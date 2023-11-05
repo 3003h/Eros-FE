@@ -1,6 +1,7 @@
 export 'advance_search.dart';
 export 'auto_lock.dart';
 export 'block_config.dart';
+export 'block_rule.dart';
 export 'cache_config.dart';
 export 'chapter.dart';
 export 'commit_vote_res.dart';

@@ -42,6 +42,8 @@ class SettingTab extends GetView<SettingViewController> {
           ),
           SliverSafeArea(
             top: false,
+            left: false,
+            right: false,
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {

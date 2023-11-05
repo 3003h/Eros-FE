@@ -4374,6 +4374,86 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Block Rules`
+  String get block_rules {
+    return Intl.message(
+      'Block Rules',
+      name: 'block_rules',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Block Rule`
+  String get edit_block_rule {
+    return Intl.message(
+      'Edit Block Rule',
+      name: 'edit_block_rule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Block Rule`
+  String get block_rule {
+    return Intl.message(
+      'Block Rule',
+      name: 'block_rule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable`
+  String get enable {
+    return Intl.message(
+      'Enable',
+      name: 'enable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Regex`
+  String get regex {
+    return Intl.message(
+      'Regex',
+      name: 'regex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Title`
+  String get title {
+    return Intl.message(
+      'Title',
+      name: 'title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comment`
+  String get comment {
+    return Intl.message(
+      'Comment',
+      name: 'comment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Commentator`
+  String get commentator {
+    return Intl.message(
+      'Commentator',
+      name: 'commentator',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

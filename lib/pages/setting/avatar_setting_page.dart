@@ -26,10 +26,7 @@ class AvatarSettingPage extends StatelessWidget {
           navigationBar: CupertinoNavigationBar(
             middle: Text(L10n.of(context).avatar),
           ),
-          child: SafeArea(
-            child: _ListView(),
-            bottom: false,
-          ));
+          child: _ListView());
     });
 
     return cps;
@@ -132,61 +129,63 @@ class _ListView extends StatelessWidget {
         ),
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(horizontal: paddingHorizontal),
-        child: Column(
-          children: [
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    L10n.of(context).default_avatar_style,
-                    style: const TextStyle(
-                      height: 1.15,
+        child: SafeArea(
+          child: Column(
+            children: [
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      L10n.of(context).default_avatar_style,
+                      style: const TextStyle(
+                        height: 1.15,
+                      ),
                     ),
                   ),
-                ),
-                Obx(() {
-                  return CupertinoSlidingSegmentedControl<
-                      AvatarBorderRadiusType>(
-                    children: <AvatarBorderRadiusType, Widget>{
-                      AvatarBorderRadiusType.circle: _ehSettingService
-                                  .avatarType ==
-                              AvatarType.boringAvatar
-                          ? boringAvatar(
-                              _ehSettingService.boringAvatarsType,
-                              borderRadiusType: AvatarBorderRadiusType.circle,
-                              name: _username,
-                            )
-                          : textAvatar(
-                              _ehSettingService.textAvatarsType,
-                              borderRadiusType: AvatarBorderRadiusType.circle,
-                              name: _username,
-                            ),
-                      AvatarBorderRadiusType.roundedRect:
-                          _ehSettingService.avatarType ==
-                                  AvatarType.boringAvatar
-                              ? boringAvatar(
-                                  _ehSettingService.boringAvatarsType,
-                                  borderRadiusType:
-                                      AvatarBorderRadiusType.roundedRect,
-                                  name: _username,
-                                )
-                              : textAvatar(
-                                  _ehSettingService.textAvatarsType,
-                                  borderRadiusType:
-                                      AvatarBorderRadiusType.roundedRect,
-                                  name: _username,
-                                ),
-                    },
-                    groupValue: _ehSettingService.avatarBorderRadiusType,
-                    onValueChanged: (AvatarBorderRadiusType? value) {
-                      _ehSettingService.avatarBorderRadiusType =
-                          value ?? AvatarBorderRadiusType.circle;
-                    },
-                  );
-                }),
-              ],
-            ).paddingSymmetric(vertical: 4),
-          ],
+                  Obx(() {
+                    return CupertinoSlidingSegmentedControl<
+                        AvatarBorderRadiusType>(
+                      children: <AvatarBorderRadiusType, Widget>{
+                        AvatarBorderRadiusType.circle: _ehSettingService
+                                    .avatarType ==
+                                AvatarType.boringAvatar
+                            ? boringAvatar(
+                                _ehSettingService.boringAvatarsType,
+                                borderRadiusType: AvatarBorderRadiusType.circle,
+                                name: _username,
+                              )
+                            : textAvatar(
+                                _ehSettingService.textAvatarsType,
+                                borderRadiusType: AvatarBorderRadiusType.circle,
+                                name: _username,
+                              ),
+                        AvatarBorderRadiusType.roundedRect:
+                            _ehSettingService.avatarType ==
+                                    AvatarType.boringAvatar
+                                ? boringAvatar(
+                                    _ehSettingService.boringAvatarsType,
+                                    borderRadiusType:
+                                        AvatarBorderRadiusType.roundedRect,
+                                    name: _username,
+                                  )
+                                : textAvatar(
+                                    _ehSettingService.textAvatarsType,
+                                    borderRadiusType:
+                                        AvatarBorderRadiusType.roundedRect,
+                                    name: _username,
+                                  ),
+                      },
+                      groupValue: _ehSettingService.avatarBorderRadiusType,
+                      onValueChanged: (AvatarBorderRadiusType? value) {
+                        _ehSettingService.avatarBorderRadiusType =
+                            value ?? AvatarBorderRadiusType.circle;
+                      },
+                    );
+                  }),
+                ],
+              ).paddingSymmetric(vertical: 4),
+            ],
+          ),
         ),
       ),
       const ItemSpace(),

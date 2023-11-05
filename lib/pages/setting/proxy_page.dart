@@ -25,43 +25,39 @@ class ProxyPage extends StatelessWidget {
           padding: const EdgeInsetsDirectional.only(start: 0),
           middle: Text(_title),
         ),
-        child: SafeArea(
-          bottom: false,
-          child: Container(
-            child: ListView(
-              children: <Widget>[
-                _buildProxyTypeItem(context, hideDivider: true),
-                const ItemSpace(),
-                TextInputItem(
-                  title: L10n.of(context).host,
-                  textAlign: TextAlign.right,
-                  initValue: ehSettingService.proxyHost,
-                  onChanged: (val) => ehSettingService.proxyHost = val,
-                ),
-                TextInputItem(
-                  title: L10n.of(context).port,
-                  textAlign: TextAlign.right,
-                  initValue: ehSettingService.proxyPort.toString(),
-                  onChanged: (val) =>
-                      ehSettingService.proxyPort = int.parse(val),
-                  keyboardType: TextInputType.number,
-                ),
-                TextInputItem(
-                  title: L10n.of(context).user_name,
-                  textAlign: TextAlign.right,
-                  initValue: ehSettingService.proxyUsername,
-                  onChanged: (val) => ehSettingService.proxyUsername = val,
-                ),
-                TextInputItem(
-                  title: L10n.of(context).passwd,
-                  textAlign: TextAlign.right,
-                  initValue: ehSettingService.proxyPassword,
-                  onChanged: (val) => ehSettingService.proxyPassword = val,
-                  obscureText: true,
-                  hideDivider: true,
-                ),
-              ],
-            ),
+        child: Container(
+          child: ListView(
+            children: <Widget>[
+              _buildProxyTypeItem(context, hideDivider: true),
+              const ItemSpace(),
+              TextInputItem(
+                title: L10n.of(context).host,
+                textAlign: TextAlign.right,
+                initValue: ehSettingService.proxyHost,
+                onChanged: (val) => ehSettingService.proxyHost = val,
+              ),
+              TextInputItem(
+                title: L10n.of(context).port,
+                textAlign: TextAlign.right,
+                initValue: ehSettingService.proxyPort.toString(),
+                onChanged: (val) => ehSettingService.proxyPort = int.parse(val),
+                keyboardType: TextInputType.number,
+              ),
+              TextInputItem(
+                title: L10n.of(context).user_name,
+                textAlign: TextAlign.right,
+                initValue: ehSettingService.proxyUsername,
+                onChanged: (val) => ehSettingService.proxyUsername = val,
+              ),
+              TextInputItem(
+                title: L10n.of(context).passwd,
+                textAlign: TextAlign.right,
+                initValue: ehSettingService.proxyPassword,
+                onChanged: (val) => ehSettingService.proxyPassword = val,
+                obscureText: true,
+                hideDivider: true,
+              ),
+            ],
           ),
         ),
       );

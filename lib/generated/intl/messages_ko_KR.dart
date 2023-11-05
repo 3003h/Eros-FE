@@ -78,6 +78,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("뒤로"),
+        "block_rule": MessageLookupByLibrary.simpleMessage("Block Rule"),
+        "block_rules": MessageLookupByLibrary.simpleMessage("Block Rules"),
         "blockers": MessageLookupByLibrary.simpleMessage("Blockers"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
             "Blurring of cover background"),
@@ -96,6 +98,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "collapse": MessageLookupByLibrary.simpleMessage("접기"),
         "color_picker_primary": MessageLookupByLibrary.simpleMessage("primary"),
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("wheel"),
+        "comment": MessageLookupByLibrary.simpleMessage("Comment"),
+        "commentator": MessageLookupByLibrary.simpleMessage("Commentator"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("클립보드에 복사되었습니다."),
         "copy": MessageLookupByLibrary.simpleMessage("복사"),
@@ -134,10 +138,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloaded": MessageLookupByLibrary.simpleMessage("다운로드 완료"),
         "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
+        "edit_block_rule":
+            MessageLookupByLibrary.simpleMessage("Edit Block Rule"),
         "edit_comment": MessageLookupByLibrary.simpleMessage("Edit comment"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("내 태그"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 설정"),
+        "enable": MessageLookupByLibrary.simpleMessage("Enable"),
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("펼치기"),
@@ -299,6 +306,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "redirect_thumb_link_summary": MessageLookupByLibrary.simpleMessage(
             "Redirect Thumb Link To ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
+        "regex": MessageLookupByLibrary.simpleMessage("Regex"),
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),
@@ -402,6 +410,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("테마"),
         "thumbnails": MessageLookupByLibrary.simpleMessage("미리 보기"),
+        "title": MessageLookupByLibrary.simpleMessage("Title"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("Past Month"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),

@@ -212,22 +212,24 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
             ),
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(flex: widget.titleFlex, child: titleWidget),
-                      if (widget.suffix != null) widget.suffix!,
-                      Expanded(flex: widget.valueFlex, child: selectedWidget),
-                    ],
+            child: SafeArea(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(flex: widget.titleFlex, child: titleWidget),
+                        if (widget.suffix != null) widget.suffix!,
+                        Expanded(flex: widget.valueFlex, child: selectedWidget),
+                      ],
+                    ),
                   ),
-                ),
-                const Icon(
-                  CupertinoIcons.forward,
-                  color: CupertinoColors.systemGrey,
-                ),
-              ],
+                  const Icon(
+                    CupertinoIcons.forward,
+                    color: CupertinoColors.systemGrey,
+                  ),
+                ],
+              ),
             ),
           ),
           if (!widget.hideDivider)
@@ -352,42 +354,44 @@ class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
               ),
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                children: <Widget>[
-                  if (widget.icon != null) widget.icon!,
-                  Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            widget.title,
-                            style: const TextStyle(
-                              height: 1.15,
-                            ),
-                          ),
-                          if (_desc != null || widget.desc != null)
+              child: SafeArea(
+                child: Row(
+                  children: <Widget>[
+                    if (widget.icon != null) widget.icon!,
+                    Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
                             Text(
-                              _desc ?? widget.desc ?? '',
+                              widget.title,
                               style: const TextStyle(
-                                  fontSize: kSummaryFontSize,
-                                  color: CupertinoColors.systemGrey),
-                            ).paddingOnly(top: 2.0),
-                        ]),
-                  ),
-                  CupertinoSlidingSegmentedControl<T>(
-                    groupValue: _value,
-                    children: widget.slidingChildren,
-                    onValueChanged: (T? val) {
-                      widget.onValueChanged?.call(val);
-                    },
-                  ),
-                  if (widget.onTap != null)
-                    const Icon(
-                      CupertinoIcons.forward,
-                      color: CupertinoColors.systemGrey,
+                                height: 1.15,
+                              ),
+                            ),
+                            if (_desc != null || widget.desc != null)
+                              Text(
+                                _desc ?? widget.desc ?? '',
+                                style: const TextStyle(
+                                    fontSize: kSummaryFontSize,
+                                    color: CupertinoColors.systemGrey),
+                              ).paddingOnly(top: 2.0),
+                          ]),
                     ),
-                ],
+                    CupertinoSlidingSegmentedControl<T>(
+                      groupValue: _value,
+                      children: widget.slidingChildren,
+                      onValueChanged: (T? val) {
+                        widget.onValueChanged?.call(val);
+                      },
+                    ),
+                    if (widget.onTap != null)
+                      const Icon(
+                        CupertinoIcons.forward,
+                        color: CupertinoColors.systemGrey,
+                      ),
+                  ],
+                ),
               ),
             ),
             if (!widget.hideDivider)
@@ -488,65 +492,67 @@ class _TextSwitchItemState extends State<TextSwitchItem> {
       },
       child: Container(
         color: _color,
-        child: Column(
-          children: <Widget>[
-            Container(
-              constraints: const BoxConstraints(
-                minHeight: kItemHeight,
-              ),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Row(
-                children: <Widget>[
-                  if (widget.icon != null) widget.icon!,
-                  Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            widget.title,
-                            style: const TextStyle(
-                              height: 1.15,
-                            ),
-                          ),
-                          if (_desc != null || widget.desc != null)
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Container(
+                constraints: const BoxConstraints(
+                  minHeight: kItemHeight,
+                ),
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Row(
+                  children: <Widget>[
+                    if (widget.icon != null) widget.icon!,
+                    Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
                             Text(
-                              _desc ?? widget.desc ?? '',
+                              widget.title,
                               style: const TextStyle(
-                                  fontSize: kSummaryFontSize,
-                                  color: CupertinoColors.systemGrey),
-                            ).paddingOnly(top: 2.0),
-                        ]),
-                  ),
-                  if (widget.suffix != null) widget.suffix!,
-                  CupertinoSwitch(
-                    onChanged: widget.onChanged != null
-                        ? (bool value) {
-                            setState(() {
-                              _switchValue = value;
-                              widget.onChanged?.call(value);
-                            });
-                          }
-                        : null,
-                    value: _switchValue,
-                  ),
-                  if (widget.onTap != null)
-                    const Icon(
-                      CupertinoIcons.forward,
-                      color: CupertinoColors.systemGrey,
+                                height: 1.15,
+                              ),
+                            ),
+                            if (_desc != null || widget.desc != null)
+                              Text(
+                                _desc ?? widget.desc ?? '',
+                                style: const TextStyle(
+                                    fontSize: kSummaryFontSize,
+                                    color: CupertinoColors.systemGrey),
+                              ).paddingOnly(top: 2.0),
+                          ]),
                     ),
-                ],
+                    if (widget.suffix != null) widget.suffix!,
+                    CupertinoSwitch(
+                      onChanged: widget.onChanged != null
+                          ? (bool value) {
+                              setState(() {
+                                _switchValue = value;
+                                widget.onChanged?.call(value);
+                              });
+                            }
+                          : null,
+                      value: _switchValue,
+                    ),
+                    if (widget.onTap != null)
+                      const Icon(
+                        CupertinoIcons.forward,
+                        color: CupertinoColors.systemGrey,
+                      ),
+                  ],
+                ),
               ),
-            ),
-            if (!widget.hideDivider)
-              Divider(
-                indent: 20 + widget.iconIndent,
-                height: kDividerHeight,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              ),
-          ],
+              if (!widget.hideDivider)
+                Divider(
+                  indent: 20 + widget.iconIndent,
+                  height: kDividerHeight,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4, context),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -624,26 +630,28 @@ class _TextItemState extends State<TextItem> {
             padding: widget.cupertinoFormRow
                 ? const EdgeInsets.all(0)
                 : const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      height: 1.0,
-                      color: widget.textColor,
-                    ),
-                  ),
-                  if (widget.subTitle != null)
+            child: SafeArea(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
                     Text(
-                      widget.subTitle ?? '',
-                      style: const TextStyle(
-                          fontSize: kSummaryFontSize,
-                          color: CupertinoColors.systemGrey),
-                    ).paddingOnly(top: 2.0),
-                ]),
+                      widget.title,
+                      style: TextStyle(
+                        height: 1.0,
+                        color: widget.textColor,
+                      ),
+                    ),
+                    if (widget.subTitle != null)
+                      Text(
+                        widget.subTitle ?? '',
+                        style: const TextStyle(
+                            fontSize: kSummaryFontSize,
+                            color: CupertinoColors.systemGrey),
+                      ).paddingOnly(top: 2.0),
+                  ]),
+            ),
           ),
           if (!(widget.hideDivider || widget.cupertinoFormRow))
             Divider(
@@ -750,58 +758,60 @@ class _TextInputItemState extends State<TextInputItem> {
       return Container(
         color: CupertinoDynamicColor.resolve(
             ehTheme.itemBackgroundColor!, Get.context!),
-        child: Column(
-          children: <Widget>[
-            Container(
-              constraints: const BoxConstraints(minHeight: kItemHeight),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  if (widget.icon != null) widget.icon!,
-                  Text(
-                    widget.title ?? '',
-                    style: const TextStyle(
-                      height: 1.2,
-                    ),
-                  ),
-                  Expanded(
-                    child: CupertinoTextField(
-                      decoration: null,
-                      padding: widget.textFieldPadding,
-                      controller: textController,
-                      obscureText: widget.obscureText ?? false,
-                      keyboardType: widget.keyboardType,
-                      textAlign: widget.textAlign,
-                      maxLines: widget.maxLines,
-                      suffix: widget.suffixText != null
-                          ? Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Text(widget.suffixText!),
-                            )
-                          : null,
-                      placeholderStyle: const TextStyle(
-                        fontWeight: FontWeight.w400,
-                        color: CupertinoColors.placeholderText,
-                        height: 1.25,
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Container(
+                constraints: const BoxConstraints(minHeight: kItemHeight),
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    if (widget.icon != null) widget.icon!,
+                    Text(
+                      widget.title ?? '',
+                      style: const TextStyle(
+                        height: 1.2,
                       ),
-                      placeholder: widget.placeholder,
-                      style: const TextStyle(height: 1.2),
-                      onChanged: widget.onChanged?.call,
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: CupertinoTextField(
+                        decoration: null,
+                        padding: widget.textFieldPadding,
+                        controller: textController,
+                        obscureText: widget.obscureText ?? false,
+                        keyboardType: widget.keyboardType,
+                        textAlign: widget.textAlign,
+                        maxLines: widget.maxLines,
+                        suffix: widget.suffixText != null
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Text(widget.suffixText!),
+                              )
+                            : null,
+                        placeholderStyle: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: CupertinoColors.placeholderText,
+                          height: 1.25,
+                        ),
+                        placeholder: widget.placeholder,
+                        style: const TextStyle(height: 1.2),
+                        onChanged: widget.onChanged?.call,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (!widget.hideDivider)
-              Divider(
-                indent: 20,
-                height: kDividerHeight,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              ),
-          ],
+              if (!widget.hideDivider)
+                Divider(
+                  indent: 20,
+                  height: kDividerHeight,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemGrey4, context),
+                ),
+            ],
+          ),
         ),
       );
     });
@@ -979,57 +989,62 @@ class GroupItem extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        Container(
-          // constraints: const BoxConstraints(minHeight: 38),
-          padding: EdgeInsets.only(
-            left: 20,
-            bottom: 4,
-            top: title != null ? 20 : 0,
-          ),
-          width: double.infinity,
-          child: Text(
-            title ?? '',
-            style: const TextStyle(fontSize: 14),
-            textAlign: TextAlign.start,
-          ),
-        ),
-        if (descTop != null)
-          Container(
-            padding: const EdgeInsets.only(
+        SafeArea(
+          child: Container(
+            padding: EdgeInsets.only(
               left: 20,
-              top: 4,
-              bottom: 10,
-              right: 20,
+              bottom: 4,
+              top: title != null ? 20 : 0,
             ),
             width: double.infinity,
             child: Text(
-              descTop!,
-              style: TextStyle(
-                fontSize: kSummaryFontSize,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
-              ),
+              title ?? '',
+              style: const TextStyle(fontSize: 14),
               textAlign: TextAlign.start,
+            ),
+          ),
+        ),
+        if (descTop != null)
+          SafeArea(
+            child: Container(
+              padding: const EdgeInsets.only(
+                left: 20,
+                top: 4,
+                bottom: 10,
+                right: 20,
+              ),
+              width: double.infinity,
+              child: Text(
+                descTop!,
+                style: TextStyle(
+                  fontSize: kSummaryFontSize,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.secondaryLabel, context),
+                ),
+                textAlign: TextAlign.start,
+              ),
             ),
           ),
         child ?? const SizedBox.shrink(),
         if (desc != null)
-          Container(
-            padding: const EdgeInsets.only(
-              left: 20,
-              top: 4,
-              bottom: 10,
-              right: 20,
-            ),
-            width: double.infinity,
-            child: Text(
-              desc!,
-              style: TextStyle(
-                fontSize: kSummaryFontSize,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.secondaryLabel, context),
+          SafeArea(
+            child: Container(
+              padding: const EdgeInsets.only(
+                left: 20,
+                top: 4,
+                bottom: 10,
+                right: 20,
               ),
-              textAlign: TextAlign.start,
+              width: double.infinity,
+              child: Text(
+                desc!,
+                style: TextStyle(
+                  fontSize: kSummaryFontSize,
+                  color: CupertinoDynamicColor.resolve(
+                      CupertinoColors.secondaryLabel, context),
+                ),
+                textAlign: TextAlign.start,
+              ),
             ),
           ),
       ],

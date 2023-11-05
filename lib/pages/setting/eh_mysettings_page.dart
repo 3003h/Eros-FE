@@ -59,53 +59,50 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                   ),
                 ],
               )),
-          child: SafeArea(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                ListViewEhMySettings(),
-                Obx(() {
-                  if (controller.isLoading) {
-                    // loading 提示组件
-                    return GestureDetector(
-                      behavior: HitTestBehavior.opaque, // 拦截触摸手势
-                      child: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: CupertinoDynamicColor.resolve(
-                                          CupertinoColors.systemGrey,
-                                          Get.context!)
-                                      .withOpacity(0.1),
-                                  offset: const Offset(0, 5),
-                                  blurRadius: 10, //阴影模糊程度
-                                  spreadRadius: 3, //阴影扩散程度
-                                ),
-                              ],
-                            ),
-                            child: CupertinoPopupSurface(
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                child: const CupertinoActivityIndicator(
-                                    radius: kIndicatorRadius),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              ListViewEhMySettings(),
+              Obx(() {
+                if (controller.isLoading) {
+                  // loading 提示组件
+                  return GestureDetector(
+                    behavior: HitTestBehavior.opaque, // 拦截触摸手势
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: CupertinoDynamicColor.resolve(
+                                        CupertinoColors.systemGrey,
+                                        Get.context!)
+                                    .withOpacity(0.1),
+                                offset: const Offset(0, 5),
+                                blurRadius: 10, //阴影模糊程度
+                                spreadRadius: 3, //阴影扩散程度
                               ),
+                            ],
+                          ),
+                          child: CupertinoPopupSurface(
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: const CupertinoActivityIndicator(
+                                  radius: kIndicatorRadius),
                             ),
                           ),
                         ),
                       ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }),
-              ],
-            ),
-            bottom: false,
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              }),
+            ],
           ));
     });
   }
@@ -317,6 +314,8 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
           onRefresh: controller.reloadData,
         ),
         SliverSafeArea(
+          left: false,
+          right: false,
           sliver: FutureBuilder<EhSettings?>(
               future: future,
               initialData: controller.ehSetting,

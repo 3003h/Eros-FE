@@ -1,16 +1,16 @@
 import 'package:fehviewer/common/controller/block_controller.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
-import 'block_rule_edit_dialog.dart';
 
 class BlockRulesPage extends GetView<BlockController> {
   const BlockRulesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final String _title = 'Block Rules';
+    final String _title = L10n.of(context).block_rules;
 
     return Obx(() {
       return CupertinoPageScaffold(
@@ -29,18 +29,13 @@ class BlockRulesPage extends GetView<BlockController> {
               size: 28,
             ),
             onPressed: () async {
-              final newName = await showCupertinoDialog<String>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (context) {
-                    return const BlockRuleEditDialog(
-                      text: '',
-                      title: 'Edit Block Rule',
-                    );
-                  });
-              // if (newName != null && newName.isNotEmpty) {
-              //   controller.crtNewTagset(name: newName);
-              // }
+              final result = await Get.toNamed<dynamic>(
+                EHRoutes.blockRuleEdit,
+                id: isLayoutLarge ? 2 : null,
+              );
+              if (result != null && result is BlockRule) {
+                controller.addBlockRule(result);
+              }
             },
           ),
         ),

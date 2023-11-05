@@ -32,20 +32,17 @@ class CustomHostsPage extends StatelessWidget {
           // transitionBetweenRoutes: false,
           trailing: _buildListBtns(context),
         ),
-        child: SafeArea(
-          bottom: false,
-          child: Container(
-            child: ListView(
-              children: <Widget>[
-                Obx(() => TextSwitchItem(
-                      _title,
-                      value: dnsConfigController.enableCustomHosts,
-                      onChanged: _handleEnableCustomHostDarkChanged,
-                    )),
-                const ItemSpace(),
-                CustomHostsListView(),
-              ],
-            ),
+        child: Container(
+          child: ListView(
+            children: <Widget>[
+              Obx(() => TextSwitchItem(
+                    _title,
+                    value: dnsConfigController.enableCustomHosts,
+                    onChanged: _handleEnableCustomHostDarkChanged,
+                  )),
+              const ItemSpace(),
+              CustomHostsListView(),
+            ],
           ),
         ),
       );

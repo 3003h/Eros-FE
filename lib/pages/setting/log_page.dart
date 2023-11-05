@@ -39,11 +39,8 @@ class LogPage extends StatelessWidget {
             onPressed: logService.removeAll,
           ),
         ),
-        child: SafeArea(
-          bottom: false,
-          child: Container(
-            child: CustomHostsListView(),
-          ),
+        child: Container(
+          child: CustomHostsListView(),
         ),
       );
     });

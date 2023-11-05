@@ -4,6 +4,7 @@ import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 import 'package:waterfall_flow/waterfall_flow.dart';
 
 import '../item/gallery_item_grid.dart';
@@ -84,105 +85,200 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
   Widget build(BuildContext context) {
     return Obx(() {
       return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(L10n.of(context).custom_width),
-        ),
-        child: SafeArea(
-          bottom: false,
-          top: true,
-          child: Container(
-            child: Column(
-              children: [
-                _buildListModeItem(
-                  context,
-                  initMode: selectedMode,
-                  onValueChanged: (val) {
-                    // logger.d('切换要修改的列表模式 listMode $val');
-                    setState(() {
-                      _onModeChange(val);
-                    });
-                  },
-                ),
-
-                // 开关
-                StatefulBuilder(builder: (context, setState) {
-                  return TextSwitchItem(
-                    L10n.of(context).custom_width,
-                    key: ValueKey(selectedMode),
-                    value: enableCustomWidth,
-                    onChanged: (bool val) {
-                      _ehSettingService.setItemConfig(
-                          selectedMode,
-                          (ItemConfig itemConfig) =>
-                              itemConfig.copyWith(enableCustomWidth: val));
-                      setState(() {
-                        enableCustomWidth = val;
-                      });
-                    },
-                    hideDivider: false,
-                  );
-                }),
-
-                Expanded(
-                  child: StatefulBuilder(builder: (context, setState) {
-                    return Column(
-                      children: [
-                        // 滑动条
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          constraints:
-                              const BoxConstraints(minHeight: kItemHeight),
-                          color: CupertinoDynamicColor.resolve(
-                              ehTheme.itemBackgroundColor!, context),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: CupertinoSlider(
-                                  value: customWidth,
-                                  min: 100,
-                                  max: 350,
-                                  divisions: 250,
-                                  onChanged: (double val) {
-                                    setState(() {
-                                      customWidth = val;
-                                    });
-                                  },
-                                  onChangeEnd: (double val) {
-                                    logger.d('onChangeEnd $val');
-                                    _ehSettingService.setItemConfig(
-                                        selectedMode,
-                                        (ItemConfig itemConfig) =>
-                                            itemConfig.copyWith(
-                                                customWidth: val.toInt()));
-                                  },
-                                ),
-                              ),
-                              Container(
-                                width: 50,
-                                alignment: Alignment.center,
-                                child: Text('${customWidth.toInt()}'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: ExampleView(
-                            selectedMode: selectedMode,
-                            customWidth: customWidth,
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
-                ),
-              ],
-            ),
+          backgroundColor: !ehTheme.isDarkMode
+              ? CupertinoColors.secondarySystemBackground
+              : null,
+          navigationBar: CupertinoNavigationBar(
+            middle: Text(L10n.of(context).custom_width),
           ),
-        ),
-      );
+          child: CustomScrollView(
+            slivers: [
+              SliverSafeArea(
+                left: false,
+                right: false,
+                sliver: MultiSliver(
+                  pushPinnedChildren: true,
+                  children: [
+                    SliverPinnedHeader(
+                      child: _buildListModeItem(
+                        context,
+                        initMode: selectedMode,
+                        onValueChanged: (val) {
+                          // logger.d('切换要修改的列表模式 listMode $val');
+                          setState(() {
+                            _onModeChange(val);
+                          });
+                        },
+                      ),
+                    ),
+                    _buildListModeItem(
+                      context,
+                      initMode: selectedMode,
+                      onValueChanged: (val) {
+                        // logger.d('切换要修改的列表模式 listMode $val');
+                        setState(() {
+                          _onModeChange(val);
+                        });
+                      },
+                    ),
+
+                    StatefulBuilder(builder: (context, setState) {
+                      return TextSwitchItem(
+                        L10n.of(context).custom_width,
+                        key: ValueKey(selectedMode),
+                        value: enableCustomWidth,
+                        onChanged: (bool val) {
+                          _ehSettingService.setItemConfig(
+                              selectedMode,
+                              (ItemConfig itemConfig) =>
+                                  itemConfig.copyWith(enableCustomWidth: val));
+                          setState(() {
+                            enableCustomWidth = val;
+                          });
+                        },
+                        hideDivider: false,
+                      );
+                    }),
+
+                    // 滑动条
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      constraints: const BoxConstraints(minHeight: kItemHeight),
+                      color: CupertinoDynamicColor.resolve(
+                          ehTheme.itemBackgroundColor!, context),
+                      child: SafeArea(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: CupertinoSlider(
+                                value: customWidth,
+                                min: 100,
+                                max: 350,
+                                divisions: 250,
+                                onChanged: (double val) {
+                                  setState(() {
+                                    customWidth = val;
+                                  });
+                                },
+                                onChangeEnd: (double val) {
+                                  logger.d('onChangeEnd $val');
+                                  _ehSettingService.setItemConfig(
+                                      selectedMode,
+                                      (ItemConfig itemConfig) => itemConfig
+                                          .copyWith(customWidth: val.toInt()));
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: 50,
+                              alignment: Alignment.center,
+                              child: Text('${customWidth.toInt()}'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ExampleView(
+                      selectedMode: selectedMode,
+                      customWidth: customWidth,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )
+
+          // child: Column(
+          //   children: [
+          //     SafeArea(
+          //       left: false,
+          //       right: false,
+          //       child: _buildListModeItem(
+          //         context,
+          //         initMode: selectedMode,
+          //         onValueChanged: (val) {
+          //           // logger.d('切换要修改的列表模式 listMode $val');
+          //           setState(() {
+          //             _onModeChange(val);
+          //           });
+          //         },
+          //       ),
+          //     ),
+          //
+          //     // 开关
+          //     StatefulBuilder(builder: (context, setState) {
+          //       return TextSwitchItem(
+          //         L10n.of(context).custom_width,
+          //         key: ValueKey(selectedMode),
+          //         value: enableCustomWidth,
+          //         onChanged: (bool val) {
+          //           _ehSettingService.setItemConfig(
+          //               selectedMode,
+          //               (ItemConfig itemConfig) =>
+          //                   itemConfig.copyWith(enableCustomWidth: val));
+          //           setState(() {
+          //             enableCustomWidth = val;
+          //           });
+          //         },
+          //         hideDivider: false,
+          //       );
+          //     }),
+          //
+          //
+          //
+          //     Expanded(
+          //       child: StatefulBuilder(builder: (context, setState) {
+          //         return Column(
+          //           children: [
+          //             // 滑动条
+          //             Container(
+          //               padding: const EdgeInsets.symmetric(horizontal: 20),
+          //               constraints: const BoxConstraints(minHeight: kItemHeight),
+          //               color: CupertinoDynamicColor.resolve(
+          //                   ehTheme.itemBackgroundColor!, context),
+          //               child: Row(
+          //                 children: [
+          //                   Expanded(
+          //                     child: CupertinoSlider(
+          //                       value: customWidth,
+          //                       min: 100,
+          //                       max: 350,
+          //                       divisions: 250,
+          //                       onChanged: (double val) {
+          //                         setState(() {
+          //                           customWidth = val;
+          //                         });
+          //                       },
+          //                       onChangeEnd: (double val) {
+          //                         logger.d('onChangeEnd $val');
+          //                         _ehSettingService.setItemConfig(
+          //                             selectedMode,
+          //                             (ItemConfig itemConfig) => itemConfig
+          //                                 .copyWith(customWidth: val.toInt()));
+          //                       },
+          //                     ),
+          //                   ),
+          //                   Container(
+          //                     width: 50,
+          //                     alignment: Alignment.center,
+          //                     child: Text('${customWidth.toInt()}'),
+          //                   ),
+          //                 ],
+          //               ),
+          //             ),
+          //             Expanded(
+          //               child: ExampleView(
+          //                 selectedMode: selectedMode,
+          //                 customWidth: customWidth,
+          //               ),
+          //             ),
+          //           ],
+          //         );
+          //       }),
+          //     ),
+          //   ],
+          // ),
+          );
     });
   }
 }
@@ -202,29 +298,48 @@ class ExampleView extends StatelessWidget {
 
     switch (selectedMode) {
       case ListModeEnum.grid:
-        return GridView.builder(
+        // return GridView.builder(
+        //   padding: const EdgeInsets.all(EHConst.gridCrossAxisSpacing),
+        //   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        //     maxCrossAxisExtent: customWidth,
+        //     childAspectRatio: EHConst.gridChildAspectRatio,
+        //     mainAxisSpacing: 4.0,
+        //     crossAxisSpacing: 4.0,
+        //   ),
+        //   itemBuilder: (context, index) {
+        //     return const _GridItem();
+        //   },
+        //   itemCount: kItemCount,
+        // );
+        return SliverPadding(
           padding: const EdgeInsets.all(EHConst.gridCrossAxisSpacing),
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: customWidth,
-            childAspectRatio: EHConst.gridChildAspectRatio,
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const _GridItem();
+              },
+              childCount: kItemCount,
+            ),
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: customWidth,
+              childAspectRatio: EHConst.gridChildAspectRatio,
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+            ),
           ),
-          itemBuilder: (context, index) {
-            return const _GridItem();
-          },
-          itemCount: kItemCount,
         );
       case ListModeEnum.waterfall:
-        return WaterfallFlowView(customWidth: customWidth);
+        return WaterfallFlowViewSliver(customWidth: customWidth);
       case ListModeEnum.waterfallLarge:
-        return WaterfallFlowView(
+        return WaterfallFlowViewSliver(
           customWidth: customWidth,
           large: true,
         );
 
       default:
-        return Container();
+        return const SliverToBoxAdapter(
+          child: SizedBox.shrink(),
+        );
     }
   }
 }
@@ -265,6 +380,47 @@ class WaterfallFlowView extends StatelessWidget {
   }
 }
 
+class WaterfallFlowViewSliver extends StatelessWidget {
+  const WaterfallFlowViewSliver({
+    super.key,
+    this.large = false,
+    required this.customWidth,
+  });
+
+  final bool large;
+  final double customWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverSafeArea(
+      minimum: EdgeInsets.all(large
+          ? EHConst.waterfallFlowLargeCrossAxisSpacing
+          : EHConst.waterfallFlowCrossAxisSpacing),
+      sliver: SliverWaterfallFlow(
+        gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: customWidth,
+          crossAxisSpacing: large
+              ? EHConst.waterfallFlowLargeCrossAxisSpacing
+              : EHConst.waterfallFlowCrossAxisSpacing,
+          mainAxisSpacing: large
+              ? EHConst.waterfallFlowLargeMainAxisSpacing
+              : EHConst.waterfallFlowMainAxisSpacing,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final aspectRatio = _aspectRatioList[index];
+            return _WaterfallFlowItem(
+              aspectRatio: aspectRatio,
+              large: large,
+            );
+          },
+          childCount: _aspectRatioList.length,
+        ),
+      ),
+    );
+  }
+}
+
 class _WaterfallFlowItem extends StatelessWidget {
   const _WaterfallFlowItem({
     Key? key,
@@ -295,8 +451,8 @@ class _WaterfallFlowItem extends StatelessWidget {
                   ehTheme.itemBackgroundColor!, context),
               alignment: Alignment.center,
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-              child: Column(
-                children: const [
+              child: const Column(
+                children: [
                   PlaceHolderLine(),
                   PlaceHolderLine(),
                 ],

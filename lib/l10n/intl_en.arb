@@ -429,5 +429,13 @@
   "show_gallery_tags": "Show Gallery Tags",
   "hide_thumbnails": "Hide Thumbnails",
   "hide_gallery_thumbnails": "Hide Gallery Thumbnails",
-  "horizontal_thumbnails": "Horizontal Thumbnails"
+  "horizontal_thumbnails": "Horizontal Thumbnails",
+  "block_rules": "Block Rules",
+  "edit_block_rule": "Edit Block Rule",
+  "block_rule": "Block Rule",
+  "enable": "Enable",
+  "regex": "Regex",
+  "title": "Title",
+  "comment": "Comment",
+  "commentator": "Commentator"
 }

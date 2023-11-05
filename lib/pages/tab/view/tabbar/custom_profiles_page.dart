@@ -80,23 +80,6 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
     });
 
     final List<Widget> _list = <Widget>[
-      // GroupItem(
-      //   title: L10n.of(context).group,
-      //   child: Obx(() {
-      //     return Column(
-      //       children: [
-      //         AnimatedCrossFade(
-      //           secondChild: normalView,
-      //           firstChild: reorderableView,
-      //           crossFadeState: controller.reorderable
-      //               ? CrossFadeState.showFirst
-      //               : CrossFadeState.showSecond,
-      //           duration: 300.milliseconds,
-      //         ),
-      //       ],
-      //     );
-      //   }),
-      // ),
       Obx(() {
         return Column(
           children: [
@@ -192,7 +175,8 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
           child: CustomScrollView(
             slivers: [
               SliverSafeArea(
-                bottom: false,
+                left: false,
+                right: false,
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {

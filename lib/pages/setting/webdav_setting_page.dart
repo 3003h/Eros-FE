@@ -27,11 +27,9 @@ class WebDavSetting extends GetView<WebdavController> {
           trailing: _buildListBtns(context),
         ),
         child: Obx(() {
-          return SafeArea(
-            child: controller.validAccount
-                ? const WebDavSettingView()
-                : Container(),
-          );
+          return controller.validAccount
+              ? const WebDavSettingView()
+              : Container();
         }),
       );
     });
@@ -69,7 +67,7 @@ class WebDavSettingView extends GetView<WebdavController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         SelectorSettingItem(
           title: L10n.of(context).webdav_Account,

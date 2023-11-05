@@ -20,10 +20,7 @@ class TagTranslatePage extends StatelessWidget {
           navigationBar: const CupertinoNavigationBar(
             middle: Text('标签翻译'),
           ),
-          child: SafeArea(
-            child: ListViewTagTranslate(),
-            bottom: false,
-          ));
+          child: ListViewTagTranslate());
     });
 
     return cps;
@@ -70,7 +67,7 @@ class ListViewTagTranslate extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool _tagTranslat = _ehSettingService.isTagTranslate;
 
-    return Column(
+    return ListView(
       children: [
         Obx(() => TextSwitchItem(
               '开启标签翻译',

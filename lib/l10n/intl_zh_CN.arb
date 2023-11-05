@@ -429,5 +429,13 @@
   "show_gallery_tags": "显示画廊标签",
   "hide_thumbnails": "隐藏缩略图",
   "hide_gallery_thumbnails": "隐藏画廊缩略图",
-  "horizontal_thumbnails": "水平缩略图"
+  "horizontal_thumbnails": "水平缩略图",
+  "block_rules": "屏蔽规则",
+  "edit_block_rule": "编辑屏蔽规则",
+  "block_rule": "屏蔽规则",
+  "enable": "启用",
+  "regex": "正则表达式",
+  "title": "标题",
+  "comment": "评论",
+  "commentator": "评论者"
 }

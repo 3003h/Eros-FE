@@ -73,6 +73,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("自动"),
         "avatar": MessageLookupByLibrary.simpleMessage("头像"),
         "back": MessageLookupByLibrary.simpleMessage("返回"),
+        "block_rule": MessageLookupByLibrary.simpleMessage("屏蔽规则"),
+        "block_rules": MessageLookupByLibrary.simpleMessage("屏蔽规则"),
         "blockers": MessageLookupByLibrary.simpleMessage("本地屏蔽"),
         "blurring_cover_background":
             MessageLookupByLibrary.simpleMessage("封面背景模糊化"),
@@ -89,6 +91,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "collapse": MessageLookupByLibrary.simpleMessage("折叠"),
         "color_picker_primary": MessageLookupByLibrary.simpleMessage("基本"),
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("色盘"),
+        "comment": MessageLookupByLibrary.simpleMessage("评论"),
+        "commentator": MessageLookupByLibrary.simpleMessage("评论者"),
         "copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
         "copy": MessageLookupByLibrary.simpleMessage("复制"),
         "current_site": m0,
@@ -120,10 +124,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloaded": MessageLookupByLibrary.simpleMessage("已下载"),
         "downloading": MessageLookupByLibrary.simpleMessage("下载中"),
         "edit": MessageLookupByLibrary.simpleMessage("编辑"),
+        "edit_block_rule": MessageLookupByLibrary.simpleMessage("编辑屏蔽规则"),
         "edit_comment": MessageLookupByLibrary.simpleMessage("编辑评论"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("我的标签"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai 设置"),
+        "enable": MessageLookupByLibrary.simpleMessage("启用"),
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("输入具体日期或偏移量 / GID"),
         "expand": MessageLookupByLibrary.simpleMessage("展开"),
@@ -266,6 +272,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "redirect_thumb_link_summary":
             MessageLookupByLibrary.simpleMessage("重定向缩略图链接为ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("重新下载"),
+        "regex": MessageLookupByLibrary.simpleMessage("正则表达式"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),
@@ -358,6 +365,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("点击翻页动画"),
         "theme": MessageLookupByLibrary.simpleMessage("主题"),
         "thumbnails": MessageLookupByLibrary.simpleMessage("缩略图"),
+        "title": MessageLookupByLibrary.simpleMessage("标题"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("总排行"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("月排行"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("年排行"),

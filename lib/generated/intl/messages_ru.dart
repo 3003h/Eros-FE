@@ -83,6 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Аватар"),
         "back": MessageLookupByLibrary.simpleMessage("Назад"),
+        "block_rule": MessageLookupByLibrary.simpleMessage("Block Rule"),
+        "block_rules": MessageLookupByLibrary.simpleMessage("Block Rules"),
         "blockers": MessageLookupByLibrary.simpleMessage("Blockers"),
         "blurring_cover_background":
             MessageLookupByLibrary.simpleMessage("Размытие фона обложки"),
@@ -104,6 +106,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "color_picker_primary":
             MessageLookupByLibrary.simpleMessage("основной"),
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("wheel"),
+        "comment": MessageLookupByLibrary.simpleMessage("Comment"),
+        "commentator": MessageLookupByLibrary.simpleMessage("Commentator"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Скопировано в буфер обмена"),
         "copy": MessageLookupByLibrary.simpleMessage("Копировать"),
@@ -149,12 +153,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloaded": MessageLookupByLibrary.simpleMessage("Скачано"),
         "downloading": MessageLookupByLibrary.simpleMessage("Скачивание"),
         "edit": MessageLookupByLibrary.simpleMessage("Редактировать"),
+        "edit_block_rule":
+            MessageLookupByLibrary.simpleMessage("Edit Block Rule"),
         "edit_comment":
             MessageLookupByLibrary.simpleMessage("Изменить комментарий"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("Мои теги"),
         "ehentai_settings":
             MessageLookupByLibrary.simpleMessage("EHentai настройки"),
+        "enable": MessageLookupByLibrary.simpleMessage("Enable"),
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("Показать"),
@@ -337,6 +344,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "redirect_thumb_link_summary": MessageLookupByLibrary.simpleMessage(
             "Перенаправление адреса миниатюры на ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Скачать заново"),
+        "regex": MessageLookupByLibrary.simpleMessage("Regex"),
         "reload_image":
             MessageLookupByLibrary.simpleMessage("Загрузить заново"),
         "remove_from_favorites":
@@ -464,6 +472,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Анимированные переходы страниц"),
         "theme": MessageLookupByLibrary.simpleMessage("Тема"),
         "thumbnails": MessageLookupByLibrary.simpleMessage("Превью"),
+        "title": MessageLookupByLibrary.simpleMessage("Title"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("За всё время"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("За месяц"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("За год"),

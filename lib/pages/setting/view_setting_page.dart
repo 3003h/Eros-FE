@@ -27,10 +27,7 @@ class ReadSettingPage extends StatelessWidget {
             // transitionBetweenRoutes: true,
             middle: Text(L10n.of(context).read_setting),
           ),
-          child: SafeArea(
-            bottom: false,
-            child: ViewSettingList(),
-          ));
+          child: ViewSettingList());
     });
 
     return cps;

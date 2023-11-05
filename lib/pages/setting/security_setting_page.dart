@@ -19,10 +19,7 @@ class SecuritySettingPage extends StatelessWidget {
             transitionBetweenRoutes: true,
             middle: Text(L10n.of(context).security),
           ),
-          child: SafeArea(
-            child: ListViewSecuritySetting(),
-            bottom: false,
-          ));
+          child: ListViewSecuritySetting());
     });
 
     return cps;

@@ -27,10 +27,7 @@ class EhSettingPage extends StatelessWidget {
           navigationBar: CupertinoNavigationBar(
             middle: Text(L10n.of(context).eh),
           ),
-          child: SafeArea(
-            child: ListViewEhSetting(),
-            bottom: false,
-          ));
+          child: ListViewEhSetting());
     });
 
     return cps;

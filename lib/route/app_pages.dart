@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
 import 'package:fehviewer/pages/gallery/view/add_tags_page.dart';
 import 'package:fehviewer/pages/gallery/view/all_thumbnails_page.dart';
@@ -58,7 +57,6 @@ import 'package:fehviewer/pages/tab/view/unlock_page.dart';
 import 'package:get/get.dart';
 
 import '../pages/tab/view/search_image_page.dart';
-import 'routes.dart';
 
 const Duration kUnLockPageTransitionDuration = Duration(milliseconds: 200);
 
@@ -139,7 +137,7 @@ class AppPages {
         () => Get.lazyPut(() => LoginController()),
       ),
     ),
-    GetPage<List<Cookie>>(
+    GetPage(
       name: EHRoutes.webLogin,
       page: () => WebLoginViewIn(),
     ),

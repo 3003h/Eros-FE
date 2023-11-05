@@ -18,10 +18,7 @@ class SearchSettingPage extends StatelessWidget {
             transitionBetweenRoutes: true,
             middle: Text(L10n.of(context).search),
           ),
-          child: SafeArea(
-            child: ListViewSearchSetting(),
-            bottom: false,
-          ));
+          child: ListViewSearchSetting());
     });
 
     return cps;

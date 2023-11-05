@@ -22,10 +22,7 @@ class DownloadSettingPage extends StatelessWidget {
             transitionBetweenRoutes: true,
             middle: Text(L10n.of(context).download),
           ),
-          child: SafeArea(
-            bottom: false,
-            child: ListViewDownloadSetting(),
-          ));
+          child: ListViewDownloadSetting());
     });
 
     return cps;

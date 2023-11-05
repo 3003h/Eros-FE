@@ -19,10 +19,7 @@ class AboutPage extends StatelessWidget {
           navigationBar: CupertinoNavigationBar(
             middle: Text(L10n.of(context).about),
           ),
-          child: SafeArea(
-            bottom: false,
-            child: ListViewAbout(),
-          ));
+          child: ListViewAbout());
     });
 
     return cps;

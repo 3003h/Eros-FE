@@ -51,38 +51,42 @@ class _SettingItems extends State<SettingItems> {
 
     final Widget container = Container(
         color: _color,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (widget.topDivider) _settingItemDivider(),
-            Container(
-              height: 50,
-              padding: const EdgeInsets.fromLTRB(16, 8, 20, 8),
-              child: Row(
-                children: <Widget>[
-                  Container(
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (widget.topDivider) _settingItemDivider(),
+              Container(
+                height: 50,
+                padding: const EdgeInsets.fromLTRB(16, 8, 20, 8),
+                child: Row(
+                  children: <Widget>[
+                    Container(
 //                    padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
-                    child: Icon(
-                      widget.icon,
-                      size: 26.0,
+                      child: Icon(
+                        widget.icon,
+                        size: 26.0,
+                        color: CupertinoColors.systemGrey,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(widget.text),
+                    ),
+                    const Spacer(),
+                    const Icon(
+                      CupertinoIcons.forward,
                       color: CupertinoColors.systemGrey,
                     ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: Text(widget.text),
-                  ),
-                  const Spacer(),
-                  const Icon(
-                    CupertinoIcons.forward,
-                    color: CupertinoColors.systemGrey,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            if (widget.bottomDivider) _settingItemDivider(),
-          ],
+              if (widget.bottomDivider) _settingItemDivider(),
+            ],
+          ),
         ));
 
     return GestureDetector(
@@ -90,7 +94,7 @@ class _SettingItems extends State<SettingItems> {
       // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        loggerNoStack.v('set tap ${widget.text} ');
+        loggerNoStack.t('set tap ${widget.text} ');
         if (isLayoutLarge) {
           final topRoute =
               SecondNavigatorObserver().history.lastOrNull?.settings.name;

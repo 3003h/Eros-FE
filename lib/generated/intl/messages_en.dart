@@ -82,6 +82,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("Automatic"),
         "avatar": MessageLookupByLibrary.simpleMessage("Avatar"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
+        "block_rule": MessageLookupByLibrary.simpleMessage("Block Rule"),
+        "block_rules": MessageLookupByLibrary.simpleMessage("Block Rules"),
         "blockers": MessageLookupByLibrary.simpleMessage("Blockers"),
         "blurring_cover_background": MessageLookupByLibrary.simpleMessage(
             "Blurring of cover background"),
@@ -102,6 +104,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "collapse": MessageLookupByLibrary.simpleMessage("Collapse"),
         "color_picker_primary": MessageLookupByLibrary.simpleMessage("Primary"),
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("Wheel"),
+        "comment": MessageLookupByLibrary.simpleMessage("Comment"),
+        "commentator": MessageLookupByLibrary.simpleMessage("Commentator"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
         "copy": MessageLookupByLibrary.simpleMessage("Copy"),
@@ -145,11 +149,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "downloaded": MessageLookupByLibrary.simpleMessage("Downloaded"),
         "downloading": MessageLookupByLibrary.simpleMessage("Downloading"),
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
+        "edit_block_rule":
+            MessageLookupByLibrary.simpleMessage("Edit Block Rule"),
         "edit_comment": MessageLookupByLibrary.simpleMessage("Edit comment"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("My Tags"),
         "ehentai_settings":
             MessageLookupByLibrary.simpleMessage("EHentai Settings"),
+        "enable": MessageLookupByLibrary.simpleMessage("Enable"),
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("Expand"),
@@ -324,6 +331,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "redirect_thumb_link_summary": MessageLookupByLibrary.simpleMessage(
             "Redirect Thumb Link To ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
+        "regex": MessageLookupByLibrary.simpleMessage("Regex"),
         "reload_image": MessageLookupByLibrary.simpleMessage("Reload image"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("Remove from favorites"),
@@ -442,6 +450,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
         "thumbnails": MessageLookupByLibrary.simpleMessage("Thumbnails"),
+        "title": MessageLookupByLibrary.simpleMessage("Title"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("All-Time"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("Past Month"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("Past Year"),

@@ -1,4 +1,8 @@
 {
   "filter_comments_by_score?": false,
-  "score_filtering_threshold?": -20
+  "score_filtering_threshold?": -20,
+  "rule_for_title?": "$[]block_rule",
+  "rule_for_uploader?": "$[]block_rule",
+  "rule_for_commentator?": "$[]block_rule",
+  "rule_for_comment?": "$[]block_rule"
 }

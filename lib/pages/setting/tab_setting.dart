@@ -4,9 +4,9 @@ import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class TabSettingPage extends StatelessWidget {
   @override
@@ -19,26 +19,47 @@ class TabSettingPage extends StatelessWidget {
         navigationBar: CupertinoNavigationBar(
           middle: Text(L10n.of(context).tabbar_setting),
         ),
-        child: SafeArea(
-          bottom: false,
-          child: CustomScrollView(
-            controller: Get.find<TabSettingController>().scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              SliverToBoxAdapter(
-                child: Container(
-                  height: 38,
-                  padding: const EdgeInsets.only(left: 20, bottom: 4),
-                  alignment: Alignment.bottomLeft,
+        child: CustomScrollView(
+          controller: Get.find<TabSettingController>().scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverSafeArea(
+              left: false,
+              right: false,
+              sliver: MultiSliver(children: [
+                const TablistView(),
+                Container(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    top: 4,
+                    bottom: 10,
+                    right: 20,
+                  ),
+                  width: double.infinity,
                   child: Text(
                     L10n.of(context).tab_sort,
-                    style: const TextStyle(fontSize: 14),
+                    style: TextStyle(
+                      fontSize: kSummaryFontSize,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.secondaryLabel, context),
+                    ),
+                    textAlign: TextAlign.start,
                   ),
                 ),
-              ),
-              const TablistView(),
-            ],
-          ),
+              ]),
+            ),
+            // SliverToBoxAdapter(
+            //   child: Container(
+            //     height: 38,
+            //     padding: const EdgeInsets.only(left: 20, bottom: 4),
+            //     alignment: Alignment.bottomLeft,
+            //     child: Text(
+            //       L10n.of(context).tab_sort,
+            //       style: const TextStyle(fontSize: 14),
+            //     ),
+            //   ),
+            // ),
+          ],
         ),
       );
     });
@@ -60,6 +81,7 @@ class TablistView extends StatelessWidget {
               (e) => TextSwitchItem(
                 tabPages.tabTitles[e] ?? '',
                 key: UniqueKey(),
+                hideDivider: e == controller.tabList.last,
                 icon: Padding(
                   padding: const EdgeInsets.only(right: 18.0),
                   child: Icon(

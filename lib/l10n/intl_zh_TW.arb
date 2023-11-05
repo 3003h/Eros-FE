@@ -429,5 +429,13 @@
   "show_gallery_tags": "Show Gallery Tags",
   "hide_thumbnails": "Hide Thumbnails",
   "hide_gallery_thumbnails": "Hide Gallery Thumbnails",
-  "horizontal_thumbnails": "Horizontal Thumbnails"
+  "horizontal_thumbnails": "Horizontal Thumbnails",
+  "block_rules": "屏蔽规则",
+  "edit_block_rule": "编辑屏蔽规则",
+  "block_rule": "屏蔽规则",
+  "enable": "启用",
+  "regex": "正则表达式",
+  "title": "标题",
+  "comment": "评论",
+  "commentator": "评论者"
 }

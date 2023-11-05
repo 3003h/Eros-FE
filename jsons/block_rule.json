@@ -1,0 +1,6 @@
+{
+  "block_type?": "Title",
+  "enabled?": true,
+  "enable_regex?": false,
+  "rule_text?": "test"
+}

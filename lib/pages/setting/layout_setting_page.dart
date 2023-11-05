@@ -28,10 +28,7 @@ class LayoutSettingPage extends StatelessWidget {
           navigationBar: CupertinoNavigationBar(
             middle: Text(L10n.of(context).layout),
           ),
-          child: SafeArea(
-            bottom: false,
-            child: ListViewLayoutSetting(),
-          ));
+          child: ListViewLayoutSetting());
     });
 
     return cps;
