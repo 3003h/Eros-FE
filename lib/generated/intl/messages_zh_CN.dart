@@ -273,6 +273,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("重定向缩略图链接为ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("重新下载"),
         "regex": MessageLookupByLibrary.simpleMessage("正则表达式"),
+        "regex_format_error": MessageLookupByLibrary.simpleMessage("正则表达式格式错误"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新载入图片"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("从收藏夹中删除"),

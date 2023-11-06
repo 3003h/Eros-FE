@@ -4454,6 +4454,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `Regex format error`
+  String get regex_format_error {
+    return Intl.message(
+      'Regex format error',
+      name: 'regex_format_error',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

@@ -289,6 +289,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Redirect Thumb Link To ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "regex": MessageLookupByLibrary.simpleMessage("正则表达式"),
+        "regex_format_error":
+            MessageLookupByLibrary.simpleMessage("Regex format error"),
         "reload_image": MessageLookupByLibrary.simpleMessage("重新載入圖片"),
         "remove_from_favorites": MessageLookupByLibrary.simpleMessage("從收藏中刪除"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("回復評論"),

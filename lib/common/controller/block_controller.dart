@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class BlockController extends GetxController {
@@ -13,23 +14,68 @@ class BlockController extends GetxController {
   final ruleForCommentator = <BlockRule>[].obs;
   final ruleForComment = <BlockRule>[].obs;
 
+  final blockRuleTextEditingController = TextEditingController();
+
+  final _currentRuleText = ''.obs;
+  String get currentRuleText => _currentRuleText.value;
+  set currentRuleText(String value) => _currentRuleText.value = value;
+
+  final _currentEnableRegex = false.obs;
+  bool get currentEnableRegex => _currentEnableRegex.value;
+  set currentEnableRegex(bool value) => _currentEnableRegex.value = value;
+
+  bool get isRegexFormatError {
+    if (currentRuleText.isEmpty || !currentEnableRegex) {
+      return false;
+    }
+    // logger.d('currentRuleText $currentRuleText');
+    try {
+      RegExp(currentRuleText);
+      return false;
+    } catch (e) {
+      logger.e('$e');
+      return true;
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    logger.d('onInit');
+    ruleForTitle.value = ehSettingService.blockConfig.ruleForTitle ?? [];
+    ruleForUploader.value = ehSettingService.blockConfig.ruleForUploader ?? [];
+    ruleForCommentator.value =
+        ehSettingService.blockConfig.ruleForCommentator ?? [];
+    ruleForComment.value = ehSettingService.blockConfig.ruleForComment ?? [];
+
+    blockRuleTextEditingController.addListener(() {
+      currentRuleText = blockRuleTextEditingController.text;
+    });
+  }
+
   bool matchRule({String? text, required BlockType blockType}) {
     if (text == null || text.isEmpty) {
       return false;
     }
     final List<BlockRule> _ruleList = getRuleListByType(blockType);
     for (final BlockRule _rule in _ruleList) {
-      final _ruleText = _rule.ruleText?.trim();
+      // 不支持 (?i) 写法, 最小限度修正
+      final _ruleText = _rule.ruleText?.trim().replaceAll('(?i)', '');
 
       // default enabled
       if (!(_rule.enabled ?? true) || _ruleText == null || _ruleText.isEmpty) {
         continue;
       }
       if (_rule.enableRegex ?? false) {
-        final RegExp _regExp = RegExp(_ruleText);
-        if (_regExp.hasMatch(text)) {
-          logger.d('matchRule:${_rule.toJson()}\ntext: $text');
-          return true;
+        try {
+          final RegExp _regExp = RegExp(_ruleText);
+          if (_regExp.hasMatch(text)) {
+            logger.d('matchRule:${_rule.toJson()}\ntext: $text');
+            return true;
+          }
+        } catch (e, s) {
+          logger.e('$e\n$s');
+          return false;
         }
       } else {
         if (text.contains(_ruleText)) {
@@ -54,17 +100,6 @@ class BlockController extends GetxController {
       default:
         return [];
     }
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    logger.d('onInit');
-    ruleForTitle.value = ehSettingService.blockConfig.ruleForTitle ?? [];
-    ruleForUploader.value = ehSettingService.blockConfig.ruleForUploader ?? [];
-    ruleForCommentator.value =
-        ehSettingService.blockConfig.ruleForCommentator ?? [];
-    ruleForComment.value = ehSettingService.blockConfig.ruleForComment ?? [];
   }
 
   void saveBlockRule() {

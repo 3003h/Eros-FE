@@ -437,5 +437,6 @@
   "regex": "Regex",
   "title": "Title",
   "comment": "Comment",
-  "commentator": "Commentator"
+  "commentator": "Commentator",
+  "regex_format_error": "Regex format error"
 }

@@ -345,6 +345,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Перенаправление адреса миниатюры на ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Скачать заново"),
         "regex": MessageLookupByLibrary.simpleMessage("Regex"),
+        "regex_format_error":
+            MessageLookupByLibrary.simpleMessage("Regex format error"),
         "reload_image":
             MessageLookupByLibrary.simpleMessage("Загрузить заново"),
         "remove_from_favorites":

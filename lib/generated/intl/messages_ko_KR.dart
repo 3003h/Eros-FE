@@ -307,6 +307,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Redirect Thumb Link To ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("Redownload"),
         "regex": MessageLookupByLibrary.simpleMessage("Regex"),
+        "regex_format_error":
+            MessageLookupByLibrary.simpleMessage("Regex format error"),
         "reload_image": MessageLookupByLibrary.simpleMessage("이미지 새로고침"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("즐겨찾기에서 제거"),

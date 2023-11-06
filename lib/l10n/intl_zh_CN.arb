@@ -437,5 +437,6 @@
   "regex": "正则表达式",
   "title": "标题",
   "comment": "评论",
-  "commentator": "评论者"
+  "commentator": "评论者",
+  "regex_format_error": "正则表达式格式错误"
 }

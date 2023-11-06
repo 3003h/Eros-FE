@@ -26,9 +26,9 @@ class BlockRuleEditPage extends GetView<BlockController> {
           enabled: true,
           enableRegex: controller.latestEnableRegex ?? false,
         );
-    final blockRuleTextEditingController = TextEditingController(
-      text: _blockRule.ruleText,
-    );
+
+    controller.blockRuleTextEditingController.text = _blockRule.ruleText ?? '';
+    controller.currentEnableRegex = _blockRule.enableRegex ?? false;
 
     final List<Widget> _list = <Widget>[
       TextSwitchItem(
@@ -43,6 +43,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
         value: _blockRule.enableRegex ?? false,
         onChanged: (val) {
           _blockRule = _blockRule.copyWith(enableRegex: val);
+          controller.currentEnableRegex = val;
         },
         // hideDivider: true,
       ),
@@ -69,7 +70,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
                     child: CupertinoTextField(
                       decoration: null,
                       maxLines: null,
-                      controller: blockRuleTextEditingController,
+                      controller: controller.blockRuleTextEditingController,
                       placeholder: L10n.of(context).block_rule,
                       placeholderStyle: const TextStyle(
                         fontWeight: FontWeight.w400,
@@ -95,6 +96,26 @@ class BlockRuleEditPage extends GetView<BlockController> {
           ),
         ),
       ),
+      Obx(() {
+        return Container(
+          padding: const EdgeInsets.only(
+            left: 20,
+            bottom: 4,
+            top: 4,
+          ),
+          width: double.infinity,
+          child: Text(
+            controller.isRegexFormatError
+                ? L10n.of(context).regex_format_error
+                : '',
+            style: TextStyle(
+                fontSize: 14,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemRed, context)),
+            textAlign: TextAlign.start,
+          ),
+        );
+      }),
     ];
 
     return Obx(() {
@@ -112,14 +133,16 @@ class BlockRuleEditPage extends GetView<BlockController> {
               CupertinoIcons.check_mark_circled,
               size: 28,
             ),
-            onPressed: () async {
-              FocusScope.of(context).requestFocus(FocusNode());
-              logger.d('_blockRule ${_blockRule.toJson()}');
-              Get.back<BlockRule>(
-                id: isLayoutLarge ? 2 : null,
-                result: _blockRule,
-              );
-            },
+            onPressed: controller.isRegexFormatError
+                ? null
+                : () async {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    logger.d('_blockRule ${_blockRule.toJson()}');
+                    Get.back<BlockRule>(
+                      id: isLayoutLarge ? 2 : null,
+                      result: _blockRule,
+                    );
+                  },
           ),
         ),
         child: ListView.builder(
@@ -139,6 +162,7 @@ class _BlockTypeSelector extends StatefulWidget {
     this.onChanged,
     this.initValue,
   });
+
   final ValueChanged<BlockType>? onChanged;
   final BlockType? initValue;
 
