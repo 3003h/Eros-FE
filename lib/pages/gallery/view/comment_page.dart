@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
@@ -34,6 +35,7 @@ class _CommentPageState extends State<CommentPage>
   late CommentController controller;
 
   EhSettingService get _ehSettingService => Get.find();
+  BlockController get _blockController => Get.find();
 
   @override
   void initState() {
@@ -76,7 +78,7 @@ class _CommentPageState extends State<CommentPage>
     return Obx(() {
       logger.t('build commentListView');
 
-      late final List<GalleryComment>? _comments;
+      List<GalleryComment>? _comments;
 
       if (_ehSettingService.showOnlyUploaderComment) {
         final _uploaderId = controller.comments
@@ -95,7 +97,18 @@ class _CommentPageState extends State<CommentPage>
       } else {
         _comments = controller.comments;
       }
-      // _comments = controller.comments;
+
+      // 根据屏蔽规则过滤评论
+      _comments = _comments?.where((element) {
+        return !_blockController.matchRule(
+              text: element.text,
+              blockType: BlockType.comment,
+            ) &&
+            !_blockController.matchRule(
+              text: element.name,
+              blockType: BlockType.commentator,
+            );
+      }).toList();
 
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: kPadding),

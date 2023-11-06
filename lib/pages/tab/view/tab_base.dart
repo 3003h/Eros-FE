@@ -1,8 +1,6 @@
+import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/extension.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_debug_simple.dart';
@@ -13,8 +11,6 @@ import 'package:fehviewer/pages/item/gallery_item_simple.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple_placeholder.dart';
 import 'package:fehviewer/pages/tab/controller/enum.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -580,6 +576,23 @@ Widget getGallerySliverList(
 }) {
   final EhSettingService ehSettingService = Get.find();
   final _key = key ?? ValueKey(galleryProviders.hashCode);
+
+  final BlockController _blockController = Get.find();
+
+  galleryProviders = galleryProviders?.where((GalleryProvider element) {
+    return !_blockController.matchRule(
+          blockType: BlockType.title,
+          text: element.englishTitle,
+        ) &&
+        !_blockController.matchRule(
+          blockType: BlockType.title,
+          text: element.japaneseTitle,
+        ) &&
+        !_blockController.matchRule(
+          blockType: BlockType.uploader,
+          text: element.uploader,
+        );
+  }).toList();
 
   // logger.d('next $next');
 

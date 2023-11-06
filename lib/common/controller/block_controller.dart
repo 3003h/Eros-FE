@@ -13,6 +13,49 @@ class BlockController extends GetxController {
   final ruleForCommentator = <BlockRule>[].obs;
   final ruleForComment = <BlockRule>[].obs;
 
+  bool matchRule({String? text, required BlockType blockType}) {
+    if (text == null || text.isEmpty) {
+      return false;
+    }
+    final List<BlockRule> _ruleList = getRuleListByType(blockType);
+    for (final BlockRule _rule in _ruleList) {
+      final _ruleText = _rule.ruleText?.trim();
+
+      // default enabled
+      if (!(_rule.enabled ?? true) || _ruleText == null || _ruleText.isEmpty) {
+        continue;
+      }
+      if (_rule.enableRegex ?? false) {
+        final RegExp _regExp = RegExp(_ruleText);
+        if (_regExp.hasMatch(text)) {
+          logger.d('matchRule:${_rule.toJson()}\ntext: $text');
+          return true;
+        }
+      } else {
+        if (text.contains(_ruleText)) {
+          logger.d('matchRule: ${_rule.toJson()}\ntext: $text');
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  List<BlockRule> getRuleListByType(BlockType? blockType) {
+    switch (blockType) {
+      case BlockType.title:
+        return ruleForTitle;
+      case BlockType.uploader:
+        return ruleForUploader;
+      case BlockType.commentator:
+        return ruleForCommentator;
+      case BlockType.comment:
+        return ruleForComment;
+      default:
+        return [];
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -24,13 +67,14 @@ class BlockController extends GetxController {
     ruleForComment.value = ehSettingService.blockConfig.ruleForComment ?? [];
   }
 
-  void updateBlockRule() {
+  void saveBlockRule() {
     ehSettingService.blockConfig = ehSettingService.blockConfig.copyWith(
       ruleForTitle: ruleForTitle,
       ruleForUploader: ruleForUploader,
       ruleForCommentator: ruleForCommentator,
       ruleForComment: ruleForComment,
     );
+    Global.saveProfile();
   }
 
   void addBlockRule(BlockRule result) {
@@ -40,21 +84,42 @@ class BlockController extends GetxController {
     }
     final BlockType? _blockType =
         BlockType.values.asNameMap()[result.blockType];
-    switch (_blockType) {
-      case BlockType.title:
-        ruleForTitle.add(result);
-        break;
-      case BlockType.uploader:
-        ruleForUploader.add(result);
-        break;
-      case BlockType.commentator:
-        ruleForCommentator.add(result);
-        break;
-      case BlockType.comment:
-        ruleForComment.add(result);
-        break;
-      default:
-        break;
+    getRuleListByType(_blockType).add(result);
+    saveBlockRule();
+  }
+
+  void updateBlockRule(BlockRule oldBlockRule, BlockRule newBlockRule) {
+    logger.d('oldBlockRule ${oldBlockRule.toJson()}');
+    logger.d('newBlockRule ${newBlockRule.toJson()}');
+
+    // if type is different, remove old rule and add new rule
+    if (oldBlockRule.blockType != newBlockRule.blockType) {
+      final _oldBlockType =
+          BlockType.values.asNameMap()[oldBlockRule.blockType];
+      removeRule(
+        oldBlockRule.blockType,
+        getRuleListByType(_oldBlockType).indexOf(oldBlockRule),
+      );
+      addBlockRule(newBlockRule);
+      return;
     }
+
+    if (newBlockRule.ruleText?.trim().isEmpty ?? true) {
+      return;
+    }
+    final BlockType? _blockType =
+        BlockType.values.asNameMap()[oldBlockRule.blockType];
+
+    final int _index = getRuleListByType(_blockType).indexOf(oldBlockRule);
+    getRuleListByType(_blockType)[_index] = newBlockRule;
+
+    saveBlockRule();
+  }
+
+  void removeRule(String? blockType, int index) {
+    logger.d('removeRule $blockType $index');
+    final BlockType? _blockType = BlockType.values.asNameMap()[blockType];
+    getRuleListByType(_blockType).removeAt(index);
+    saveBlockRule();
   }
 }

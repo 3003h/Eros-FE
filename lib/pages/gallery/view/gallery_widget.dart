@@ -1,3 +1,4 @@
+import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
@@ -349,6 +350,7 @@ class TopCommentEx extends StatelessWidget {
   final String? uploader;
 
   EhSettingService get _ehSettingService => Get.find();
+  BlockController get _blockController => Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -376,6 +378,18 @@ class TopCommentEx extends StatelessWidget {
             (int.tryParse(comment.score) ?? 0) >
                 _ehSettingService.scoreFilteringThreshold);
       }
+
+      // 根据屏蔽规则过滤评论
+      _comments = _comments.where((element) {
+        return !_blockController.matchRule(
+              text: element.text,
+              blockType: BlockType.comment,
+            ) &&
+            !_blockController.matchRule(
+              text: element.name,
+              blockType: BlockType.commentator,
+            );
+      });
 
       _comments = _comments.take(max);
 

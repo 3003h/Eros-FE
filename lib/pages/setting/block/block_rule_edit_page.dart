@@ -14,15 +14,21 @@ class BlockRuleEditPage extends GetView<BlockController> {
   @override
   Widget build(BuildContext context) {
     final String _title = L10n.of(context).edit_block_rule;
-    final blockRuleTextEditingController = TextEditingController();
+
+    final BlockRule? _blockRuleFromArg =
+        Get.arguments is BlockRule ? Get.arguments as BlockRule : null;
 
     BlockRule _blockRule = blockRule ??
+        _blockRuleFromArg ??
         BlockRule(
           ruleText: '',
           blockType: controller.latestBlockType?.name ?? BlockType.title.name,
           enabled: true,
           enableRegex: controller.latestEnableRegex ?? false,
         );
+    final blockRuleTextEditingController = TextEditingController(
+      text: _blockRule.ruleText,
+    );
 
     final List<Widget> _list = <Widget>[
       TextSwitchItem(
@@ -70,9 +76,14 @@ class BlockRuleEditPage extends GetView<BlockController> {
                         color: CupertinoColors.placeholderText,
                         height: 1.25,
                       ),
+                      textInputAction: TextInputAction.done,
                       style: const TextStyle(height: 1.2),
+                      onEditingComplete: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
+                      keyboardType: TextInputType.text,
                       onChanged: (value) {
-                        logger.d('value $value');
+                        logger.t('value $value');
                         _blockRule = _blockRule.copyWith(
                             ruleText: value.replaceAll('\n', ' '));
                       },

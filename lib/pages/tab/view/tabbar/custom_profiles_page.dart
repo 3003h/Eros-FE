@@ -41,7 +41,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
               backgroundColor: CupertinoDynamicColor.resolve(
                   CupertinoColors.systemRed, context),
               foregroundColor: Colors.white,
-              icon: Icons.delete,
+              icon: CupertinoIcons.delete,
               // label: L10n.of(context).delete,
             ),
           ],
