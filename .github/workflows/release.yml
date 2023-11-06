@@ -159,13 +159,13 @@ jobs:
           ENCODED_KEYSTORE: ${{ secrets.ENCODED_KEYSTORE }}
 
       # 安装 JDK
-      - name: Setup Java JDK 11 (Android)
+      - name: Setup Java JDK (Android)
         if: matrix.target == 'android'
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11'
-          cache: gradle
+          java-version: '17'
+#          cache: gradle
 
       # 安装 Flutter
       - name: Flutter action
