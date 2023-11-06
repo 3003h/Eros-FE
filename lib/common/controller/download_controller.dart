@@ -780,7 +780,6 @@ class DownloadController extends GetxController {
         if (parentPath.isContentUri && tempSavePath.isNotEmpty) {
           // read file
           final File file = File(tempSavePath);
-          final bytes = await file.readAsBytes();
 
           final extension = path.extension(tempSavePath);
 
@@ -788,16 +787,44 @@ class DownloadController extends GetxController {
 
           // SAF write file
           final fileName = '$fileNameWithoutExtension$extension';
-          await ss.createFileAsBytes(
-            parentUri,
-            mimeType: '*/*',
-            displayName: fileName,
-            bytes: bytes,
-          );
-          // delete temp file
-          await file.delete();
 
-          onDownloadCompleteWithFileName?.call(fileName);
+          // final bytes = await file.readAsBytes();
+          // await ss.createFileAsBytes(
+          //   parentUri,
+          //   mimeType: '*/*',
+          //   displayName: fileName,
+          //   bytes: bytes,
+          // );
+          // // delete temp file
+          // await file.delete();
+
+          file
+              .readAsBytes()
+              .then((bytes) {
+                ss.createFileAsBytes(
+                  parentUri,
+                  mimeType: '*/*',
+                  displayName: fileName,
+                  bytes: bytes,
+                );
+              })
+              .then((value) => file.delete())
+              .whenComplete(
+                  () => onDownloadCompleteWithFileName?.call(fileName));
+
+          // try {
+          //   await safCreateDocumentFileFromPath(
+          //     parentUri,
+          //     mimeType: '*/*',
+          //     displayName: fileName,
+          //     sourceFilePath: tempSavePath,
+          //   );
+          // } finally {
+          //   // delete temp file
+          //   await file.delete();
+          // }
+
+          // onDownloadCompleteWithFileName?.call(fileName);
         } else {
           logger.t('normal realSaveFullPath $realSaveFullPath');
           onDownloadCompleteWithFileName?.call(path.basename(realSaveFullPath));

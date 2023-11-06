@@ -26,6 +26,7 @@ import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:photo_view/photo_view.dart';
 import 'package:preload_page_view/preload_page_view.dart';
+import 'package:saf/saf.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:synchronized/synchronized.dart';
@@ -143,6 +144,8 @@ class ViewExtController extends GetxController {
   Timer? autoNextTimer;
 
   StreamSubscription? _volumeKeyDownSubscription;
+
+  String? safCacheDirectory;
 
   @override
   void onInit() {
@@ -285,6 +288,11 @@ class ViewExtController extends GetxController {
     OrientationHelper.setPreferredOrientations(DeviceOrientation.values);
 
     vState.asyncInputStreamMap.values.map((e) => e.close());
+
+    if (safCacheDirectory != null) {
+      Saf.clearCacheFor(safCacheDirectory);
+      safCacheDirectory = null;
+    }
 
     super.onClose();
   }
@@ -606,7 +614,9 @@ class ViewExtController extends GetxController {
       if (task.savedDir?.isContentUri ?? false) {
         final _uri = task.safUri ??
             '${task.savedDir}%2F${Uri.encodeComponent(task.fileName ?? '')}';
-        filePath = await safCacheSingle(Uri.parse(_uri));
+        final result = await safCacheSingle(Uri.parse(_uri));
+        filePath = result.cachePath;
+        safCacheDirectory = result.parentPath;
       } else {
         filePath = path.join(task.savedDir ?? '', task.fileName);
       }

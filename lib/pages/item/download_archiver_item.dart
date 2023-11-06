@@ -15,6 +15,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:saf/saf.dart';
 
 import 'download_gallery_item.dart';
 
@@ -232,9 +233,12 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
     }
 
     late String? archiverPath;
+    late String safCacheDirectory;
     if (filePath.realArchiverPath.isContentUri) {
       logger.d('filePath.realArchiverPath ${filePath.realArchiverPath}');
-      archiverPath = await safCacheSingle(Uri.parse(filePath.realArchiverPath));
+      final result = await safCacheSingle(Uri.parse(filePath.realArchiverPath));
+      archiverPath = result.cachePath;
+      safCacheDirectory = result.parentPath;
     } else {
       archiverPath = filePath.realArchiverPath;
     }
@@ -255,6 +259,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
         lastIndex ?? 0, asyncArchive, '$gid');
 
     inputStream.close();
+    Saf.clearCacheFor(safCacheDirectory);
   }
 
   Widget _buildCover() {

@@ -43,7 +43,8 @@ Future<String> safCacheSingle_Old(Uri cacheUri,
   return cachePath;
 }
 
-Future<String?> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
+Future<({String? cachePath, String parentPath})> safCacheSingle(Uri cacheUri,
+    {bool overwrite = false}) async {
   final pathSegments = cacheUri.pathSegments;
   logger.d('pathSegments: \n${pathSegments.join('\n')}');
 
@@ -68,7 +69,7 @@ Future<String?> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
   final cachePath = await saf.singleCache(filePath: filePath);
   logger.d('cachePath: $cachePath');
 
-  return cachePath;
+  return (cachePath: cachePath, parentPath: parentPath);
 }
 
 Future<String?> safCreateDocumentFileFromPath(
@@ -76,6 +77,7 @@ Future<String?> safCreateDocumentFileFromPath(
   required String sourceFilePath,
   required String? displayName,
   required String? mimeType,
+  bool checkPermission = true,
 }) async {
   final pathSegments = parentUri.pathSegments;
   logger.d('pathSegments: \n${pathSegments.join('\n')}');
@@ -89,10 +91,13 @@ Future<String?> safCreateDocumentFileFromPath(
   logger.d('parentPath: $parentPath, sourceFilePath: $sourceFilePath');
 
   final saf = Saf(parentPath);
-  bool? isGranted = await saf.getDirectoryPermission(isDynamic: false);
-  if (isGranted == null || !isGranted) {
-    await Saf.releasePersistedPermissions();
-    await saf.getDirectoryPermission(isDynamic: false);
+
+  if (checkPermission) {
+    bool? isGranted = await saf.getDirectoryPermission(isDynamic: true);
+    if (isGranted == null || !isGranted) {
+      await Saf.releasePersistedPermissions();
+      await saf.getDirectoryPermission(isDynamic: true);
+    }
   }
 
   final documentFileUri = await saf.createDocumentFileFromPath(
