@@ -55,37 +55,39 @@ class BarsItem extends StatelessWidget {
           ),
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      title,
-                      maxLines: maxLines,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        height: 1.2,
-                      ).copyWith(fontSize: titleSize),
-                    ),
-                    if (desc != null && desc!.isNotEmpty)
+          child: SafeArea(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                       Text(
-                        desc ?? '',
-                        maxLines: null,
-                        style: _kDescStyle,
-                      ).paddingOnly(top: 6.0)
-                  ],
+                        title,
+                        maxLines: maxLines,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          height: 1.2,
+                        ).copyWith(fontSize: titleSize),
+                      ),
+                      if (desc != null && desc!.isNotEmpty)
+                        Text(
+                          desc ?? '',
+                          maxLines: null,
+                          style: _kDescStyle,
+                        ).paddingOnly(top: 6.0)
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(
-                CupertinoIcons.bars,
-                color: CupertinoColors.systemGrey,
-              ),
-            ],
+                const SizedBox(width: 8),
+                const Icon(
+                  CupertinoIcons.bars,
+                  color: CupertinoColors.systemGrey,
+                ),
+              ],
+            ),
           ),
         ),
         Divider(

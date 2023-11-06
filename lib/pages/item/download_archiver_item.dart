@@ -231,12 +231,16 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
       lastIndex = cache?.lastIndex;
     }
 
-    late String archiverPath;
+    late String? archiverPath;
     if (filePath.realArchiverPath.isContentUri) {
       logger.d('filePath.realArchiverPath ${filePath.realArchiverPath}');
       archiverPath = await safCacheSingle(Uri.parse(filePath.realArchiverPath));
     } else {
       archiverPath = filePath.realArchiverPath;
+    }
+
+    if (archiverPath == null) {
+      throw Exception('archiverPath is null');
     }
 
     // 异步读取zip

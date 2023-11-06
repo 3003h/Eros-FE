@@ -18,6 +18,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 import '../../../../common/service/layout_service.dart';
 import '../../fetch_list.dart';
@@ -351,12 +352,12 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           ? CupertinoColors.secondarySystemBackground
           : null,
       navigationBar: buildCupertinoNavigationBar(_style),
-      child: Container(
-        height: double.infinity,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: SafeArea(
-            child: Column(
+      child: CustomScrollView(
+        slivers: [
+          SliverSafeArea(
+            left: false,
+            right: false,
+            sliver: MultiSliver(
               children: [
                 // 分组名称编辑
                 GroupItem(
@@ -375,19 +376,6 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     placeholder: L10n.of(context).groupName,
                   ),
                 ),
-                // 隐藏分组
-                //GroupItem(
-                //  child: TextSwitchItem(
-                //    L10n.of(context).hide,
-                //    intValue: hideTab,
-                //    onChanged: (val) {
-                //      setState(() {
-                //        hideTab = val;
-                //      });
-                //    },
-                //    hideLine: true,
-                //  ),
-                //),
                 // 列表样式设置
                 GroupItem(
                   child: _buildListModeItem(context, hideLine: true),
@@ -399,63 +387,61 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                     width: double.infinity,
                     color: CupertinoDynamicColor.resolve(
                         ehTheme.itemBackgroundColor!, Get.context!),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      constraints: const BoxConstraints(
-                        minHeight: kItemHeight,
-                      ),
-                      child: CupertinoSlidingSegmentedControl<GalleryListType>(
-                        children: <GalleryListType, Widget>{
-                          GalleryListType.popular: Container(
-                            child: Text(
-                              L10n.of(context).tab_popular,
-                              style: segmentedTextStyle,
+                    child: SafeArea(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        constraints: const BoxConstraints(
+                          minHeight: kItemHeight,
+                        ),
+                        child:
+                            CupertinoSlidingSegmentedControl<GalleryListType>(
+                          children: <GalleryListType, Widget>{
+                            GalleryListType.popular: Container(
+                              child: Text(
+                                L10n.of(context).tab_popular,
+                                style: segmentedTextStyle,
+                              ),
+                              padding: segmentedPadding,
+                              // constraints: BoxConstraints(minWidth: 10),
                             ),
-                            padding: segmentedPadding,
-                            // constraints: BoxConstraints(minWidth: 10),
-                          ),
-                          GalleryListType.gallery: Container(
-                            child: Text(
-                              L10n.of(context).tab_gallery,
-                              style: segmentedTextStyle,
+                            GalleryListType.gallery: Container(
+                              child: Text(
+                                L10n.of(context).tab_gallery,
+                                style: segmentedTextStyle,
+                              ),
+                              padding: segmentedPadding,
+                              // constraints: BoxConstraints(minWidth: 10),
                             ),
-                            padding: segmentedPadding,
-                            // constraints: BoxConstraints(minWidth: 10),
-                          ),
-                          GalleryListType.watched: Container(
-                            child: Text(
-                              L10n.of(context).tab_watched,
-                              style: segmentedTextStyle,
+                            GalleryListType.watched: Container(
+                              child: Text(
+                                L10n.of(context).tab_watched,
+                                style: segmentedTextStyle,
+                              ),
+                              padding: segmentedPadding,
+                              // constraints: BoxConstraints(minWidth: 10),
                             ),
-                            padding: segmentedPadding,
-                            // constraints: BoxConstraints(minWidth: 10),
-                          ),
-                          // if (!kReleaseMode)
-                          //   GalleryListType.aggregate: Container(
-                          //     child: Text(L10n.of(context).aggregate),
-                          //     // constraints: BoxConstraints(minWidth: 10),
-                          //   ),
-                        },
-                        groupValue: _listType,
-                        onValueChanged: (GalleryListType? value) {
-                          customProfile = customProfile.copyWith(
-                              listTypeValue:
-                                  value?.name ?? GalleryListType.gallery.name);
-                          setState(() {
-                            _listType = value ?? GalleryListType.gallery;
-                          });
-                        },
+                          },
+                          groupValue: _listType,
+                          onValueChanged: (GalleryListType? value) {
+                            customProfile = customProfile.copyWith(
+                                listTypeValue: value?.name ??
+                                    GalleryListType.gallery.name);
+                            setState(() {
+                              _listType = value ?? GalleryListType.gallery;
+                            });
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // 搜索选项：关键词 类型 高级搜索，popular时隐藏, 聚合时显示聚合选项
+                // 搜索选项：关键词 类型 高级搜索，popular时隐藏
                 buildSearchOption(context),
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -488,7 +474,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   }
 
   Widget buildSearchOption(BuildContext context) {
-    return Column(
+    return MultiSliver(
       children: [
         // 设置搜索关键词
         GroupItem(
@@ -546,75 +532,56 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                 constraints: const BoxConstraints(minHeight: kItemHeight),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Builder(builder: (context) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: CupertinoTextField(
-                          decoration: null,
-                          controller: textController,
-                          placeholder: L10n.of(context).newText,
-                          placeholderStyle: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: CupertinoColors.placeholderText,
-                            height: 1.25,
-                          ),
-                          style: const TextStyle(height: 1.2),
-                          onChanged: (value) {
-                            profileEditController.searchText = value.trim();
-                            if (lastText.isEmpty && value.isNotEmpty) {
-                              showSearchAttach(value, context);
-                            }
-                            if (value.trim().isEmpty) {
-                              SmartDialog.dismiss();
-                            }
+                  return SafeArea(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoTextField(
+                            decoration: null,
+                            controller: textController,
+                            placeholder: L10n.of(context).newText,
+                            placeholderStyle: const TextStyle(
+                              fontWeight: FontWeight.w400,
+                              color: CupertinoColors.placeholderText,
+                              height: 1.25,
+                            ),
+                            style: const TextStyle(height: 1.2),
+                            onChanged: (value) {
+                              profileEditController.searchText = value.trim();
+                              if (lastText.isEmpty && value.isNotEmpty) {
+                                showSearchAttach(value, context);
+                              }
+                              if (value.trim().isEmpty) {
+                                SmartDialog.dismiss();
+                              }
 
-                            lastText = value.trim();
-                          },
-                        ),
-                      ),
-                      // 添加为新的条件组
-                      // CupertinoTheme(
-                      //   data: const CupertinoThemeData(
-                      //     primaryColor: CupertinoColors.activeGreen,
-                      //   ),
-                      //   child: CupertinoButton(
-                      //     padding: const EdgeInsets.symmetric(
-                      //         horizontal: 4, vertical: 8),
-                      //     minSize: 0,
-                      //     child: const Icon(
-                      //       CupertinoIcons.rectangle_stack_fill_badge_plus,
-                      //       size: 30,
-                      //     ),
-                      //     onPressed: () {
-                      //       // setState(() {
-                      //       //   searchText.add(textController.text.trim());
-                      //       //   textController.clear();
-                      //       // });
-                      //     },
-                      //   ),
-                      // ),
-                      // 添加到当前条件组
-                      CupertinoTheme(
-                        data: const CupertinoThemeData(
-                          primaryColor: CupertinoColors.activeGreen,
-                        ),
-                        child: CupertinoButton(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 4, vertical: 8),
-                          minSize: 0,
-                          child: const Icon(
-                            FontAwesomeIcons.circlePlus,
-                            size: 30,
+                              lastText = value.trim();
+                            },
                           ),
-                          onPressed: () {
-                            setState(() {
-                              searchTextList.add(textController.text.trim());
-                              textController.clear();
-                            });
-                          },
                         ),
-                      ),
-                    ],
+                        // 添加到当前条件组
+                        CupertinoTheme(
+                          data: const CupertinoThemeData(
+                            primaryColor: CupertinoColors.activeGreen,
+                          ),
+                          child: CupertinoButton(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 8),
+                            minSize: 0,
+                            child: const Icon(
+                              FontAwesomeIcons.circlePlus,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                searchTextList.add(textController.text.trim());
+                                textController.clear();
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 }),
               ),
@@ -627,19 +594,17 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           child: Container(
             color: CupertinoDynamicColor.resolve(
                 ehTheme.itemBackgroundColor!, Get.context!),
-            child: Column(
-              children: [
-                GalleryCatFilter(
-                  catNum: customProfile.cats ?? 0,
-                  maxCrossAxisExtent: 150,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                  onCatNumChanged: (int value) {
-                    logger.d('onCatNumChanged $value');
-                    customProfile = customProfile.copyWith(cats: value);
-                  },
-                ),
-              ],
+            child: SafeArea(
+              child: GalleryCatFilter(
+                catNum: customProfile.cats ?? 0,
+                maxCrossAxisExtent: 150,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                onCatNumChanged: (int value) {
+                  logger.d('onCatNumChanged $value');
+                  customProfile = customProfile.copyWith(cats: value);
+                },
+              ),
             ),
           ),
         ),
@@ -679,50 +644,20 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             children: [
               Column(
                 children: [
-                  // TextSwitchItem(
-                  //   L10n.of(context).s_Search_Gallery_Name,
-                  //   intValue: searchGalleryName,
-                  //   onChanged: (val) => searchGalleryName = val,
-                  // ),
-                  // TextSwitchItem(
-                  //   L10n.of(context).s_Search_Gallery_Tags,
-                  //   intValue: searchGalleryTags,
-                  //   onChanged: (val) => searchGalleryTags = val,
-                  // ),
-                  // TextSwitchItem(
-                  //   L10n.of(context).s_Search_Gallery_Description,
-                  //   intValue: searchGalleryDesc,
-                  //   onChanged: (val) => searchGalleryDesc = val,
-                  // ),
-                  // TextSwitchItem(
-                  //   L10n.of(context).s_Search_Torrent_Filenames,
-                  //   intValue: searchToreenFilenames,
-                  //   onChanged: (val) => searchToreenFilenames = val,
-                  // ),
                   TextSwitchItem(
                     L10n.of(context).s_Only_Show_Galleries_With_Torrents,
                     value: requireGalleryTorrent,
                     onChanged: (val) => requireGalleryTorrent = val,
                   ),
-                  // TextSwitchItem(
-                  //   L10n.of(context).s_Search_Low_Power_Tags,
-                  //   intValue: searchLowPowerTags,
-                  //   onChanged: (val) => searchLowPowerTags = val,
-                  // ),
-                  // TextSwitchItem(
-                  //   L10n.of(context).s_Search_Downvoted_Tags,
-                  //   intValue: searchDownvotedTags,
-                  //   onChanged: (val) => searchDownvotedTags = val,
-                  // ),
                   TextSwitchItem(
                     L10n.of(context).s_Show_Expunged_Galleries,
                     value: browseExpungedGalleries,
                     onChanged: (val) => browseExpungedGalleries = val,
                   ),
-                  buildSearchWithminRating(context),
+                  buildSearchWithMinRating(context),
                 ],
               ).autoCompressKeyboard(context),
-              buildSearchBetweenpage(context),
+              buildSearchBetweenPage(context),
             ],
           ),
         ),
@@ -753,7 +688,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   }
 
   /// 设置最低评分
-  Widget buildSearchWithminRating(BuildContext context) {
+  Widget buildSearchWithMinRating(BuildContext context) {
     return Column(
       children: [
         TextSwitchItem(
@@ -840,29 +775,61 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   }
 
   /// 页码范围
-  Widget buildSearchBetweenpage(BuildContext context) {
+  Widget buildSearchBetweenPage(BuildContext context) {
     return Container(
       color: CupertinoDynamicColor.resolve(
           ehTheme.itemBackgroundColor!, Get.context!),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextSwitchItem(
-              L10n.of(context).s_pages,
-              value: searchBetweenPage,
-              onChanged: (val) {
-                setState(() {
-                  searchBetweenPage = val;
-                });
-              },
+      child: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              child: TextSwitchItem(
+                L10n.of(context).s_pages,
+                value: searchBetweenPage,
+                onChanged: (val) {
+                  setState(() {
+                    searchBetweenPage = val;
+                  });
+                },
+              ),
             ),
-          ),
-          // 最小页码
-          Container(
-            margin: const EdgeInsets.only(right: 4),
-            width: 70,
-            height: kItemHeight - 18,
-            child: CupertinoTextField(
+            // 最小页码
+            Container(
+              margin: const EdgeInsets.only(right: 4),
+              width: 70,
+              height: kItemHeight - 18,
+              child: CupertinoTextField(
+                  decoration: BoxDecoration(
+                    color: ehTheme.textFieldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  keyboardType: TextInputType.number,
+                  // cursorHeight: 14,
+                  enabled: searchBetweenPage,
+                  style: const TextStyle(
+                    height: 1.2,
+                    textBaseline: TextBaseline.alphabetic,
+                  ),
+                  onChanged: (val) => startPage = val,
+                  // controller: TextEditingController(text: startPage),
+                  controller: TextEditingController()
+                    ..value = TextEditingValue(
+                      text: startPage ?? '',
+                      selection: TextSelection.fromPosition(
+                        TextPosition(
+                          affinity: TextAffinity.downstream,
+                          offset: (startPage ?? '').length,
+                        ),
+                      ),
+                    )),
+            ),
+            Text(L10n.of(context).s_and),
+            // 最大页码
+            Container(
+              margin: const EdgeInsets.only(left: 4, right: 20),
+              width: 70,
+              height: kItemHeight - 18,
+              child: CupertinoTextField(
                 decoration: BoxDecoration(
                   color: ehTheme.textFieldBackgroundColor,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -874,51 +841,21 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                   height: 1.2,
                   textBaseline: TextBaseline.alphabetic,
                 ),
-                onChanged: (val) => startPage = val,
-                // controller: TextEditingController(text: startPage),
+                onChanged: (val) => endPage = val,
                 controller: TextEditingController()
                   ..value = TextEditingValue(
-                    text: startPage ?? '',
+                    text: endPage ?? '',
                     selection: TextSelection.fromPosition(
                       TextPosition(
                         affinity: TextAffinity.downstream,
-                        offset: (startPage ?? '').length,
+                        offset: (endPage ?? '').length,
                       ),
                     ),
-                  )),
-          ),
-          Text(L10n.of(context).s_and),
-          // 最大页码
-          Container(
-            margin: const EdgeInsets.only(left: 4, right: 20),
-            width: 70,
-            height: kItemHeight - 18,
-            child: CupertinoTextField(
-              decoration: BoxDecoration(
-                color: ehTheme.textFieldBackgroundColor,
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              ),
-              keyboardType: TextInputType.number,
-              // cursorHeight: 14,
-              enabled: searchBetweenPage,
-              style: const TextStyle(
-                height: 1.2,
-                textBaseline: TextBaseline.alphabetic,
-              ),
-              onChanged: (val) => endPage = val,
-              controller: TextEditingController()
-                ..value = TextEditingValue(
-                  text: endPage ?? '',
-                  selection: TextSelection.fromPosition(
-                    TextPosition(
-                      affinity: TextAffinity.downstream,
-                      offset: (endPage ?? '').length,
-                    ),
                   ),
-                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

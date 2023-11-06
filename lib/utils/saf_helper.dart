@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pp;
+import 'package:saf/saf.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
 
 const kSafCacheDir = 'saf_cache';
@@ -16,7 +17,12 @@ const kDocumentFileColumns = <ss.DocumentFileColumn>[
   ss.DocumentFileColumn.mimeType,
 ];
 
-Future<String> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
+Future<String> safCacheSingle_Old(Uri cacheUri,
+    {bool overwrite = false}) async {
+  logger.d('safCacheSingle: $cacheUri');
+
+  // await safTest(cacheUri);
+
   final exists = await ss.exists(cacheUri) ?? false;
   if (!exists) {
     throw Exception('safCacheSingle: $cacheUri not exists');
@@ -35,6 +41,68 @@ Future<String> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
   }
 
   return cachePath;
+}
+
+Future<String?> safCacheSingle(Uri cacheUri, {bool overwrite = false}) async {
+  final pathSegments = cacheUri.pathSegments;
+  logger.d('pathSegments: \n${pathSegments.join('\n')}');
+
+  if (!pathSegments.last.startsWith('primary:')) {
+    throw Exception('safCacheSingle: $cacheUri not primary');
+  }
+
+  final pathList = pathSegments.last.replaceFirst('primary:', '').split('/');
+  final filePath = pathList.join('/');
+  final parentPath = pathList.sublist(0, pathList.length - 1).join('/');
+  final fileName = pathList.last;
+
+  logger.d('parentPath: $parentPath, fileName: $fileName');
+
+  final saf = Saf(parentPath);
+  bool? isGranted = await saf.getDirectoryPermission(isDynamic: false);
+  if (isGranted == null || !isGranted) {
+    await Saf.releasePersistedPermissions();
+    await saf.getDirectoryPermission(isDynamic: false);
+  }
+
+  final cachePath = await saf.singleCache(filePath: filePath);
+  logger.d('cachePath: $cachePath');
+
+  return cachePath;
+}
+
+Future<String?> safCreateDocumentFileFromPath(
+  Uri parentUri, {
+  required String sourceFilePath,
+  required String? displayName,
+  required String? mimeType,
+}) async {
+  final pathSegments = parentUri.pathSegments;
+  logger.d('pathSegments: \n${pathSegments.join('\n')}');
+
+  if (!pathSegments.last.startsWith('primary:')) {
+    throw Exception('safCreateDocumentFileFromPath: $parentUri not primary');
+  }
+
+  final parentPath = pathSegments.last.replaceFirst('primary:', '');
+
+  logger.d('parentPath: $parentPath, sourceFilePath: $sourceFilePath');
+
+  final saf = Saf(parentPath);
+  bool? isGranted = await saf.getDirectoryPermission(isDynamic: false);
+  if (isGranted == null || !isGranted) {
+    await Saf.releasePersistedPermissions();
+    await saf.getDirectoryPermission(isDynamic: false);
+  }
+
+  final documentFileUri = await saf.createDocumentFileFromPath(
+    sourceFilePath: sourceFilePath,
+    displayName: displayName,
+    mimeType: mimeType,
+  );
+  logger.d('documentFileUri: $documentFileUri');
+
+  return documentFileUri;
 }
 
 Future<String> safCache(Uri cacheUri, {bool overwrite = false}) async {

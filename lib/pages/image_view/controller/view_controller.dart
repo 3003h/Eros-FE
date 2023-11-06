@@ -602,7 +602,7 @@ class ViewExtController extends GetxController {
       }
 
       // final filePath = path.join(task.savedDir ?? '', task.fileName);
-      late final String filePath;
+      late final String? filePath;
       if (task.savedDir?.isContentUri ?? false) {
         final _uri = task.safUri ??
             '${task.savedDir}%2F${Uri.encodeComponent(task.fileName ?? '')}';
@@ -611,6 +611,9 @@ class ViewExtController extends GetxController {
         filePath = path.join(task.savedDir ?? '', task.fileName);
       }
       // logger.d('filePath $filePath');
+      if (filePath == null) {
+        throw Exception('filePath is null');
+      }
 
       // 异步读取zip
       final result = await readAsyncArchive(filePath.realArchiverPath);

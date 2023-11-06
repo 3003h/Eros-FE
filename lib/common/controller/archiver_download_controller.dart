@@ -7,6 +7,7 @@ import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
 import 'package:fehviewer/store/get_store.dart';
+import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
@@ -84,7 +85,7 @@ class ArchiverDownloadController extends GetxController {
         final (taskId, status, progress) =
             (para[0] as String, para[1] as int, para[2] as int);
 
-        logger.d('$taskId $status $progress%');
+        logger.t('$taskId $status $progress%');
 
         // 更新任务状态
         callback(taskId, status, progress);
@@ -131,7 +132,7 @@ class ArchiverDownloadController extends GetxController {
     final timeCreated = _task?.timeCreated;
 
     if (_task != null) {
-      logger.d('_task $_task');
+      logger.t('_task $_task');
     }
 
     if (fileName != null) {
@@ -200,15 +201,24 @@ class ArchiverDownloadController extends GetxController {
     }
     final parentUri = Uri.parse(await _getArchiverDownloadPath());
     try {
-      final result = await ss.createFileAsBytes(
+      // final result = await ss.createFileAsBytes(
+      //   parentUri,
+      //   bytes: tempFile.readAsBytesSync(),
+      //   mimeType: 'application/zip',
+      //   displayName: fileName,
+      // );
+      // logger.d('write result ${result?.uri}');
+      // logger.d('copyFileToSAF success');
+      // return result?.uri;
+      final result = await safCreateDocumentFileFromPath(
         parentUri,
-        bytes: tempFile.readAsBytesSync(),
-        mimeType: 'application/zip',
+        sourceFilePath: tempFile.path,
         displayName: fileName,
+        mimeType: 'application/zip',
       );
-      logger.d('write result ${result?.uri}');
+      logger.d('write result $result');
       logger.d('copyFileToSAF success');
-      return result?.uri;
+      return Uri.parse(result ?? '');
     } catch (e, s) {
       logger.e('copyFileToSAF', error: e, stackTrace: s);
     } finally {
@@ -430,7 +440,7 @@ class ArchiverDownloadController extends GetxController {
 void flutterDownloadCallback(String id, int status, int progress) {
   final sendPort = IsolateNameServer.lookupPortByName(flutterDownloadPortName)!;
   // print('_downloadCallback ${sendPort.runtimeType}');
-  logger.t('$id $status $progress%');
+  // logger.t('$id $status $progress%');
 
   sendPort.send([id, status, progress]);
 }
