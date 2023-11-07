@@ -24,11 +24,11 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
       # 建立 java 环境
-      - name: Setup Java JDK 11
+      - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '11'
+          java-version: '17'
       # 建立 Flutter 环境
       - name: Flutter action
         uses: subosito/flutter-action@v2
