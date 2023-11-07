@@ -165,11 +165,15 @@ class GalleryImageHttpTransformer extends HttpTransformer {
     // 使用 compute 方式会内部的 EhError 无法正常抛出
     // final GalleryImage image = await compute(paraImage, html);
     final GalleryImage image = paraImage(html);
-    // throw EhError(type: EhErrorType.image509);
-    if (image.imageUrl!.endsWith('/509.gif') ||
-        image.imageUrl!.endsWith('/509s.gif')) {
+
+    // if (image.imageUrl!.endsWith('/509.gif') ||
+    //     image.imageUrl!.endsWith('/509s.gif')) {
+    //   throw EhError(type: EhErrorType.image509);
+    // }
+    if (RegExp(EHConst.REG_509_URL).hasMatch(image.imageUrl ?? '')) {
       throw EhError(type: EhErrorType.image509);
     }
+
     // final GalleryImage image = await paraImage(html);
     return DioHttpResponse<GalleryImage>.success(image);
   }

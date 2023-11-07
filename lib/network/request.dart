@@ -246,8 +246,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
       showKey == null ||
       showKey.isEmpty ||
       (sourceId?.isNotEmpty ?? false)) {
-    logger.d(
-        'fetchImageInfoByApi: showKey $showKey, sourceId $sourceId, isMpv $isMpv');
+    logger.d('OOOOOOOld : showKey $showKey, sourceId $sourceId, isMpv $isMpv');
     final _image = await _fetchImageInfo(
       href,
       refresh: refresh,
@@ -282,7 +281,16 @@ Future<GalleryImage?> fetchImageInfoByApi(
   // 请求api
   final response = await postEhApi(reqJsonStr, forceRefresh: refresh);
 
-  return paraShowPage(response);
+  final image = paraShowPage(response);
+  // if (image.imageUrl!.endsWith('/509.gif') ||
+  //     image.imageUrl!.endsWith('/509s.gif')) {
+  //   throw EhError(type: EhErrorType.image509);
+  // }
+  if (RegExp(EHConst.REG_509_URL).hasMatch(image.imageUrl ?? '')) {
+    throw EhError(type: EhErrorType.image509);
+  }
+
+  return image;
 }
 
 Future<GalleryImage?> _fetchImageInfo(

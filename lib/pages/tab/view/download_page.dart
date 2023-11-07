@@ -283,11 +283,13 @@ Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
 
       final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
       final String? _speed = logic.downloadSpeedMap[_taskInfo.gid];
+      final String? _errInfo = logic.errInfoMap[_taskInfo.gid];
 
       return DownloadGalleryItem(
         galleryTask: _taskInfo,
         taskIndex: _taskIndex,
         speed: _speed,
+        errInfo: _errInfo,
       );
     },
   );

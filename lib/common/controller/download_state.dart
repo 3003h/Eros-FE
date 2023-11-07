@@ -26,6 +26,8 @@ class DownloadState {
   List<GalleryTask> get galleryTasks => galleryTaskMap.values.toList();
   final downloadSpeeds = <int, String>{};
 
+  final errInfoMap = <int, String>{};
+
   late Executor executor;
 
   QueueTask queueTask = QueueTask();

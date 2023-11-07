@@ -97,7 +97,7 @@ class ViewErr429 extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  '429 - Too Many Requests',
+                  '429',
                   style: TextStyle(
                     fontSize: 20,
                     color: CupertinoColors.systemPink.darkColor,

@@ -14,12 +14,6 @@ GalleryImage paraShowPage(String jsonString) {
   final String imageUrl =
       regImageUrl.firstMatch('${jsonMap['i3']}')?.group(1) ?? '';
 
-  // throw EhError(type: EhErrorType.image509);
-
-  if (imageUrl.endsWith('/509.gif') || imageUrl.endsWith('/509s.gif')) {
-    throw EhError(type: EhErrorType.image509);
-  }
-
   logger.t('largeImageUrl $imageUrl');
 
   final RegExpMatch? _xy = RegExp(r'(\S+)\s+::\s+(\d+)\s+x\s+(\d+)(\s+::)?')

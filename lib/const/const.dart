@@ -262,6 +262,8 @@ class EHConst {
   static const String REG_URL_THUMB =
       r'(https://.+)/([0-9a-f]{2}/[0-9a-f]{2}/([(0-9a-f]{40})-(\d+)-(\d+)-(\d+)-(\w+)\.(jpg|png|gif))';
 
+  static const String REG_509_URL = r'\.org/.+/509s?\.gif';
+
   static const String DB_NAME = 'feh.db';
 
   static const int exMaxConnectionsPerHost = 3;
@@ -321,9 +323,10 @@ class EHConst {
 
   static List<int> multiDownload = <int>[
     1,
+    2,
     3,
+    4,
     5,
-    7,
     if (!kReleaseMode) 9,
     if (!kReleaseMode) 11,
     if (Global.inDebugMode) 100,

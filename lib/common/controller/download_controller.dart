@@ -419,34 +419,38 @@ class DownloadController extends GetxController {
     required int gid,
     bool shouldDeleteContent = true,
   }) async {
-    // 删除文件
+    // 查找任务
     final GalleryTask? _task = dState.galleryTaskMap[gid];
     if (_task == null) {
       return;
     }
-    String? dirpath = _task.realDirPath;
-    logger.t('dirPath: $dirpath');
-    if (dirpath != null && shouldDeleteContent) {
-      if (dirpath.isContentUri) {
-        // SAF
-        await ss.delete(Uri.parse(dirpath));
-      } else {
-        final dir = Directory(dirpath);
-        if (await dir.exists()) {
-          await dir.delete(recursive: true);
-        }
-      }
+
+    // 取消任务
+    if (!(dState.cancelTokenMap[_task.gid]?.isCancelled ?? true)) {
+      dState.cancelTokenMap[_task.gid]?.cancel();
     }
 
-    if (!((dState.cancelTokenMap[_task.gid]?.isCancelled) ?? true)) {
-      dState.cancelTokenMap[_task.gid]?.cancel();
+    dState.galleryTaskMap.remove(gid);
+
+    // 删除文件
+    String? dirPath = _task.realDirPath;
+    logger.t('dirPath: $dirPath');
+    if (dirPath != null && shouldDeleteContent) {
+      if (dirPath.isContentUri) {
+        // SAF
+        ss.delete(Uri.parse(dirPath));
+      } else {
+        final dir = Directory(dirPath);
+        // if (await dir.exists()) {
+        //   await dir.delete(recursive: true);
+        // }
+        dir.exists().then((value) => dir.delete(recursive: true));
+      }
     }
 
     // 删除数据库记录
     isarHelper.removeImageTask(_task.gid);
     isarHelper.removeGalleryTask(_task.gid);
-
-    dState.galleryTaskMap.remove(gid);
   }
 
   void resetConcurrency() {
@@ -1208,6 +1212,8 @@ class DownloadController extends GetxController {
 
     galleryTaskUpdateStatus(galleryTask.gid, TaskStatus.running);
 
+    _clearErrInfo(galleryTask.gid);
+
     final CancelToken _cancelToken = CancelToken();
     dState.cancelTokenMap[galleryTask.gid] = _cancelToken;
 
@@ -1306,14 +1312,16 @@ class DownloadController extends GetxController {
               _galleryTaskPausedAll();
               dState.executor.close();
               resetConcurrency();
+              _updateErrInfo(galleryTask.gid, '509');
             }
             rethrow;
           } on HttpException catch (e) {
             logger.e('$e');
             if (e is BadRequestException && e.code == 429) {
-              show429Toast();
               _galleryTaskPausedAll();
               dState.executor.close();
+              _updateErrInfo(galleryTask.gid, '429');
+              show429Toast();
               resetConcurrency();
             }
             rethrow;
@@ -1323,6 +1331,16 @@ class DownloadController extends GetxController {
         }
       });
     }
+  }
+
+  void _updateErrInfo(int gid, String error) {
+    dState.errInfoMap[gid] = error;
+    _updateDownloadView(['DownloadGalleryItem_$gid']);
+  }
+
+  void _clearErrInfo(int gid) {
+    dState.errInfoMap.remove(gid);
+    _updateDownloadView(['DownloadGalleryItem_$gid']);
   }
 
   // 下载完成回调

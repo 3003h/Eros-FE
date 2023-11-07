@@ -87,11 +87,13 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
     required this.galleryTask,
     required this.taskIndex,
     this.speed,
+    this.errInfo,
   }) : super(key: key);
 
   final GalleryTask galleryTask;
   final int taskIndex;
   final String? speed;
+  final String? errInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -175,8 +177,11 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
     );
   }
 
-  Widget _buildCardItem(BuildContext context, bool _complete,
-      {String? addTime}) {
+  Widget _buildCardItem(
+    BuildContext context,
+    bool _complete, {
+    String? addTime,
+  }) {
     return Container(
       padding: const EdgeInsets.only(right: 10),
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -245,17 +250,20 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
 
   Widget _buildCover({bool cardType = false}) {
     return GestureDetector(
-      child: DownloadItemCoverImage(
-        filePath: (galleryTask.coverImage != null &&
-                galleryTask.coverImage!.isNotEmpty)
-            ? (galleryTask.realDirPath?.isContentUri ?? false)
-                ? '${galleryTask.realDirPath}%2F${galleryTask.coverImage}'
-                : path.join(
-                    galleryTask.realDirPath ?? '', galleryTask.coverImage)
-            : null,
-        url: galleryTask.coverUrl,
-        cardType: cardType,
-      ).paddingOnly(right: 8),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: DownloadItemCoverImage(
+          filePath: (galleryTask.coverImage != null &&
+                  galleryTask.coverImage!.isNotEmpty)
+              ? (galleryTask.realDirPath?.isContentUri ?? false)
+                  ? '${galleryTask.realDirPath}%2F${galleryTask.coverImage}'
+                  : path.join(
+                      galleryTask.realDirPath ?? '', galleryTask.coverImage)
+              : null,
+          url: galleryTask.coverUrl,
+          cardType: cardType,
+        ),
+      ),
       onTap: () async {
         logger.t('${galleryTask.url} ');
         String? url = galleryTask.url;
@@ -272,7 +280,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
 
   Widget _buildItemInfo(
     BuildContext context,
-    bool _complete, {
+    bool isComplete, {
     String? addTime,
   }) {
     return Column(
@@ -321,7 +329,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                     ),
                     const Spacer(),
                     // 进度条
-                    if (!_complete)
+                    if (!isComplete)
                       ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: LinearProgressIndicator(
@@ -340,19 +348,13 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
                     // 下载速度 下载进度
                     Row(
                       children: [
-                        if (!_complete)
-                          Text(
-                            speed != null ? '$speed/s' : '',
-                            style: TextStyle(
-                                fontSize: 13,
-                                color: CupertinoDynamicColor.resolve(
-                                    CupertinoColors.secondaryLabel, context)),
-                          )
+                        if (!isComplete)
+                          _buildDownloadCtl(context)
                         else
                           _buildCategory(galleryTask.category),
                         const Spacer(),
                         Text(
-                          _complete
+                          isComplete
                               ? '${galleryTask.fileCount}'
                               : '${galleryTask.completCount ?? 0}/${galleryTask.fileCount}',
                           style: TextStyle(
@@ -372,6 +374,26 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         ),
       ],
     );
+  }
+
+  Widget _buildDownloadCtl(BuildContext context) {
+    if (errInfo != null && errInfo!.isNotEmpty) {
+      return Text(
+        errInfo ?? '',
+        style: TextStyle(
+            fontSize: 13,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.systemRed, context)),
+      );
+    } else {
+      return Text(
+        speed != null ? '$speed/s' : '',
+        style: TextStyle(
+            fontSize: 13,
+            color: CupertinoDynamicColor.resolve(
+                CupertinoColors.secondaryLabel, context)),
+      );
+    }
   }
 
   Widget _buildRating(double? rating) {

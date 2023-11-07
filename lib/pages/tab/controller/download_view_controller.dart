@@ -99,6 +99,8 @@ class DownloadViewController extends GetxController {
   Map<int, String> get downloadSpeedMap =>
       _downloadController.dState.downloadSpeeds;
 
+  Map<int, String> get errInfoMap => _downloadController.dState.errInfoMap;
+
   Future<List<GalleryImageTask>> getImageTasks(int gid) async {
     return await _downloadController.getImageTasks(gid);
   }
