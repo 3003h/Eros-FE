@@ -166,10 +166,10 @@ packages:
     dependency: transitive
     description:
       name: build_daemon
-      sha256: "5f02d73eb2ba16483e693f80bee4f088563a820e47d1027d4cdfe62b5bb43e65"
+      sha256: "0343061a33da9c5810b2d6cee51945127d8f4c060b7fbdd9d54917f0a3feaaa1"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.1"
   build_resolvers:
     dependency: transitive
     description:
@@ -474,6 +474,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.4.4"
+  dio_cache_interceptor_file_store:
+    dependency: "direct main"
+    description:
+      name: dio_cache_interceptor_file_store
+      sha256: c84eefeeb725b44e96d6cb300e86e898bd5026dcf3d468737a8ec209b967fc73
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.2.2"
   dio_cache_interceptor_hive_store:
     dependency: "direct main"
     description:
@@ -482,14 +490,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.2.1"
-  dio_cache_interceptor_objectbox_store:
-    dependency: "direct main"
-    description:
-      name: dio_cache_interceptor_objectbox_store
-      sha256: "59cffcfee93e4292cdda5849079e9437b446560b772dbc113c7601f1f0f70bb7"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.1"
   dio_cookie_manager:
     dependency: "direct main"
     description:
@@ -730,14 +730,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0"
-  flat_buffers:
-    dependency: transitive
-    description:
-      name: flat_buffers
-      sha256: "23e2ced0d8e8ecdffbd9f267f49a668c74438393b9acaeac1c724123e3764263"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.0.5"
   flex_color_picker:
     dependency: "direct main"
     description:
@@ -1461,14 +1453,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0"
-  objectbox:
-    dependency: transitive
-    description:
-      name: objectbox
-      sha256: c18d41f4e81e5a30fc0e2200e9e8306f5ccc8a9b61fe3746426359690c33dc7b
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.7.2"
   octo_image:
     dependency: "direct main"
     description:
