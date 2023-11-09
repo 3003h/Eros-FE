@@ -6,6 +6,7 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio_cache_interceptor_objectbox_store/dio_cache_interceptor_objectbox_store.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
@@ -41,12 +42,12 @@ class Api {
   }
 
   static CacheOptions cacheOption = CacheOptions(
-    // store: BackupCacheStore(
-    //   primary: MemCacheStore(),
-    //   // secondary: HiveCacheStore(Global.appSupportPath),
-    //   secondary: ObjectBoxCacheStore(storePath: Global.appSupportPath),
-    // ),
-    store: MemCacheStore(),
+    store: BackupCacheStore(
+      primary: MemCacheStore(),
+      // secondary: HiveCacheStore(Global.appSupportPath),
+      secondary: ObjectBoxCacheStore(storePath: Global.appSupportPath),
+    ),
+    // store: MemCacheStore(),
     policy: CachePolicy.refresh,
     hitCacheOnErrorExcept: [401, 403, 503],
     maxStale: const Duration(days: 3),
