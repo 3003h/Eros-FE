@@ -37,10 +37,10 @@ packages:
     dependency: "direct main"
     description:
       name: archive
-      sha256: "0da817eab9833cc222ee5575789664e99f60fe0c554be55dc1979f9b4ec6dd73"
+      sha256: "7b875fd4a20b165a3084bd2d210439b22ebc653f21cea4842729c0c30c82596b"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.4.8"
+    version: "3.4.9"
   archive_async:
     dependency: "direct main"
     description:
@@ -339,13 +339,13 @@ packages:
     source: hosted
     version: "5.0.4"
   cronet_http:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: cronet_http
-      sha256: "5bc88e2ea1a42f60ef69713468c08e2c6c318a3373246e35cb3d0a9e40f536d6"
+      sha256: "567170c4bb3d237991b852f446c1b52a3325de8b584a82d195f31dd76310d7d1"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.2.1"
+    version: "0.4.1"
   cross_file:
     dependency: "direct main"
     description:
@@ -482,6 +482,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.2.1"
+  dio_cache_interceptor_objectbox_store:
+    dependency: "direct main"
+    description:
+      name: dio_cache_interceptor_objectbox_store
+      sha256: "59cffcfee93e4292cdda5849079e9437b446560b772dbc113c7601f1f0f70bb7"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.1"
   dio_cookie_manager:
     dependency: "direct main"
     description:
@@ -722,6 +730,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0"
+  flat_buffers:
+    dependency: transitive
+    description:
+      name: flat_buffers
+      sha256: "23e2ced0d8e8ecdffbd9f267f49a668c74438393b9acaeac1c724123e3764263"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.5"
   flex_color_picker:
     dependency: "direct main"
     description:
@@ -916,10 +932,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: "8afc9a6aa6d8e8063523192ba837149dbf3d377a37c0b0fc579149a1fbd4a619"
+      sha256: "35108526a233cc0755664d445f8a6b4b61e6f8fe993b3658b80b4a26827fc196"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.6.18"
+    version: "0.6.18+2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -1235,6 +1251,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.0"
+  jni:
+    dependency: transitive
+    description:
+      name: jni
+      sha256: "0d88790bdf7e298aa65a9094c62b58ea231169a2deb84f23defc7d7955885b43"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.7.2"
   js:
     dependency: transitive
     description:
@@ -1437,6 +1461,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0"
+  objectbox:
+    dependency: transitive
+    description:
+      name: objectbox
+      sha256: c18d41f4e81e5a30fc0e2200e9e8306f5ccc8a9b61fe3746426359690c33dc7b
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.7.2"
   octo_image:
     dependency: "direct main"
     description:
@@ -1748,7 +1780,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "1a4ca175b550e58a75c00e9ee7b6e48221b1aebd"
+      resolved-ref: "19789bb10e0a2330f28a72aac15fa2c752cc630d"
       url: "https://github.com/honjow/saf.git"
     source: git
     version: "1.0.4+2"

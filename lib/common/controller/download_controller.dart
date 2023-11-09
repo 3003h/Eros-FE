@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
+import 'package:saf/saf.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
 import 'package:sprintf/sprintf.dart' as sp;
 
@@ -1091,54 +1092,118 @@ class DownloadController extends GetxController {
     }
   }
 
-  // 从当前下载目录恢复下载列表数据
   Future<void> restoreGalleryTasks({bool init = false}) async {
     final String _currentDownloadPath = await _getGalleryDownloadPath();
     logger.d('_currentDownloadPath: $_currentDownloadPath');
+
+    if (_currentDownloadPath.isContentUri) {
+      await restoreGalleryTasksWithSAF(_currentDownloadPath);
+    } else {
+      await restoreGalleryTasksWithPath(_currentDownloadPath);
+    }
+
+    if (init) {
+      onInit();
+      resetDownloadViewAnimationKey();
+    }
+  }
+
+  Future<void> restoreGalleryTasksWithSAF(String _currentDownloadPath) async {
+    logger.d('restoreGalleryTasksWithSAF $_currentDownloadPath');
+    final uri = Uri.parse(_currentDownloadPath);
+    final pathSegments = uri.pathSegments;
+    logger.d('pathSegments: \n${pathSegments.join('\n')}');
+
+    if (!pathSegments.last.startsWith('primary:')) {
+      throw Exception('safCacheSingle: $uri not primary');
+    }
+
+    final safTreePath = pathSegments.last.replaceFirst('primary:', '');
+    final saf = Saf(safTreePath);
+
+    // 申请Tree权限
+    bool? isGranted = await saf.getDirectoryPermission(isDynamic: true);
+    if (isGranted == null || !isGranted) {
+      await Saf.releasePersistedPermissions();
+      await saf.getDirectoryPermission(isDynamic: false);
+    }
+
+    // await saf.cache();
+
+    final filePaths = await saf.getFilesPath() ?? [];
+    logger.d('filePaths: \n${filePaths.join('\n')}');
+
+    for (final fiPath in filePaths) {
+      final directoryName = path.basename(fiPath);
+      logger.d('directoryName: $directoryName');
+
+      if (directoryName.startsWith('.')) {
+        continue;
+      }
+
+      final _subSafPath = path.join(safTreePath, directoryName);
+      final _subSaf = Saf(_subSafPath);
+
+      final infoFilePath = path.join(fiPath, '.info');
+      final cachePath = await _subSaf.singleCache(
+        filePath: infoFilePath,
+        treePath: safTreePath,
+      );
+      logger.d('cachePath: $cachePath');
+      final infoFile = File(cachePath ?? '');
+      if (infoFile.existsSync()) {
+        _loadInfoFile(
+          infoFile,
+          safMakeUri(path: fiPath, tree: safTreePath).toString(),
+        );
+      }
+      _subSaf.clearCache();
+    }
+    await saf.clearCache();
+  }
+
+  // 从当前下载目录恢复下载列表数据
+  Future<void> restoreGalleryTasksWithPath(String _currentDownloadPath) async {
     final directory = Directory(GetPlatform.isIOS
         ? path.join(Global.appDocPath, _currentDownloadPath)
         : _currentDownloadPath);
     await for (final fs in directory.list()) {
       final infoFile = File(path.join(fs.path, '.info'));
       if (fs is Directory && infoFile.existsSync()) {
-        logger.d('infoFile: ${infoFile.path}');
-        final info = infoFile.readAsStringSync();
-        final infoList = info
-            .split('\n')
-            .where((element) => element.trim().isNotEmpty)
-            .toList();
-        if (infoList.length < 2) {
-          continue;
-        }
-
-        final taskJsonString = infoList[0];
-        final imageJsonString = infoList[1];
-
-        try {
-          final galleryTask = GalleryTask.fromJson(
-                  jsonDecode(taskJsonString) as Map<String, dynamic>)
-              .copyWith(dirPath: fs.path);
-          final galleryImageTaskList = <GalleryImageTask>[];
-
-          final imageList = jsonDecode(imageJsonString) as List<dynamic>;
-          for (final img in imageList) {
-            final galleryImageTask =
-                GalleryImageTask.fromJson(img as Map<String, dynamic>);
-            galleryImageTaskList.add(galleryImageTask);
-          }
-
-          await isarHelper.putAllImageTaskIsolate(galleryImageTaskList);
-          await isarHelper.putGalleryTaskIsolate(galleryTask);
-        } catch (e, stack) {
-          logger.e('$e\n$stack');
-          continue;
-        }
+        _loadInfoFile(infoFile, fs.path);
       }
     }
+  }
 
-    if (init) {
-      onInit();
-      resetDownloadViewAnimationKey();
+  Future<void> _loadInfoFile(File infoFile, String dirPath) async {
+    logger.d('infoFile: ${infoFile.path}');
+    final info = infoFile.readAsStringSync();
+    final infoList =
+        info.split('\n').where((element) => element.trim().isNotEmpty).toList();
+    if (infoList.length < 2) {
+      return;
+    }
+
+    final taskJsonString = infoList[0];
+    final imageJsonString = infoList[1];
+
+    try {
+      final galleryTask = GalleryTask.fromJson(
+              jsonDecode(taskJsonString) as Map<String, dynamic>)
+          .copyWith(dirPath: dirPath);
+      final galleryImageTaskList = <GalleryImageTask>[];
+
+      final imageList = jsonDecode(imageJsonString) as List<dynamic>;
+      for (final img in imageList) {
+        final galleryImageTask =
+            GalleryImageTask.fromJson(img as Map<String, dynamic>);
+        galleryImageTaskList.add(galleryImageTask);
+      }
+
+      await isarHelper.putAllImageTaskIsolate(galleryImageTaskList);
+      await isarHelper.putGalleryTaskIsolate(galleryTask);
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
     }
   }
 
@@ -1212,7 +1277,7 @@ class DownloadController extends GetxController {
 
     galleryTaskUpdateStatus(galleryTask.gid, TaskStatus.running);
 
-    _clearErrInfo(galleryTask.gid);
+    _clearErrInfo(galleryTask.gid, updateView: false);
 
     final CancelToken _cancelToken = CancelToken();
     dState.cancelTokenMap[galleryTask.gid] = _cancelToken;
@@ -1318,11 +1383,11 @@ class DownloadController extends GetxController {
           } on HttpException catch (e) {
             logger.e('$e');
             if (e is BadRequestException && e.code == 429) {
+              show429Toast();
               _galleryTaskPausedAll();
               dState.executor.close();
-              _updateErrInfo(galleryTask.gid, '429');
-              show429Toast();
               resetConcurrency();
+              _updateErrInfo(galleryTask.gid, '429');
             }
             rethrow;
           } catch (e) {
@@ -1338,9 +1403,11 @@ class DownloadController extends GetxController {
     _updateDownloadView(['DownloadGalleryItem_$gid']);
   }
 
-  void _clearErrInfo(int gid) {
+  void _clearErrInfo(int gid, {bool updateView = true}) {
     dState.errInfoMap.remove(gid);
-    _updateDownloadView(['DownloadGalleryItem_$gid']);
+    if (updateView) {
+      _updateDownloadView(['DownloadGalleryItem_$gid']);
+    }
   }
 
   // 下载完成回调

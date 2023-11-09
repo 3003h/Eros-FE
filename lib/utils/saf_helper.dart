@@ -176,23 +176,36 @@ String _makeDirectoryPathToName(String path) {
   return path.replaceAll('/', '_').replaceAll(':', '_');
 }
 
-Uri safMakeUri(
-    {String path = '', String device = 'primary', bool isTreeUri = false}) {
-  final fullPath =
+Uri safMakeUri({
+  String path = '',
+  String device = 'primary',
+  String? tree,
+  bool isTreeUri = false,
+}) {
+  final _path =
       path.replaceAll(RegExp(r'^(/storage/emulated/\d+/|/sdcard/)'), '');
-  final directoryPath = fullPath.replaceAll(RegExp(r'[^/]+$'), '');
+  final _tree =
+      tree?.replaceAll(RegExp(r'^(/storage/emulated/\d+/|/sdcard/)'), '');
+
+  final pathSegments = _path.split("/");
+  final treePath =
+      _tree ?? pathSegments.sublist(0, pathSegments.length - 1).join("/");
 
   const scheme = 'content';
   const host = 'com.android.externalstorage.documents';
+
+  final documentPathSegments = [
+    '$device:$treePath',
+    'document',
+    '$device:$_path',
+  ];
 
   Uri uri = Uri(
     scheme: scheme,
     host: host,
     pathSegments: [
       'tree',
-      if (isTreeUri) '$device:$fullPath' else '$device:$directoryPath',
-      if (!isTreeUri) 'document',
-      if (!isTreeUri) '$device:$fullPath',
+      if (isTreeUri) '$device:$_path' else ...documentPathSegments,
     ],
   );
 

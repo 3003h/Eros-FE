@@ -111,11 +111,13 @@ abstract class TabViewController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    logger.t('onReady');
     firstLoad();
   }
 
   // 请求一批画廊数据
   Future<GalleryList?> fetchData({bool refresh = false}) async {
+    logger.d('super fetchData ....');
     cancelToken = CancelToken();
     return null;
   }
@@ -414,12 +416,12 @@ abstract class TabViewController extends GetxController {
   }
 
   void scrollToTop(BuildContext context) {
-    PrimaryScrollController.of(context)?.animateTo(0.0,
+    PrimaryScrollController.of(context).animateTo(0.0,
         duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   void scrollToTopRefresh(BuildContext context) {
-    PrimaryScrollController.of(context)?.animateTo(
+    PrimaryScrollController.of(context).animateTo(
         -kDefaultRefreshTriggerPullDistance,
         duration: const Duration(milliseconds: 500),
         curve: Curves.ease);

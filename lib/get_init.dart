@@ -28,19 +28,16 @@ import 'pages/controller/favorite_sel_controller.dart';
 import 'pages/setting/controller/eh_mysettings_controller.dart';
 import 'pages/setting/controller/eh_mytags_controller.dart';
 import 'pages/tab/controller/download_view_controller.dart';
-import 'pages/tab/controller/favorite/favorite_controller.dart';
 import 'pages/tab/controller/favorite/favorite_tabbar_controller.dart';
 import 'pages/tab/controller/gallery_controller.dart';
 import 'pages/tab/controller/group/custom_tabbar_controller.dart';
 import 'pages/tab/controller/history_view_controller.dart';
-import 'pages/tab/controller/popular_controller.dart';
 import 'pages/tab/controller/search_image_controller.dart';
 import 'pages/tab/controller/setting_controller.dart';
 import 'pages/tab/controller/splash_controller.dart';
 import 'pages/tab/controller/tabhome_controller.dart';
 import 'pages/tab/controller/toplist_controller.dart';
 import 'pages/tab/controller/unlock_page_controller.dart';
-import 'pages/tab/controller/watched_controller.dart';
 
 void getinit() {
   Get.lazyPut(() => EhSettingService(), fenix: true);
@@ -71,12 +68,12 @@ void getinit() {
   debugPrint('getInit');
   Get.put(TabHomeController(), permanent: true);
 
-  Get.lazyPut(() => PopularViewController(), fenix: true);
-  Get.lazyPut(() => WatchedViewController(), fenix: true);
+  // Get.lazyPut(() => PopularViewController(), fenix: true);
+  // Get.lazyPut(() => WatchedViewController(), fenix: true);
   Get.lazyPut(() => GalleryViewController(), fenix: true);
   Get.lazyPut(() => HistoryViewController(), fenix: true);
   Get.lazyPut(() => DownloadViewController(), fenix: true);
-  Get.lazyPut(() => FavoriteViewController(), fenix: true);
+  // Get.lazyPut(() => FavoriteViewController(), fenix: true);
   Get.lazyPut(() => TopListViewController(), fenix: true);
   Get.lazyPut(() => FavoriteTabberController(), fenix: true);
   Get.lazyPut(() => CustomTabbarController(), fenix: true);

@@ -65,7 +65,7 @@ class SearchFetchListClient extends FetchListClient {
 
   @override
   Future<GalleryList?> fetch() async {
-    // logger.d('SearchFetchListClient fetchParams ${fetchParams.toString()}');
+    logger.t('SearchFetchListClient fetchParams ${fetchParams.toString()}');
 
     final result = await getGallery(
       pageType: fetchParams.pageType,
@@ -100,24 +100,24 @@ class SearchFetchListClient extends FetchListClient {
   }
 }
 
-class WatchedFetchListClient extends FetchListClient {
-  WatchedFetchListClient({
-    required FetchParams fetchParams,
-  }) : super(fetchParams: fetchParams);
-
-  @override
-  Future<GalleryList?> fetch() async {
-    return await getGallery(
-      pageType: fetchParams.pageType,
-      gid: fetchParams.gid,
-      search: fetchParams.searchText,
-      cats: fetchParams.cats,
-      cancelToken: fetchParams.cancelToken,
-      refresh: fetchParams.refresh,
-      galleryListType: GalleryListType.watched,
-    );
-  }
-}
+// class WatchedFetchListClient extends FetchListClient {
+//   WatchedFetchListClient({
+//     required FetchParams fetchParams,
+//   }) : super(fetchParams: fetchParams);
+//
+//   @override
+//   Future<GalleryList?> fetch() async {
+//     return await getGallery(
+//       pageType: fetchParams.pageType,
+//       gid: fetchParams.gid,
+//       search: fetchParams.searchText,
+//       cats: fetchParams.cats,
+//       cancelToken: fetchParams.cancelToken,
+//       refresh: fetchParams.refresh,
+//       galleryListType: GalleryListType.watched,
+//     );
+//   }
+// }
 
 class FavoriteFetchListClient extends FetchListClient {
   FavoriteFetchListClient({
@@ -175,19 +175,19 @@ class ToplistFetchListClient extends FetchListClient {
   }
 }
 
-class PopularFetchListClient extends FetchListClient {
-  PopularFetchListClient({
-    required FetchParams fetchParams,
-  }) : super(fetchParams: fetchParams);
-
-  @override
-  Future<GalleryList?> fetch() async {
-    return await getGallery(
-      galleryListType: GalleryListType.popular,
-      refresh: fetchParams.refresh,
-    );
-  }
-}
+// class PopularFetchListClient extends FetchListClient {
+//   PopularFetchListClient({
+//     required FetchParams fetchParams,
+//   }) : super(fetchParams: fetchParams);
+//
+//   @override
+//   Future<GalleryList?> fetch() async {
+//     return await getGallery(
+//       galleryListType: GalleryListType.popular,
+//       refresh: fetchParams.refresh,
+//     );
+//   }
+// }
 
 class FetchParams {
   FetchParams({
