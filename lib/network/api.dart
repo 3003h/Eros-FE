@@ -545,7 +545,7 @@ class Api {
       await ehDownload(
           progressCallback: progressCallback,
           url: imageUrl,
-          savePath: (Headers headers) {
+          savePathBuilder: (Headers headers) {
             logger.d('headers:\n$headers');
             final contentDisposition = headers.value('content-disposition');
             logger.d('contentDisposition $contentDisposition');

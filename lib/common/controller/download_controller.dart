@@ -297,8 +297,10 @@ class DownloadController extends GetxController {
             .map((e) => e.copyWith(imageUrl: ''))
             .toList();
 
-    String jsonImageTaskList = jsonEncode(imageTaskList);
-    String jsonGalleryTask = jsonEncode(galleryTask.copyWith(dirPath: ''));
+    String jsonImageTaskList = await compute(jsonEncode, imageTaskList);
+    // String jsonGalleryTask = jsonEncode(galleryTask.copyWith(dirPath: ''));
+    String jsonGalleryTask =
+        await compute(jsonEncode, galleryTask.copyWith(dirPath: ''));
     logger.t('_writeTaskInfoFile:\n$jsonGalleryTask\n$jsonImageTaskList');
 
     final dirPath = galleryTask.realDirPath;
@@ -315,7 +317,7 @@ class DownloadController extends GetxController {
       if (infoDomFile?.name != null) {
         await ss.delete(Uri.parse('$dirPath%2F.info'));
       }
-      await ss.createFileAsBytes(
+      ss.createFileAsBytes(
         Uri.parse(dirPath),
         mimeType: '',
         displayName: '.info',
@@ -741,20 +743,23 @@ class DownloadController extends GetxController {
     // 缓存不存在的话下载
     String realSaveFullPath = '';
     String tempSavePath = '';
-    String Function(Headers) savePath = (Headers headers) {
+    SavePathBuild savePathBuild = (Headers headers) {
       logger.t('headers:\n$headers');
       final contentDisposition = headers.value('content-disposition');
       logger.t('contentDisposition $contentDisposition');
       final filename =
           contentDisposition?.split(RegExp(r"filename(=|\*=UTF-8'')")).last ??
               '';
-      final fileNameDecode = Uri.decodeFull(filename).replaceAll('/', '_');
-      logger.t(
-          'fileNameDecode: $fileNameDecode, fileBaseNameNotExt: $fileNameWithoutExtension');
+      final fileNameDecode =
+          Uri.decodeFull(filename).replaceAll('/', '_').replaceAll('"', '');
+
       late String ext;
       if (fileNameDecode.isEmpty) {
+        logger.t('url: $url');
         ext = path.extension(url);
       } else {
+        logger.t(
+            'fileNameDecode: $fileNameDecode, fileBaseNameNotExt: $fileNameWithoutExtension');
         ext = path.extension(fileNameDecode);
       }
 
@@ -774,10 +779,10 @@ class DownloadController extends GetxController {
       }
     };
 
-    // 下载文件
+    // 调用 request 下载文件
     await ehDownload(
       url: url,
-      savePath: savePath,
+      savePathBuilder: savePathBuild,
       cancelToken: cancelToken,
       onDownloadComplete: () async {
         logger.t('onDownloadComplete');
@@ -786,7 +791,12 @@ class DownloadController extends GetxController {
           // read file
           final File file = File(tempSavePath);
 
-          final extension = path.extension(tempSavePath);
+          // 限定 [0-9a-zA-Z]
+          final extension = path
+              .extension(tempSavePath)
+              .replaceAll(RegExp(r'[^0-9a-zA-Z.]'), '');
+
+          logger.t('extension $extension');
 
           final parentUri = Uri.parse(parentPath);
 
@@ -806,6 +816,7 @@ class DownloadController extends GetxController {
           file
               .readAsBytes()
               .then((bytes) {
+                // TODO(3003h): 重复下载要先检查删除旧文件，否则会变成 xxxx.jpg(1) 这样的文件
                 ss.createFileAsBytes(
                   parentUri,
                   mimeType: '*/*',
@@ -817,17 +828,24 @@ class DownloadController extends GetxController {
               .whenComplete(
                   () => onDownloadCompleteWithFileName?.call(fileName));
 
-          // try {
-          //   await safCreateDocumentFileFromPath(
-          //     parentUri,
-          //     mimeType: '*/*',
-          //     displayName: fileName,
-          //     sourceFilePath: tempSavePath,
-          //   );
-          // } finally {
-          //   // delete temp file
-          //   await file.delete();
-          // }
+          // final _downloadPath = await _getGalleryDownloadPath();
+          // final _downloadTreeUri = Uri.parse(_downloadPath);
+          //
+          // logger.d('parentUri $parentUri, fileName $fileName');
+
+          // Future.delayed(Duration.zero)
+          //     .then((_) async {
+          //       await safCreateDocumentFileFromPath(
+          //         parentUri,
+          //         mimeType: '*/*',
+          //         displayName: fileName,
+          //         sourceFilePath: tempSavePath,
+          //         checkPermission: false,
+          //       );
+          //     })
+          //     .then((value) => file.delete())
+          //     .whenComplete(
+          //         () => onDownloadCompleteWithFileName?.call(fileName));
 
           // onDownloadCompleteWithFileName?.call(fileName);
         } else {

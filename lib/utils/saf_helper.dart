@@ -86,11 +86,11 @@ Future<String?> safCreateDocumentFileFromPath(
     throw Exception('safCreateDocumentFileFromPath: $parentUri not primary');
   }
 
-  final parentPath = pathSegments.last.replaceFirst('primary:', '');
+  final treePath = pathSegments.last.replaceFirst('primary:', '');
 
-  logger.d('parentPath: $parentPath, sourceFilePath: $sourceFilePath');
+  logger.d('treePath: $treePath, sourceFilePath: $sourceFilePath');
 
-  final saf = Saf(parentPath);
+  final saf = Saf(treePath);
 
   if (checkPermission) {
     bool? isGranted = await saf.getDirectoryPermission(isDynamic: true);

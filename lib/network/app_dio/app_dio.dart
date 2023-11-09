@@ -28,6 +28,19 @@ export 'http_config.dart';
 
 typedef AppHttpAdapter = HttpProxyAdapter;
 
+typedef SavePathBuild = String Function(Headers);
+
+class DioSavePath {
+  const DioSavePath({required this.pathBuilder});
+  final SavePathBuild pathBuilder;
+
+  String path(Headers h) => pathBuilder(h);
+}
+
+extension SavePathExt on String {
+  DioSavePath get toDioSavePath => DioSavePath(pathBuilder: (_) => this);
+}
+
 class AppDio with DioMixin implements Dio {
   AppDio({BaseOptions? options, DioHttpConfig? dioConfig}) {
     options ??= BaseOptions(
@@ -188,19 +201,33 @@ class AppDio with DioMixin implements Dio {
       rethrow;
     }
     final File file;
-    if (savePath is FutureOr<String> Function(Headers)) {
-      // Add real Uri and redirect information to headers.
+
+    // if (savePath is FutureOr<String> Function(Headers)) {
+    //   // Add real Uri and redirect information to headers.
+    //   response.headers
+    //     ..add('redirects', response.redirects.length.toString())
+    //     ..add('uri', response.realUri.toString());
+    //   file = File(await savePath(response.headers));
+    // } else if (savePath is String) {
+    //   file = File(savePath);
+    // } else {
+    //   throw ArgumentError.value(
+    //     savePath.runtimeType,
+    //     'savePath',
+    //     'The type must be `String` or `FutureOr<String> Function(Headers)`.',
+    //   );
+    // }
+
+    if (savePath is DioSavePath) {
       response.headers
         ..add('redirects', response.redirects.length.toString())
         ..add('uri', response.realUri.toString());
-      file = File(await savePath(response.headers));
-    } else if (savePath is String) {
-      file = File(savePath);
+      file = File(savePath.path(response.headers));
     } else {
       throw ArgumentError.value(
         savePath.runtimeType,
         'savePath',
-        'The type must be `String` or `FutureOr<String> Function(Headers)`.',
+        'The type must be `DioSavePath`.',
       );
     }
 
