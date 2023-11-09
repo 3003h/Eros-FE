@@ -37,7 +37,9 @@ ehentai译文数据库
 - [EhTagTranslation/Database](https://github.com/EhTagTranslation/Database)
 
 翻译
-- [KeepSOBP](https://github.com/KeepSOBP) 韩语翻译
+- [KeepSOBP](https://github.com/KeepSOBP) -- 韩语翻译
+- [pursel](https://github.com/pursel), [Gigas002](https://github.com/Gigas002) -- 俄语翻译
+- [cristal-node](https://github.com/cristal-node) -- 日语翻译
 
 ## 应用截图
 

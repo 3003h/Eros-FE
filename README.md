@@ -37,6 +37,7 @@ EhTagTranslation
 Translation
 - [KeepSOBP](https://github.com/KeepSOBP) Korean translation
 - [pursel](https://github.com/pursel), [Gigas002](https://github.com/Gigas002) -- Russian translation
+- [cristal-node](https://github.com/cristal-node) -- Japanese translation
 
 ## Screenshot
 
