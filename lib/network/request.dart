@@ -844,7 +844,9 @@ Future<bool?> postComment({
     httpTransformer: HttpTransformerBuilder(
       (response) {
         logger.d('statusCode ${response.statusCode}');
-        return DioHttpResponse<bool>.success(response.statusCode == 200);
+        return DioHttpResponse<bool>.success(response.statusCode == 200 ||
+            response.statusCode == 302 ||
+            response.statusCode == 303);
       },
     ),
     options: getCacheOptions(forceRefresh: true)
