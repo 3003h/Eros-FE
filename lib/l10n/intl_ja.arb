@@ -429,5 +429,14 @@
   "show_gallery_tags": "ギャラリーダグを表示",
   "hide_thumbnails": "サムネイルを非表示",
   "hide_gallery_thumbnails": "ギャラリーサムネイルを非表示",
-  "horizontal_thumbnails": "水平サムネイル"
+  "horizontal_thumbnails": "水平サムネイル",
+  "block_rules": "Block Rules",
+  "edit_block_rule": "Edit Block Rule",
+  "block_rule": "Block Rule",
+  "enable": "Enable",
+  "regex": "Regex",
+  "title": "Title",
+  "comment": "Comment",
+  "commentator": "Commentator",
+  "regex_format_error": "Regex format error"
 }
