@@ -246,7 +246,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
       showKey == null ||
       showKey.isEmpty ||
       (sourceId?.isNotEmpty ?? false)) {
-    logger.d('OOOOOOOld : showKey $showKey, sourceId $sourceId, isMpv $isMpv');
+    logger.t('OOOOOOOld : showKey $showKey, sourceId $sourceId, isMpv $isMpv');
     final _image = await _fetchImageInfo(
       href,
       refresh: refresh,

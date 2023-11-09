@@ -514,14 +514,15 @@ class ViewExtController extends GetxController {
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
-    logger.t('vState.realDirPath ${vState.realDirPath} gid:${vState.gid} $gid');
-    if (vState.gid == gid.toString()) {
+    logger.d('vState.realDirPath ${vState.realDirPath} gid:${vState.gid} $gid');
+    if (vState.gid == gid.toString() &&
+        vState.realDirPath != null &&
+        vState.realDirPath!.isNotEmpty) {
       return vState.realDirPath;
     }
 
     final gTask = await isarHelper.findGalleryTaskByGid(gid);
-    // final gTask = await isarHelper
-    //     .findGalleryTaskByGid(int.tryParse(vState.gid ?? '') ?? 0);
+
     final realDirPath = gTask?.realDirPath;
     if (realDirPath != null && realDirPath.isNotEmpty) {
       vState.realDirPath = realDirPath;
@@ -535,6 +536,8 @@ class ViewExtController extends GetxController {
     int itemSer, {
     bool changeSource = false,
   }) async {
+    logger.d('fetchImage ser:$itemSer');
+
     // 首先检查下载记录中是否有记录
     vState.dirPath ??=
         await _getTaskDirPath(int.tryParse(_galleryPageStat?.gid ?? '') ?? 0);
