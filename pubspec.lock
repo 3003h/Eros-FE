@@ -370,6 +370,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  cupertino_battery_indicator:
+    dependency: "direct main"
+    description:
+      name: cupertino_battery_indicator
+      sha256: e8beabd34fc4c5085372f1ea2e4736f252d7679652e48ee7bfaaec1853889941
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   cupertino_http:
     dependency: transitive
     description:
