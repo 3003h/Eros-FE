@@ -71,9 +71,11 @@ class _SubListViewState<T extends CustomSubListController>
           sliver: _buildListView(),
         ),
         Obx(() {
-          return EndIndicator(
-            pageState: subController.pageState,
-            loadDataMore: subController.loadDataMore,
+          return SliverSafeArea(
+            sliver: EndIndicator(
+              pageState: subController.pageState,
+              loadDataMore: subController.loadDataMore,
+            ),
           );
         }),
       ],

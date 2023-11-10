@@ -182,14 +182,18 @@ class _DownloadArchiverViewState extends State<DownloadArchiverView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return AnimatedList(
-      key: controller.animatedArchiverListKey,
-      padding: EdgeInsets.only(
-        top: context.mediaQueryPadding.top,
-        bottom: context.mediaQueryPadding.bottom,
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: AnimatedList(
+        key: controller.animatedArchiverListKey,
+        padding: EdgeInsets.only(
+          top: context.mediaQueryPadding.top,
+          bottom: context.mediaQueryPadding.bottom,
+        ),
+        initialItemCount: controller.archiverTasks.length,
+        itemBuilder: downloadArchiverItemBuilder,
       ),
-      initialItemCount: controller.archiverTasks.length,
-      itemBuilder: downloadArchiverItemBuilder,
     );
   }
 
@@ -221,14 +225,18 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
       // controller.galleryTasks更新时，生成新的animatedGalleryListKey，确保列表能刷新
       // TODO: 会导致任务状态变化时， 列表重新回到顶部
       // controller.animatedGalleryListKey = GlobalKey<AnimatedListState>();
-      return AnimatedList(
-        key: controller.animatedGalleryListKey,
-        padding: EdgeInsets.only(
-          top: context.mediaQueryPadding.top,
-          bottom: context.mediaQueryPadding.bottom,
+      return SafeArea(
+        top: false,
+        bottom: false,
+        child: AnimatedList(
+          key: controller.animatedGalleryListKey,
+          padding: EdgeInsets.only(
+            top: context.mediaQueryPadding.top,
+            bottom: context.mediaQueryPadding.bottom,
+          ),
+          initialItemCount: controller.galleryTasks.length,
+          itemBuilder: downloadItemBuilder,
         ),
-        initialItemCount: controller.galleryTasks.length,
-        itemBuilder: downloadItemBuilder,
       );
     });
   }

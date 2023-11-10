@@ -176,11 +176,17 @@ class _ToplistTabState extends State<ToplistTab> {
               onRefresh: controller.onRefresh,
             ),
           ),
-          _buildListView(context),
+          SliverSafeArea(
+            top: false,
+            bottom: false,
+            sliver: _buildListView(context),
+          ),
           Obx(() {
-            return EndIndicator(
-              pageState: controller.pageState,
-              loadDataMore: controller.loadDataMore,
+            return SliverSafeArea(
+              sliver: EndIndicator(
+                pageState: controller.pageState,
+                loadDataMore: controller.loadDataMore,
+              ),
             );
           }),
         ],
