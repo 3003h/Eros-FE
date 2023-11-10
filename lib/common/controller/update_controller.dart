@@ -15,6 +15,11 @@ const String kGithubUrl =
 class UpdateController extends GetxController {
   final _canUpdate = false.obs;
   bool get canUpdate => _canUpdate.value;
+
+  final _isChecking = false.obs;
+  bool get isChecking => _isChecking.value;
+  set isChecking(bool val) => _isChecking.value = val;
+
   set canUpdate(bool val) => _canUpdate.value = val;
 
   final _isLastVersion = true.obs;
@@ -33,6 +38,7 @@ class UpdateController extends GetxController {
     final packageInfo = await PackageInfo.fromPlatform();
     final currentVersion = packageInfo.version;
 
+    isChecking = true;
     final _response = await getGithubApi(kGithubUrl);
     final tagName = (_response['tag_name'] as String?)?.trim() ?? '';
     final body = (_response['body'] as String?)?.trim() ?? '';
@@ -47,6 +53,8 @@ class UpdateController extends GetxController {
     final compare = versionStringCompare(
         preVersion: currentVersion, lastVersion: remoteVersion);
     lastVersion = remoteVersion;
+
+    isChecking = false;
 
     if (compare >= 0) {
       isLastVersion = true;

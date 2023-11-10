@@ -9,7 +9,6 @@ import 'package:fehviewer/pages/gallery/view/all_thumbnails_page.dart';
 import 'package:fehviewer/pages/gallery/view/comment_page.dart';
 import 'package:fehviewer/pages/gallery/view/gallery_info_page.dart';
 import 'package:fehviewer/pages/gallery/view/sliver/gallery_page.dart';
-import 'package:fehviewer/pages/setting/about_page.dart';
 import 'package:fehviewer/pages/setting/advanced_setting_page.dart';
 import 'package:fehviewer/pages/setting/avatar_setting_page.dart';
 import 'package:fehviewer/pages/setting/block/block_rule_edit_page.dart';
@@ -24,7 +23,6 @@ import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
 import 'package:fehviewer/pages/setting/image_hide_page.dart';
 import 'package:fehviewer/pages/setting/item_width_setting_page.dart';
 import 'package:fehviewer/pages/setting/layout_setting_page.dart';
-import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
@@ -36,6 +34,8 @@ import 'package:fehviewer/pages/setting/tag_translat_page.dart';
 import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
+import 'package:fehviewer/pages/setting_c/about_page.dart';
+import 'package:fehviewer/pages/setting_c/license_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/quick_search_page.dart';
@@ -344,7 +344,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.license:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => const LicensePage(),
+                              page: () => LicensePage(),
                             );
                           default:
                             return GetPageRoute(

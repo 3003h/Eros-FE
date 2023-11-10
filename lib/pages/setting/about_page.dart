@@ -69,14 +69,14 @@ class ListViewAbout extends StatelessWidget {
             subTitle: 'An unofficial e-hentai app',
             onTap: null,
           ),
-          if (!GetPlatform.isWindows)
+          if (!GetPlatform.isWindows || !GetPlatform.isLinux)
             TextItem(
               L10n.of(context).version,
               subTitle:
                   '${Global.packageInfo.version}(${Global.packageInfo.buildNumber}) $debugLabel',
               onTap: null,
             ),
-          if (!GetPlatform.isWindows)
+          if (!GetPlatform.isWindows || !GetPlatform.isLinux)
             Obx(() {
               return TextItem(
                 L10n.of(context).check_for_update,
