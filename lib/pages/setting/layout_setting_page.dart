@@ -10,7 +10,6 @@ import '../../common/service/ehsetting_service.dart';
 import '../../common/service/layout_service.dart';
 import '../../common/service/locale_service.dart';
 import '../../component/setting_base.dart';
-import '../../const/locale.dart';
 import '../../const/theme_colors.dart';
 import '../../fehviewer.dart';
 import '../login/controller/login_controller.dart';
@@ -55,8 +54,6 @@ class ListViewLayoutSetting extends StatelessWidget {
     }
 
     final List<Widget> _list = <Widget>[
-      _buildLanguageItem(context, hideLine: true),
-      const ItemSpace(),
       _buildThemeItem(context),
       Obx(() => TextSwitchItem(
             L10n.of(context).dark_mode_effect,
@@ -239,28 +236,6 @@ class ListViewLayoutSetting extends StatelessWidget {
       },
     );
   }
-}
-
-/// 语言设置部件
-Widget _buildLanguageItem(BuildContext context, {bool hideLine = false}) {
-  final LocaleService localeService = Get.find();
-  final String _title = L10n.of(context).language;
-
-  final Map<String, String> localeMap = <String, String>{
-    '': L10n.of(context).follow_system,
-  };
-
-  localeMap.addAll(languageMenu);
-
-  return Obx(() {
-    return SelectorItem<String>(
-      title: _title,
-      hideDivider: hideLine,
-      actionMap: localeMap,
-      initVal: localeService.localCode.value,
-      onValueChanged: (val) => localeService.localCode.value = val,
-    );
-  });
 }
 
 /// 主题设置部件

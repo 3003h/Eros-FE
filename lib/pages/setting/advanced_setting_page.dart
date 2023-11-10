@@ -5,7 +5,9 @@ import 'package:fehviewer/common/controller/cache_controller.dart';
 import 'package:fehviewer/common/service/dns_service.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/const/locale.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/webview/mode.dart';
 import 'package:fehviewer/utils/import_export.dart';
@@ -74,6 +76,8 @@ class ListViewAdvancedSetting extends StatelessWidget {
     }
 
     final List<Widget> _list = <Widget>[
+      _buildLanguageItem(context, hideLine: true),
+      const ItemSpace(),
       SelectorSettingItem(
         title: L10n.of(context).image_block,
         selector: '',
@@ -240,6 +244,28 @@ Widget _buildWebDAVMaxConnectionsItem(BuildContext context,
       actionMap: actionMap,
       initVal: ehSettingService.webDAVMaxConnections,
       onValueChanged: (val) => ehSettingService.webDAVMaxConnections = val,
+    );
+  });
+}
+
+/// 语言设置部件
+Widget _buildLanguageItem(BuildContext context, {bool hideLine = false}) {
+  final LocaleService localeService = Get.find();
+  final String _title = L10n.of(context).language;
+
+  final Map<String, String> localeMap = <String, String>{
+    '': L10n.of(context).follow_system,
+  };
+
+  localeMap.addAll(languageMenu);
+
+  return Obx(() {
+    return SelectorItem<String>(
+      title: _title,
+      hideDivider: hideLine,
+      actionMap: localeMap,
+      initVal: localeService.localCode.value,
+      onValueChanged: (val) => localeService.localCode.value = val,
     );
   });
 }
