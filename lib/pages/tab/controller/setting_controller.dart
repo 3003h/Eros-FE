@@ -1,7 +1,7 @@
-import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/item/setting_item.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -79,6 +79,30 @@ class SettingViewController extends GetxController
     }
     return _slivers;
   }
+
+  Widget cupertinoListTileBuilder(int index) {
+    return CupertinoListTile(
+      title: Text(_itemTitles[index]),
+      leading: Icon(_icons[index], color: CupertinoColors.systemGrey),
+      trailing: const CupertinoListTileChevron(),
+      onTap: () {
+        final route = _routes[index];
+        if (isLayoutLarge) {
+          final topRoute =
+              SecondNavigatorObserver().history.lastOrNull?.settings.name;
+          if (topRoute?.startsWith('/setting') ?? false) {
+            Get.offNamed(route, id: 2);
+          } else {
+            Get.toNamed(route, id: 2);
+          }
+        } else {
+          Get.toNamed(route);
+        }
+      },
+    );
+  }
+
+  int get itemCount => _itemTitles.length;
 
   void initData(BuildContext context) {
     scrollController = PrimaryScrollController.of(context);

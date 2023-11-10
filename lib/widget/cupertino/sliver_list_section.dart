@@ -108,7 +108,7 @@ class SliverCupertinoListSection extends StatelessWidget {
         additionalDividerMargin = additionalDividerMargin ??
             (hasLeading ? _kBaseAdditionalDividerMargin : 0.0);
 
-  SliverCupertinoListSection.base({
+  const SliverCupertinoListSection.base({
     super.key,
     required this.itemBuilder,
     required this.itemCount,
