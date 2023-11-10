@@ -344,7 +344,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.license:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => customLicensePage,
+                              page: () => const LicensePage(),
                             );
                           default:
                             return GetPageRoute(

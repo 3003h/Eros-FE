@@ -112,7 +112,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.license,
-      page: () => customLicensePage,
+      page: () => const LicensePage(),
     ),
     GetPage(
       name: EHRoutes.downloadSetting,
