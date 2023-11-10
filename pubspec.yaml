@@ -194,6 +194,8 @@ dependencies:
   firebase_performance_dio: ^0.6.0
   pull_down_button: ^0.9.3
   dio_cache_interceptor_file_store: ^1.2.2
+  flutter_windowmanager: ^0.2.0
+  integral_isolates: ^0.4.1
 
 dev_dependencies:
   # flutter pub run build_runner build --delete-conflicting-outputs

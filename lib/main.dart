@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
@@ -150,6 +151,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     logger.t('state: $state');
     _autoLockController.updateStat(state);
+    if (state != AppLifecycleState.resumed) {
+      logger.d('applyBlurredInRecentTasks');
+
+      // 非 resumed 时根据设置 添加 FLAG_SECURE
+      _ehSettingService.applyBlurredInRecentTasks();
+    }
     if (state == AppLifecycleState.paused) {
       // went to Background
       // loggerTime.d('paused');
@@ -159,6 +166,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // came back to Foreground
       // loggerTime.d('resumed');
       _autoLockController.resumed();
+
+      // resumed 时清除 FLAG_SECURE ,避免无法截屏
+      FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
 
       _ehSettingService.chkClipboardLink(context);
     }

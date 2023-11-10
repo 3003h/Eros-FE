@@ -195,13 +195,14 @@ class Global {
     cookieJar = await Api.cookieJar;
 
     // 读取设备第一次打开
-    isFirstOpen = !StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY);
+    isFirstOpen =
+        !(StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY) ?? false);
     if (isFirstOpen) {
       creatDirs();
       StorageUtil().setBool(STORAGE_DEVICE_ALREADY_OPEN_KEY, true);
     }
 
-    isDBinappSupportPath = StorageUtil().getBool(IS_DB_IN_SUPPORT_DIR);
+    isDBinappSupportPath = StorageUtil().getBool(IS_DB_IN_SUPPORT_DIR) ?? false;
 
     if (Platform.isAndroid) {
       await iaw.AndroidInAppWebViewController.setWebContentsDebuggingEnabled(

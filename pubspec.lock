@@ -994,6 +994,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.14.6"
+  flutter_windowmanager:
+    dependency: "direct main"
+    description:
+      name: flutter_windowmanager
+      sha256: b4d0bc06f6777952b729c0cdb7ce9ad1ecabd8b8b1cb0acb57a36621457dab1b
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.2.0"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -1171,6 +1179,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.3"
+  integral_isolates:
+    dependency: "direct main"
+    description:
+      name: integral_isolates
+      sha256: "31b8ef45985ebfba628f1df5366df263578bc62119409588dbd679a2e27f2225"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.4.1"
   intl:
     dependency: "direct main"
     description:

@@ -22,7 +22,7 @@ class StorageUtil {
     return _prefs?.setString(key, jsonString);
   }
 
-  dynamic? getJSON(String key) {
+  dynamic getJSON(String key) {
     final String? jsonString = _prefs?.getString(key);
     return jsonString;
   }
@@ -39,9 +39,9 @@ class StorageUtil {
     return _prefs?.setBool(key, val);
   }
 
-  bool getBool(String key) {
+  bool? getBool(String key) {
     final bool? val = _prefs?.getBool(key);
-    return val ?? false;
+    return val;
   }
 
   Future<bool>? remove(String key) {
