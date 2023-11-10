@@ -43,6 +43,16 @@ const EdgeInsetsDirectional _kDefaultInsetGroupedRowsMarginWithHeader =
 const BorderRadius _kDefaultInsetGroupedBorderRadius =
     BorderRadius.all(Radius.circular(10.0));
 
+const BorderRadius _kDefaultTopInsetGroupedBorderRadius = BorderRadius.only(
+  topLeft: Radius.circular(10.0),
+  topRight: Radius.circular(10.0),
+);
+
+const BorderRadius _kDefaultBottomInsetGroupedBorderRadius = BorderRadius.only(
+  bottomLeft: Radius.circular(10.0),
+  bottomRight: Radius.circular(10.0),
+);
+
 // The margin of divider used in base list section. Estimated from iOS 14.4 SDK
 // Settings app.
 const double _kBaseDividerMargin = 20.0;
@@ -61,7 +71,7 @@ const double _kInsetAdditionalDividerMargin = 42.0;
 
 // Additional margin of divider used in inset grouped version of list section
 // when there is no leading widgets. Estimated from iOS 14.4 SDK Notes app.
-const double _kInsetAdditionalDividerMarginWithoutLeading = 14.0;
+const double _kInsetAdditionalDividerMarginWithoutLeading = 6.0;
 
 // Color of header and footer text in edge-to-edge variant.
 const Color _kHeaderFooterColor = CupertinoDynamicColor(
@@ -91,7 +101,7 @@ class SliverCupertinoListSection extends StatelessWidget {
     this.header,
     this.footer,
     this.margin = _kDefaultRowsMargin,
-    // this.backgroundColor = CupertinoColors.systemGroupedBackground,
+    this.backgroundColor = CupertinoColors.systemGroupedBackground,
     this.decoration,
     this.clipBehavior = Clip.none,
     this.dividerMargin = _kBaseDividerMargin,
@@ -115,7 +125,7 @@ class SliverCupertinoListSection extends StatelessWidget {
     this.header,
     this.footer,
     this.margin = _kDefaultRowsMargin,
-    // this.backgroundColor = CupertinoColors.systemGroupedBackground,
+    this.backgroundColor = CupertinoColors.systemGroupedBackground,
     this.decoration,
     this.clipBehavior = Clip.hardEdge,
     this.dividerMargin = _kInsetDividerMargin,
@@ -141,7 +151,7 @@ class SliverCupertinoListSection extends StatelessWidget {
     this.header,
     this.footer,
     EdgeInsetsGeometry? margin,
-    // this.backgroundColor = CupertinoColors.systemGroupedBackground,
+    this.backgroundColor = CupertinoColors.systemGroupedBackground,
     this.decoration,
     this.clipBehavior = Clip.hardEdge,
     this.dividerMargin = _kInsetDividerMargin,
@@ -170,13 +180,14 @@ class SliverCupertinoListSection extends StatelessWidget {
     this.header,
     this.footer,
     EdgeInsetsGeometry? margin,
+    this.backgroundColor = CupertinoColors.systemGroupedBackground,
     this.decoration,
     this.clipBehavior = Clip.hardEdge,
     this.dividerMargin = _kInsetDividerMargin,
     double? additionalDividerMargin,
     this.topMargin,
     this.separatorColor,
-    bool hasLeading = true,
+    bool hasLeading = false,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,
     this.addSemanticIndexes = true,
@@ -248,7 +259,7 @@ class SliverCupertinoListSection extends StatelessWidget {
   /// Sets the background color behind the section.
   ///
   /// Defaults to [CupertinoColors.systemGroupedBackground].
-  // final Color backgroundColor;
+  final Color backgroundColor;
 
   /// {@macro flutter.material.Material.clipBehavior}
   ///
@@ -354,20 +365,27 @@ class SliverCupertinoListSection extends StatelessWidget {
         children!.isNotEmpty) {
       final List<Widget> childrenWithDividers = <Widget>[];
 
-      // if (type == SliverCupertinoListSectionType.base) {
-      //   childrenWithDividers.add(longDivider);
-      // }
+      for (int i = 0; i < children!.length; i++) {
+        final BorderRadius childrenGroupBorderRadius = () {
+          if (children!.length == 1) {
+            return _kDefaultInsetGroupedBorderRadius;
+          } else if (i == 0) {
+            return _kDefaultTopInsetGroupedBorderRadius;
+          } else if (i == children!.length - 1) {
+            return _kDefaultBottomInsetGroupedBorderRadius;
+          } else {
+            return BorderRadius.zero;
+          }
+        }();
 
-      children!.sublist(0, children!.length - 1).forEach((Widget widget) {
-        childrenWithDividers.add(widget);
-        childrenWithDividers.add(shortDivider);
-      });
-
-      childrenWithDividers.add(children!.last);
-
-      // if (type == SliverCupertinoListSectionType.base) {
-      //   childrenWithDividers.add(longDivider);
-      // }
+        childrenWithDividers.add(ClipRRect(
+          borderRadius: childrenGroupBorderRadius,
+          child: children![i],
+        ));
+        if (i != children!.length - 1) {
+          childrenWithDividers.add(shortDivider);
+        }
+      }
 
       _delegate = SliverChildListDelegate(
         childrenWithDividers,
@@ -385,7 +403,26 @@ class SliverCupertinoListSection extends StatelessWidget {
           final int itemIndex = index ~/ 2;
           final Widget? widget;
           if (index.isEven) {
-            widget = itemBuilder!(context, itemIndex);
+            if (type == SliverCupertinoListSectionType.insetGrouped) {
+              final BorderRadius childrenGroupBorderRadius = () {
+                if (itemCount == 1) {
+                  return _kDefaultInsetGroupedBorderRadius;
+                } else if (index == 0) {
+                  return _kDefaultTopInsetGroupedBorderRadius;
+                } else if (index == itemCount * 2 - 2) {
+                  return _kDefaultBottomInsetGroupedBorderRadius;
+                } else {
+                  return BorderRadius.zero;
+                }
+              }();
+
+              widget = ClipRRect(
+                borderRadius: childrenGroupBorderRadius,
+                child: itemBuilder!(context, itemIndex),
+              );
+            } else {
+              widget = itemBuilder!(context, itemIndex);
+            }
           } else {
             widget = shortDivider;
             assert(() {
@@ -450,85 +487,37 @@ class SliverCupertinoListSection extends StatelessWidget {
       );
     }
 
-    Widget? decoratedChildrenGroup;
-    if (children != null && children!.isNotEmpty) {
-      // We construct childrenWithDividers as follows:
-      // Insert a short divider between all rows.
-      // If it is a `CupertinoListSectionType.base` type, add a long divider
-      // to the top and bottom of the rows.
-      final List<Widget> childrenWithDividers = <Widget>[];
-
-      if (type == SliverCupertinoListSectionType.base) {
-        childrenWithDividers.add(longDivider);
-      }
-
-      children!.sublist(0, children!.length - 1).forEach((Widget widget) {
-        childrenWithDividers.add(widget);
-        childrenWithDividers.add(shortDivider);
-      });
-
-      childrenWithDividers.add(children!.last);
-      if (type == SliverCupertinoListSectionType.base) {
-        childrenWithDividers.add(longDivider);
-      }
-
-      final BorderRadius childrenGroupBorderRadius = switch (type) {
-        SliverCupertinoListSectionType.insetGrouped =>
-          _kDefaultInsetGroupedBorderRadius,
-        SliverCupertinoListSectionType.base => BorderRadius.zero,
-      };
-
-      decoratedChildrenGroup = DecoratedSliver(
-        decoration: decoration ??
-            BoxDecoration(
-              color: CupertinoDynamicColor.resolve(
-                  decoration?.color ??
-                      CupertinoColors.secondarySystemGroupedBackground,
-                  context),
-              borderRadius: childrenGroupBorderRadius,
-            ),
-        sliver: MultiSliver(children: childrenWithDividers),
-      );
-
-      decoratedChildrenGroup = SliverPadding(
-        padding: margin,
-        sliver: clipBehavior == Clip.none
-            ? decoratedChildrenGroup
-            : DecoratedSliver(
-                sliver: decoratedChildrenGroup,
-                decoration: BoxDecoration(
-                  borderRadius: childrenGroupBorderRadius,
-                ),
+    return DecoratedSliver(
+      decoration: BoxDecoration(
+          color: CupertinoDynamicColor.resolve(backgroundColor, context)),
+      sliver: MultiSliver(
+        children: <Widget>[
+          if (type == SliverCupertinoListSectionType.base)
+            SizedBox(height: topMargin),
+          if (headerWidget != null)
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: type == SliverCupertinoListSectionType.base
+                    ? _kDefaultHeaderMargin
+                    : _kInsetGroupedDefaultHeaderMargin,
+                child: headerWidget,
               ),
-      );
-    }
-
-    return MultiSliver(
-      children: <Widget>[
-        if (type == SliverCupertinoListSectionType.base)
-          SizedBox(height: topMargin),
-        if (headerWidget != null)
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Padding(
-              padding: type == SliverCupertinoListSectionType.base
-                  ? _kDefaultHeaderMargin
-                  : _kInsetGroupedDefaultHeaderMargin,
-              child: headerWidget,
             ),
-          ),
-        if (sliverDecoratedChildrenGroup != null) sliverDecoratedChildrenGroup,
-        if (footerWidget != null)
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Padding(
-              padding: type == SliverCupertinoListSectionType.base
-                  ? _kDefaultFooterMargin
-                  : _kInsetGroupedDefaultFooterMargin,
-              child: footerWidget,
+          if (sliverDecoratedChildrenGroup != null)
+            sliverDecoratedChildrenGroup,
+          if (footerWidget != null)
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: type == SliverCupertinoListSectionType.base
+                    ? _kDefaultFooterMargin
+                    : _kInsetGroupedDefaultFooterMargin,
+                child: footerWidget,
+              ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

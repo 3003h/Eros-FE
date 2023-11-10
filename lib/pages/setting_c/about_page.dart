@@ -33,7 +33,7 @@ class AboutPage extends StatelessWidget {
         _list.add(
           CupertinoListTile(
             title: Text(L10n.of(context).version),
-            subtitle: Text(
+            additionalInfo: Text(
                 '${Global.packageInfo.version}(${Global.packageInfo.buildNumber}) $debugLabel'),
           ),
         );
