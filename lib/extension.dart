@@ -193,6 +193,7 @@ extension ExtTagTranlat on TagTranslat {
     }
   }
 
+  /// 根据不同图片级别， 处理tag简介中的图片
   String? get introMDimage {
     final EhSettingService ehSettingService = Get.find();
 

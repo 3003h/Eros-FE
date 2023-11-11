@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -13,8 +11,13 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-Future<void> showTagInfoDialog(String text,
-    {required String type, required String translate, int vote = 0}) {
+Future<void> showTagInfoDialog(
+  BuildContext context,
+  String text, {
+  required String type,
+  required String translate,
+  int vote = 0,
+}) {
   vibrateUtil.medium();
   Get.lazyPut(() => TagInfoController(), tag: pageCtrlTag);
   final TagInfoController controller = Get.find(tag: pageCtrlTag);
@@ -90,7 +93,7 @@ Future<void> showTagInfoDialog(String text,
   }
 
   return showCupertinoDialog<void>(
-      context: Get.context!,
+      context: context,
       barrierDismissible: true,
       builder: (_) {
         Widget _title() {
@@ -126,10 +129,10 @@ Future<void> showTagInfoDialog(String text,
           }
         }
 
-        Future<void> _tapAddtoMytag() async {
+        Future<void> _tapAddToMyTags() async {
           Get.back();
-          final _mytagsController = Get.find<EhMyTagsController>();
-          await _mytagsController.showAddNewTagDialog(Get.context!,
+          final _myTagsController = Get.find<EhMyTagsController>();
+          await _myTagsController.showAddNewTagDialog(Get.context!,
               userTag: EhUsertag(
                 title: '$type:$text',
                 defaultColor: true,
@@ -159,7 +162,7 @@ Future<void> showTagInfoDialog(String text,
                     Text(L10n.of(Get.context!).tag_add_to_mytag),
                 ],
               ),
-              onPressed: _tapAddtoMytag,
+              onPressed: _tapAddToMyTags,
             ),
           ],
         );
@@ -180,16 +183,19 @@ class TagDialogView extends StatefulWidget {
 class _TagDialogViewState extends State<TagDialogView> {
   late Future<TagTranslat?> _future;
 
-  Future<TagTranslat?> _getTaginfo() async {
-    final TagTranslat? _taginfo = await Get.find<TagTransController>()
-        .getTagTranslate(widget.text, widget.type);
-    return _taginfo;
+  Future<TagTranslat?> _getTagInfo() async {
+    final TagTranslat? _tagInfo =
+        await Get.find<TagTransController>().getTagTranslate(
+      widget.text,
+      widget.type,
+    );
+    return _tagInfo;
   }
 
   @override
   void initState() {
     super.initState();
-    _future = _getTaginfo();
+    _future = _getTagInfo();
   }
 
   @override
@@ -208,7 +214,7 @@ class _TagDialogViewState extends State<TagDialogView> {
                 ),
                 onPressed: () {
                   setState(() {
-                    _future = _getTaginfo();
+                    _future = _getTagInfo();
                   });
                 },
               );
@@ -220,67 +226,66 @@ class _TagDialogViewState extends State<TagDialogView> {
                       textStyle: theme.textTheme.textStyle.copyWith(
                 fontSize: 14,
               )));
-              return IntrinsicHeight(
-                child: Container(
-                  child: CupertinoTheme(
-                    data: lTheme,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        MarkdownBody(
-                          data: _taginfo?.introMDimage ?? '',
-                          selectable: true,
-                          onTapLink: (String text, String? href, String title) {
-                            onOpenUrl(url: href);
-                          },
-                          styleSheetTheme:
-                              MarkdownStyleSheetBaseTheme.cupertino,
-                          styleSheet: MarkdownStyleSheet(
-                            code: theme.textTheme.textStyle.copyWith(
-                                backgroundColor: Colors.transparent,
-                                // decoration: TextDecoration.underline,
-                                // decorationStyle: TextDecorationStyle.dashed,
-                                // backgroundColor: CupertinoColors.activeOrange
-                                //     .withOpacity(0.5),
-                                color: CupertinoColors.systemPink,
-                                fontSize:
-                                    theme.textTheme.textStyle.fontSize! * 0.8,
-                                fontFamilyFallback:
-                                    EHConst.monoFontFamilyFallback),
-                          ),
-                          imageBuilder: (Uri uri, String? title, String? alt) {
-                            return EhNetworkImage(
-                              imageUrl: uri.toString(),
-                              placeholder: (_, __) {
-                                return const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CupertinoActivityIndicator(),
-                                );
-                              },
-                            );
-                          },
+
+              Widget tagInfoView = Container(
+                child: CupertinoTheme(
+                  data: lTheme,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      MarkdownBody(
+                        data: _taginfo?.introMDimage ?? '',
+                        selectable: true,
+                        onTapLink: (String text, String? href, String title) {
+                          onOpenUrl(url: href);
+                        },
+                        styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
+                        styleSheet: MarkdownStyleSheet(
+                          code: theme.textTheme.textStyle.copyWith(
+                              backgroundColor: Colors.transparent,
+                              color: CupertinoColors.systemPink,
+                              fontSize:
+                                  theme.textTheme.textStyle.fontSize! * 0.8,
+                              fontFamilyFallback:
+                                  EHConst.monoFontFamilyFallback),
                         ),
-                        const SizedBox(height: 12),
-                        MarkdownBody(
-                          data: _taginfo?.links ?? '',
-                          selectable: true,
-                          onTapLink: (String text, String? href, String title) {
-                            onOpenUrl(url: href);
-                          },
-                          styleSheet: MarkdownStyleSheet(
-                            a: const TextStyle(
-                              color: CupertinoColors.activeBlue,
-                              decoration: TextDecoration.underline,
-                            ),
+                        imageBuilder: (Uri uri, String? title, String? alt) {
+                          return EhNetworkImage(
+                            imageUrl: uri.toString(),
+                            placeholder: (_, __) {
+                              return const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CupertinoActivityIndicator(),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      MarkdownBody(
+                        data: _taginfo?.links ?? '',
+                        selectable: true,
+                        onTapLink: (String text, String? href, String title) {
+                          onOpenUrl(url: href);
+                        },
+                        styleSheet: MarkdownStyleSheet(
+                          a: const TextStyle(
+                            color: CupertinoColors.activeBlue,
+                            decoration: TextDecoration.underline,
                           ),
-                          styleSheetTheme:
-                              MarkdownStyleSheetBaseTheme.cupertino,
                         ),
-                      ],
-                    ),
+                        styleSheetTheme: MarkdownStyleSheetBaseTheme.cupertino,
+                      ),
+                    ],
                   ),
                 ),
               );
+
+              // tagInfoView = IntrinsicHeight(
+              //   child: tagInfoView,
+              // );
+
+              return tagInfoView;
             }
           } else {
             return Container(

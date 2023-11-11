@@ -498,6 +498,7 @@ class TagGroupItem extends StatelessWidget {
             },
             onLongPress: () {
               showTagInfoDialog(
+                context,
                 tag.title,
                 translate: tag.tagTranslat,
                 type: tag.type,

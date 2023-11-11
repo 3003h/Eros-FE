@@ -142,18 +142,6 @@ class TagTransController extends GetxController {
 
   /// 获取翻译结果
   Future<String?> _getTagTransStr(String key, {String? namespace}) async {
-    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
-    // TagTranslat? tr;
-    // if (namespace != null && namespace.isNotEmpty) {
-    //   tr = await tagTranslatDao.findTagTranslatByKey(
-    //       key.trim(), namespace.trim());
-    // } else {
-    //   final List<TagTranslat> trans =
-    //       await tagTranslatDao.findAllTagTranslatsByKey(key);
-    //   if (trans.isNotEmpty) {
-    //     tr = trans.last;
-    //   }
-    // }
     TagTranslat? tr =
         await isarHelper.findTagTranslate(key, namespace: namespace);
 
@@ -216,19 +204,32 @@ class TagTransController extends GetxController {
     return _translateList.join('   ');
   }
 
-  Future<String?> getTagTranslateText(String text, {String? namespace}) async {
+  Future<String?> getTagTranslateText(
+    String text, {
+    String? namespace,
+    bool ignoreNamespace = false,
+  }) async {
     if (text.contains(':')) {
-      final RegExp rpfx = RegExp(r'(\w):(.+)');
-      final RegExpMatch? rult = rpfx.firstMatch(text.toLowerCase());
+      final RegExp regPfx = RegExp(r'(\w):(.+)');
+      final RegExpMatch? rult = regPfx.firstMatch(text.toLowerCase());
       final String pfx = rult?.group(1) ?? '';
       final String? _nameSpase = EHConst.prefixToNameSpaceMap[pfx];
       final String _tag = rult?.group(2) ?? '';
       final String? _transTag =
           await _getTagTransStr(_tag, namespace: _nameSpase);
 
-      return _transTag != null ? '$pfx:$_transTag' : text;
+      if (_transTag == null) {
+        return text;
+      }
+
+      if (ignoreNamespace) {
+        return _transTag;
+      } else {
+        return '$pfx:$_transTag';
+      }
+
+      // return _transTag != null ? '$pfx:$_transTag' : text;
     } else {
-      // logger.d('namespace $namespace');
       String? _tempNamespace;
       if (_namespaces.contains(namespace)) {
         _tempNamespace = namespace;
@@ -239,30 +240,30 @@ class TagTransController extends GetxController {
   }
 
   Future<TagTranslat?> getTagTranslate(String text, String namespace) async {
-    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
-    // final TagTranslat? _translates =
-    //     await tagTranslatDao.findTagTranslatByKey(text, namespace);
-
     final TagTranslat? _translates =
         await isarHelper.findTagTranslate(text, namespace: namespace);
 
-    logger.t(_translates?.intro);
+    logger.d(_translates?.intro);
     // 查询code字段
     final qryMap = {};
-    final RegExp regCode = RegExp(r'`((\w+\s+?)*\w+)`');
+    final RegExp regCode = RegExp(r'`(([\w:]+\s+?)*[\w:]+)`');
     final matches = regCode.allMatches(_translates?.intro ?? '');
     for (final match in matches) {
       final _ori = match.group(1);
       if (_ori != null) {
-        final _translateCode = await getTagTranslateText(_ori);
+        final _translateCode = await getTagTranslateText(
+          _ori,
+          ignoreNamespace: true,
+        );
         if (_translateCode != null && _translateCode != _ori) {
+          logger.t('match $_ori $_translateCode');
           qryMap[_ori] = _translateCode;
         }
       }
     }
 
-    final _intro = _translates?.intro?.replaceAllMapped(
-        regCode, (match) => ' `${qryMap[match.group(1)]}(${match.group(1)})` ');
+    final _intro = _translates?.intro?.replaceAllMapped(regCode,
+        (match) => ' `${qryMap[match.group(1)]} (${match.group(1)})` ');
     logger.t(_intro);
 
     return _translates?.copyWith(intro: _intro);
@@ -274,10 +275,6 @@ class TagTransController extends GetxController {
     if (text.isEmpty) {
       return [];
     }
-    // final TagTranslatDao tagTranslatDao = await _getTagTranslatDao();
-
-    // final List<TagTranslat> _translates = await tagTranslatDao
-    //     .findTagTranslatsWithLike('%$text%', '%$text%', '%$text%', limit);
 
     final List<TagTranslat> _translates =
         await isarHelper.findTagTranslateContains(text, limit);
