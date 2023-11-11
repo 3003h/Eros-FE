@@ -8,7 +8,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/login/controller/login_controller.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:open_by_default/open_by_default.dart';
@@ -58,7 +57,7 @@ class ListViewEhSetting extends StatelessWidget {
     return MultiSliver(children: [
       SliverCupertinoListSection.listInsetGrouped(children: [
         if (_isLogin)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).galery_site),
             trailing: Obx(() {
               return CupertinoSlidingSegmentedControl<String>(
@@ -77,7 +76,7 @@ class ListViewEhSetting extends StatelessWidget {
               );
             }),
           ),
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).link_redirect),
           subtitle: Text(L10n.of(context).link_redirect_summary),
           trailing: Obx(() {
@@ -89,7 +88,7 @@ class ListViewEhSetting extends StatelessWidget {
             );
           }),
         ),
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).redirect_thumb_link),
           subtitle: Text(L10n.of(context).redirect_thumb_link_summary),
           trailing: Obx(() {
@@ -102,12 +101,12 @@ class ListViewEhSetting extends StatelessWidget {
           }),
         ),
         if (_isLogin)
-          const CupertinoListTile(
+          const EhCupertinoListTile(
             title: Text('Cookie'),
             trailing: CupertinoListTileChevron(),
             onTap: showUserCookie,
           ),
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).auto_select_profile),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -118,7 +117,7 @@ class ListViewEhSetting extends StatelessWidget {
           }),
         ),
         if (_isLogin)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).ehentai_settings),
             subtitle: Text(L10n.of(context).setting_on_website),
             trailing: const CupertinoListTileChevron(),
@@ -130,7 +129,7 @@ class ListViewEhSetting extends StatelessWidget {
             },
           ),
         if (_isLogin)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).ehentai_my_tags),
             subtitle: Text(L10n.of(context).mytags_on_website),
             trailing: const CupertinoListTileChevron(),
@@ -153,7 +152,7 @@ class ListViewEhSetting extends StatelessWidget {
                       hiveHelper.setEhHome(ehHome);
                     }
                   }
-                  return CupertinoListTile(
+                  return EhCupertinoListTile(
                     title: Text(L10n.of(context).image_limits),
                     additionalInfo: Text(ehHome == null
                         ? ''
@@ -182,7 +181,7 @@ class ListViewEhSetting extends StatelessWidget {
 
       // 云服务
       SliverCupertinoListSection.listInsetGrouped(children: [
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text('WebDAV'),
           trailing: const CupertinoListTileChevron(),
           onTap: () {
@@ -203,7 +202,7 @@ class ListViewEhSetting extends StatelessWidget {
             (snapshot.data ?? false)) {
           return SliverCupertinoListSection.listInsetGrouped(
             children: [
-              CupertinoListTile(
+              EhCupertinoListTile(
                 title: Text(L10n.of(context).open_supported_links),
                 trailing: const CupertinoListTileChevron(),
                 // subtitle: Text(L10n.of(context).open_supported_links_summary),
@@ -220,7 +219,7 @@ class ListViewEhSetting extends StatelessWidget {
       }),
 
       SliverCupertinoListSection.listInsetGrouped(children: [
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).default_favorites),
           subtitle: Text(L10n.of(context).manually_sel_favorites),
           trailing: Obx(() {
@@ -231,7 +230,7 @@ class ListViewEhSetting extends StatelessWidget {
             );
           }),
         ),
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).clipboard_detection),
           subtitle: Text(L10n.of(context).clipboard_detection_desc),
           trailing: Obx(() {

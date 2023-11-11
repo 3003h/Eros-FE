@@ -5,7 +5,6 @@ import 'package:fehviewer/pages/setting/const.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_edit_dialog.dart';
 import 'package:fehviewer/pages/setting/webview/eh_tagset_edit_dialog.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -318,7 +317,7 @@ class _ListViewEhMyTagsState extends State<ListViewEhMyTags> {
 
     late Widget _item;
 
-    _item = CupertinoListTile(
+    _item = EhCupertinoListTile(
       title: Text(usertag.title),
       leading: _buildHideIcon(usertag.hide, usertag.watch),
       trailing: _buildColorBox(
@@ -355,7 +354,7 @@ class _ListViewEhMyTagsState extends State<ListViewEhMyTags> {
     ValueChanged<String>? deleteUserTag,
     bool showLine = true,
   }) {
-    return CupertinoListTile(
+    return EhCupertinoListTile(
       title: Text(usertag.title),
       leading: const Icon(FontAwesomeIcons.tag),
       subtitle: isTagTranslat ? Text(usertag.translate ?? '') : null,

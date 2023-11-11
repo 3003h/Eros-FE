@@ -24,6 +24,8 @@ export 'utils/toast.dart';
 export 'utils/utility.dart';
 export 'utils/vibrate.dart';
 export 'widget/animated.dart';
+export 'widget/cupertino/list_tile.dart';
+export 'widget/cupertino/sliver_list_section.dart';
 export 'widget/eh_dark_cupertino_theme.dart';
 export 'widget/emoji_text.dart';
 export 'widget/image/eh_cached_network_image.dart';

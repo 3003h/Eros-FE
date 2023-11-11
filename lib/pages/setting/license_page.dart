@@ -1,5 +1,4 @@
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +51,7 @@ class LicensePage extends StatelessWidget {
           hasLeading: false,
           additionalDividerMargin: 6,
           itemBuilder: (context, index) {
-            return CupertinoListTile(
+            return EhCupertinoListTile(
               title: Text(packages[index]),
               trailing: const CupertinoListTileChevron(),
               subtitle: Text(

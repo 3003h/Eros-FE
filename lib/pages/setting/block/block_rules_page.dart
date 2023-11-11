@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -81,7 +80,7 @@ class BlockRulesPage extends GetView<BlockController> {
                               ),
                             ],
                           ),
-                          child: CupertinoListTile(
+                          child: EhCupertinoListTile(
                             title: Text(_blockRule.ruleText ?? ''),
                             trailing: const CupertinoListTileChevron(),
                             onTap: () async {

@@ -9,7 +9,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/setting/webview/mode.dart';
 import 'package:fehviewer/utils/import_export.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -49,7 +48,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
         SliverCupertinoListSection.listInsetGrouped(
           children: [
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text(L10n.of(context).image_block),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
@@ -59,7 +58,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 );
               },
             ),
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text(L10n.of(context).blockers),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
@@ -76,7 +75,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
           children: [
             // 清除缓存
             _cacheController.obx(
-                (String? state) => CupertinoListTile(
+                (String? state) => EhCupertinoListTile(
                       title: Text(L10n.of(context).clear_cache),
                       trailing: const CupertinoListTileChevron(),
                       additionalInfo: Text(state ?? ''),
@@ -85,7 +84,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                         _cacheController.clearAllCache();
                       },
                     ),
-                onLoading: CupertinoListTile(
+                onLoading: EhCupertinoListTile(
                   title: Text(L10n.of(context).clear_cache),
                   trailing: const CupertinoActivityIndicator(),
                   onTap: () {
@@ -99,7 +98,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         SliverCupertinoListSection.listInsetGrouped(
           children: [
             Obx(() {
-              return CupertinoListTile(
+              return EhCupertinoListTile(
                 title: Text(L10n.of(context).proxy),
                 additionalInfo: Text(
                     getProxyTypeModeMap(context)[_ehSettingService.proxyType] ??
@@ -123,7 +122,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
         SliverCupertinoListSection.listInsetGrouped(
           children: [
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text(L10n.of(context).vibrate_feedback),
               trailing: Obx(() {
                 return CupertinoSwitch(
@@ -138,7 +137,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
 
         SliverCupertinoListSection.listInsetGrouped(
           children: [
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text(L10n.of(context).export_app_data),
               subtitle: Text(L10n.of(context).export_app_data_summary),
               trailing: const CupertinoListTileChevron(),
@@ -147,7 +146,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 exportAppDataToFile();
               },
             ),
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text(L10n.of(context).import_app_data),
               subtitle: Text(L10n.of(context).import_app_data_summary),
               trailing: const CupertinoListTileChevron(),
@@ -161,7 +160,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
         SliverCupertinoListSection.listInsetGrouped(
           children: [
             if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS)
-              CupertinoListTile(
+              EhCupertinoListTile(
                 title: Text(L10n.of(context).native_http_client_adapter),
                 trailing: Obx(() {
                   return CupertinoSwitch(
@@ -171,7 +170,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                   );
                 }),
               ),
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text('Log'),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
@@ -181,7 +180,7 @@ class ListViewAdvancedSetting extends StatelessWidget {
                 );
               },
             ),
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text('Log debugMode'),
               trailing: Obx(() {
                 return CupertinoSwitch(

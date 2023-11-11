@@ -2,7 +2,6 @@ import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -57,7 +56,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
             children: [
               SliverCupertinoListSection.listInsetGrouped(children: [
                 // enable switch
-                CupertinoListTile(
+                EhCupertinoListTile(
                   title: Text(L10n.of(context).enable),
                   trailing: StatefulBuilder(builder: (context, setState) {
                     return CupertinoSwitch(
@@ -71,7 +70,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
                 ),
 
                 // regex switch
-                CupertinoListTile(
+                EhCupertinoListTile(
                   title: Text(L10n.of(context).regex),
                   trailing: StatefulBuilder(builder: (context, setState) {
                     return CupertinoSwitch(

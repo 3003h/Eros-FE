@@ -1,4 +1,4 @@
-import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -182,7 +182,7 @@ class _SelectorCupertinoListTileState<T>
           });
     }
 
-    return CupertinoListTile(
+    return EhCupertinoListTile(
       title: Text(widget.title),
       additionalInfo: Text(
         selector,

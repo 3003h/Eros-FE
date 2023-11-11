@@ -2,7 +2,6 @@ import 'package:fehviewer/common/controller/download_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -59,7 +58,7 @@ class DownloadSetting extends StatelessWidget {
                     path = '';
                   }
 
-                  return CupertinoListTile(
+                  return EhCupertinoListTile(
                     padding: const EdgeInsetsDirectional.only(
                         start: 20.0, end: 14.0, top: 6.0, bottom: 6.0),
                     title: Text(L10n.of(context).download_location),
@@ -95,7 +94,7 @@ class DownloadSetting extends StatelessWidget {
 
         // allow_media_scan
         if (GetPlatform.isAndroid || GetPlatform.isFuchsia)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).allow_media_scan),
             trailing: Obx(() {
               return CupertinoSwitch(
@@ -115,7 +114,7 @@ class DownloadSetting extends StatelessWidget {
       // 数据处理
       SliverCupertinoListSection.listInsetGrouped(children: [
         // 恢复下载任务数据
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).restore_tasks_data),
           trailing: const CupertinoListTileChevron(),
           onTap: () async {
@@ -124,7 +123,7 @@ class DownloadSetting extends StatelessWidget {
           },
         ),
         // 重建下载任务数据
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).rebuild_tasks_data),
           trailing: const CupertinoListTileChevron(),
           onTap: () async {
@@ -137,8 +136,7 @@ class DownloadSetting extends StatelessWidget {
 }
 
 /// 下载原图
-Widget _buildDownloadOrigImageItem(BuildContext context,
-    {bool hideDivider = false}) {
+Widget _buildDownloadOrigImageItem(BuildContext context) {
   final String _title = L10n.of(context).download_ori_image;
   final EhSettingService ehSettingService = Get.find();
 
@@ -191,7 +189,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
         });
   }
 
-  return Obx(() => CupertinoListTile(
+  return Obx(() => EhCupertinoListTile(
         title: Text(_title),
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(ehSettingService.preloadImage.toString()),
@@ -237,7 +235,7 @@ Widget _buildMultiDownloadItem(BuildContext context) {
         });
   }
 
-  return Obx(() => CupertinoListTile(
+  return Obx(() => EhCupertinoListTile(
         title: Text(_title),
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(ehSettingService.multiDownload.toString()),

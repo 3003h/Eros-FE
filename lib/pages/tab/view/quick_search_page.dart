@@ -5,7 +5,6 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/utils/import_export.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -220,7 +219,7 @@ class _QuickSearchListTile extends GetView<QuickSearchController> {
           ),
         ],
       ),
-      child: CupertinoListTile(
+      child: EhCupertinoListTile(
         padding: const EdgeInsets.only(left: 20, right: 10, top: 6, bottom: 6),
         title: Text(text),
         subtitle: localeService.isLanguageCodeZh

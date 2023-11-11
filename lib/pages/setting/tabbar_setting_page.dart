@@ -1,7 +1,6 @@
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
@@ -57,8 +56,8 @@ class TabbarListView extends StatelessWidget {
       height: 0.5,
     );
 
-    Widget _buildCupertinoListTile(String tag) {
-      return CupertinoListTile(
+    Widget _buildEhCupertinoListTile(String tag) {
+      return EhCupertinoListTile(
         title: Text(tabPages.tabTitles[tag] ?? ''),
         key: ValueKey(tag),
         leading: Icon(
@@ -86,7 +85,7 @@ class TabbarListView extends StatelessWidget {
         Column(
           key: ValueKey(tag),
           children: [
-            _buildCupertinoListTile(controller.tabList[i]),
+            _buildEhCupertinoListTile(controller.tabList[i]),
             shortDivider,
           ],
         ),
@@ -94,7 +93,7 @@ class TabbarListView extends StatelessWidget {
     }
 
     _list.add(
-      _buildCupertinoListTile(controller.tabList.last),
+      _buildEhCupertinoListTile(controller.tabList.last),
     );
 
     return _list;

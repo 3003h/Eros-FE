@@ -7,7 +7,6 @@ import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart
 import 'package:fehviewer/pages/setting/setting_items/excluded_language.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/setting/webview/web_mysetting_in.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -128,21 +127,21 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
             header: Text(L10n.of(context).uc_profile),
             children: [
               _buildSelectedProfileItem(context),
-              CupertinoListTile(
+              EhCupertinoListTile(
                 title: Text(L10n.of(context).uc_rename),
                 onTap: controller.renameProfile,
               ),
-              CupertinoListTile(
+              EhCupertinoListTile(
                 title: Text(L10n.of(context).uc_crt_profile),
                 onTap: controller.crtNewProfile,
               ),
               if (!controller.selectedIsDefault)
-                CupertinoListTile(
+                EhCupertinoListTile(
                   title: Text(L10n.of(context).uc_del_profile),
                   onTap: controller.deleteProfile,
                 ),
               if (!controller.selectedIsDefault)
-                CupertinoListTile(
+                EhCupertinoListTile(
                   title: Text(L10n.of(context).uc_set_as_def),
                   onTap: controller.setDefaultProfile,
                 ),
@@ -193,26 +192,28 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         children: [_buildFrontPageSettingsItem(context)],
       ),
 
-      // TODO uc_fav
       // uc_fav
-
-      SliverCupertinoListSection.listInsetGrouped(
-        header: Text(L10n.of(context).uc_fav),
-        hasLeading: true,
-        children: [
-          ...kFavList.map((e) {
-            return CupertinoTextInputListTile(
-              leading: Icon(
-                FontAwesomeIcons.solidHeart,
-                color: ThemeColors.favColor['$e'],
-              ).paddingOnly(left: 4, right: 8),
-              textAlign: TextAlign.right,
-              initValue: controller.ehSetting.favMap['$e'] ?? '',
-              onChanged: (val) => controller.ehSetting.setFavname('$e', val),
-            );
-          }).toList(),
-        ],
-      ),
+      Obx(() {
+        return SliverCupertinoListSection.listInsetGrouped(
+          header: Text(L10n.of(context).uc_fav),
+          hasLeading: true,
+          children: [
+            ...kFavList.map((e) {
+              final String _title = controller.ehSetting.favMap['$e'] ?? '';
+              // logger.d('favMap: $e $_title');
+              return CupertinoTextInputListTile(
+                leading: Icon(
+                  FontAwesomeIcons.solidHeart,
+                  color: ThemeColors.favColor['$e'],
+                ),
+                // textAlign: TextAlign.left,
+                initValue: _title,
+                onChanged: (val) => controller.ehSetting.setFavname('$e', val),
+              );
+            }).toList(),
+          ],
+        );
+      }),
 
       SliverCupertinoListSection.listInsetGrouped(
         footer: Text(L10n.of(context).uc_fav_sort_desc),
@@ -242,7 +243,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
         footer: Text(L10n.of(context).uc_exc_lang_desc),
         children: [
           // to ExcludedLanguagePage
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).uc_exc_lang),
             trailing: const CupertinoListTileChevron(),
             onTap: () {

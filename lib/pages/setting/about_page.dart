@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:fehviewer/common/controller/update_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -21,17 +20,17 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final UpdateController _updateController = Get.put(UpdateController());
 
-    List<CupertinoListTile> _buildList() {
-      final List<CupertinoListTile> _list = <CupertinoListTile>[];
+    List<Widget> _buildList() {
+      final List<Widget> _list = <Widget>[];
       _list.add(
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).app_title),
           subtitle: const Text('An unofficial e-hentai app'),
         ),
       );
       if (!Platform.isWindows || !Platform.isLinux) {
         _list.add(
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).version),
             additionalInfo: Text(
                 '${Global.packageInfo.version}(${Global.packageInfo.buildNumber}) $debugLabel'),
@@ -40,7 +39,7 @@ class AboutPage extends StatelessWidget {
       }
       if (!Platform.isWindows || !Platform.isLinux) {
         _list.add(
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).check_for_update),
             trailing: Obx(() {
               if (_updateController.isChecking) {
@@ -60,7 +59,7 @@ class AboutPage extends StatelessWidget {
         );
       }
       _list.add(
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).license),
           trailing: const CupertinoListTileChevron(),
           onTap: () {

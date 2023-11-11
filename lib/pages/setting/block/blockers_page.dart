@@ -2,7 +2,6 @@ import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -99,7 +98,7 @@ class BlockersPage extends GetView<BlockController> {
               children: [
                 SliverCupertinoListSection.listInsetGrouped(children: [
                   // to block_rules
-                  CupertinoListTile(
+                  EhCupertinoListTile(
                     title: Text(L10n.of(context).block_rules),
                     trailing: const CupertinoListTileChevron(),
                     onTap: () {
@@ -115,7 +114,7 @@ class BlockersPage extends GetView<BlockController> {
                       Text(L10n.of(context).filter_comments_by_score_summary),
                   children: [
                     // filter_comments_by_score switch
-                    CupertinoListTile(
+                    EhCupertinoListTile(
                       title: Text(L10n.of(context).filter_comments_by_score),
                       // subtitle:
                       //     Text(L10n.of(context).filter_comments_by_score_summary),

@@ -8,7 +8,6 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/login/controller/login_controller.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -48,7 +47,7 @@ class LayoutSettingList extends StatelessWidget {
 
         // dark_mode_effect
         if (!kReleaseMode)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).dark_mode_effect),
             trailing: Obx(() {
               return CupertinoSlidingSegmentedControl<bool>(
@@ -68,7 +67,7 @@ class LayoutSettingList extends StatelessWidget {
           ),
 
         // tabbar_setting
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).tabbar_setting),
           trailing: const CupertinoListTileChevron(),
           onTap: () {
@@ -82,7 +81,7 @@ class LayoutSettingList extends StatelessWidget {
       SliverCupertinoListSection.listInsetGrouped(
         children: [
           if (localeService.isLanguageCodeZh)
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: const Text('标签翻译'),
               subtitle: Text('当前版本:${_ehSettingService.tagTranslatVer.value}'),
               additionalInfo: Text(_ehSettingService.isTagTranslate
@@ -97,7 +96,7 @@ class LayoutSettingList extends StatelessWidget {
               },
             ),
           // japanese_title_in_gallery
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).japanese_title_in_gallery),
             subtitle: Text(L10n.of(context).japanese_title_in_gallery_summary),
             trailing: Obx(() {
@@ -111,7 +110,7 @@ class LayoutSettingList extends StatelessWidget {
           ),
 
           // showComments switch
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).show_comments),
             trailing: Obx(() {
               return CupertinoSwitch(
@@ -126,7 +125,7 @@ class LayoutSettingList extends StatelessWidget {
           Obx(() {
             return AnimatedCrossFade(
               firstChild: const SizedBox(),
-              secondChild: CupertinoListTile(
+              secondChild: EhCupertinoListTile(
                 title: Text(L10n.of(context).show_only_uploader_comment),
                 trailing: Obx(() {
                   return CupertinoSwitch(
@@ -148,7 +147,7 @@ class LayoutSettingList extends StatelessWidget {
           }),
 
           // showGalleryTags switch
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).show_gallery_tags),
             trailing: Obx(() {
               return CupertinoSwitch(
@@ -161,7 +160,7 @@ class LayoutSettingList extends StatelessWidget {
           ),
 
           // hideGalleryThumbnails switch
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).hide_gallery_thumbnails),
             trailing: Obx(() {
               return CupertinoSwitch(
@@ -174,7 +173,7 @@ class LayoutSettingList extends StatelessWidget {
           ),
 
           // horizontalThumbnails
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).horizontal_thumbnails),
             trailing: Obx(() {
               return CupertinoSwitch(
@@ -189,7 +188,7 @@ class LayoutSettingList extends StatelessWidget {
       ),
       SliverCupertinoListSection.listInsetGrouped(children: [
         // hide_top_bar_on_scroll switch
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).hide_top_bar_on_scroll),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -203,7 +202,7 @@ class LayoutSettingList extends StatelessWidget {
 
         // isGalleryImgBlur
         if (localeService.isLanguageCodeZh)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text('画廊列表封面模糊处理'),
             trailing: Obx(() {
               return CupertinoSwitch(
@@ -218,7 +217,7 @@ class LayoutSettingList extends StatelessWidget {
         _buildListModeItem(context),
 
         // custom_width
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).custom_width),
           trailing: const CupertinoListTileChevron(),
           onTap: () {
@@ -232,7 +231,7 @@ class LayoutSettingList extends StatelessWidget {
         _buildTagLimitItem(context),
 
         // blurring_cover_background switch
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).blurring_cover_background),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -247,7 +246,7 @@ class LayoutSettingList extends StatelessWidget {
         ),
 
         // fixed_height_of_list_items switch
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).fixed_height_of_list_items),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -263,7 +262,7 @@ class LayoutSettingList extends StatelessWidget {
       ]),
       SliverCupertinoListSection.listInsetGrouped(children: [
         // to avatar
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).avatar),
           trailing: const CupertinoListTileChevron(),
           onTap: () {
@@ -276,7 +275,7 @@ class LayoutSettingList extends StatelessWidget {
 
         // commentTrans switch
         if (localeService.isLanguageCodeZh && GetPlatform.isMobile)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: const Text('评论机翻按钮'),
             subtitle: const Text('用机器翻译将评论翻译为简体中文'),
             trailing: Obx(() {

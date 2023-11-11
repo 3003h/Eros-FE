@@ -1,6 +1,5 @@
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -17,7 +16,7 @@ class SearchSettingPage extends StatelessWidget {
       child: CustomScrollView(slivers: [
         SliverSafeArea(
           sliver: SliverCupertinoListSection.listInsetGrouped(children: [
-            CupertinoListTile(
+            EhCupertinoListTile(
               title: Text(L10n.of(context).quick_search),
               trailing: const CupertinoListTileChevron(),
               onTap: () async {

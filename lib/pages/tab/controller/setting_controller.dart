@@ -81,7 +81,7 @@ class SettingViewController extends GetxController
   }
 
   Widget cupertinoListTileBuilder(int index) {
-    return CupertinoListTile(
+    return EhCupertinoListTile(
       title: Text(_itemTitles[index]),
       leading: Icon(_icons[index], color: CupertinoColors.systemGrey),
       trailing: const CupertinoListTileChevron(),

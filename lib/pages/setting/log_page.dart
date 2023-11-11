@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/log_view_page.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
@@ -57,7 +57,7 @@ class LogListView extends GetView<LogService> {
         itemBuilder: (context, index) {
           final _file = logfiles[index];
           final fileName = path.basename(_file.path);
-          return CupertinoListTile(
+          return EhCupertinoListTile(
             title: Text(fileName),
             trailing: const CupertinoListTileChevron(),
             onTap: () {

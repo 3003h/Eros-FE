@@ -3,7 +3,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
 import 'package:fehviewer/pages/setting/webview/eh_tagset_edit_dialog.dart';
 import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -81,7 +80,7 @@ class EhMyTagsPage extends GetView<EhMyTagsController> {
                       itemBuilder: (context, index) {
                         final e = state[index];
 
-                        return CupertinoListTile(
+                        return EhCupertinoListTile(
                           title: Text(e.name),
                           additionalInfo: Text('${e.tagCount}'),
                           trailing: const CupertinoListTileChevron(),

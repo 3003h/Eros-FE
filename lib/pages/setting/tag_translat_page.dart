@@ -2,7 +2,6 @@ import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -68,7 +67,7 @@ class ListViewTagTranslate extends StatelessWidget {
     return MultiSliver(children: [
       SliverCupertinoListSection.listInsetGrouped(children: [
         // _handleTagTranslatChanged switch
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: const Text('启用标签翻译'),
           subtitle: Text('当前版本:${_ehSettingService.tagTranslatVer.value}'),
           trailing: Obx(() {
@@ -103,7 +102,7 @@ class ListViewTagTranslate extends StatelessWidget {
         }),
 
         // enableTagTranslateCDN switch
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: const Text('加速下载数据'),
           subtitle: const Text('使用CDN加速下载数据'),
           trailing: Obx(() {

@@ -315,7 +315,7 @@ Widget _buildShowPageNumbers(
     '1': L10n.of(context).uc_pn_1,
   };
 
-  return CupertinoListTile(
+  return EhCupertinoListTile(
     title: Text(L10n.of(context).uc_show_page_num),
     trailing: Obx(() {
       return CupertinoSwitch(
@@ -347,7 +347,7 @@ Widget _buildOriginalImages(
   //   },
   // );
 
-  return CupertinoListTile(
+  return EhCupertinoListTile(
     title: Text(L10n.of(context).uc_ori_image),
     trailing: Obx(() {
       return CupertinoSwitch(
@@ -379,7 +379,7 @@ Widget _buildMPVAlwaysUse(
   //   },
   // );
 
-  return CupertinoListTile(
+  return EhCupertinoListTile(
     title: Text(L10n.of(context).uc_mpv_always),
     trailing: Obx(() {
       return CupertinoSwitch(
@@ -439,7 +439,7 @@ Widget _buildMPVThumbPane(
   //   },
   // );
 
-  return CupertinoListTile(
+  return EhCupertinoListTile(
     title: Text(L10n.of(context).uc_mpv_thumb_pane),
     trailing: Obx(() {
       return CupertinoSwitch(

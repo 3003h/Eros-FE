@@ -8,7 +8,6 @@ import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/utils/orientation_helper.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -65,7 +64,7 @@ class ReadSettingList extends StatelessWidget {
         _buildViewModeItem(context),
         if (!_hideOrientationItem) ReadOrientationItem(),
         _buildDoublePageItem(context),
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).show_page_interval),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -81,7 +80,7 @@ class ReadSettingList extends StatelessWidget {
           }),
         ),
         // turn_page_anima
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).turn_page_anima),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -94,7 +93,7 @@ class ReadSettingList extends StatelessWidget {
         ),
         // volume_key_turn_page
         if (GetPlatform.isAndroid)
-          CupertinoListTile(
+          EhCupertinoListTile(
             title: Text(L10n.of(context).volume_key_turn_page),
             trailing: Obx(() {
               return CupertinoSwitch(
@@ -106,7 +105,7 @@ class ReadSettingList extends StatelessWidget {
             }),
           ),
         // fullscreen
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).fullscreen),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -119,7 +118,7 @@ class ReadSettingList extends StatelessWidget {
 
       // 兼容模式
       SliverCupertinoListSection.listInsetGrouped(children: [
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).read_view_compatible_mode),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -174,7 +173,7 @@ Widget _buildViewModeItem(BuildContext context) {
         });
   }
 
-  return Obx(() => CupertinoListTile(
+  return Obx(() => EhCupertinoListTile(
         title: Text(_title),
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(modeMap[ehSettingService.viewMode.value] ?? ''),
@@ -236,7 +235,7 @@ class ReadOrientationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => CupertinoListTile(
+    return Obx(() => EhCupertinoListTile(
           title: Text(_title),
           trailing: const CupertinoListTileChevron(),
           additionalInfo:
@@ -261,7 +260,7 @@ class ReadOrientationItem extends StatelessWidget {
 }
 
 /// 双页设置切换
-Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildDoublePageItem(BuildContext context) {
   final String _title = L10n.of(context).double_page_model;
   final EhSettingService ehSettingService = Get.find();
 

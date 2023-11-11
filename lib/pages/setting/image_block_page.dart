@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -26,7 +25,7 @@ class ImageBlockPage extends StatelessWidget {
               SliverCupertinoListSection.listInsetGrouped(
                 children: [
                   // QR_code_block switch
-                  CupertinoListTile(
+                  EhCupertinoListTile(
                     title: Text(L10n.of(context).QR_code_block),
                     trailing: Obx(() {
                       return CupertinoSwitch(
@@ -40,7 +39,7 @@ class ImageBlockPage extends StatelessWidget {
               ),
               SliverCupertinoListSection.listInsetGrouped(children: [
                 // phash_check switch
-                CupertinoListTile(
+                EhCupertinoListTile(
                   title: Text(L10n.of(context).phash_check),
                   trailing: Obx(() {
                     return CupertinoSwitch(
@@ -52,7 +51,7 @@ class ImageBlockPage extends StatelessWidget {
                 ),
 
                 // to phash_block_list
-                CupertinoListTile(
+                EhCupertinoListTile(
                   title: Text(L10n.of(context).phash_block_list),
                   trailing: const CupertinoListTileChevron(),
                   onTap: () {

@@ -1,7 +1,6 @@
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -39,7 +38,7 @@ class SecuritySettingPage extends StatelessWidget {
   List<Widget> _buildList(BuildContext context) {
     return <Widget>[
       if (GetPlatform.isMobile)
-        CupertinoListTile(
+        EhCupertinoListTile(
           title: Text(L10n.of(context).security_blurredInRecentTasks),
           trailing: Obx(() {
             return CupertinoSwitch(
@@ -132,7 +131,7 @@ Widget _buildAutoLockItem(BuildContext context) {
     }
   }
 
-  return Obx(() => CupertinoListTile(
+  return Obx(() => EhCupertinoListTile(
         title: Text(_title),
         trailing: const CupertinoListTileChevron(),
         additionalInfo:

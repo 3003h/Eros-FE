@@ -1,4 +1,5 @@
 import 'package:fehviewer/common/service/layout_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -34,7 +35,7 @@ class SingleInputItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final _initValue = initValue ?? '';
 
-    return CupertinoListTile(
+    return EhCupertinoListTile(
       title: Text(title),
       trailing: const CupertinoListTileChevron(),
       additionalInfo: Text(selector ??
