@@ -1,56 +1,62 @@
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/component/setting_base.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class SecuritySettingPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final Widget cps = Obx(() {
-      return CupertinoPageScaffold(
-          backgroundColor: !ehTheme.isDarkMode
-              ? CupertinoColors.secondarySystemBackground
-              : null,
-          navigationBar: CupertinoNavigationBar(
-            transitionBetweenRoutes: true,
-            middle: Text(L10n.of(context).security),
-          ),
-          child: ListViewSecuritySetting());
-    });
+  const SecuritySettingPage({super.key});
 
-    return cps;
-  }
-}
-
-class ListViewSecuritySetting extends StatelessWidget {
   EhSettingService get _ehSettingService => Get.find<EhSettingService>();
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _list = <Widget>[
-      if (GetPlatform.isMobile)
-        TextSwitchItem(
-          L10n.of(context).security_blurredInRecentTasks,
-          value: _ehSettingService.blurredInRecentTasks,
-          onChanged: (val) => _ehSettingService.blurredInRecentTasks = val,
-        ),
-      _buildAutoLockItem(context, hideLine: true),
-    ];
-    return ListView.builder(
-      itemCount: _list.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _list[index];
-      },
+    final _widgetList = _buildList(context);
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        transitionBetweenRoutes: true,
+        middle: Text(L10n.of(context).security),
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverSafeArea(
+            sliver: SliverCupertinoListSection.insetGrouped(
+              hasLeading: false,
+              additionalDividerMargin: 6,
+              itemBuilder: (context, index) {
+                return _widgetList[index];
+              },
+              itemCount: _widgetList.length,
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  List<Widget> _buildList(BuildContext context) {
+    return <Widget>[
+      if (GetPlatform.isMobile)
+        CupertinoListTile(
+          title: Text(L10n.of(context).security_blurredInRecentTasks),
+          trailing: Obx(() {
+            return CupertinoSwitch(
+              value: _ehSettingService.blurredInRecentTasks,
+              onChanged: (bool value) {
+                _ehSettingService.blurredInRecentTasks = value;
+              },
+            );
+          }),
+        ),
+      _buildAutoLockItem(context),
+    ];
   }
 }
 
 /// 自动锁定时间设置
-Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildAutoLockItem(BuildContext context) {
   final String _title = L10n.of(context).autoLock;
   final EhSettingService ehSettingService = Get.find();
   final AutoLockController autoLockController = Get.find();
@@ -126,10 +132,11 @@ Widget _buildAutoLockItem(BuildContext context, {bool hideLine = false}) {
     }
   }
 
-  return Obx(() => SelectorSettingItem(
-        title: _title,
-        hideDivider: hideLine,
-        selector: _getTimeText(ehSettingService.autoLockTimeOut.value),
+  return Obx(() => CupertinoListTile(
+        title: Text(_title),
+        trailing: const CupertinoListTileChevron(),
+        additionalInfo:
+            Text(_getTimeText(ehSettingService.autoLockTimeOut.value)),
         onTap: () async {
           final int? _result = await _showActionSheet(context);
           if (_result != null) {

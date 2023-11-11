@@ -1,60 +1,72 @@
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
-class ImageBlockPage extends GetView<ImageHideController> {
-  const ImageBlockPage({Key? key}) : super(key: key);
-  EhSettingService get _ehSettingService => Get.find();
+class ImageBlockPage extends StatelessWidget {
+  const ImageBlockPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final String _title = L10n.of(context).image_block;
-    return Obx(() {
-      return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(end: 12),
-          middle: Text(_title),
-        ),
-        child: Container(
-          child: ListView(
+    EhSettingService _ehSettingService = Get.find();
+
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(L10n.of(context).image_block),
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverSafeArea(
+              sliver: MultiSliver(
             children: [
-              Obx(() => TextSwitchItem(
-                    L10n.of(context).QR_code_block,
-                    value: _ehSettingService.enableQRCodeCheck,
-                    onChanged: (bool val) =>
-                        _ehSettingService.enableQRCodeCheck = val,
-                    hideDivider: true,
-                  )),
-              const ItemSpace(),
-              Obx(() => TextSwitchItem(
-                    L10n.of(context).phash_check,
-                    value: _ehSettingService.enablePHashCheck,
-                    onChanged: (bool val) =>
-                        _ehSettingService.enablePHashCheck = val,
-                  )),
-              SelectorSettingItem(
-                hideDivider: true,
-                title: L10n.of(context).phash_block_list,
-                selector: '',
-                onTap: () {
-                  Get.toNamed(
-                    EHRoutes.mangaHidedImage,
-                    id: isLayoutLarge ? 2 : null,
-                  );
-                },
+              SliverCupertinoListSection.listInsetGrouped(
+                children: [
+                  // QR_code_block switch
+                  CupertinoListTile(
+                    title: Text(L10n.of(context).QR_code_block),
+                    trailing: Obx(() {
+                      return CupertinoSwitch(
+                        value: _ehSettingService.enableQRCodeCheck,
+                        onChanged: (bool val) =>
+                            _ehSettingService.enableQRCodeCheck = val,
+                      );
+                    }),
+                  ),
+                ],
               ),
+              SliverCupertinoListSection.listInsetGrouped(children: [
+                // phash_check switch
+                CupertinoListTile(
+                  title: Text(L10n.of(context).phash_check),
+                  trailing: Obx(() {
+                    return CupertinoSwitch(
+                      value: _ehSettingService.enablePHashCheck,
+                      onChanged: (bool val) =>
+                          _ehSettingService.enablePHashCheck = val,
+                    );
+                  }),
+                ),
+
+                // to phash_block_list
+                CupertinoListTile(
+                  title: Text(L10n.of(context).phash_block_list),
+                  trailing: const CupertinoListTileChevron(),
+                  onTap: () {
+                    Get.toNamed(
+                      EHRoutes.mangaHidedImage,
+                      id: isLayoutLarge ? 2 : null,
+                    );
+                  },
+                ),
+              ]),
             ],
-          ),
-        ),
-      );
-    });
+          )),
+        ],
+      ),
+    );
   }
 }

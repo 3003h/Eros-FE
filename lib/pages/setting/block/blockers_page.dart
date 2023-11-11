@@ -1,36 +1,43 @@
 import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class BlockersPage extends GetView<BlockController> {
   const BlockersPage({super.key});
 
-  Widget _buildSlide(BuildContext context, int score) {
+  Widget _buildSlide(
+    BuildContext context, {
+    required int score,
+    required bool enable,
+  }) {
+    const kMaxRating = 100.0;
+    const kMinRating = -100.0;
     return StatefulBuilder(builder: (context, setState) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         constraints: const BoxConstraints(minHeight: kItemHeight),
-        color: CupertinoDynamicColor.resolve(
-            ehTheme.itemBackgroundColor!, context),
         child: SafeArea(
           child: Row(
             children: [
               Expanded(
                 child: CupertinoSlider(
                   value: score.toDouble(),
-                  min: -100,
-                  max: 100,
-                  onChanged: (double val) {
-                    setState(() {
-                      score = val.toInt();
-                    });
-                  },
+                  min: kMinRating,
+                  max: kMaxRating,
+                  activeColor: enable ? null : CupertinoColors.systemGrey,
+                  onChanged: enable
+                      ? (double val) {
+                          setState(() {
+                            score = val.toInt();
+                          });
+                        }
+                      : null,
                   onChangeEnd: (double val) {
-                    logger.d('onChangeEnd $val');
                     controller.ehSettingService.scoreFilteringThreshold =
                         val.toInt();
                   },
@@ -39,7 +46,37 @@ class BlockersPage extends GetView<BlockController> {
               Container(
                 width: 50,
                 alignment: Alignment.center,
-                child: Text('${score.toInt()}'),
+                child: CupertinoTextField(
+                  textAlign: TextAlign.center,
+                  enabled: enable,
+                  style: TextStyle(
+                    color: enable ? null : CupertinoColors.systemGrey,
+                  ),
+                  controller: TextEditingController.fromValue(
+                    TextEditingValue(
+                      text: score.toString(),
+                      selection: TextSelection.fromPosition(
+                        TextPosition(
+                          affinity: TextAffinity.downstream,
+                          offset: score.toString().length,
+                        ),
+                      ),
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (String val) {
+                    final int _val = int.parse(val);
+                    score = _val.clamp(kMinRating, kMaxRating).toInt();
+                    setState(() {});
+
+                    controller.ehSettingService.scoreFilteringThreshold = score;
+                  },
+                  onEditingComplete: () {
+                    controller.ehSettingService.scoreFilteringThreshold = score;
+                    // close keyboard
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                ),
               ),
             ],
           ),
@@ -50,59 +87,63 @@ class BlockersPage extends GetView<BlockController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = L10n.of(context).blockers;
-
-    return Obx(() {
-      return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(start: 0),
-          middle: Text(_title),
-        ),
-        child: ListView(
-          children: [
-            SelectorSettingItem(
-              hideDivider: true,
-              title: L10n.of(context).block_rules,
-              onTap: () {
-                Get.toNamed(
-                  EHRoutes.blockRules,
-                  id: isLayoutLarge ? 2 : null,
-                );
-              },
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(L10n.of(context).image_block),
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverSafeArea(
+            sliver: MultiSliver(
+              children: [
+                SliverCupertinoListSection.listInsetGrouped(children: [
+                  // to block_rules
+                  CupertinoListTile(
+                    title: Text(L10n.of(context).block_rules),
+                    trailing: const CupertinoListTileChevron(),
+                    onTap: () {
+                      Get.toNamed(
+                        EHRoutes.blockRules,
+                        id: isLayoutLarge ? 2 : null,
+                      );
+                    },
+                  ),
+                ]),
+                SliverCupertinoListSection.listInsetGrouped(
+                  footer:
+                      Text(L10n.of(context).filter_comments_by_score_summary),
+                  children: [
+                    // filter_comments_by_score switch
+                    CupertinoListTile(
+                      title: Text(L10n.of(context).filter_comments_by_score),
+                      // subtitle:
+                      //     Text(L10n.of(context).filter_comments_by_score_summary),
+                      trailing: Obx(() {
+                        return CupertinoSwitch(
+                          value:
+                              controller.ehSettingService.filterCommentsByScore,
+                          onChanged: (bool val) => controller
+                              .ehSettingService.filterCommentsByScore = val,
+                        );
+                      }),
+                    ),
+                    Obx(() {
+                      return _buildSlide(
+                        context,
+                        score:
+                            controller.ehSettingService.scoreFilteringThreshold,
+                        enable:
+                            controller.ehSettingService.filterCommentsByScore,
+                      );
+                    }),
+                  ],
+                ),
+              ],
             ),
-            const ItemSpace(),
-            // 开关
-            Obx(() {
-              return TextSwitchItem(
-                L10n.of(context).filter_comments_by_score,
-                desc: L10n.of(context).filter_comments_by_score_summary,
-                value: controller.ehSettingService.filterCommentsByScore,
-                onChanged: (val) =>
-                    controller.ehSettingService.filterCommentsByScore = val,
-                // hideDivider:
-                //     !controller.ehSettingService.filterCommentsByScore,
-                hideDivider: true,
-              );
-            }),
-            Obx(() {
-              return AnimatedCrossFade(
-                firstChild: const SizedBox(),
-                secondChild: _buildSlide(context,
-                    controller.ehSettingService.scoreFilteringThreshold),
-                crossFadeState:
-                    controller.ehSettingService.filterCommentsByScore
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                secondCurve: Curves.easeOut,
-                duration: const Duration(milliseconds: 200),
-              );
-            }),
-          ],
-        ),
-      );
-    });
+          ),
+        ],
+      ),
+    );
   }
 }

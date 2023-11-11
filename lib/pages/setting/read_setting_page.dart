@@ -2,39 +2,38 @@ import 'dart:math';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/utils/orientation_helper.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class ReadSettingPage extends StatelessWidget {
-  const ReadSettingPage({Key? key}) : super(key: key);
+  const ReadSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Widget cps = Obx(() {
-      return CupertinoPageScaffold(
-          backgroundColor: !ehTheme.isDarkMode
-              ? CupertinoColors.secondarySystemBackground
-              : null,
-          navigationBar: CupertinoNavigationBar(
-            // transitionBetweenRoutes: true,
-            middle: Text(L10n.of(context).read_setting),
-          ),
-          child: ViewSettingList());
-    });
-
-    return cps;
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(L10n.of(context).eh),
+      ),
+      child: CustomScrollView(slivers: [
+        SliverSafeArea(sliver: ReadSettingList()),
+      ]),
+    );
   }
 }
 
-class ViewSettingList extends StatelessWidget {
+class ReadSettingList extends StatelessWidget {
+  ReadSettingList({super.key});
+
   final EhSettingService ehSettingService = Get.find();
 
   Future<void> onViewFullscreenChanged(bool val) async {
@@ -61,59 +60,78 @@ class ViewSettingList extends StatelessWidget {
     // iPad不显示旋转设置
     final bool _hideOrientationItem = GetPlatform.isIOS && context.isTablet;
 
-    final List<Widget> _list = <Widget>[
-      _buildViewModeItem(context),
-      if (!_hideOrientationItem) ReadOrientationItem(),
-      _buildDoublePageItem(context),
-      TextSwitchItem(
-        L10n.of(context).show_page_interval,
-        value: ehSettingService.showPageInterval.value,
-        onChanged: (bool val) {
-          ehSettingService.showPageInterval.value = val;
-          if (Get.isRegistered<ViewExtController>()) {
-            Get.find<ViewExtController>().resetPageController();
-            Get.find<ViewExtController>().update([idSlidePage]);
-          }
-        },
-      ),
-      TextSwitchItem(
-        L10n.of(context).turn_page_anima,
-        value: ehSettingService.turnPageAnimations,
-        onChanged: (bool val) {
-          ehSettingService.turnPageAnimations = val;
-        },
-      ),
-      if (GetPlatform.isAndroid)
-        TextSwitchItem(
-          L10n.of(context).volume_key_turn_page,
-          value: ehSettingService.volumnTurnPage,
-          onChanged: (bool val) {
-            ehSettingService.volumnTurnPage = val;
-          },
+    return MultiSliver(children: [
+      SliverCupertinoListSection.listInsetGrouped(children: [
+        _buildViewModeItem(context),
+        if (!_hideOrientationItem) ReadOrientationItem(),
+        _buildDoublePageItem(context),
+        CupertinoListTile(
+          title: Text(L10n.of(context).show_page_interval),
+          trailing: Obx(() {
+            return CupertinoSwitch(
+              value: ehSettingService.showPageInterval.value,
+              onChanged: (bool val) {
+                ehSettingService.showPageInterval.value = val;
+                if (Get.isRegistered<ViewExtController>()) {
+                  Get.find<ViewExtController>().resetPageController();
+                  Get.find<ViewExtController>().update([idSlidePage]);
+                }
+              },
+            );
+          }),
         ),
-      TextSwitchItem(
-        L10n.of(context).fullscreen,
-        value: ehSettingService.viewFullscreen,
-        onChanged: onViewFullscreenChanged,
-        hideDivider: true,
-      ),
-      const ItemSpace(),
-      // CompatibleMode
-      TextSwitchItem(
-        L10n.of(context).read_view_compatible_mode,
-        value: ehSettingService.readViewCompatibleMode,
-        hideDivider: true,
-        onChanged: (bool val) {
-          ehSettingService.readViewCompatibleMode = val;
-        },
-      ),
-    ];
-    return ListView.builder(
-      itemCount: _list.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _list[index];
-      },
-    );
+        // turn_page_anima
+        CupertinoListTile(
+          title: Text(L10n.of(context).turn_page_anima),
+          trailing: Obx(() {
+            return CupertinoSwitch(
+              value: ehSettingService.turnPageAnimations,
+              onChanged: (bool val) {
+                ehSettingService.turnPageAnimations = val;
+              },
+            );
+          }),
+        ),
+        // volume_key_turn_page
+        if (GetPlatform.isAndroid)
+          CupertinoListTile(
+            title: Text(L10n.of(context).volume_key_turn_page),
+            trailing: Obx(() {
+              return CupertinoSwitch(
+                value: ehSettingService.volumnTurnPage,
+                onChanged: (bool val) {
+                  ehSettingService.volumnTurnPage = val;
+                },
+              );
+            }),
+          ),
+        // fullscreen
+        CupertinoListTile(
+          title: Text(L10n.of(context).fullscreen),
+          trailing: Obx(() {
+            return CupertinoSwitch(
+              value: ehSettingService.viewFullscreen,
+              onChanged: onViewFullscreenChanged,
+            );
+          }),
+        ),
+      ]),
+
+      // 兼容模式
+      SliverCupertinoListSection.listInsetGrouped(children: [
+        CupertinoListTile(
+          title: Text(L10n.of(context).read_view_compatible_mode),
+          trailing: Obx(() {
+            return CupertinoSwitch(
+              value: ehSettingService.readViewCompatibleMode,
+              onChanged: (bool val) {
+                ehSettingService.readViewCompatibleMode = val;
+              },
+            );
+          }),
+        ),
+      ]),
+    ]);
   }
 }
 
@@ -156,9 +174,10 @@ Widget _buildViewModeItem(BuildContext context) {
         });
   }
 
-  return Obx(() => SelectorSettingItem(
-        title: _title,
-        selector: modeMap[ehSettingService.viewMode.value] ?? '',
+  return Obx(() => CupertinoListTile(
+        title: Text(_title),
+        trailing: const CupertinoListTileChevron(),
+        additionalInfo: Text(modeMap[ehSettingService.viewMode.value] ?? ''),
         onTap: () async {
           logger.t('tap ModeItem');
           final ViewMode? _result = await _showDialog(context);
@@ -217,24 +236,21 @@ class ReadOrientationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => SelectorSettingItem(
-          title: _title,
-          selector: modeMap[ehSettingService.orientation.value] ?? '',
+    return Obx(() => CupertinoListTile(
+          title: Text(_title),
+          trailing: const CupertinoListTileChevron(),
+          additionalInfo:
+              Text(modeMap[ehSettingService.orientation.value] ?? ''),
           onTap: () async {
             logger.t('tap ModeItem');
             final ReadOrientation? _result = await _showDialog(context);
             if (_result != null) {
-              // ignore: unnecessary_string_interpolations
-              // logger.t('${EnumToString.convertToString(_result)}');
               ehSettingService.orientation.value = _result;
               if (_result != ReadOrientation.system &&
                   _result != ReadOrientation.auto) {
                 OrientationHelper.setPreferredOrientations(
                     [orientationMap[_result] ?? DeviceOrientation.portraitUp]);
-                // OrientationPlugin.forceOrientation(orientationMap[_result]!);
               } else if (_result == ReadOrientation.system) {
-                // OrientationPlugin.forceOrientation(
-                //     DeviceOrientation.portraitUp);
                 OrientationHelper.setPreferredOrientations(
                     DeviceOrientation.values);
               }
@@ -349,9 +365,8 @@ Widget _buildDoublePageItem(BuildContext context, {bool hideLine = false}) {
   };
 
   return Obx(() {
-    return SelectorItem<ViewColumnMode>(
+    return SelectorCupertinoListTile<ViewColumnMode>(
       title: _title,
-      hideDivider: hideLine,
       actionMap: actionMap,
       actionWidgetMap: actionWidgetMap,
       initVal: ehSettingService.viewColumnMode,
