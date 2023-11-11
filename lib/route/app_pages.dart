@@ -20,7 +20,6 @@ import 'package:fehviewer/pages/setting/item_width_setting_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
 import 'package:fehviewer/pages/setting/proxy_page.dart';
-import 'package:fehviewer/pages/setting/tab_setting.dart';
 import 'package:fehviewer/pages/setting/tag_translat_page.dart';
 import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
@@ -39,6 +38,7 @@ import 'package:fehviewer/pages/setting_c/log_page.dart';
 import 'package:fehviewer/pages/setting_c/read_setting_page.dart';
 import 'package:fehviewer/pages/setting_c/search_setting_page.dart';
 import 'package:fehviewer/pages/setting_c/security_setting_page.dart';
+import 'package:fehviewer/pages/setting_c/tabbar_setting_page.dart';
 import 'package:fehviewer/pages/tab/bindings/splash_binding.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
 import 'package:fehviewer/pages/tab/view/empty.dart';
@@ -162,7 +162,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.pageSetting,
-      page: () => TabSettingPage(),
+      page: () => TabbarSettingPage(),
       binding: BindingsBuilder(
         () => Get.lazyPut(() => TabSettingController()),
       ),

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-class TabSettingPage extends StatelessWidget {
+class TabbarSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -48,17 +48,6 @@ class TabSettingPage extends StatelessWidget {
                 ),
               ]),
             ),
-            // SliverToBoxAdapter(
-            //   child: Container(
-            //     height: 38,
-            //     padding: const EdgeInsets.only(left: 20, bottom: 4),
-            //     alignment: Alignment.bottomLeft,
-            //     child: Text(
-            //       L10n.of(context).tab_sort,
-            //       style: const TextStyle(fontSize: 14),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       );
