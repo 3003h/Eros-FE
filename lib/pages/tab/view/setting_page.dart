@@ -1,7 +1,9 @@
 import 'package:fehviewer/common/service/ehsetting_service.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/user_item.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -12,10 +14,9 @@ class SettingTab extends GetView<SettingViewController> {
   Widget build(BuildContext context) {
     controller.initData(context);
     final String _title = L10n.of(context).tab_setting;
+
     return CupertinoPageScaffold(
-      backgroundColor: CupertinoTheme.of(context).brightness != Brightness.dark
-          ? CupertinoColors.secondarySystemBackground
-          : null,
+      backgroundColor: CupertinoColors.systemGroupedBackground,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
@@ -44,17 +45,11 @@ class SettingTab extends GetView<SettingViewController> {
             top: false,
             left: false,
             right: false,
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final _itemList = controller.itemList;
-                  if (index < _itemList.length) {
-                    return _itemList[index];
-                  } else {
-                    return null;
-                  }
-                },
-              ),
+            sliver: SliverCupertinoListSection.insetGrouped(
+              itemCount: controller.itemCount,
+              itemBuilder: (context, index) {
+                return controller.cupertinoListTileBuilder(index);
+              },
             ),
           ),
         ],

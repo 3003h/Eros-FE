@@ -1,126 +1,126 @@
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
+import 'package:fehviewer/pages/setting/webview/eh_tagset_edit_dialog.dart';
+import 'package:fehviewer/pages/setting/webview/mytags_in.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-
-import '../../../component/setting_base.dart';
-import '../../../fehviewer.dart';
-import '../controller/eh_mytags_controller.dart';
-import '../webview/eh_tagset_edit_dialog.dart';
-import '../webview/mytags_in.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class EhMyTagsPage extends GetView<EhMyTagsController> {
-  const EhMyTagsPage({Key? key}) : super(key: key);
+  const EhMyTagsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-            padding: const EdgeInsetsDirectional.only(end: 8),
-            middle: Text(L10n.of(context).ehentai_my_tags),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  // child: const Icon(
-                  //   CupertinoIcons.gauge,
-                  //   size: 28,
-                  // ),
-                  child: const Icon(
-                    FontAwesomeIcons.earthAmericas,
-                    size: 22,
-                  ),
-                  onPressed: () async {
-                    Get.to(() => InWebMyTags());
-                  },
-                ),
-                CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  child: const Icon(
-                    // FontAwesomeIcons.plus,
-                    CupertinoIcons.plus_circle,
-                    size: 28,
-                  ),
-                  onPressed: () async {
-                    final newName = await showCupertinoDialog<String>(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return const EhTagSetEditDialog(
-                            text: '',
-                            title: 'New Tagset',
-                          );
-                        });
-                    if (newName != null && newName.isNotEmpty) {
-                      controller.crtNewTagset(name: newName);
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.only(end: 10),
+        middle: Text(L10n.of(context).ehentai_my_tags),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              minSize: 40,
+              child: const Icon(
+                FontAwesomeIcons.earthAmericas,
+                size: 22,
+              ),
+              onPressed: () async {
+                Get.to(() => InWebMyTags());
+              },
+            ),
+            CupertinoButton(
+              padding: const EdgeInsets.all(0),
+              minSize: 40,
+              child: const Icon(
+                // FontAwesomeIcons.plus,
+                CupertinoIcons.plus_circle,
+                size: 28,
+              ),
+              onPressed: () async {
+                final newName = await showCupertinoDialog<String>(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) {
+                      return const EhTagSetEditDialog(
+                        text: '',
+                        title: 'New Tagset',
+                      );
+                    });
+                if (newName != null && newName.isNotEmpty) {
+                  controller.crtNewTagset(name: newName);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+      child: CustomScrollView(
+        slivers: [
+          SliverSafeArea(
+            bottom: false,
+            sliver: EhCupertinoSliverRefreshControl(
+              onRefresh: controller.reloadData,
+            ),
+          ),
+          SliverSafeArea(
+            top: false,
+            sliver: MultiSliver(
+              children: [
+                controller.obx(
+                  (state) {
+                    if (state == null) {
+                      return const SizedBox.shrink();
                     }
-                  },
-                ),
-              ],
-            )),
-        child: SafeArea(
-          child: controller.obx(
-            (state) {
-              if (state == null) {
-                return const SizedBox.shrink();
-              }
-              return CustomScrollView(
-                slivers: [
-                  EhCupertinoSliverRefreshControl(
-                    onRefresh: controller.reloadData,
-                  ),
-                  SliverSafeArea(
-                    sliver: SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final e = state[index];
 
-                          return SelectorSettingItem(
-                            title: e.name,
-                            onTap: () async {
-                              if (controller.currSelected != e.value) {
-                                controller.currSelected = e.value ?? '';
-                                // await controller.reloadData();
-                              }
-                              Get.toNamed(
-                                EHRoutes.userTags,
-                                id: isLayoutLarge ? 2 : null,
-                              );
-                            },
-                            hideDivider: index == state.length - 1,
-                          );
-                          // return _list[index];
-                        },
-                        childCount: state.length,
+                    return SliverCupertinoListSection.insetGrouped(
+                      itemBuilder: (context, index) {
+                        final e = state[index];
+
+                        return CupertinoListTile(
+                          title: Text(e.name),
+                          additionalInfo: Text('${e.tagCount}'),
+                          trailing: const CupertinoListTileChevron(),
+                          onTap: () async {
+                            if (controller.currSelected != e.value) {
+                              controller.currSelected = e.value ?? '';
+                              // await controller.reloadData();
+                            }
+                            Get.toNamed(
+                              EHRoutes.userTags,
+                              id: isLayoutLarge ? 2 : null,
+                            );
+                          },
+                        );
+                        // return _list[index];
+                      },
+                      itemCount: state.length,
+                    );
+                  },
+                  onLoading: const SliverFillRemaining(
+                    child: Center(
+                      child: CupertinoActivityIndicator(
+                        radius: 16,
                       ),
                     ),
                   ),
-                ],
-              );
-            },
-            onLoading: const Center(
-              child: CupertinoActivityIndicator(
-                radius: 16,
-              ),
-            ),
-            onEmpty: CustomScrollView(
-              slivers: [
-                EhCupertinoSliverRefreshControl(
-                  onRefresh: controller.reloadData,
+                  onEmpty: CustomScrollView(
+                    slivers: [
+                      EhCupertinoSliverRefreshControl(
+                        onRefresh: controller.reloadData,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-        ),
-      );
-    });
+        ],
+      ),
+    );
   }
 }

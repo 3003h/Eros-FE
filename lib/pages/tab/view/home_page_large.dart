@@ -20,8 +20,8 @@ import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/download_setting_page.dart';
 import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/eh_setting_page.dart';
-import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
-import 'package:fehviewer/pages/setting/image_hide_page.dart';
+import 'package:fehviewer/pages/setting/image_block/phash_list_page.dart';
+import 'package:fehviewer/pages/setting/image_block_page.dart';
 import 'package:fehviewer/pages/setting/item_width_setting_page.dart';
 import 'package:fehviewer/pages/setting/layout_setting_page.dart';
 import 'package:fehviewer/pages/setting/license_page.dart';
@@ -29,12 +29,12 @@ import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
 import 'package:fehviewer/pages/setting/proxy_page.dart';
+import 'package:fehviewer/pages/setting/read_setting_page.dart';
 import 'package:fehviewer/pages/setting/search_setting_page.dart';
 import 'package:fehviewer/pages/setting/security_setting_page.dart';
-import 'package:fehviewer/pages/setting/tab_setting.dart';
+import 'package:fehviewer/pages/setting/tabbar_setting_page.dart';
 import 'package:fehviewer/pages/setting/tag_translat_page.dart';
 import 'package:fehviewer/pages/setting/view/login_webdav.dart';
-import 'package:fehviewer/pages/setting/view_setting_page.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:fehviewer/pages/tab/view/download_page.dart';
@@ -284,7 +284,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.pageSetting:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => TabSettingPage(),
+                              page: () => TabbarSettingPage(),
                               binding: BindingsBuilder(
                                 () => Get.lazyPut(() => TabSettingController()),
                               ),
@@ -319,7 +319,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.imageHide:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => const ImageHidePage(),
+                              page: () => const ImageBlockPage(),
                             );
                           case EHRoutes.mangaHidedImage:
                             return GetPageRoute(
@@ -344,7 +344,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.license:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => const LicensePage(),
+                              page: () => LicensePage(),
                             );
                           default:
                             return GetPageRoute(

@@ -1,62 +1,51 @@
 import 'package:fehviewer/common/controller/image_hide_controller.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class PHashImageListPage extends GetView<ImageHideController> {
-  const PHashImageListPage({Key? key}) : super(key: key);
+  const PHashImageListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final String _title = L10n.of(context).phash_block_list;
-    return Obx(() {
-      return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(end: 12),
-          middle: Text(_title),
-          trailing: CupertinoButton(
-            // 清除按钮
-            child: const Icon(
-              FontAwesomeIcons.trashCan,
-              size: 22,
-            ),
-            onPressed: () {
-              controller.customHideList.clear();
-            },
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.only(end: 12),
+        middle: Text(L10n.of(context).phash_block_list),
+        trailing: CupertinoButton(
+          // 清除按钮
+          padding: const EdgeInsets.all(0),
+          minSize: 40,
+          child: const Icon(
+            CupertinoIcons.trash,
+            size: 24,
           ),
+          onPressed: () {
+            controller.customHideList.clear();
+          },
         ),
-        child: SafeArea(
-          bottom: false,
-          top: false,
-          child: Container(
-            child: ListView.separated(
+      ),
+      child: CustomScrollView(slivers: [
+        SliverSafeArea(
+          sliver: Obx(() {
+            return SliverCupertinoListSection.insetGrouped(
+              additionalDividerMargin: 64,
               itemCount: controller.customHideList.length,
               itemBuilder: (context, index) {
                 final imageHide = controller.customHideList[index];
+
                 return ImageHideItem(
                   imageHide: imageHide,
                   onDelete: () => controller.customHideList.removeAt(index),
                 );
               },
-              separatorBuilder: (context, index) {
-                return Divider(
-                  indent: 12,
-                  thickness: 1.0,
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey4, context),
-                );
-              },
-            ),
-          ),
+            );
+          }),
         ),
-      );
-    });
+      ]),
+    );
   }
 }
 
@@ -69,7 +58,8 @@ class ImageHideItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.only(left: 14, right: 12),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       height: 80,
       child: Row(
         children: [
@@ -83,7 +73,7 @@ class ImageHideItem extends StatelessWidget {
                       width: 50,
                       child: EhNetworkImage(imageUrl: imageHide.imageUrl ?? ''),
                     ),
-                    borderRadius: BorderRadius.circular(6.0),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
                 Text(
@@ -95,8 +85,9 @@ class ImageHideItem extends StatelessWidget {
           CupertinoButton(
             // 清除按钮
             child: const Icon(
-              FontAwesomeIcons.circleXmark,
-              size: 22,
+              CupertinoIcons.xmark_circle,
+              color: CupertinoColors.systemRed,
+              size: 26,
             ),
             onPressed: onDelete,
           ),

@@ -1,120 +1,78 @@
-import 'dart:io';
-
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/component/setting_base.dart';
-import 'package:fehviewer/generated/l10n.dart';
+import 'package:fehviewer/pages/setting/log_view_page.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 
-import '../../fehviewer.dart';
-import 'log_view_page.dart';
-
-class LogPage extends StatelessWidget {
-  LogPage({Key? key}) : super(key: key);
-  final LogService logService = Get.find();
+class LogPage extends GetView<LogService> {
+  const LogPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const String _title = 'Log';
-    return Obx(() {
-      return CupertinoPageScaffold(
-        backgroundColor: !ehTheme.isDarkMode
-            ? CupertinoColors.secondarySystemBackground
-            : null,
-        navigationBar: CupertinoNavigationBar(
-          padding: const EdgeInsetsDirectional.only(start: 0),
-          middle: Text(_title),
-          trailing: CupertinoButton(
-            // 清除按钮
-            child: const Icon(
-              FontAwesomeIcons.trashCan,
-              size: 22,
-            ),
-            onPressed: logService.removeAll,
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text('Log'),
+        trailing: CupertinoButton(
+          // 清除按钮
+          padding: const EdgeInsets.all(0),
+          minSize: 40,
+          child: const Icon(
+            CupertinoIcons.trash,
+            size: 24,
           ),
+          onPressed: controller.removeAll,
         ),
-        child: Container(
-          child: CustomHostsListView(),
+      ),
+      child: CustomScrollView(slivers: [
+        SliverSafeArea(
+          bottom: false,
+          sliver:
+              CupertinoSliverRefreshControl(onRefresh: controller.refreshFiles),
         ),
-      );
-    });
+        const SliverSafeArea(
+          top: false,
+          sliver: LogListView(),
+        ),
+      ]),
+    );
   }
 }
 
-class CustomHostsListView extends StatelessWidget {
-  CustomHostsListView({Key? key}) : super(key: key);
-
-  final LogService logService = Get.find();
-  final ScrollController _controller = ScrollController();
+class LogListView extends GetView<LogService> {
+  const LogListView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final listKey = ValueKey(logService.logFiles.length);
-      // logger.d('logService.logFiles: ${logService.logFiles.length}');
-      return ListView.builder(
-        key: listKey,
-        controller: _controller,
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (_, int index) {
-          final File _file = logService.logFiles[index];
-          return Slidable(
-            endActionPane: ActionPane(
-              motion: const ScrollMotion(),
-              extentRatio: 0.25,
-              children: [
-                SlidableAction(
-                  onPressed: (_) => logService.removeLogAt(index),
-                  backgroundColor: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemRed, context),
-                  foregroundColor: Colors.white,
-                  icon: Icons.delete,
-                  label: L10n.of(context).delete,
+      if (controller.isLoading) {
+        return const SliverFillRemaining(child: CupertinoActivityIndicator());
+      }
+
+      final logfiles = controller.logFiles;
+      return SliverCupertinoListSection.insetGrouped(
+        itemCount: logfiles.length,
+        itemBuilder: (context, index) {
+          final _file = logfiles[index];
+          final fileName = path.basename(_file.path);
+          return CupertinoListTile(
+            title: Text(fileName),
+            trailing: const CupertinoListTileChevron(),
+            onTap: () {
+              Get.to(
+                () => LogViewPage(
+                  title: fileName,
+                  index: index,
                 ),
-              ],
-            ),
-            child: LogFileItem(
-              index: index,
-              fileName: path.basename(_file.path),
-            ),
+                id: isLayoutLarge ? 2 : null,
+                transition: isLayoutLarge ? Transition.rightToLeft : null,
+              );
+            },
           );
         },
-        itemCount: logService.logFiles.length,
       );
     });
-  }
-}
-
-class LogFileItem extends StatelessWidget {
-  const LogFileItem({
-    Key? key,
-    required this.fileName,
-    required this.index,
-  }) : super(key: key);
-  final String fileName;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return SelectorSettingItem(
-      title: fileName,
-      onTap: () {
-        Get.to(
-          () => LogViewPage(
-            title: fileName,
-            index: index,
-          ),
-          id: isLayoutLarge ? 2 : null,
-          transition: isLayoutLarge ? Transition.rightToLeft : null,
-        );
-      },
-    );
   }
 }

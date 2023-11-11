@@ -1,5 +1,5 @@
-import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
+import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,30 +48,31 @@ class LicensePage extends StatelessWidget {
           );
         }
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              return SelectorSettingItem(
-                title: packages[index],
-                desc:
-                    '${packageLicenseBindings[licenseData.packages[index]]!.length} ${L10n.of(context).license}',
-                onTap: () {
-                  List<LicenseEntry> packageLicenses =
-                      packageLicenseBindings[licenseData.packages[index]]!
-                          .map((binding) => licenseData.licenses[binding])
-                          .toList();
-                  Get.to(
-                    _LicensePage(
-                      currentPackage: licenseData.packages[index],
-                      packageLicenses: packageLicenses,
-                    ),
-                    id: isLayoutLarge ? 2 : null,
-                  );
-                },
-              );
-            },
-            childCount: packages.length,
-          ),
+        return SliverCupertinoListSection.insetGrouped(
+          hasLeading: false,
+          additionalDividerMargin: 6,
+          itemBuilder: (context, index) {
+            return CupertinoListTile(
+              title: Text(packages[index]),
+              trailing: const CupertinoListTileChevron(),
+              subtitle: Text(
+                  '${packageLicenseBindings[licenseData.packages[index]]!.length} ${L10n.of(context).license}'),
+              onTap: () {
+                List<LicenseEntry> packageLicenses =
+                    packageLicenseBindings[licenseData.packages[index]]!
+                        .map((binding) => licenseData.licenses[binding])
+                        .toList();
+                Get.to(
+                  _LicensePage(
+                    currentPackage: licenseData.packages[index],
+                    packageLicenses: packageLicenses,
+                  ),
+                  id: isLayoutLarge ? 2 : null,
+                );
+              },
+            );
+          },
+          itemCount: packages.length,
         );
 
       default:

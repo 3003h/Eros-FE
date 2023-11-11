@@ -1,19 +1,17 @@
-part of 'eh_mysettings_page.dart';
+part of '../setting/eh_mysettings_page.dart';
 
 final _controller = Get.find<EhMySettingsController>();
 
-Widget _buildSelectedProfileItem(BuildContext context,
-    {bool hideLine = false}) {
+Widget _buildSelectedProfileItem(BuildContext context) {
   return Obx(() {
     final Map<String, String> actionMap = <String, String>{};
     for (final _profile in _controller.ehSetting.profilelist) {
       actionMap['${_profile.value}'] = _profile.name;
     }
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_selected,
       actionTitle: 'Selected Profile',
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.profileSelected ?? '',
       onValueChanged: (val) {
@@ -25,7 +23,7 @@ Widget _buildSelectedProfileItem(BuildContext context,
   });
 }
 
-Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildLoadTypeItem(BuildContext context) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_uh_0,
     '1': L10n.of(context).uc_uh_1,
@@ -40,10 +38,9 @@ Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
     '3': L10n.of(context).uc_uh_3_s,
   };
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_thor_hath,
-      hideDivider: hideLine,
       actionMap: actionMap,
       simpleActionMap: simpleActionMap,
       initVal: _controller.ehSetting.loadImageThroughHAtH ?? '',
@@ -53,7 +50,7 @@ Widget _buildLoadTypeItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildImageSizeItem(BuildContext context) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_auto,
     '5': '2400x',
@@ -63,10 +60,9 @@ Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
     '1': '780x',
   };
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_res_res,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.imageSize ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -75,18 +71,16 @@ Widget _buildImageSizeItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildNameDisplayItem(BuildContext context) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_tl_0,
     '1': L10n.of(context).uc_tl_1,
   };
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_name_display,
-      hideDivider: hideLine,
       actionMap: actionMap,
-      valueFlex: 1,
       initVal: _controller.ehSetting.galleryNameDisplay ?? '',
       onValueChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(galleryNameDisplay: val),
@@ -94,8 +88,7 @@ Widget _buildNameDisplayItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildArchiverSettingsItem(BuildContext context,
-    {bool hideLine = false}) {
+Widget _buildArchiverSettingsItem(BuildContext context) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_ar_0,
     '1': L10n.of(context).uc_ar_1,
@@ -113,14 +106,10 @@ Widget _buildArchiverSettingsItem(BuildContext context,
     '5': 'ARA',
   };
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_archiver_set,
-      hideDivider: hideLine,
       actionMap: actionMap,
-      // simpleActionMap: sActionMap,
-      titleFlex: 1,
-      valueFlex: 1,
       initVal: _controller.ehSetting.archiverSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(archiverSettings: val),
@@ -128,8 +117,7 @@ Widget _buildArchiverSettingsItem(BuildContext context,
   });
 }
 
-Widget _buildFrontPageSettingsItem(BuildContext context,
-    {bool hideLine = false}) {
+Widget _buildFrontPageSettingsItem(BuildContext context) {
   final Map<String, String> actionMap = <String, String>{
     '3': L10n.of(context).uc_dm_3,
     '4': L10n.of(context).uc_dm_4,
@@ -139,10 +127,9 @@ Widget _buildFrontPageSettingsItem(BuildContext context,
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_front_page_dis_mode,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -151,19 +138,19 @@ Widget _buildFrontPageSettingsItem(BuildContext context,
   });
 }
 
-Widget _buildFavoritesSortItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildFavoritesSortItem(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_fs_0,
     '1': L10n.of(context).uc_fs_1,
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_fav_sort,
-      hideDivider: hideLine,
       actionMap: actionMap,
-      valueFlex: 1,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(frontPageSettings: val),
@@ -171,8 +158,7 @@ Widget _buildFavoritesSortItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildSearchResultCountItem(BuildContext context,
-    {bool hideLine = false}) {
+Widget _buildSearchResultCountItem(BuildContext context) {
   final Map<String, String> actionMap = <String, String>{
     '0': '25',
     '1': '50',
@@ -181,10 +167,9 @@ Widget _buildSearchResultCountItem(BuildContext context,
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_search_r_count,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.searchResultCount ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -193,7 +178,9 @@ Widget _buildSearchResultCountItem(BuildContext context,
   });
 }
 
-Widget _buildThumbMouseOverItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildThumbMouseOverItem(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_lt_0,
     '1': L10n.of(context).uc_lt_1,
@@ -205,10 +192,9 @@ Widget _buildThumbMouseOverItem(BuildContext context, {bool hideLine = false}) {
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_mose_over_thumb,
-      hideDivider: hideLine,
       actionMap: actionMap,
       simpleActionMap: sActionMap,
       initVal: _controller.ehSetting.mouseOverThumbnails ?? '',
@@ -218,17 +204,18 @@ Widget _buildThumbMouseOverItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildThumbSizeItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildThumbSizeItem(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_ts_0,
     '1': L10n.of(context).uc_ts_1,
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_thumb_size,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailSize ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -237,7 +224,9 @@ Widget _buildThumbSizeItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildThumbRowItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildThumbRowItem(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': '4',
     '1': '10',
@@ -246,10 +235,9 @@ Widget _buildThumbRowItem(BuildContext context, {bool hideLine = false}) {
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_thumb_row,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailRows ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -258,7 +246,9 @@ Widget _buildThumbRowItem(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildSortOrderComment(BuildContext context, {bool hideLine = false}) {
+Widget _buildSortOrderComment(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_cs_0,
     '1': L10n.of(context).uc_cs_1,
@@ -266,10 +256,9 @@ Widget _buildSortOrderComment(BuildContext context, {bool hideLine = false}) {
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_comments_sort_order,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderComments ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -278,17 +267,18 @@ Widget _buildSortOrderComment(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildShowCommentVotes(BuildContext context, {bool hideLine = false}) {
+Widget _buildShowCommentVotes(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_sc_0,
     '1': L10n.of(context).uc_sc_1,
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_comments_show_votes,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.showCommentVotes ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -297,17 +287,18 @@ Widget _buildShowCommentVotes(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildSortOrderTags(BuildContext context, {bool hideLine = false}) {
+Widget _buildSortOrderTags(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_tb_0,
     '1': L10n.of(context).uc_tb_1,
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_tag_short_order,
-      hideDivider: hideLine,
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderTags ?? '',
       onValueChanged: (val) => _controller.ehSetting =
@@ -316,100 +307,93 @@ Widget _buildSortOrderTags(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildShowPageNumbers(BuildContext context, {bool hideLine = false}) {
+Widget _buildShowPageNumbers(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_pn_0,
     '1': L10n.of(context).uc_pn_1,
   };
 
-  return TextSwitchItem(
-    L10n.of(context).uc_show_page_num,
-    hideDivider: hideLine,
-    value: _controller.ehSetting.showGalleryPageNumbers == '0',
-    onChanged: (val) => _controller.ehSetting =
-        _controller.ehSetting.copyWith(showGalleryPageNumbers: val ? '0' : '1'),
+  return CupertinoListTile(
+    title: Text(L10n.of(context).uc_show_page_num),
+    trailing: Obx(() {
+      return CupertinoSwitch(
+        value: _controller.ehSetting.showGalleryPageNumbers == '0',
+        onChanged: (val) => _controller.ehSetting = _controller.ehSetting
+            .copyWith(showGalleryPageNumbers: val ? '0' : '1'),
+      );
+    }),
   );
-
-  // return Obx(() {
-  //   return SelectorItem<String>(
-  //     key: UniqueKey(),
-  //     title: L10n.of(context).uc_show_page_num,
-  //     hideLine: hideLine,
-  //     actionMap: actionMap,
-  //     initVal: _controller.ehSetting.showGalleryPageNumbers ?? '',
-  //     onValueChanged: (val) => _controller.ehSetting =
-  //         _controller.ehSetting.copyWith(showGalleryPageNumbers: val),
-  //   );
-  // });
 }
 
-Widget _buildOriginalImages(BuildContext context, {bool hideLine = false}) {
+Widget _buildOriginalImages(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_oi_0,
     '1': L10n.of(context).uc_oi_1,
   };
 
-  return Obx(
-    () {
-      return TextSwitchItem(
-        L10n.of(context).uc_ori_image,
-        hideDivider: true,
+  // return Obx(
+  //   () {
+  //     return TextSwitchItem(
+  //       L10n.of(context).uc_ori_image,
+  //       hideDivider: true,
+  //       value: _controller.ehSetting.originalImages == '1',
+  //       onChanged: (val) => _controller.ehSetting =
+  //           _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),
+  //     );
+  //   },
+  // );
+
+  return CupertinoListTile(
+    title: Text(L10n.of(context).uc_ori_image),
+    trailing: Obx(() {
+      return CupertinoSwitch(
         value: _controller.ehSetting.originalImages == '1',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),
       );
-    },
+    }),
   );
-
-  // return Obx(() {
-  //   return SelectorItem<String>(
-  //     key: UniqueKey(),
-  //     title: L10n.of(context).uc_ori_image,
-  //     actionTitle:
-  //         'Use original images instead of the resampled versions where applicable?',
-  //     hideLine: hideLine,
-  //     actionMap: actionMap,
-  //     initVal: _controller.ehSetting.originalImages ?? '',
-  //     onValueChanged: (val) => _controller.ehSetting =
-  //         _controller.ehSetting.copyWith(originalImages: val),
-  //   );
-  // });
 }
 
-Widget _buildMPVAlwaysUse(BuildContext context, {bool hideLine = false}) {
+Widget _buildMPVAlwaysUse(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_qb_0,
     '1': L10n.of(context).uc_qb_1,
   };
 
-  return Obx(
-    () {
-      return TextSwitchItem(
-        L10n.of(context).uc_mpv_always,
-        key: UniqueKey(),
+  // return Obx(
+  //   () {
+  //     return TextSwitchItem(
+  //       L10n.of(context).uc_mpv_always,
+  //       key: UniqueKey(),
+  //       value: _controller.ehSetting.alwaysUseMpv == '1',
+  //       onChanged: (val) => _controller.ehSetting =
+  //           _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : '0'),
+  //     );
+  //   },
+  // );
+
+  return CupertinoListTile(
+    title: Text(L10n.of(context).uc_mpv_always),
+    trailing: Obx(() {
+      return CupertinoSwitch(
         value: _controller.ehSetting.alwaysUseMpv == '1',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : '0'),
       );
-    },
+    }),
   );
-
-  // return Obx(() {
-  //   return SelectorItem<String>(
-  //     key: UniqueKey(),
-  //     title: L10n.of(context).uc_mpv_always,
-  //     actionTitle:
-  //         'Always use the Multi-Page Viewer? There will still be a link to manually start it if this is left disabled',
-  //     hideLine: hideLine,
-  //     actionMap: actionMap,
-  //     initVal: _controller.ehSetting.alwaysUseMpv ?? '',
-  //     onValueChanged: (val) => _controller.ehSetting =
-  //         _controller.ehSetting.copyWith(alwaysUseMpv: val),
-  //   );
-  // });
 }
 
-Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
+Widget _buildMPVDisplayStyle(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_ms_0,
     '1': L10n.of(context).uc_ms_1,
@@ -423,14 +407,11 @@ Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
   };
 
   return Obx(() {
-    return SelectorItem<String>(
+    return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
       title: L10n.of(context).uc_mpv_stype,
       actionTitle: 'Multi-Page Viewer Display Style',
-      hideDivider: hideLine,
       actionMap: actionMap,
-      // simpleActionMap: sActionMap,
-      valueFlex: 1,
       initVal: _controller.ehSetting.mpvStyle ?? '',
       onValueChanged: (val) =>
           _controller.ehSetting = _controller.ehSetting.copyWith(mpvStyle: val),
@@ -438,44 +419,45 @@ Widget _buildMPVDisplayStyle(BuildContext context, {bool hideLine = false}) {
   });
 }
 
-Widget _buildMPVThumbPane(BuildContext context, {bool hideLine = false}) {
+Widget _buildMPVThumbPane(
+  BuildContext context,
+) {
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_mt_0,
     '1': L10n.of(context).uc_mt_1,
   };
 
-  return Obx(
-    () {
-      return TextSwitchItem(
-        L10n.of(context).uc_mpv_thumb_pane,
-        key: UniqueKey(),
+  // return Obx(
+  //   () {
+  //     return TextSwitchItem(
+  //       L10n.of(context).uc_mpv_thumb_pane,
+  //       key: UniqueKey(),
+  //       value: _controller.ehSetting.mpvThumbnailPane == '0',
+  //       onChanged: (val) => _controller.ehSetting =
+  //           _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '0' : '1'),
+  //     );
+  //   },
+  // );
+
+  return CupertinoListTile(
+    title: Text(L10n.of(context).uc_mpv_thumb_pane),
+    trailing: Obx(() {
+      return CupertinoSwitch(
         value: _controller.ehSetting.mpvThumbnailPane == '0',
         onChanged: (val) => _controller.ehSetting =
             _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '0' : '1'),
       );
-    },
+    }),
   );
-
-  // return Obx(() {
-  //   return SelectorItem<String>(
-  //     key: UniqueKey(),
-  //     title: L10n.of(context).uc_mpv_thumb_pane,
-  //     actionTitle: 'Multi-Page Viewer Thumbnail Pane',
-  //     hideLine: hideLine,
-  //     actionMap: actionMap,
-  //     initVal: _controller.ehSetting.mpvThumbnailPane ?? '',
-  //     onValueChanged: (val) => _controller.ehSetting =
-  //         _controller.ehSetting.copyWith(mpvThumbnailPane: val),
-  //   );
-  // });
 }
 
-Widget _buildRatingsItem(BuildContext context, {bool hideLine = false}) {
+Widget _buildRatingsItem(
+  BuildContext context,
+) {
   return Obx(() {
-    return TextInputItem(
+    return CupertinoTextInputListTile(
       title: L10n.of(context).uc_rating,
       placeholder: 'RRGGB',
-      hideDivider: hideLine,
       initValue: _controller.ehSetting.ratings ?? '',
       onChanged: (val) =>
           _controller.ehSetting = _controller.ehSetting.copyWith(ratings: val),
@@ -526,11 +508,10 @@ Widget _buildExcludedUploaders(BuildContext context) {
 Widget _buildThumbnailScaling(BuildContext context) {
   // Thumbnail Scaling
   return Obx(() {
-    return TextInputItem(
+    return CupertinoTextInputListTile(
       title: L10n.of(context).uc_thumb_scaling,
-      suffixText: '%',
       placeholder: '100',
-      hideDivider: true,
+      trailing: const Text('%'),
       initValue: _controller.ehSetting.thumbnailScaling ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(thumbnailScaling: val),
@@ -541,10 +522,9 @@ Widget _buildThumbnailScaling(BuildContext context) {
 Widget _buildViewportOverride(BuildContext context) {
   // Thumbnail Scaling
   return Obx(() {
-    return TextInputItem(
+    return CupertinoTextInputListTile(
       title: L10n.of(context).uc_viewport_or,
-      suffixText: 'px',
-      hideDivider: true,
+      trailing: const Text('px'),
       initValue: _controller.ehSetting.viewportOverride ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(viewportOverride: val),
@@ -552,25 +532,10 @@ Widget _buildViewportOverride(BuildContext context) {
   });
 }
 
-Widget _buildHatHLocalNetworkHost(BuildContext context) {
-  // Hentai@Home Local Network Host
-  return Obx(() {
-    return TextInputItem(
-      title: 'IP Address:Port',
-      hideDivider: true,
-      initValue: _controller.ehSetting.hentaiAtHomeLocalNetworkHost ?? '',
-      onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(hentaiAtHomeLocalNetworkHost: val),
-    );
-  });
-}
-
 Widget _buildSizeHorizontal(BuildContext context) {
   return Obx(() {
-    return TextInputItem(
+    return CupertinoTextInputListTile(
       title: L10n.of(context).uc_img_horiz,
-      suffixText: L10n.of(context).uc_pixels,
-      hideDivider: false,
       initValue: _controller.ehSetting.imageSizeHorizontal ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(imageSizeHorizontal: val),
@@ -580,39 +545,11 @@ Widget _buildSizeHorizontal(BuildContext context) {
 
 Widget _buildSizeVertical(BuildContext context) {
   return Obx(() {
-    return TextInputItem(
+    return CupertinoTextInputListTile(
       title: L10n.of(context).uc_img_vert,
-      suffixText: L10n.of(context).uc_pixels,
-      hideDivider: true,
       initValue: _controller.ehSetting.imageSizeVertical ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(imageSizeVertical: val),
-    );
-  });
-}
-
-Widget _buildTagNamespaces(BuildContext context) {
-  return Obx(() {
-    final xnItemMap = _controller.ehSetting.xnItemMap;
-    final _sMap = xnItemMap.map(
-      (key, value) => MapEntry(
-        key,
-        SingleSelectItemBean(
-            title: L10n.of(context).tagNamespace(key),
-            enable: value.value == '1'),
-      ),
-    );
-
-    return MultiSelectorGroup(
-      key: UniqueKey(),
-      selectorMap: _sMap,
-      onValueChanged: (val) {
-        logger.d('$val');
-        for (final entry in val.entries) {
-          _controller.ehSetting
-              .setXnItem(entry.key, (entry.value.enable ?? false) ? '1' : '');
-        }
-      },
     );
   });
 }
