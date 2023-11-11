@@ -154,9 +154,7 @@ class ListViewLayoutSetting extends StatelessWidget {
           // hideDivider: true,
           // desc: '画廊列表封面模糊效果',
         ),
-      _buildListModeItem(
-        context,
-      ),
+      _buildListModeItem(context),
       SelectorSettingItem(
         title: L10n.of(context).custom_width,
         onTap: () {

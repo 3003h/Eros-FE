@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'cpuertino_list_tile'
     tags:
       - v*
       - '!v*ios'
