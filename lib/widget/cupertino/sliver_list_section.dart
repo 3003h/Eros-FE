@@ -157,7 +157,7 @@ class SliverCupertinoListSection extends StatelessWidget {
     this.dividerMargin = _kInsetDividerMargin,
     double? additionalDividerMargin,
     this.topMargin,
-    bool hasLeading = true,
+    bool hasLeading = false,
     this.separatorColor,
     this.addAutomaticKeepAlives = true,
     this.addRepaintBoundaries = true,

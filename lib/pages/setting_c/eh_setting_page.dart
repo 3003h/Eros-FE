@@ -207,7 +207,9 @@ class ListViewEhSetting extends StatelessWidget {
                 title: Text(L10n.of(context).open_supported_links),
                 trailing: const CupertinoListTileChevron(),
                 // subtitle: Text(L10n.of(context).open_supported_links_summary),
-                onTap: OpenByDefault.open,
+                onTap: () {
+                  OpenByDefault.open();
+                },
               ),
             ],
             footer: Text(L10n.of(context).open_supported_links_summary),
