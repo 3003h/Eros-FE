@@ -1053,3 +1053,83 @@ class GroupItem extends StatelessWidget {
     );
   }
 }
+
+/// 文本输入框类型
+class CupertinoTextInputListTile extends StatefulWidget {
+  const CupertinoTextInputListTile({
+    this.title,
+    Key? key,
+    this.maxLines = 1,
+    this.onChanged,
+    this.initValue,
+    this.placeholder,
+    this.leading,
+    this.trailing,
+    this.textAlign = TextAlign.right,
+    this.textFieldPadding = const EdgeInsets.all(6.0),
+    this.textController,
+    this.obscureText,
+    this.keyboardType,
+  }) : super(key: key);
+
+  final String? title;
+  final String? initValue;
+  final ValueChanged<String>? onChanged;
+  final String? placeholder;
+  final int? maxLines;
+  final Widget? leading;
+  final Widget? trailing;
+  final TextAlign textAlign;
+  final EdgeInsetsGeometry textFieldPadding;
+  final TextEditingController? textController;
+  final bool? obscureText;
+  final TextInputType? keyboardType;
+
+  @override
+  State<CupertinoTextInputListTile> createState() =>
+      _CupertinoTextInputListTileState();
+}
+
+class _CupertinoTextInputListTileState
+    extends State<CupertinoTextInputListTile> {
+  late TextEditingController textController;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.textController != null) {
+      textController = widget.textController!;
+      textController.text = widget.initValue ?? '';
+    } else {
+      textController = TextEditingController(text: widget.initValue);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoListTile(
+      title: Text(widget.title ?? ''),
+      leading: widget.leading,
+      trailing: widget.trailing,
+      additionalInfo: Expanded(
+        child: CupertinoTextField(
+          decoration: null,
+          padding: widget.textFieldPadding,
+          controller: textController,
+          obscureText: widget.obscureText ?? false,
+          keyboardType: widget.keyboardType,
+          textAlign: widget.textAlign,
+          maxLines: widget.maxLines,
+          placeholderStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            color: CupertinoColors.placeholderText,
+            height: 1.25,
+          ),
+          placeholder: widget.placeholder,
+          style: const TextStyle(height: 1.2),
+          onChanged: widget.onChanged?.call,
+        ),
+      ),
+    );
+  }
+}

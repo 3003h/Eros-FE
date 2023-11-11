@@ -2,7 +2,6 @@ import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../../../component/setting_base.dart';
 import 'single_input_page.dart';
 
 class SingleInputItem extends StatelessWidget {
@@ -35,13 +34,13 @@ class SingleInputItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final _initValue = initValue ?? '';
 
-    return SelectorSettingItem(
-      title: title,
-      hideDivider: hideLine,
-      selector: selector ??
+    return CupertinoListTile(
+      title: Text(title),
+      trailing: const CupertinoListTileChevron(),
+      additionalInfo: Text(selector ??
           ((_initValue.isNotEmpty && suffixText != null)
               ? '$_initValue $suffixText'
-              : _initValue),
+              : _initValue)),
       onTap: () async {
         Get.to(
           () => SingleInputPage(

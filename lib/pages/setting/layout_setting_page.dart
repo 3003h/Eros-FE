@@ -45,24 +45,27 @@ class LayoutSettingList extends StatelessWidget {
     return MultiSliver(children: [
       SliverCupertinoListSection.listInsetGrouped(children: [
         _buildThemeItem(context),
+
         // dark_mode_effect
-        CupertinoListTile(
-          title: Text(L10n.of(context).dark_mode_effect),
-          trailing: Obx(() {
-            return CupertinoSlidingSegmentedControl<bool>(
-              groupValue: _ehSettingService.isPureDarkTheme.value,
-              children: {
-                false: Text(L10n.of(context).gray_black, textScaleFactor: 0.8),
-                true: Text(L10n.of(context).pure_black, textScaleFactor: 0.8)
-              },
-              onValueChanged: (bool? val) {
-                if (val != null) {
-                  _ehSettingService.isPureDarkTheme.value = val;
-                }
-              },
-            );
-          }),
-        ),
+        if (!kReleaseMode)
+          CupertinoListTile(
+            title: Text(L10n.of(context).dark_mode_effect),
+            trailing: Obx(() {
+              return CupertinoSlidingSegmentedControl<bool>(
+                groupValue: _ehSettingService.isPureDarkTheme,
+                children: {
+                  false:
+                      Text(L10n.of(context).gray_black, textScaleFactor: 0.8),
+                  true: Text(L10n.of(context).pure_black, textScaleFactor: 0.8)
+                },
+                onValueChanged: (bool? val) {
+                  if (val != null) {
+                    _ehSettingService.isPureDarkTheme = val;
+                  }
+                },
+              );
+            }),
+          ),
 
         // tabbar_setting
         CupertinoListTile(

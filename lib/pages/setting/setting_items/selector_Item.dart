@@ -184,7 +184,10 @@ class _SelectorCupertinoListTileState<T>
 
     return CupertinoListTile(
       title: Text(widget.title),
-      additionalInfo: Text(selector),
+      additionalInfo: Text(
+        selector,
+        textAlign: TextAlign.right,
+      ),
       trailing: const CupertinoListTileChevron(),
       onTap: () async {
         // 显示dialog 选择选项

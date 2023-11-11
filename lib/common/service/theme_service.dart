@@ -12,7 +12,7 @@ class ThemeService extends ProfileService {
   final EhSettingService _ehSettingService = Get.find();
   final Rx<ThemesModeEnum> _themeModel = ThemesModeEnum.system.obs;
   Rx<Brightness?> platformBrightness =
-      WidgetsBinding.instance.window.platformBrightness.obs;
+      WidgetsBinding.instance.platformDispatcher.platformBrightness.obs;
 
   set themeModel(ThemesModeEnum value) {
     _themeModel.value = value;
@@ -22,10 +22,9 @@ class ThemeService extends ProfileService {
     return _themeModel.value;
   }
 
-  CupertinoThemeData get _getDarkTheme =>
-      _ehSettingService.isPureDarkTheme.value
-          ? ThemeColors.darkPureTheme
-          : ThemeColors.darkGrayTheme;
+  CupertinoThemeData get _getDarkTheme => _ehSettingService.isPureDarkTheme
+      ? ThemeColors.darkPureTheme
+      : ThemeColors.darkGrayTheme;
 
   CupertinoThemeData? get themeData {
     switch (themeModel) {
@@ -61,7 +60,7 @@ class EHTheme {
   EhSettingService get _ehSettingService => Get.find();
 
   Color? _getColorWithTheme(EhDynamicColor ehcolor) {
-    final Color effDarkColor = _ehSettingService.isPureDarkTheme.value
+    final Color effDarkColor = _ehSettingService.isPureDarkTheme
         ? ehcolor.darkColor
         : ehcolor.darkGrayColor;
 

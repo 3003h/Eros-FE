@@ -39,11 +39,15 @@ class EhSettingService extends ProfileService {
   RxBool isSafeMode = false.obs;
   RxString tagTranslatVer = ''.obs;
   RxBool isFavPicker = false.obs;
-  RxBool isPureDarkTheme = false.obs;
+  // RxBool isPureDarkTheme = false.obs;
   RxBool isClipboardLink = true.obs;
   RxBool commentTrans = false.obs;
   // RxBool blurredInRecentTasks = true.obs;
   Rx<TagIntroImgLv> tagIntroImgLv = TagIntroImgLv.nonh.obs;
+
+  final _isPureDarkTheme = false.obs;
+  bool get isPureDarkTheme => _isPureDarkTheme.value;
+  set isPureDarkTheme(bool val) => _isPureDarkTheme.value = val;
 
   final _blurredInRecentTasks = false.obs;
   bool get blurredInRecentTasks => _blurredInRecentTasks.value;
@@ -586,8 +590,10 @@ class EhSettingService extends ProfileService {
     everProfile<bool>(
         isFavPicker, (value) => ehConfig = ehConfig.copyWith(favPicker: value));
 
-    isPureDarkTheme.value = ehConfig.pureDarkTheme ?? isPureDarkTheme.value;
-    everProfile<bool>(isPureDarkTheme,
+    // TODO isPureDarkTheme 暂时禁用
+    // isPureDarkTheme = ehConfig.pureDarkTheme ?? isPureDarkTheme;
+    isPureDarkTheme = false;
+    everProfile<bool>(_isPureDarkTheme,
         (bool value) => ehConfig = ehConfig.copyWith(pureDarkTheme: value));
 
     isClipboardLink.value = ehConfig.clipboardLink ?? isClipboardLink.value;
