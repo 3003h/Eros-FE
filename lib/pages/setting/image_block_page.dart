@@ -7,8 +7,8 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class ImageHidePage extends GetView<ImageHideController> {
-  const ImageHidePage({Key? key}) : super(key: key);
+class ImageBlockPage extends GetView<ImageHideController> {
+  const ImageBlockPage({Key? key}) : super(key: key);
   EhSettingService get _ehSettingService => Get.find();
 
   @override

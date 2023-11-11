@@ -12,12 +12,10 @@ import 'package:fehviewer/pages/gallery/view/sliver/gallery_page.dart';
 import 'package:fehviewer/pages/setting/avatar_setting_page.dart';
 import 'package:fehviewer/pages/setting/block/block_rule_edit_page.dart';
 import 'package:fehviewer/pages/setting/block/block_rules_page.dart';
-import 'package:fehviewer/pages/setting/block/blockers_page.dart';
 import 'package:fehviewer/pages/setting/controller/tab_setting_controller.dart';
 import 'package:fehviewer/pages/setting/custom_hosts_page.dart';
 import 'package:fehviewer/pages/setting/eh_mysettings_page.dart';
 import 'package:fehviewer/pages/setting/image_hide/phash_list_page.dart';
-import 'package:fehviewer/pages/setting/image_hide_page.dart';
 import 'package:fehviewer/pages/setting/item_width_setting_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
@@ -29,8 +27,10 @@ import 'package:fehviewer/pages/setting/view/login_webdav.dart';
 import 'package:fehviewer/pages/setting/webdav_setting_page.dart';
 import 'package:fehviewer/pages/setting_c/about_page.dart';
 import 'package:fehviewer/pages/setting_c/advanced_setting_page.dart';
+import 'package:fehviewer/pages/setting_c/block/blockers_page.dart';
 import 'package:fehviewer/pages/setting_c/download_setting_page.dart';
 import 'package:fehviewer/pages/setting_c/eh_setting_page.dart';
+import 'package:fehviewer/pages/setting_c/image_block_page.dart';
 import 'package:fehviewer/pages/setting_c/layout_setting_page.dart';
 import 'package:fehviewer/pages/setting_c/license_page.dart';
 import 'package:fehviewer/pages/setting_c/read_setting_page.dart';
@@ -319,7 +319,7 @@ class TabHomeLarge extends GetView<TabHomeController> {
                           case EHRoutes.imageHide:
                             return GetPageRoute(
                               settings: settings,
-                              page: () => const ImageHidePage(),
+                              page: () => const ImageBlockPage(),
                             );
                           case EHRoutes.mangaHidedImage:
                             return GetPageRoute(
