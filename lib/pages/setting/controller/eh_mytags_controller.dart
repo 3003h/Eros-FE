@@ -72,61 +72,66 @@ class EhMyTagsController extends GetxController
     super.onInit();
     firstLoad();
 
-    debounce(_inputSearchText, (String val) async {
-      logger.t('debounce _inputSearchText $val');
-      if (val.trim().isEmpty) {
-        // searchTags.clear();
-        searchNewTags.clear();
-      }
+    debounce(_inputSearchText, reSearch);
+  }
 
-      // 筛选tag
-      final rult = (ehMyTags.usertags ?? <EhUsertag>[]).where((element) =>
-          element.title.contains(val) ||
-          (element.translate?.contains(val) ?? false));
-      searchTags.clear();
-      if (rult.isNotEmpty) {
-        searchTags.addAll(rult);
-      }
-
-      // 新tag
-      // 通过eh的api搜索
-      List<TagTranslat> tagTranslateList =
-          await Api.tagSuggest(text: val.trim());
-
-      // 中文从翻译库匹配
-      if (localeService.isLanguageCodeZh && ehSettingService.isTagTranslate) {
-        List<TagTranslat> qryTagsList = await Get.find<TagTransController>()
-            .getTagTranslatesLike(text: val.trim(), limit: 200);
-
-        for (final tr in qryTagsList) {
-          if (tagTranslateList
-              .any((element) => element.fullTagText == tr.fullTagText)) {
-            continue;
-          }
-          tagTranslateList.add(tr);
-        }
-      }
-
+  Future<void> reSearch(String text) async {
+    logger.t('debounce _inputSearchText $text');
+    if (text.trim().isEmpty) {
       searchNewTags.clear();
-      for (final tr in tagTranslateList) {
-        final title = '${tr.namespace}:${tr.key}';
-        if (ehMyTags.usertags?.any((element) => element.title == title) ??
-            false) {
+    }
+
+    // 筛选tag
+    final rult = (ehMyTags.usertags ?? <EhUsertag>[]).where((element) =>
+        element.title.contains(text) ||
+        (element.translate?.contains(text) ?? false));
+    searchTags.clear();
+    if (rult.isNotEmpty) {
+      searchTags.addAll(rult);
+    }
+
+    // 新tag
+    // 通过eh的api搜索
+    List<TagTranslat> tagTranslateList =
+        await Api.tagSuggest(text: text.trim());
+
+    // 中文从翻译库匹配
+    if (localeService.isLanguageCodeZh && ehSettingService.isTagTranslate) {
+      List<TagTranslat> qryTagsList = await Get.find<TagTransController>()
+          .getTagTranslatesLike(text: text.trim(), limit: 200);
+
+      for (final tr in qryTagsList) {
+        if (tagTranslateList
+            .any((element) => element.fullTagText == tr.fullTagText)) {
           continue;
         }
-        final translate = await trController.getTranTagWithNameSpase(title);
-        searchNewTags.add(
-          EhUsertag(
-            title: '${tr.namespace}:${tr.key}',
-            defaultColor: true,
-            watch: false,
-            hide: false,
-            tagWeight: '10',
-            translate: translate,
-          ),
-        );
+        tagTranslateList.add(tr);
       }
-    });
+    }
+
+    // searchNewTags.clear();
+
+    final _newTags = <EhUsertag>[];
+    for (final tr in tagTranslateList) {
+      final title = '${tr.namespace}:${tr.key}';
+      if (ehMyTags.usertags?.any((element) => element.title == title) ??
+          false) {
+        continue;
+      }
+      final translate = await trController.getTranTagWithNameSpase(title);
+      _newTags.add(
+        EhUsertag(
+          title: '${tr.namespace}:${tr.key}',
+          defaultColor: true,
+          watch: false,
+          hide: false,
+          tagWeight: '10',
+          translate: translate,
+        ),
+      );
+    }
+
+    searchNewTags(_newTags);
   }
 
   Future<String?> getTextTranslate(String text) async {
@@ -184,6 +189,9 @@ class EhMyTagsController extends GetxController
   Future<void> reloadData() async {
     final sets = await loadData(refresh: true);
     change(sets?.tagsets, status: RxStatus.success());
+    if (isSearchUserTags) {
+      reSearch(inputSearchText);
+    }
   }
 
   Map<String, EhMytagSet> get tagsetMap {
@@ -214,7 +222,7 @@ class EhMyTagsController extends GetxController
     isStackLoading = false;
   }
 
-  Future<void> renameTagset({required String newName}) async {
+  Future<void> renameTagSet({required String newName}) async {
     final rult = await actionRenameTagSet(
       tagsetname: newName,
       tagset: currSelected,
@@ -226,14 +234,28 @@ class EhMyTagsController extends GetxController
     }
   }
 
-  void deleteUsertag(int index) {
-    logger.d('deleteUsertag $index');
+  void deleteUserTag(String title) {
+    logger.d('delete Usertag $title');
     final temp = ehMyTags.clone();
-    final _id = ehMyTags.usertags?[index].tagid;
+    final tag = temp.usertags
+        ?.firstWhere((element) => element.title.trim() == title.trim());
+    if (tag == null) {
+      return;
+    }
+
+    final _id = tag.tagid;
+    final index = temp.usertags?.indexOf(tag);
+    if (index == null || index < 0) {
+      return;
+    }
     temp.usertags?.removeAt(index);
     ehMyTags = temp;
     if (_id != null) {
       actionDeleteUserTag(usertags: [_id]);
+    }
+
+    if (isSearchUserTags) {
+      reSearch(inputSearchText);
     }
   }
 
