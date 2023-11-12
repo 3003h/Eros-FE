@@ -2071,10 +2071,10 @@ class L10n {
     );
   }
 
-  /// `rchiver Settings`
+  /// `Archiver Settings`
   String get uc_archiver_set {
     return Intl.message(
-      'rchiver Settings',
+      'Archiver Settings',
       name: 'uc_archiver_set',
       desc: '',
       args: [],

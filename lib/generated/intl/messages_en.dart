@@ -495,7 +495,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_archiver_desc": MessageLookupByLibrary.simpleMessage(
             "The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here."),
         "uc_archiver_set":
-            MessageLookupByLibrary.simpleMessage("rchiver Settings"),
+            MessageLookupByLibrary.simpleMessage("Archiver Settings"),
         "uc_artist": MessageLookupByLibrary.simpleMessage("artist"),
         "uc_auto": MessageLookupByLibrary.simpleMessage("Auto"),
         "uc_character": MessageLookupByLibrary.simpleMessage("character"),

@@ -201,7 +201,7 @@
   "uc_img_cussize_desc": "While the site will automatically scale down images to fit your screen width, you can also manually restrict the maximum display size of an image. Like the automatic scaling, this does not resample the image, as the resizing is done browser-side. (0 = no limit)",
   "uc_name_display": "Gallery Name Display",
   "uc_name_display_desc": "Many galleries have both an English/Romanized title and a title in Japanese script. Which gallery name would you like as default?",
-  "uc_archiver_set": "rchiver Settings",
+  "uc_archiver_set": "Archiver Settings",
   "uc_archiver_desc": "The default behavior for the Archiver is to confirm the cost and selection for original or resampled archive, then present a link that can be clicked or copied elsewhere. You can change this behavior here.",
   "uc_front_page": "Front Page",
   "uc_front_page_dis_mode": "Front Page Display mode",

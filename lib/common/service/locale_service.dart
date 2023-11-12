@@ -2,18 +2,16 @@ import 'dart:ui';
 
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/index.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import 'base_service.dart';
 
 class LocaleService extends ProfileService {
-  RxString localCode = window.locale.toString().obs;
+  RxString localCode = PlatformDispatcher.instance.locale.toString().obs;
 
   Locale? get locale {
     final String localeSt = localCode.value;
     if (localeSt.isEmpty || localeSt == '_' || !localeSt.contains('_')) {
-      // return window.locale;
       return null;
     }
     final List<String> t = localeSt.split('_');
@@ -22,7 +20,7 @@ class LocaleService extends ProfileService {
 
   bool get isLanguageCodeZh =>
       locale?.languageCode.startsWith('zh') ??
-      window.locale.languageCode.startsWith('zh');
+      PlatformDispatcher.instance.locale.languageCode.startsWith('zh');
 
   @override
   void onInit() {

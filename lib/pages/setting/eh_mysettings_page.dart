@@ -324,12 +324,14 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
 
     return CustomScrollView(
       slivers: [
-        EhCupertinoSliverRefreshControl(
-          onRefresh: controller.reloadData,
+        SliverSafeArea(
+          bottom: false,
+          sliver: EhCupertinoSliverRefreshControl(
+            onRefresh: controller.reloadData,
+          ),
         ),
         SliverSafeArea(
-          left: false,
-          right: false,
+          top: false,
           sliver: FutureBuilder<EhSettings?>(
               future: future,
               initialData: controller.ehSetting,

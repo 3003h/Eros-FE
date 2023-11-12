@@ -53,6 +53,7 @@ class LogListView extends GetView<LogService> {
 
       final logfiles = controller.logFiles;
       return SliverCupertinoListSection.insetGrouped(
+        key: ValueKey(logfiles.length),
         itemCount: logfiles.length,
         itemBuilder: (context, index) {
           final _file = logfiles[index];

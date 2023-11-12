@@ -1,9 +1,7 @@
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/item/user_item.dart';
 import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -43,8 +41,6 @@ class SettingTab extends GetView<SettingViewController> {
           ),
           SliverSafeArea(
             top: false,
-            left: false,
-            right: false,
             sliver: SliverCupertinoListSection.insetGrouped(
               itemCount: controller.itemCount,
               itemBuilder: (context, index) {

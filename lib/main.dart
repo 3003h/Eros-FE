@@ -231,20 +231,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             GlobalCupertinoLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          // localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
-          //   final Locale _locale = window.locale;
-          //   logger.t(
-          //       'system Locale \n${_locale.languageCode}  ${_locale.scriptCode}  ${_locale.countryCode}');
-          //   // logger.d('${_locale} ${supportedLocales}');
-          //   if (locale != null) {
-          //     // logger.d('sel $locale');
-          //     //如果已经选定语言，则不跟随系统
-          //     return locale;
-          //   } else {
-          //     logger.t('语言跟随系统语言  $_locale');
-          //     return null;
-          //   }
-          // },
+
+          localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
+            final Locale _locale = PlatformDispatcher.instance.locale;
+
+            return localeService.locale ??
+                supportedLocales.firstWhere(
+                  (Locale locale) =>
+                      locale.languageCode == _locale.languageCode,
+                  orElse: () => supportedLocales.first,
+                );
+          },
         );
       });
     }

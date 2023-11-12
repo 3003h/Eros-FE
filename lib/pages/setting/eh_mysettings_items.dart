@@ -335,18 +335,6 @@ Widget _buildOriginalImages(
     '1': L10n.of(context).uc_oi_1,
   };
 
-  // return Obx(
-  //   () {
-  //     return TextSwitchItem(
-  //       L10n.of(context).uc_ori_image,
-  //       hideDivider: true,
-  //       value: _controller.ehSetting.originalImages == '1',
-  //       onChanged: (val) => _controller.ehSetting =
-  //           _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),
-  //     );
-  //   },
-  // );
-
   return EhCupertinoListTile(
     title: Text(L10n.of(context).uc_ori_image),
     trailing: Obx(() {
@@ -366,18 +354,6 @@ Widget _buildMPVAlwaysUse(
     '0': L10n.of(context).uc_qb_0,
     '1': L10n.of(context).uc_qb_1,
   };
-
-  // return Obx(
-  //   () {
-  //     return TextSwitchItem(
-  //       L10n.of(context).uc_mpv_always,
-  //       key: UniqueKey(),
-  //       value: _controller.ehSetting.alwaysUseMpv == '1',
-  //       onChanged: (val) => _controller.ehSetting =
-  //           _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : '0'),
-  //     );
-  //   },
-  // );
 
   return EhCupertinoListTile(
     title: Text(L10n.of(context).uc_mpv_always),
@@ -427,18 +403,6 @@ Widget _buildMPVThumbPane(
     '1': L10n.of(context).uc_mt_1,
   };
 
-  // return Obx(
-  //   () {
-  //     return TextSwitchItem(
-  //       L10n.of(context).uc_mpv_thumb_pane,
-  //       key: UniqueKey(),
-  //       value: _controller.ehSetting.mpvThumbnailPane == '0',
-  //       onChanged: (val) => _controller.ehSetting =
-  //           _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '0' : '1'),
-  //     );
-  //   },
-  // );
-
   return EhCupertinoListTile(
     title: Text(L10n.of(context).uc_mpv_thumb_pane),
     trailing: Obx(() {
@@ -467,9 +431,8 @@ Widget _buildRatingsItem(
 
 Widget _buildTagFilteringThreshold(BuildContext context) {
   return Obx(() {
-    return TextInputItem(
+    return CupertinoTextInputListTile(
       title: L10n.of(context).uc_tag_ft,
-      hideDivider: true,
       initValue: _controller.ehSetting.tagFilteringThreshold ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(tagFilteringThreshold: val),
@@ -479,9 +442,8 @@ Widget _buildTagFilteringThreshold(BuildContext context) {
 
 Widget _buildTagWatchingThreshold(BuildContext context) {
   return Obx(() {
-    return TextInputItem(
+    return CupertinoTextInputListTile(
       title: L10n.of(context).uc_tag_wt,
-      hideDivider: true,
       initValue: _controller.ehSetting.tagWatchingThreshold ?? '',
       onChanged: (val) => _controller.ehSetting =
           _controller.ehSetting.copyWith(tagWatchingThreshold: val),
