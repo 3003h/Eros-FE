@@ -1107,7 +1107,7 @@ class _CupertinoTextInputListTileState
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoListTile(
+    return EhCupertinoListTile(
       title: Text(widget.title ?? ''),
       leading: widget.leading,
       trailing: widget.trailing,

@@ -1,32 +1,24 @@
 import 'dart:convert';
 
-import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
+import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/component/setting_base.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/pages/tab/controller/group/custom_sublist_controller.dart';
 import 'package:fehviewer/pages/tab/controller/group/custom_tabbar_controller.dart';
-import 'package:fehviewer/pages/tab/controller/group/profile_edit_controller.dart';
+import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-import '../../../../common/service/layout_service.dart';
-import '../../fetch_list.dart';
-
-const String kAttachTagSearch = 'TagSearch';
+const kSegmentedPadding = EdgeInsets.symmetric(horizontal: 6, vertical: 4);
+const kSegmentedTextStyle = TextStyle(height: 1.1, fontSize: 14);
 
 class CustomProfileSettingPage extends StatefulWidget {
-  const CustomProfileSettingPage({Key? key}) : super(key: key);
+  const CustomProfileSettingPage({super.key});
 
   @override
   State<CustomProfileSettingPage> createState() =>
@@ -34,850 +26,593 @@ class CustomProfileSettingPage extends StatefulWidget {
 }
 
 class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
-  final CustomTabbarController controller = Get.find();
-  final LocaleService localeService = Get.find();
-  GalleryListType _listType = GalleryListType.gallery;
-  late CustomProfile customProfile;
-  late int oriIndex;
+  CustomTabbarController get controller => Get.find();
 
-  late final CustomSubListController subController;
+  LocaleService get localeService => Get.find();
 
-  late ListModeEnum listMode;
+  final _searchWithMinRating = false.obs;
+  final _searchBetweenPage = false.obs;
+  final _enableAdvance = false.obs;
 
-  bool enableAdvance = false;
-
-  bool hideTab = false;
-
-  // bool searchGalleryName = true;
-  // bool searchGalleryTags = true;
-  // bool searchGalleryDesc = false;
-  // bool searchToreenFilenames = false;
-  bool requireGalleryTorrent = false;
-  // bool searchLowPowerTags = false;
-  // bool searchDownvotedTags = false;
-  bool browseExpungedGalleries = false;
-  bool searchWithMinRating = false;
-  int minRating = 2;
-  bool searchBetweenPage = false;
-  String? startPage;
-  String? endPage;
-  bool disableCustomFilterLanguage = false;
-  bool disableCustomFilterUploader = false;
-  bool disableCustomFilterTags = false;
-
-  List<String> searchTextList = <String>[];
-  // List<String> aggGroupList = <String>[];
-
-  final textController = TextEditingController();
-  String lastText = '';
-  final ProfileEditController profileEditController =
-      Get.put(ProfileEditController());
-
-  // 保存配置
-  void _saveProfile() {
-    if (customProfile.name.trim().isEmpty) {
-      showToast('Name is empty');
-      return;
-    }
-
-    logger.d('searchWithminRating $searchWithMinRating $minRating');
-
-    customProfile = customProfile.copyWith(
-      enableAdvance: enableAdvance,
-      searchText: searchTextList,
-      listModeValue: listMode.name,
-      hideTab: hideTab,
-      lastEditTime: DateTime.now().millisecondsSinceEpoch,
-      advSearch: customProfile.advSearch?.copyWith(
-            requireGalleryTorrent: requireGalleryTorrent,
-            browseExpungedGalleries: browseExpungedGalleries,
-            searchWithMinRating: searchWithMinRating,
-            minRating: minRating,
-            searchBetweenPage: searchBetweenPage,
-            startPage: startPage,
-            endPage: endPage,
-            disableCustomFilterLanguage: disableCustomFilterLanguage,
-            disableCustomFilterUploader: disableCustomFilterUploader,
-            disableCustomFilterTags: disableCustomFilterTags,
-          ) ??
-          AdvanceSearch(
-            requireGalleryTorrent: requireGalleryTorrent,
-            browseExpungedGalleries: browseExpungedGalleries,
-            searchWithMinRating: searchWithMinRating,
-            minRating: minRating,
-            searchBetweenPage: searchBetweenPage,
-            startPage: startPage ?? '',
-            endPage: endPage ?? '',
-            disableCustomFilterLanguage: disableCustomFilterLanguage,
-            disableCustomFilterUploader: disableCustomFilterUploader,
-            disableCustomFilterTags: disableCustomFilterTags,
-          ),
-    );
-
-    logger.d(' ${jsonEncode(customProfile)}');
-
-    if (oriIndex >= 0) {
-      // 修改profile
-      controller.profiles[oriIndex] = customProfile;
-    } else {
-      // 新增profile
-      logger.d('new profile ${customProfile.name}');
-      controller.profiles.add(customProfile);
-    }
-
-    Get.lazyPut(
-      () => CustomSubListController(profileUuid: customProfile.uuid)
-        ..heroTag = customProfile.uuid,
-      tag: customProfile.uuid,
-      fenix: true,
-    );
-
-    subController = Get.find(tag: customProfile.uuid);
-    subController.listMode = listMode;
-  }
+  late CustomProfile _customProfile;
 
   @override
   void initState() {
     super.initState();
 
-    customProfile = Get.find();
+    _customProfile = Get.arguments is CustomProfile
+        ? Get.arguments as CustomProfile
+        : CustomProfile(name: '', uuid: generateUuidv4());
 
-    // profile 下标
-    oriIndex = controller.profiles
-        .indexWhere((element) => element.uuid == customProfile.uuid);
-
-    searchTextList.addAll(customProfile.searchText?.map((e) => '$e') ?? []);
-
-    // aggGroupList.addAll(customProfile.aggregateGroups ?? []);
-
-    _listType = customProfile.listType;
-    enableAdvance = customProfile.enableAdvance ?? enableAdvance;
-
-    hideTab = customProfile.hideTab ?? hideTab;
-
-    listMode = customProfile.listMode;
-
-    // searchGalleryTags =
-    //     customProfile.advSearch?.searchGalleryTags ?? searchGalleryTags;
-    // searchGalleryDesc =
-    //     customProfile.advSearch?.searchGalleryDesc ?? searchGalleryDesc;
-    // searchToreenFilenames =
-    //     customProfile.advSearch?.searchToreenFilenames ?? searchToreenFilenames;
-    requireGalleryTorrent =
-        customProfile.advSearch?.requireGalleryTorrent ?? requireGalleryTorrent;
-    // searchLowPowerTags =
-    //     customProfile.advSearch?.searchLowPowerTags ?? searchLowPowerTags;
-    // searchDownvotedTags =
-    //     customProfile.advSearch?.searchDownvotedTags ?? searchDownvotedTags;
-    browseExpungedGalleries =
-        customProfile.advSearch?.browseExpungedGalleries ??
-            browseExpungedGalleries;
-    searchWithMinRating =
-        customProfile.advSearch?.searchWithMinRating ?? searchWithMinRating;
-    minRating = customProfile.advSearch?.minRating ?? minRating;
-    searchBetweenPage =
-        customProfile.advSearch?.searchBetweenPage ?? searchBetweenPage;
-    startPage = customProfile.advSearch?.startPage ?? startPage;
-    endPage = customProfile.advSearch?.endPage ?? endPage;
-    disableCustomFilterLanguage =
-        customProfile.advSearch?.disableCustomFilterLanguage ??
-            disableCustomFilterLanguage;
-    disableCustomFilterUploader =
-        customProfile.advSearch?.disableCustomFilterUploader ??
-            disableCustomFilterUploader;
-    disableCustomFilterTags =
-        customProfile.advSearch?.disableCustomFilterTags ??
-            disableCustomFilterTags;
-  }
-
-  Future<void> showSearchAttach(
-      String input, BuildContext targetContext) async {
-    const _marginLR = 30.0;
-
-    final robj = targetContext.findRenderObject() as RenderBox?;
-    final size = robj?.size;
-
-    final textStyle = TextStyle(
-      fontSize: 16,
-      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-    );
-
-    final translateStyle = TextStyle(
-      fontSize: 14,
-      color: CupertinoDynamicColor.resolve(
-          CupertinoColors.secondaryLabel, context),
-    );
-
-    final highLightTextStyle = TextStyle(
-      fontSize: 16,
-      color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
-    );
-
-    final highLightTranslateStyle = TextStyle(
-      fontSize: 14,
-      color: CupertinoDynamicColor.resolve(CupertinoColors.systemBlue, context),
-    );
-
-    await SmartDialog.showAttach(
-      tag: kAttachTagSearch,
-      targetContext: targetContext,
-      onDismiss: () {
-        lastText = '';
-      },
-      builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Container(
-            width: size?.width,
-            margin: const EdgeInsets.only(
-                left: _marginLR - 10, right: _marginLR, top: 10, bottom: 40),
-            constraints: const BoxConstraints(maxHeight: 300, minHeight: 50),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.darkBackgroundGray, Get.context!)
-                      .withOpacity(0.16),
-                  offset: const Offset(0, 16),
-                  blurRadius: 20, //阴影模糊程度
-                  spreadRadius: 2, //阴影扩散程度
-                ),
-              ],
-            ),
-            // color: CupertinoColors.systemGrey5,
-            child: CupertinoPopupSurface(
-              child: CupertinoScrollbar(
-                // isAlwaysShown: true,
-                child: Container(
-                  // child: SizedBox(),
-                  child: Obx(() {
-                    final _rultlist = profileEditController.rultlist;
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(0),
-                      itemBuilder: (context, index) {
-                        final _trans = _rultlist[index];
-
-                        final input = profileEditController.searchText;
-                        final text = _trans.fullTagText;
-                        final translate = _trans.fullTagTranslate;
-
-                        final textSpans = text
-                            ?.split(input)
-                            .map((e) => TextSpan(
-                                  text: e,
-                                  style: textStyle,
-                                ))
-                            .separat(
-                                separator: TextSpan(
-                              text: input,
-                              style: highLightTextStyle,
-                            ));
-
-                        final translateTextSpans = translate
-                            ?.split(input)
-                            .map((e) => TextSpan(
-                                  text: e,
-                                  style: translateStyle,
-                                ))
-                            .separat(
-                                separator: TextSpan(
-                              text: input,
-                              style: highLightTranslateStyle,
-                            ));
-
-                        return GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () => profileEditController.selectItem(
-                            index,
-                            searchTextController: textController,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: textSpans,
-                                ),
-                              ),
-                              if (translate != null) const SizedBox(height: 6),
-                              if (translate != null &&
-                                  profileEditController.isTagTranslat)
-                                RichText(
-                                  text: TextSpan(
-                                    children: translateTextSpans,
-                                  ),
-                                ),
-                            ],
-                          ).paddingSymmetric(vertical: 8),
-                        );
-                      },
-                      itemCount: _rultlist.length,
-                    );
-                  }),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<String?> _getTextTranslate(String text) async {
-    final String? tranText =
-        await Get.find<TagTransController>().getTranTagWithNameSpaseAuto(text);
-    if (tranText?.trim() != text) {
-      return tranText;
-    }
-    return null;
+    _searchWithMinRating.value =
+        _customProfile.advSearch?.searchWithMinRating ?? false;
+    _searchBetweenPage.value =
+        _customProfile.advSearch?.searchBetweenPage ?? false;
+    _enableAdvance.value = _customProfile.enableAdvance ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _style = TextStyle(
-      color: CupertinoDynamicColor.resolve(CupertinoColors.activeBlue, context),
-    );
-
-    const segmentedPadding = EdgeInsets.symmetric(horizontal: 6, vertical: 4);
-    const segmentedTextStyle = TextStyle(height: 1.1);
-
     return CupertinoPageScaffold(
-      backgroundColor: !ehTheme.isDarkMode
-          ? CupertinoColors.secondarySystemBackground
-          : null,
-      navigationBar: buildCupertinoNavigationBar(_style),
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        trailing: CupertinoButton(
+          padding: const EdgeInsets.all(0),
+          minSize: 40,
+          child: const Icon(
+            CupertinoIcons.check_mark_circled,
+            size: 28,
+          ),
+          onPressed: () async {
+            FocusScope.of(context).requestFocus(FocusNode());
+            logger.d('_customProfile ${jsonEncode(_customProfile)}');
+
+            if (_customProfile.name.trim().isEmpty) {
+              showToast('Name is empty');
+              return;
+            }
+
+            Get.back(
+              id: isLayoutLarge ? 2 : null,
+              result: _customProfile.copyWith(
+                lastEditTime: DateTime.now().millisecondsSinceEpoch,
+              ),
+            );
+          },
+        ),
+      ),
       child: CustomScrollView(
         slivers: [
           SliverSafeArea(
-            left: false,
-            right: false,
-            sliver: MultiSliver(
-              children: [
-                // 分组名称编辑
-                GroupItem(
-                  title: L10n.of(context).groupName,
-                  child: TextInputItem(
-                    textFieldPadding: const EdgeInsets.fromLTRB(0, 6, 6, 6),
-                    initValue: customProfile.name,
-                    maxLines: null,
-                    textAlign: TextAlign.left,
-                    hideDivider: true,
-                    onChanged: (value) {
-                      logger.d('onChanged name value $value');
-                      customProfile = customProfile.copyWith(
-                          name: value.replaceAll('\n', '').trim());
-                    },
-                    placeholder: L10n.of(context).groupName,
-                  ),
-                ),
-                // 列表样式设置
-                GroupItem(
-                  child: _buildListModeItem(context, hideLine: true),
-                ),
-                // 列表类型设置：热门，画廊，关注，聚合
-                GroupItem(
-                  title: L10n.of(context).groupType,
-                  child: Container(
-                    width: double.infinity,
-                    color: CupertinoDynamicColor.resolve(
-                        ehTheme.itemBackgroundColor!, Get.context!),
-                    child: SafeArea(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        constraints: const BoxConstraints(
-                          minHeight: kItemHeight,
-                        ),
-                        child:
-                            CupertinoSlidingSegmentedControl<GalleryListType>(
-                          children: <GalleryListType, Widget>{
-                            GalleryListType.popular: Container(
-                              child: Text(
-                                L10n.of(context).tab_popular,
-                                style: segmentedTextStyle,
-                              ),
-                              padding: segmentedPadding,
-                              // constraints: BoxConstraints(minWidth: 10),
-                            ),
-                            GalleryListType.gallery: Container(
-                              child: Text(
-                                L10n.of(context).tab_gallery,
-                                style: segmentedTextStyle,
-                              ),
-                              padding: segmentedPadding,
-                              // constraints: BoxConstraints(minWidth: 10),
-                            ),
-                            GalleryListType.watched: Container(
-                              child: Text(
-                                L10n.of(context).tab_watched,
-                                style: segmentedTextStyle,
-                              ),
-                              padding: segmentedPadding,
-                              // constraints: BoxConstraints(minWidth: 10),
-                            ),
-                          },
-                          groupValue: _listType,
-                          onValueChanged: (GalleryListType? value) {
-                            customProfile = customProfile.copyWith(
-                                listTypeValue: value?.name ??
-                                    GalleryListType.gallery.name);
-                            setState(() {
-                              _listType = value ?? GalleryListType.gallery;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // 搜索选项：关键词 类型 高级搜索，popular时隐藏
-                buildSearchOption(context),
-              ],
-            ),
+            sliver: buildCustomProfileEditView(),
           ),
         ],
       ),
     );
   }
 
-  /// 列表模式切换
-  Widget _buildListModeItem(BuildContext context, {bool hideLine = false}) {
-    final String _title = L10n.of(context).list_mode;
+  Widget buildCustomProfileEditView() {
+    List<Widget> _slivers = [
+      SliverCupertinoListSection.listInsetGrouped(children: [
+        CupertinoTextInputListTile(
+          title: L10n.of(context).groupName,
+          initValue: _customProfile.name,
+          onChanged: (String val) {
+            _customProfile = _customProfile.copyWith(name: val);
+          },
+        )
+      ]),
 
-    final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
-      ListModeEnum.global: L10n.of(context).global_setting,
-      ListModeEnum.list: L10n.of(context).listmode_medium,
-      ListModeEnum.simpleList: L10n.of(context).listmode_small,
-      ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
-      ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
-      ListModeEnum.grid: L10n.of(context).listmode_grid,
-      if (kDebugMode || Get.find<EhSettingService>().debugMode)
-        ListModeEnum.debugSimple: 'debugSimple',
-    };
-    return SelectorItem<ListModeEnum>(
-      title: _title,
-      hideDivider: hideLine,
-      actionMap: modeMap,
-      initVal: listMode,
-      onValueChanged: (val) {
-        setState(() {
-          listMode = val;
-        });
-      },
-    );
-  }
-
-  Widget buildSearchOption(BuildContext context) {
-    return MultiSliver(
-      children: [
-        // 设置搜索关键词
-        GroupItem(
-          title: L10n.of(context).searchTexts,
-          child: Column(
-            children: [
-              // 关键词列表
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: searchTextList.length,
-                itemBuilder: (context, index) {
-                  final element = searchTextList[index];
-                  return Slidable(
-                      child: profileEditController.isTagTranslat
-                          ? FutureBuilder<String?>(
-                              future: _getTextTranslate(element),
-                              initialData: element,
-                              builder: (context, snapshot) {
-                                return BarsItem(
-                                  title: element,
-                                  maxLines: 3,
-                                  titleSize: 16,
-                                  desc: snapshot.data,
-                                  key: ValueKey(index),
-                                );
-                              })
-                          : BarsItem(
-                              title: element,
-                              key: ValueKey(index),
-                            ),
-                      endActionPane: ActionPane(
-                        extentRatio: 0.25,
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (_) {
-                              setState(() {
-                                searchTextList.removeAt(index);
-                              });
-                            },
-                            backgroundColor: CupertinoDynamicColor.resolve(
-                                CupertinoColors.systemRed, context),
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                          ),
-                        ],
-                      ));
-                },
-              ),
-              // 新关键词编辑栏
-              Container(
-                color: CupertinoDynamicColor.resolve(
-                    ehTheme.itemBackgroundColor!, Get.context!),
-                constraints: const BoxConstraints(minHeight: kItemHeight),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Builder(builder: (context) {
-                  return SafeArea(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: CupertinoTextField(
-                            decoration: null,
-                            controller: textController,
-                            placeholder: L10n.of(context).newText,
-                            placeholderStyle: const TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: CupertinoColors.placeholderText,
-                              height: 1.25,
-                            ),
-                            style: const TextStyle(height: 1.2),
-                            onChanged: (value) {
-                              profileEditController.searchText = value.trim();
-                              if (lastText.isEmpty && value.isNotEmpty) {
-                                showSearchAttach(value, context);
-                              }
-                              if (value.trim().isEmpty) {
-                                SmartDialog.dismiss();
-                              }
-
-                              lastText = value.trim();
-                            },
-                          ),
-                        ),
-                        // 添加到当前条件组
-                        CupertinoTheme(
-                          data: const CupertinoThemeData(
-                            primaryColor: CupertinoColors.activeGreen,
-                          ),
-                          child: CupertinoButton(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 8),
-                            minSize: 0,
-                            child: const Icon(
-                              FontAwesomeIcons.circlePlus,
-                              size: 30,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                searchTextList.add(textController.text.trim());
-                                textController.clear();
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
-            ],
-          ),
-        ),
-
-        // 类型筛选器
-        GroupItem(
-          child: Container(
-            color: CupertinoDynamicColor.resolve(
-                ehTheme.itemBackgroundColor!, Get.context!),
-            child: SafeArea(
-              child: GalleryCatFilter(
-                catNum: customProfile.cats ?? 0,
-                maxCrossAxisExtent: 150,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                onCatNumChanged: (int value) {
-                  logger.d('onCatNumChanged $value');
-                  customProfile = customProfile.copyWith(cats: value);
-                },
-              ),
-            ),
-          ),
-        ),
-
-        // 高级搜索选项开关
-        GroupItem(
-          child: TextSwitchItem(
-            L10n.of(context).s_Advanced_Options,
-            value: enableAdvance,
-            onChanged: (val) {
-              setState(() {
-                enableAdvance = val;
-              });
-            },
-            hideDivider: true,
-          ),
-        ),
-
-        // 高级搜索选项
-        AnimatedCrossFade(
-          firstChild: const SizedBox(width: double.infinity),
-          secondChild: buildAdvancedOptions(context),
-          crossFadeState: enableAdvance
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-          duration: 300.milliseconds,
-        ),
-      ],
-    );
-  }
-
-  Widget buildAdvancedOptions(BuildContext context) {
-    return Column(
-      children: [
-        GroupItem(
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  TextSwitchItem(
-                    L10n.of(context).s_Only_Show_Galleries_With_Torrents,
-                    value: requireGalleryTorrent,
-                    onChanged: (val) => requireGalleryTorrent = val,
-                  ),
-                  TextSwitchItem(
-                    L10n.of(context).s_Show_Expunged_Galleries,
-                    value: browseExpungedGalleries,
-                    onChanged: (val) => browseExpungedGalleries = val,
-                  ),
-                  buildSearchWithMinRating(context),
-                ],
-              ).autoCompressKeyboard(context),
-              buildSearchBetweenPage(context),
-            ],
-          ),
-        ),
-        GroupItem(
-          title: L10n.of(context).s_Disable_default_filters,
-          child: Column(
-            children: [
-              TextSwitchItem(
-                L10n.of(context).language,
-                value: disableCustomFilterLanguage,
-                onChanged: (val) => disableCustomFilterLanguage = val,
-              ),
-              TextSwitchItem(
-                L10n.of(context).uploader,
-                value: disableCustomFilterUploader,
-                onChanged: (val) => disableCustomFilterUploader = val,
-              ),
-              TextSwitchItem(
-                L10n.of(context).tags,
-                value: disableCustomFilterTags,
-                onChanged: (val) => disableCustomFilterTags = val,
-              ),
-            ],
-          ).autoCompressKeyboard(context),
-        ),
-      ],
-    );
-  }
-
-  /// 设置最低评分
-  Widget buildSearchWithMinRating(BuildContext context) {
-    return Column(
-      children: [
-        TextSwitchItem(
-          L10n.of(context).s_Minimum_Rating,
-          value: searchWithMinRating,
-          onChanged: (val) {
-            setState(() {
-              searchWithMinRating = val;
-            });
+      //
+      SliverCupertinoListSection.listInsetGrouped(children: [
+        _buildListModeItem(
+          context,
+          listMode: _customProfile.listMode,
+          onValueChanged: (ListModeEnum val) {
+            _customProfile = _customProfile.copyWith(listModeValue: val.name);
           },
         ),
-        AnimatedContainer(
-          curve: Curves.ease,
-          duration: 300.milliseconds,
-          width: double.infinity,
-          height: searchWithMinRating ? kItemHeight : 0,
-          // height: kItemHeight,
-          color: CupertinoDynamicColor.resolve(
-              ehTheme.itemBackgroundColor!, Get.context!),
-          child: SingleChildScrollView(
-            child: AnimatedCrossFade(
-              sizeCurve: Curves.ease,
-              firstCurve: Curves.ease,
-              secondCurve: Curves.ease,
-              duration: 300.milliseconds,
-              crossFadeState: searchWithMinRating
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              secondChild: const SizedBox.shrink(),
-              firstChild: Container(
-                height: kItemHeight,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        width: double.infinity,
-                        child: CupertinoSlidingSegmentedControl<int>(
-                          children: <int, Widget>{
-                            2: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(L10n.of(context).s_stars('2')),
-                            ),
-                            3: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(L10n.of(context).s_stars('3')),
-                            ),
-                            4: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(L10n.of(context).s_stars('4')),
-                            ),
-                            5: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Text(L10n.of(context).s_stars('5')),
-                            ),
-                          },
-                          groupValue: minRating,
-                          onValueChanged: (int? value) {
-                            setState(() {
-                              minRating = value ?? 2;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      indent: 20,
-                      height: 0.6,
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemGrey4, context),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+      ]),
 
-  /// 页码范围
-  Widget buildSearchBetweenPage(BuildContext context) {
-    return Container(
-      color: CupertinoDynamicColor.resolve(
-          ehTheme.itemBackgroundColor!, Get.context!),
-      child: SafeArea(
-        child: Row(
+      //
+      SliverCupertinoListSection.listInsetGrouped(
+          header: Text(L10n.of(context).groupType),
           children: [
-            Expanded(
-              child: TextSwitchItem(
-                L10n.of(context).s_pages,
-                value: searchBetweenPage,
-                onChanged: (val) {
-                  setState(() {
-                    searchBetweenPage = val;
-                  });
-                },
-              ),
+            _ListTypeSelector(
+              initValue: _customProfile.listType,
+              onChanged: (GalleryListType value) {
+                _customProfile =
+                    _customProfile.copyWith(listTypeValue: value.name);
+              },
             ),
-            // 最小页码
-            Container(
-              margin: const EdgeInsets.only(right: 4),
-              width: 70,
-              height: kItemHeight - 18,
-              child: CupertinoTextField(
-                  decoration: BoxDecoration(
-                    color: ehTheme.textFieldBackgroundColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  ),
-                  keyboardType: TextInputType.number,
-                  // cursorHeight: 14,
-                  enabled: searchBetweenPage,
-                  style: const TextStyle(
-                    height: 1.2,
-                    textBaseline: TextBaseline.alphabetic,
-                  ),
-                  onChanged: (val) => startPage = val,
-                  // controller: TextEditingController(text: startPage),
-                  controller: TextEditingController()
-                    ..value = TextEditingValue(
-                      text: startPage ?? '',
-                      selection: TextSelection.fromPosition(
-                        TextPosition(
-                          affinity: TextAffinity.downstream,
-                          offset: (startPage ?? '').length,
-                        ),
-                      ),
-                    )),
-            ),
-            Text(L10n.of(context).s_and),
-            // 最大页码
-            Container(
-              margin: const EdgeInsets.only(left: 4, right: 20),
-              width: 70,
-              height: kItemHeight - 18,
-              child: CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                keyboardType: TextInputType.number,
-                // cursorHeight: 14,
-                enabled: searchBetweenPage,
-                style: const TextStyle(
-                  height: 1.2,
-                  textBaseline: TextBaseline.alphabetic,
-                ),
-                onChanged: (val) => endPage = val,
-                controller: TextEditingController()
-                  ..value = TextEditingValue(
-                    text: endPage ?? '',
-                    selection: TextSelection.fromPosition(
-                      TextPosition(
-                        affinity: TextAffinity.downstream,
-                        offset: (endPage ?? '').length,
-                      ),
-                    ),
-                  ),
-              ),
-            ),
-          ],
+          ]),
+
+      //
+      SliverCupertinoListSection.listInsetGrouped(children: [
+        GalleryCatFilter(
+          catNum: _customProfile.cats ?? 0,
+          maxCrossAxisExtent: 150,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+          onCatNumChanged: (int value) {
+            logger.d('onCatNumChanged $value');
+            _customProfile = _customProfile.copyWith(cats: value);
+          },
         ),
+      ]),
+
+      // 高级选项开关
+      SliverCupertinoListSection.listInsetGrouped(children: [
+        // switch s_Advanced_Options
+        EhCupertinoListTile(
+          title: Text(L10n.of(context).s_Advanced_Options),
+          trailing: StatefulBuilder(builder: (context, setState) {
+            return CupertinoSwitch(
+              value: _customProfile.enableAdvance ?? false,
+              onChanged: (val) {
+                _enableAdvance.value = val;
+                _customProfile = _customProfile.copyWith(enableAdvance: val);
+                setState(() {});
+              },
+            );
+          }),
+        ),
+      ]),
+    ];
+
+    return SliverAnimatedPaintExtent(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      child: MultiSliver(
+        children: [
+          MultiSliver(children: _slivers),
+          Obx(
+            () {
+              if (_enableAdvance.value) {
+                return _buildAdvanceView();
+              } else {
+                return const SizedBox(width: double.infinity);
+              }
+            },
+          ),
+        ],
       ),
     );
   }
 
-  CupertinoNavigationBar buildCupertinoNavigationBar(TextStyle _style) {
-    return CupertinoNavigationBar(
-      trailing: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
+  Widget _buildAdvanceView() {
+    return MultiSliver(
+      children: [
+        SliverCupertinoListSection.listInsetGrouped(
+          children: [
+            // s_Only_Show_Galleries_With_Torrents switch
+            EhCupertinoListTile(
+              title: Text(L10n.of(context).s_Only_Show_Galleries_With_Torrents),
+              trailing: StatefulBuilder(builder: (context, setState) {
+                return CupertinoSwitch(
+                  value:
+                      _customProfile.advSearch?.requireGalleryTorrent ?? false,
+                  onChanged: (val) {
+                    _customProfile = _customProfile.copyWith(
+                        advSearch: _customProfile.advSearch
+                            ?.copyWith(requireGalleryTorrent: val));
+                    setState(() {});
+                  },
+                );
+              }),
+            ),
 
-          _saveProfile();
-
-          Get.back(
-            id: isLayoutLarge ? 2 : null,
-          );
-
-          Get.find<CustomTabbarController>().syncProfiles();
-        },
-        child: Text(
-          L10n.of(context).done,
-          style: _style,
+            // s_Show_Expunged_Galleries switch
+            CupertinoListTile(
+              title: Text(L10n.of(context).s_Show_Expunged_Galleries),
+              trailing: StatefulBuilder(builder: (context, setState) {
+                return CupertinoSwitch(
+                  value: _customProfile.advSearch?.browseExpungedGalleries ??
+                      false,
+                  onChanged: (val) {
+                    _customProfile = _customProfile.copyWith(
+                        advSearch: _customProfile.advSearch
+                            ?.copyWith(browseExpungedGalleries: val));
+                    setState(() {});
+                  },
+                );
+              }),
+            ),
+          ],
         ),
+
+        SliverCupertinoListSection.listInsetGrouped(
+          children: [
+            // s_Minimum_Rating switch
+            Column(
+              children: [
+                CupertinoListTile(
+                  title: Text(L10n.of(context).s_Minimum_Rating),
+                  trailing: StatefulBuilder(builder: (context, setState) {
+                    return CupertinoSwitch(
+                      value: _customProfile.advSearch?.searchWithMinRating ??
+                          false,
+                      onChanged: (val) {
+                        _customProfile = _customProfile.copyWith(
+                            advSearch: _customProfile.advSearch
+                                ?.copyWith(searchWithMinRating: val));
+
+                        // update obs
+                        _searchWithMinRating.value = val;
+
+                        setState(() {});
+                      },
+                    );
+                  }),
+                ),
+                Obx(() {
+                  return AnimatedCrossFade(
+                    firstCurve: Curves.easeIn,
+                    secondCurve: Curves.easeOut,
+                    firstChild: const SizedBox(width: double.infinity),
+                    secondChild: _MinRatingSelector(
+                      initValue: _customProfile.advSearch?.minRating ?? 2,
+                      onChanged: (int value) {
+                        _customProfile = _customProfile.copyWith(
+                            advSearch: _customProfile.advSearch?.copyWith(
+                                minRating: value == 2 ? null : value));
+                      },
+                    ),
+                    crossFadeState: _searchWithMinRating.value
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: const Duration(milliseconds: 300),
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
+
+        //
+        SliverCupertinoListSection.listInsetGrouped(
+          children: [
+            Column(
+              children: [
+                // searchBetweenPage switch
+                CupertinoListTile(
+                  title: Text(L10n.of(context).s_pages),
+                  trailing: StatefulBuilder(builder: (context, setState) {
+                    return CupertinoSwitch(
+                      value:
+                          _customProfile.advSearch?.searchBetweenPage ?? false,
+                      onChanged: (val) {
+                        _customProfile = _customProfile.copyWith(
+                            advSearch: _customProfile.advSearch
+                                ?.copyWith(searchBetweenPage: val));
+                        //
+                        _searchBetweenPage.value = val;
+
+                        setState(() {});
+                      },
+                    );
+                  }),
+                ),
+
+                Obx(() {
+                  return AnimatedCrossFade(
+                    crossFadeState: _searchBetweenPage.value
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: const Duration(milliseconds: 300),
+                    firstCurve: Curves.easeIn,
+                    secondCurve: Curves.easeOut,
+                    firstChild: const SizedBox(width: double.infinity),
+                    secondChild: _BetweenPageTile(
+                      enable:
+                          _customProfile.advSearch?.searchBetweenPage ?? false,
+                      startPage: _customProfile.advSearch?.startPage,
+                      endPage: _customProfile.advSearch?.endPage,
+                      onStartPageChanged: (val) {
+                        _customProfile = _customProfile.copyWith(
+                            advSearch: _customProfile.advSearch?.copyWith(
+                                startPage: val.isEmpty ? null : val));
+                      },
+                      onEndPageChanged: (val) {
+                        _customProfile = _customProfile.copyWith(
+                            advSearch: _customProfile.advSearch
+                                ?.copyWith(endPage: val.isEmpty ? null : val));
+                      },
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
+
+        //
+        SliverCupertinoListSection.listInsetGrouped(
+          header: Text(L10n.of(context).s_Disable_default_filters),
+          children: [
+            // disableCustomFilterLanguage switch
+            CupertinoListTile(
+              title: Text(L10n.of(context).language),
+              trailing: StatefulBuilder(builder: (context, setState) {
+                return CupertinoSwitch(
+                  value:
+                      _customProfile.advSearch?.disableCustomFilterLanguage ??
+                          false,
+                  onChanged: (val) {
+                    _customProfile = _customProfile.copyWith(
+                        advSearch: _customProfile.advSearch
+                            ?.copyWith(disableCustomFilterLanguage: val));
+                    setState(() {});
+                  },
+                );
+              }),
+            ),
+
+            // disableCustomFilterUploader switch
+            CupertinoListTile(
+              title: Text(L10n.of(context).uploader),
+              trailing: StatefulBuilder(builder: (context, setState) {
+                return CupertinoSwitch(
+                  value:
+                      _customProfile.advSearch?.disableCustomFilterUploader ??
+                          false,
+                  onChanged: (val) {
+                    _customProfile = _customProfile.copyWith(
+                        advSearch: _customProfile.advSearch
+                            ?.copyWith(disableCustomFilterUploader: val));
+                    setState(() {});
+                  },
+                );
+              }),
+            ),
+
+            // disableCustomFilterTags switch
+            CupertinoListTile(
+              title: Text(L10n.of(context).tags),
+              trailing: StatefulBuilder(builder: (context, setState) {
+                return CupertinoSwitch(
+                  value: _customProfile.advSearch?.disableCustomFilterTags ??
+                      false,
+                  onChanged: (val) {
+                    _customProfile = _customProfile.copyWith(
+                        advSearch: _customProfile.advSearch
+                            ?.copyWith(disableCustomFilterTags: val));
+                    setState(() {});
+                  },
+                );
+              }),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// 列表模式切换
+Widget _buildListModeItem(
+  BuildContext context, {
+  required ListModeEnum listMode,
+  required ValueChanged<ListModeEnum> onValueChanged,
+}) {
+  final String _title = L10n.of(context).list_mode;
+
+  final Map<ListModeEnum, String> modeMap = <ListModeEnum, String>{
+    ListModeEnum.global: L10n.of(context).global_setting,
+    ListModeEnum.list: L10n.of(context).listmode_medium,
+    ListModeEnum.simpleList: L10n.of(context).listmode_small,
+    ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
+    ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
+    ListModeEnum.grid: L10n.of(context).listmode_grid,
+    if (kDebugMode || Get.find<EhSettingService>().debugMode)
+      ListModeEnum.debugSimple: 'debugSimple',
+  };
+  return SelectorCupertinoListTile<ListModeEnum>(
+    title: _title,
+    actionMap: modeMap,
+    initVal: listMode,
+    onValueChanged: onValueChanged,
+  );
+}
+
+class _MinRatingSelector extends StatefulWidget {
+  const _MinRatingSelector({super.key, this.onChanged, this.initValue});
+
+  final ValueChanged<int>? onChanged;
+  final int? initValue;
+
+  @override
+  State<_MinRatingSelector> createState() => _MinRatingSelectorState();
+}
+
+class _MinRatingSelectorState extends State<_MinRatingSelector> {
+  int? _initValue;
+
+  Widget _buildSlidingSegmentedAction(String title) {
+    return Padding(
+      child: Text(title),
+      padding: kSegmentedPadding,
+      // constraints: BoxConstraints(minWidth: 10),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initValue = widget.initValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        constraints: const BoxConstraints(minHeight: kItemHeight),
+        child: SafeArea(
+          child: CupertinoSlidingSegmentedControl<int>(
+            children: <int, Widget>{
+              2: _buildSlidingSegmentedAction(L10n.of(context).s_stars('2')),
+              3: _buildSlidingSegmentedAction(L10n.of(context).s_stars('3')),
+              4: _buildSlidingSegmentedAction(L10n.of(context).s_stars('4')),
+              5: _buildSlidingSegmentedAction(L10n.of(context).s_stars('5')),
+            },
+            groupValue: _initValue,
+            onValueChanged: (int? value) {
+              setState(() {
+                _initValue = value;
+              });
+              widget.onChanged?.call(value!);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ListTypeSelector extends StatefulWidget {
+  const _ListTypeSelector({super.key, this.onChanged, this.initValue});
+
+  final ValueChanged<GalleryListType>? onChanged;
+  final GalleryListType? initValue;
+
+  @override
+  State<_ListTypeSelector> createState() => _ListTypeSelectorState();
+}
+
+class _ListTypeSelectorState extends State<_ListTypeSelector> {
+  GalleryListType? _initValue;
+
+  Widget _buildSlidingSegmentedAction(String title) {
+    return Container(
+      child: Text(
+        title,
+        style: kSegmentedTextStyle,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+      ),
+      padding: kSegmentedPadding,
+      // constraints: BoxConstraints(minWidth: 10),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initValue = widget.initValue;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        constraints: const BoxConstraints(minHeight: kItemHeight),
+        child: SafeArea(
+          child: CupertinoSlidingSegmentedControl<GalleryListType>(
+            children: <GalleryListType, Widget>{
+              GalleryListType.popular:
+                  _buildSlidingSegmentedAction(L10n.of(context).tab_popular),
+              GalleryListType.gallery:
+                  _buildSlidingSegmentedAction(L10n.of(context).tab_gallery),
+              GalleryListType.watched:
+                  _buildSlidingSegmentedAction(L10n.of(context).tab_watched),
+            },
+            groupValue: _initValue,
+            onValueChanged: (GalleryListType? value) {
+              setState(() {
+                _initValue = value;
+              });
+              widget.onChanged?.call(value!);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BetweenPageTile extends StatelessWidget {
+  const _BetweenPageTile({
+    super.key,
+    this.enable = false,
+    this.startPage,
+    this.endPage,
+    this.onStartPageChanged,
+    this.onEndPageChanged,
+  });
+
+  final bool enable;
+  final String? startPage;
+  final String? endPage;
+  final ValueChanged<String>? onStartPageChanged;
+  final ValueChanged<String>? onEndPageChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: kItemHeight,
+      padding: const EdgeInsetsDirectional.only(start: 20.0, end: 14.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // start page
+          Expanded(
+            child: CupertinoTextField(
+                keyboardType: TextInputType.number,
+                // cursorHeight: 14,
+                textAlign: TextAlign.center,
+                enabled: enable,
+                style: const TextStyle(
+                  height: 1.2,
+                  textBaseline: TextBaseline.alphabetic,
+                ),
+                onChanged: onStartPageChanged,
+                // controller: TextEditingController(text: startPage),
+                controller: TextEditingController()
+                  ..value = TextEditingValue(
+                    text: startPage ?? '',
+                    selection: TextSelection.fromPosition(
+                      TextPosition(
+                        affinity: TextAffinity.downstream,
+                        offset: (startPage ?? '').length,
+                      ),
+                    ),
+                  )),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text(L10n.of(context).s_and),
+          ),
+
+          // end page
+          Expanded(
+            child: CupertinoTextField(
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              // cursorHeight: 14,
+              enabled: enable,
+              style: const TextStyle(
+                height: 1.2,
+                textBaseline: TextBaseline.alphabetic,
+              ),
+              onChanged: onEndPageChanged,
+              controller: TextEditingController()
+                ..value = TextEditingValue(
+                  text: endPage ?? '',
+                  selection: TextSelection.fromPosition(
+                    TextPosition(
+                      affinity: TextAffinity.downstream,
+                      offset: (endPage ?? '').length,
+                    ),
+                  ),
+                ),
+            ),
+          ),
+        ],
       ),
     );
   }

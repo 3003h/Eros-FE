@@ -176,21 +176,30 @@ class CustomTabbarController extends DefaultTabViewController {
     logger.d('topRoute $topRoute');
 
     // 依赖注入
-    Get.replace<CustomProfile>(
-        profileMap[uuid] ?? CustomProfile(name: '', uuid: generateUuidv4()));
+    // Get.replace<CustomProfile>(
+    //     profileMap[uuid] ?? CustomProfile(name: '', uuid: generateUuidv4()));
+
+    late final dynamic _result;
 
     if (isLayoutLarge && topRoute == EHRoutes.customProfileSetting) {
-      await Get.offNamed(
+      _result = await Get.offNamed(
         EHRoutes.customProfileSetting,
         id: isLayoutLarge ? 2 : null,
         preventDuplicates: false,
+        arguments: profileMap[uuid],
       );
     } else {
-      await Get.toNamed(
+      _result = await Get.toNamed(
         EHRoutes.customProfileSetting,
         id: isLayoutLarge ? 2 : null,
         preventDuplicates: false,
+        arguments: profileMap[uuid],
       );
+    }
+
+    if (_result != null && _result is CustomProfile) {
+      addProfile(_result);
+      syncProfiles();
     }
   }
 

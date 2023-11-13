@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:fehviewer/common/controller/log_controller.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -47,7 +48,7 @@ class _LogViewPageState extends State<LogViewPage> {
       Get.back();
     }
 
-    final Uint8List _logByte = await logFile.readAsBytes();
+    final Uint8List _logByte = await compute(_readFileBytes, logFile.path);
     final _log = const Utf8Decoder(allowMalformed: true).convert(_logByte);
 
     // await 30.seconds.delay();
@@ -128,4 +129,8 @@ class _LogViewPageState extends State<LogViewPage> {
       );
     });
   }
+}
+
+Uint8List _readFileBytes(String path) {
+  return File(path).readAsBytesSync();
 }
