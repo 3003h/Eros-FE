@@ -9,7 +9,7 @@ const double _kMinHeightWithSubtitle = _kLeadingSize + 2 * 10.0;
 const double _kNotchedMinHeight = _kNotchedLeadingSize + 2 * 12.0;
 const double _kNotchedMinHeightWithoutLeading = _kNotchedLeadingSize + 2 * 10.0;
 const EdgeInsetsDirectional _kPadding =
-    EdgeInsetsDirectional.only(start: 20.0, end: 14.0);
+    EdgeInsetsDirectional.only(start: 20.0, end: 14.0, top: 6.0, bottom: 6.0);
 const EdgeInsetsDirectional _kPaddingWithSubtitle =
     EdgeInsetsDirectional.only(start: 20.0, end: 14.0, top: 8.0, bottom: 8.0);
 const EdgeInsets _kNotchedPadding = EdgeInsets.symmetric(horizontal: 14.0);
