@@ -17,6 +17,19 @@ class BlockersPage extends GetView<BlockController> {
     const kMaxRating = 100.0;
     const kMinRating = -100.0;
     return StatefulBuilder(builder: (context, setState) {
+      TextEditingController textEditingController =
+          TextEditingController.fromValue(
+        TextEditingValue(
+          text: score.toString(),
+          selection: TextSelection.fromPosition(
+            TextPosition(
+              affinity: TextAffinity.downstream,
+              offset: score.toString().length,
+            ),
+          ),
+        ),
+      );
+
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         constraints: const BoxConstraints(minHeight: kItemHeight),
@@ -51,26 +64,15 @@ class BlockersPage extends GetView<BlockController> {
                   style: TextStyle(
                     color: enable ? null : CupertinoColors.systemGrey,
                   ),
-                  controller: TextEditingController.fromValue(
-                    TextEditingValue(
-                      text: score.toString(),
-                      selection: TextSelection.fromPosition(
-                        TextPosition(
-                          affinity: TextAffinity.downstream,
-                          offset: score.toString().length,
-                        ),
-                      ),
-                    ),
-                  ),
+                  controller: textEditingController,
                   keyboardType: TextInputType.number,
-                  onChanged: (String val) {
-                    final int _val = int.parse(val);
-                    score = _val.clamp(kMinRating, kMaxRating).toInt();
-                    setState(() {});
-
-                    controller.ehSettingService.scoreFilteringThreshold = score;
-                  },
                   onEditingComplete: () {
+                    score = int.parse(textEditingController.text)
+                        .clamp(kMinRating, kMaxRating)
+                        .toInt();
+
+                    textEditingController.text = score.toString();
+
                     controller.ehSettingService.scoreFilteringThreshold = score;
                     // close keyboard
                     FocusScope.of(context).requestFocus(FocusNode());

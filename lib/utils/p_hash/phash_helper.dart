@@ -34,7 +34,7 @@ class PHashHelper {
   }
 
   Future<BigInt> calculatePHashFromUrl(String imageUrl) async {
-    logger.d('calculatePHashFromUrl $imageUrl');
+    logger.t('calculatePHashFromUrl $imageUrl');
     File? imageFile;
     if (await cachedImageExists(imageUrl)) {
       // logger.d('calculatePHashFromUrl from cache');
@@ -46,7 +46,7 @@ class PHashHelper {
 
     final path = imageFile.path;
 
-    logger.d('calculatePHashFromUrl $path');
+    logger.t('calculatePHashFromUrl $path');
 
     // final List<int> data = imageFile.readAsBytesSync();
 

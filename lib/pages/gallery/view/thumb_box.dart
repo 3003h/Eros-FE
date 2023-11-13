@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/controller/image_block_controller.dart';
 import 'package:fehviewer/common/service/controller_tag_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
@@ -31,7 +31,7 @@ class ThumbBox extends StatefulWidget {
 }
 
 class _ThumbBoxState extends State<ThumbBox> {
-  final ImageHideController imageHideController = Get.find();
+  final ImageBlockController imageHideController = Get.find();
 
   final _galleryPageController =
       Get.find<GalleryPageController>(tag: pageCtrlTag);

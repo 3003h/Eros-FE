@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/utils/p_hash/phash_base.dart' as phash;
 import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:get/get.dart';
@@ -10,23 +10,25 @@ import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart
 
 import '../../fehviewer.dart';
 
-const int kMaxPhashDiff = 5;
+// const int kMaxPhashDiff = 10;
 
-class ImageHideController extends GetxController {
-  final RxList<ImageHide> customHideList = <ImageHide>[].obs;
+class ImageBlockController extends GetxController {
+  final RxList<ImageHide> customBlockList = <ImageHide>[].obs;
   final Map<String, BigInt> pHashMap = <String, BigInt>{};
+
+  EhSettingService get _ehSettingService => Get.find();
 
   @override
   void onInit() {
     super.onInit();
-    customHideList(hiveHelper.getAllCustomImageHide());
-    debounce<List<ImageHide>>(customHideList, (value) {
+    customBlockList(hiveHelper.getAllCustomImageHide());
+    debounce<List<ImageHide>>(customBlockList, (value) {
       hiveHelper.setAllCustomImageHide(value);
     }, time: const Duration(seconds: 2));
   }
 
   Future<void> addCustomImageHide(String imageUrl) async {
-    if (customHideList.any((e) => e.imageUrl == imageUrl)) {
+    if (customBlockList.any((e) => e.imageUrl == imageUrl)) {
       return;
     }
 
@@ -40,11 +42,11 @@ class ImageHideController extends GetxController {
 
     final data = imageFile.readAsBytesSync();
     final pHash = phash.calculatePHash(phash.getValidImage(data));
-    if (customHideList.any((e) => e.pHash == pHash.toRadixString(16))) {
+    if (customBlockList.any((e) => e.pHash == pHash.toRadixString(16))) {
       return;
     }
 
-    customHideList.insert(
+    customBlockList.insert(
         0, ImageHide(pHash: pHash.toRadixString(16), imageUrl: imageUrl));
   }
 
@@ -52,10 +54,17 @@ class ImageHideController extends GetxController {
     BigInt? hash = await calculatePHash(url);
     loggerSimple.v('checkHide url:$url hash:${hash.toRadixString(16)}');
 
-    return customHideList.any((e) =>
-        phash.hammingDistance(
-            BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash) <=
-        kMaxPhashDiff);
+    return customBlockList.any(
+      (e) {
+        final diff = phash.hammingDistance(
+            BigInt.tryParse(e.pHash, radix: 16) ?? BigInt.from(0), hash);
+        // logger.d('diff $diff');
+        if (diff <= _ehSettingService.pHashThreshold) {
+          logger.d('diff $diff');
+        }
+        return diff <= _ehSettingService.pHashThreshold;
+      },
+    );
   }
 
   Future<bool> checkQRCodeHide(String url) async {
@@ -68,7 +77,7 @@ class ImageHideController extends GetxController {
   }
 
   Future<BigInt> calculatePHash(String url) async {
-    logger.d('calculatePHash url:$url');
+    logger.t('calculatePHash url:$url');
     BigInt? hash;
     if (pHashMap.containsKey(url)) {
       hash = pHashMap[url]!;
@@ -93,7 +102,7 @@ class ImageHideController extends GetxController {
 
     final path = imageFile.path;
 
-    final Uint8List data = imageFile.readAsBytesSync();
+    // final Uint8List data = imageFile.readAsBytesSync();
 
     final inputImage = InputImage.fromFilePath(path);
 

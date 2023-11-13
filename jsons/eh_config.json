@@ -65,5 +65,6 @@
   "showOnlyUploaderComment?": false,
   "showGalleryTags?": true,
   "hideGalleryThumbnails?": false,
-  "horizontalThumbnails?": false
+  "horizontalThumbnails?": false,
+  "pHashThreshold?" : 10
 }

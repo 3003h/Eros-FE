@@ -327,7 +327,18 @@ class EhSettingService extends ProfileService {
   bool get horizontalThumbnails => _horizontalThumbnails.value;
   set horizontalThumbnails(bool val) => _horizontalThumbnails.value = val;
 
+  // pHashThreshold
+  final _pHashThreshold = 10.obs;
+  int get pHashThreshold => _pHashThreshold.value;
+  set pHashThreshold(int val) => _pHashThreshold.value = val;
+
   void _initEhConfig() {
+    // pHashThreshold
+    pHashThreshold = ehConfig.pHashThreshold ?? pHashThreshold;
+    everProfile<int>(_pHashThreshold, (val) {
+      ehConfig = ehConfig.copyWith(pHashThreshold: val);
+    });
+
     // hideGalleryThumbnails
     hideGalleryThumbnails =
         ehConfig.hideGalleryThumbnails ?? hideGalleryThumbnails;

@@ -1,5 +1,5 @@
 import 'package:fehviewer/common/controller/block_controller.dart';
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/controller/image_block_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -56,7 +56,7 @@ void getinit() {
   Get.lazyPut(() => UserController(), fenix: true);
   Get.lazyPut(() => AvatarController(), fenix: true);
   Get.lazyPut(() => CacheController(), fenix: true);
-  Get.lazyPut(() => ImageHideController(), fenix: true);
+  Get.lazyPut(() => ImageBlockController(), fenix: true);
 
   Get.put(GalleryCacheController(), permanent: true);
 

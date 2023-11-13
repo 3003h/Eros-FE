@@ -2,13 +2,12 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/controller/image_block_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'dart:ui' as ui show Image;
 
 class NetworkExtendedImage extends StatefulWidget {
   const NetworkExtendedImage({
@@ -52,7 +51,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
     with SingleTickerProviderStateMixin {
   Map<String, String> _httpHeaders = {};
   late AnimationController animationController;
-  ImageHideController imageHideController = Get.find();
+  ImageBlockController imageHideController = Get.find();
 
   @override
   void initState() {
@@ -218,67 +217,72 @@ class _ExtendedImageRectState extends State<ExtendedImageRect> {
   Future<ImageInfo> getImageInfo(ImageProvider imageProvider) {
     Completer<ImageInfo> completer = Completer();
     imageProvider.resolve(ImageConfiguration()).addListener(
-          ImageStreamListener(
-            (ImageInfo info, bool _) {
-              completer.complete(info);
-            },
-          ),
-        );
+      ImageStreamListener(
+        (ImageInfo info, bool _) {
+          completer.complete(info);
+        },
+      ),
+    );
     return completer.future;
   }
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      cacheManager: imageCacheManager(ser: null),
-      imageBuilder: (BuildContext context, ImageProvider imageProvider) {
-        return FutureBuilder(
-          future: getImageInfo(imageProvider),
-            builder: (BuildContext context, AsyncSnapshot<ImageInfo> snapshot) {
-            if(snapshot.data != null) {
-              return ExtendedRawImage(
-                image: snapshot.data!.image,
-                width: widget.sourceRect?.width,
-                height: widget.sourceRect?.height,
-                fit: BoxFit.fill,
-                sourceRect: widget.sourceRect,
-              );
-            }else {
-              return Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey5.withOpacity(0.2), context),
-                  child: const CupertinoActivityIndicator(),
-                ),
-              );
-            }
-        });
-      },
-      httpHeaders: _httpHeaders,
-      width: widget.width,
-      height: widget.height,
-      fit: widget.fit,
-      imageUrl: widget.url.handleUrl,
-      placeholder: (BuildContext context, String url) {
-        return Center(
-          child: Container(
+        cacheManager: imageCacheManager(ser: null),
+        imageBuilder: (BuildContext context, ImageProvider imageProvider) {
+          return FutureBuilder(
+              future: getImageInfo(imageProvider),
+              builder:
+                  (BuildContext context, AsyncSnapshot<ImageInfo> snapshot) {
+                if (snapshot.data != null) {
+                  return ExtendedRawImage(
+                    image: snapshot.data!.image,
+                    width: widget.sourceRect?.width,
+                    height: widget.sourceRect?.height,
+                    fit: BoxFit.fill,
+                    sourceRect: widget.sourceRect,
+                  );
+                } else {
+                  return Center(
+                    child: Container(
+                      alignment: Alignment.center,
+                      color: CupertinoDynamicColor.resolve(
+                          CupertinoColors.systemGrey5.withOpacity(0.2),
+                          context),
+                      child: const CupertinoActivityIndicator(),
+                    ),
+                  );
+                }
+              });
+        },
+        httpHeaders: _httpHeaders,
+        width: widget.width,
+        height: widget.height,
+        fit: widget.fit,
+        imageUrl: widget.url.handleUrl,
+        placeholder: (BuildContext context, String url) {
+          return Center(
+            child: Container(
+              alignment: Alignment.center,
+              color: CupertinoDynamicColor.resolve(
+                  CupertinoColors.systemGrey5.withOpacity(0.2), context),
+              child: const CupertinoActivityIndicator(),
+            ),
+          );
+        },
+        errorWidget: (
+          BuildContext context,
+          String url,
+          dynamic error,
+        ) {
+          return Container(
             alignment: Alignment.center,
-            color: CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey5.withOpacity(0.2), context),
-            child: const CupertinoActivityIndicator(),
-          ),
-        );
-      },
-      errorWidget: (BuildContext context, String url, dynamic error,) {
-        return Container(
-          alignment: Alignment.center,
-          child: const Icon(
-            Icons.error,
-            color: Colors.red,
-          ),
-        );
-      }
-    );
+            child: const Icon(
+              Icons.error,
+              color: Colors.red,
+            ),
+          );
+        });
   }
 }

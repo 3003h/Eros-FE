@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/controller/image_block_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/app_dio/dio_file_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,7 +43,7 @@ class EhCachedNetworkImage extends StatelessWidget {
 
   final int? ser;
 
-  final ImageHideController imageHideController = Get.find();
+  final ImageBlockController imageHideController = Get.find();
 
   Future<bool> _future() async {
     if (checkPHashHide && checkQRCodeHide) {

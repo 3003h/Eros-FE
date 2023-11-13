@@ -1,10 +1,9 @@
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/controller/image_block_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/cupertino/sliver_list_section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class PHashImageListPage extends GetView<ImageHideController> {
+class PHashImageListPage extends GetView<ImageBlockController> {
   const PHashImageListPage({super.key});
 
   @override
@@ -23,7 +22,7 @@ class PHashImageListPage extends GetView<ImageHideController> {
             size: 24,
           ),
           onPressed: () {
-            controller.customHideList.clear();
+            controller.customBlockList.clear();
           },
         ),
       ),
@@ -32,13 +31,13 @@ class PHashImageListPage extends GetView<ImageHideController> {
           sliver: Obx(() {
             return SliverCupertinoListSection.insetGrouped(
               additionalDividerMargin: 64,
-              itemCount: controller.customHideList.length,
+              itemCount: controller.customBlockList.length,
               itemBuilder: (context, index) {
-                final imageHide = controller.customHideList[index];
+                final imageHide = controller.customBlockList[index];
 
                 return ImageHideItem(
                   imageHide: imageHide,
-                  onDelete: () => controller.customHideList.removeAt(index),
+                  onDelete: () => controller.customBlockList.removeAt(index),
                 );
               },
             );

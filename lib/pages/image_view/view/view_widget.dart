@@ -4,7 +4,7 @@ import 'dart:math' as math;
 import 'package:archive_async/archive_async.dart';
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/controller/image_hide_controller.dart';
+import 'package:fehviewer/common/controller/image_block_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/component/exception/error.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -563,7 +563,7 @@ class ImageWithHide extends StatefulWidget {
 }
 
 class _ImageWithHideState extends State<ImageWithHide> {
-  final ImageHideController imageHideController = Get.find();
+  final ImageBlockController imageHideController = Get.find();
   late Future<bool> _future;
 
   final ViewExtController viewController = Get.find();
