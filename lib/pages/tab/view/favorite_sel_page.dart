@@ -1,179 +1,97 @@
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/request.dart';
 import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
+import 'package:fehviewer/pages/tab/fetch_list.dart';
 import 'package:fehviewer/pages/tab/view/gallery_base.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../fetch_list.dart';
-
-/// 收藏夹选择页面 列表
 class FavoriteSelectorPage extends StatelessWidget {
-  FavoriteSelectorPage({Key? key, this.favcatItemBean}) : super(key: key);
+  const FavoriteSelectorPage({super.key, this.favCatItemBean});
 
-  final Favcat? favcatItemBean;
+  final Favcat? favCatItemBean;
 
-  final FavoriteSelectorController favoriteSelectorController = Get.find();
+  FavoriteSelectorController get favoriteSelectorController => Get.find();
 
   @override
   Widget build(BuildContext context) {
-    final String _title = L10n.of(context).favcat;
-    final CupertinoPageScaffold sca = CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text(_title),
-          transitionBetweenRoutes: false,
-        ),
-        child: SafeArea(
-          child: _buildFavoriteSelectorListView(),
-        ));
-
-    return sca;
-  }
-
-  Widget _buildFavoriteSelectorListView() {
-    return favoriteSelectorController.obx(
-        (List<Favcat>? state) {
-          return ListViewFavorite(
-            favcatList: state ?? [],
-          );
-        },
-        onLoading: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.only(bottom: 50),
-          child: const CupertinoActivityIndicator(
-            radius: 14.0,
-          ),
-        ),
-        onError: (err) {
-          return Center(
-            child: Container(
-              padding: const EdgeInsets.only(bottom: 50),
-              child: GalleryErrorPage(
-                onTap: () async {
-                  await getGallery(
-                    favcat: 'a',
-                    refresh: true,
-                    galleryListType: GalleryListType.favorite,
-                  );
-                },
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(L10n.of(context).favcat),
+      ),
+      child: CustomScrollView(slivers: [
+        SliverSafeArea(
+          sliver: favoriteSelectorController.obx(
+              (List<Favcat>? state) {
+                return ListViewFavorite(
+                  favCatList: state ?? [],
+                );
+              },
+              onLoading: const SliverFillRemaining(
+                child: Center(
+                  child: CupertinoActivityIndicator(
+                    radius: 14.0,
+                  ),
+                ),
               ),
-            ),
-          );
-        });
+              onError: (err) {
+                return SliverFillRemaining(
+                  child: Center(
+                    child: GalleryErrorPage(
+                      onTap: () async {
+                        await getGallery(
+                          favcat: 'a',
+                          refresh: true,
+                          galleryListType: GalleryListType.favorite,
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }),
+        ),
+      ]),
+    );
   }
 }
 
 class ListViewFavorite extends StatelessWidget {
-  const ListViewFavorite({Key? key, required this.favcatList})
-      : super(key: key);
-  final List<Favcat> favcatList;
+  const ListViewFavorite({super.key, required this.favCatList});
+
+  final List<Favcat> favCatList;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: favcatList.length,
-
-      //列表项构造器
-      itemBuilder: (BuildContext context, int index) {
-        return _FavSelectorItem(
-          favcat: favcatList[index],
-          index: index,
-        );
-      },
-    );
-  }
-}
-
-/// 收藏夹选择单项
-class _FavSelectorItem extends StatelessWidget {
-  const _FavSelectorItem({required this.index, required this.favcat});
-
-  final int index;
-  final Favcat favcat;
-
-  @override
-  Widget build(BuildContext context) {
-    // 每个Item单独的依赖
-    final FavSelectorItemController favoriteSelectorItemController =
-        Get.put(FavSelectorItemController(), tag: '$index')!;
-
-    final Widget container = Obx(() => Container(
-          color: favoriteSelectorItemController.colorTap.value,
-          padding: const EdgeInsets.fromLTRB(24, 8, 12, 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(children: <Widget>[
-                // 图标
-                Icon(
-                  FontAwesomeIcons.solidHeart,
-                  color: ThemeColors.favColor[favcat.favId],
-                ),
-                Container(
-                  width: 8,
-                ), // 占位 宽度8
-                Text(
-                  favcat.favTitle,
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  '${favcat.totNum ?? 0}',
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-                const Icon(
-                  CupertinoIcons.forward,
-                  size: 24.0,
-                  color: CupertinoColors.systemGrey,
-                ),
-              ]),
-            ],
+    return SliverCupertinoListSection.insetGrouped(
+      hasLeading: true,
+      itemBuilder: (context, index) {
+        final Favcat _favcat = favCatList[index];
+        return EhCupertinoListTile(
+          title: Text(_favcat.favTitle),
+          leading: Icon(
+            CupertinoIcons.heart_fill,
+            color: ThemeColors.favColor[_favcat.favId],
           ),
-        ));
-
-    return GestureDetector(
-      child: Column(
-        children: <Widget>[
-          container,
-          _settingItemDivider(),
-        ],
-      ),
-      // 不可见区域点击有效
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        // 返回 并带上参数
-        Get.back(
-          result: favcat,
-          id: isLayoutLarge ? 1 : null,
+          trailing: const CupertinoListTileChevron(),
+          additionalInfo: Text(
+            '${_favcat.totNum ?? 0}',
+            style: const TextStyle(
+              fontSize: 16,
+              color: CupertinoColors.secondaryLabel,
+            ),
+          ),
+          onTap: () {
+            Get.back(
+              result: _favcat,
+              id: isLayoutLarge ? 1 : null,
+            );
+          },
         );
       },
-      onTapDown: (_) => favoriteSelectorItemController.updatePressedColor(),
-      onTapUp: (_) {
-        Future<void>.delayed(const Duration(milliseconds: 100), () {
-          favoriteSelectorItemController.updateNormalColor();
-        });
-      },
-      onTapCancel: () => favoriteSelectorItemController.updateNormalColor(),
-    );
-  }
-
-  /// 设置项分隔线
-  Widget _settingItemDivider() {
-    return Divider(
-      height: 1.0,
-      indent: 48,
-      color: CupertinoDynamicColor.resolve(
-          CupertinoColors.systemGrey4, Get.context!),
+      itemCount: favCatList.length,
     );
   }
 }
