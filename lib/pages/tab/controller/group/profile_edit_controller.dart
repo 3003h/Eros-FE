@@ -12,14 +12,14 @@ class ProfileEditController extends GetxController {
   final LocaleService localeService = Get.find();
 
   final EhSettingService ehSettingService = Get.find();
-  bool get isTagTranslat =>
+  bool get isTagTranslate =>
       ehSettingService.isTagTranslate && localeService.isLanguageCodeZh;
 
   final _searchText = ''.obs;
   String get searchText => _searchText.value;
   set searchText(String val) => _searchText.value = val;
 
-  final rultlist = <TagTranslat>[].obs;
+  final resultList = <TagTranslat>[].obs;
 
   final textController = TextEditingController();
 
@@ -27,19 +27,21 @@ class ProfileEditController extends GetxController {
   void onInit() {
     super.onInit();
     debounce(_searchText, (String val) async {
-      rultlist.clear();
+      // rultlist.clear();
       try {
         // 中文从翻译库匹配
         if (localeService.isLanguageCodeZh) {
           List<TagTranslat> tagTranslateList =
               await Get.find<TagTransController>()
                   .getTagTranslatesLike(text: val.trim(), limit: 100);
-          rultlist.addAll(tagTranslateList);
+          // rultlist.addAll(tagTranslateList);
+          resultList(tagTranslateList);
         } else {
           // 其它通过eh的api
           List<TagTranslat> tagTranslateList =
               await Api.tagSuggest(text: val.trim());
-          rultlist.addAll(tagTranslateList);
+          // rultlist.addAll(tagTranslateList);
+          resultList(tagTranslateList);
         }
       } catch (_) {}
 
@@ -51,7 +53,7 @@ class ProfileEditController extends GetxController {
   }
 
   void selectItem(int index, {TextEditingController? searchTextController}) {
-    final TagTranslat _qry = rultlist[index];
+    final TagTranslat _qry = resultList[index];
     final String _add = _qry.key.contains(' ')
         ? '${_qry.namespace.trim().shortName}:"${_qry.key}\$"'
         : '${_qry.namespace.trim().shortName}:${_qry.key}\$';

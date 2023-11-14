@@ -37,6 +37,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   final _searchWithMinRating = false.obs;
   final _searchBetweenPage = false.obs;
   final _enableAdvance = false.obs;
+  final _listModeIsPopular = false.obs;
 
   late CustomProfile _customProfile;
 
@@ -55,6 +56,9 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
     _searchBetweenPage.value =
         _customProfile.advSearch?.searchBetweenPage ?? false;
     _enableAdvance.value = _customProfile.enableAdvance ?? false;
+
+    _listModeIsPopular.value =
+        _customProfile.listType == GalleryListType.popular;
   }
 
   @override
@@ -98,7 +102,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   }
 
   Widget buildCustomProfileEditView() {
-    List<Widget> _slivers = [
+    List<Widget> _mainTiles = [
       SliverCupertinoListSection.listInsetGrouped(children: [
         CupertinoTextInputListTile(
           title: L10n.of(context).groupName,
@@ -122,17 +126,21 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
       //
       SliverCupertinoListSection.listInsetGrouped(
-          header: Text(L10n.of(context).groupType),
-          children: [
-            _ListTypeSelector(
-              initValue: _customProfile.listType,
-              onChanged: (GalleryListType value) {
-                _customProfile =
-                    _customProfile.copyWith(listTypeValue: value.name);
-              },
-            ),
-          ]),
+        header: Text(L10n.of(context).groupType),
+        children: [
+          _ListTypeSelector(
+            initValue: _customProfile.listType,
+            onChanged: (GalleryListType value) {
+              _customProfile =
+                  _customProfile.copyWith(listTypeValue: value.name);
+              _listModeIsPopular.value = value == GalleryListType.popular;
+            },
+          ),
+        ],
+      ),
+    ];
 
+    List<Widget> _slivers = [
       //
       SliverCupertinoListSection.listInsetGrouped(children: [
         GalleryCatFilter(
@@ -157,40 +165,47 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
       // 高级选项开关
       SliverCupertinoListSection.listInsetGrouped(children: [
         // switch s_Advanced_Options
-        EhCupertinoSwitchListTile(
-          title: Text(L10n.of(context).s_Advanced_Options),
-          value: _customProfile.enableAdvance ?? false,
-          onChanged: (val) {
-            _enableAdvance.value = val;
-            _customProfile = _customProfile.copyWith(enableAdvance: val);
-          },
-        ),
+        Obx(() {
+          // 使用 _enableAdvance obs 变量，避免和下发开关展开情况不同步
+          return EhCupertinoSwitchListTile(
+            title: Text(L10n.of(context).s_Advanced_Options),
+            value: _enableAdvance.value,
+            onChanged: (val) {
+              _customProfile = _customProfile.copyWith(enableAdvance: val);
+              _enableAdvance.value = val;
+            },
+          );
+        }),
       ]),
     ];
 
     return SliverAnimatedPaintExtent(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
-      child: MultiSliver(
-        children: [
-          MultiSliver(children: _slivers),
-          Obx(
-            () {
-              if (_enableAdvance.value) {
-                return _AdvanceView(
-                  advanceSearch:
-                      _customProfile.advSearch ?? const AdvanceSearch(),
-                  onChanged: (AdvanceSearch val) {
-                    _customProfile = _customProfile.copyWith(advSearch: val);
-                  },
-                );
-              } else {
-                return const SizedBox(width: double.infinity);
-              }
-            },
-          ),
-        ],
-      ),
+      child: Obx(() {
+        return MultiSliver(
+          children: [
+            MultiSliver(children: _mainTiles),
+            if (!_listModeIsPopular.value)
+              MultiSliver(
+                children: [
+                  MultiSliver(
+                    children: _slivers,
+                  ),
+                  if (_enableAdvance.value)
+                    _AdvanceView(
+                      advanceSearch:
+                          _customProfile.advSearch ?? const AdvanceSearch(),
+                      onChanged: (AdvanceSearch val) {
+                        _customProfile =
+                            _customProfile.copyWith(advSearch: val);
+                      },
+                    )
+                ],
+              ),
+          ],
+        );
+      }),
     );
   }
 }
@@ -431,6 +446,7 @@ class _SearchTextTile extends StatefulWidget {
     required this.searchTextList,
     this.onChanged,
   });
+
   final List<String> searchTextList;
   final ValueChanged<List<String>>? onChanged;
 
@@ -465,7 +481,7 @@ class _SearchTextTileState extends State<_SearchTextTile> {
       header: Text(L10n.of(context).searchTexts),
       children: [
         ..._searchTextList.map((element) => Slidable(
-            child: controller.isTagTranslat
+            child: controller.isTagTranslate
                 ? FutureBuilder<String?>(
                     future: _getTextTranslate(element),
                     initialData: element,
@@ -522,6 +538,7 @@ class _SearchTextTileState extends State<_SearchTextTile> {
 
 class _AdvanceView extends StatefulWidget {
   const _AdvanceView({super.key, required this.advanceSearch, this.onChanged});
+
   final AdvanceSearch advanceSearch;
   final ValueChanged<AdvanceSearch>? onChanged;
 

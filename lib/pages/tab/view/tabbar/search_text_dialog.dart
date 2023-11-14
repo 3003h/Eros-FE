@@ -48,7 +48,7 @@ class ProfileSearchTextDialog extends StatelessWidget {
           },
         ),
         Obx(() {
-          final _resultList = profileEditController.rultlist;
+          final _resultList = profileEditController.resultList;
           return Container(
             height: 300,
             child: ListView.builder(
@@ -102,7 +102,7 @@ class ProfileSearchTextDialog extends StatelessWidget {
                       ),
                       if (translate != null) const SizedBox(height: 6),
                       if (translate != null &&
-                          profileEditController.isTagTranslat)
+                          profileEditController.isTagTranslate)
                         RichText(
                           text: TextSpan(
                             children: translateTextSpans,
