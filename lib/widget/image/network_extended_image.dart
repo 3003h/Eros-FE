@@ -116,7 +116,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
 
             // return _image;
 
-            logger.d(
+            logger.t(
                 'widget.checkPHashHide   widget.checkQRCodeHide ${widget.checkPHashHide}  ${widget.checkQRCodeHide}');
             if (widget.checkPHashHide || widget.checkQRCodeHide) {
               Future<bool> _future() async {

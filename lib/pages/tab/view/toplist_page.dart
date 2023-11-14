@@ -1,7 +1,7 @@
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/tab/controller/toplist_controller.dart';
-import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/pages/tab/view/list/tab_base.dart';
 import 'package:fehviewer/utils/cust_lib/persistent_header_builder.dart';
 import 'package:fehviewer/utils/cust_lib/sliver/sliver_persistent_header.dart';
 import 'package:fehviewer/widget/refresh.dart';

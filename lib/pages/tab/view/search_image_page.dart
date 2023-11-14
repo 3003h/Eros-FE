@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:blur/blur.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/pages/tab/view/list/tab_base.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

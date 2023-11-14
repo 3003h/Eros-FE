@@ -228,8 +228,8 @@ GalleryList parseGalleryList(
     final String imageStyle = img?.attributes['style'] ?? '';
     final RegExpMatch? match =
         RegExp(r'height:(\d+)px;width:(\d+)px').firstMatch(imageStyle);
-    final double imageHeight = double.parse(match?[1] ?? '0');
-    final double imageWidth = double.parse(match?[2] ?? '0');
+    final int imageHeight = int.parse(match?[1] ?? '0');
+    final int imageWidth = int.parse(match?[2] ?? '0');
 
 // 评分星级计算
     final String ratPx = tr

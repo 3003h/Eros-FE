@@ -6,7 +6,7 @@ import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/models/index.dart';
 import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
-import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/pages/tab/view/list/tab_base.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';

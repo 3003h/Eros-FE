@@ -52,41 +52,40 @@ class CommentItem extends StatelessWidget {
       builder: (_commentController) {
         return Container(
           margin: const EdgeInsets.only(top: 8),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
               color: ehTheme.commentBackgroundColor,
-              padding: const EdgeInsets.all(8),
-              alignment: Alignment.centerLeft,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _CommentHead(
-                    commentController: _commentController,
-                    galleryComment: galleryComment,
-                    simple: simple,
-                  ),
-                  if (galleryComment.id != '0' && reptyComment != null)
-                    _CommentReply(reptyComments: reptyComments),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: simple
-                        ? _buildSimpleExpTextLinkify(
-                            context: context,
-                            style: _commentTextStyle,
-                            showTranslate:
-                                galleryComment.showTranslate ?? false,
-                          )
-                        : buildComment(_commentTextStyle, context),
-                  ),
-                  _CommentTail(
-                    commentController: _commentController,
-                    showRepty: galleryComment.id != '0' && !simple,
-                    simple: simple,
-                    galleryComment: galleryComment,
-                  ),
-                ],
-              ),
+            ),
+            padding: const EdgeInsets.all(8),
+            alignment: Alignment.centerLeft,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _CommentHead(
+                  commentController: _commentController,
+                  galleryComment: galleryComment,
+                  simple: simple,
+                ),
+                if (galleryComment.id != '0' && reptyComment != null)
+                  _CommentReply(reptyComments: reptyComments),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: simple
+                      ? _buildSimpleExpTextLinkify(
+                          context: context,
+                          style: _commentTextStyle,
+                          showTranslate: galleryComment.showTranslate ?? false,
+                        )
+                      : buildComment(_commentTextStyle, context),
+                ),
+                _CommentTail(
+                  commentController: _commentController,
+                  showRepty: galleryComment.id != '0' && !simple,
+                  simple: simple,
+                  galleryComment: galleryComment,
+                ),
+              ],
             ),
           ),
         );

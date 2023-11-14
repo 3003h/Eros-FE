@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../comm.dart';
 import '../constants.dart';
 import '../gallery_base.dart';
-import '../tab_base.dart';
+import '../list/tab_base.dart';
 
 class SubListView<T extends CustomSubListController> extends StatefulWidget {
   const SubListView({

@@ -232,8 +232,8 @@ class _CoverImage extends StatelessWidget {
     final EhSettingService ehSettingService = Get.find();
     final GalleryProvider _item = galleryProviderController.galleryProvider;
 
-    // 图片高宽比
-    final imageRatio = (_item.imgHeight ?? 0) / (_item.imgWidth ?? 1);
+    // 图片宽高比
+    final imageRatio = (_item.imgWidth ?? 0) / (_item.imgHeight ?? 1);
 
     // 计算图片容器宽度
     final double coverImageWidth = Get.context!.isPhone
@@ -241,57 +241,60 @@ class _CoverImage extends StatelessWidget {
         : 0.7 * kFixedHeight;
 
     // 计算图片容器高度
-    late double? coverImageHeigth;
+    late double? coverImageHeight;
 
     if (_ehSettingService.fixedHeightOfListItems) {
-      coverImageHeigth = kFixedHeight;
+      coverImageHeight = kFixedHeight;
     } else {
       if ((_item.imgWidth ?? 0) >= coverImageWidth) {
         // 如果实际宽度大于限制的最大宽度[coverImageWidth] 按照比例计算高度
-        coverImageHeigth =
+        coverImageHeight =
             (_item.imgHeight ?? 0) * coverImageWidth / (_item.imgWidth ?? 0);
       } else {
         // 否者返回实际高度
-        coverImageHeigth = _item.imgHeight;
+        coverImageHeight = _item.imgHeight?.toDouble();
       }
     }
 
     logger.t('iRatio:$imageRatio\n'
         'w:${_item.imgWidth} h:${_item.imgHeight}\n'
-        'cW:$coverImageWidth  cH:$coverImageHeigth');
+        'cW:$coverImageWidth  cH:$coverImageHeight');
 
-    final containRatio = (coverImageHeigth ?? 0) / coverImageWidth;
+    final containRatio = coverImageWidth / (coverImageHeight ?? 0);
 
-    BoxFit _fit = BoxFit.contain;
+    BoxFit _fit = BoxFit.cover;
 
     // todo
     if (imageRatio < containRatio && containRatio - imageRatio < 0.5) {
-      _fit = BoxFit.fitHeight;
+      // _fit = BoxFit.fitHeight;
+      _fit = BoxFit.cover;
     }
 
     if (imageRatio > containRatio && imageRatio - containRatio < 1.0) {
-      _fit = BoxFit.cover;
+      // _fit = BoxFit.cover;
+      _fit = BoxFit.fitHeight;
     }
 
     loggerSimple.t('imageRatio:$imageRatio  containRatio:$containRatio  $_fit');
 
     Widget image = CoverImg(
+      fixedHeight: _ehSettingService.fixedHeightOfListItems,
       imgUrl: _item.imgUrl ?? '',
-      width: _item.imgWidth,
-      height: _item.imgHeight,
+      width: _item.imgWidth?.toDouble(),
+      height: _item.imgHeight?.toDouble(),
       fit: _fit,
     );
 
-    Widget getImageBlureFittedBox() {
-      Widget imageBlureFittedBox = CoverImg(
+    Widget getImageBlurFittedBox() {
+      Widget imageBlurFittedBox = CoverImg(
         imgUrl: _item.imgUrl ?? '',
         width: coverImageWidth,
         fit: BoxFit.contain,
       );
 
-      imageBlureFittedBox = FittedBox(
+      imageBlurFittedBox = FittedBox(
         fit: BoxFit.cover,
-        child: imageBlureFittedBox.blurred(
+        child: imageBlurFittedBox.blurred(
           blur: 10,
           colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
           blurColor:
@@ -299,12 +302,12 @@ class _CoverImage extends StatelessWidget {
         ),
       );
 
-      return imageBlureFittedBox;
+      return imageBlurFittedBox;
     }
 
     Widget coverBackground(BoxFit fit, bool blurringOfCoverBackground) {
       if (_fit == BoxFit.contain && blurringOfCoverBackground) {
-        return getImageBlureFittedBox();
+        return getImageBlurFittedBox();
       } else {
         return Container(
           color: CupertinoDynamicColor.resolve(
@@ -374,7 +377,7 @@ class _CoverImage extends StatelessWidget {
         // borderRadius: BorderRadius.circular(kCardRadius),
         child: Container(
           child: image,
-          height: coverImageHeigth,
+          height: coverImageHeight,
           width: coverImageWidth,
         ),
       );
@@ -538,35 +541,34 @@ class TagItem extends StatelessWidget {
     Key? key,
     this.text,
     this.color,
-    this.backgrondColor,
+    this.backgroundColor,
   }) : super(key: key);
 
   final String? text;
   final Color? color;
-  final Color? backgrondColor;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        // height: 18,
-        padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
-        color: backgrondColor ??
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor ??
             CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
-        child: Text(
-          text ?? '',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            height: 1,
-            // fontWeight:
-            //     backgrondColor == null ? FontWeight.w400 : FontWeight.w500,
-            color: color ??
-                CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
-          ),
-          strutStyle: const StrutStyle(height: 1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      padding: const EdgeInsets.fromLTRB(4, 2, 4, 2),
+      child: Text(
+        text ?? '',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 12,
+          height: 1,
+          // fontWeight:
+          //     backgrondColor == null ? FontWeight.w400 : FontWeight.w500,
+          color: color ??
+              CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
         ),
+        strutStyle: const StrutStyle(height: 1),
       ),
     );
   }
@@ -603,7 +605,8 @@ class TagBox extends StatelessWidget {
             return TagItem(
               text: _text,
               color: ColorsUtil.getTagColor(_simpleTag.color),
-              backgrondColor: ColorsUtil.getTagColor(_simpleTag.backgrondColor),
+              backgroundColor:
+                  ColorsUtil.getTagColor(_simpleTag.backgrondColor),
             );
           }).toList()), //要显示的子控件集合
         ),
@@ -620,6 +623,7 @@ class CoverImg extends StatelessWidget {
     this.height,
     this.width,
     this.fit = BoxFit.contain,
+    this.fixedHeight = true,
   }) : super(key: key);
 
   final String imgUrl;
@@ -627,6 +631,8 @@ class CoverImg extends StatelessWidget {
   final double? width;
 
   final BoxFit fit;
+
+  final bool fixedHeight;
 
   @override
   Widget build(BuildContext context) {

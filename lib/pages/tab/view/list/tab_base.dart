@@ -4,8 +4,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
 import 'package:fehviewer/pages/item/gallery_item.dart';
 import 'package:fehviewer/pages/item/gallery_item_debug_simple.dart';
-import 'package:fehviewer/pages/item/gallery_item_flow.dart';
-import 'package:fehviewer/pages/item/gallery_item_flow_large.dart';
 import 'package:fehviewer/pages/item/gallery_item_placeholder.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple.dart';
 import 'package:fehviewer/pages/item/gallery_item_simple_placeholder.dart';
@@ -17,183 +15,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_list_view/flutter_list_view.dart';
 import 'package:get/get.dart';
 import 'package:keframe/keframe.dart';
-import 'package:waterfall_flow/waterfall_flow.dart';
 
-import '../../item/gallery_item_grid.dart';
-import '../../item/gallery_item_grid_placeholder.dart';
-
-SliverPadding buildWaterfallFlow(
-  List<GalleryProvider> galleryProviders,
-  dynamic tabTag, {
-  String? next,
-  VoidCallback? lastComplete,
-  bool large = false,
-  Key? key,
-  Key? centerKey,
-  int? lastTopitemIndex,
-}) {
-  final double _padding = large
-      ? EHConst.waterfallFlowLargeCrossAxisSpacing
-      : EHConst.waterfallFlowCrossAxisSpacing;
-  EhSettingService _ehSettingService = Get.find();
-  double getMaxCrossAxisExtent() {
-    if (large) {
-      final itemConfig =
-          _ehSettingService.getItemConfig(ListModeEnum.waterfallLarge);
-      const defaultMaxCrossAxisExtent =
-          EHConst.waterfallFlowLargeMaxCrossAxisExtent;
-      if (itemConfig?.enableCustomWidth ?? false) {
-        return itemConfig?.customWidth?.toDouble() ?? defaultMaxCrossAxisExtent;
-      } else {
-        return defaultMaxCrossAxisExtent;
-      }
-    } else {
-      final itemConfig =
-          _ehSettingService.getItemConfig(ListModeEnum.waterfall);
-      final defaultMaxCrossAxisExtent = Get.context!.isPhone
-          ? EHConst.waterfallFlowMaxCrossAxisExtent
-          : EHConst.waterfallFlowMaxCrossAxisExtentTablet;
-      if (itemConfig?.enableCustomWidth ?? false) {
-        return itemConfig?.customWidth?.toDouble() ?? defaultMaxCrossAxisExtent;
-      } else {
-        return defaultMaxCrossAxisExtent;
-      }
-    }
-  }
-
-  return SliverPadding(
-    padding: EdgeInsets.all(_padding),
-    sliver: SliverWaterfallFlow(
-      key: key,
-      gridDelegate: SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
-        // maxCrossAxisExtent: large
-        //     ? EHConst.waterfallFlowLargeMaxCrossAxisExtent
-        //     : (!Get.context!.isPhone
-        //         ? EHConst.waterfallFlowMaxCrossAxisExtentTablet
-        //         : EHConst.waterfallFlowMaxCrossAxisExtent),
-        maxCrossAxisExtent: getMaxCrossAxisExtent(),
-        crossAxisSpacing: large
-            ? EHConst.waterfallFlowLargeCrossAxisSpacing
-            : EHConst.waterfallFlowCrossAxisSpacing,
-        mainAxisSpacing: large
-            ? EHConst.waterfallFlowLargeMainAxisSpacing
-            : EHConst.waterfallFlowMainAxisSpacing,
-        lastChildLayoutTypeBuilder: (int index) =>
-            index == galleryProviders.length
-                ? LastChildLayoutType.foot
-                : LastChildLayoutType.none,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (galleryProviders.length - 1 < index) {
-            return const SizedBox.shrink();
-          }
-
-          if (index == galleryProviders.length - 1 &&
-              (next?.isNotEmpty ?? false)) {
-            // 加载完成最后一项的回调
-            lastComplete?.call();
-          }
-
-          final GalleryProvider _provider = galleryProviders[index];
-          Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
-          Get.lazyReplace(
-              () => GalleryItemController(
-                  galleryProvider: Get.find(tag: _provider.gid)),
-              tag: _provider.gid,
-              fenix: true);
-
-          return large
-              ? FrameSeparateWidget(
-                  index: index,
-                  child: GalleryItemFlowLarge(
-                    key: index == lastTopitemIndex
-                        ? centerKey
-                        : ValueKey(_provider.gid),
-                    galleryProvider: _provider,
-                    tabTag: tabTag,
-                  ),
-                )
-              : GalleryItemFlow(
-                  key: index == lastTopitemIndex
-                      ? centerKey
-                      : ValueKey(_provider.gid),
-                  galleryProvider: _provider,
-                  tabTag: tabTag,
-                );
-        },
-        childCount: galleryProviders.length,
-      ),
-    ),
-  );
-}
-
-SliverPadding buildGridView(
-  List<GalleryProvider> galleryProviders,
-  dynamic tabTag, {
-  String? next,
-  VoidCallback? lastComplete,
-  Key? key,
-  Key? centerKey,
-  int? lastTopitemIndex,
-}) {
-  EhSettingService _ehSettingService = Get.find();
-  double getMaxCrossAxisExtent() {
-    final itemConfig = _ehSettingService.getItemConfig(ListModeEnum.grid);
-    const defaultMaxCrossAxisExtent = EHConst.gridMaxCrossAxisExtent;
-    if (itemConfig?.enableCustomWidth ?? false) {
-      return itemConfig?.customWidth?.toDouble() ?? defaultMaxCrossAxisExtent;
-    } else {
-      return defaultMaxCrossAxisExtent;
-    }
-  }
-
-  return SliverPadding(
-    padding: const EdgeInsets.all(EHConst.gridCrossAxisSpacing),
-    sliver: SliverGrid(
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: getMaxCrossAxisExtent(),
-        crossAxisSpacing: EHConst.gridCrossAxisSpacing,
-        mainAxisSpacing: EHConst.gridMainAxisSpacing,
-        childAspectRatio: EHConst.gridChildAspectRatio,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          if (galleryProviders.length - 1 < index) {
-            return const SizedBox.shrink();
-          }
-
-          if (index == galleryProviders.length - 1 &&
-              (next?.isNotEmpty ?? false)) {
-            // 加载完成最后一项的回调
-            lastComplete?.call();
-          }
-
-          final GalleryProvider _provider = galleryProviders[index];
-          Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
-          Get.lazyReplace(
-              () => GalleryItemController(
-                  galleryProvider: Get.find(tag: _provider.gid)),
-              tag: _provider.gid,
-              fenix: true);
-
-          return FrameSeparateWidget(
-            index: index,
-            placeHolder: const GalleryItemGridPlaceHolder(),
-            child: GalleryItemGrid(
-              key: index == lastTopitemIndex
-                  ? centerKey
-                  : ValueKey(_provider.gid),
-              galleryProvider: _provider,
-              tabTag: tabTag,
-            ),
-          );
-        },
-        childCount: galleryProviders.length,
-      ),
-    ),
-  );
-}
+import 'grid.dart';
+import 'sliver_list.dart';
+import 'waterfall_flow.dart';
 
 // debug测试用的简单布局
 SliverPadding buildDebugSimple(
@@ -203,7 +28,7 @@ SliverPadding buildDebugSimple(
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
-  int? lastTopitemIndex,
+  int? lastTopItemIndex,
 }) {
   return SliverPadding(
     padding: const EdgeInsets.all(EHConst.gridCrossAxisSpacing),
@@ -230,7 +55,7 @@ SliverPadding buildDebugSimple(
 
           return GalleryItemDebugSimple(
             key:
-                index == lastTopitemIndex ? centerKey : ValueKey(_provider.gid),
+                index == lastTopItemIndex ? centerKey : ValueKey(_provider.gid),
             galleryProvider: _provider,
             tabTag: tabTag,
           );
@@ -255,7 +80,7 @@ SliverPadding buildDebugSimple(
   );
 }
 
-Widget _listItemWiget(
+Widget _listItemWidget(
   GalleryProvider _provider, {
   dynamic tabTag,
   Key? centerKey,
@@ -325,7 +150,7 @@ Widget buildGallerySliverListItem(
 }) {
   return _buildSliverAnimatedListItem(
     _animation,
-    child: _listItemWiget(
+    child: _listItemWidget(
       _item,
       tabTag: tabTag,
       centerKey: index == oriFirstIndex ? centerKey : null,
@@ -343,7 +168,7 @@ Widget buildDelGallerySliverListItem(
 }) {
   return _buildDelSliverAnimatedListItem(
     _animation,
-    child: _listItemWiget(_item, tabTag: tabTag, listMode: listMode),
+    child: _listItemWidget(_item, tabTag: tabTag, listMode: listMode),
   );
 }
 
@@ -405,62 +230,6 @@ Widget buildAnimatedGallerySliverListView(
         );
       }
     },
-  );
-}
-
-Widget buildGallerySliverListView(
-  List<GalleryProvider> galleryProviders,
-  dynamic tabTag, {
-  String? next,
-  VoidCallback? lastComplete,
-  Key? key,
-  Key? centerKey,
-  int? lastTopitemIndex,
-  bool keepPosition = false,
-}) {
-  logger.t('buildGallerySliverListView');
-
-  return FlutterSliverList(
-    delegate: FlutterListViewDelegate(
-      (context, index) {
-        if (galleryProviders.length - 1 < index) {
-          return const SizedBox.shrink();
-        }
-
-        if (index == galleryProviders.length - 1 &&
-            (next?.isNotEmpty ?? false)) {
-          // 加载完成最后一项的回调
-          SchedulerBinding.instance
-              .addPostFrameCallback((_) => lastComplete?.call());
-        }
-
-        final GalleryProvider _provider = galleryProviders[index];
-        Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
-        Get.lazyReplace(
-          () => GalleryItemController(
-              galleryProvider: Get.find(tag: _provider.gid)),
-          tag: _provider.gid,
-          fenix: true,
-        );
-
-        // return GalleryItemWidget(
-        //   galleryProvider: _provider,
-        //   tabTag: tabTag,
-        // );
-
-        return FrameSeparateWidget(
-          index: index,
-          placeHolder: const GalleryItemPlaceHolder(),
-          child: GalleryItemWidget(
-            galleryProvider: _provider,
-            tabTag: tabTag,
-          ),
-        );
-      },
-      onItemKey: (index) => galleryProviders[index].gid ?? '',
-      childCount: galleryProviders.length,
-      keepPosition: keepPosition,
-    ),
   );
 }
 
@@ -604,28 +373,28 @@ Widget getGallerySliverList(
 
     switch (mod) {
       case ListModeEnum.list:
-        return buildGallerySliverListView(
+        return EhSliverList(
           galleryProviders ?? [],
           tabTag,
           next: next,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
-          lastTopitemIndex: lastTopitemIndex,
+          lastTopItemIndex: lastTopitemIndex,
           keepPosition: keepPosition,
         );
       case ListModeEnum.waterfall:
-        return buildWaterfallFlow(
+        return EhWaterfallFlow(
           galleryProviders ?? [],
           tabTag,
           next: next,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
-          lastTopitemIndex: lastTopitemIndex,
+          lastTopItemIndex: lastTopitemIndex,
         );
       case ListModeEnum.waterfallLarge:
-        return buildWaterfallFlow(
+        return EhWaterfallFlow(
           galleryProviders ?? [],
           tabTag,
           next: next,
@@ -633,19 +402,9 @@ Widget getGallerySliverList(
           large: true,
           key: _key,
           centerKey: centerKey,
-          lastTopitemIndex: lastTopitemIndex,
+          lastTopItemIndex: lastTopitemIndex,
         );
       case ListModeEnum.simpleList:
-        // return buildAnimatedGallerySliverListSimpleView(
-        //   galleryProviders ?? [],
-        //   tabTag,
-        //   maxPage: maxPage,
-        //   curPage: curPage ?? 0,
-        //   lastComplete: lastComplete,
-        //   key: _key,
-        //   centerKey: centerKey,
-        //   lastTopitemIndex: lastTopitemIndex,
-        // );
         return buildGallerySliverListSimpleView(
           galleryProviders ?? [],
           tabTag,
@@ -657,14 +416,14 @@ Widget getGallerySliverList(
           keepPosition: keepPosition,
         );
       case ListModeEnum.grid:
-        return buildGridView(
+        return EhGridView(
           galleryProviders ?? [],
           tabTag,
           next: next,
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
-          lastTopitemIndex: lastTopitemIndex,
+          lastTopItemIndex: lastTopitemIndex,
         );
       case ListModeEnum.debugSimple:
         return buildDebugSimple(
@@ -674,7 +433,7 @@ Widget getGallerySliverList(
           lastComplete: lastComplete,
           key: _key,
           centerKey: centerKey,
-          lastTopitemIndex: lastTopitemIndex,
+          lastTopItemIndex: lastTopitemIndex,
         );
       case ListModeEnum.global:
         return const SliverFillRemaining(

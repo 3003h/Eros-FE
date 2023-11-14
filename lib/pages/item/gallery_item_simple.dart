@@ -175,8 +175,8 @@ class GalleryItemSimpleWidget extends StatelessWidget {
               // 圆角
               borderRadius: BorderRadius.circular(6),
               child: CoverImg(
-                  height: _item.imgHeight,
-                  width: _item.imgWidth,
+                  height: _item.imgHeight?.toDouble(),
+                  width: _item.imgWidth?.toDouble(),
                   imgUrl:
                       galleryProviderController.galleryProvider.imgUrl ?? ''),
             ),

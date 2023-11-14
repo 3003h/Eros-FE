@@ -11,7 +11,7 @@ import 'package:fehviewer/pages/gallery/gallery_repository.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
 import 'package:fehviewer/pages/image_view/view/view_page.dart';
 import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
-import 'package:fehviewer/pages/tab/view/tab_base.dart';
+import 'package:fehviewer/pages/tab/view/list/tab_base.dart';
 import 'package:fehviewer/route/first_observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get/get.dart';

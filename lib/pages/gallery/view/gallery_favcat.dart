@@ -3,7 +3,6 @@ import 'package:fehviewer/const/theme_colors.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/gallery/controller/gallery_fav_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -56,10 +55,10 @@ class GalleryFavButton extends StatelessWidget {
         Container(
           height: 16,
           padding: const EdgeInsets.only(right: 4),
-          child: Text(
+          child: const Text(
             // L10n.of(context).processing,
             '',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
             ),
           ),
@@ -111,7 +110,10 @@ class _FavcatAddListItemState extends State<FavcatAddListItem> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         child: Container(
-          color: _color,
+          decoration: BoxDecoration(
+            color: _color,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
           child: Row(

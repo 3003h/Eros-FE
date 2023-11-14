@@ -118,6 +118,7 @@ class CoverImage extends StatelessWidget {
           margin: const EdgeInsets.only(right: 10),
           child: Container(
             decoration: BoxDecoration(
+                color: CupertinoColors.systemBackground,
                 borderRadius: BorderRadius.circular(6.0), //圆角
                 // ignore: prefer_const_literals_to_create_immutables
                 boxShadow: [
@@ -127,12 +128,12 @@ class CoverImage extends StatelessWidget {
                     blurRadius: 2.0,
                   )
                 ]),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                color: CupertinoColors.systemBackground,
-              ),
-            ),
+            // child: ClipRRect(
+            //   borderRadius: BorderRadius.circular(6),
+            //   child: Container(
+            //     color: CupertinoColors.systemBackground,
+            //   ),
+            // ),
           ),
         );
       }
@@ -580,29 +581,27 @@ class TagButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       onLongPress: onLongPress,
-      child: ClipRRect(
-        // key: key,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
+      child: Container(
+        decoration: BoxDecoration(
           color: color ??
               CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
-          child: Column(
-            children: [
-              Text(
-                text,
-                style: TextStyle(
-                  color: textColor ??
-                      CupertinoDynamicColor.resolve(
-                          ThemeColors.tagText, context),
-                  fontSize: 13,
-                  // fontWeight: textColor != null ? FontWeight.w600 : null,
-                  height: 1.3,
-                ),
-                strutStyle: const StrutStyle(height: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
+        child: Column(
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                color: textColor ??
+                    CupertinoDynamicColor.resolve(ThemeColors.tagText, context),
+                fontSize: 13,
+                // fontWeight: textColor != null ? FontWeight.w600 : null,
+                height: 1.3,
               ),
-            ],
-          ),
+              strutStyle: const StrutStyle(height: 1),
+            ),
+          ],
         ),
       ),
     );
@@ -634,47 +633,46 @@ class SearchHisTagButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       onLongPress: onLongPress,
-      child: ClipRRect(
-        // key: key,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
+      child: Container(
+        padding: padding ?? const EdgeInsets.fromLTRB(6, 3, 6, 4),
+        decoration: BoxDecoration(
           color: color ??
               CupertinoDynamicColor.resolve(ThemeColors.tagBackground, context),
-          child: IntrinsicWidth(
-            child: Column(
-              children: [
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: IntrinsicWidth(
+          child: Column(
+            children: [
+              Text(
+                text,
+                style: TextStyle(
+                  color: textColor ??
+                      CupertinoDynamicColor.resolve(
+                          ThemeColors.tagText, context),
+                  fontSize: 13,
+                  fontWeight: textColor != null ? FontWeight.w500 : null,
+                  height: 1.3,
+                ),
+                strutStyle: const StrutStyle(height: 1),
+              ),
+              if (desc != null && desc!.isNotEmpty)
+                Container(
+                  height: 0.1,
+                  color: ThemeColors.tagText,
+                ),
+              if (desc != null && desc!.isNotEmpty)
                 Text(
-                  text,
+                  desc!,
                   style: TextStyle(
                     color: textColor ??
                         CupertinoDynamicColor.resolve(
                             ThemeColors.tagText, context),
-                    fontSize: 13,
-                    fontWeight: textColor != null ? FontWeight.w500 : null,
+                    fontSize: 12,
                     height: 1.3,
+                    // fontWeight: FontWeight.w500,
                   ),
-                  strutStyle: const StrutStyle(height: 1),
                 ),
-                if (desc != null && desc!.isNotEmpty)
-                  Container(
-                    height: 0.1,
-                    color: ThemeColors.tagText,
-                  ),
-                if (desc != null && desc!.isNotEmpty)
-                  Text(
-                    desc!,
-                    style: TextStyle(
-                      color: textColor ??
-                          CupertinoDynamicColor.resolve(
-                              ThemeColors.tagText, context),
-                      fontSize: 12,
-                      height: 1.3,
-                      // fontWeight: FontWeight.w500,
-                    ),
-                  ),
-              ],
-            ),
+            ],
           ),
         ),
       ),

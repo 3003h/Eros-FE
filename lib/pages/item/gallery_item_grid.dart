@@ -101,7 +101,7 @@ class GalleryItemGrid extends StatelessWidget {
                                 galleryProviderController:
                                     galleryProviderController,
                                 tabTag: tabTag,
-                                coverImageHeigth: coverHeight,
+                                coverImageHeight: coverHeight,
                                 coverImageWidth: constraints.maxWidth,
                               ),
                             ),
@@ -290,12 +290,12 @@ class _CoverImage extends StatelessWidget {
     required this.galleryProviderController,
     this.tabTag,
     required this.coverImageWidth,
-    required this.coverImageHeigth,
+    required this.coverImageHeight,
   }) : super(key: key);
   final GalleryItemController galleryProviderController;
   final dynamic tabTag;
   final double coverImageWidth;
-  final double coverImageHeigth;
+  final double coverImageHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -306,9 +306,9 @@ class _CoverImage extends StatelessWidget {
 
     logger.t('iRatio:$ratio\n'
         'w:${_provider.imgWidth} h:${_provider.imgHeight}\n'
-        'cW:$coverImageWidth  cH:$coverImageHeigth');
+        'cW:$coverImageWidth  cH:$coverImageHeight');
 
-    final containRatio = coverImageHeigth / coverImageWidth;
+    final containRatio = coverImageHeight / coverImageWidth;
 
     // 默认为contain裁切
     BoxFit _fit = BoxFit.contain;
@@ -325,8 +325,8 @@ class _CoverImage extends StatelessWidget {
 
     Widget image = CoverImg(
       imgUrl: _provider.imgUrl ?? '',
-      width: _provider.imgWidth,
-      height: _provider.imgHeight,
+      width: _provider.imgWidth?.toDouble(),
+      height: _provider.imgHeight?.toDouble(),
       fit: _fit,
     );
 
@@ -356,7 +356,7 @@ class _CoverImage extends StatelessWidget {
         // if (_fit == BoxFit.contain) getImageBlureFittedBox(),
         Container(
           width: coverImageWidth,
-          height: coverImageHeigth,
+          height: coverImageHeight,
           color: CupertinoDynamicColor.resolve(
               CupertinoColors.systemGrey6, context),
         ),
@@ -366,7 +366,7 @@ class _CoverImage extends StatelessWidget {
               width: coverImageWidth,
               height: _fit == BoxFit.contain
                   ? coverImageWidth * ratio
-                  : coverImageHeigth,
+                  : coverImageHeight,
               child: image,
             ),
             tag: '${_provider.gid}_cover_$tabTag',

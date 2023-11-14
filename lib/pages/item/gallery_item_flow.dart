@@ -54,10 +54,10 @@ class GalleryItemFlow extends StatelessWidget {
           context);
 
       // 获取图片高度
-      double? _getHeigth() {
+      int? _getHeight() {
         if ((galleryProvider.imgWidth ?? 0) >= constraints.maxWidth) {
           return (galleryProvider.imgHeight ?? 0) *
-              constraints.maxWidth /
+              constraints.maxWidth ~/
               (galleryProvider.imgWidth ?? 0);
         } else {
           return galleryProvider.imgHeight;
@@ -101,8 +101,9 @@ class GalleryItemFlow extends StatelessWidget {
                       ),
                     ),
                     alignment: Alignment.center,
-                    height:
-                        galleryProvider.imgWidth != null ? _getHeigth() : null,
+                    height: galleryProvider.imgWidth != null
+                        ? _getHeight()?.toDouble()
+                        : null,
                     child: CoverImg(imgUrl: galleryProvider.imgUrl!),
                   ),
                 ),
