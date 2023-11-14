@@ -21,6 +21,8 @@ class ProfileEditController extends GetxController {
 
   final rultlist = <TagTranslat>[].obs;
 
+  final textController = TextEditingController();
+
   @override
   void onInit() {
     super.onInit();

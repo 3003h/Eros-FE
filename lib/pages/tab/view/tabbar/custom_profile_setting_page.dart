@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fehviewer/common/controller/tag_trans_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
@@ -8,9 +9,12 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/filter/filter.dart';
 import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
 import 'package:fehviewer/pages/tab/controller/group/custom_tabbar_controller.dart';
+import 'package:fehviewer/pages/tab/controller/group/profile_edit_controller.dart';
 import 'package:fehviewer/pages/tab/fetch_list.dart';
+import 'package:fehviewer/pages/tab/view/tabbar/search_text_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -39,6 +43,8 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
   @override
   void initState() {
     super.initState();
+
+    Get.put(ProfileEditController());
 
     _customProfile = Get.arguments is CustomProfile
         ? Get.arguments as CustomProfile
@@ -140,21 +146,24 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
         ),
       ]),
 
+      _SearchTextTile(
+        searchTextList:
+            _customProfile.searchText?.map((e) => '$e').toList() ?? [],
+        onChanged: (List<String> val) {
+          _customProfile = _customProfile.copyWith(searchText: val);
+        },
+      ),
+
       // 高级选项开关
       SliverCupertinoListSection.listInsetGrouped(children: [
         // switch s_Advanced_Options
-        EhCupertinoListTile(
+        EhCupertinoSwitchListTile(
           title: Text(L10n.of(context).s_Advanced_Options),
-          trailing: StatefulBuilder(builder: (context, setState) {
-            return CupertinoSwitch(
-              value: _customProfile.enableAdvance ?? false,
-              onChanged: (val) {
-                _enableAdvance.value = val;
-                _customProfile = _customProfile.copyWith(enableAdvance: val);
-                setState(() {});
-              },
-            );
-          }),
+          value: _customProfile.enableAdvance ?? false,
+          onChanged: (val) {
+            _enableAdvance.value = val;
+            _customProfile = _customProfile.copyWith(enableAdvance: val);
+          },
         ),
       ]),
     ];
@@ -168,7 +177,13 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           Obx(
             () {
               if (_enableAdvance.value) {
-                return _buildAdvanceView();
+                return _AdvanceView(
+                  advanceSearch:
+                      _customProfile.advSearch ?? const AdvanceSearch(),
+                  onChanged: (AdvanceSearch val) {
+                    _customProfile = _customProfile.copyWith(advSearch: val);
+                  },
+                );
               } else {
                 return const SizedBox(width: double.infinity);
               }
@@ -176,214 +191,6 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildAdvanceView() {
-    return MultiSliver(
-      children: [
-        SliverCupertinoListSection.listInsetGrouped(
-          children: [
-            // s_Only_Show_Galleries_With_Torrents switch
-            EhCupertinoListTile(
-              title: Text(L10n.of(context).s_Only_Show_Galleries_With_Torrents),
-              trailing: StatefulBuilder(builder: (context, setState) {
-                return CupertinoSwitch(
-                  value:
-                      _customProfile.advSearch?.requireGalleryTorrent ?? false,
-                  onChanged: (val) {
-                    _customProfile = _customProfile.copyWith(
-                        advSearch: _customProfile.advSearch
-                            ?.copyWith(requireGalleryTorrent: val));
-                    setState(() {});
-                  },
-                );
-              }),
-            ),
-
-            // s_Show_Expunged_Galleries switch
-            CupertinoListTile(
-              title: Text(L10n.of(context).s_Show_Expunged_Galleries),
-              trailing: StatefulBuilder(builder: (context, setState) {
-                return CupertinoSwitch(
-                  value: _customProfile.advSearch?.browseExpungedGalleries ??
-                      false,
-                  onChanged: (val) {
-                    _customProfile = _customProfile.copyWith(
-                        advSearch: _customProfile.advSearch
-                            ?.copyWith(browseExpungedGalleries: val));
-                    setState(() {});
-                  },
-                );
-              }),
-            ),
-          ],
-        ),
-
-        SliverCupertinoListSection.listInsetGrouped(
-          children: [
-            // s_Minimum_Rating switch
-            Column(
-              children: [
-                CupertinoListTile(
-                  title: Text(L10n.of(context).s_Minimum_Rating),
-                  trailing: StatefulBuilder(builder: (context, setState) {
-                    return CupertinoSwitch(
-                      value: _customProfile.advSearch?.searchWithMinRating ??
-                          false,
-                      onChanged: (val) {
-                        _customProfile = _customProfile.copyWith(
-                            advSearch: _customProfile.advSearch
-                                ?.copyWith(searchWithMinRating: val));
-
-                        // update obs
-                        _searchWithMinRating.value = val;
-
-                        setState(() {});
-                      },
-                    );
-                  }),
-                ),
-                Obx(() {
-                  return AnimatedCrossFade(
-                    firstCurve: Curves.easeIn,
-                    secondCurve: Curves.easeOut,
-                    firstChild: const SizedBox(width: double.infinity),
-                    secondChild: _MinRatingSelector(
-                      initValue: _customProfile.advSearch?.minRating ?? 2,
-                      onChanged: (int value) {
-                        _customProfile = _customProfile.copyWith(
-                            advSearch: _customProfile.advSearch?.copyWith(
-                                minRating: value == 2 ? null : value));
-                      },
-                    ),
-                    crossFadeState: _searchWithMinRating.value
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    duration: const Duration(milliseconds: 300),
-                  );
-                }),
-              ],
-            ),
-          ],
-        ),
-
-        //
-        SliverCupertinoListSection.listInsetGrouped(
-          children: [
-            Column(
-              children: [
-                // searchBetweenPage switch
-                CupertinoListTile(
-                  title: Text(L10n.of(context).s_pages),
-                  trailing: StatefulBuilder(builder: (context, setState) {
-                    return CupertinoSwitch(
-                      value:
-                          _customProfile.advSearch?.searchBetweenPage ?? false,
-                      onChanged: (val) {
-                        _customProfile = _customProfile.copyWith(
-                            advSearch: _customProfile.advSearch
-                                ?.copyWith(searchBetweenPage: val));
-                        //
-                        _searchBetweenPage.value = val;
-
-                        setState(() {});
-                      },
-                    );
-                  }),
-                ),
-
-                Obx(() {
-                  return AnimatedCrossFade(
-                    crossFadeState: _searchBetweenPage.value
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    duration: const Duration(milliseconds: 300),
-                    firstCurve: Curves.easeIn,
-                    secondCurve: Curves.easeOut,
-                    firstChild: const SizedBox(width: double.infinity),
-                    secondChild: _BetweenPageTile(
-                      enable:
-                          _customProfile.advSearch?.searchBetweenPage ?? false,
-                      startPage: _customProfile.advSearch?.startPage,
-                      endPage: _customProfile.advSearch?.endPage,
-                      onStartPageChanged: (val) {
-                        _customProfile = _customProfile.copyWith(
-                            advSearch: _customProfile.advSearch?.copyWith(
-                                startPage: val.isEmpty ? null : val));
-                      },
-                      onEndPageChanged: (val) {
-                        _customProfile = _customProfile.copyWith(
-                            advSearch: _customProfile.advSearch
-                                ?.copyWith(endPage: val.isEmpty ? null : val));
-                      },
-                    ),
-                  );
-                }),
-              ],
-            ),
-          ],
-        ),
-
-        //
-        SliverCupertinoListSection.listInsetGrouped(
-          header: Text(L10n.of(context).s_Disable_default_filters),
-          children: [
-            // disableCustomFilterLanguage switch
-            CupertinoListTile(
-              title: Text(L10n.of(context).language),
-              trailing: StatefulBuilder(builder: (context, setState) {
-                return CupertinoSwitch(
-                  value:
-                      _customProfile.advSearch?.disableCustomFilterLanguage ??
-                          false,
-                  onChanged: (val) {
-                    _customProfile = _customProfile.copyWith(
-                        advSearch: _customProfile.advSearch
-                            ?.copyWith(disableCustomFilterLanguage: val));
-                    setState(() {});
-                  },
-                );
-              }),
-            ),
-
-            // disableCustomFilterUploader switch
-            CupertinoListTile(
-              title: Text(L10n.of(context).uploader),
-              trailing: StatefulBuilder(builder: (context, setState) {
-                return CupertinoSwitch(
-                  value:
-                      _customProfile.advSearch?.disableCustomFilterUploader ??
-                          false,
-                  onChanged: (val) {
-                    _customProfile = _customProfile.copyWith(
-                        advSearch: _customProfile.advSearch
-                            ?.copyWith(disableCustomFilterUploader: val));
-                    setState(() {});
-                  },
-                );
-              }),
-            ),
-
-            // disableCustomFilterTags switch
-            CupertinoListTile(
-              title: Text(L10n.of(context).tags),
-              trailing: StatefulBuilder(builder: (context, setState) {
-                return CupertinoSwitch(
-                  value: _customProfile.advSearch?.disableCustomFilterTags ??
-                      false,
-                  onChanged: (val) {
-                    _customProfile = _customProfile.copyWith(
-                        advSearch: _customProfile.advSearch
-                            ?.copyWith(disableCustomFilterTags: val));
-                    setState(() {});
-                  },
-                );
-              }),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
@@ -614,6 +421,278 @@ class _BetweenPageTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SearchTextTile extends StatefulWidget {
+  const _SearchTextTile({
+    super.key,
+    required this.searchTextList,
+    this.onChanged,
+  });
+  final List<String> searchTextList;
+  final ValueChanged<List<String>>? onChanged;
+
+  @override
+  State<_SearchTextTile> createState() => _SearchTextTileState();
+}
+
+class _SearchTextTileState extends State<_SearchTextTile> {
+  Future<String?> _getTextTranslate(String text) async {
+    final String? tranText =
+        await Get.find<TagTransController>().getTranTagWithNameSpaseAuto(text);
+    if (tranText?.trim() != text) {
+      return tranText;
+    }
+    return null;
+  }
+
+  late ProfileEditController controller;
+
+  late List<String> _searchTextList;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(ProfileEditController());
+    _searchTextList = widget.searchTextList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverCupertinoListSection.listInsetGrouped(
+      header: Text(L10n.of(context).searchTexts),
+      children: [
+        ..._searchTextList.map((element) => Slidable(
+            child: controller.isTagTranslat
+                ? FutureBuilder<String?>(
+                    future: _getTextTranslate(element),
+                    initialData: element,
+                    builder: (context, snapshot) {
+                      return EhCupertinoListTile(
+                        title: Text(element),
+                        subtitle:
+                            snapshot.data != null ? Text(snapshot.data!) : null,
+                        key: ValueKey(element),
+                      );
+                    })
+                : EhCupertinoListTile(
+                    title: Text(element),
+                    key: ValueKey(element),
+                  ),
+            endActionPane: ActionPane(
+              extentRatio: 0.25,
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (_) {
+                    setState(() {
+                      _searchTextList.remove(element);
+                      widget.onChanged?.call(_searchTextList);
+                    });
+                  },
+                  backgroundColor: CupertinoDynamicColor.resolve(
+                      CupertinoColors.systemRed, context),
+                  icon: CupertinoIcons.delete,
+                ),
+              ],
+            ))),
+        EhCupertinoListTile(
+          title: Text(
+            '${L10n.of(context).newText} ...',
+            style: const TextStyle(
+              color: CupertinoColors.activeBlue,
+            ),
+          ),
+          onTap: () async {
+            final result = await showSearchTextDialog(context);
+            if (result != null && result.isNotEmpty) {
+              setState(() {
+                _searchTextList.add(result);
+                widget.onChanged?.call(_searchTextList);
+              });
+            }
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _AdvanceView extends StatefulWidget {
+  const _AdvanceView({super.key, required this.advanceSearch, this.onChanged});
+  final AdvanceSearch advanceSearch;
+  final ValueChanged<AdvanceSearch>? onChanged;
+
+  @override
+  State<_AdvanceView> createState() => _AdvanceViewState();
+}
+
+class _AdvanceViewState extends State<_AdvanceView> {
+  late AdvanceSearch _advanceSearch;
+
+  @override
+  void initState() {
+    super.initState();
+    _advanceSearch = widget.advanceSearch;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSliver(
+      children: [
+        SliverCupertinoListSection.listInsetGrouped(
+          children: [
+            // s_Only_Show_Galleries_With_Torrents switch
+            EhCupertinoSwitchListTile(
+              title: Text(L10n.of(context).s_Only_Show_Galleries_With_Torrents),
+              value: _advanceSearch.requireGalleryTorrent ?? false,
+              onChanged: (val) {
+                _advanceSearch =
+                    _advanceSearch.copyWith(requireGalleryTorrent: val);
+                widget.onChanged?.call(_advanceSearch);
+              },
+            ),
+
+            // s_Show_Expunged_Galleries switch
+            EhCupertinoSwitchListTile(
+              title: Text(L10n.of(context).s_Show_Expunged_Galleries),
+              value: _advanceSearch.browseExpungedGalleries ?? false,
+              onChanged: (val) {
+                _advanceSearch =
+                    _advanceSearch.copyWith(browseExpungedGalleries: val);
+                widget.onChanged?.call(_advanceSearch);
+              },
+            ),
+          ],
+        ),
+
+        StatefulBuilder(builder: (context, setState) {
+          return SliverCupertinoListSection.listInsetGrouped(
+            children: [
+              // s_Minimum_Rating switch
+              Column(
+                children: [
+                  EhCupertinoSwitchListTile(
+                    title: Text(L10n.of(context).s_Minimum_Rating),
+                    value: _advanceSearch.searchWithMinRating ?? false,
+                    onChanged: (val) {
+                      _advanceSearch =
+                          _advanceSearch.copyWith(searchWithMinRating: val);
+
+                      setState(() {});
+                      widget.onChanged?.call(_advanceSearch);
+                    },
+                  ),
+                  AnimatedCrossFade(
+                    firstCurve: Curves.easeIn,
+                    secondCurve: Curves.easeOut,
+                    firstChild: const SizedBox(width: double.infinity),
+                    secondChild: _MinRatingSelector(
+                      initValue: _advanceSearch.minRating ?? 2,
+                      onChanged: (int value) {
+                        _advanceSearch = _advanceSearch.copyWith(
+                            minRating: value == 2 ? null : value);
+                      },
+                    ),
+                    crossFadeState: _advanceSearch.searchWithMinRating ?? false
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: const Duration(milliseconds: 300),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }),
+
+        //
+        StatefulBuilder(builder: (context, setState) {
+          return SliverCupertinoListSection.listInsetGrouped(
+            children: [
+              Column(
+                children: [
+                  // searchBetweenPage switch
+                  EhCupertinoSwitchListTile(
+                    title: Text(L10n.of(context).s_pages),
+                    value: _advanceSearch.searchBetweenPage ?? false,
+                    onChanged: (val) {
+                      _advanceSearch =
+                          _advanceSearch.copyWith(searchBetweenPage: val);
+
+                      widget.onChanged?.call(_advanceSearch);
+                      setState(() {});
+                    },
+                  ),
+
+                  AnimatedCrossFade(
+                    crossFadeState: _advanceSearch.searchBetweenPage ?? false
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: const Duration(milliseconds: 300),
+                    firstCurve: Curves.easeIn,
+                    secondCurve: Curves.easeOut,
+                    firstChild: const SizedBox(width: double.infinity),
+                    secondChild: _BetweenPageTile(
+                      enable: _advanceSearch.searchBetweenPage ?? false,
+                      startPage: _advanceSearch.startPage,
+                      endPage: _advanceSearch.endPage,
+                      onStartPageChanged: (val) {
+                        _advanceSearch = _advanceSearch.copyWith(
+                            startPage: val.isEmpty ? null : val);
+                      },
+                      onEndPageChanged: (val) {
+                        _advanceSearch = _advanceSearch.copyWith(
+                            endPage: val.isEmpty ? null : val);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }),
+
+        //
+        SliverCupertinoListSection.listInsetGrouped(
+          header: Text(L10n.of(context).s_Disable_default_filters),
+          children: [
+            // disableCustomFilterLanguage switch
+            EhCupertinoSwitchListTile(
+              title: Text(L10n.of(context).language),
+              value: _advanceSearch.disableCustomFilterLanguage ?? false,
+              onChanged: (val) {
+                _advanceSearch =
+                    _advanceSearch.copyWith(disableCustomFilterLanguage: val);
+                widget.onChanged?.call(_advanceSearch);
+              },
+            ),
+
+            // disableCustomFilterUploader switch
+            EhCupertinoSwitchListTile(
+              title: Text(L10n.of(context).uploader),
+              value: _advanceSearch.disableCustomFilterUploader ?? false,
+              onChanged: (val) {
+                _advanceSearch =
+                    _advanceSearch.copyWith(disableCustomFilterUploader: val);
+                widget.onChanged?.call(_advanceSearch);
+              },
+            ),
+
+            // disableCustomFilterTags switch
+            EhCupertinoSwitchListTile(
+              title: Text(L10n.of(context).tags),
+              value: _advanceSearch.disableCustomFilterTags ?? false,
+              onChanged: (val) {
+                _advanceSearch =
+                    _advanceSearch.copyWith(disableCustomFilterTags: val);
+                widget.onChanged?.call(_advanceSearch);
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

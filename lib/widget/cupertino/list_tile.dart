@@ -106,3 +106,55 @@ class EhCupertinoListTile extends StatelessWidget {
     );
   }
 }
+
+class EhCupertinoSwitchListTile extends StatefulWidget {
+  const EhCupertinoSwitchListTile({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.value = false,
+    this.onChanged,
+  });
+
+  /// A [title] is used to convey the central information. Usually a [Text].
+  final Widget title;
+
+  /// A [subtitle] is used to display additional information. It is located
+  /// below [title]. Usually a [Text] widget.
+  final Widget? subtitle;
+
+  final bool value;
+
+  final ValueChanged<bool>? onChanged;
+
+  @override
+  State<EhCupertinoSwitchListTile> createState() =>
+      _EhCupertinoSwitchListTileState();
+}
+
+class _EhCupertinoSwitchListTileState extends State<EhCupertinoSwitchListTile> {
+  late bool _value;
+
+  @override
+  void initState() {
+    super.initState();
+    _value = widget.value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return EhCupertinoListTile(
+      title: widget.title,
+      subtitle: widget.subtitle,
+      trailing: CupertinoSwitch(
+        value: _value,
+        onChanged: (bool value) {
+          setState(() {
+            _value = value;
+          });
+          widget.onChanged?.call(value);
+        },
+      ),
+    );
+  }
+}
