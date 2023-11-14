@@ -52,13 +52,20 @@ class TagTransController extends GetxController {
     }
 
     final _urlJson = await getGithubApi(apiUrl);
-    // 获取发布时间 作为远程版本号
-    _remoteVer = _urlJson['published_at']?.trim() as String;
+
+    final _publishedTime = '${_urlJson['published_at']}';
+    final _tagName = '${_urlJson['tag_name']}';
+
+    // 远程版本号
+    _remoteVer = '$_tagName $_publishedTime';
 
     // 获取当前本地版本
     final String localVer = ehSettingService.tagTranslatVer.value;
 
+    logger.d('localVer $localVer, remoteVer $_remoteVer');
+
     if (_remoteVer == localVer && force == false) {
+      logger.d('tagTranslateVer is latest');
       return false;
     }
 
@@ -95,10 +102,11 @@ class TagTransController extends GetxController {
     final dbDataMap = jsonDecode(dbJson);
     final List listData = dbDataMap['data'] as List;
 
-    final head = dbDataMap['head'] as Map;
-    final committer = head['committer'] as Map;
-    _remoteVer = committer['when'] as String;
-    logger.d('_remoteVer $_remoteVer');
+    // final head = dbDataMap['head'] as Map;
+    // final committer = head['committer'] as Map;
+
+    // _remoteVer = committer['when'] as String;
+    // logger.d('_remoteVer $_remoteVer');
 
     return listData;
   }
@@ -131,11 +139,6 @@ class TagTransController extends GetxController {
       });
     }
 
-    // loggerNoStack.d('tag中文翻译数量 ${tagTranslats.length}');
-
-    // tagTranslatDao.insertAllTagTranslats(tagTranslats);
-
-    // await isarHelper.putAllTagTranslate(tagTranslats);
     await isarHelper.putAllTagTranslateIsolate(tagTranslats);
     ehSettingService.tagTranslatVer.value = _remoteVer ?? '';
   }
