@@ -48,26 +48,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "KEEP_IT_SAFE": MessageLookupByLibrary.simpleMessage("安全を確認してください"),
         "QR_code_block":
             MessageLookupByLibrary.simpleMessage("QRコードを含む画像をブロック"),
-        "about": MessageLookupByLibrary.simpleMessage("このアプリについて"),
-        "add_quick_search": MessageLookupByLibrary.simpleMessage("クイック検索を追加"),
+        "about": MessageLookupByLibrary.simpleMessage("アプリについて"),
+        "add_quick_search": MessageLookupByLibrary.simpleMessage("クイック検索に追加"),
         "add_tag_placeholder": MessageLookupByLibrary.simpleMessage(
             "新しいタグを入力してください（「,」で分別してください）"),
         "add_tags": MessageLookupByLibrary.simpleMessage("タグに追加"),
         "add_to_favorites": MessageLookupByLibrary.simpleMessage("お気に入りに追加"),
         "add_to_phash_block_list":
             MessageLookupByLibrary.simpleMessage("知覚ハッシュマスクリストに追加"),
-        "advanced": MessageLookupByLibrary.simpleMessage("その他の設定"),
+        "advanced": MessageLookupByLibrary.simpleMessage("その他"),
         "aggregate": MessageLookupByLibrary.simpleMessage("Aggregate"),
         "aggregate_groups":
             MessageLookupByLibrary.simpleMessage("Aggregate groups"),
-        "all_Favorites": MessageLookupByLibrary.simpleMessage("すべてのお気に入り"),
-        "all_comment": MessageLookupByLibrary.simpleMessage("他のコメントを見る"),
-        "all_thumbnails": MessageLookupByLibrary.simpleMessage("すべてのサムネイルを見る"),
-        "allow_media_scan":
-            MessageLookupByLibrary.simpleMessage("メディアスキャンを許可する"),
+        "all_Favorites": MessageLookupByLibrary.simpleMessage("総合"),
+        "all_comment": MessageLookupByLibrary.simpleMessage("他のコメント"),
+        "all_thumbnails": MessageLookupByLibrary.simpleMessage("サムネイル"),
+        "allow_media_scan": MessageLookupByLibrary.simpleMessage("メディアスキャンを許可"),
         "always": MessageLookupByLibrary.simpleMessage("常時"),
         "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
-        "ask_me": MessageLookupByLibrary.simpleMessage("Ask for Me"),
+        "ask_me": MessageLookupByLibrary.simpleMessage("手動選択"),
         "auth_biometricHint": MessageLookupByLibrary.simpleMessage("本人確認"),
         "auth_signInTitle": MessageLookupByLibrary.simpleMessage("ログインが必要"),
         "author": MessageLookupByLibrary.simpleMessage("開発者"),
@@ -76,8 +75,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "automatic": MessageLookupByLibrary.simpleMessage("自動"),
         "avatar": MessageLookupByLibrary.simpleMessage("アバター"),
         "back": MessageLookupByLibrary.simpleMessage("戻る"),
-        "block_rule": MessageLookupByLibrary.simpleMessage("Block Rule"),
-        "block_rules": MessageLookupByLibrary.simpleMessage("Block Rules"),
+        "block_rule": MessageLookupByLibrary.simpleMessage("ルール"),
+        "block_rules": MessageLookupByLibrary.simpleMessage("ブロックルール"),
         "blockers": MessageLookupByLibrary.simpleMessage("ブロッキング"),
         "blurring_cover_background":
             MessageLookupByLibrary.simpleMessage("カバーの背景がぼやける"),
@@ -85,8 +84,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "change_to_favorites": MessageLookupByLibrary.simpleMessage("お気に入りを移動"),
         "chapter": MessageLookupByLibrary.simpleMessage("章"),
         "check_for_update": MessageLookupByLibrary.simpleMessage("更新を確認"),
-        "clear_cache": MessageLookupByLibrary.simpleMessage("キャッシュをクリア"),
-        "clear_filter": MessageLookupByLibrary.simpleMessage("すべて削除"),
+        "clear_cache": MessageLookupByLibrary.simpleMessage("キャッシュを削除"),
+        "clear_filter": MessageLookupByLibrary.simpleMessage("削除"),
         "clear_search_history":
             MessageLookupByLibrary.simpleMessage("検索履歴を全消去"),
         "clipboard_detection":
@@ -96,8 +95,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "collapse": MessageLookupByLibrary.simpleMessage("非表示"),
         "color_picker_primary": MessageLookupByLibrary.simpleMessage("Primary"),
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("Wheel"),
-        "comment": MessageLookupByLibrary.simpleMessage("Comment"),
-        "commentator": MessageLookupByLibrary.simpleMessage("Commentator"),
+        "comment": MessageLookupByLibrary.simpleMessage("コメント"),
+        "commentator": MessageLookupByLibrary.simpleMessage("コメンター"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("クリップボードにコピーしました"),
         "copy": MessageLookupByLibrary.simpleMessage("コピー"),
@@ -122,25 +121,23 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Domain fronting"),
         "donate": MessageLookupByLibrary.simpleMessage("寄付金"),
         "done": MessageLookupByLibrary.simpleMessage("完了"),
-        "double_click_back":
-            MessageLookupByLibrary.simpleMessage("止めるにはもう一度押してください"),
+        "double_click_back": MessageLookupByLibrary.simpleMessage("一度押して終了します"),
         "double_page_model": MessageLookupByLibrary.simpleMessage("両ページモード"),
         "download": MessageLookupByLibrary.simpleMessage("ダウンロード"),
         "download_location": MessageLookupByLibrary.simpleMessage("ダウンロードパス"),
         "download_ori_image":
-            MessageLookupByLibrary.simpleMessage("オリジナル画像ダウンロード"),
+            MessageLookupByLibrary.simpleMessage("オリジナル画像をダウンロード"),
         "download_ori_image_summary":
             MessageLookupByLibrary.simpleMessage("危険です！509エラー発生可能性するがあります"),
         "downloaded": MessageLookupByLibrary.simpleMessage("ダウンロード済み"),
         "downloading": MessageLookupByLibrary.simpleMessage("ダウンロード中"),
         "edit": MessageLookupByLibrary.simpleMessage("編集"),
-        "edit_block_rule":
-            MessageLookupByLibrary.simpleMessage("Edit Block Rule"),
+        "edit_block_rule": MessageLookupByLibrary.simpleMessage("編集"),
         "edit_comment": MessageLookupByLibrary.simpleMessage("編集"),
         "eh": MessageLookupByLibrary.simpleMessage("E·H"),
         "ehentai_my_tags": MessageLookupByLibrary.simpleMessage("マイ タグ"),
         "ehentai_settings": MessageLookupByLibrary.simpleMessage("EHentai設定"),
-        "enable": MessageLookupByLibrary.simpleMessage("Enable"),
+        "enable": MessageLookupByLibrary.simpleMessage("有効化"),
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("特定の日付やオフセット/GIDを入力"),
         "expand": MessageLookupByLibrary.simpleMessage("表示"),
@@ -155,24 +152,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "favorites_order_Use_posted":
             MessageLookupByLibrary.simpleMessage("アップロードされた日付順"),
         "filter_comments_by_score":
-            MessageLookupByLibrary.simpleMessage("スコアでくコメントのフィルタリング"),
+            MessageLookupByLibrary.simpleMessage("スコアでくコメントを絞り込む"),
         "filter_comments_by_score_summary":
-            MessageLookupByLibrary.simpleMessage("このスコア以下のコメントは非表示になります"),
+            MessageLookupByLibrary.simpleMessage("このスコア以下のコメントは表示されません"),
         "fixed_height_of_list_items":
             MessageLookupByLibrary.simpleMessage("リスト項目の高さを固定"),
         "follow_system": MessageLookupByLibrary.simpleMessage("システム設定"),
         "fullscreen": MessageLookupByLibrary.simpleMessage("フルスクリーン"),
         "galery_site": MessageLookupByLibrary.simpleMessage("ギャラリーサイト"),
-        "gallery_comments": MessageLookupByLibrary.simpleMessage("ギャラリーコメント"),
+        "gallery_comments": MessageLookupByLibrary.simpleMessage("コメント"),
         "global_setting": MessageLookupByLibrary.simpleMessage("通常"),
         "gray_black": MessageLookupByLibrary.simpleMessage("灰色"),
-        "group": MessageLookupByLibrary.simpleMessage("組合"),
+        "group": MessageLookupByLibrary.simpleMessage("総合"),
         "groupName": MessageLookupByLibrary.simpleMessage("名前"),
         "groupType": MessageLookupByLibrary.simpleMessage("タイプ"),
         "hide": MessageLookupByLibrary.simpleMessage("非表示"),
         "hide_gallery_thumbnails":
-            MessageLookupByLibrary.simpleMessage("ギャラリーサムネイルを非表示"),
-        "hide_thumbnails": MessageLookupByLibrary.simpleMessage("サムネイルを非表示"),
+            MessageLookupByLibrary.simpleMessage("サムネイル（非表示）"),
+        "hide_thumbnails": MessageLookupByLibrary.simpleMessage("サムネイル（非表示）"),
         "hide_top_bar_on_scroll":
             MessageLookupByLibrary.simpleMessage("スクロール時にトップバーを隠す"),
         "horizontal_thumbnails":
@@ -190,7 +187,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "input_error": MessageLookupByLibrary.simpleMessage("入力エラー"),
         "instantly": MessageLookupByLibrary.simpleMessage("即刻"),
         "japanese_title_in_gallery":
-            MessageLookupByLibrary.simpleMessage("日本語タイトルを表示"),
+            MessageLookupByLibrary.simpleMessage("日本語のタイトル"),
         "japanese_title_in_gallery_summary":
             MessageLookupByLibrary.simpleMessage("ギャラリーページのみ"),
         "jump_next": MessageLookupByLibrary.simpleMessage("次"),
@@ -220,14 +217,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "listmode_waterfall_large":
             MessageLookupByLibrary.simpleMessage("滝（大）"),
         "loading": MessageLookupByLibrary.simpleMessage("読み込み中…"),
-        "local_favorite": MessageLookupByLibrary.simpleMessage("ローカルのお気に入り"),
+        "local_favorite": MessageLookupByLibrary.simpleMessage("ローカル"),
         "login": MessageLookupByLibrary.simpleMessage("ログイン"),
         "login_web": MessageLookupByLibrary.simpleMessage("Webでログイン"),
         "manually_sel_favorites": MessageLookupByLibrary.simpleMessage("手動選択"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大履歴"),
         "min": MessageLookupByLibrary.simpleMessage("分"),
         "model": m1,
-        "more_thumbnails": MessageLookupByLibrary.simpleMessage("他のサムネイルを見る"),
+        "more_thumbnails": MessageLookupByLibrary.simpleMessage("他のサムネイル"),
         "multi_download": MessageLookupByLibrary.simpleMessage("マルチダウンロード"),
         "mytags_on_website": MessageLookupByLibrary.simpleMessage("タグの管理"),
         "native_http_client_adapter":
@@ -236,7 +233,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "newGroup": MessageLookupByLibrary.simpleMessage("作成"),
         "newText": MessageLookupByLibrary.simpleMessage("キーワード"),
         "new_comment": MessageLookupByLibrary.simpleMessage("コメント入力"),
-        "no": MessageLookupByLibrary.simpleMessage("いいえ"),
+        "no": MessageLookupByLibrary.simpleMessage("しない"),
         "no_limit": MessageLookupByLibrary.simpleMessage("無制限"),
         "no_more_thumbnails":
             MessageLookupByLibrary.simpleMessage("これ以上サムネイルはありません"),
@@ -275,7 +272,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pls_i_username":
             MessageLookupByLibrary.simpleMessage("ユーザー名を入力してください"),
         "port": MessageLookupByLibrary.simpleMessage("Port"),
-        "preload_image": MessageLookupByLibrary.simpleMessage("画像をプリロード"),
+        "preload_image": MessageLookupByLibrary.simpleMessage("プリロード"),
         "processing": MessageLookupByLibrary.simpleMessage("ロード中"),
         "proxy": MessageLookupByLibrary.simpleMessage("Proxy"),
         "proxy_type": MessageLookupByLibrary.simpleMessage("Proxy Type"),
@@ -297,23 +294,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "redownload": MessageLookupByLibrary.simpleMessage("再ダウンロード"),
         "regex": MessageLookupByLibrary.simpleMessage("Regex"),
         "regex_format_error":
-            MessageLookupByLibrary.simpleMessage("Regex format error"),
+            MessageLookupByLibrary.simpleMessage("Regexフォーマットエラー"),
         "reload_image": MessageLookupByLibrary.simpleMessage("再ロード"),
         "remove_from_favorites":
             MessageLookupByLibrary.simpleMessage("お気に入りから削除"),
         "reply_to_comment": MessageLookupByLibrary.simpleMessage("返信"),
-        "resample_image": MessageLookupByLibrary.simpleMessage("再サンプル"),
+        "resample_image": MessageLookupByLibrary.simpleMessage("サンプル"),
         "reset_cost": MessageLookupByLibrary.simpleMessage("リセットコスト"),
         "restore_tasks_data":
             MessageLookupByLibrary.simpleMessage("Restore tasks data"),
         "right_to_left": MessageLookupByLibrary.simpleMessage("右から左"),
-        "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("その他のオプション"),
-        "s_Between": MessageLookupByLibrary.simpleMessage("から"),
+        "s_Advanced_Options": MessageLookupByLibrary.simpleMessage("オプション"),
+        "s_Between": MessageLookupByLibrary.simpleMessage(""),
         "s_Disable_default_filters":
-            MessageLookupByLibrary.simpleMessage("Disable default filters"),
+            MessageLookupByLibrary.simpleMessage("デフォルトフィルターの無効化"),
         "s_Minimum_Rating": MessageLookupByLibrary.simpleMessage("評価の下限"),
         "s_Only_Show_Galleries_With_Torrents":
-            MessageLookupByLibrary.simpleMessage("Torrentのあるギャラリーのみを表示"),
+            MessageLookupByLibrary.simpleMessage("Torrentがあるのみ"),
         "s_Search_Downvoted_Tags":
             MessageLookupByLibrary.simpleMessage("低評価タグ"),
         "s_Search_Fav_Name":
@@ -330,13 +327,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "s_Search_Torrent_Filenames":
             MessageLookupByLibrary.simpleMessage("トレントファイル名"),
         "s_Show_Expunged_Galleries":
-            MessageLookupByLibrary.simpleMessage("削除済みのギャラリーを表示"),
-        "s_and": MessageLookupByLibrary.simpleMessage("まで"),
+            MessageLookupByLibrary.simpleMessage("削除済み"),
+        "s_and": MessageLookupByLibrary.simpleMessage("〜"),
         "s_pages": MessageLookupByLibrary.simpleMessage("ページ"),
         "s_stars": m2,
         "save": MessageLookupByLibrary.simpleMessage("保存"),
-        "save_into_album": MessageLookupByLibrary.simpleMessage("画像を保存"),
-        "saved_successfully": MessageLookupByLibrary.simpleMessage("画像を保存しました"),
+        "save_into_album": MessageLookupByLibrary.simpleMessage("保存"),
+        "saved_successfully": MessageLookupByLibrary.simpleMessage("保存しました"),
         "screen_orientation": MessageLookupByLibrary.simpleMessage("回転モード"),
         "search": MessageLookupByLibrary.simpleMessage("検索"),
         "searchTexts": MessageLookupByLibrary.simpleMessage("検索"),
@@ -348,16 +345,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("システムタスクに非表示"),
         "setting_on_website": MessageLookupByLibrary.simpleMessage("ウエブサイトで設定"),
         "share": MessageLookupByLibrary.simpleMessage("共有"),
-        "share_image": MessageLookupByLibrary.simpleMessage("画像を共有"),
+        "share_image": MessageLookupByLibrary.simpleMessage("共有"),
         "show_comment_avatar": MessageLookupByLibrary.simpleMessage("アバターを表示"),
-        "show_comments": MessageLookupByLibrary.simpleMessage("コメントを表示"),
+        "show_comments": MessageLookupByLibrary.simpleMessage("コメント"),
         "show_filter": MessageLookupByLibrary.simpleMessage("フィルターを表示"),
-        "show_gallery_tags": MessageLookupByLibrary.simpleMessage("ギャラリーダグを表示"),
+        "show_gallery_tags": MessageLookupByLibrary.simpleMessage("ダグ"),
         "show_jpn_title": MessageLookupByLibrary.simpleMessage("日本語タイトルを表示"),
         "show_only_uploader_comment":
-            MessageLookupByLibrary.simpleMessage("アップローダのコメントのみ表示"),
-        "show_page_interval":
-            MessageLookupByLibrary.simpleMessage("画面の切り抜きエリアにも内容を表示"),
+            MessageLookupByLibrary.simpleMessage("アップローダのコメントのみ"),
+        "show_page_interval": MessageLookupByLibrary.simpleMessage("間紙"),
         "skip": MessageLookupByLibrary.simpleMessage("スキップ"),
         "sync_group": MessageLookupByLibrary.simpleMessage("グループ同期"),
         "sync_history": MessageLookupByLibrary.simpleMessage("履歴同期"),
@@ -365,8 +361,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "sync_read_progress": MessageLookupByLibrary.simpleMessage("進歩同期"),
         "system_proxy": MessageLookupByLibrary.simpleMessage("System Proxy"),
         "system_share": MessageLookupByLibrary.simpleMessage("シェア"),
-        "t_Clear_all_history":
-            MessageLookupByLibrary.simpleMessage("閲覧履歴をすべて削除しますか？"),
+        "t_Clear_all_history": MessageLookupByLibrary.simpleMessage("削除しますか？"),
         "tab_download": MessageLookupByLibrary.simpleMessage("ダウンロード"),
         "tab_favorite": MessageLookupByLibrary.simpleMessage("お気に入り"),
         "tab_gallery": MessageLookupByLibrary.simpleMessage("ギャラリー"),
@@ -377,7 +372,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "tab_toplist": MessageLookupByLibrary.simpleMessage("ランキング"),
         "tab_watched": MessageLookupByLibrary.simpleMessage("登録"),
         "tabbar_setting": MessageLookupByLibrary.simpleMessage("カテゴリー設定"),
-        "tablet_layout": MessageLookupByLibrary.simpleMessage("タブレット"),
+        "tablet_layout": MessageLookupByLibrary.simpleMessage("タブレットUI"),
         "tagNamespace": m3,
         "tag_add_to_mytag": MessageLookupByLibrary.simpleMessage("マイタグに追加"),
         "tag_dialog_Default_color":
@@ -395,7 +390,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tap to turn page animations"),
         "theme": MessageLookupByLibrary.simpleMessage("テーマ"),
         "thumbnails": MessageLookupByLibrary.simpleMessage("サムネイル"),
-        "title": MessageLookupByLibrary.simpleMessage("Title"),
+        "title": MessageLookupByLibrary.simpleMessage("タイトル"),
         "tolist_alltime": MessageLookupByLibrary.simpleMessage("史上"),
         "tolist_past_month": MessageLookupByLibrary.simpleMessage("月中"),
         "tolist_past_year": MessageLookupByLibrary.simpleMessage("年中"),
@@ -427,10 +422,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_ar_1": MessageLookupByLibrary.simpleMessage("手動選択、自動開始"),
         "uc_ar_2": MessageLookupByLibrary.simpleMessage("自動選択（オリジナル）、手動開始"),
         "uc_ar_3": MessageLookupByLibrary.simpleMessage("自動選択（オリジナル）、自動開始"),
-        "uc_ar_4": MessageLookupByLibrary.simpleMessage("自動選択（Resample）、手動開始"),
-        "uc_ar_5": MessageLookupByLibrary.simpleMessage("自動選択（Resample）、自動開始"),
+        "uc_ar_4": MessageLookupByLibrary.simpleMessage("自動選択（サンプル）、手動開始"),
+        "uc_ar_5": MessageLookupByLibrary.simpleMessage("自動選択（サンプル）、自動開始"),
         "uc_archiver_desc": MessageLookupByLibrary.simpleMessage(
-            "Archiverのデフォルトの動作は、コストとオリジナルまたは再サンプルアーカイブの選択を確認し、他の場所でクリックまたはコピーできるリンクを表示します。この動作はここで変更できます。"),
+            "Archiverのデフォルトの動作は、コストとオリジナルまたはサンプルアーカイブの選択を確認し、他の場所でクリックまたはコピーできるリンクを表示します。この動作はここで変更できます。"),
         "uc_archiver_set": MessageLookupByLibrary.simpleMessage("圧縮パッケージ"),
         "uc_artist": MessageLookupByLibrary.simpleMessage("作者"),
         "uc_auto": MessageLookupByLibrary.simpleMessage("自動"),
@@ -470,7 +465,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_hath_local_host_desc": MessageLookupByLibrary.simpleMessage(
             "この設定は、ローカルネットワーク上でH@Hクライアントがサイトを閲覧するのと同じ公開IPで動作している場合に使用できます。一部のルーターはバグがあり、自身のIPにリクエストをルーティングすることができません。\nブラウズするのと同じPCでクライアントを実行している場合は、ループバックアドレス（127.0.0.1:port）を使用します。クライアントがネットワーク上の別のコンピュータで実行されている場合は、そのローカルネットワークIPを使用します。ブラウザの設定によっては、外部のWebサイトがローカルネットワークIPを持つURLにアクセスできないようになっています。その場合、ホワイトリストに登録しなければならなりません"),
         "uc_img_cussize_desc": MessageLookupByLibrary.simpleMessage(
-            "このサイトは、画面幅に合わせて画像を自動的に縮小しますが、画像の最大表示サイズを手動で制限することもできます。自動スケーリングと同様、リサイズはブラウザ側で行われるため、画像の再サンプルは行われません。(0 = 制限なし)"),
+            "このサイトは、画面幅に合わせて画像を自動的に縮小しますが、画像の最大表示サイズを手動で制限することもできます。自動スケーリングと同様、リサイズはブラウザ側で行われるため、画像のサンプルは行われません。(0 = 制限なし)"),
         "uc_img_horiz": MessageLookupByLibrary.simpleMessage("横向き"),
         "uc_img_load_setting": MessageLookupByLibrary.simpleMessage("画像のロード"),
         "uc_img_size_setting": MessageLookupByLibrary.simpleMessage("画像の規模"),
@@ -500,11 +495,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_name_display": MessageLookupByLibrary.simpleMessage("ギャラリー名"),
         "uc_name_display_desc": MessageLookupByLibrary.simpleMessage(
             "多くのギャラリーは英語/ローマ字のタイトルと日本語のタイトルの両方を持っています。どちらのギャラリー名をデフォルトにしますか？"),
-        "uc_oi_0": MessageLookupByLibrary.simpleMessage("再サンプルを優先"),
+        "uc_oi_0": MessageLookupByLibrary.simpleMessage("サンプルを優先"),
         "uc_oi_1": MessageLookupByLibrary.simpleMessage("オリジナルを優先"),
         "uc_ori_image": MessageLookupByLibrary.simpleMessage("オリジナル画像"),
         "uc_ori_image_desc": MessageLookupByLibrary.simpleMessage(
-            "オリジナル画像を使用しますか？上記の【自動】とは異なる水平解像度を選択し、問題の画像の幅が広い場合、または元の画像が10MB（1年以上前のライブラリは4MB）より大きい場合、再サンプルされた画像が使用されます。"),
+            "オリジナル画像を使用しますか？上記の【自動】とは異なる水平解像度を選択し、問題の画像の幅が広い場合、または元の画像が10MB（1年以上前のライブラリは4MB）より大きい場合、サンプルされた画像が使用されます。"),
         "uc_parody": MessageLookupByLibrary.simpleMessage("パロディー"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
         "uc_pn_0": MessageLookupByLibrary.simpleMessage("いいえ"),
@@ -519,7 +514,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_rename": MessageLookupByLibrary.simpleMessage("名前を変更"),
         "uc_res_res": MessageLookupByLibrary.simpleMessage("解像度"),
         "uc_res_res_desc": MessageLookupByLibrary.simpleMessage(
-            "画像は通常、オンライン表示用に水平解像度1280pxに再サンプルされます。上記の代替解像度のいずれかを選択できます。"),
+            "画像は通常、オンライン表示用に水平解像度1280pxにサンプルされます。上記の代替解像度のいずれかを選択できます。"),
         "uc_sc_0": MessageLookupByLibrary.simpleMessage("クリック"),
         "uc_sc_1": MessageLookupByLibrary.simpleMessage("常時"),
         "uc_search_r_count": MessageLookupByLibrary.simpleMessage("検索結果数"),
@@ -576,7 +571,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "version": MessageLookupByLibrary.simpleMessage("バージョン"),
         "vibrate_feedback": MessageLookupByLibrary.simpleMessage("バイブレーション"),
         "volume_key_turn_page":
-            MessageLookupByLibrary.simpleMessage("ボリュームキーでページを"),
+            MessageLookupByLibrary.simpleMessage("ボリュームキーナビゲーション"),
         "vote_down_successfully":
             MessageLookupByLibrary.simpleMessage("反対しました"),
         "vote_successfully": MessageLookupByLibrary.simpleMessage("評価しました"),
