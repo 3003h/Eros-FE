@@ -34,7 +34,42 @@ class EhSliverList extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterSliverList(
       delegate: FlutterListViewDelegate(
-        itemBuilder,
+        (BuildContext context, int index) {
+          if (galleryProviders.length - 1 < index) {
+            return const SizedBox.shrink();
+          }
+
+          if (index == galleryProviders.length - 1 &&
+              (next?.isNotEmpty ?? false)) {
+            // 加载完成最后一项的回调
+            // SchedulerBinding.instance
+            //     .addPostFrameCallback((_) => lastComplete?.call());
+            lastComplete?.call();
+          }
+
+          final GalleryProvider _provider = galleryProviders[index];
+          Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+          Get.lazyReplace(
+            () => GalleryItemController(
+                galleryProvider: Get.find(tag: _provider.gid)),
+            tag: _provider.gid,
+            fenix: true,
+          );
+
+          // return GalleryItemWidget(
+          //   galleryProvider: _provider,
+          //   tabTag: tabTag,
+          // );
+
+          return FrameSeparateWidget(
+            index: index,
+            placeHolder: const GalleryItemPlaceHolder(),
+            child: GalleryItemWidget(
+              galleryProvider: _provider,
+              tabTag: tabTag,
+            ),
+          );
+        },
         onItemKey: (index) => galleryProviders[index].gid ?? '',
         childCount: galleryProviders.length,
         keepPosition: keepPosition,
@@ -42,38 +77,61 @@ class EhSliverList extends StatelessWidget {
     );
   }
 
-  Widget itemBuilder(BuildContext context, int index) {
-    if (galleryProviders.length - 1 < index) {
-      return const SizedBox.shrink();
-    }
+  // Widget itemBuilder
+}
 
-    if (index == galleryProviders.length - 1 && (next?.isNotEmpty ?? false)) {
-      // 加载完成最后一项的回调
-      SchedulerBinding.instance
-          .addPostFrameCallback((_) => lastComplete?.call());
-    }
+Widget buildGallerySliverListView(
+  List<GalleryProvider> galleryProviders,
+  dynamic tabTag, {
+  String? next,
+  VoidCallback? lastComplete,
+  Key? key,
+  Key? centerKey,
+  int? lastTopItemIndex,
+  bool keepPosition = false,
+}) {
+  logger.t('buildGallerySliverListView');
 
-    final GalleryProvider _provider = galleryProviders[index];
-    Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
-    Get.lazyReplace(
-      () =>
-          GalleryItemController(galleryProvider: Get.find(tag: _provider.gid)),
-      tag: _provider.gid,
-      fenix: true,
-    );
+  return FlutterSliverList(
+    delegate: FlutterListViewDelegate(
+      (context, index) {
+        if (galleryProviders.length - 1 < index) {
+          return const SizedBox.shrink();
+        }
 
-    // return GalleryItemWidget(
-    //   galleryProvider: _provider,
-    //   tabTag: tabTag,
-    // );
+        if (index == galleryProviders.length - 1 &&
+            (next?.isNotEmpty ?? false)) {
+          // 加载完成最后一项的回调
+          SchedulerBinding.instance
+              .addPostFrameCallback((_) => lastComplete?.call());
+        }
 
-    return FrameSeparateWidget(
-      index: index,
-      placeHolder: const GalleryItemPlaceHolder(),
-      child: GalleryItemWidget(
-        galleryProvider: _provider,
-        tabTag: tabTag,
-      ),
-    );
-  }
+        final GalleryProvider _provider = galleryProviders[index];
+        Get.lazyReplace(() => _provider, tag: _provider.gid, fenix: true);
+        Get.lazyReplace(
+          () => GalleryItemController(
+              galleryProvider: Get.find(tag: _provider.gid)),
+          tag: _provider.gid,
+          fenix: true,
+        );
+
+        // return GalleryItemWidget(
+        //   galleryProvider: _provider,
+        //   tabTag: tabTag,
+        // );
+
+        return FrameSeparateWidget(
+          index: index,
+          placeHolder: const GalleryItemPlaceHolder(),
+          child: GalleryItemWidget(
+            galleryProvider: _provider,
+            tabTag: tabTag,
+          ),
+        );
+      },
+      onItemKey: (index) => galleryProviders[index].gid ?? '',
+      childCount: galleryProviders.length,
+      keepPosition: keepPosition,
+    ),
+  );
 }

@@ -281,18 +281,18 @@ class GalleryCategory extends StatelessWidget {
     // final Color _colorCategory = CupertinoDynamicColor.resolve(
     //     ThemeColors.catColor[category ?? 'default']!, context);
     return GestureDetector(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      child: Container(
+        decoration: BoxDecoration(
           color: _colorCategory,
-          child: Text(
-            category ?? '',
-            style: const TextStyle(
-              fontSize: 14.5,
-              // height: 1.1,
-              color: CupertinoColors.white,
-            ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+        child: Text(
+          category ?? '',
+          style: const TextStyle(
+            fontSize: 14.5,
+            // height: 1.1,
+            color: CupertinoColors.white,
           ),
         ),
       ),

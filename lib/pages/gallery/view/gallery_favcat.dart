@@ -81,8 +81,8 @@ class GalleryFavButton extends StatelessWidget {
   }
 }
 
-class FavcatAddListItem extends StatefulWidget {
-  const FavcatAddListItem({
+class FavCatAddListItem extends StatefulWidget {
+  const FavCatAddListItem({
     Key? key,
     required VoidCallback onTap,
     required this.text,
@@ -97,63 +97,60 @@ class FavcatAddListItem extends StatefulWidget {
   final int? totNum;
 
   @override
-  _FavcatAddListItemState createState() => _FavcatAddListItemState();
+  _FavCatAddListItemState createState() => _FavCatAddListItemState();
 }
 
-class _FavcatAddListItemState extends State<FavcatAddListItem> {
+class _FavCatAddListItemState extends State<FavCatAddListItem> {
   Color? _color;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: Container(
-          decoration: BoxDecoration(
-            color: _color,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-          ),
-          width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                FontAwesomeIcons.solidHeart,
-                color: CupertinoDynamicColor.resolve(
-                    ThemeColors.favColor[widget.favcat]!, context),
-                size: 18,
-              ).paddingOnly(left: 8, right: 8, bottom: 4),
-              Text(
-                widget.text,
-                style: const TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                '${widget.totNum ?? 0}',
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
-              ).paddingOnly(right: 4),
-            ],
-          ),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        decoration: BoxDecoration(
+          color: _color,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
-        onTap: widget._onTap,
-        onTapDown: (_) {
-          setState(() {
-            _color = CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey3, context);
-          });
-        },
-        onTapCancel: () {
-          setState(() {
-            _color = null;
-          });
-        },
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              FontAwesomeIcons.solidHeart,
+              color: CupertinoDynamicColor.resolve(
+                  ThemeColors.favColor[widget.favcat]!, context),
+              size: 18,
+            ).paddingOnly(left: 8, right: 8, bottom: 4),
+            Text(
+              widget.text,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              '${widget.totNum ?? 0}',
+              style: const TextStyle(
+                fontSize: 14,
+              ),
+            ).paddingOnly(right: 4),
+          ],
+        ),
       ),
+      onTap: widget._onTap,
+      onTapDown: (_) {
+        setState(() {
+          _color = CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey3, context);
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          _color = null;
+        });
+      },
     );
   }
 }

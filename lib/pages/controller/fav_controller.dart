@@ -140,7 +140,7 @@ class FavController extends GetxController {
   ) async {
     final List<Widget> _favcatList = List<Widget>.from(favList
         .where((value) => value.favId != 'a')
-        .map((Favcat fav) => FavcatAddListItem(
+        .map((Favcat fav) => FavCatAddListItem(
               text: fav.favTitle,
               favcat: fav.favId,
               totNum: fav.totNum,

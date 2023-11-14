@@ -270,7 +270,7 @@ class EhMyTagsController extends GetxController
         barrierDismissible: true,
         builder: (context) {
           return CupertinoAlertDialog(
-            title: const Text('Tagset'),
+            title: const Text('Tag Set'),
             content: Container(
               child: obx(
                 (state) {
@@ -382,14 +382,14 @@ class TagSetListItem extends StatefulWidget {
     Key? key,
     required VoidCallback onTap,
     required this.text,
-    this.tagset,
+    this.tagSet,
     this.totNum,
   })  : _onTap = onTap,
         super(key: key);
 
   final VoidCallback _onTap;
   final String text;
-  final String? tagset;
+  final String? tagSet;
   final int? totNum;
 
   @override
@@ -401,50 +401,50 @@ class _TagSetListItemState extends State<TagSetListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: Container(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        decoration: BoxDecoration(
           color: _color,
-          width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                FontAwesomeIcons.tags,
-                size: 18,
-              ).paddingOnly(left: 8, right: 12, bottom: 2),
-              Text(
-                widget.text,
-                style: const TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              const Spacer(),
-              // Text(
-              //   '${widget.totNum ?? 0}',
-              //   style: const TextStyle(
-              //     fontSize: 14,
-              //   ),
-              // ).paddingOnly(right: 4),
-            ],
-          ),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
-        onTap: widget._onTap,
-        onTapDown: (_) {
-          setState(() {
-            _color = CupertinoDynamicColor.resolve(
-                CupertinoColors.systemGrey3, context);
-          });
-        },
-        onTapCancel: () {
-          setState(() {
-            _color = null;
-          });
-        },
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              FontAwesomeIcons.tags,
+              size: 18,
+            ).paddingOnly(left: 8, right: 12, bottom: 2),
+            Text(
+              widget.text,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            const Spacer(),
+            // Text(
+            //   '${widget.totNum ?? 0}',
+            //   style: const TextStyle(
+            //     fontSize: 14,
+            //   ),
+            // ).paddingOnly(right: 4),
+          ],
+        ),
       ),
+      onTap: widget._onTap,
+      onTapDown: (_) {
+        setState(() {
+          _color = CupertinoDynamicColor.resolve(
+              CupertinoColors.systemGrey3, context);
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          _color = null;
+        });
+      },
     );
   }
 }

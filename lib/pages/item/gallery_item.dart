@@ -287,6 +287,7 @@ class _CoverImage extends StatelessWidget {
 
     Widget getImageBlurFittedBox() {
       Widget imageBlurFittedBox = CoverImg(
+        fixedHeight: _ehSettingService.fixedHeightOfListItems,
         imgUrl: _item.imgUrl ?? '',
         width: coverImageWidth,
         fit: BoxFit.contain,
@@ -518,18 +519,18 @@ class _Category extends StatelessWidget {
             CupertinoColors.systemBackground,
         Get.context!);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+    return Container(
+      decoration: BoxDecoration(
         color: _colorCategory,
-        child: Text(
-          category ?? '',
-          style: const TextStyle(
-            fontSize: 14,
-            height: 1,
-            color: CupertinoColors.white,
-          ),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+      child: Text(
+        category ?? '',
+        style: const TextStyle(
+          fontSize: 14,
+          height: 1,
+          color: CupertinoColors.white,
         ),
       ),
     );

@@ -274,18 +274,18 @@ class GalleryItemSimpleWidget extends StatelessWidget {
             CupertinoColors.systemBackground,
         Get.context!);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 4),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
         color: _colorCategory,
-        child: Text(
-          galleryProviderController.galleryProvider.category ?? '',
-          style: const TextStyle(
-            fontSize: 10,
-            height: 1.1,
-            color: CupertinoColors.white,
-          ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 4),
+      child: Text(
+        galleryProviderController.galleryProvider.category ?? '',
+        style: const TextStyle(
+          fontSize: 10,
+          height: 1.1,
+          color: CupertinoColors.white,
         ),
       ),
     );

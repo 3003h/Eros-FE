@@ -1,6 +1,5 @@
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'gallery_item.dart';
@@ -69,15 +68,15 @@ class GalleryItemPlaceHolder extends StatelessWidget {
                   ),
                   const Spacer(),
                   // 标签
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Expanded(child: PlaceHolderLine(width: 65)),
                       PlaceHolderLine(width: 50),
                       PlaceHolderLine(width: 50),
                     ],
                   ),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       PlaceHolderLine(width: 50),
                       PlaceHolderLine(width: 50),
                       Expanded(child: PlaceHolderLine(width: 65)),
@@ -90,9 +89,9 @@ class GalleryItemPlaceHolder extends StatelessWidget {
                     height: 4,
                   ),
                   // 类型和时间
-                  Row(
+                  const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const <Widget>[
+                    children: <Widget>[
                       // 类型
                       PlaceHolderLine(width: 60),
                       Spacer(),
@@ -106,104 +105,6 @@ class GalleryItemPlaceHolder extends StatelessWidget {
           ],
         ),
       ),
-    );
-
-    return Column(
-      children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            boxShadow: ehTheme.isDarkMode
-                ? null
-                : [
-                    BoxShadow(
-                      color: CupertinoDynamicColor.resolve(
-                              CupertinoColors.systemGrey5, Get.context!)
-                          .withOpacity(1.0),
-                      blurRadius: 10,
-                      // spreadRadius: 2,
-                      offset: const Offset(2, 4),
-                    )
-                  ],
-            color: ehTheme.itemBackgroundColor,
-            borderRadius: BorderRadius.circular(kCardRadius),
-          ),
-          padding: const EdgeInsets.only(right: kPaddingHorizontal),
-          margin: const EdgeInsets.fromLTRB(10, 8, 10, 12),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  // 封面图片
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: Container(
-                      constraints:
-                          const BoxConstraints(maxHeight: 280, minHeight: 100),
-                      color: CupertinoDynamicColor.resolve(
-                          CupertinoColors.systemGrey5, context),
-                      width: coverImageWidth,
-                      child: const SizedBox(
-                        height: 150,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  // 右侧信息
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const PlaceHolderLine(),
-                        const PlaceHolderLine(),
-                        Container(width: 70, child: const PlaceHolderLine()),
-                        const SizedBox(height: 4),
-                        const PlaceHolderLine(),
-                        Container(width: 70, child: const PlaceHolderLine()),
-
-                        // 评分行
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            // 评分
-                            Container(
-                                width: 50, child: const PlaceHolderLine()),
-                            // 占位
-                            const Spacer(),
-                            Container(
-                                width: 50, child: const PlaceHolderLine()),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        // 类型和时间
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            // 类型
-                            // _buildCategory(),
-                            const Spacer(),
-                            // 上传时间
-                            // _buildPostTime(),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Divider(
-          height: 0.5,
-          indent: kPaddingHorizontal,
-          color: CupertinoDynamicColor.resolve(
-              CupertinoColors.systemGrey4, Get.context!),
-        ),
-      ],
     );
   }
 }

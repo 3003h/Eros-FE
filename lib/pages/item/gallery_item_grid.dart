@@ -115,7 +115,7 @@ class GalleryItemGrid extends StatelessWidget {
                       right: 4,
                       child: Row(
                         children: [
-                          _buildFavcatIcon(),
+                          _buildFavCatIcon(),
                           _buildCount(),
                         ],
                       ),
@@ -162,7 +162,7 @@ class GalleryItemGrid extends StatelessWidget {
     });
   }
 
-  Widget _buildFavcatIcon({bool blur = false}) {
+  Widget _buildFavCatIcon({bool blur = false}) {
     return Obx(() {
       Widget icon = Icon(
         FontAwesomeIcons.solidHeart,
@@ -180,13 +180,13 @@ class GalleryItemGrid extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
         );
       } else {
-        icon = ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
+        icon = Container(
+          decoration: BoxDecoration(
             color: Colors.black38,
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-            child: icon,
+            borderRadius: BorderRadius.circular(10),
           ),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+          child: icon,
         );
       }
 
@@ -241,15 +241,13 @@ class GalleryItemGrid extends StatelessWidget {
       );
     } else {
       return Container(
-        padding: const EdgeInsets.only(left: 2),
-        child: ClipRRect(
+        margin: const EdgeInsets.only(left: 2),
+        decoration: BoxDecoration(
+          color: Colors.black38,
           borderRadius: BorderRadius.circular(10),
-          child: Container(
-            color: Colors.black38,
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-            child: text,
-          ),
         ),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+        child: text,
       );
     }
   }

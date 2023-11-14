@@ -288,7 +288,7 @@ Widget buildGallerySliverListSimpleView(
   VoidCallback? lastComplete,
   Key? key,
   Key? centerKey,
-  int? lastTopitemIndex,
+  int? lastTopItemIndex,
   bool keepPosition = false,
 }) {
   logger.t('buildGallerySliverListSimpleView');
@@ -378,7 +378,6 @@ Widget getGallerySliverList(
           tabTag,
           next: next,
           lastComplete: lastComplete,
-          key: _key,
           centerKey: centerKey,
           lastTopItemIndex: lastTopitemIndex,
           keepPosition: keepPosition,
@@ -389,7 +388,6 @@ Widget getGallerySliverList(
           tabTag,
           next: next,
           lastComplete: lastComplete,
-          key: _key,
           centerKey: centerKey,
           lastTopItemIndex: lastTopitemIndex,
         );
@@ -400,7 +398,6 @@ Widget getGallerySliverList(
           next: next,
           lastComplete: lastComplete,
           large: true,
-          key: _key,
           centerKey: centerKey,
           lastTopItemIndex: lastTopitemIndex,
         );
@@ -410,9 +407,8 @@ Widget getGallerySliverList(
           tabTag,
           next: next,
           lastComplete: lastComplete,
-          key: _key,
           centerKey: centerKey,
-          lastTopitemIndex: lastTopitemIndex,
+          lastTopItemIndex: lastTopitemIndex,
           keepPosition: keepPosition,
         );
       case ListModeEnum.grid:
@@ -421,7 +417,6 @@ Widget getGallerySliverList(
           tabTag,
           next: next,
           lastComplete: lastComplete,
-          key: _key,
           centerKey: centerKey,
           lastTopItemIndex: lastTopitemIndex,
         );
@@ -431,7 +426,6 @@ Widget getGallerySliverList(
           tabTag,
           next: next,
           lastComplete: lastComplete,
-          key: _key,
           centerKey: centerKey,
           lastTopItemIndex: lastTopitemIndex,
         );
