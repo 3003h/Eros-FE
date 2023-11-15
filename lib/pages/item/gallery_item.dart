@@ -264,21 +264,20 @@ class _CoverImage extends StatelessWidget {
 
     BoxFit _fit = BoxFit.cover;
 
-    // todo
-    if (imageRatio < containRatio && containRatio - imageRatio < 0.5) {
-      // _fit = BoxFit.fitHeight;
-      _fit = BoxFit.cover;
-    }
-
-    if (imageRatio > containRatio && imageRatio - containRatio < 1.0) {
-      // _fit = BoxFit.cover;
-      _fit = BoxFit.fitHeight;
+    if (!_ehSettingService.fixedHeightOfListItems) {
+      if (imageRatio > 1 || imageRatio < 3 / 5) {
+        _fit = BoxFit.contain;
+      }
+    } else {
+      if (imageRatio - containRatio > 0.28 || containRatio - imageRatio > 0.2) {
+        _fit = BoxFit.contain;
+      }
     }
 
     loggerSimple.t('imageRatio:$imageRatio  containRatio:$containRatio  $_fit');
 
     Widget image = CoverImg(
-      fixedHeight: _ehSettingService.fixedHeightOfListItems,
+      // expand: _ehSettingService.fixedHeightOfListItems,
       imgUrl: _item.imgUrl ?? '',
       width: _item.imgWidth?.toDouble(),
       height: _item.imgHeight?.toDouble(),
@@ -287,26 +286,24 @@ class _CoverImage extends StatelessWidget {
 
     Widget getImageBlurFittedBox() {
       Widget imageBlurFittedBox = CoverImg(
-        fixedHeight: _ehSettingService.fixedHeightOfListItems,
         imgUrl: _item.imgUrl ?? '',
         width: coverImageWidth,
-        fit: BoxFit.contain,
+        fit: BoxFit.cover,
       );
 
-      imageBlurFittedBox = FittedBox(
-        fit: BoxFit.cover,
-        child: imageBlurFittedBox.blurred(
-          blur: 10,
-          colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
-          blurColor:
-              CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
-        ),
+      imageBlurFittedBox = Blur(
+        child: imageBlurFittedBox,
+        blur: 5,
+        colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
+        blurColor: CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
       );
 
       return imageBlurFittedBox;
     }
 
     Widget coverBackground(BoxFit fit, bool blurringOfCoverBackground) {
+      // return getImageBlurFittedBox();
+
       if (_fit == BoxFit.contain && blurringOfCoverBackground) {
         return getImageBlurFittedBox();
       } else {
@@ -624,7 +621,7 @@ class CoverImg extends StatelessWidget {
     this.height,
     this.width,
     this.fit = BoxFit.contain,
-    this.fixedHeight = true,
+    this.expand = true,
   }) : super(key: key);
 
   final String imgUrl;
@@ -633,7 +630,7 @@ class CoverImg extends StatelessWidget {
 
   final BoxFit fit;
 
-  final bool fixedHeight;
+  final bool expand;
 
   @override
   Widget build(BuildContext context) {
@@ -661,6 +658,7 @@ class CoverImg extends StatelessWidget {
 
     return Obx(
       () => BlurImage(
+        expand: expand,
         child: image(),
         isBlur: ehSettingService.isGalleryImgBlur.value,
       ),

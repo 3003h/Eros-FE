@@ -8,19 +8,19 @@ class BlurImage extends StatelessWidget {
     required this.child,
     this.isBlur = true,
     this.sigma = 5.0,
-    this.fixedHeight = true,
+    this.expand = true,
   });
 
   final Widget child;
   final bool isBlur;
   final double sigma;
-  final bool fixedHeight;
+  final bool expand;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      fit: fixedHeight ? StackFit.expand : StackFit.loose,
+      fit: expand ? StackFit.expand : StackFit.loose,
       children: <Widget>[
         Container(child: child),
         if (isBlur)
