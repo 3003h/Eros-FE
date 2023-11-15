@@ -596,11 +596,13 @@ class Api {
 
     io.File? file;
     late String realFileName;
+    bool isCached = false;
 
     // 从缓存中获取
     file = await getCachedImageFile(imageUrl);
 
     if (file != null) {
+      isCached = true;
       realFileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
     } else {
       // 无缓存下载
@@ -626,14 +628,35 @@ class Api {
     logger.d('^^^^ 保存图片到相册 $realFileName lengthSync:${file.lengthSync()}');
 
     try {
-      final result = await ImageGallerySaver.saveFile(
-        file.path,
-        name: realFileName,
-        isReturnPathOfIOS: GetPlatform.isIOS,
-      );
+      late final dynamic result;
+
+      if (Platform.isAndroid || !isCached) {
+        // Android 直接使用缓存路径的图片文件, 或者非缓存图片（通常为下载原图）
+        result = await ImageGallerySaver.saveFile(
+          file.path,
+          name: realFileName,
+        );
+      } else {
+        // iOS 不能直接使用缓存路径的图片文件， 所以需要先读取文件内容
+        result = await ImageGallerySaver.saveImage(
+          file.readAsBytesSync(),
+          name: realFileName,
+          quality: 100,
+        );
+      }
+
       logger.d('${result.runtimeType} $result');
+
       if (result == null || result == '') {
         throw EhError(error: 'Save image fail');
+      }
+
+      if (result is Map) {
+        final isSuccess = result['isSuccess'] as bool;
+        final errorMessage = result['errorMessage'] as String?;
+        if (!isSuccess) {
+          throw EhError(error: errorMessage ?? 'Save image fail');
+        }
       }
 
       // final result = await ImageSave.saveImage(
@@ -645,6 +668,8 @@ class Api {
       // if (result == null || !result) {
       //   throw EhError(error: 'Save image fail');
       // }
+    } on EhError catch (e) {
+      rethrow;
     } catch (e, s) {
       logger.e('保存图片到相册失败', error: e, stackTrace: s);
       throw EhError(error: '保存失败');

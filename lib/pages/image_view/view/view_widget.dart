@@ -1634,22 +1634,38 @@ Future<void> showSaveActionSheet(
                 Get.back();
                 if (filePath != null && filePath.isNotEmpty) {
                   logger.d('重采样图片 filePath: $filePath');
-                  await Api.saveLocalImageToPhoto(
-                    filePath,
-                    context: context,
-                    gid: gid,
-                  );
-                  showToast(L10n.of(context).saved_successfully);
+                  try {
+                    await Api.saveLocalImageToPhoto(
+                      filePath,
+                      context: context,
+                      gid: gid,
+                    );
+                    showToast(L10n.of(context).saved_successfully);
+                  } on EhError catch (e) {
+                    logger.e('保存失败', error: e);
+                    showToast(e.message);
+                  } catch (e) {
+                    logger.e('保存失败', error: e);
+                    showToast(e.toString());
+                  }
                 } else if (imageUrl != null && imageUrl.isNotEmpty) {
                   logger.d('重采样图片 imageUrl: $imageUrl');
-                  await Api.saveNetworkImageToPhoto(
-                    imageUrl,
-                    context: context,
-                    gid: gid,
-                    ser: ser,
-                    filename: filename,
-                  );
-                  showToast(L10n.of(context).saved_successfully);
+                  try {
+                    await Api.saveNetworkImageToPhoto(
+                      imageUrl,
+                      context: context,
+                      gid: gid,
+                      ser: ser,
+                      filename: filename,
+                    );
+                    showToast(L10n.of(context).saved_successfully);
+                  } on EhError catch (e) {
+                    logger.e('保存失败', error: e);
+                    showToast(e.message);
+                  } catch (e) {
+                    logger.e('保存失败', error: e);
+                    showToast(e.toString());
+                  }
                 } else {
                   showToast('imageUrl is null or file is null');
                 }
@@ -1669,7 +1685,7 @@ Future<void> showSaveActionSheet(
 
                   SmartDialog.showLoading(
                     builder: (_) => _downloadIndicator(),
-                    backDismiss: false,
+                    backDismiss: true,
                   );
                   try {
                     await Api.saveNetworkImageToPhoto(
