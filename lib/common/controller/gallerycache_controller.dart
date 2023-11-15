@@ -48,9 +48,9 @@ class GalleryCacheController extends GetxController {
 
     if (sync && webdavController.syncReadProgress) {
       try {
-        final remotelist = await webdavController.getRemotReadList();
-        logger.t('remotelist $remotelist');
-        if (remotelist.contains(gid)) {
+        final remoteList = await webdavController.getRemotReadList();
+        logger.t('remoteList $remoteList');
+        if (remoteList.contains(gid)) {
           final remote = await webdavController.downloadRead(gid);
           logger.t('远程 ${remote?.toJson()}');
           if (_localCache == null && remote != null) {
