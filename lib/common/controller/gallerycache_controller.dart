@@ -82,23 +82,22 @@ class GalleryCacheController extends GetxController {
       return;
     }
     final GalleryCache? _ori = await listenGalleryCache(gid, sync: false).first;
-    // logger.d('_ori ${_ori?.toJson()}');
+    logger.d('_ori ${_ori?.toJson()}');
     final _time = DateTime.now().millisecondsSinceEpoch;
     if (_ori == null) {
       final _newCache = GalleryCache(gid: gid, lastIndex: index, time: _time);
+      logger.d('_newCache ${_newCache.toJson()}');
       gCacheMap[gid] = _newCache;
       if (saveToStore) {
-        // gStore.saveCache(_newCache);
         hiveHelper.saveCache(_newCache);
         if (webdavController.syncReadProgress) {
           debSync.debounce(() => webdavController.uploadRead(_newCache));
         }
       }
     } else {
-      final _newCache = _ori.copyWith(lastIndex: index, time: _time);
+      final _newCache = _ori.copyWith(lastIndex: index, time: _time, gid: gid);
       gCacheMap[gid] = _newCache;
       if (saveToStore) {
-        // gStore.saveCache(_newCache);
         hiveHelper.saveCache(_newCache);
         if (webdavController.syncReadProgress) {
           debSync.debounce(() => webdavController.uploadRead(_newCache));
@@ -111,7 +110,6 @@ class GalleryCacheController extends GetxController {
     logger.t(
         'save All GalleryCache \n${gCacheMap.entries.map((e) => jsonEncode(e.value)).join('\n')}');
     gCacheMap.forEach((key, value) {
-      // gStore.saveCache(value);
       hiveHelper.saveCache(value);
     });
   }
@@ -120,11 +118,9 @@ class GalleryCacheController extends GetxController {
     final GalleryCache? _ori = await listenGalleryCache(gid, sync: false).first;
     if (_ori == null) {
       gCacheMap[gid] = GalleryCache(gid: gid).copyWithMode(columnMode);
-      // gStore.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));
       hiveHelper.saveCache(GalleryCache(gid: gid).copyWithMode(columnMode));
     } else {
       gCacheMap[gid] = _ori.copyWithMode(columnMode);
-      // gStore.saveCache(_ori.copyWithMode(columnMode));
       hiveHelper.saveCache(_ori.copyWithMode(columnMode));
     }
   }
