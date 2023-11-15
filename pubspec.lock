@@ -146,6 +146,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.1"
+  buffer:
+    dependency: transitive
+    description:
+      name: buffer
+      sha256: "94f60815065a8f0fd4f05be51faf86cf86519327e039d5c2aac72e1d1cc1dad4"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.2.2"
   build:
     dependency: transitive
     description:
@@ -1461,6 +1469,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.2"
+  mysql_client:
+    dependency: "direct main"
+    description:
+      name: mysql_client
+      sha256: "6a0fdcbe3e0721c637f97ad24649be2f70dbce2b21ede8f962910e640f753fc2"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.27"
   native_dio_adapter:
     dependency: "direct main"
     description:
@@ -2142,6 +2158,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      sha256: a97ce2013f240b2f3807bcbaf218765b6f301c3eff91092bcfa23a039e7dd151
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.2"
   typed_data:
     dependency: transitive
     description:
