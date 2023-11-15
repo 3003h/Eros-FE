@@ -5,7 +5,6 @@ import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:fehviewer/pages/image_view/common.dart';
-import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
@@ -15,7 +14,6 @@ import '../../pages/gallery/controller/gallery_page_state.dart';
 const _kMaxPageState = 60;
 
 class GalleryCacheController extends GetxController {
-  final GStore gStore = Get.find<GStore>();
   final WebdavController webdavController = Get.find();
   LinkedHashMap<String, GalleryCache> gCacheMap = LinkedHashMap();
 
@@ -37,7 +35,7 @@ class GalleryCacheController extends GetxController {
     String gid, {
     bool sync = true,
   }) async* {
-    final _localCache = hiveHelper.getCache(gid) ?? gStore.getCache(gid);
+    final _localCache = hiveHelper.getCache(gid);
 
     if (!gCacheMap.containsKey(gid) && _localCache != null) {
       logger.d('get from store');

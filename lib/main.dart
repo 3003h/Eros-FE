@@ -8,7 +8,6 @@ import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/locale_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/widget/system_ui_overlay.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,7 +44,7 @@ Future<void> main() async {
   }
 
   Get.lazyPut(() => LogService(), fenix: true);
-  Get.lazyPut(() => GStore());
+
   await Global.init();
   getinit();
   Global.proxyInit();

@@ -1042,14 +1042,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "4.6.6"
-  get_storage:
-    dependency: "direct main"
-    description:
-      name: get_storage
-      sha256: "39db1fffe779d0c22b3a744376e86febe4ade43bf65e06eab5af707dc84185a2"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.1.1"
   getwidget:
     dependency: "direct main"
     description:

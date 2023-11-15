@@ -36,7 +36,6 @@ dependencies:
   flutter_linkify: ^6.0.0
   url_launcher: ^6.0.3
   get: ^4.3.8
-  get_storage: ^2.0.3
   photo_view: ^0.14.0
   cached_network_image: ^3.0.0
   extended_image: ^8.0.1
