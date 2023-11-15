@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_storage/shared_storage.dart' as ss;
 
 Future<void> importQuickSearchFromFile() async {
@@ -71,7 +72,21 @@ Future<void> exportQuickSearchToFile() async {
           logger.d('file: ${file?.uri}');
         }
       } else {
-        final saveToDirPath = await FilePicker.platform.getDirectoryPath();
+        if (Platform.isIOS) {
+          Share.shareXFiles([
+            XFile(
+              _tempFilePath,
+              mimeType: '*/*',
+              name: path.basename(_tempFilePath),
+            )
+          ]);
+          return;
+        }
+
+        logger.d('saveToDirPath');
+        final saveToDirPath = await FilePicker.platform.getDirectoryPath(
+          dialogTitle: 'Save to',
+        );
         logger.d('$saveToDirPath');
         if (saveToDirPath != null) {
           final _dstPath =
@@ -171,6 +186,17 @@ Future<void> exportAppDataToFile({bool base64 = true}) async {
         logger.d('file: ${file?.uri}');
       }
     } else {
+      if (Platform.isIOS) {
+        Share.shareXFiles([
+          XFile(
+            tempFilePath,
+            mimeType: '*/*',
+            name: path.basename(tempFilePath),
+          )
+        ]);
+        return;
+      }
+      logger.d('saveToDirPath');
       final saveToDirPath = await FilePicker.platform.getDirectoryPath();
       logger.d('saveToDirPath $saveToDirPath');
       if (saveToDirPath != null) {
