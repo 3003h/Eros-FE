@@ -6,7 +6,6 @@ import 'package:collection/collection.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/utils/saf_helper.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
@@ -26,8 +25,6 @@ class ArchiverDownloadController extends GetxController {
   final Map<String, DownloadArchiverTaskInfo> archiverTaskMap =
       <String, DownloadArchiverTaskInfo>{};
 
-  final GStore _gStore = Get.find();
-
   final EhSettingService ehSettingService = Get.find();
 
   @override
@@ -38,13 +35,7 @@ class ArchiverDownloadController extends GetxController {
 
     // 初始化 taskMap
     final _archiver = hiveHelper.getAllArchiverTaskMap() ??
-        _gStore.archiverTaskMap ??
         <String, DownloadArchiverTaskInfo>{};
-
-    // 清理GS里的内容
-    if (_gStore.archiverTaskMap?.isNotEmpty ?? false) {
-      _gStore.cleanArchiverTaskMap();
-    }
 
     archiverTaskMap.clear();
     archiverTaskMap.addAll(_archiver);

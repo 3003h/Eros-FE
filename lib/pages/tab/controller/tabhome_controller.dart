@@ -7,7 +7,6 @@ import 'package:fehviewer/pages/tab/view/history_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
 import 'package:fehviewer/pages/tab/view/toplist_page.dart';
-import 'package:fehviewer/store/get_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -102,7 +101,6 @@ class TabHomeController extends GetxController {
   bool tapAwait = false;
 
   final EhSettingService _ehSettingService = Get.find();
-  final GStore gStore = Get.find();
 
   bool get isSafeMode => _ehSettingService.isSafeMode.value;
 
@@ -145,9 +143,7 @@ class TabHomeController extends GetxController {
   void onInit() {
     super.onInit();
 
-    _tabConfig = Global.profile.tabConfig ??
-        gStore.tabConfig ??
-        (const TabConfig(tabItemList: []));
+    _tabConfig = Global.profile.tabConfig ?? (const TabConfig(tabItemList: []));
 
     if (_tabConfig.tabMap.isNotEmpty) {
       final List<String> _tabConfigNames =
@@ -188,7 +184,6 @@ class TabHomeController extends GetxController {
 
     ever(tabMap, (Map<String, bool> map) {
       _tabConfig.setItemList(map, tabNameList);
-      gStore.tabConfig = _tabConfig;
 
       Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
       Global.saveProfile();
@@ -199,7 +194,6 @@ class TabHomeController extends GetxController {
 
     ever(tabNameList, (List<String> nameList) {
       _tabConfig.setItemList(tabMap, nameList);
-      gStore.tabConfig = _tabConfig;
 
       Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
       Global.saveProfile();

@@ -11,7 +11,6 @@ import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/network/api.dart';
 import 'package:fehviewer/network/app_dio/http_config.dart';
 import 'package:fehviewer/store/db/isar_helper.dart';
-import 'package:fehviewer/store/get_store.dart';
 import 'package:fehviewer/store/hive/hive.dart';
 import 'package:fehviewer/store/hive/hive_cache.dart';
 import 'package:fehviewer/utils/http_override.dart';
@@ -178,8 +177,6 @@ class Global {
 
     // SP初始化
     await StorageUtil.init();
-
-    await GStore.init();
 
     if (Platform.isWindows) {
       await hiveHelper.init(EHConst.appTitle);
