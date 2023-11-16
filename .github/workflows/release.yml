@@ -30,25 +30,25 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: '3.13'
+#            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/FEhViewer*.apk
           - target: ios
             os: macos-12
-            flutter_version: '3.13'
+#            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-ios
             artifact_path: build/**/FEhViewer*.ipa
           - target: macos
             os: macos-12
-            flutter_version: '3.13'
+#            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-mac
             artifact_path: build/macos/FEhViewer*.zip
           - target: windows
             os: windows-latest
-            flutter_version: '3.13'
+#            flutter_version: '3.13'
             flutter_channel: 'stable'
             artifact_name: release-windows
             artifact_path: build/windows/FEhViewer*.zip
@@ -244,7 +244,7 @@ jobs:
         run: |
           flutter build windows --release
           $DestDir = "build\windows\FEhViewer"
-          $SrcDir = "build\windows\runner\Release"
+          $SrcDir = "build\windows\x64\runner\Release"
           New-Item -Path $DestDir -ItemType Directory
           Copy-Item $SrcDir\* -Recurse $DestDir
           Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
