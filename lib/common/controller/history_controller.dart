@@ -1,13 +1,10 @@
 import 'dart:convert';
 
 import 'package:fehviewer/common/controller/webdav_controller.dart';
-import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
 import 'package:fehviewer/pages/tab/view/list/tab_base.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
@@ -73,7 +70,6 @@ class HistoryController extends GetxController {
         _hisViewController.sliverAnimatedListKey.currentState?.insertItem(0);
       }
 
-      // isarHelper.addHistory(_item);
       isarHelper.addHistoryIsolate(_item);
     } else {
       _histories.add(_item);
@@ -83,24 +79,23 @@ class HistoryController extends GetxController {
             ?.insertItem(insertIndex);
       }
 
-      // isarHelper.addHistory(_item);
       isarHelper.addHistoryIsolate(_item);
     }
 
     logger.t('add ${galleryProvider.gid} update1');
     update();
-    // if (!isListView) {
-    //   update();
-    // }
+
+    // TODO
+    syncHistoryMySQL();
 
     if (sync) {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
         logger.t('throttle syncHistory');
-        return syncHistory();
+        return syncHistoryWebDAV();
       });
 
-      debSync.debounce(syncHistory);
+      debSync.debounce(syncHistoryWebDAV);
     }
   }
 
@@ -128,10 +123,10 @@ class HistoryController extends GetxController {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
         logger.t('throttle syncHistory');
-        return syncHistory();
+        return syncHistoryWebDAV();
       });
 
-      debSync.debounce(syncHistory);
+      debSync.debounce(syncHistoryWebDAV);
     }
   }
 
@@ -186,7 +181,11 @@ class HistoryController extends GetxController {
   //   webdavController.updateRemoveFlg(gid);
   // }
 
-  Future<void> syncHistory() async {
+  Future<void> syncHistoryMySQL() async {
+    logger.d('syncHistoryMySQL');
+  }
+
+  Future<void> syncHistoryWebDAV() async {
     if (!webdavController.syncHistory) {
       // logger.d('disable syncHistory');
       return;

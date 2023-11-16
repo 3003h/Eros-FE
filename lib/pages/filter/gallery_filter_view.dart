@@ -373,7 +373,8 @@ class GalleryFilterView extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   cursorHeight: 14,
                   enabled: advanceSearchController
-                      .advanceSearch.value.searchBetweenPage,
+                          .advanceSearch.value.searchBetweenPage ??
+                      false,
                   style: const TextStyle(
                     height: 1,
                     textBaseline: TextBaseline.alphabetic,
@@ -394,7 +395,8 @@ class GalleryFilterView extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   cursorHeight: 14,
                   enabled: advanceSearchController
-                      .advanceSearch.value.searchBetweenPage,
+                          .advanceSearch.value.searchBetweenPage ??
+                      false,
                   style: const TextStyle(
                     height: 1,
                     textBaseline: TextBaseline.alphabetic,

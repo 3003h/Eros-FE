@@ -191,6 +191,16 @@ class ListViewEhSetting extends StatelessWidget {
             );
           },
         ),
+        EhCupertinoListTile(
+          title: Text('MySQL Sync'),
+          trailing: const CupertinoListTileChevron(),
+          onTap: () {
+            Get.toNamed(
+              EHRoutes.mysqlSync,
+              id: isLayoutLarge ? 2 : null,
+            );
+          },
+        ),
       ]),
 
       // 默认打开

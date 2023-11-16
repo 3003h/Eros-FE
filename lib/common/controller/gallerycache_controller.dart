@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:fehviewer/common/controller/mysql_controller.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/global.dart';
 import 'package:fehviewer/models/base/eh_models.dart';
@@ -16,6 +17,8 @@ const _kMaxPageState = 60;
 class GalleryCacheController extends GetxController {
   final WebdavController webdavController = Get.find();
   LinkedHashMap<String, GalleryCache> gCacheMap = LinkedHashMap();
+
+  final MysqlController mysqlController = Get.find();
 
   final Map<String, GalleryProvider?> _galleryProviderCache = {};
 
@@ -44,30 +47,53 @@ class GalleryCacheController extends GetxController {
 
     yield gCacheMap[gid];
 
-    if (sync && webdavController.syncReadProgress) {
+    if (sync) {
+      GalleryCache? remote = await getRemote(gid);
+
+      if (_localCache == null && remote != null) {
+        logger.t('local null');
+        gCacheMap[gid] = GalleryCache(lastIndex: remote.lastIndex);
+        yield gCacheMap[gid];
+      } else if (_localCache != null && remote != null) {
+        logger.t('both not null');
+        if ((remote.time ?? 0) > (_localCache.time ?? 0)) {
+          gCacheMap[gid] = _localCache.copyWith(
+              lastIndex: remote.lastIndex, time: remote.time);
+          yield gCacheMap[gid];
+        }
+      }
+    }
+  }
+
+  Future<GalleryCache?> getRemote(String gid) async {
+    List<GalleryCache?> remotes = [];
+    if (webdavController.syncReadProgress) {
       try {
         final remoteList = await webdavController.getRemotReadList();
         logger.t('remoteList $remoteList');
         if (remoteList.contains(gid)) {
-          final remote = await webdavController.downloadRead(gid);
-          logger.t('远程 ${remote?.toJson()}');
-          if (_localCache == null && remote != null) {
-            logger.t('local null');
-            gCacheMap[gid] = GalleryCache(lastIndex: remote.lastIndex);
-            yield gCacheMap[gid];
-          } else if (_localCache != null && remote != null) {
-            logger.t('both not null');
-            if ((remote.time ?? 0) > (_localCache.time ?? 0)) {
-              gCacheMap[gid] = _localCache.copyWith(
-                  lastIndex: remote.lastIndex, time: remote.time);
-              yield gCacheMap[gid];
-            }
-          }
+          final remoteWebdav = await webdavController.downloadRead(gid);
+          remotes.add(remoteWebdav);
         }
       } catch (e) {
         logger.e('$e');
       }
     }
+
+    if (mysqlController.syncReadProgress) {
+      final remoteMysql = await mysqlController.qryRead(gid);
+      remotes.add(remoteMysql);
+    }
+
+    return remotes.reduce((value, element) {
+      if (value == null) {
+        return element;
+      } else if (element == null) {
+        return value;
+      } else {
+        return (element.time ?? 0) > (value.time ?? 0) ? element : value;
+      }
+    });
   }
 
   Future<void> setIndex(
@@ -88,20 +114,28 @@ class GalleryCacheController extends GetxController {
       gCacheMap[gid] = _newCache;
       if (saveToStore) {
         hiveHelper.saveCache(_newCache);
-        if (webdavController.syncReadProgress) {
-          debSync.debounce(() => webdavController.uploadRead(_newCache));
-        }
+        _uploadRead(_newCache);
       }
     } else {
       final _newCache = _ori.copyWith(lastIndex: index, time: _time, gid: gid);
       gCacheMap[gid] = _newCache;
       if (saveToStore) {
         hiveHelper.saveCache(_newCache);
-        if (webdavController.syncReadProgress) {
-          debSync.debounce(() => webdavController.uploadRead(_newCache));
-        }
+        _uploadRead(_newCache);
       }
     }
+  }
+
+  void _uploadRead(GalleryCache read) {
+    debSync.debounce(() {
+      if (webdavController.syncReadProgress) {
+        return webdavController.uploadRead(read);
+      }
+
+      if (mysqlController.syncReadProgress) {
+        return mysqlController.uploadRead(read);
+      }
+    });
   }
 
   void saveAll() {

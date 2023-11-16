@@ -16,5 +16,6 @@
   "customTabConfig?": "$custom_tab_config",
   "tabConfig?": "$tab_config",
   "layoutConfig?": "$layout_config",
-  "blockConfig?": "$block_config"
+  "blockConfig?": "$block_config",
+  "mysqlConfig?": "$mysql_config"
 }

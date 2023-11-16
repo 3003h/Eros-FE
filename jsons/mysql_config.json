@@ -1,0 +1,8 @@
+{
+  "syncHistory?": false,
+  "syncReadProgress?": false,
+  "syncGroupProfile?": false,
+  "syncQuickSearch?": false,
+  "isValidAccount?": false,
+  "mysqlConnectionInfo?": "$mysql_connection_info"
+}
