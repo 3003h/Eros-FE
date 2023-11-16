@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/store/mysql/mysql.dart';
 import 'package:get/get.dart';
@@ -155,7 +157,7 @@ class MysqlController extends GetxController {
     feMySql?.testInit(connectionInfo);
   }
 
-  Future<GalleryCache?> qryRead(String gid) async {
+  Future<GalleryCache?> downloadRead(String gid) async {
     logger.d('qryRead $gid');
     if (gid.isEmpty) {
       logger.e('gid is empty');
@@ -172,5 +174,96 @@ class MysqlController extends GetxController {
       logger.e('$e\n$stack');
     }
     return null;
+  }
+
+  Future<void> uploadHistory(GalleryProvider his) async {
+    final _his = his.copyWith(
+      galleryComment: [],
+      galleryImages: [],
+      tagGroup: [],
+    );
+    final _gid = _his.gid;
+
+    if (_gid == null || _gid.isEmpty) {
+      logger.e('uploadHistory gid is null');
+      return;
+    }
+
+    logger.d('uploadHistory ${_his.gid}');
+
+    final _text = jsonEncode(_his);
+    final _time = _his.lastViewTime;
+
+    try {
+      await feMySql?.insertHistory(_gid, _time, _text);
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+    }
+  }
+
+  Future<int?> getHistoryTime(String gid) async {
+    logger.d('getHistoryTime $gid');
+    if (gid.isEmpty) {
+      logger.e('gid is empty');
+      return null;
+    }
+    try {
+      final result = await feMySql?.getHistoryTime(gid);
+      logger.d('getHistoryTime $result');
+      return result;
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+    }
+    return null;
+  }
+
+  Future<GalleryProvider?> downloadHistory(String gid) async {
+    logger.d('downloadHistory $gid');
+    if (gid.isEmpty) {
+      logger.e('gid is empty');
+      return null;
+    }
+    try {
+      final result = await feMySql?.getHistory(gid);
+      logger.d('downloadHistory $result');
+      if (result != null) {
+        return GalleryProvider.fromJson(jsonDecode(result.json));
+      }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+    }
+    return null;
+  }
+
+  Future<List<GalleryProvider?>> downloadHistoryList(
+      List<String?> gidList) async {
+    // 50 个一组
+    final _gidList = gidList.whereType<String>().toList();
+    final _list = <GalleryProvider?>[];
+    while (_gidList.isNotEmpty) {
+      final _subList = _gidList.sublist(0, 50);
+      _gidList.removeRange(0, _subList.length);
+      final _result = await feMySql?.getHistoryList(_subList);
+      logger.d('downloadHistoryList $_result');
+      if (_result != null) {
+        _list.addAll(
+            _result.map((e) => GalleryProvider.fromJson(jsonDecode(e.json))));
+      }
+    }
+    return _list;
+  }
+
+  Future<List<HistoryIndexGid>> getHistoryList() async {
+    logger.d('getHistoryList');
+    try {
+      final result = await feMySql?.getHistoryTimeList();
+      logger.d('getHistoryList $result');
+      if (result != null) {
+        return result.map((e) => HistoryIndexGid(g: e.gid, t: e.time)).toList();
+      }
+    } catch (e, stack) {
+      logger.e('$e\n$stack');
+    }
+    return [];
   }
 }

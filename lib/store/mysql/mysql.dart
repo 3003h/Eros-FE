@@ -158,7 +158,6 @@ class FeMySql {
       return null;
     }
 
-    // logger.d(result.rows.first.assoc());
     final version = result.rows.first.colAt(0);
     if (version == null) {
       return null;
@@ -215,8 +214,7 @@ class FeMySql {
       return null;
     }
 
-    // logger.d(result.rows.first.assoc());
-    final row = result.rows.first.assoc();
+    final row = result.rows.first.typedAssoc();
 
     logger.d('read Process row $row');
 
@@ -228,7 +226,7 @@ class FeMySql {
   }
 
   // History
-  Future<void> insertHistory(String gid, int time, String json) async {
+  Future<void> insertHistory(String gid, int? time, String? json) async {
     await _conn.execute('''
       INSERT INTO fe_history (gid, time, json) VALUES (:gid, :time, :json) ON DUPLICATE KEY UPDATE time = :time, json = :json
     ''', {
@@ -263,15 +261,75 @@ class FeMySql {
       return null;
     }
 
-    // logger.d(result.rows.first.assoc());
-    final row = result.rows.first.assoc();
+    final row = result.rows.first.typedAssoc();
 
     logger.d('history row $row');
 
     return (
-      gid: row['gid'] as String,
-      time: row['time'] as int,
-      json: row['json'] as String,
+      gid: row['gid'] as String? ?? '',
+      time: row['time'] as int? ?? 0,
+      json: row['json'] as String? ?? '',
     );
+  }
+
+  Future<int> getHistoryTime(String gid) async {
+    final IResultSet result = await _conn
+        .execute('SELECT time FROM fe_history WHERE gid= :gid', {'gid': gid});
+    if (result.rows.isEmpty) {
+      return 0;
+    }
+
+    final row = result.rows.first.typedAssoc();
+
+    logger.d('history row $row');
+
+    return row['time'] as int? ?? 0;
+  }
+
+  Future<List<({String gid, int time})>> getHistoryTimeList() async {
+    final IResultSet result = await _conn
+        .execute('SELECT gid, time FROM fe_history ORDER BY time DESC');
+    if (result.rows.isEmpty) {
+      return [];
+    }
+
+    final list = <({String gid, int time})>[];
+    result.rows.forEach((element) {
+      final row = element.typedAssoc();
+      list.add(
+        (
+          gid: row['gid'] as String? ?? '',
+          time: row['time'] as int? ?? 0,
+        ),
+      );
+    });
+
+    return list;
+  }
+
+  Future<List<({String gid, int time, String json})>> getHistoryList(
+      List<String> subList) async {
+    final _subList = subList.toList();
+    final _list = <({String gid, int time, String json})>[];
+    final _subSubList = _subList.sublist(0, 50);
+    _subList.removeRange(0, _subSubList.length);
+    final _result = await _conn.execute(
+        'SELECT gid, time, json FROM fe_history WHERE gid IN (:gidList)',
+        {'gidList': _subSubList});
+
+    if (_result.rows.isNotEmpty) {
+      _result.rows.forEach((element) {
+        final row = element.typedAssoc();
+        _list.add(
+          (
+            gid: row['gid'] as String? ?? '',
+            time: row['time'] as int? ?? 0,
+            json: row['json'] as String? ?? '',
+          ),
+        );
+      });
+    }
+
+    return _list;
   }
 }

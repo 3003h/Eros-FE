@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:fehviewer/common/controller/mysql_controller.dart';
 import 'package:fehviewer/common/controller/webdav_controller.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -22,6 +23,7 @@ class HistoryController extends GetxController {
 
   final EhSettingService _ehSettingService = Get.find();
   final WebdavController webdavController = Get.find();
+  final MysqlController mysqlController = Get.find();
 
   final thrSync = Throttling(duration: const Duration(seconds: 60));
   final debSync = Debouncing(duration: const Duration(seconds: 80));
@@ -85,17 +87,14 @@ class HistoryController extends GetxController {
     logger.t('add ${galleryProvider.gid} update1');
     update();
 
-    // TODO
-    syncHistoryMySQL();
-
     if (sync) {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
         logger.t('throttle syncHistory');
-        return syncHistoryWebDAV();
+        return syncHistory();
       });
 
-      debSync.debounce(syncHistoryWebDAV);
+      debSync.debounce(syncHistory);
     }
   }
 
@@ -115,7 +114,6 @@ class HistoryController extends GetxController {
       update();
     }
 
-    // hiveHelper.removeHistory(gid);
     isarHelper.removeHistory(gid);
     _addHistoryDelFlg(gid);
 
@@ -123,10 +121,10 @@ class HistoryController extends GetxController {
       // 节流函数 最多每分钟一次同步
       thrSync.throttle(() {
         logger.t('throttle syncHistory');
-        return syncHistoryWebDAV();
+        return syncHistory();
       });
 
-      debSync.debounce(syncHistoryWebDAV);
+      debSync.debounce(syncHistory);
     }
   }
 
@@ -181,86 +179,71 @@ class HistoryController extends GetxController {
   //   webdavController.updateRemoveFlg(gid);
   // }
 
-  Future<void> syncHistoryMySQL() async {
-    logger.d('syncHistoryMySQL');
-  }
-
-  Future<void> syncHistoryWebDAV() async {
-    if (!webdavController.syncHistory) {
-      // logger.d('disable syncHistory');
-      return;
-    }
-
+  /// 同步历史记录
+  Future<void> syncHistory() async {
     final List<HistoryIndexGid?> listLocal = histories
         .map((e) => HistoryIndexGid(t: e.lastViewTime, g: e.gid))
         .toList();
     logger.t('listLocal ${listLocal.length} \n${listLocal.map((e) => e?.g)}');
     logger.t('${jsonEncode(listLocal)} ');
 
-    // 下载远程列表
-    final listRemote = await webdavController.getRemoteHistoryList();
-    if (listRemote.isEmpty) {
-      await _uploadHistories(listLocal.toList());
-      return;
-    }
-
-    logger.t('listRemote size ${listRemote.length}');
-    // yield true;
-
-    // 比较远程和本地的差异
-    final allGid = <HistoryIndexGid?>{...listRemote, ...listLocal};
-    final diff = allGid
-        .where((element) =>
-            !listRemote.contains(element) || !listLocal.contains(element))
-        .toList()
-        .toSet();
-    logger.t('diff ${diff.map((e) => e?.toJson())}');
-
-    // 本地时间更大的画廊
-    final localNewer = listLocal.where(
-      (eLocal) {
-        if (eLocal == null) {
-          return false;
-        }
-        final _eRemote =
-            listRemote.firstWhereOrNull((eRemote) => eRemote.g == eLocal.g);
-        if (_eRemote == null) {
-          return true;
-        }
-
-        return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
-      },
-    );
-    logger.t('localNewer count ${localNewer.length}');
-
-    // 远程时间更大的画廊
-    final remoteNewer = listRemote.where(
-      (eRemote) {
-        final _eLocal = listLocal
-            .firstWhereOrNull((eLocal) => (eLocal?.g ?? '') == eRemote.g);
-
-        final _eDelFlg = _delHistories
-            .firstWhereOrNull((eDel) => (eDel.g ?? '') == eRemote.g);
-
-        if (_eDelFlg != null) {
-          return (eRemote.t ?? 0) > (_eDelFlg.t ?? 0);
-        }
-
-        if (_eLocal == null) {
-          return true;
-        }
-
-        return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
-      },
-    );
-    logger.t('remoteNewer ${remoteNewer.map((e) => e.g).toList()}');
-
-    await _downloadHistories(remoteNewer.toSet().toList());
-
-    await _uploadHistories(localNewer.toList(), listRemote: listRemote);
+    syncHistoryMySQL(listLocal);
+    syncHistoryWebDAV(listLocal);
   }
 
-  Future _downloadHistories(List<HistoryIndexGid> hisList) async {
+  /// 通过mysql同步历史记录
+  Future<void> syncHistoryMySQL(List<HistoryIndexGid?> listLocal) async {
+    await _syncHistoryCallback(
+      enable: mysqlController.syncHistory,
+      listLocal: listLocal,
+      getRemoteList: mysqlController.getHistoryList,
+      uploadLocalHistories: _uploadHistoriesMySQL,
+      downloadRemoteHistories: _downloadHistoriesMySQL,
+    );
+  }
+
+  /// 通过webdav同步历史记录
+  Future<void> syncHistoryWebDAV(List<HistoryIndexGid?> listLocal) async {
+    await _syncHistoryCallback(
+      enable: webdavController.syncHistory,
+      listLocal: listLocal,
+      getRemoteList: webdavController.getRemoteHistoryList,
+      uploadLocalHistories: _uploadHistoriesWebDAV,
+      downloadRemoteHistories: _downloadHistoriesWebDAV,
+    );
+  }
+
+  Future<void> _downloadHistoriesMySQL(List<HistoryIndexGid> hisList) async {
+    final _list = await mysqlController
+        .downloadHistoryList(hisList.map((e) => e.g).toList());
+    for (final _image in _list) {
+      if (_image != null) {
+        final ori =
+            histories.firstWhereOrNull((element) => element.gid == _image.gid);
+        if (ori != null &&
+            (_image.lastViewTime ?? 0) <= (ori.lastViewTime ?? 0)) {
+          continue;
+        }
+        addHistory(_image, updateTime: false, sync: false);
+      }
+    }
+  }
+
+  Future<void> _uploadHistoriesMySQL(
+    List<HistoryIndexGid?> localHisList, {
+    List<HistoryIndexGid?>? listRemote,
+  }) async {
+    for (final his in localHisList) {
+      final GalleryProvider? _his =
+          histories.firstWhereOrNull((element) => element.gid == his?.g);
+
+      if (_his != null) {
+        await mysqlController.uploadHistory(_his);
+      }
+    }
+  }
+
+  Future<void> _downloadHistoriesWebDAV(List<HistoryIndexGid> hisList) async {
     webdavController.initExecutor();
     for (final gid in hisList) {
       webdavController.webDAVExecutor.scheduleTask(() async {
@@ -282,7 +265,7 @@ class HistoryController extends GetxController {
     await webdavController.webDAVExecutor.join(withWaiting: true);
   }
 
-  Future _uploadHistories(
+  Future<void> _uploadHistoriesWebDAV(
     List<HistoryIndexGid?> localHisList, {
     List<HistoryIndexGid?>? listRemote,
   }) async {
@@ -305,9 +288,79 @@ class HistoryController extends GetxController {
     await webdavController.webDAVExecutor.join(withWaiting: true);
   }
 
-  // Future<void> _uploadHistoryIndex(List<HistoryIndexGid?> gids) async {
-  //   final _time = DateTime.now().millisecondsSinceEpoch;
-  //   await webdavController.uploadHistoryIndex(
-  //       gids.where((element) => element != null).toList(), _time);
-  // }
+  Future<void> _syncHistoryCallback({
+    bool enable = false,
+    required List<HistoryIndexGid?> listLocal,
+    required Future<List<HistoryIndexGid>> Function() getRemoteList,
+    required Future<void> Function(
+      List<HistoryIndexGid?>, {
+      List<HistoryIndexGid?>? listRemote,
+    }) uploadLocalHistories,
+    required Future<void> Function(List<HistoryIndexGid>)
+        downloadRemoteHistories,
+  }) async {
+    logger.d('syncHistoryCallback');
+    if (!enable) {
+      return;
+    }
+
+    // 下载远程列表
+    final listRemote = await getRemoteList();
+    if (listRemote.isEmpty) {
+      await uploadLocalHistories(listLocal);
+      return;
+    }
+
+    logger.d('listRemote ${listRemote.length}');
+
+    // 比较远程和本地的差异
+    // final combinedList = <HistoryIndexGid?>{...listRemote, ...listLocal};
+    // final diff = combinedList
+    //     .where((element) =>
+    //         !listRemote.contains(element) || !listLocal.contains(element))
+    //     .toList()
+    //     .toSet();
+
+    // 本地时间更大的画廊
+    final localNewer = listLocal.where(
+      (eLocal) {
+        if (eLocal == null) {
+          return false;
+        }
+        final _eRemote =
+            listRemote.firstWhereOrNull((eRemote) => eRemote.g == eLocal.g);
+        if (_eRemote == null) {
+          return true;
+        }
+
+        return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
+      },
+    );
+    logger.d('localNewer ${localNewer.length} ${localNewer.map((e) => e?.g)}');
+
+    // 远程时间更大的画廊
+    final remoteNewer = listRemote.where(
+      (eRemote) {
+        final _eLocal = listLocal
+            .firstWhereOrNull((eLocal) => (eLocal?.g ?? '') == eRemote.g);
+
+        final _eDelFlg = _delHistories
+            .firstWhereOrNull((eDel) => (eDel.g ?? '') == eRemote.g);
+
+        if (_eDelFlg != null) {
+          return (eRemote.t ?? 0) > (_eDelFlg.t ?? 0);
+        }
+
+        if (_eLocal == null) {
+          return true;
+        }
+
+        return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
+      },
+    );
+
+    await downloadRemoteHistories(remoteNewer.toSet().toList());
+
+    await uploadLocalHistories(localNewer.toList(), listRemote: listRemote);
+  }
 }
