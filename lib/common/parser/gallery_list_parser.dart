@@ -212,7 +212,7 @@ GalleryList parseGalleryList(
                   backgrondColor: '',
                 ));
 
-        _translated = EHUtils.getLangeage(_langTag?.text ?? '');
+        _translated = EHUtils.getLanguage(_langTag?.text ?? '');
       }
     } catch (e, stack) {
       // logger.e('$e\n$stack');

@@ -170,7 +170,7 @@ class Api {
       /// 判断获取语言标识
       String _translated = '';
       if (tags.isNotEmpty) {
-        _translated = EHUtils.getLangeage(tags[0] as String);
+        _translated = EHUtils.getLanguage(tags[0] as String);
       }
 
       galleryProviders[i] = galleryProviders[i].copyWith(

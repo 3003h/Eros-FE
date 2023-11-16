@@ -133,8 +133,19 @@ class MysqlController extends GetxController {
     return false;
   }
 
+  Future<void> test() async {
+    // feMySql?.insertVersion();
+    // feMySql?.getVersion();
+    // feMySql?.reConnect(connectionInfo);
+  }
+
+  Future<void> connect() async {
+    await feMySql?.connect(connectionInfo);
+  }
+
   // 上传进度
   Future<void> uploadRead(GalleryCache read) async {
+    await connect();
     logger.d('mysql uploadRead ${read.toJson()}');
     final gid = read.gid;
 
@@ -151,13 +162,8 @@ class MysqlController extends GetxController {
     }
   }
 
-  Future<void> test() async {
-    // feMySql?.insertVersion();
-    // feMySql?.getVersion();
-    feMySql?.testInit(connectionInfo);
-  }
-
   Future<GalleryCache?> downloadRead(String gid) async {
+    await connect();
     logger.d('qryRead $gid');
     if (gid.isEmpty) {
       logger.e('gid is empty');
@@ -177,6 +183,7 @@ class MysqlController extends GetxController {
   }
 
   Future<void> uploadHistory(GalleryProvider his) async {
+    await connect();
     final _his = his.copyWith(
       galleryComment: [],
       galleryImages: [],
@@ -202,6 +209,7 @@ class MysqlController extends GetxController {
   }
 
   Future<int?> getHistoryTime(String gid) async {
+    await connect();
     logger.d('getHistoryTime $gid');
     if (gid.isEmpty) {
       logger.e('gid is empty');
@@ -218,6 +226,7 @@ class MysqlController extends GetxController {
   }
 
   Future<GalleryProvider?> downloadHistory(String gid) async {
+    await connect();
     logger.d('downloadHistory $gid');
     if (gid.isEmpty) {
       logger.e('gid is empty');
@@ -237,23 +246,30 @@ class MysqlController extends GetxController {
 
   Future<List<GalleryProvider?>> downloadHistoryList(
       List<String?> gidList) async {
-    // 50 个一组
-    final _gidList = gidList.whereType<String>().toList();
-    final _list = <GalleryProvider?>[];
-    while (_gidList.isNotEmpty) {
-      final _subList = _gidList.sublist(0, 50);
-      _gidList.removeRange(0, _subList.length);
-      final _result = await feMySql?.getHistoryList(_subList);
-      logger.d('downloadHistoryList $_result');
-      if (_result != null) {
-        _list.addAll(
-            _result.map((e) => GalleryProvider.fromJson(jsonDecode(e.json))));
+    await connect();
+    logger.t('downloadHistoryList $gidList');
+
+    final List<String> _gidList = [];
+    for (final gid in gidList) {
+      if (gid != null && gid.isNotEmpty) {
+        _gidList.add(gid);
       }
     }
+
+    final _list = <GalleryProvider?>[];
+
+    final result = await feMySql?.getHistoryList(_gidList);
+
+    if (result != null) {
+      _list.addAll(
+          result.map((e) => GalleryProvider.fromJson(jsonDecode(e.json))));
+    }
+
     return _list;
   }
 
   Future<List<HistoryIndexGid>> getHistoryList() async {
+    await connect();
     logger.d('getHistoryList');
     try {
       final result = await feMySql?.getHistoryTimeList();

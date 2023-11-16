@@ -234,6 +234,7 @@ class HistoryController extends GetxController {
     List<HistoryIndexGid?>? listRemote,
   }) async {
     for (final his in localHisList) {
+      logger.d('his ${his?.g}');
       final GalleryProvider? _his =
           histories.firstWhereOrNull((element) => element.gid == his?.g);
 
@@ -336,7 +337,6 @@ class HistoryController extends GetxController {
         return (eLocal.t ?? 0) > (_eRemote.t ?? 0);
       },
     );
-    logger.d('localNewer ${localNewer.length} ${localNewer.map((e) => e?.g)}');
 
     // 远程时间更大的画廊
     final remoteNewer = listRemote.where(
@@ -358,6 +358,8 @@ class HistoryController extends GetxController {
         return (eRemote.t ?? 0) > (_eLocal.t ?? 0);
       },
     );
+
+    logger.d('localNewer ${localNewer.length} ${localNewer.map((e) => e?.g)}');
 
     await downloadRemoteHistories(remoteNewer.toSet().toList());
 
