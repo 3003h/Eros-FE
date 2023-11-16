@@ -26,6 +26,7 @@ class EHRoutes {
   static const String proxySetting = '/proxySetting';
   static const String logfile = '/logfile';
   static const String webDavSetting = '/webDavSetting';
+  static const String mysqlSync = '/mysqlSync';
   static const String mySettings = '/mySettings';
   static const String myTags = '/myTags';
   static const String userTags = '/userTags';

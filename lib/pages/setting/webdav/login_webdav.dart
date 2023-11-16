@@ -49,7 +49,6 @@ class LoginWebDAV extends GetView<WebdavController> {
                       controller: controller.urlController,
                       style: kTextStyle,
                       placeholderStyle: _placeholderStyle,
-                      // prefix: Text(''),
                       placeholder: 'Url',
                       onEditingComplete: () {
                         FocusScope.of(context)
@@ -60,7 +59,7 @@ class LoginWebDAV extends GetView<WebdavController> {
                       controller: controller.usernameController,
                       style: kTextStyle,
                       placeholderStyle: _placeholderStyle,
-                      // prefix: Text(''),
+                      focusNode: controller.nodeUser,
                       placeholder: 'Username',
                       onEditingComplete: () {
                         FocusScope.of(context).requestFocus(controller.nodePwd);
@@ -70,9 +69,9 @@ class LoginWebDAV extends GetView<WebdavController> {
                       builder: (controller) {
                         return CupertinoTextFormFieldRow(
                           controller: controller.passwdController,
+                          focusNode: controller.nodePwd,
                           style: kTextStyle,
                           placeholderStyle: _placeholderStyle,
-                          // prefix: Text(''),
                           placeholder: 'Password',
                           obscureText: controller.obscurePasswd,
                         );

@@ -38,6 +38,8 @@ export 'layout_config.dart';
 export 'local_fav.dart';
 export 'mpv.dart';
 export 'mvp_image.dart';
+export 'mysql_config.dart';
+export 'mysql_connection_info.dart';
 export 'openl_translation.dart';
 export 'profile.dart';
 export 'simple_tag.dart';

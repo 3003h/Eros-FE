@@ -1,5 +1,6 @@
 import 'package:fehviewer/common/controller/block_controller.dart';
 import 'package:fehviewer/common/controller/image_block_controller.dart';
+import 'package:fehviewer/common/controller/mysql_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -50,6 +51,7 @@ void getinit() {
 
   /// 一些全局设置或者控制
   Get.lazyPut(() => WebdavController(), fenix: true);
+  Get.lazyPut(() => MysqlController(), fenix: true);
   Get.lazyPut(() => AutoLockController(), fenix: true);
   Get.lazyPut(() => LocalFavController(), fenix: true);
   Get.lazyPut(() => HistoryController(), fenix: true);

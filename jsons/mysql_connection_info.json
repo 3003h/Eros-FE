@@ -1,0 +1,9 @@
+{
+  "host": "localhost",
+  "port": 3000,
+  "userName": "admin",
+  "password": "admin",
+  "databaseName": "test",
+  "secure?": true,
+  "collation?":""
+}

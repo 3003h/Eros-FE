@@ -67,7 +67,7 @@ class HistoryViewController extends DefaultTabViewController {
     // await for (final rult in historyController.syncHistory()) {
     //   logger.d('${rult.runtimeType}');
     // }
-    historyController.syncHistory();
+    historyController.syncHistoryWebDAV();
     await Future.delayed(const Duration(seconds: 1));
   }
 }

@@ -10,6 +10,7 @@ import 'eh_config.dart';
 import 'fav_config.dart';
 import 'layout_config.dart';
 import 'local_fav.dart';
+import 'mysql_config.dart';
 import 'tab_config.dart';
 import 'user.dart';
 import 'webdav_profile.dart';
@@ -35,6 +36,7 @@ class Profile {
     this.tabConfig,
     this.layoutConfig,
     this.blockConfig,
+    this.mysqlConfig,
   });
 
   final EhConfig ehConfig;
@@ -55,6 +57,7 @@ class Profile {
   final TabConfig? tabConfig;
   final LayoutConfig? layoutConfig;
   final BlockConfig? blockConfig;
+  final MysqlConfig? mysqlConfig;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
       ehConfig: EhConfig.fromJson(json['ehConfig'] as Map<String, dynamic>),
@@ -90,6 +93,9 @@ class Profile {
           : null,
       blockConfig: json['blockConfig'] != null
           ? BlockConfig.fromJson(json['blockConfig'] as Map<String, dynamic>)
+          : null,
+      mysqlConfig: json['mysqlConfig'] != null
+          ? MysqlConfig.fromJson(json['mysqlConfig'] as Map<String, dynamic>)
           : null);
 
   Map<String, dynamic> toJson() => {
@@ -110,7 +116,8 @@ class Profile {
         'customTabConfig': customTabConfig?.toJson(),
         'tabConfig': tabConfig?.toJson(),
         'layoutConfig': layoutConfig?.toJson(),
-        'blockConfig': blockConfig?.toJson()
+        'blockConfig': blockConfig?.toJson(),
+        'mysqlConfig': mysqlConfig?.toJson()
       };
 
   Profile clone() => Profile(
@@ -131,7 +138,8 @@ class Profile {
       customTabConfig: customTabConfig?.clone(),
       tabConfig: tabConfig?.clone(),
       layoutConfig: layoutConfig?.clone(),
-      blockConfig: blockConfig?.clone());
+      blockConfig: blockConfig?.clone(),
+      mysqlConfig: mysqlConfig?.clone());
 
   Profile copyWith(
           {EhConfig? ehConfig,
@@ -151,7 +159,8 @@ class Profile {
           CustomTabConfig? customTabConfig,
           TabConfig? tabConfig,
           LayoutConfig? layoutConfig,
-          BlockConfig? blockConfig}) =>
+          BlockConfig? blockConfig,
+          MysqlConfig? mysqlConfig}) =>
       Profile(
         ehConfig: ehConfig ?? this.ehConfig,
         user: user ?? this.user,
@@ -171,6 +180,7 @@ class Profile {
         tabConfig: tabConfig ?? this.tabConfig,
         layoutConfig: layoutConfig ?? this.layoutConfig,
         blockConfig: blockConfig ?? this.blockConfig,
+        mysqlConfig: mysqlConfig ?? this.mysqlConfig,
       );
 
   @override
@@ -194,7 +204,8 @@ class Profile {
           customTabConfig == other.customTabConfig &&
           tabConfig == other.tabConfig &&
           layoutConfig == other.layoutConfig &&
-          blockConfig == other.blockConfig;
+          blockConfig == other.blockConfig &&
+          mysqlConfig == other.mysqlConfig;
 
   @override
   int get hashCode =>
@@ -215,5 +226,6 @@ class Profile {
       customTabConfig.hashCode ^
       tabConfig.hashCode ^
       layoutConfig.hashCode ^
-      blockConfig.hashCode;
+      blockConfig.hashCode ^
+      mysqlConfig.hashCode;
 }

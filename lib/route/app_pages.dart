@@ -29,6 +29,7 @@ import 'package:fehviewer/pages/setting/item_width_setting_page.dart';
 import 'package:fehviewer/pages/setting/layout_setting_page.dart';
 import 'package:fehviewer/pages/setting/license_page.dart';
 import 'package:fehviewer/pages/setting/log_page.dart';
+import 'package:fehviewer/pages/setting/mysql/mysql_sync_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_mytags_page.dart';
 import 'package:fehviewer/pages/setting/mytags/eh_usertag_page.dart';
 import 'package:fehviewer/pages/setting/proxy_page.dart';
@@ -234,6 +235,10 @@ class AppPages {
       page: () => const WebDavSetting(),
     ),
     GetPage(
+      name: EHRoutes.mysqlSync,
+      page: () => const MysqlSyncPage(),
+    ),
+    GetPage(
       name: EHRoutes.avatarSetting,
       page: () => const AvatarSettingPage(),
     ),
@@ -376,6 +381,11 @@ class AppPages {
         return GetPageRoute(
           settings: settings,
           page: () => WebDavSetting(),
+        );
+      case EHRoutes.mysqlSync:
+        return GetPageRoute(
+          settings: settings,
+          page: () => const MysqlSyncPage(),
         );
       case EHRoutes.tagTranslate:
         return GetPageRoute(
