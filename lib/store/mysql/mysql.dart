@@ -34,7 +34,7 @@ class FeMySql {
       return;
     }
 
-    if (isInit && !newConnection) {
+    if (isInit && _conn.connected && !newConnection) {
       return;
     }
 
@@ -69,14 +69,21 @@ class FeMySql {
     return result.rows.isNotEmpty;
   }
 
-  void close() {
+  Future<void> close() async {
     _initCompleter = Completer();
-    _conn.close();
+    await _conn.close();
   }
 
-  void testInit(MySQLConnectionInfo? connectionInfo) {
-    close();
-    _init(connectionInfo, true);
+  Future<void> reConnect(MySQLConnectionInfo? connectionInfo) async {
+    await close();
+    await _init(connectionInfo, true);
+  }
+
+  Future<void> connect(MySQLConnectionInfo? connectionInfo) async {
+    if (_conn.connected) {
+      return;
+    }
+    await _init(connectionInfo, true);
   }
 
   FeMySql addMigrations(List<Migration> migrations) {
@@ -308,26 +315,32 @@ class FeMySql {
   }
 
   Future<List<({String gid, int time, String json})>> getHistoryList(
-      List<String> subList) async {
-    final _subList = subList.toList();
+    List<String> subList,
+  ) async {
     final _list = <({String gid, int time, String json})>[];
-    final _subSubList = _subList.sublist(0, 50);
-    _subList.removeRange(0, _subSubList.length);
-    final _result = await _conn.execute(
-        'SELECT gid, time, json FROM fe_history WHERE gid IN (:gidList)',
-        {'gidList': _subSubList});
 
-    if (_result.rows.isNotEmpty) {
-      _result.rows.forEach((element) {
-        final row = element.typedAssoc();
-        _list.add(
-          (
-            gid: row['gid'] as String? ?? '',
-            time: row['time'] as int? ?? 0,
-            json: row['json'] as String? ?? '',
-          ),
-        );
-      });
+    final _splitList = EHUtils.splitList(subList, 50);
+    for (final _subSubList in _splitList) {
+      logger.d('_subSubList $_subSubList');
+
+      final result = await _conn.execute(
+          'SELECT gid, time, json FROM fe_history WHERE gid IN (${_subSubList.join(',')})');
+
+      final rows = result.rows;
+      logger.d('rows ${rows.length}');
+
+      if (rows.isNotEmpty) {
+        rows.forEach((element) {
+          final row = element.typedAssoc();
+          _list.add(
+            (
+              gid: row['gid'] as String? ?? '',
+              time: row['time'] as int? ?? 0,
+              json: row['json'] as String? ?? '',
+            ),
+          );
+        });
+      }
     }
 
     return _list;

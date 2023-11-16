@@ -504,7 +504,7 @@ class EHUtils {
     return result;
   }
 
-  static String getLangeage(String value) {
+  static String getLanguage(String value) {
     for (final String key in EHConst.iso936.keys) {
       if (key.toUpperCase().trim() == value.toUpperCase().trim()) {
         return EHConst.iso936[key] ?? EHConst.iso936.values.first;
