@@ -81,7 +81,7 @@ class GalleryCacheController extends GetxController {
     }
 
     if (mysqlController.syncReadProgress) {
-      final remoteMysql = await mysqlController.qryRead(gid);
+      final remoteMysql = await mysqlController.downloadRead(gid);
       remotes.add(remoteMysql);
     }
 
