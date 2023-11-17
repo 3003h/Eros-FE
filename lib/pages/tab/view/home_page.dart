@@ -10,36 +10,44 @@ import 'home_page_large.dart';
 import 'home_page_small.dart';
 
 class HomePage extends GetView<TabHomeController> {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    controller.init(inContext: context);
+    // controller.init(inContext: context);
     final LayoutServices layoutServices = Get.find();
-    final EhSettingService _ehSettingService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
 
-    final WillPopScope willPopScope = WillPopScope(
-      onWillPop: controller.onWillPop,
-      child: Obx(
-        () {
-          final tabletLayoutType = _ehSettingService.tabletLayoutType;
-          final half = layoutServices.half;
-          final vOffset = layoutServices.sideProportion;
+    final child = Obx(
+      () {
+        final tabletLayoutType = ehSettingService.tabletLayoutType;
+        final half = layoutServices.half;
+        final vOffset = layoutServices.sideProportion;
 
-          logger.t(' ${context.width} ${context.height}');
+        logger.t(' ${context.width} ${context.height}');
 
-          layoutServices.layoutMode = getLayoutMode(context, tabletLayoutType);
+        layoutServices.layoutMode = getLayoutMode(context, tabletLayoutType);
 
-          if (isLayoutLarge) {
-            return TabHomeLarge(
-              sideProportion: vOffset,
-            );
-          } else {
-            return const TabHomeSmall();
-          }
-        },
-      ),
+        if (isLayoutLarge) {
+          return TabHomeLarge(
+            sideProportion: vOffset,
+          );
+        } else {
+          return const TabHomeSmall();
+        }
+      },
     );
 
-    return willPopScope;
+    // return PopScope(
+    //   canPop: false,
+    //   onPopInvoked: controller.onPopInvoked,
+    //   child: child,
+    // );
+
+    return WillPopScope(
+      onWillPop: controller.onWillPop,
+      child: child,
+    );
   }
 
   LayoutMode getLayoutMode(

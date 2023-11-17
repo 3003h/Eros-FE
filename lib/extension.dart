@@ -240,7 +240,6 @@ extension ExtTagTranlat on TagTranslat {
       case TagIntroImgLv.r18:
         // 去除R18g, 把r18的格式修正
         return _fix(regR18And18g, _remove(regR18g, intro));
-        break;
       case TagIntroImgLv.r18g:
         // 把r18和r18g的格式修正
         return _fix(regR18And18g, intro);

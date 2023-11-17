@@ -1,5 +1,4 @@
 import 'package:fehviewer/common/controller/history_controller.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/pages/tab/controller/history_view_controller.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
@@ -16,16 +15,15 @@ import 'package:keframe/keframe.dart';
 import '../comm.dart';
 
 class HistoryTab extends StatefulWidget {
-  const HistoryTab({Key? key}) : super(key: key);
+  const HistoryTab({super.key});
 
   @override
-  _HistoryTabState createState() => _HistoryTabState();
+  State<HistoryTab> createState() => _HistoryTabState();
 }
 
 class _HistoryTabState extends State<HistoryTab> {
   final controller = Get.find<HistoryViewController>();
   final EhTabController ehTabController = EhTabController();
-  final EhSettingService _ehSettingService = Get.find();
 
   @override
   void initState() {

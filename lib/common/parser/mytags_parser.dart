@@ -6,16 +6,14 @@ import '../../fehviewer.dart';
 EhMytags parseMyTags(String html) {
   final Document document = parse(html);
 
-  final tagsets = <EhMytagSet>[];
-
-  late String selectedValue = '';
+  final tagSets = <EhMytagSet>[];
 
   // 解析tagsets
-  final Element? tagsetElm =
+  final Element? tagSetElm =
       document.querySelector('#tagset_outer > div:nth-child(3) > select');
 
-  if (tagsetElm != null) {
-    final tagsetElms = tagsetElm.children;
+  if (tagSetElm != null) {
+    final tagsetElms = tagSetElm.children;
     // logger.d('tagsetElms.length ${tagsetElms.length}');
     for (final _tagset in tagsetElms) {
       final value = _tagset.attributes['value'];
@@ -30,9 +28,7 @@ EhMytags parseMyTags(String html) {
           RegExp(r'(.+)\((\d+)\)'), (match) => match.group(1) ?? '');
       final count = _tagset.text.replaceAllMapped(
           RegExp(r'(.+)\((\d+)\)'), (match) => match.group(2) ?? '');
-      if (isSelected) {
-        selectedValue = value;
-      }
+      if (isSelected) {}
 
       // if (_tagset.text.trim().endsWith('(Default)')) {
       //   // defaultProfile = value;
@@ -40,7 +36,7 @@ EhMytags parseMyTags(String html) {
 
       // logger.d('name:$name  count:$count');
 
-      tagsets.add(EhMytagSet(
+      tagSets.add(EhMytagSet(
         name: name.trim(),
         tagCount: count.trim(),
         value: value.trim(),
@@ -48,7 +44,7 @@ EhMytags parseMyTags(String html) {
     }
   }
 
-  tagsets.sort((a, b) =>
+  tagSets.sort((a, b) =>
       (int.tryParse(a.value ?? '0') ?? 0) -
       (int.tryParse(b.value ?? '0') ?? 0));
 
@@ -127,7 +123,7 @@ EhMytags parseMyTags(String html) {
       '';
 
   return EhMytags(
-    tagsets: tagsets,
+    tagsets: tagSets,
     usertags: usertags,
     canDelete: html.contains('do_tagset_delete()'),
     apikey: _apikey,

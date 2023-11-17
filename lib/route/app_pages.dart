@@ -65,7 +65,7 @@ class AppPages {
   static final List<GetPage> routes = <GetPage>[
     GetPage(
       name: EHRoutes.root,
-      page: () => SplashPage(),
+      page: () => const SplashPage(),
       binding: SplashBinding(),
       transition: Transition.fadeIn,
     ),
@@ -78,17 +78,17 @@ class AppPages {
       name: EHRoutes.unlockPage,
       page: () => const UnLockPage(),
       transition: Transition.noTransition,
-      transitionDuration: kUnLockPageTransitionDuration,
+      // transitionDuration: kUnLockPageTransitionDuration,
     ),
     GetPage(
       name: EHRoutes.home,
-      page: () => HomePage(),
-      // page: () => TabHomeSmall(),
-      transition: Transition.fadeIn,
+      page: () => const HomePage(),
+      // page: () => const TabHomeSmall(),
+      // transition: Transition.fadeIn,
     ),
     GetPage(
       name: EHRoutes.selFavorite,
-      page: () => FavoriteSelectorPage(),
+      page: () => const FavoriteSelectorPage(),
     ),
     GetPage(
       name: EHRoutes.ehSetting,
@@ -109,23 +109,23 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.about,
-      page: () => AboutPage(),
+      page: () => const AboutPage(),
     ),
     GetPage(
       name: EHRoutes.license,
-      page: () => LicensePage(),
+      page: () => const LicensePage(),
     ),
     GetPage(
       name: EHRoutes.downloadSetting,
-      page: () => DownloadSettingPage(),
+      page: () => const DownloadSettingPage(),
     ),
     GetPage(
       name: EHRoutes.searchSetting,
-      page: () => SearchSettingPage(),
+      page: () => const SearchSettingPage(),
     ),
     GetPage(
       name: EHRoutes.securitySetting,
-      page: () => SecuritySettingPage(),
+      page: () => const SecuritySettingPage(),
     ),
     GetPage(
       name: EHRoutes.readSetting,
@@ -144,7 +144,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.galleryComment,
-      page: () => CommentPage(),
+      page: () => const CommentPage(),
     ),
     GetPage(
       name: EHRoutes.galleryAllThumbnails,
@@ -152,7 +152,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.addTag,
-      page: () => AddTagPage(),
+      page: () => const AddTagPage(),
       binding: BindingsBuilder(
         () => Get.lazyPut(() => TagInfoController(), tag: pageCtrlTag),
       ),
@@ -163,7 +163,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.pageSetting,
-      page: () => TabbarSettingPage(),
+      page: () => const TabbarSettingPage(),
       binding: BindingsBuilder(
         () => Get.lazyPut(() => TabSettingController()),
       ),
@@ -220,7 +220,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.quickSearch,
-      page: () => QuickSearchListPage(),
+      page: () => const QuickSearchListPage(),
     ),
     GetPage(
       name: EHRoutes.customHosts,
@@ -260,7 +260,7 @@ class AppPages {
     ),
     GetPage(
       name: EHRoutes.logfile,
-      page: () => LogPage(),
+      page: () => const LogPage(),
     ),
     GetPage(
       name: EHRoutes.mySettings,
@@ -304,231 +304,232 @@ class AppPages {
     )
   ];
 
-  static final RouteFactory onGenerateRoute = (settings) {
-    switch (settings.name) {
-      case EHRoutes.about:
-        return GetPageRoute(
-          settings: settings,
-          page: () => AboutPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
+  static RouteFactory get onGenerateRoute => (settings) {
+        switch (settings.name) {
+          case EHRoutes.about:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const AboutPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
 
-      case EHRoutes.ehSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const EhSettingPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
-      case EHRoutes.layoutSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const LayoutSettingPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
-      case EHRoutes.itemWidthSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const ItemWidthSettingPage(),
-        );
-      case EHRoutes.readSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const ReadSettingPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
-      case EHRoutes.downloadSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => DownloadSettingPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
-      case EHRoutes.searchSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => SearchSettingPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
-      case EHRoutes.quickSearch:
-        return GetPageRoute(
-          settings: settings,
-          page: () => QuickSearchListPage(),
-        );
-      case EHRoutes.advancedSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const AdvancedSettingPage(),
-          binding: BindingsBuilder(() => Get.lazyPut(() => CacheController())),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
-      case EHRoutes.customHosts:
-        return GetPageRoute(
-          settings: settings,
-          page: () => CustomHostsPage(),
-        );
-      case EHRoutes.proxySetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => ProxyPage(),
-        );
-      case EHRoutes.webDavSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => WebDavSetting(),
-        );
-      case EHRoutes.mysqlSync:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const MysqlSyncPage(),
-        );
-      case EHRoutes.tagTranslate:
-        return GetPageRoute(
-          settings: settings,
-          page: () => TagTranslatePage(),
-        );
-      case EHRoutes.blockers:
-        return GetPageRoute(
-          settings: settings,
-          page: () => BlockersPage(),
-        );
-      case EHRoutes.blockRules:
-        return GetPageRoute(
-          settings: settings,
-          page: () => BlockRulesPage(),
-        );
-      case EHRoutes.blockRuleEdit:
-        return GetPageRoute(
-          settings: settings,
-          page: () => BlockRuleEditPage(),
-        );
-      case EHRoutes.avatarSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => AvatarSettingPage(),
-        );
-      case EHRoutes.logfile:
-        return GetPageRoute(
-          settings: settings,
-          page: () => LogPage(),
-        );
-      case EHRoutes.securitySetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => SecuritySettingPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-        );
-      case EHRoutes.galleryPage:
-        return GetPageRoute(
-          settings: settings,
-          // page: () => const GallerySliverPage(),
-          page: () => const GalleryPage(),
-          transition: Transition.fadeIn,
-          showCupertinoParallax: false,
-          // fullscreenDialog: true,
-        );
-      case EHRoutes.galleryComment:
-        return GetPageRoute(
-          settings: settings,
-          page: () => CommentPage(),
-        );
-      case EHRoutes.galleryAllThumbnails:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const AllThumbnailsPage(),
-        );
-      case EHRoutes.addTag:
-        return GetPageRoute(
-          settings: settings,
-          page: () => AddTagPage(),
-          binding: BindingsBuilder(
-            () => Get.lazyPut(() => TagInfoController(), tag: pageCtrlTag),
-          ),
-        );
-      case EHRoutes.galleryInfo:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const GalleryInfoPage(),
-        );
-      case EHRoutes.pageSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => TabbarSettingPage(),
-          binding: BindingsBuilder(
-            () => Get.lazyPut(() => TabSettingController()),
-          ),
-        );
-      case EHRoutes.empty:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const EmptyPage(),
-          popGesture: false,
-          transition: Transition.fadeIn,
-        );
-      case EHRoutes.download:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const DownloadTab(),
-        );
-      case EHRoutes.mySettings:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const EhMySettingsPage(),
-        );
-      case EHRoutes.myTags:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const EhMyTagsPage(),
-        );
-      case EHRoutes.userTags:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const EhUserTagsPage(),
-        );
-      case EHRoutes.imageHide:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const ImageBlockPage(),
-        );
-      case EHRoutes.mangaHidedImage:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const PHashImageListPage(),
-        );
-      case EHRoutes.loginWebDAV:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const LoginWebDAV(),
-        );
-      case EHRoutes.customProfiles:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const CustomProfilesPage(),
-        );
-      case EHRoutes.customProfileSetting:
-        return GetPageRoute(
-          settings: settings,
-          page: () => const CustomProfileSettingPage(),
-        );
-      case EHRoutes.license:
-        return GetPageRoute(
-          settings: settings,
-          page: () => LicensePage(),
-        );
-      default:
-        return GetPageRoute(
-          settings: settings,
-          routeName: EHRoutes.empty,
-          page: () => const EmptyPage(),
-          popGesture: false,
-          transition: Transition.fadeIn,
-        );
-    }
-  };
+          case EHRoutes.ehSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const EhSettingPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
+          case EHRoutes.layoutSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const LayoutSettingPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
+          case EHRoutes.itemWidthSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const ItemWidthSettingPage(),
+            );
+          case EHRoutes.readSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const ReadSettingPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
+          case EHRoutes.downloadSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const DownloadSettingPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
+          case EHRoutes.searchSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const SearchSettingPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
+          case EHRoutes.quickSearch:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const QuickSearchListPage(),
+            );
+          case EHRoutes.advancedSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const AdvancedSettingPage(),
+              binding:
+                  BindingsBuilder(() => Get.lazyPut(() => CacheController())),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
+          case EHRoutes.customHosts:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const CustomHostsPage(),
+            );
+          case EHRoutes.proxySetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const ProxyPage(),
+            );
+          case EHRoutes.webDavSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const WebDavSetting(),
+            );
+          case EHRoutes.mysqlSync:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const MysqlSyncPage(),
+            );
+          case EHRoutes.tagTranslate:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const TagTranslatePage(),
+            );
+          case EHRoutes.blockers:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const BlockersPage(),
+            );
+          case EHRoutes.blockRules:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const BlockRulesPage(),
+            );
+          case EHRoutes.blockRuleEdit:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const BlockRuleEditPage(),
+            );
+          case EHRoutes.avatarSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const AvatarSettingPage(),
+            );
+          case EHRoutes.logfile:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const LogPage(),
+            );
+          case EHRoutes.securitySetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const SecuritySettingPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+            );
+          case EHRoutes.galleryPage:
+            return GetPageRoute(
+              settings: settings,
+              // page: () => const GallerySliverPage(),
+              page: () => const GalleryPage(),
+              transition: Transition.fadeIn,
+              showCupertinoParallax: false,
+              // fullscreenDialog: true,
+            );
+          case EHRoutes.galleryComment:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const CommentPage(),
+            );
+          case EHRoutes.galleryAllThumbnails:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const AllThumbnailsPage(),
+            );
+          case EHRoutes.addTag:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const AddTagPage(),
+              binding: BindingsBuilder(
+                () => Get.lazyPut(() => TagInfoController(), tag: pageCtrlTag),
+              ),
+            );
+          case EHRoutes.galleryInfo:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const GalleryInfoPage(),
+            );
+          case EHRoutes.pageSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const TabbarSettingPage(),
+              binding: BindingsBuilder(
+                () => Get.lazyPut(() => TabSettingController()),
+              ),
+            );
+          case EHRoutes.empty:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const EmptyPage(),
+              popGesture: false,
+              transition: Transition.fadeIn,
+            );
+          case EHRoutes.download:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const DownloadTab(),
+            );
+          case EHRoutes.mySettings:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const EhMySettingsPage(),
+            );
+          case EHRoutes.myTags:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const EhMyTagsPage(),
+            );
+          case EHRoutes.userTags:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const EhUserTagsPage(),
+            );
+          case EHRoutes.imageHide:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const ImageBlockPage(),
+            );
+          case EHRoutes.mangaHidedImage:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const PHashImageListPage(),
+            );
+          case EHRoutes.loginWebDAV:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const LoginWebDAV(),
+            );
+          case EHRoutes.customProfiles:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const CustomProfilesPage(),
+            );
+          case EHRoutes.customProfileSetting:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const CustomProfileSettingPage(),
+            );
+          case EHRoutes.license:
+            return GetPageRoute(
+              settings: settings,
+              page: () => const LicensePage(),
+            );
+          default:
+            return GetPageRoute(
+              settings: settings,
+              routeName: EHRoutes.empty,
+              page: () => const EmptyPage(),
+              popGesture: false,
+              transition: Transition.fadeIn,
+            );
+        }
+      };
 }

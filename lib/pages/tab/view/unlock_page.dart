@@ -1,15 +1,17 @@
 import 'package:fehviewer/pages/tab/controller/unlock_page_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UnLockPage extends StatefulWidget {
   const UnLockPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    this.autoBack = true,
+  });
+
+  final bool autoBack;
 
   @override
-  _UnLockPageState createState() => _UnLockPageState();
+  State<UnLockPage> createState() => _UnLockPageState();
 }
 
 class _UnLockPageState extends State<UnLockPage> {
@@ -18,8 +20,10 @@ class _UnLockPageState extends State<UnLockPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => controller.unlockAndback(context: context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => controller.unlockToBack(
+          context: context,
+          autoBack: widget.autoBack,
+        ));
   }
 
   @override
@@ -38,12 +42,13 @@ class _UnLockPageState extends State<UnLockPage> {
 
   Widget _buildUnlockButton(BuildContext context) {
     return CupertinoButton(
+        borderRadius: BorderRadius.circular(100),
+        color: CupertinoColors.activeOrange,
+        onPressed: () => controller.unlockToBack(
+            context: context, autoBack: widget.autoBack),
         child: const Icon(
           CupertinoIcons.lock_fill,
           size: 50,
-        ),
-        borderRadius: BorderRadius.circular(100),
-        color: CupertinoColors.activeOrange,
-        onPressed: () => controller.unlockAndback(context: context));
+        ));
   }
 }

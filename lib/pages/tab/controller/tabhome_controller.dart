@@ -212,7 +212,7 @@ class TabHomeController extends GetxController {
 
   late BuildContext tContext;
 
-  /// 需要初始化获取BuildContext 否则修改语言时tabitem的文字不会立即生效
+  /// 需要初始化获取BuildContext 否则修改语言时 tabitem 的文字不会立即生效
   void init({required BuildContext inContext}) {
     // logger.d(' rebuild home');
     tContext = inContext;
@@ -318,5 +318,9 @@ class TabHomeController extends GetxController {
     } else {
       return await doubleClickBack();
     }
+  }
+
+  Future<void> onPopInvoked(bool didPop) async {
+    logger.d('onPopInvoked $didPop');
   }
 }

@@ -8,31 +8,28 @@ import '../controller/splash_controller.dart';
 
 /// 闪屏页
 class SplashPage extends GetView<SplashController> {
+  const SplashPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final Widget container = (controller.sharedText != null &&
             (controller.sharedText?.isNotEmpty ?? false))
-        ? Container(
-            child:
-                const Center(child: CupertinoActivityIndicator(radius: 20.0)),
-          )
-        : Container(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Icon(
-                    FontAwesomeIcons.cat,
-                    // FontAwesomeIcons.heading,
-                    size: 150.0,
-                    color: Colors.grey,
-                  ),
-                  Text(
-                    L10n.of(context).app_title,
-                    style: const TextStyle(color: Colors.grey),
-                  ).paddingSymmetric(vertical: 20),
-                ],
-              ),
+        ? const Center(child: CupertinoActivityIndicator(radius: 20.0))
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Icon(
+                  FontAwesomeIcons.cat,
+                  // FontAwesomeIcons.heading,
+                  size: 150.0,
+                  color: Colors.grey,
+                ),
+                Text(
+                  L10n.of(context).app_title,
+                  style: const TextStyle(color: Colors.grey),
+                ).paddingSymmetric(vertical: 20),
+              ],
             ),
           );
 

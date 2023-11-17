@@ -17,8 +17,10 @@ const CupertinoDynamicColor _kClearButtonColor =
 );
 
 class AddTagPage extends StatefulWidget {
+  const AddTagPage({super.key});
+
   @override
-  _AddTagPageState createState() => _AddTagPageState();
+  State<AddTagPage> createState() => _AddTagPageState();
 }
 
 class _AddTagPageState extends State<AddTagPage> {
@@ -111,7 +113,7 @@ class _AddTagPageState extends State<AddTagPage> {
                     // 滑动收起键盘
                     FocusScope.of(context).requestFocus(FocusNode());
                   },
-                  child: CustomScrollView(
+                  child: const CustomScrollView(
                     slivers: [
                       QryTagSliverList(),
                     ],
@@ -125,7 +127,9 @@ class _AddTagPageState extends State<AddTagPage> {
 }
 
 class QryTagSliverList extends StatelessWidget {
-  final TagInfoController controller = Get.find(tag: pageCtrlTag);
+  const QryTagSliverList({super.key});
+
+  TagInfoController get controller => Get.find(tag: pageCtrlTag);
 
   @override
   Widget build(BuildContext context) {

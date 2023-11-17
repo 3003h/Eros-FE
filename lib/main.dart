@@ -14,6 +14,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
@@ -116,8 +118,10 @@ Future<void> main() async {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
@@ -126,11 +130,51 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final EhSettingService _ehSettingService = Get.find();
   final AutoLockController _autoLockController = Get.find();
 
+  late final AppLifecycleListener _listener;
+  late AppLifecycleState? _state;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _autoLockController.resumed();
+    _autoLockController.checkLock();
+
+    _state = SchedulerBinding.instance.lifecycleState;
+    _listener = AppLifecycleListener(
+      onShow: () {
+        _handleTransition('show');
+        // Get.toNamed(EHRoutes.unlockPage);
+        // _autoLockController.checkLock();
+      },
+      onResume: () async {
+        _handleTransition('resume');
+
+        await _autoLockController.checkLock();
+
+        // resumed 时清除 FLAG_SECURE ,避免无法截屏
+        FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+
+        if (context.mounted) {
+          _ehSettingService.chkClipboardLink(context);
+        }
+      },
+      onHide: () {
+        _handleTransition('hide');
+        _autoLockController.paused();
+      },
+      onInactive: () {
+        _handleTransition('inactive');
+        // 添加 FLAG_SECURE
+        _ehSettingService.applyBlurredInRecentTasks();
+      },
+      onPause: () => _handleTransition('pause'),
+      onDetach: () => _handleTransition('detach'),
+      onRestart: () => _handleTransition('restart'),
+    );
+  }
+
+  void _handleTransition(String name) {
+    logger.d('########################## main $name');
   }
 
   @override
@@ -143,34 +187,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangePlatformBrightness() {
     themeService.platformBrightness.value =
         View.of(context).platformDispatcher.platformBrightness;
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    logger.t('state: $state');
-    _autoLockController.updateStat(state);
-    if (state != AppLifecycleState.resumed) {
-      logger.d('applyBlurredInRecentTasks');
-
-      // 非 resumed 时根据设置 添加 FLAG_SECURE
-      _ehSettingService.applyBlurredInRecentTasks();
-    }
-    if (state == AppLifecycleState.paused) {
-      // went to Background
-      // loggerTime.d('paused');
-      _autoLockController.paused();
-    }
-    if (state == AppLifecycleState.resumed) {
-      // came back to Foreground
-      // loggerTime.d('resumed');
-      _autoLockController.resumed();
-
-      // resumed 时清除 FLAG_SECURE ,避免无法截屏
-      FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
-
-      _ehSettingService.chkClipboardLink(context);
-    }
   }
 
   @override
@@ -218,7 +234,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           initialRoute: EHRoutes.root,
           theme: themeService.themeData,
           locale: localeService.locale,
-          enableLog: false && kDebugMode,
+          enableLog: false,
           logWriterCallback: loggerGetx,
           supportedLocales: <Locale>[
             ...L10n.delegate.supportedLocales,
@@ -232,12 +248,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ],
 
           localeResolutionCallback: (_, Iterable<Locale> supportedLocales) {
-            final Locale _locale = PlatformDispatcher.instance.locale;
+            final Locale locale = PlatformDispatcher.instance.locale;
 
             return localeService.locale ??
                 supportedLocales.firstWhere(
-                  (Locale locale) =>
-                      locale.languageCode == _locale.languageCode,
+                  (Locale sl) => sl.languageCode == locale.languageCode,
                   orElse: () => supportedLocales.first,
                 );
           },

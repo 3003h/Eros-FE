@@ -50,8 +50,7 @@ class SplashController extends GetxController {
   }
 
   Future<void> _startHome(String url, {bool replace = true}) async {
-    // await _autoLockController.resumed(forceLock: true && !kDebugMode);
-    await _autoLockController.resumed(forceLock: true);
+    await _autoLockController.checkLock(forceLock: true);
 
     final RegExp regGalleryUrl =
         RegExp(r'https?://e[-x]hentai.org/g/[0-9]+/[0-9a-z]+/?');

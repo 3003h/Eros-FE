@@ -1,6 +1,5 @@
 import 'package:fehviewer/common/controller/auto_lock_controller.dart';
 import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/route/app_pages.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -37,10 +36,15 @@ class UnlockPageController extends GetxController {
     }
   }
 
-  Future<void> unlockAndback({required BuildContext context}) async {
-    await Future.delayed(kUnLockPageTransitionDuration);
+  Future<void> unlockToBack(
+      {required BuildContext context, bool autoBack = true}) async {
+    // await Future.delayed(kUnLockPageTransitionDuration);
+    if (!context.mounted) {
+      return;
+    }
+
     final didAuthenticate = await _unlock(context: context);
-    if (didAuthenticate) {
+    if (didAuthenticate && autoBack) {
       Get.back(result: didAuthenticate);
     }
   }

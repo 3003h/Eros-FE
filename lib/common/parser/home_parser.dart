@@ -2,7 +2,6 @@ import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
 import '../../models/base/eh_models.dart';
-import '../../utils/logger.dart';
 
 EhHome parserEhHome(String response) {
   final Document document = parse(response);

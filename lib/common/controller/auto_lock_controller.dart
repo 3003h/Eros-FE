@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/generated/l10n.dart';
 import 'package:fehviewer/models/index.dart';
@@ -75,21 +73,22 @@ class AutoLockController extends GetxController {
     }
   }
 
-  Future<void> resumed({bool forceLock = false}) async {
+  Future<void> checkLock({bool forceLock = false}) async {
     final nowTime = DateTime.now().millisecondsSinceEpoch;
     final subTime = nowTime - lastLeaveTime;
     final autoLockTimeOut = _ehSettingService.autoLockTimeOut.value;
 
-    logger.t('now time ${nowTime}, lastLeaveTime: ${lastLeaveTime}');
+    logger.t('now time $nowTime, lastLeaveTime: $lastLeaveTime');
 
-    final _locked =
+    final locked =
         autoLockTimeOut >= 0 && (subTime / 1000 > autoLockTimeOut || forceLock);
-    logger.t('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $_locked');
+    logger.t('离开时间为: ${subTime}ms  锁定超时为: $autoLockTimeOut  需要解锁: $locked');
 
-    if (_locked && !_isResumed) {
+    if (locked && !_isResumed) {
       _isLocking = true;
 
       final result = await Get.toNamed(EHRoutes.unlockPage);
+
       if (result is bool) {
         final bool didAuthenticate = result;
         if (didAuthenticate) {
@@ -100,6 +99,4 @@ class AutoLockController extends GetxController {
       }
     }
   }
-
-  void updateStat(AppLifecycleState state) {}
 }

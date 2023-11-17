@@ -1,10 +1,9 @@
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TabHomeSmall extends GetView<TabHomeController> {
-  const TabHomeSmall({Key? key}) : super(key: key);
+  const TabHomeSmall({super.key});
   @override
   Widget build(BuildContext context) {
     controller.init(inContext: context);

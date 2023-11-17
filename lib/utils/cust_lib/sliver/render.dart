@@ -8,13 +8,10 @@ import 'element.dart';
 class RenderSliverFloatingPinnedPersistentHeader
     extends RenderSliverFloatingPersistentHeader {
   RenderSliverFloatingPinnedPersistentHeader({
-    RenderBox? child,
-    RenderBox? minProtoType,
-    RenderBox? maxProtoType,
-  }) : super(
-            child: child,
-            minProtoType: minProtoType,
-            maxProtoType: maxProtoType);
+    super.child,
+    super.minProtoType,
+    super.maxProtoType,
+  });
 
   @override
   double updateGeometry() {
@@ -95,9 +92,10 @@ class RenderSliverFloatingPersistentHeader extends RenderSliver
   /// The dimension of the child in the main axis.
   @protected
   double get childExtent {
-    if (child == null) return 0.0;
+    if (child == null) {
+      return 0.0;
+    }
     assert(child!.hasSize);
-    assert(constraints.axis != null);
     switch (constraints.axis) {
       case Axis.vertical:
         return child!.size.height;
@@ -139,7 +137,6 @@ class RenderSliverFloatingPersistentHeader extends RenderSliver
   @protected
   void layoutChild(double scrollOffset, double maxExtent,
       {bool overlapsContent = false}) {
-    assert(maxExtent != null);
     final double shrinkOffset = math.min(scrollOffset, maxExtent);
     if (_needsUpdateChild ||
         _lastShrinkOffset != shrinkOffset ||
@@ -153,7 +150,6 @@ class RenderSliverFloatingPersistentHeader extends RenderSliver
       _lastOverlapsContent = overlapsContent;
       _needsUpdateChild = false;
     }
-    assert(minExtent != null);
     assert(() {
       if (minExtent <= maxExtent) return true;
       throw FlutterError.fromParts(<DiagnosticsNode>[
@@ -252,9 +248,6 @@ class RenderSliverFloatingPersistentHeader extends RenderSliver
   }
 
   void _updateAnimation(Duration duration, double endValue, Curve curve) {
-    assert(duration != null);
-    assert(endValue != null);
-    assert(curve != null);
     assert(
       vsync != null,
       'vsync must not be null if the floating header changes size animatedly.',
@@ -352,9 +345,10 @@ class RenderSliverFloatingPersistentHeader extends RenderSliver
   }) {
     final PersistentHeaderShowOnScreenConfiguration? showOnScreen =
         showOnScreenConfiguration;
-    if (showOnScreen == null)
+    if (showOnScreen == null) {
       return super.showOnScreen(
           descendant: descendant, rect: rect, duration: duration, curve: curve);
+    }
 
     assert(child != null || descendant == null);
     // We prefer the child's coordinate space (instead of the sliver's) because
@@ -431,10 +425,11 @@ class RenderSliverFloatingPersistentHeader extends RenderSliver
   bool hitTestChildren(SliverHitTestResult result,
       {required double mainAxisPosition, required double crossAxisPosition}) {
     assert(geometry!.hitTestExtent > 0.0);
-    if (child != null)
+    if (child != null) {
       return hitTestBoxChild(BoxHitTestResult.wrap(result), child!,
           mainAxisPosition: mainAxisPosition,
           crossAxisPosition: crossAxisPosition);
+    }
     return false;
   }
 
@@ -537,8 +532,8 @@ class RenderSliverFloatingPersistentHeader extends RenderSliver
 class RenderSliverPinnedToBoxAdapter extends RenderSliverSingleBoxAdapter {
   /// Creates a [RenderSliver] that wraps a [RenderBox].
   RenderSliverPinnedToBoxAdapter({
-    RenderBox? child,
-  }) : super(child: child);
+    super.child,
+  });
 
   @override
   void performLayout() {
