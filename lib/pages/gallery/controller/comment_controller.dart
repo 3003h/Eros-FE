@@ -73,8 +73,14 @@ class CommentController extends GetxController {
 
   @override
   void onClose() {
-    _tgr.forEach((element) => element.dispose());
+    for (final element in _tgr) {
+      element.dispose();
+    }
     super.onClose();
+  }
+
+  Future<void> onRefresh() async {
+    await pageController.handOnRefresh();
   }
 
   final List<TapGestureRecognizer> _tgr = [];
