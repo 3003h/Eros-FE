@@ -164,14 +164,14 @@ class MysqlController extends GetxController {
 
   Future<GalleryCache?> downloadRead(String gid) async {
     await connect();
-    logger.d('qryRead $gid');
+    logger.t('qryRead $gid');
     if (gid.isEmpty) {
       logger.e('gid is empty');
       return null;
     }
     try {
       final result = await feMySql?.getReadProgress(gid);
-      logger.d('qryRead $result');
+      logger.t('qryRead $result');
       if (result != null) {
         return GalleryCache(
             gid: result.gid, lastIndex: result.page, time: result.time);
@@ -270,10 +270,10 @@ class MysqlController extends GetxController {
 
   Future<List<HistoryIndexGid>> getHistoryList() async {
     await connect();
-    logger.d('getHistoryList');
+    logger.t('getHistoryList');
     try {
       final result = await feMySql?.getHistoryTimeList();
-      logger.d('getHistoryList $result');
+      logger.t('getHistoryList $result');
       if (result != null) {
         return result.map((e) => HistoryIndexGid(g: e.gid, t: e.time)).toList();
       }

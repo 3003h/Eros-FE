@@ -17,7 +17,7 @@
 #
 # This file contains the analysis options used by Flutter tools, such as IntelliJ,
 # Android Studio, and the `flutter analyze` command.
-include: package:flutter_lints/flutter.yaml
+#include: package:flutter_lints/flutter.yaml
 
 analyzer:
   strong-mode:
@@ -37,7 +37,6 @@ analyzer:
     # Stream and not importing dart:async
     # Please see https://github.com/flutter/flutter/pull/24528 for details.
     sdk_version_async_exported_from_core: ignore
-    invalid_annotation_target: ignore
   exclude:
     - "bin/cache/**"
     # the following two are relative to the stocks example and the flutter package respectively
@@ -47,8 +46,6 @@ analyzer:
     - "lib/src/http/**"
     - "lib/models/**"
     - "**/*.g.dart"
-    - "**/*.gr.dart"
-    - "**/*.freezed.dart"
 
 linter:
   rules:

@@ -46,7 +46,7 @@ class _CommentPageState extends State<CommentPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    logger.d('pageCtrlTag $pageCtrlTag');
+    // logger.d('pageCtrlTag $pageCtrlTag');
     final cps = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text(L10n.of(context).gallery_comments),

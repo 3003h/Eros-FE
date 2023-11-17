@@ -396,7 +396,7 @@ class _CommentTail extends StatelessWidget {
               commentController.commitVoteDown(galleryComment.id!);
             },
           ),
-        if (showRepty && !simple)
+        if (showRepty && !simple && commentController.isLogin)
           CupertinoButton(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             minSize: 0,

@@ -58,7 +58,7 @@ class OpenLTranslator {
     return rult;
   }
 
-  Future<String?> getfallbackService() async {
+  Future<String?> getFallbackService() async {
     for (final service in _fallbackServices) {
       final String _path = '/services/$service';
       final Uri url = Uri.https(_baseUrl, _path);
@@ -74,6 +74,7 @@ class OpenLTranslator {
       logger.d(jsonData);
       logger.d('${state.runtimeType}');
       if (state is String && state == 'ACTIVE') {
+        logger.d('getFallbackService: $service');
         return service;
       }
     }

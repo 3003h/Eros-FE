@@ -321,7 +321,7 @@ class FeMySql {
 
     final _splitList = EHUtils.splitList(subList, 50);
     for (final _subSubList in _splitList) {
-      logger.d('_subSubList $_subSubList');
+      logger.t('_subSubList $_subSubList');
 
       final result = await _conn.execute(
           'SELECT gid, time, json FROM fe_history WHERE gid IN (${_subSubList.join(',')})');
