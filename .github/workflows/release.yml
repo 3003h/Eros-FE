@@ -24,6 +24,8 @@ env:
 jobs:
   Build_and_upload:
     name: Build releases
+    env:
+      PACKAGE_NAME: FEhViewer
     strategy:
       fail-fast: false
       matrix:
@@ -34,25 +36,25 @@ jobs:
           - target: android
             os: ubuntu-latest
             artifact_name: release-apk
-            artifact_path: build/app/outputs/apk/release/${{ env.PACKAGE_NAME }}*.apk
+            artifact_path: build/app/outputs/apk/release/${PACKAGE_NAME}*.apk
           - target: ios
             os: macos-12
             artifact_name: release-ios
-            artifact_path: build/**/${{ env.PACKAGE_NAME }}*.ipa
+            artifact_path: build/**/${PACKAGE_NAME}*.ipa
           - target: ios
             suffix: -impeller
             os: macos-12
             flutter_version: 3.13
             artifact_name: release-ios-impeller
-            artifact_path: build/**/${{ env.PACKAGE_NAME }}*.ipa
+            artifact_path: build/**/${PACKAGE_NAME}*.ipa
           - target: macos
             os: macos-12
             artifact_name: release-mac
-            artifact_path: build/macos/${{ env.PACKAGE_NAME }}*.zip
+            artifact_path: build/macos/${PACKAGE_NAME}*.zip
           - target: windows
             os: windows-latest
             artifact_name: release-windows
-            artifact_path: build/windows/${{ env.PACKAGE_NAME }}*.zip
+            artifact_path: build/windows/${PACKAGE_NAME}*.zip
 
     runs-on: ${{ matrix.os }}
     steps:
