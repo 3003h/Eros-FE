@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 class EhNetworkImage extends StatefulWidget {
   const EhNetworkImage({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.height,
     this.width,
@@ -17,12 +17,15 @@ class EhNetworkImage extends StatefulWidget {
     this.httpHeaders,
     this.checkHide = false,
     this.onHideFlagChanged,
-  }) : super(key: key);
+    this.blurHash = false,
+  });
 
   final String imageUrl;
   final double? height;
   final double? width;
   final BoxFit? fit;
+
+  final bool blurHash;
 
   final Map<String, String>? httpHeaders;
 
@@ -66,6 +69,7 @@ class _EhNetworkImageState extends State<EhNetworkImage> {
       checkPHashHide: widget.checkHide && ehSettingService.enablePHashCheck,
       checkQRCodeHide: widget.checkHide && ehSettingService.enableQRCodeCheck,
       onHideFlagChanged: widget.onHideFlagChanged,
+      blurHash: widget.blurHash,
     );
   }
 }

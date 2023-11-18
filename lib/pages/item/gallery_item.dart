@@ -1,16 +1,9 @@
-import 'package:blur/blur.dart';
-import 'package:fehviewer/common/exts.dart';
 import 'package:fehviewer/common/service/ehsetting_service.dart';
 import 'package:fehviewer/common/service/layout_service.dart';
 import 'package:fehviewer/common/service/theme_service.dart';
 import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/extension.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:fehviewer/fehviewer.dart';
 import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/widget/blur_image.dart';
-import 'package:fehviewer/widget/image/eh_network_image.dart';
 import 'package:fehviewer/widget/rating_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +36,12 @@ class GalleryItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => itemController.onTap(tabTag),
+      onTapDown: itemController.onTapDown,
+      onTapUp: itemController.onTapUp,
+      onTapCancel: itemController.onTapCancel,
+      onLongPress: itemController.onLongPress,
       child: Center(
         child: Stack(
           children: [
@@ -66,12 +65,6 @@ class GalleryItemWidget extends StatelessWidget {
           ],
         ),
       ),
-      behavior: HitTestBehavior.opaque,
-      onTap: () => itemController.onTap(tabTag),
-      onTapDown: itemController.onTapDown,
-      onTapUp: itemController.onTapUp,
-      onTapCancel: itemController.onTapCancel,
-      onLongPress: itemController.onLongPress,
     ).autoCompressKeyboard(context);
   }
 
@@ -218,11 +211,12 @@ class GalleryItemWidget extends StatelessWidget {
 
 class _CoverImage extends StatelessWidget {
   const _CoverImage({
-    Key? key,
+    super.key,
     required this.galleryProviderController,
     this.tabTag,
     this.cardType = false,
-  }) : super(key: key);
+  });
+
   final GalleryItemController galleryProviderController;
   final dynamic tabTag;
   final bool cardType;
@@ -286,17 +280,18 @@ class _CoverImage extends StatelessWidget {
 
     Widget getImageBlurFittedBox() {
       Widget imageBlurFittedBox = CoverImg(
+        blurHash: true,
         imgUrl: _item.imgUrl ?? '',
         width: coverImageWidth,
         fit: BoxFit.cover,
       );
 
-      imageBlurFittedBox = Blur(
-        child: imageBlurFittedBox,
-        blur: 5,
-        colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
-        blurColor: CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
-      );
+      // imageBlurFittedBox = Blur(
+      //   blur: 0,
+      //   colorOpacity: ehTheme.isDarkMode ? 0.5 : 0.1,
+      //   blurColor: CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
+      //   child: imageBlurFittedBox,
+      // );
 
       return imageBlurFittedBox;
     }
@@ -315,13 +310,11 @@ class _CoverImage extends StatelessWidget {
     }
 
     if (!cardType) {
-      image = Container(
-        child: HeroMode(
-          enabled: !isLayoutLarge,
-          child: Hero(
-            tag: '${_item.gid}_cover_$tabTag',
-            child: image,
-          ),
+      image = HeroMode(
+        enabled: !isLayoutLarge,
+        child: Hero(
+          tag: '${_item.gid}_cover_$tabTag',
+          child: image,
         ),
       );
 
@@ -386,8 +379,7 @@ class _CoverImage extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({Key? key, required this.galleryItemController})
-      : super(key: key);
+  const _Title({super.key, required this.galleryItemController});
   final GalleryItemController galleryItemController;
 
   @override
@@ -616,13 +608,14 @@ class TagBox extends StatelessWidget {
 /// 封面图片Widget
 class CoverImg extends StatelessWidget {
   const CoverImg({
-    Key? key,
+    super.key,
     required this.imgUrl,
     this.height,
     this.width,
     this.fit = BoxFit.contain,
     this.expand = true,
-  }) : super(key: key);
+    this.blurHash = false,
+  });
 
   final String imgUrl;
   final double? height;
@@ -632,36 +625,47 @@ class CoverImg extends StatelessWidget {
 
   final bool expand;
 
+  final bool blurHash;
+
   @override
   Widget build(BuildContext context) {
     final EhSettingService ehSettingService = Get.find();
 
     Widget image() {
       if (imgUrl.isNotEmpty) {
-        return EhNetworkImage(
-          placeholder: (_, __) {
-            return Container(
-              alignment: Alignment.center,
-              child: const CupertinoActivityIndicator(),
-            );
-          },
-          width: width,
-          height: height,
-          // httpHeaders: _httpHeaders,
-          imageUrl: imgUrl.handleUrl,
-          fit: fit, //
-        );
+        return Obx(() {
+          return EhNetworkImage(
+            blurHash: ehSettingService.isGalleryImgBlur.value || blurHash,
+            placeholder: (_, __) {
+              return Container(
+                alignment: Alignment.center,
+                child: const CupertinoActivityIndicator(),
+              );
+            },
+            width: width,
+            height: height,
+            // httpHeaders: _httpHeaders,
+            imageUrl: imgUrl.handleUrl,
+            fit: fit, //
+          );
+        });
       } else {
         return Container();
       }
     }
 
-    return Obx(
-      () => BlurImage(
-        expand: expand,
-        child: image(),
-        isBlur: ehSettingService.isGalleryImgBlur.value,
-      ),
-    );
+    return image();
+
+    // final BlurhashTheImage blurhashTheImage = BlurhashTheImage(
+    //   getEhImageProvider(imgUrl.handleUrl),
+    // );
+
+    // return Obx(
+    //   () => BlurImage(
+    //     expand: expand,
+    //     isBlur: ehSettingService.isGalleryImgBlur.value,
+    //     child: image(),
+    //   ),
+    // );
   }
 }

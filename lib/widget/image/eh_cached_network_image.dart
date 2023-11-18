@@ -1,3 +1,4 @@
+import 'package:blurhash_ffi/blurhash_ffi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fehviewer/common/controller/image_block_controller.dart';
 import 'package:fehviewer/fehviewer.dart';
@@ -11,7 +12,7 @@ import 'package:octo_image/octo_image.dart';
 
 class EhCachedNetworkImage extends StatelessWidget {
   EhCachedNetworkImage({
-    Key? key,
+    super.key,
     required this.imageUrl,
     this.height,
     this.width,
@@ -25,7 +26,8 @@ class EhCachedNetworkImage extends StatelessWidget {
     this.checkQRCodeHide = false,
     this.onHideFlagChanged,
     this.ser,
-  }) : super(key: key);
+    this.blurHash = false,
+  });
 
   final String imageUrl;
   final double? height;
@@ -40,6 +42,8 @@ class EhCachedNetworkImage extends StatelessWidget {
   final bool checkPHashHide;
   final bool checkQRCodeHide;
   final ValueChanged<bool>? onHideFlagChanged;
+
+  final bool blurHash;
 
   final int? ser;
 
@@ -58,7 +62,11 @@ class EhCachedNetworkImage extends StatelessWidget {
   }
 
   ImageWidgetBuilder get imageWidgetBuilder => (context, imageProvider) {
-        final _image = OctoImage(
+        if (blurHash) {
+          imageProvider = BlurhashTheImage(imageProvider);
+        }
+
+        final octoImage = OctoImage(
           image: imageProvider,
           width: width,
           height: height,
@@ -70,33 +78,31 @@ class EhCachedNetworkImage extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
-                    return _image;
+                    return octoImage;
                   }
                   final showHidePlaceWidget = snapshot.data ?? false;
                   onHideFlagChanged?.call(showHidePlaceWidget);
                   return showHidePlaceWidget
-                      ? Container(
-                          child: Center(
-                            child: Icon(
-                              CupertinoIcons.xmark_shield_fill,
-                              size: 32,
-                              color: CupertinoDynamicColor.resolve(
-                                  CupertinoColors.systemGrey3, context),
-                            ),
+                      ? Center(
+                          child: Icon(
+                            CupertinoIcons.xmark_shield_fill,
+                            size: 32,
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.systemGrey3, context),
                           ),
                         )
-                      : _image;
+                      : octoImage;
                 } else {
                   return placeholder?.call(context, imageUrl) ??
                       Container(
                         alignment: Alignment.center,
                         child: const CupertinoActivityIndicator(),
                       );
-                  // return _image;
+                  // return octoImage;
                 }
               });
         } else {
-          return _image;
+          return octoImage;
         }
       };
 
