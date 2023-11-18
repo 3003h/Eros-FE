@@ -836,7 +836,7 @@ class ViewExtController extends GetxController {
     //   );
     // }
 
-    if (vState.viewMode == ViewMode.LeftToRight) {
+    if (vState.viewMode == ViewMode.leftToRight) {
       toPrev();
     } else if (vState.viewMode == ViewMode.rightToLeft) {
       toNext();
@@ -869,7 +869,7 @@ class ViewExtController extends GetxController {
     //   );
     // }
 
-    if (vState.viewMode == ViewMode.LeftToRight) {
+    if (vState.viewMode == ViewMode.leftToRight) {
       toNext();
     } else if (vState.viewMode == ViewMode.rightToLeft) {
       toPrev();

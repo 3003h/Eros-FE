@@ -225,7 +225,7 @@ Widget _buildListModeItem(
     ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
     ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
     ListModeEnum.grid: L10n.of(context).listmode_grid,
-    if (kDebugMode || Get.find<EhSettingService>().debugMode)
+    if (!kReleaseMode || Get.find<EhSettingService>().debugMode)
       ListModeEnum.debugSimple: 'debugSimple',
   };
   return SelectorCupertinoListTile<ListModeEnum>(

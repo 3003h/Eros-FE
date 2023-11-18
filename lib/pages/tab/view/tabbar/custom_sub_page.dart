@@ -12,16 +12,16 @@ import '../list/tab_base.dart';
 
 class SubListView<T extends CustomSubListController> extends StatefulWidget {
   const SubListView({
-    Key? key,
+    super.key,
     required this.profileUuid,
     this.pinned = true,
-  }) : super(key: key);
+  });
 
   final String profileUuid;
   final bool pinned;
 
   @override
-  _SubListViewState createState() => _SubListViewState<T>();
+  State<SubListView> createState() => _SubListViewState<T>();
 }
 
 class _SubListViewState<T extends CustomSubListController>

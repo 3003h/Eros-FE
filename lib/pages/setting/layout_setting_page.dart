@@ -324,7 +324,7 @@ Widget _buildListModeItem(BuildContext context) {
     ListModeEnum.waterfall: L10n.of(context).listmode_waterfall,
     ListModeEnum.waterfallLarge: L10n.of(context).listmode_waterfall_large,
     ListModeEnum.grid: L10n.of(context).listmode_grid,
-    if (kDebugMode || ehSettingService.debugMode)
+    if (!kReleaseMode || ehSettingService.debugMode)
       ListModeEnum.debugSimple: 'debugSimple',
   };
   return Obx(() {

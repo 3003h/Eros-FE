@@ -11,14 +11,13 @@ import '../gallery_base.dart';
 import '../list/tab_base.dart';
 
 class FavoriteSubPage extends StatefulWidget {
-  const FavoriteSubPage({Key? key, required this.favcat, this.pinned = true})
-      : super(key: key);
+  const FavoriteSubPage({super.key, required this.favcat, this.pinned = true});
 
   final String favcat;
   final bool pinned;
 
   @override
-  _FavoriteSubPageState createState() => _FavoriteSubPageState();
+  State<FavoriteSubPage> createState() => _FavoriteSubPageState();
 }
 
 class _FavoriteSubPageState extends State<FavoriteSubPage>

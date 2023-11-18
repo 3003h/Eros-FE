@@ -77,7 +77,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   List<Widget> _getBarItems(BuildContext context, double boxWidth) {
     this.boxWidth = boxWidth;
     channelFrameList.clear();
-    List<Widget> _barItems = [];
+    List<Widget> barItems = [];
     _maxScrollViewWidth = 0;
 
     for (int i = 0; i < widget.items.length; i++) {
@@ -180,9 +180,9 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
         }),
       );
 
-      _barItems.add(barItem);
+      barItems.add(barItem);
     }
-    return _barItems;
+    return barItems;
   }
 
   void scrollToItem(int index) {
@@ -269,7 +269,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
   Widget build(BuildContext context) {
     final scrollViewWidth = _maxScrollViewWidth;
 
-    final _indicator = AnimatedContainer(
+    final indicator = AnimatedContainer(
       height: widget.indicatorHeight,
       width: _indicatorWidth,
       decoration: BoxDecoration(
@@ -287,7 +287,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
       return SingleChildScrollView(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
-        child: Container(
+        child: SizedBox(
           width: _maxScrollViewWidth,
           child: Column(
             children: [
@@ -304,9 +304,9 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
                         height: widget.indicatorHeight, width: scrollViewWidth),
                     AnimatedPositioned(
                       left: _indicatorPositionedLeft,
-                      child: _indicator,
                       duration: kDuration,
                       curve: Curves.ease,
+                      child: indicator,
                     ),
                   ],
                 ),
@@ -330,7 +330,7 @@ class _LinkScrollBarState extends State<LinkScrollBar> {
 
 class TitleIndicator extends StatefulWidget {
   const TitleIndicator({
-    Key? key,
+    super.key,
     this.maxWidth,
     this.pageController,
     required this.channelFrameList,
@@ -338,7 +338,7 @@ class TitleIndicator extends StatefulWidget {
     required this.index,
     this.itemPadding,
     this.height = 0.0,
-  }) : super(key: key);
+  });
   final double? maxWidth;
   final PageController? pageController;
   final List<ItemFrame> channelFrameList;
@@ -409,7 +409,7 @@ class _TitleIndicatorState extends State<TitleIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: widget.height,
       child: Stack(
         children: [
@@ -436,6 +436,7 @@ class _TitleIndicatorState extends State<TitleIndicator> {
 //导航栏item组件封装
 class InnerLinkTabItem extends StatefulWidget {
   const InnerLinkTabItem({
+    super.key,
     required this.title,
     this.selected = false,
     this.padding,

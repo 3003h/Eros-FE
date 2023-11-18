@@ -146,7 +146,7 @@ class ImageView extends StatelessWidget {
         switch (logic.vState.viewMode) {
           case ViewMode.topToBottom:
             return const ImageListView();
-          case ViewMode.LeftToRight:
+          case ViewMode.leftToRight:
             return const ImagePageView();
             return kReleaseMode
                 ? const ImagePageView()

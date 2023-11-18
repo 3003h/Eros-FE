@@ -140,7 +140,7 @@ Widget _buildViewModeItem(BuildContext context) {
   final EhSettingService ehSettingService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
-    ViewMode.LeftToRight: L10n.of(context).left_to_right,
+    ViewMode.leftToRight: L10n.of(context).left_to_right,
     ViewMode.rightToLeft: L10n.of(context).right_to_left,
     ViewMode.topToBottom: L10n.of(context).top_to_bottom,
   };

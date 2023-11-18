@@ -16,7 +16,7 @@ import '../constants.dart';
 import 'custom_sub_page.dart';
 
 class CustomTabbarList extends StatefulWidget {
-  const CustomTabbarList({Key? key}) : super(key: key);
+  const CustomTabbarList({super.key});
 
   @override
   State<CustomTabbarList> createState() => _CustomTabbarListState();
@@ -130,7 +130,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
     double offset,
     double maxExtentCallBackValue,
   ) {
-    return Container(
+    return SizedBox(
       height: maxExtentCallBackValue,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -149,8 +149,9 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
   CupertinoNavigationBar getNavigationBar(BuildContext context) {
     return CupertinoNavigationBar(
       transitionBetweenRoutes: false,
-      // backgroundColor:
-      //     CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
+      backgroundColor: kEnableImpeller
+          ? CupertinoTheme.of(context).barBackgroundColor.withOpacity(1)
+          : null,
       // border: null,
       border: Border(
         bottom: BorderSide(
@@ -274,9 +275,9 @@ class JumpButton extends StatelessWidget {
 
 class CustomTabBar extends StatelessWidget {
   const CustomTabBar({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   final CustomTabbarController controller;
 
@@ -293,7 +294,7 @@ class CustomTabBar extends StatelessWidget {
             blur: 10,
             blurColor:
                 CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
-            colorOpacity: 0.7,
+            colorOpacity: kEnableImpeller ? 1.0 : 0.7,
             child: Container(
               height: kTopTabbarHeight,
             ),

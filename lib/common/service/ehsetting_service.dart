@@ -102,7 +102,7 @@ class EhSettingService extends ProfileService {
 
   /// 阅读相关设置
   /// 阅读方向
-  Rx<ViewMode> viewMode = ViewMode.LeftToRight.obs;
+  Rx<ViewMode> viewMode = ViewMode.leftToRight.obs;
 
   /// 自动锁定时间
   RxInt autoLockTimeOut = (-1).obs;

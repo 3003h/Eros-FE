@@ -1,5 +1,4 @@
 // import 'package:fehviewer/utils/cust_lib/flutter_linkify.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:linkify/linkify.dart'
@@ -21,7 +20,7 @@ const Duration _kExpandDuration = Duration(milliseconds: 200);
 
 class ExpandableLinkify extends StatefulWidget {
   const ExpandableLinkify({
-    Key? key,
+    super.key,
     required this.text,
     this.maxLines,
     this.style,
@@ -41,7 +40,7 @@ class ExpandableLinkify extends StatefulWidget {
     this.colorExpandText = Colors.blueAccent,
     this.expandText = 'expand',
     this.collapseText = 'compress',
-  }) : super(key: key);
+  });
 
   final bool expand;
 

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:reorderables/reorderables.dart';
 
 class CustomProfilesPage extends GetView<CustomTabbarController> {
-  const CustomProfilesPage({Key? key}) : super(key: key);
+  const CustomProfilesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
     );
 
     Widget buildNormalItem(CustomProfile element, {bool isLast = false}) {
-      Widget _buildTile({Key? key}) => EhCupertinoListTile(
+      Widget buildTile({Key? key}) => EhCupertinoListTile(
             key: key,
             title: Text(element.name),
             trailing: const CupertinoListTileChevron(),
@@ -30,15 +30,6 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
 
       return Slidable(
         key: ValueKey(element.uuid),
-        child: isLast
-            ? _buildTile(key: ValueKey(element.uuid))
-            : Column(
-                key: ValueKey(element.uuid),
-                children: [
-                  _buildTile(),
-                  shortDivider,
-                ],
-              ),
         endActionPane: ActionPane(
           extentRatio: 0.25,
           motion: const ScrollMotion(),
@@ -53,6 +44,15 @@ class CustomProfilesPage extends GetView<CustomTabbarController> {
             ),
           ],
         ),
+        child: isLast
+            ? buildTile(key: ValueKey(element.uuid))
+            : Column(
+                key: ValueKey(element.uuid),
+                children: [
+                  buildTile(),
+                  shortDivider,
+                ],
+              ),
       );
     }
 
