@@ -24,37 +24,41 @@ env:
 jobs:
   Build_and_upload:
     name: Build releases
-    env:
-      PACKAGE_NAME: FEhViewer
     strategy:
       fail-fast: false
       matrix:
-        flutter_version: ['3.16']
-        flutter_channel: ['stable']
-        suffix: ['']
         include:
           - target: android
             os: ubuntu-latest
+            flutter_version: 3.16
+            flutter_channel: stable
             artifact_name: release-apk
-            artifact_path: build/app/outputs/apk/release/${PACKAGE_NAME}*.apk
+            artifact_path: build/app/outputs/apk/release/FEhViewer*.apk
           - target: ios
             os: macos-12
+            flutter_version: 3.16
+            flutter_channel: stable
             artifact_name: release-ios
-            artifact_path: build/**/${PACKAGE_NAME}*.ipa
+            artifact_path: build/**/FEhViewer*.ipa
           - target: ios
             suffix: -impeller
             os: macos-12
-            flutter_version: 3.13
+            flutter_version: 3.16
+            flutter_channel: stable
             artifact_name: release-ios-impeller
-            artifact_path: build/**/${PACKAGE_NAME}*.ipa
+            artifact_path: build/**/FEhViewer*.ipa
           - target: macos
             os: macos-12
+            flutter_version: 3.16
+            flutter_channel: stable
             artifact_name: release-mac
-            artifact_path: build/macos/${PACKAGE_NAME}*.zip
+            artifact_path: build/macos/FEhViewer*.zip
           - target: windows
             os: windows-latest
+            flutter_version: 3.16
+            flutter_channel: stable
             artifact_name: release-windows
-            artifact_path: build/windows/${PACKAGE_NAME}*.zip
+            artifact_path: build/windows/FEhViewer*.zip
 
     runs-on: ${{ matrix.os }}
     steps:
