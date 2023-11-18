@@ -77,7 +77,8 @@ class _CommentPageState extends State<CommentPage>
     return Obx(() {
       logger.t('build commentListView');
 
-      List<GalleryComment>? comments = _filterComments(controller.comments);
+      List<GalleryComment> comments =
+          _filterComments(controller.comments) ?? [];
 
       return CustomScrollView(
         slivers: [
@@ -87,7 +88,7 @@ class _CommentPageState extends State<CommentPage>
               onRefresh: controller.onRefresh,
             ),
           ),
-          if (comments?.isEmpty ?? true)
+          if (comments.isEmpty)
             const SliverFillRemaining()
           else
             SliverSafeArea(
@@ -99,9 +100,9 @@ class _CommentPageState extends State<CommentPage>
               sliver: SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    return _itemBuilder(context, index);
+                    return _itemBuilder(comments[index]);
                   },
-                  childCount: comments?.length ?? 0,
+                  childCount: comments.length,
                 ),
               ),
             ),
@@ -145,12 +146,10 @@ class _CommentPageState extends State<CommentPage>
     return commentsFilter;
   }
 
-  Widget _itemBuilder(BuildContext context, int index) {
+  Widget _itemBuilder(GalleryComment comment) {
     if (controller.comments == null || controller.comments!.isEmpty) {
       return const SizedBox();
     }
-
-    final comment = controller.comments![index];
 
     final hideComment = _ehSettingService.filterCommentsByScore &&
         (comment.score.isNotEmpty &&
