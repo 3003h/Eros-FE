@@ -43,8 +43,8 @@ jobs:
           - target: ios
             suffix: -impeller
             os: macos-12
-            flutter_version: 3.13
-            flutter_channel: stable
+            flutter_version: x
+            flutter_channel: master
             artifact_name: release-ios-impeller
             artifact_path: build/**/FEhViewer*.ipa
           - target: macos
@@ -144,6 +144,9 @@ jobs:
           flutter-version: ${{ matrix.flutter_version }}
           channel: ${{ matrix.flutter_channel }}
 
+      - name: Flutter version
+        run: flutter --version
+
       - name: Build resolve Swift dependencies
         if: matrix.target == 'macos'
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
@@ -186,7 +189,8 @@ jobs:
         if: matrix.target == 'ios'
         run: |
           sed -i '' 's/dev2.cn.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
-          cd ios && pod update && pod install && cd ..
+          rm ios/Podfile.lock
+          cd ios && pod update && pod install --repo-update && cd ..
           flutter build ios --release --no-codesign
 
       - name: upload-symbols
