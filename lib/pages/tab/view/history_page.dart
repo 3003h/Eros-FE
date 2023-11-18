@@ -49,58 +49,53 @@ class _HistoryTabState extends State<HistoryTab> {
       leading: controller.getLeading(context),
       middle: GestureDetector(
           onTap: () => controller.scrollToTop(context), child: Text(_title)),
-      trailing: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (GetPlatform.isDesktop)
-              StatefulBuilder(builder: (context, setState) {
-                return CupertinoButton(
-                  padding: const EdgeInsets.all(0),
-                  minSize: 40,
-                  child: isRefresh
-                      ? const CupertinoActivityIndicator(
-                          radius: 10,
-                        )
-                      : const Icon(
-                          CupertinoIcons.arrow_clockwise,
-                          size: 24,
-                        ),
-                  onPressed: () async {
+      trailing: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (GetPlatform.isDesktop)
+            StatefulBuilder(builder: (context, setState) {
+              return CupertinoButton(
+                padding: const EdgeInsets.all(0),
+                minSize: 40,
+                child: isRefresh
+                    ? const CupertinoActivityIndicator(
+                        radius: 10,
+                      )
+                    : const Icon(
+                        CupertinoIcons.arrow_clockwise,
+                        size: 24,
+                      ),
+                onPressed: () async {
+                  setState(() {
+                    isRefresh = true;
+                  });
+                  try {
+                    await controller.reloadData();
+                  } finally {
                     setState(() {
-                      isRefresh = true;
+                      isRefresh = false;
                     });
-                    try {
-                      await controller.reloadData();
-                    } finally {
-                      setState(() {
-                        isRefresh = false;
-                      });
-                    }
-                  },
-                );
-              }),
-            // 清除按钮
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                FontAwesomeIcons.solidTrashCan,
-                size: 20,
-              ),
-              onPressed: () {
-                controller.clearHistory();
-              },
+                  }
+                },
+              );
+            }),
+          // 清除按钮
+          CupertinoButton(
+            minSize: 40,
+            padding: const EdgeInsets.all(0),
+            child: const Icon(
+              FontAwesomeIcons.solidTrashCan,
+              size: 20,
             ),
-          ],
-        ),
+            onPressed: () {
+              controller.clearHistory();
+            },
+          ),
+        ],
       ),
     );
     final Widget customScrollView = CustomScrollView(
-      // cacheExtent: 500,
-      // controller: scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
       slivers: <Widget>[
         SliverFloatingPinnedPersistentHeader(
           delegate: SliverFloatingPinnedPersistentHeaderBuilder(
@@ -111,6 +106,11 @@ class _HistoryTabState extends State<HistoryTab> {
             builder: (_, __, ___) => navigationBar,
           ),
         ),
+        // CupertinoSliverNavigationBar(
+        //   largeTitle: GestureDetector(
+        //       onTap: () => controller.scrollToTop(context),
+        //       child: Text(_title)),
+        // ),
         EhCupertinoSliverRefreshControl(
           onRefresh: controller.syncHistory,
         ),

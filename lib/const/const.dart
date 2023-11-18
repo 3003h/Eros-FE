@@ -18,7 +18,9 @@ final urlRegExp = RegExp(
 final commentUrlRegExp = RegExp(
     r'(?<!(">\n?|="))(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]');
 
-const kEnableImpeller = true;
+const kEnableImpeller = false;
+
+const double kTabViewCacheExtent = 500;
 
 enum ListModeEnum {
   list,

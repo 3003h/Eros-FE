@@ -43,9 +43,10 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           buildNestedScrollView(context, hideTopBarOnScroll);
 
       return CupertinoPageScaffold(
-        // navigationBar: hideTopBarOnScroll ? null : getNavigationBar(context),
         child: SizeCacheWidget(child: scrollView),
       );
+
+      // return CupertinoPageScaffold(child: scrollView);
     });
   }
 
@@ -68,14 +69,13 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                   offset,
                   headerMaxHeight,
                 ),
-                // minHeight: context.mediaQueryPadding.top + kTopTabbarHeight,
                 minHeight: hideTopBarOnScroll
                     ? context.mediaQueryPadding.top + kTopTabbarHeight
                     : headerMaxHeight,
                 maxHeight: headerMaxHeight,
               ),
             ),
-          )
+          ),
         ];
       },
       body: buildSubPages(),
@@ -104,8 +104,7 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
                               profileUuid: e.uuid,
                               key: ValueKey(e.uuid),
                               pinned: !hideTopBarOnScroll,
-                            ))
-                        .toList(),
+                            )),
                   ]
                 : [
                     const Center(
@@ -167,12 +166,13 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           children: [
             Text(L10n.of(context).tab_gallery),
             Obx(() {
-              if (controller.isBackgroundRefresh)
+              if (controller.isBackgroundRefresh) {
                 return const CupertinoActivityIndicator(
                   radius: 10,
                 ).paddingSymmetric(horizontal: 8);
-              else
+              } else {
                 return const SizedBox();
+              }
             }),
           ],
         ),
@@ -231,9 +231,9 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
 
 class JumpButton extends StatelessWidget {
   const JumpButton({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   final CustomTabbarController controller;
 
@@ -259,6 +259,7 @@ class JumpButton extends StatelessWidget {
               '1',
               textAlign: TextAlign.center,
               textScaleFactor: 0.9,
+              // textScaler: const TextScaler.linear(0.9),
               style: TextStyle(
                   height: 1.3,
                   fontWeight: FontWeight.bold,
@@ -308,7 +309,7 @@ class CustomTabBar extends StatelessWidget {
             left: context.mediaQueryPadding.left,
             right: context.mediaQueryPadding.right,
           ),
-          child: Container(
+          child: SizedBox(
             height: kTopTabbarHeight,
             child: Row(
               children: [
@@ -390,11 +391,11 @@ class CustomTabBar extends StatelessWidget {
                       CupertinoButton(
                         minSize: 40,
                         padding: const EdgeInsets.all(0),
+                        onPressed: controller.pressedBar,
                         child: const Icon(
                           FontAwesomeIcons.bars,
                           size: 20,
                         ),
-                        onPressed: controller.pressedBar,
                       ),
                     ],
                   ),
@@ -409,10 +410,10 @@ class CustomTabBar extends StatelessWidget {
 }
 
 class EnglishWordList extends StatefulWidget {
-  const EnglishWordList({Key? key}) : super(key: key);
+  const EnglishWordList({super.key});
 
   @override
-  _EnglishWordListState createState() => _EnglishWordListState();
+  State<EnglishWordList> createState() => _EnglishWordListState();
 }
 
 class _EnglishWordListState extends State<EnglishWordList>

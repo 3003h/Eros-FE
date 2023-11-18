@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'master'
-      - 'mysql'
     tags:
       - v*
       - '!v*ios'
@@ -14,12 +13,13 @@ on:
       - '!v*.flutter2'
       - '!v*.bot'
       - '!v*.linux'
-env:
-  APP_DEV_PROVISION_PATH: '/tmp/app_dev.mobileprovision'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
+
+env:
+  PACKAGE_NAME: FEhViewer
 
 jobs:
   Build_and_upload:
@@ -27,31 +27,32 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        flutter_version: ['3.16']
+        flutter_channel: ['stable']
+        suffix: ['']
         include:
           - target: android
             os: ubuntu-latest
-#            flutter_version: '3.13'
-            flutter_channel: 'stable'
             artifact_name: release-apk
-            artifact_path: build/app/outputs/apk/release/FEhViewer*.apk
+            artifact_path: build/app/outputs/apk/release/${{ env.PACKAGE_NAME }}*.apk
           - target: ios
             os: macos-12
-#            flutter_version: '3.13'
-            flutter_channel: 'stable'
             artifact_name: release-ios
-            artifact_path: build/**/FEhViewer*.ipa
+            artifact_path: build/**/${{ env.PACKAGE_NAME }}*.ipa
+          - target: ios
+            suffix: -impeller
+            os: macos-12
+            flutter_version: 3.13
+            artifact_name: release-ios-impeller
+            artifact_path: build/**/${{ env.PACKAGE_NAME }}*.ipa
           - target: macos
             os: macos-12
-#            flutter_version: '3.13'
-            flutter_channel: 'stable'
             artifact_name: release-mac
-            artifact_path: build/macos/FEhViewer*.zip
+            artifact_path: build/macos/${{ env.PACKAGE_NAME }}*.zip
           - target: windows
             os: windows-latest
-#            flutter_version: '3.13'
-            flutter_channel: 'stable'
             artifact_name: release-windows
-            artifact_path: build/windows/FEhViewer*.zip
+            artifact_path: build/windows/${{ env.PACKAGE_NAME }}*.zip
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -70,44 +71,6 @@ jobs:
 
       - name: show version
         run: echo ${{ env.app_version }}
-
-#      - name: Cache Flutter (Linux)
-#        if: matrix.os == 'ubuntu-latest'
-#        uses: actions/cache@v3
-#        with:
-#          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
-#          path: /opt/hostedtoolcache/flutter
-#          restore-keys: |
-#            ${{ runner.os }}-flutter-
-#
-#      - name: Cache Flutter (MacOS)
-#        if: matrix.os == 'macos-12'
-#        uses: actions/cache@v3
-#        with:
-#          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
-#          path: /Users/runner/hostedtoolcache/flutter
-#          restore-keys: |
-#            ${{ runner.os }}-flutter-
-#
-#      - name: Cache Flutter (Windows)
-#        if: matrix.os == 'windows-latest'
-#        uses: actions/cache@v3
-#        with:
-#          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
-#          path: 'C:\hostedtoolcache\windows\flutter'
-#          restore-keys: |
-#            ${{ runner.os }}-flutter-
-
-#      - name: Cache Gradle packages (Android)
-#        if: matrix.target == 'android'
-#        uses: actions/cache@v3
-#        with:
-#          path: |
-#            ~/.gradle/caches
-#            ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gradle-
 
       - name: Cache Pods (build macos)
         uses: actions/cache@v3
@@ -172,24 +135,30 @@ jobs:
       - name: Flutter action
         uses: subosito/flutter-action@v2
         with:
-#          flutter-version: ${{ matrix.flutter_version }}
+          flutter-version: ${{ matrix.flutter_version }}
           channel: ${{ matrix.flutter_channel }}
 
       - name: Build resolve Swift dependencies
         if: matrix.target == 'macos'
         run: xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner -configuration Release
 
-      - name: replace cronet_http
-        if: matrix.target == 'macos'
+#      - name: replace cronet_http
+#        if: matrix.target == 'macos'
+#        shell: bash
+#        run: |
+#          brew install gnu-sed
+#          export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+#          which sed
+#          which gsed
+#          gsed -i "s,#cronet_http: ^0.2.1,cronet_http: ^0.2.1,g" pubspec.yaml
+#          grep cronet_http pubspec.yaml
+#          git stash
+
+      - name: ios enable impeller
+        if: matrix.target == 'ios' && matrix.suffix == '-impeller'
         shell: bash
         run: |
-          brew install gnu-sed
-          export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-          which sed
-          which gsed
-          gsed -i "s,#cronet_http: ^0.2.1,cronet_http: ^0.2.1,g" pubspec.yaml
-          grep cronet_http pubspec.yaml
-          git stash
+          gsed -i '/FLTEnableImpeller/{N;d;}' ios/Runner/Info.plist
 
       - name: Flutter pub get
         run: |
@@ -214,9 +183,11 @@ jobs:
           sed -i '' 's/dev2.cn.honjow.fehv/cn.honjow.fehv/g' 'ios/Runner.xcodeproj/project.pbxproj'
           cd ios && pod update && pod install && cd ..
           flutter build ios --release --no-codesign
+
       - name: upload-symbols
         if: matrix.target == 'ios'
         run: find build/ios/Release-iphoneos -name "*.dSYM" | xargs -I \{\} ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/Runner/GoogleService-Info.plist -p ios \{\}
+
       - name: Thin app
         if: matrix.target == 'ios'
         run: sh scripts/thin-payload.sh build/ios/iphoneos/*.app
@@ -227,7 +198,7 @@ jobs:
           cd build
           mkdir -p Payload
           mv ios/iphoneos/*.app Payload
-          zip -9 FEhViewer_${{ env.app_version }}.ipa -r Payload
+          zip -9 ${{ env.PACKAGE_NAME }}${{ matrix.suffix }}_${{ env.app_version }}.ipa -r Payload
 
       # 打包 mac
       - name: Build mac app
@@ -237,18 +208,18 @@ jobs:
           flutter build macos --release
           APP_PATH=build/macos/Build/Products/Release/fehviewer.app
           cp -a $APP_PATH ./build
-          cd build && zip -qroy macos/FEhViewer_${{ env.app_version }}_macos.zip fehviewer.app
+          cd build && zip -qroy macos/${{ env.PACKAGE_NAME }}_${{ env.app_version }}_macos.zip fehviewer.app
 
       - name: Build windows
         if: matrix.target == 'windows'
         run: |
           flutter build windows --release
-          $DestDir = "build\windows\FEhViewer"
+          $DestDir = "build\windows\${{ env.PACKAGE_NAME }}"
           $SrcDir = "build\windows\x64\runner\Release"
           New-Item -Path $DestDir -ItemType Directory
           Copy-Item $SrcDir\* -Recurse $DestDir
           Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
-          Compress-Archive $DestDir build\windows\FEhViewer_${{ env.app_version }}_windows.zip
+          Compress-Archive $DestDir build\windows\${{ env.PACKAGE_NAME }}_${{ env.app_version }}_windows.zip
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
@@ -283,7 +254,7 @@ jobs:
       - name: Upload to release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
+          artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios*/*.ipa,/tmp/artifacts/release-mac/*.zip,/tmp/artifacts/release-windows/*.zip"
           tag: ${{ github.ref_name }}
           bodyFile: changelog/v${{ env.app_version }}.md
           prerelease: contains(github.ref, 'pre')

@@ -57,6 +57,7 @@ class _SubListViewState<T extends CustomSubListController>
   Widget build(BuildContext context) {
     super.build(context);
     return CustomScrollView(
+      cacheExtent: kTabViewCacheExtent,
       physics:
           const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       slivers: [

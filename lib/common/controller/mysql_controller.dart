@@ -236,7 +236,8 @@ class MysqlController extends GetxController {
       final result = await feMySql?.getHistory(gid);
       logger.d('downloadHistory $result');
       if (result != null) {
-        return GalleryProvider.fromJson(jsonDecode(result.json));
+        return GalleryProvider.fromJson(
+            jsonDecode(result.json) as Map<String, dynamic>);
       }
     } catch (e, stack) {
       logger.e('$e\n$stack');
@@ -261,8 +262,8 @@ class MysqlController extends GetxController {
     final result = await feMySql?.getHistoryList(_gidList);
 
     if (result != null) {
-      _list.addAll(
-          result.map((e) => GalleryProvider.fromJson(jsonDecode(e.json))));
+      _list.addAll(result.map((e) => GalleryProvider.fromJson(
+          jsonDecode(e.json) as Map<String, dynamic>)));
     }
 
     return _list;

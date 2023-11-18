@@ -1,3 +1,4 @@
+import 'package:fehviewer/const/const.dart';
 import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,9 @@ class TabHomeSmall extends GetView<TabHomeController> {
     return Obx(() => CupertinoTabScaffold(
           controller: controller.tabController,
           tabBar: CupertinoTabBar(
+            backgroundColor: kEnableImpeller
+                ? CupertinoTheme.of(context).barBackgroundColor.withOpacity(1)
+                : null,
             items: controller.listBottomNavigationBarItem,
             onTap: controller.onTap,
           ),
