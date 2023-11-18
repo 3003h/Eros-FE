@@ -43,7 +43,7 @@ jobs:
           - target: ios
             suffix: -impeller
             os: macos-12
-            flutter_version: 3.16
+            flutter_version: 3.13
             flutter_channel: stable
             artifact_name: release-ios-impeller
             artifact_path: build/**/FEhViewer*.ipa
@@ -162,9 +162,8 @@ jobs:
 
       - name: ios enable impeller
         if: matrix.target == 'ios' && matrix.suffix == '-impeller'
-        shell: bash
         run: |
-          gsed -i '/FLTEnableImpeller/{N;d;}' ios/Runner/Info.plist
+          sed -i '' '/FLTEnableImpeller/{N;d;}' ios/Runner/Info.plist
 
       - name: Flutter pub get
         run: |
