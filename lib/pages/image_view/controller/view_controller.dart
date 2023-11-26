@@ -568,6 +568,19 @@ class ViewExtController extends GetxController {
         await _galleryPageController?.loadImagesForSer(itemSer);
       }
 
+      var needShowKey =
+          vState.pageState?.galleryProvider?.showKey?.isEmpty ?? true;
+      
+      if (needShowKey) {
+        // fetchAndParserImageInfo() then ehPrecacheImages()
+        // make sure showKey is parsed before ehPrecacheImages()
+        image = await _galleryPageController?.fetchAndParserImageInfo(
+        itemSer,
+        cancelToken: vState.getMoreCancelToken,
+        changeSource: changeSource,
+        );
+      }
+
       GalleryPara.instance
           .ehPrecacheImages(
         imageMap: _galleryPageStat?.imageMap,
@@ -582,11 +595,16 @@ class ViewExtController extends GetxController {
         }
       });
 
-      image = await _galleryPageController?.fetchAndParserImageInfo(
+      if (!needShowKey) {
+        // ehPrecacheImages() then fetchAndParserImageInfo()
+        // the original logic
+        image = await _galleryPageController?.fetchAndParserImageInfo(
         itemSer,
         cancelToken: vState.getMoreCancelToken,
         changeSource: changeSource,
-      );
+        );
+      }
+
     }
 
     return image;
