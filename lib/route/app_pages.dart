@@ -516,6 +516,7 @@ class AppPages {
             return GetPageRoute(
               settings: settings,
               page: () => const CustomProfileSettingPage(),
+              transition: Transition.fadeIn,
             );
           case EHRoutes.license:
             return GetPageRoute(

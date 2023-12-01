@@ -47,9 +47,14 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
 
     Get.put(ProfileEditController());
 
-    _customProfile = Get.arguments is CustomProfile
-        ? Get.arguments as CustomProfile
-        : CustomProfile(name: '', uuid: generateUuidv4());
+    logger.d('Get.arguments runtimeType ${Get.arguments.runtimeType}');
+
+    // _customProfile = Get.arguments is CustomProfile
+    //     ? Get.arguments as CustomProfile
+    //     : CustomProfile(name: '', uuid: generateUuidv4());
+
+    // arguments 方式不能跨栈传递，改回依赖注入
+    _customProfile = Get.find<CustomProfile>();
 
     _searchWithMinRating.value =
         _customProfile.advSearch?.searchWithMinRating ?? false;
