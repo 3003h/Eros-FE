@@ -66,6 +66,8 @@ class LayoutSettingList extends StatelessWidget {
             }),
           ),
 
+        if (context.isTablet) _buildTableLayoutItem(context),
+
         // tabbar_setting
         EhCupertinoListTile(
           title: Text(L10n.of(context).tabbar_setting),
