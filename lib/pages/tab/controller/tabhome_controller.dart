@@ -183,7 +183,7 @@ class TabHomeController extends GetxController {
     // logger.d('${tabNameList}');
 
     ever(tabMap, (Map<String, bool> map) {
-      _tabConfig.setItemList(map, tabNameList);
+      updateItemList(map, tabNameList);
 
       Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
       Global.saveProfile();
@@ -193,7 +193,7 @@ class TabHomeController extends GetxController {
     });
 
     ever(tabNameList, (List<String> nameList) {
-      _tabConfig.setItemList(tabMap, nameList);
+      updateItemList(tabMap, nameList);
 
       Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
       Global.saveProfile();
@@ -203,9 +203,17 @@ class TabHomeController extends GetxController {
     });
   }
 
+  void updateItemList(Map<String, bool> map, List<String> nameList) {
+    final tabItemList = <TabItem>[];
+    for (final String name in nameList) {
+      tabItemList.add(TabItem(name: name, enable: map[name] ?? false));
+    }
+    _tabConfig = _tabConfig.copyWith(tabItemList: tabItemList);
+  }
+
   List<BottomNavigationBarItem> get listBottomNavigationBarItem => _showTabs
       .map((e) => BottomNavigationBarItem(
-            icon: (tabPages.tabIcons[e])!,
+            icon: tabPages.tabIcons[e]!,
             label: tabPages.tabTitles[e],
           ))
       .toList();

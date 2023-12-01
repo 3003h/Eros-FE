@@ -32,8 +32,8 @@ class TabbarSettingPage extends StatelessWidget {
 
 class TabbarListView extends StatelessWidget {
   const TabbarListView({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class TabbarListView extends StatelessWidget {
 
   List<Widget> _buildList(BuildContext context) {
     final TabSettingController controller = Get.put(TabSettingController());
-    final List<Widget> _list = [];
+    final List<Widget> list = [];
 
     final Widget shortDivider = Container(
       margin: const EdgeInsetsDirectional.only(start: 60),
@@ -56,7 +56,7 @@ class TabbarListView extends StatelessWidget {
       height: 0.5,
     );
 
-    Widget _buildEhCupertinoListTile(String tag) {
+    Widget buildEhCupertinoListTile(String tag) {
       return EhCupertinoListTile(
         title: Text(tabPages.tabTitles[tag] ?? ''),
         key: ValueKey(tag),
@@ -81,21 +81,21 @@ class TabbarListView extends StatelessWidget {
     // for in controller.tabList -1
     for (int i = 0; i < controller.tabList.length - 1; i++) {
       final String tag = controller.tabList[i];
-      _list.add(
+      list.add(
         Column(
           key: ValueKey(tag),
           children: [
-            _buildEhCupertinoListTile(controller.tabList[i]),
+            buildEhCupertinoListTile(controller.tabList[i]),
             shortDivider,
           ],
         ),
       );
     }
 
-    _list.add(
-      _buildEhCupertinoListTile(controller.tabList.last),
+    list.add(
+      buildEhCupertinoListTile(controller.tabList.last),
     );
 
-    return _list;
+    return list;
   }
 }

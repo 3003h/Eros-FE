@@ -42,13 +42,6 @@ extension ExtTabList on TabConfig {
   List<String> get tabNameList {
     return tabItemList.map((TabItem e) => e.name).toList();
   }
-
-  void setItemList(Map<String, bool> map, List<String> nameList) {
-    tabItemList.clear();
-    for (final String name in nameList) {
-      tabItemList.add(TabItem(name: name, enable: map[name] ?? false));
-    }
-  }
 }
 
 extension ExtComment on GalleryComment {
