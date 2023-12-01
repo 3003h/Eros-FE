@@ -2,7 +2,7 @@ name: fehviewer
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.5.3+533
+version: 1.5.4+534
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
