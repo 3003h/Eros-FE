@@ -251,8 +251,8 @@ class _MinRatingSelectorState extends State<_MinRatingSelector> {
 
   Widget _buildSlidingSegmentedAction(String title) {
     return Padding(
-      child: Text(title),
       padding: kSegmentedPadding,
+      child: Text(title),
       // constraints: BoxConstraints(minWidth: 10),
     );
   }
@@ -307,6 +307,7 @@ class _ListTypeSelectorState extends State<_ListTypeSelector> {
 
   Widget _buildSlidingSegmentedAction(String title) {
     return Container(
+      padding: kSegmentedPadding,
       child: Text(
         title,
         style: kSegmentedTextStyle,
@@ -314,7 +315,6 @@ class _ListTypeSelectorState extends State<_ListTypeSelector> {
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
       ),
-      padding: kSegmentedPadding,
       // constraints: BoxConstraints(minWidth: 10),
     );
   }
@@ -481,22 +481,6 @@ class _SearchTextTileState extends State<_SearchTextTile> {
       header: Text(L10n.of(context).searchTexts),
       children: [
         ..._searchTextList.map((element) => Slidable(
-            child: controller.isTagTranslate
-                ? FutureBuilder<String?>(
-                    future: _getTextTranslate(element),
-                    initialData: element,
-                    builder: (context, snapshot) {
-                      return EhCupertinoListTile(
-                        title: Text(element),
-                        subtitle:
-                            snapshot.data != null ? Text(snapshot.data!) : null,
-                        key: ValueKey(element),
-                      );
-                    })
-                : EhCupertinoListTile(
-                    title: Text(element),
-                    key: ValueKey(element),
-                  ),
             endActionPane: ActionPane(
               extentRatio: 0.25,
               motion: const ScrollMotion(),
@@ -513,7 +497,23 @@ class _SearchTextTileState extends State<_SearchTextTile> {
                   icon: CupertinoIcons.delete,
                 ),
               ],
-            ))),
+            ),
+            child: controller.isTagTranslate
+                ? FutureBuilder<String?>(
+                    future: _getTextTranslate(element),
+                    initialData: element,
+                    builder: (context, snapshot) {
+                      return EhCupertinoListTile(
+                        title: Text(element),
+                        subtitle:
+                            snapshot.data != null ? Text(snapshot.data!) : null,
+                        key: ValueKey(element),
+                      );
+                    })
+                : EhCupertinoListTile(
+                    title: Text(element),
+                    key: ValueKey(element),
+                  ))),
         EhCupertinoListTile(
           title: Text(
             '${L10n.of(context).newText} ...',
@@ -611,6 +611,7 @@ class _AdvanceViewState extends State<_AdvanceView> {
                       onChanged: (int value) {
                         _advanceSearch = _advanceSearch.copyWith(
                             minRating: value == 2 ? null : value);
+                        widget.onChanged?.call(_advanceSearch);
                       },
                     ),
                     crossFadeState: _advanceSearch.searchWithMinRating ?? false
@@ -658,10 +659,12 @@ class _AdvanceViewState extends State<_AdvanceView> {
                       onStartPageChanged: (val) {
                         _advanceSearch = _advanceSearch.copyWith(
                             startPage: val.isEmpty ? null : val);
+                        widget.onChanged?.call(_advanceSearch);
                       },
                       onEndPageChanged: (val) {
                         _advanceSearch = _advanceSearch.copyWith(
                             endPage: val.isEmpty ? null : val);
+                        widget.onChanged?.call(_advanceSearch);
                       },
                     ),
                   ),
