@@ -231,7 +231,7 @@ jobs:
           Compress-Archive $DestDir build\windows\${{ env.PACKAGE_NAME }}_${{ env.app_version }}_windows.zip
 
       - name: Publish Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
           path: ${{ matrix.artifact_path }}

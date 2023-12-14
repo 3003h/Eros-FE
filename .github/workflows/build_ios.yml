@@ -52,7 +52,7 @@ jobs:
           zip -9 FEhViewer.ipa -r Payload
 
       - name: Publish iOS Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-ios-nosign
           path: build/FEhViewer.ipa

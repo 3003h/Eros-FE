@@ -43,7 +43,7 @@ jobs:
           cd build && zip -qroy macos/fehviewer.zip fehviewer.app
 
       - name: Publish Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-mac
           path: build/macos/*.zip

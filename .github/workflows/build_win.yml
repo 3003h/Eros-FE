@@ -52,7 +52,7 @@ jobs:
           Compress-Archive $DestDir build\windows\FEhViewer.zip
 
       - name: Publish Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-windows
           path: build/windows/*.zip
