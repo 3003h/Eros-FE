@@ -197,7 +197,7 @@ dependencies:
   integral_isolates: ^0.4.1
   cupertino_battery_indicator: ^1.1.0
   mysql_client: ^0.0.27
-  blurhash_ffi: ^1.2.0
+  blurhash_ffi: ^1.2.2
   cached_annotation: ^1.6.0
 
 dev_dependencies:
