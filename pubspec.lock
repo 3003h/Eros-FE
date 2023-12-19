@@ -142,10 +142,10 @@ packages:
     dependency: "direct main"
     description:
       name: blurhash_ffi
-      sha256: "80c5853c230f9cb49aba73b9407e4bdb7b7170f509d4b337be1f2c0dfaae930f"
+      sha256: "54d035fd71088a8b28fb07453333fdb6b9016b24be079bbc51e2c0b4aedab292"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.0"
+    version: "1.2.2"
   boolean_selector:
     dependency: transitive
     description:
