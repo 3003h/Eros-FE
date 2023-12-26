@@ -131,7 +131,7 @@ dependencies:
     git:
       url: https://github.com/honjow/open_by_default.git
   flex_color_picker: ^3.0.0
-  bitsdojo_window: ^0.1.1
+  bitsdojo_window: ^0.1.6
 #  image_picker: ^0.8.5
   sliver_tools: ^0.2.6
   flutter_boring_avatars:
