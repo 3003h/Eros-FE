@@ -161,7 +161,7 @@ dependencies:
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.0-dev.8
   dio_cache_interceptor: ^3.3.1
-  dio_cache_interceptor_hive_store: ^3.2.0
+  dio_cache_interceptor_hive_store: ^3.2.2
   flutter_android_volume_keydown: #^1.0.0
     git:
       url: https://github.com/honjow/flutter_android_volume_keydown.git
