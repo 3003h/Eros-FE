@@ -36,7 +36,7 @@ jobs:
           channel: "stable"
 
       - name: Cache Gradle packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-gradle
           path: |
@@ -44,7 +44,7 @@ jobs:
             ~/.gradle/wrapper
 
       - name: Cache Flutter packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-flutter
           path: /opt/hostedtoolcache/flutter

@@ -79,7 +79,7 @@ jobs:
         run: echo ${{ env.app_version }}
 
       - name: Cache Pods (build macos)
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: matrix.target == 'macos'
         with:
           path: |
@@ -89,7 +89,7 @@ jobs:
             ${{ runner.os }}-pods-
 
       - name: Cache Pods (build ios)
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         if: matrix.target == 'ios'
         with:
           path: |
