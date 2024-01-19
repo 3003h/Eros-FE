@@ -20,7 +20,7 @@ jobs:
         with:
           submodules: 'recursive'
       - name: Unlock secrets
-        uses: sliteteam/github-action-git-crypt-unlock@1.2.0
+        uses: sliteteam/github-action-git-crypt-unlock@1.3.0
         env:
           GIT_CRYPT_KEY: ${{ secrets.ENCODED_GIT_CRYPT }}
       # 建立 java 环境
