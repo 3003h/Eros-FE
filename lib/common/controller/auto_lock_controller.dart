@@ -5,7 +5,7 @@ import 'package:fehviewer/route/routes.dart';
 import 'package:fehviewer/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:local_auth_android/local_auth_android.dart';
-import 'package:local_auth_ios/local_auth_ios.dart';
+import 'package:local_auth_darwin/local_auth_darwin.dart';
 
 import '../global.dart';
 
