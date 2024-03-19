@@ -30,32 +30,32 @@ jobs:
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: 3.16
+            flutter_version: 3.19
             flutter_channel: stable
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/FEhViewer*.apk
           - target: ios
             os: macos-12
-            flutter_version: 3.16
+            flutter_version: 3.19
             flutter_channel: stable
             artifact_name: release-ios
             artifact_path: build/**/FEhViewer*.ipa
           - target: ios
             suffix: -impeller
             os: macos-12
-            flutter_version: x
-            flutter_channel: master
+            flutter_version: 3.19
+            flutter_channel: stable
             artifact_name: release-ios-impeller
             artifact_path: build/**/FEhViewer*.ipa
           - target: macos
             os: macos-12
-            flutter_version: 3.16
+            flutter_version: 3.19
             flutter_channel: stable
             artifact_name: release-mac
             artifact_path: build/macos/FEhViewer*.zip
           - target: windows
             os: windows-latest
-            flutter_version: 3.16
+            flutter_version: 3.19
             flutter_channel: stable
             artifact_name: release-windows
             artifact_path: build/windows/FEhViewer*.zip
