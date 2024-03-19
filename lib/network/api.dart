@@ -97,70 +97,71 @@ class Api {
     }
 
     // 通过api获取画廊详细信息
-    final List<List<String>> _gidlist = <List<String>>[];
+    final List<List<String>> gidlist = <List<String>>[];
 
-    galleryProviders.forEach((GalleryProvider galleryProvider) {
-      _gidlist.add([galleryProvider.gid!, galleryProvider.token!]);
-    });
+    for (final galleryProvider in galleryProviders) {
+      gidlist.add([galleryProvider.gid!, galleryProvider.token!]);
+    }
 
     // 25个一组分割
-    List _group = EHUtils.splitList(_gidlist, 25);
+    List group = EHUtils.splitList(gidlist, 25);
 
-    final rultList = <dynamic>[];
+    final resultList = <dynamic>[];
 
     // 查询 合并结果
-    for (int i = 0; i < _group.length; i++) {
-      Map reqMap = {'gidlist': _group[i], 'method': 'gdata'};
+    for (int i = 0; i < group.length; i++) {
+      Map reqMap = {'gidlist': group[i], 'method': 'gdata'};
       final String reqJsonStr = jsonEncode(reqMap);
 
-      final rult = await postEhApi(reqJsonStr);
+      final result = await postEhApi(reqJsonStr);
 
-      final jsonObj = jsonDecode(rult.toString());
+      logger.d('result $result');
+
+      final jsonObj = jsonDecode(result.toString());
       final tempList = jsonObj['gmetadata'] as List<dynamic>;
-      rultList.addAll(tempList);
+      resultList.addAll(tempList);
     }
 
     final HtmlUnescape unescape = HtmlUnescape();
 
     for (int i = 0; i < galleryProviders.length; i++) {
       // 标题
-      final _englishTitle = unescape.convert(rultList[i]['title'] as String);
+      final _englishTitle = unescape.convert('${resultList[i]['title']}');
 
       // 日语标题
-      final _japaneseTitle =
-          unescape.convert(rultList[i]['title_jpn'] as String);
+      final _japaneseTitle = unescape.convert('${resultList[i]['title_jpn']}');
 
       // 详细评分
-      final rating = rultList[i]['rating'] as String?;
+      final rating = resultList[i]['rating'] as String?;
       final _rating = rating != null
           ? double.parse(rating)
           : galleryProviders[i].ratingFallBack;
 
       // 封面图片
-      final String thumb = rultList[i]['thumb'] as String;
+      final String thumb = resultList[i]['thumb'] as String;
       final _imgUrlL = thumb;
 
       // 文件数量
-      final _filecount = rultList[i]['filecount'] as String?;
+      final _filecount = resultList[i]['filecount'] as String?;
 
       // logger.d('_filecount $_filecount');
 
       // 上传者
-      final _uploader = rultList[i]['uploader'] as String?;
-      final _category = rultList[i]['category'] as String?;
+      final _uploader = resultList[i]['uploader'] as String?;
+      final _category = resultList[i]['category'] as String?;
 
       // 标签
-      final List<dynamic> tags = rultList[i]['tags'] as List<dynamic>;
+      final List<dynamic> tags = resultList[i]['tags'] as List<dynamic>;
       final _tagsFromApi = tags;
 
       // 大小
-      final _filesize = rultList[i]['filesize'] as int?;
+      final _filesize = resultList[i]['filesize'] as int?;
 
       // 种子数量
-      final _torrentcount = rultList[i]['torrentcount'] as String?;
+      final _torrentcount = resultList[i]['torrentcount'] as String?;
 
       // 种子列表
-      final List<dynamic> torrents = rultList[i]['torrents'] as List<dynamic>;
+      final List<dynamic> torrents = resultList[i]['torrents'] as List<dynamic>;
       final _torrents = <GalleryTorrent>[];
       torrents.forEach((dynamic element) {
         // final Map<String, dynamic> e = element as Map<String, dynamic>;

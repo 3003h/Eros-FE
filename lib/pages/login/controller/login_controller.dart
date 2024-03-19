@@ -120,10 +120,10 @@ class LoginController extends GetxController {
     final user = userController.user.value.copyWith(
       username: '${memberId.substring(0, 1)}****'.oN,
       memberId: memberId.oN,
-      passHash: _getCookiesValue(cookies, 'ipb_pass_hash').oN,
-      igneous: _getCookiesValue(cookies, 'igneous').oN,
-      hathPerks: _getCookiesValue(cookies, 'hath_perks').oN,
-      sk: _getCookiesValue(cookies, 'sk').oN,
+      passHash: _getCookiesValue(cookies, 'ipb_pass_hash')?.oN,
+      igneous: _getCookiesValue(cookies, 'igneous')?.oN,
+      hathPerks: _getCookiesValue(cookies, 'hath_perks')?.oN,
+      sk: _getCookiesValue(cookies, 'sk')?.oN,
     );
 
     logger.d('user ${user.toJson()}');
@@ -175,13 +175,13 @@ class LoginController extends GetxController {
       final user = userController.user.value.copyWith(
         username: '${memberId.substring(0, 1)}****'.oN,
         memberId: memberId.oN,
-        passHash: _getCookiesValue(cookies, 'ipb_pass_hash').oN,
-        igneous: _getCookiesValue(cookies, 'igneous').oN,
-        hathPerks: _getCookiesValue(cookies, 'hath_perks').oN,
-        sk: _getCookiesValue(cookies, 'sk').oN,
+        passHash: _getCookiesValue(cookies, 'ipb_pass_hash')?.oN,
+        igneous: _getCookiesValue(cookies, 'igneous')?.oN,
+        hathPerks: _getCookiesValue(cookies, 'hath_perks')?.oN,
+        sk: _getCookiesValue(cookies, 'sk')?.oN,
       );
 
-      logger.d('user ${user.toJson()}');
+      logger.d('>>>>>>>>>>>>>>>> user ${user.toJson()}');
 
       userController.user(user);
 
@@ -200,7 +200,7 @@ class LoginController extends GetxController {
       return;
     }
     // 异步获取昵称和头像
-    logger.t('异步获取昵称和头像');
+    logger.d('异步获取昵称和头像');
     late User? info;
     try {
       info = await getUserInfo(memberId);
@@ -210,8 +210,8 @@ class LoginController extends GetxController {
     }
 
     userController.user(userController.user.value.copyWith(
-      nickName: info?.nickName.oN,
-      avatarUrl: info?.avatarUrl.oN,
+      nickName: info?.nickName?.oN,
+      avatarUrl: info?.avatarUrl?.oN,
     ));
     userController.update();
   }

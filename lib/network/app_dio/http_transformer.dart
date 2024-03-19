@@ -372,11 +372,11 @@ class UserLoginTransformer extends HttpTransformer {
     }
 
     final User user = kDefUser.copyWith(
-      memberId: cookieMap['ipb_member_id'].oN,
-      passHash: cookieMap['ipb_pass_hash'].oN,
-      igneous: cookieMap['igneous'].oN,
-      hathPerks: cookieMap['hath_perks'].oN,
-      sk: cookieMap['sk'].oN,
+      memberId: cookieMap['ipb_member_id']?.oN,
+      passHash: cookieMap['ipb_pass_hash']?.oN,
+      igneous: cookieMap['igneous']?.oN,
+      hathPerks: cookieMap['hath_perks']?.oN,
+      sk: cookieMap['sk']?.oN,
     );
     return DioHttpResponse<User>.success(user);
   }

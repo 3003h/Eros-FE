@@ -59,12 +59,12 @@ class EhCookieInterceptor extends Interceptor {
 
       userController.user(userController.user.value.copyWith(
         memberId: getCookiesValue(_cookies, 'ipb_member_id')?.oN,
-        passHash: getCookiesValue(_cookies, 'ipb_pass_hash').oN,
-        igneous: igneous != 'mystery' && igneous != '' ? igneous.oN : null,
-        hathPerks: getCookiesValue(_cookies, 'hath_perks').oN,
+        passHash: getCookiesValue(_cookies, 'ipb_pass_hash')?.oN,
+        igneous: igneous != 'mystery' && igneous != '' ? igneous?.oN : null,
+        hathPerks: getCookiesValue(_cookies, 'hath_perks')?.oN,
         sk: _newSk.isNotEmpty ? _newSk.oN : null,
-        star: getCookiesValue(_cookies, 'star').oN,
-        yay: getCookiesValue(_cookies, 'yay').oN,
+        star: getCookiesValue(_cookies, 'star')?.oN,
+        yay: getCookiesValue(_cookies, 'yay')?.oN,
       ));
 
       // logger.t('new sk $_newSk');

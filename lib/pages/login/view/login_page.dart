@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../controller/login_controller.dart';
 
 class LoginPage extends GetView<LoginController> {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +73,13 @@ class LoginPage extends GetView<LoginController> {
                             prefix: Row(
                               children: [
                                 GestureDetector(
+                                  onTap: logic.switchObscure,
                                   child: Icon(
                                     logic.obscurePasswd
                                         ? FontAwesomeIcons.eyeSlash
                                         : FontAwesomeIcons.eye,
                                     size: 20,
                                   ).paddingOnly(right: 12.0),
-                                  onTap: logic.switchObscure,
                                 ),
                                 Text(L10n.of(context).passwd),
                               ],
@@ -98,12 +98,12 @@ class LoginPage extends GetView<LoginController> {
                     child: GetBuilder<LoginController>(
                       builder: (logic) {
                         return CupertinoButton(
-                          child: logic.loadingLogin
-                              ? const CupertinoActivityIndicator()
-                              : Text(L10n.of(context).login),
                           color: CupertinoColors.activeBlue,
                           onPressed:
                               logic.loadingLogin ? null : logic.pressLogin,
+                          child: logic.loadingLogin
+                              ? const CupertinoActivityIndicator()
+                              : Text(L10n.of(context).login),
                         );
                       },
                     ),
@@ -117,8 +117,9 @@ class LoginPage extends GetView<LoginController> {
                         CupertinoButton(
                           minSize: 50,
                           padding: const EdgeInsets.all(20),
-                          child: Column(
-                            children: const [
+                          onPressed: controller.handOnWeblogin,
+                          child: const Column(
+                            children: [
                               Icon(
                                 FontAwesomeIcons.earthAmericas,
                                 size: 30,
@@ -126,14 +127,14 @@ class LoginPage extends GetView<LoginController> {
                               Text('Web', textScaleFactor: 0.8),
                             ],
                           ),
-                          onPressed: controller.handOnWeblogin,
                         ),
                       // cookie登陆
                       CupertinoButton(
                         minSize: 50,
                         padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: const [
+                        onPressed: controller.hanOnCookieLogin,
+                        child: const Column(
+                          children: [
                             Icon(
                               FontAwesomeIcons.cookieBite,
                               size: 30,
@@ -141,7 +142,6 @@ class LoginPage extends GetView<LoginController> {
                             Text('Cookie', textScaleFactor: 0.8),
                           ],
                         ),
-                        onPressed: controller.hanOnCookieLogin,
                       ),
                     ],
                   ).paddingSymmetric(vertical: 30),
