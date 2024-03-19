@@ -35,20 +35,20 @@ jobs:
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/Eros-FE*.apk
           - target: ios
-            os: macos-12
+            os: macos-latest
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-ios
             artifact_path: build/**/Eros-FE*.ipa
           - target: ios
             suffix: -impeller
-            os: macos-12
+            os: macos-latest
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-ios-impeller
             artifact_path: build/**/Eros-FE*.ipa
           - target: macos
-            os: macos-12
+            os: macos-latest
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-mac
@@ -78,29 +78,29 @@ jobs:
       - name: show version
         run: echo ${{ env.app_version }}
 
-      - name: Cache Pods (build macos)
-        uses: actions/cache@v3
-        if: matrix.target == 'macos'
-        with:
-          path: |
-            macos/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('macos/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-
+#      - name: Cache Pods (build macos)
+#        uses: actions/cache@v3
+#        if: matrix.target == 'macos'
+#        with:
+#          path: |
+#            macos/Pods
+#          key: ${{ runner.os }}-pods-${{ hashFiles('macos/Podfile.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-pods-
 
-      - name: Cache Pods (build ios)
-        uses: actions/cache@v3
-        if: matrix.target == 'ios'
-        with:
-          path: |
-            ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pods-            
+#      - name: Cache Pods (build ios)
+#        uses: actions/cache@v3
+#        if: matrix.target == 'ios'
+#        with:
+#          path: |
+#            ios/Pods
+#          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-pods-
 
       # git-crypt unlock
       - name: Unlock secrets (MacOS)
-        if: matrix.os == 'macos-12'
+        if: matrix.os == 'macos-latest'
         run: |
           brew install git-crypt
           echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
