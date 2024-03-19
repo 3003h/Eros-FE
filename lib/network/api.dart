@@ -100,6 +100,12 @@ class Api {
     final List<List<String>> gidlist = <List<String>>[];
 
     for (final galleryProvider in galleryProviders) {
+      if (galleryProvider.gid == null || galleryProvider.token == null) {
+        continue;
+      }
+      if (galleryProvider.gid!.isEmpty || galleryProvider.token!.isEmpty) {
+        continue;
+      }
       gidlist.add([galleryProvider.gid!, galleryProvider.token!]);
     }
 
@@ -112,7 +118,7 @@ class Api {
     for (int i = 0; i < group.length; i++) {
       Map reqMap = {'gidlist': group[i], 'method': 'gdata'};
       final String reqJsonStr = jsonEncode(reqMap);
-
+      logger.d('reqJsonStr $reqJsonStr');
       final result = await postEhApi(reqJsonStr);
 
       logger.d('result $result');
@@ -126,67 +132,64 @@ class Api {
 
     for (int i = 0; i < galleryProviders.length; i++) {
       // 标题
-      final _englishTitle = unescape.convert('${resultList[i]['title']}');
+      final englishTitle = unescape.convert('${resultList[i]['title']}');
 
       // 日语标题
-      final _japaneseTitle = unescape.convert('${resultList[i]['title_jpn']}');
+      final japaneseTitle = unescape.convert('${resultList[i]['title_jpn']}');
 
       // 详细评分
-      final rating = resultList[i]['rating'] as String?;
-      final _rating = rating != null
-          ? double.parse(rating)
+      final ratingStr = resultList[i]['rating'] as String?;
+      final rating = ratingStr != null
+          ? double.parse(ratingStr)
           : galleryProviders[i].ratingFallBack;
 
       // 封面图片
       final String thumb = resultList[i]['thumb'] as String;
-      final _imgUrlL = thumb;
+      final imgUrlL = thumb;
 
       // 文件数量
-      final _filecount = resultList[i]['filecount'] as String?;
-
-      // logger.d('_filecount $_filecount');
+      final fileCount = resultList[i]['filecount'] as String?;
 
       // 上传者
-      final _uploader = resultList[i]['uploader'] as String?;
-      final _category = resultList[i]['category'] as String?;
+      final uploader = resultList[i]['uploader'] as String?;
+      final category = resultList[i]['category'] as String?;
 
       // 标签
       final List<dynamic> tags = resultList[i]['tags'] as List<dynamic>;
-      final _tagsFromApi = tags;
+      final tagsFromApi = tags;
 
       // 大小
-      final _filesize = resultList[i]['filesize'] as int?;
+      final filesize = resultList[i]['filesize'] as int?;
 
       // 种子数量
-      final _torrentcount = resultList[i]['torrentcount'] as String?;
+      final torrentcount = resultList[i]['torrentcount'] as String?;
 
       // 种子列表
       final List<dynamic> torrents = resultList[i]['torrents'] as List<dynamic>;
       final _torrents = <GalleryTorrent>[];
-      torrents.forEach((dynamic element) {
-        // final Map<String, dynamic> e = element as Map<String, dynamic>;
+      for (final element in torrents) {
         _torrents.add(GalleryTorrent.fromJson(element as Map<String, dynamic>));
-      });
+      }
 
       /// 判断获取语言标识
-      String _translated = '';
+      String translated = '';
       if (tags.isNotEmpty) {
-        _translated = EHUtils.getLanguage(tags[0] as String);
+        translated = EHUtils.getLanguage(tags[0] as String);
       }
 
       galleryProviders[i] = galleryProviders[i].copyWith(
-        englishTitle: _englishTitle.oN,
-        japaneseTitle: _japaneseTitle.oN,
-        rating: _rating.oN,
-        imgUrlL: _imgUrlL.oN,
-        filecount: _filecount.oN,
-        uploader: _uploader.oN,
-        category: _category.oN,
-        tagsFromApi: _tagsFromApi.oN,
-        filesize: _filesize.oN,
-        torrentcount: _torrentcount.oN,
+        englishTitle: englishTitle.oN,
+        japaneseTitle: japaneseTitle.oN,
+        rating: rating?.oN,
+        imgUrlL: imgUrlL.oN,
+        filecount: fileCount?.oN,
+        uploader: uploader?.oN,
+        category: category?.oN,
+        tagsFromApi: tagsFromApi.oN,
+        filesize: filesize?.oN,
+        torrentcount: torrentcount?.oN,
         torrents: _torrents.oN,
-        translated: _translated.oN,
+        translated: translated.oN,
       );
     }
 
@@ -389,15 +392,15 @@ class Api {
   }) async {
     final RegExp urlRex =
         RegExp(r'(http?s://e([-x])hentai.org)?/g/(\d+)/(\w+)/?$');
-    // logger.t(galleryProvider.url);
+    logger.d('>> galleryProvider.url ${galleryProvider.url}');
     final RegExpMatch? urlRult = urlRex.firstMatch(galleryProvider.url ?? '');
     // logger.t(urlRult.groupCount);
 
-    final String gid = urlRult?.group(3) ?? '';
-    final String token = urlRult?.group(4) ?? '';
+    final gid = urlRult?.group(3);
+    final token = urlRult?.group(4);
 
     final GalleryProvider tempProvider =
-        galleryProvider.copyWith(gid: gid.oN, token: token.oN);
+        galleryProvider.copyWith(gid: gid?.oN, token: token?.oN);
 
     final List<GalleryProvider> reqGalleryItems = <GalleryProvider>[
       tempProvider

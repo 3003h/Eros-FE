@@ -222,10 +222,10 @@ class GalleryPageController extends GetxController
           gState.galleryProvider = gState.galleryProvider?.copyWith(
             ratingFallBack:
                 (gState.galleryProvider?.ratingFallBack ?? _oriRatingFallBack)
-                    .oN,
+                    ?.oN,
             ratingCount:
-                (gState.galleryProvider?.ratingCount ?? _oriRatingCount).oN,
-            colorRating: _oriColorRating.oN,
+                (gState.galleryProvider?.ratingCount ?? _oriRatingCount)?.oN,
+            colorRating: _oriColorRating?.oN,
             // isRatinged: _oriIsRatinged,
           );
 
@@ -243,7 +243,7 @@ class GalleryPageController extends GetxController
       gState.galleryProvider = gState.galleryProvider?.copyWith(
         imgUrl:
             (gState.galleryProvider?.imgUrl ?? gState.galleryProvider?.imgUrlL)
-                .oN,
+                ?.oN,
       );
 
       // 加入历史
@@ -343,7 +343,7 @@ class GalleryPageController extends GetxController
           image.showKey != gState.galleryProvider?.showKey) {
         logger.d('update showKey ${image.showKey}');
         gState.galleryProvider = gState.galleryProvider?.copyWith(
-          showKey: image.showKey.oN,
+          showKey: image.showKey?.oN,
         );
       }
 
@@ -613,7 +613,7 @@ class GalleryPageController extends GetxController
           if (_image?.showKey != null && _image?.showKey != _showKey) {
             logger.t('update showKey ${_image?.showKey}');
             gState.galleryProvider = gState.galleryProvider?.copyWith(
-              showKey: _image?.showKey.oN,
+              showKey: _image?.showKey?.oN,
             );
           }
 
