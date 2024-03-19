@@ -184,7 +184,7 @@ dependencies:
   saf:
     git:
       url: https://github.com/honjow/saf.git
-#    path: ../saf
+      ref: master
   flutter_widget_from_html_core: ^0.14.4
   quiver: ^3.1.0 # 工具库
   native_dio_adapter: ^1.0.0+2
