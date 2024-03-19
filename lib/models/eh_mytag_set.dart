@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class EhMytagSet {
-  
+
   const EhMytagSet({
     required this.name,
     this.tagCount,
@@ -17,10 +19,10 @@ class EhMytagSet {
   final String? value;
 
   factory EhMytagSet.fromJson(Map<String,dynamic> json) => EhMytagSet(
-    name: json['name'] as String,
-    tagCount: json['tagCount'] != null ? json['tagCount'] as String : null,
+    name: json['name'].toString(),
+    tagCount: json['tagCount']?.toString(),
     enable: json['enable'] != null ? json['enable'] as bool : null,
-    value: json['value'] != null ? json['value'] as String : null
+    value: json['value']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -37,21 +39,21 @@ class EhMytagSet {
     value: value
   );
 
-    
+
   EhMytagSet copyWith({
     String? name,
-    String? tagCount,
-    bool? enable,
-    String? value
+    Optional<String?>? tagCount,
+    Optional<bool?>? enable,
+    Optional<String?>? value
   }) => EhMytagSet(
     name: name ?? this.name,
-    tagCount: tagCount ?? this.tagCount,
-    enable: enable ?? this.enable,
-    value: value ?? this.value,
-  );  
+    tagCount: checkOptional(tagCount, () => this.tagCount),
+    enable: checkOptional(enable, () => this.enable),
+    value: checkOptional(value, () => this.value),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is EhMytagSet && name == other.name && tagCount == other.tagCount && enable == other.enable && value == other.value;
 
   @override

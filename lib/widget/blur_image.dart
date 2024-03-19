@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 
 class BlurImage extends StatelessWidget {
   const BlurImage({
+    super.key,
     required this.child,
     this.isBlur = true,
     this.sigma = 5.0,

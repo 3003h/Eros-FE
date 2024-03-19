@@ -74,12 +74,12 @@ class EhSettingService extends ProfileService {
 
   String? get lastShowFavcat => ehConfig.lastShowFavcat;
   set lastShowFavcat(String? value) {
-    ehConfig = ehConfig.copyWith(lastShowFavcat: value);
+    ehConfig = ehConfig.copyWith(lastShowFavcat: value.oN);
   }
 
   String? get lastShowFavTitle => ehConfig.lastShowFavTitle;
   set lastShowFavTitle(String? value) {
-    ehConfig = ehConfig.copyWith(lastShowFavTitle: value);
+    ehConfig = ehConfig.copyWith(lastShowFavTitle: value.oN);
     Global.saveProfile();
   }
 
@@ -336,47 +336,47 @@ class EhSettingService extends ProfileService {
     // pHashThreshold
     pHashThreshold = ehConfig.pHashThreshold ?? pHashThreshold;
     everProfile<int>(_pHashThreshold, (val) {
-      ehConfig = ehConfig.copyWith(pHashThreshold: val);
+      ehConfig = ehConfig.copyWith(pHashThreshold: val.oN);
     });
 
     // hideGalleryThumbnails
     hideGalleryThumbnails =
         ehConfig.hideGalleryThumbnails ?? hideGalleryThumbnails;
     everProfile<bool>(_hideGalleryThumbnails, (val) {
-      ehConfig = ehConfig.copyWith(hideGalleryThumbnails: val);
+      ehConfig = ehConfig.copyWith(hideGalleryThumbnails: val.oN);
     });
 
     // horizontalThumbnails
     horizontalThumbnails =
         ehConfig.horizontalThumbnails ?? horizontalThumbnails;
     everProfile<bool>(_horizontalThumbnails, (val) {
-      ehConfig = ehConfig.copyWith(horizontalThumbnails: val);
+      ehConfig = ehConfig.copyWith(horizontalThumbnails: val.oN);
     });
 
     // showComments
     showComments = ehConfig.showComments ?? showComments;
     everProfile<bool>(_showComments, (val) {
-      ehConfig = ehConfig.copyWith(showComments: val);
+      ehConfig = ehConfig.copyWith(showComments: val.oN);
     });
 
     // showOnlyUploaderComment
     showOnlyUploaderComment =
         ehConfig.showOnlyUploaderComment ?? showOnlyUploaderComment;
     everProfile<bool>(_showOnlyUploaderComment, (val) {
-      ehConfig = ehConfig.copyWith(showOnlyUploaderComment: val);
+      ehConfig = ehConfig.copyWith(showOnlyUploaderComment: val.oN);
     });
 
     // showGalleryTags
     showGalleryTags = ehConfig.showGalleryTags ?? showGalleryTags;
     everProfile<bool>(_showGalleryTags, (val) {
-      ehConfig = ehConfig.copyWith(showGalleryTags: val);
+      ehConfig = ehConfig.copyWith(showGalleryTags: val.oN);
     });
 
     // jpnTitleInGalleryPage
     jpnTitleInGalleryPage =
         ehConfig.jpnTitleInGalleryPage ?? jpnTitleInGalleryPage;
     everProfile<bool>(_jpnTitleInGalleryPage, (val) {
-      ehConfig = ehConfig.copyWith(jpnTitleInGalleryPage: val);
+      ehConfig = ehConfig.copyWith(jpnTitleInGalleryPage: val.oN);
     });
 
     // nativeHttpClientAdapter
@@ -387,14 +387,14 @@ class EhSettingService extends ProfileService {
       nativeHttpClientAdapter = false;
     }
     everProfile<bool>(_nativeHttpClientAdapter, (val) {
-      ehConfig = ehConfig.copyWith(nativeHttpClientAdapter: val);
+      ehConfig = ehConfig.copyWith(nativeHttpClientAdapter: val.oN);
     });
 
     // readViewCompatibleModes
     readViewCompatibleMode =
         ehConfig.readViewCompatibleMode ?? readViewCompatibleMode;
     everProfile<bool>(_readViewCompatibleMode, (val) {
-      ehConfig = ehConfig.copyWith(readViewCompatibleMode: val);
+      ehConfig = ehConfig.copyWith(readViewCompatibleMode: val.oN);
       if (Get.isRegistered<ViewExtController>()) {
         Get.find<ViewExtController>().update([idSlidePage]);
       }
@@ -404,13 +404,13 @@ class EhSettingService extends ProfileService {
     translateSearchHistory =
         ehConfig.translateSearchHistory ?? translateSearchHistory;
     everProfile<bool>(_translateSearchHistory, (val) {
-      ehConfig = ehConfig.copyWith(translateSearchHistory: val);
+      ehConfig = ehConfig.copyWith(translateSearchHistory: val.oN);
     });
 
     // hideTopBarOnScroll
     hideTopBarOnScroll = ehConfig.hideTopBarOnScroll ?? hideTopBarOnScroll;
     everProfile<bool>(_hideTopBarOnScroll, (value) {
-      ehConfig = ehConfig.copyWith(hideTopBarOnScroll: value);
+      ehConfig = ehConfig.copyWith(hideTopBarOnScroll: value.oN);
     });
 
     // webDAVMaxConnections
@@ -420,89 +420,89 @@ class EhSettingService extends ProfileService {
       if (Get.isRegistered<WebdavController>()) {
         Get.find<WebdavController>().resetExecutorConcurrency(value);
       }
-      ehConfig = ehConfig.copyWith(webDAVMaxConnections: value);
+      ehConfig = ehConfig.copyWith(webDAVMaxConnections: value.oN);
     });
 
     proxyType =
         EnumToString.fromString(ProxyType.values, ehConfig.proxyType ?? '') ??
             proxyType;
     everFromEnum(_proxyType, (String value) {
-      ehConfig = ehConfig.copyWith(proxyType: value);
+      ehConfig = ehConfig.copyWith(proxyType: value.oN);
       setProxy();
     });
 
     proxyHost = ehConfig.proxyHost ?? proxyHost;
     everProfile<String>(_proxyHost, (value) {
-      ehConfig = ehConfig.copyWith(proxyHost: value);
+      ehConfig = ehConfig.copyWith(proxyHost: value.oN);
       setProxy();
     });
 
     proxyPort = ehConfig.proxyPort ?? proxyPort;
     everProfile<int>(_proxyPort, (value) {
-      ehConfig = ehConfig.copyWith(proxyPort: value);
+      ehConfig = ehConfig.copyWith(proxyPort: value.oN);
       setProxy();
     });
 
     proxyUsername = ehConfig.proxyUsername ?? proxyUsername;
     everProfile<String>(_proxyUsername, (value) {
-      ehConfig = ehConfig.copyWith(proxyUsername: value);
+      ehConfig = ehConfig.copyWith(proxyUsername: value.oN);
       setProxy();
     });
 
     proxyPassword = ehConfig.proxyPassword ?? proxyPassword;
     everProfile<String>(_proxyPassword, (value) {
-      ehConfig = ehConfig.copyWith(proxyPassword: value);
+      ehConfig = ehConfig.copyWith(proxyPassword: value.oN);
       setProxy();
     });
 
     volumnTurnPage = ehConfig.volumnTurnPage ?? volumnTurnPage;
     everProfile<bool>(_volumnTurnPage, (value) {
-      ehConfig = ehConfig.copyWith(volumnTurnPage: value);
+      ehConfig = ehConfig.copyWith(volumnTurnPage: value.oN);
     });
 
     redirectThumbLink = ehConfig.redirectThumbLink ?? redirectThumbLink;
     everProfile<bool>(_redirectThumbLink, (value) {
-      ehConfig = ehConfig.copyWith(redirectThumbLink: value);
+      ehConfig = ehConfig.copyWith(redirectThumbLink: value.oN);
     });
 
     listViewTagLimit = ehConfig.listViewTagLimit ?? listViewTagLimit;
     everProfile<int>(_listViewTagLimit, (value) {
-      ehConfig = ehConfig.copyWith(listViewTagLimit: value);
+      ehConfig = ehConfig.copyWith(listViewTagLimit: value.oN);
     });
 
     avatarType =
         EnumToString.fromString(AvatarType.values, ehConfig.avatarType ?? '') ??
             _kAvatarType;
     everFromEnum(_avatarType, (String value) {
-      ehConfig = ehConfig.copyWith(avatarType: value);
+      ehConfig = ehConfig.copyWith(avatarType: value.oN);
     });
 
     textAvatarsType = EnumToString.fromString(
             TextAvatarsType.values, ehConfig.textAvatarsType ?? '') ??
         _kTextAvatarsType;
     everFromEnum(_textAvatarsType, (String value) {
-      ehConfig = ehConfig.copyWith(textAvatarsType: value);
+      ehConfig = ehConfig.copyWith(textAvatarsType: value.oN);
     });
 
     blurringOfCoverBackground =
         ehConfig.blurringOfCoverBackground ?? blurringOfCoverBackground;
     everProfile<bool>(_blurringOfCoverBackground, (value) {
-      ehConfig = ehConfig.copyWith(blurringOfCoverBackground: value);
+      ehConfig = ehConfig.copyWith(blurringOfCoverBackground: value.oN);
     });
 
     viewFullscreen = ehConfig.viewFullscreen ?? viewFullscreen;
     everProfile<bool>(_viewFullscreen, (value) {
-      ehConfig = ehConfig.copyWith(viewFullscreen: value);
+      ehConfig = ehConfig.copyWith(viewFullscreen: value.oN);
     });
 
     enablePHashCheck = ehConfig.enablePHashCheck ?? enablePHashCheck;
     everProfile<bool>(_enablePHashCheck, (value) {
-      ehConfig = ehConfig.copyWith(enablePHashCheck: value);
+      ehConfig = ehConfig.copyWith(enablePHashCheck: value.oN);
     });
 
     enableQRCodeCheck = ehConfig.enableQRCodeCheck ?? enableQRCodeCheck;
     everProfile<bool>(_enableQRCodeCheck, (value) {
-      ehConfig = ehConfig.copyWith(enableQRCodeCheck: value);
+      ehConfig = ehConfig.copyWith(enableQRCodeCheck: value.oN);
     });
 
     // _boringAvatarsType
@@ -510,7 +510,7 @@ class EhSettingService extends ProfileService {
             BoringAvatarsType.values, ehConfig.boringAvatarsType ?? '') ??
         BoringAvatarsType.beam;
     everFromEnum(_boringAvatarsType, (String value) {
-      ehConfig = ehConfig.copyWith(boringAvatarsType: value);
+      ehConfig = ehConfig.copyWith(boringAvatarsType: value.oN);
     });
 
     // _avatarBorderRadiusType
@@ -519,7 +519,7 @@ class EhSettingService extends ProfileService {
             ehConfig.avatarBorderRadiusType ?? '') ??
         avatarBorderRadiusType;
     everFromEnum(_avatarBorderRadiusType, (String value) {
-      ehConfig = ehConfig.copyWith(avatarBorderRadiusType: value);
+      ehConfig = ehConfig.copyWith(avatarBorderRadiusType: value.oN);
     });
 
     /// 阅读方向
@@ -533,7 +533,7 @@ class EhSettingService extends ProfileService {
     //
     isSafeMode.value = ehConfig.safeMode ?? isSafeMode.value;
     everProfile<bool>(isSafeMode, (value) {
-      ehConfig = ehConfig.copyWith(safeMode: value);
+      ehConfig = ehConfig.copyWith(safeMode: value.oN);
       Get.find<TabHomeController>().resetIndex();
     });
 
@@ -544,18 +544,18 @@ class EhSettingService extends ProfileService {
 
     isTagTranslate = ehConfig.tagTranslat ?? isTagTranslate;
     everProfile<bool>(_isTagTranslate,
-        (value) => ehConfig = ehConfig.copyWith(tagTranslat: value));
+        (value) => ehConfig = ehConfig.copyWith(tagTranslat: value.oN));
 
     isGalleryImgBlur.value = ehConfig.galleryImgBlur ?? isGalleryImgBlur.value;
     everProfile<bool>(isGalleryImgBlur,
-        (value) => ehConfig = ehConfig.copyWith(galleryImgBlur: value));
+        (value) => ehConfig = ehConfig.copyWith(galleryImgBlur: value.oN));
 
     isSiteEx.value = ehConfig.siteEx ?? isSiteEx.value;
     // 初始化
     switchGlobalDioConfig(isSiteEx.value);
-    everProfile(isSiteEx, (value) {
+    everProfile<bool>(isSiteEx, (value) {
       logger.d('everProfile isSiteEx');
-      ehConfig = ehConfig.copyWith(siteEx: value as bool);
+      ehConfig = ehConfig.copyWith(siteEx: value.oN);
       switchGlobalDioConfig(value);
       // 切换ex后
       Global.initImageHttpClient(
@@ -565,7 +565,7 @@ class EhSettingService extends ProfileService {
 
     isFavLongTap.value = ehConfig.favLongTap ?? isFavLongTap.value;
     everProfile<bool>(isFavLongTap,
-        (value) => ehConfig = ehConfig.copyWith(favLongTap: value));
+        (value) => ehConfig = ehConfig.copyWith(favLongTap: value.oN));
 
     catFilter.value = ehConfig.catFilter;
     everProfile<int>(
@@ -579,7 +579,7 @@ class EhSettingService extends ProfileService {
 
     isSearchBarComp.value = ehConfig.searchBarComp ?? isSearchBarComp.value;
     everProfile<bool>(isSearchBarComp,
-        (value) => ehConfig = ehConfig.copyWith(searchBarComp: value));
+        (value) => ehConfig = ehConfig.copyWith(searchBarComp: value.oN));
 
     favoriteOrder.value = EnumToString.fromString(
             FavoriteOrder.values, ehConfig.favoritesOrder) ??
@@ -595,25 +595,25 @@ class EhSettingService extends ProfileService {
 
     lastFavcat = ehConfig.lastFavcat ?? lastFavcat;
     everProfile<String>(_lastFavcat,
-        (value) => ehConfig = ehConfig.copyWith(lastFavcat: value));
+        (value) => ehConfig = ehConfig.copyWith(lastFavcat: value.oN));
 
     isFavPicker.value = ehConfig.favPicker ?? isFavPicker.value;
-    everProfile<bool>(
-        isFavPicker, (value) => ehConfig = ehConfig.copyWith(favPicker: value));
+    everProfile<bool>(isFavPicker,
+        (value) => ehConfig = ehConfig.copyWith(favPicker: value.oN));
 
     // TODO isPureDarkTheme 暂时禁用
     // isPureDarkTheme = ehConfig.pureDarkTheme ?? isPureDarkTheme;
     isPureDarkTheme = false;
     everProfile<bool>(_isPureDarkTheme,
-        (bool value) => ehConfig = ehConfig.copyWith(pureDarkTheme: value));
+        (bool value) => ehConfig = ehConfig.copyWith(pureDarkTheme: value.oN));
 
     isClipboardLink.value = ehConfig.clipboardLink ?? isClipboardLink.value;
     everProfile<bool>(isClipboardLink,
-        (bool value) => ehConfig = ehConfig.copyWith(clipboardLink: value));
+        (bool value) => ehConfig = ehConfig.copyWith(clipboardLink: value.oN));
 
     commentTrans.value = ehConfig.commentTrans ?? commentTrans.value;
     everProfile<bool>(commentTrans,
-        (bool value) => ehConfig = ehConfig.copyWith(commentTrans: value));
+        (bool value) => ehConfig = ehConfig.copyWith(commentTrans: value.oN));
 
     // blurredInRecentTasks
     blurredInRecentTasks =
@@ -625,44 +625,50 @@ class EhSettingService extends ProfileService {
     // autoLockTimeOut
     autoLockTimeOut.value = ehConfig.autoLockTimeOut ?? autoLockTimeOut.value;
     everProfile<int>(autoLockTimeOut,
-        (int value) => ehConfig = ehConfig.copyWith(autoLockTimeOut: value));
+        (int value) => ehConfig = ehConfig.copyWith(autoLockTimeOut: value.oN));
 
     // showPageInterval
     showPageInterval.value =
         ehConfig.showPageInterval ?? showPageInterval.value;
-    everProfile<bool>(showPageInterval,
-        (bool value) => ehConfig = ehConfig.copyWith(showPageInterval: value));
+    everProfile<bool>(
+        showPageInterval,
+        (bool value) =>
+            ehConfig = ehConfig.copyWith(showPageInterval: value.oN));
 
     // orientation
     orientation.value = EnumToString.fromString(
             ReadOrientation.values, ehConfig.favoritesOrder) ??
         orientation.value;
     everFromEnum(orientation,
-        (String value) => ehConfig = ehConfig.copyWith(orientation: value));
+        (String value) => ehConfig = ehConfig.copyWith(orientation: value.oN));
 
     // vibrate
     vibrate.value = ehConfig.vibrate ?? vibrate.value;
-    everProfile<bool>(
-        vibrate, (bool value) => ehConfig = ehConfig.copyWith(vibrate: value));
+    everProfile<bool>(vibrate,
+        (bool value) => ehConfig = ehConfig.copyWith(vibrate: value.oN));
 
     // tagIntroImgLv
     tagIntroImgLv.value = EnumToString.fromString(
             TagIntroImgLv.values, ehConfig.tagIntroImgLv ?? 'nonh') ??
         tagIntroImgLv.value;
-    everFromEnum(tagIntroImgLv,
-        (String value) => ehConfig = ehConfig.copyWith(tagIntroImgLv: value));
+    everFromEnum(
+        tagIntroImgLv,
+        (String value) =>
+            ehConfig = ehConfig.copyWith(tagIntroImgLv: value.oN));
 
     // viewColumnMode
     viewColumnMode = EnumToString.fromString(
             ViewColumnMode.values, ehConfig.viewColumnMode ?? '') ??
         viewColumnMode;
-    everFromEnum(_viewColumnMode,
-        (String value) => ehConfig = ehConfig.copyWith(viewColumnMode: value));
+    everFromEnum(
+        _viewColumnMode,
+        (String value) =>
+            ehConfig = ehConfig.copyWith(viewColumnMode: value.oN));
 
     debugCount = ehConfig.debugCount ?? debugCount;
     if (!kDebugMode) {
       debugCount -= 1;
-      ehConfig = ehConfig.copyWith(debugCount: debugCount);
+      ehConfig = ehConfig.copyWith(debugCount: debugCount.oN);
     }
     if (debugCount > 0) {
       debugMode = ehConfig.debugMode ?? false;
@@ -671,14 +677,14 @@ class EhSettingService extends ProfileService {
     }
     Global.saveProfile();
     everProfile<bool>(_debugMode, (bool value) {
-      ehConfig = ehConfig.copyWith(debugMode: value, debugCount: 3);
+      ehConfig = ehConfig.copyWith(debugMode: value.oN, debugCount: 3.oN);
       if (value) {
         Logger.level = Level.debug;
         logger.t('Level.debug');
-        ehConfig = ehConfig.copyWith(debugCount: 3);
+        ehConfig = ehConfig.copyWith(debugCount: 3.oN);
       } else {
         Logger.level = Level.error;
-        ehConfig = ehConfig.copyWith(debugCount: 0);
+        ehConfig = ehConfig.copyWith(debugCount: 0.oN);
       }
       resetLogLevel();
     });
@@ -686,18 +692,18 @@ class EhSettingService extends ProfileService {
     // 自动翻页 _autoRead
     autoRead = ehConfig.autoRead ?? autoRead;
     everProfile<bool>(_autoRead,
-        (bool value) => ehConfig = ehConfig.copyWith(autoRead: value));
+        (bool value) => ehConfig = ehConfig.copyWith(autoRead: value.oN));
 
     // 翻页时间间隔 _turnPageInv
     turnPageInv = ehConfig.turnPageInv ?? turnPageInv;
     everProfile<int>(_turnPageInv,
-        (int value) => ehConfig = ehConfig.copyWith(turnPageInv: value));
+        (int value) => ehConfig = ehConfig.copyWith(turnPageInv: value.oN));
 
     toplist =
         EnumToString.fromString(ToplistType.values, ehConfig.toplist ?? '') ??
             toplist;
     everFromEnum(_toplist,
-        (String value) => ehConfig = ehConfig.copyWith(toplist: value));
+        (String value) => ehConfig = ehConfig.copyWith(toplist: value.oN));
 
     // tabletLayout = ehConfig.tabletLayout ?? tabletLayout;
     // everProfile<bool>(_tabletLayout,
@@ -708,37 +714,39 @@ class EhSettingService extends ProfileService {
     everProfile<bool>(
         _enableTagTranslateCDN,
         (bool value) =>
-            ehConfig = ehConfig.copyWith(enableTagTranslateCDN: value));
+            ehConfig = ehConfig.copyWith(enableTagTranslateCDN: value.oN));
 
     // _autoSelectProfile
     autoSelectProfile = ehConfig.autoSelectProfile ?? autoSelectProfile;
-    everProfile<bool>(_autoSelectProfile,
-        (bool value) => ehConfig = ehConfig.copyWith(autoSelectProfile: value));
+    everProfile<bool>(
+        _autoSelectProfile,
+        (bool value) =>
+            ehConfig = ehConfig.copyWith(autoSelectProfile: value.oN));
 
     // tapToTurnPageAnimations
     turnPageAnimations = ehConfig.turnPageAnimations ?? turnPageAnimations;
     everProfile<bool>(
         _turnPageAnimations,
         (bool value) =>
-            ehConfig = ehConfig.copyWith(turnPageAnimations: value));
+            ehConfig = ehConfig.copyWith(turnPageAnimations: value.oN));
 
     // _selectProfile
     selectProfile = ehConfig.selectProfile ?? selectProfile;
     everProfile<String>(_selectProfile, (value) {
-      ehConfig = ehConfig.copyWith(selectProfile: value);
+      ehConfig = ehConfig.copyWith(selectProfile: value.oN);
     });
 
     // _linkRedirect
     linkRedirect = ehConfig.linkRedirect ?? linkRedirect;
     everProfile<bool>(_linkRedirect, (value) {
-      ehConfig = ehConfig.copyWith(linkRedirect: value);
+      ehConfig = ehConfig.copyWith(linkRedirect: value.oN);
     });
 
     // fixedHeightOfListItems
     fixedHeightOfListItems =
         ehConfig.fixedHeightOfListItems ?? fixedHeightOfListItems;
     everProfile<bool>(_fixedHeightOfListItems, (value) {
-      ehConfig = ehConfig.copyWith(fixedHeightOfListItems: value);
+      ehConfig = ehConfig.copyWith(fixedHeightOfListItems: value.oN);
     });
 
     // tagTranslateDataUpdateMode
@@ -749,7 +757,7 @@ class EhSettingService extends ProfileService {
     everFromEnum(
         _tagTranslateDataUpdateMode,
         (String value) =>
-            ehConfig = ehConfig.copyWith(tagTranslateDataUpdateMode: value));
+            ehConfig = ehConfig.copyWith(tagTranslateDataUpdateMode: value.oN));
 
     // tabletLayoutType
     tabletLayoutType = EnumToString.fromString(
@@ -758,12 +766,12 @@ class EhSettingService extends ProfileService {
     everFromEnum(
         _tabletLayoutType,
         (String value) =>
-            ehConfig = ehConfig.copyWith(tabletLayoutValue: value));
+            ehConfig = ehConfig.copyWith(tabletLayoutValue: value.oN));
 
     // _showCommentAvatar
     showCommentAvatar = ehConfig.showCommentAvatar ?? showCommentAvatar;
     everProfile<bool>(_showCommentAvatar, (value) {
-      ehConfig = ehConfig.copyWith(showCommentAvatar: value);
+      ehConfig = ehConfig.copyWith(showCommentAvatar: value.oN);
     });
   }
 
@@ -773,13 +781,13 @@ class EhSettingService extends ProfileService {
     /// 预载图片数量
     preloadImage.value = downloadConfig.preloadImage ?? preloadImage.value;
     everProfile<int>(preloadImage, (value) {
-      downloadConfig = downloadConfig.copyWith(preloadImage: value);
+      downloadConfig = downloadConfig.copyWith(preloadImage: value.oN);
     });
 
     // downloadLocatino
     downloadLocatino = downloadConfig.downloadLocation ?? downloadLocatino;
     everProfile<String>(_downloadLocatino, (value) {
-      downloadConfig = downloadConfig.copyWith(downloadLocation: value);
+      downloadConfig = downloadConfig.copyWith(downloadLocation: value.oN);
     });
 
     multiDownload = (downloadConfig.multiDownload != null &&
@@ -787,18 +795,18 @@ class EhSettingService extends ProfileService {
         ? downloadConfig.multiDownload!
         : multiDownload;
     everProfile<int>(_multiDownload, (value) {
-      downloadConfig = downloadConfig.copyWith(multiDownload: value);
+      downloadConfig = downloadConfig.copyWith(multiDownload: value.oN);
     });
 
     allowMediaScan = downloadConfig.allowMediaScan ?? allowMediaScan;
     everProfile<bool>(_allowMediaScan, (value) {
-      downloadConfig = downloadConfig.copyWith(allowMediaScan: value);
+      downloadConfig = downloadConfig.copyWith(allowMediaScan: value.oN);
     });
 
     // downloadOrigImage
     downloadOrigImage = downloadConfig.downloadOrigImage ?? downloadOrigImage;
     everProfile<bool>(_downloadOrigImage, (value) {
-      downloadConfig = downloadConfig.copyWith(downloadOrigImage: value);
+      downloadConfig = downloadConfig.copyWith(downloadOrigImage: value.oN);
     });
 
     // _downloadOrigType
@@ -808,7 +816,7 @@ class EhSettingService extends ProfileService {
             ? DownloadOrigImageType.askMe
             : DownloadOrigImageType.no);
     everFromEnum(_downloadOrigType, (String value) {
-      downloadConfig = downloadConfig.copyWith(downloadOrigImageType: value);
+      downloadConfig = downloadConfig.copyWith(downloadOrigImageType: value.oN);
     });
 
     /// downloadConfig end
@@ -824,7 +832,7 @@ class EhSettingService extends ProfileService {
 
     everProfile<List<ItemConfig>>(_itemConfigList, (val) {
       logger.d('itemConfigList changed: ${val.map((e) => e.toJson())}');
-      layoutConfig = layoutConfig.copyWith(itemConfigs: val);
+      layoutConfig = layoutConfig.copyWith(itemConfigs: val.oN);
     });
   }
 
@@ -843,14 +851,14 @@ class EhSettingService extends ProfileService {
     filterCommentsByScore =
         blockConfig.filterCommentsByScore ?? filterCommentsByScore;
     everProfile<bool>(_filterCommentsByScore, (val) {
-      blockConfig = blockConfig.copyWith(filterCommentsByScore: val);
+      blockConfig = blockConfig.copyWith(filterCommentsByScore: val.oN);
     });
 
     // _scoreFilteringThreshold
     scoreFilteringThreshold =
         blockConfig.scoreFilteringThreshold ?? scoreFilteringThreshold;
     everProfile<int>(_scoreFilteringThreshold, (val) {
-      blockConfig = blockConfig.copyWith(scoreFilteringThreshold: val);
+      blockConfig = blockConfig.copyWith(scoreFilteringThreshold: val.oN);
     });
   }
 

@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'eh_profile.dart';
+import 'package:quiver/core.dart';
+
+import 'index.dart';
 
 @immutable
 class Uconfig {
-  
+
   const Uconfig({
     required this.profilelist,
     required this.profileSelected,
@@ -20,7 +22,7 @@ class Uconfig {
 
   factory Uconfig.fromJson(Map<String,dynamic> json) => Uconfig(
     profilelist: (json['profilelist'] as List? ?? []).map((e) => EhProfile.fromJson(e as Map<String, dynamic>)).toList(),
-    profileSelected: json['profileSelected'] as String,
+    profileSelected: json['profileSelected'].toString(),
     nameDisplay: json['nameDisplay'] != null ? json['nameDisplay'] as int : null,
     thumbnailSize: json['thumbnailSize'] != null ? json['thumbnailSize'] as int : null,
     thumbnailRows: json['thumbnailRows'] != null ? json['thumbnailRows'] as int : null
@@ -42,23 +44,23 @@ class Uconfig {
     thumbnailRows: thumbnailRows
   );
 
-    
+
   Uconfig copyWith({
     List<EhProfile>? profilelist,
     String? profileSelected,
-    int? nameDisplay,
-    int? thumbnailSize,
-    int? thumbnailRows
+    Optional<int?>? nameDisplay,
+    Optional<int?>? thumbnailSize,
+    Optional<int?>? thumbnailRows
   }) => Uconfig(
     profilelist: profilelist ?? this.profilelist,
     profileSelected: profileSelected ?? this.profileSelected,
-    nameDisplay: nameDisplay ?? this.nameDisplay,
-    thumbnailSize: thumbnailSize ?? this.thumbnailSize,
-    thumbnailRows: thumbnailRows ?? this.thumbnailRows,
-  );  
+    nameDisplay: checkOptional(nameDisplay, () => this.nameDisplay),
+    thumbnailSize: checkOptional(thumbnailSize, () => this.thumbnailSize),
+    thumbnailRows: checkOptional(thumbnailRows, () => this.thumbnailRows),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is Uconfig && profilelist == other.profilelist && profileSelected == other.profileSelected && nameDisplay == other.nameDisplay && thumbnailSize == other.thumbnailSize && thumbnailRows == other.thumbnailRows;
 
   @override

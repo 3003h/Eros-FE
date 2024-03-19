@@ -186,7 +186,7 @@ dependencies:
       url: https://github.com/honjow/saf.git
       ref: master
   flutter_widget_from_html_core: ^0.14.4
-  quiver: ^3.1.0 # 工具库
+  quiver: ^3.2.0 # 工具库
   native_dio_adapter: ^1.0.0+2
   firebase_analytics: ^10.6.3
   firebase_crashlytics: ^3.4.3
@@ -211,7 +211,9 @@ dev_dependencies:
   intl_utils: ^2.5.1
 
   # flutter pub run apn_json2model
-  apn_json2model: ^2.3.0
+#  apn_json2model: ^2.3.0
+  # flutter pub run json_to_model
+  json_to_model: ^3.2.4
 
   build_runner: ^2.4.6
   json_serializable: ^6.0.1

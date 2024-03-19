@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'advance_search.dart';
+import 'package:quiver/core.dart';
+
+import 'index.dart';
 
 @immutable
 class CustomProfile {
-  
+
   const CustomProfile({
     required this.uuid,
     required this.name,
@@ -35,16 +37,16 @@ class CustomProfile {
   final int? lastEditTime;
 
   factory CustomProfile.fromJson(Map<String,dynamic> json) => CustomProfile(
-    uuid: json['uuid'] as String,
-    name: json['name'] as String,
+    uuid: json['uuid'].toString(),
+    name: json['name'].toString(),
     searchText: json['searchText'] != null ? (json['searchText'] as List? ?? []).map((e) => e as dynamic).toList() : null,
-    listTypeValue: json['listTypeValue'] != null ? json['listTypeValue'] as String : null,
-    catsTypeValue: json['catsTypeValue'] != null ? json['catsTypeValue'] as String : null,
+    listTypeValue: json['listTypeValue']?.toString(),
+    catsTypeValue: json['catsTypeValue']?.toString(),
     cats: json['cats'] != null ? json['cats'] as int : null,
     enableAdvance: json['enableAdvance'] != null ? json['enableAdvance'] as bool : null,
-    advSearchTypeValue: json['advSearchTypeValue'] != null ? json['advSearchTypeValue'] as String : null,
+    advSearchTypeValue: json['advSearchTypeValue']?.toString(),
     advSearch: json['advSearch'] != null ? AdvanceSearch.fromJson(json['advSearch'] as Map<String, dynamic>) : null,
-    listModeValue: json['listModeValue'] != null ? json['listModeValue'] as String : null,
+    listModeValue: json['listModeValue']?.toString(),
     hideTab: json['hideTab'] != null ? json['hideTab'] as bool : null,
     aggregateGroups: json['aggregateGroups'] != null ? (json['aggregateGroups'] as List? ?? []).map((e) => e as String).toList() : null,
     lastEditTime: json['lastEditTime'] != null ? json['lastEditTime'] as int : null
@@ -82,39 +84,39 @@ class CustomProfile {
     lastEditTime: lastEditTime
   );
 
-    
+
   CustomProfile copyWith({
     String? uuid,
     String? name,
-    List<dynamic>? searchText,
-    String? listTypeValue,
-    String? catsTypeValue,
-    int? cats,
-    bool? enableAdvance,
-    String? advSearchTypeValue,
-    AdvanceSearch? advSearch,
-    String? listModeValue,
-    bool? hideTab,
-    List<String>? aggregateGroups,
-    int? lastEditTime
+    Optional<List<dynamic>?>? searchText,
+    Optional<String?>? listTypeValue,
+    Optional<String?>? catsTypeValue,
+    Optional<int?>? cats,
+    Optional<bool?>? enableAdvance,
+    Optional<String?>? advSearchTypeValue,
+    Optional<AdvanceSearch?>? advSearch,
+    Optional<String?>? listModeValue,
+    Optional<bool?>? hideTab,
+    Optional<List<String>?>? aggregateGroups,
+    Optional<int?>? lastEditTime
   }) => CustomProfile(
     uuid: uuid ?? this.uuid,
     name: name ?? this.name,
-    searchText: searchText ?? this.searchText,
-    listTypeValue: listTypeValue ?? this.listTypeValue,
-    catsTypeValue: catsTypeValue ?? this.catsTypeValue,
-    cats: cats ?? this.cats,
-    enableAdvance: enableAdvance ?? this.enableAdvance,
-    advSearchTypeValue: advSearchTypeValue ?? this.advSearchTypeValue,
-    advSearch: advSearch ?? this.advSearch,
-    listModeValue: listModeValue ?? this.listModeValue,
-    hideTab: hideTab ?? this.hideTab,
-    aggregateGroups: aggregateGroups ?? this.aggregateGroups,
-    lastEditTime: lastEditTime ?? this.lastEditTime,
-  );  
+    searchText: checkOptional(searchText, () => this.searchText),
+    listTypeValue: checkOptional(listTypeValue, () => this.listTypeValue),
+    catsTypeValue: checkOptional(catsTypeValue, () => this.catsTypeValue),
+    cats: checkOptional(cats, () => this.cats),
+    enableAdvance: checkOptional(enableAdvance, () => this.enableAdvance),
+    advSearchTypeValue: checkOptional(advSearchTypeValue, () => this.advSearchTypeValue),
+    advSearch: checkOptional(advSearch, () => this.advSearch),
+    listModeValue: checkOptional(listModeValue, () => this.listModeValue),
+    hideTab: checkOptional(hideTab, () => this.hideTab),
+    aggregateGroups: checkOptional(aggregateGroups, () => this.aggregateGroups),
+    lastEditTime: checkOptional(lastEditTime, () => this.lastEditTime),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is CustomProfile && uuid == other.uuid && name == other.name && searchText == other.searchText && listTypeValue == other.listTypeValue && catsTypeValue == other.catsTypeValue && cats == other.cats && enableAdvance == other.enableAdvance && advSearchTypeValue == other.advSearchTypeValue && advSearch == other.advSearch && listModeValue == other.listModeValue && hideTab == other.hideTab && aggregateGroups == other.aggregateGroups && lastEditTime == other.lastEditTime;
 
   @override

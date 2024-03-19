@@ -140,7 +140,7 @@ class DownloadViewController extends GetxController {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
-              .copyWith(taskId: _newTaskId);
+              .copyWith(taskId: _newTaskId.oN);
     }
   }
 
@@ -169,7 +169,7 @@ class DownloadViewController extends GetxController {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
-              .copyWith(taskId: _newTaskId);
+              .copyWith(taskId: _newTaskId.oN);
     }
   }
 

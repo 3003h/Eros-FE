@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class SimpleTag {
-  
+
   const SimpleTag({
     this.text,
     this.translat,
@@ -17,10 +19,10 @@ class SimpleTag {
   final String? backgrondColor;
 
   factory SimpleTag.fromJson(Map<String,dynamic> json) => SimpleTag(
-    text: json['text'] != null ? json['text'] as String : null,
-    translat: json['Translat'] != null ? json['Translat'] as String : null,
-    color: json['color'] != null ? json['color'] as String : null,
-    backgrondColor: json['backgrondColor'] != null ? json['backgrondColor'] as String : null
+    text: json['text']?.toString(),
+    translat: json['Translat']?.toString(),
+    color: json['color']?.toString(),
+    backgrondColor: json['backgrondColor']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -37,21 +39,21 @@ class SimpleTag {
     backgrondColor: backgrondColor
   );
 
-    
+
   SimpleTag copyWith({
-    String? text,
-    String? translat,
-    String? color,
-    String? backgrondColor
+    Optional<String?>? text,
+    Optional<String?>? translat,
+    Optional<String?>? color,
+    Optional<String?>? backgrondColor
   }) => SimpleTag(
-    text: text ?? this.text,
-    translat: translat ?? this.translat,
-    color: color ?? this.color,
-    backgrondColor: backgrondColor ?? this.backgrondColor,
-  );  
+    text: checkOptional(text, () => this.text),
+    translat: checkOptional(translat, () => this.translat),
+    color: checkOptional(color, () => this.color),
+    backgrondColor: checkOptional(backgrondColor, () => this.backgrondColor),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is SimpleTag && text == other.text && translat == other.translat && color == other.color && backgrondColor == other.backgrondColor;
 
   @override

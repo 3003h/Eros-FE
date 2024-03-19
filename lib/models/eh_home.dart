@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class EhHome {
-  
+
   const EhHome({
     this.currentLimit,
     this.totLimit,
@@ -32,19 +34,19 @@ class EhHome {
     resetCost: resetCost
   );
 
-    
+
   EhHome copyWith({
-    int? currentLimit,
-    int? totLimit,
-    int? resetCost
+    Optional<int?>? currentLimit,
+    Optional<int?>? totLimit,
+    Optional<int?>? resetCost
   }) => EhHome(
-    currentLimit: currentLimit ?? this.currentLimit,
-    totLimit: totLimit ?? this.totLimit,
-    resetCost: resetCost ?? this.resetCost,
-  );  
+    currentLimit: checkOptional(currentLimit, () => this.currentLimit),
+    totLimit: checkOptional(totLimit, () => this.totLimit),
+    resetCost: checkOptional(resetCost, () => this.resetCost),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is EhHome && currentLimit == other.currentLimit && totLimit == other.totLimit && resetCost == other.resetCost;
 
   @override

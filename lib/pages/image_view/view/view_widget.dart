@@ -597,7 +597,7 @@ class _ImageWithHideState extends State<ImageWithHide> {
               if (_tmpImage != null) {
                 vState.galleryPageController?.uptImageBySer(
                   ser: widget.ser,
-                  imageCallback: (image) => image.copyWith(hide: true),
+                  imageCallback: (image) => image.copyWith(hide: true.oN),
                 );
 
                 Future.delayed(const Duration(milliseconds: 100)).then(

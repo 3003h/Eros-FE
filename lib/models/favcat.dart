@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class Favcat {
-  
+
   const Favcat({
     required this.favId,
     required this.favTitle,
@@ -17,10 +19,10 @@ class Favcat {
   final String? note;
 
   factory Favcat.fromJson(Map<String,dynamic> json) => Favcat(
-    favId: json['favId'] as String,
-    favTitle: json['favTitle'] as String,
+    favId: json['favId'].toString(),
+    favTitle: json['favTitle'].toString(),
     totNum: json['totNum'] != null ? json['totNum'] as int : null,
-    note: json['note'] != null ? json['note'] as String : null
+    note: json['note']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -37,21 +39,21 @@ class Favcat {
     note: note
   );
 
-    
+
   Favcat copyWith({
     String? favId,
     String? favTitle,
-    int? totNum,
-    String? note
+    Optional<int?>? totNum,
+    Optional<String?>? note
   }) => Favcat(
     favId: favId ?? this.favId,
     favTitle: favTitle ?? this.favTitle,
-    totNum: totNum ?? this.totNum,
-    note: note ?? this.note,
-  );  
+    totNum: checkOptional(totNum, () => this.totNum),
+    note: checkOptional(note, () => this.note),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is Favcat && favId == other.favId && favTitle == other.favTitle && totNum == other.totNum && note == other.note;
 
   @override

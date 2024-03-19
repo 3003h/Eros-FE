@@ -16,12 +16,12 @@ const kBorderWidth = 1.5;
 
 class TextAvatar extends StatelessWidget {
   const TextAvatar({
-    Key? key,
+    super.key,
     required this.name,
     this.type = TextAvatarsType.firstText,
     this.colors = kDefaultAvatarsColors,
     this.radius,
-  }) : super(key: key);
+  });
   final String name;
   final TextAvatarsType type;
   final List<Color> colors;

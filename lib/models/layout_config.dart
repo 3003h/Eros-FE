@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'item_config.dart';
+import 'package:quiver/core.dart';
+
+import 'index.dart';
 
 @immutable
 class LayoutConfig {
-  
+
   const LayoutConfig({
     this.itemConfigs,
   });
@@ -22,15 +24,15 @@ class LayoutConfig {
     itemConfigs: itemConfigs?.map((e) => e.clone()).toList()
   );
 
-    
+
   LayoutConfig copyWith({
-    List<ItemConfig>? itemConfigs
+    Optional<List<ItemConfig>?>? itemConfigs
   }) => LayoutConfig(
-    itemConfigs: itemConfigs ?? this.itemConfigs,
-  );  
+    itemConfigs: checkOptional(itemConfigs, () => this.itemConfigs),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is LayoutConfig && itemConfigs == other.itemConfigs;
 
   @override

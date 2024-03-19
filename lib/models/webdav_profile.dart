@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class WebdavProfile {
-  
+
   const WebdavProfile({
     required this.url,
     this.user,
@@ -23,9 +25,9 @@ class WebdavProfile {
   final bool? syncQuickSearch;
 
   factory WebdavProfile.fromJson(Map<String,dynamic> json) => WebdavProfile(
-    url: json['url'] as String,
-    user: json['user'] != null ? json['user'] as String : null,
-    password: json['password'] != null ? json['password'] as String : null,
+    url: json['url'].toString(),
+    user: json['user']?.toString(),
+    password: json['password']?.toString(),
     syncHistory: json['syncHistory'] != null ? json['syncHistory'] as bool : null,
     syncReadProgress: json['syncReadProgress'] != null ? json['syncReadProgress'] as bool : null,
     syncGroupProfile: json['syncGroupProfile'] != null ? json['syncGroupProfile'] as bool : null,
@@ -52,27 +54,27 @@ class WebdavProfile {
     syncQuickSearch: syncQuickSearch
   );
 
-    
+
   WebdavProfile copyWith({
     String? url,
-    String? user,
-    String? password,
-    bool? syncHistory,
-    bool? syncReadProgress,
-    bool? syncGroupProfile,
-    bool? syncQuickSearch
+    Optional<String?>? user,
+    Optional<String?>? password,
+    Optional<bool?>? syncHistory,
+    Optional<bool?>? syncReadProgress,
+    Optional<bool?>? syncGroupProfile,
+    Optional<bool?>? syncQuickSearch
   }) => WebdavProfile(
     url: url ?? this.url,
-    user: user ?? this.user,
-    password: password ?? this.password,
-    syncHistory: syncHistory ?? this.syncHistory,
-    syncReadProgress: syncReadProgress ?? this.syncReadProgress,
-    syncGroupProfile: syncGroupProfile ?? this.syncGroupProfile,
-    syncQuickSearch: syncQuickSearch ?? this.syncQuickSearch,
-  );  
+    user: checkOptional(user, () => this.user),
+    password: checkOptional(password, () => this.password),
+    syncHistory: checkOptional(syncHistory, () => this.syncHistory),
+    syncReadProgress: checkOptional(syncReadProgress, () => this.syncReadProgress),
+    syncGroupProfile: checkOptional(syncGroupProfile, () => this.syncGroupProfile),
+    syncQuickSearch: checkOptional(syncQuickSearch, () => this.syncQuickSearch),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is WebdavProfile && url == other.url && user == other.user && password == other.password && syncHistory == other.syncHistory && syncReadProgress == other.syncReadProgress && syncGroupProfile == other.syncGroupProfile && syncQuickSearch == other.syncQuickSearch;
 
   @override

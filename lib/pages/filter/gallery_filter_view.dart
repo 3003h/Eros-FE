@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:eros_fe/common/controller/advance_search_controller.dart';
 import 'package:eros_fe/common/service/controller_tag_service.dart';
 import 'package:eros_fe/common/service/theme_service.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/generated/l10n.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/pages/filter/filter.dart';
@@ -269,7 +270,7 @@ class GalleryFilterView extends StatelessWidget {
           value: _advanceSearch.value.requireGalleryTorrent,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value.copyWith(requireGalleryTorrent: value));
+                _advanceSearch.value.copyWith(requireGalleryTorrent: value.oN));
           },
         ),
         // AdvanceSearchSwitchItem(
@@ -292,8 +293,8 @@ class GalleryFilterView extends StatelessWidget {
           title: L10n.of(context).s_Show_Expunged_Galleries,
           value: _advanceSearch.value.browseExpungedGalleries,
           onChanged: (bool value) {
-            _advanceSearch(
-                _advanceSearch.value.copyWith(browseExpungedGalleries: value));
+            _advanceSearch(_advanceSearch.value
+                .copyWith(browseExpungedGalleries: value.oN));
           },
         ),
         AdvanceSearchSwitchItem(
@@ -301,7 +302,7 @@ class GalleryFilterView extends StatelessWidget {
           value: _advanceSearch.value.searchWithMinRating,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value.copyWith(searchWithMinRating: value));
+                _advanceSearch.value.copyWith(searchWithMinRating: value.oN));
           },
         ),
         AnimatedCrossFade(
@@ -335,7 +336,8 @@ class GalleryFilterView extends StatelessWidget {
             },
             groupValue: _advanceSearch.value.minRating,
             onValueChanged: (int? value) {
-              _advanceSearch(_advanceSearch.value.copyWith(minRating: value));
+              _advanceSearch(
+                  _advanceSearch.value.copyWith(minRating: value.oN));
             },
           ),
         ),
@@ -345,7 +347,7 @@ class GalleryFilterView extends StatelessWidget {
           value: advanceSearchController.advanceSearch.value.searchBetweenPage,
           onChanged: (bool value) {
             _advanceSearch(
-                _advanceSearch.value.copyWith(searchBetweenPage: value));
+                _advanceSearch.value.copyWith(searchBetweenPage: value.oN));
           },
         ),
         AnimatedCrossFade(
@@ -414,7 +416,7 @@ class GalleryFilterView extends StatelessWidget {
           value: _advanceSearch.value.disableCustomFilterLanguage,
           onChanged: (bool value) {
             _advanceSearch(_advanceSearch.value
-                .copyWith(disableCustomFilterLanguage: value));
+                .copyWith(disableCustomFilterLanguage: value.oN));
           },
         ),
         AdvanceSearchSwitchItem(
@@ -422,15 +424,15 @@ class GalleryFilterView extends StatelessWidget {
           value: _advanceSearch.value.disableCustomFilterUploader,
           onChanged: (bool value) {
             _advanceSearch(_advanceSearch.value
-                .copyWith(disableCustomFilterUploader: value));
+                .copyWith(disableCustomFilterUploader: value.oN));
           },
         ),
         AdvanceSearchSwitchItem(
           title: L10n.of(context).tags,
           value: _advanceSearch.value.disableCustomFilterTags,
           onChanged: (bool value) {
-            _advanceSearch(
-                _advanceSearch.value.copyWith(disableCustomFilterTags: value));
+            _advanceSearch(_advanceSearch.value
+                .copyWith(disableCustomFilterTags: value.oN));
           },
         ),
         // const SizedBox(height: 50)

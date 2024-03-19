@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class EhDarkCupertinoTheme extends StatelessWidget {
-  const EhDarkCupertinoTheme({Key? key, required this.child}) : super(key: key);
+  const EhDarkCupertinoTheme({super.key, required this.child});
   final Widget child;
 
   @override

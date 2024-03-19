@@ -276,7 +276,7 @@ class CommentController extends GetxController {
     if (comment?.translatedElement != null &&
         comment?.translatedElement is dom.Element) {
       comments![_commentIndex!] = comments![_commentIndex].copyWith(
-        showTranslate: !(comments![_commentIndex].showTranslate ?? false),
+        showTranslate: (!(comments![_commentIndex].showTranslate ?? false)).oN,
       );
 
       return;
@@ -296,8 +296,8 @@ class CommentController extends GetxController {
     logger.d('t :${_translatedTextList.join('\n')}');
 
     comments![_commentIndex!] = comments![_commentIndex].copyWith(
-      showTranslate: !(comments![_commentIndex].showTranslate ?? false),
-      translatedElement: _translatedElement,
+      showTranslate: (!(comments![_commentIndex].showTranslate ?? false)).oN,
+      translatedElement: _translatedElement.oN,
     );
 
     // update([_id]);
@@ -343,7 +343,7 @@ class CommentController extends GetxController {
     logger.t('commit up id $_id');
     final int? _commentIndex =
         comments?.indexWhere((element) => element.id == _id.toString());
-    comments![_commentIndex!] = comments![_commentIndex].copyWith(vote: 1);
+    comments![_commentIndex!] = comments![_commentIndex].copyWith(vote: 1.oN);
 
     update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
@@ -365,7 +365,8 @@ class CommentController extends GetxController {
     logger.t('commit down id $_id');
     final int? _commentIndex =
         comments?.indexWhere((element) => element.id == _id.toString());
-    comments![_commentIndex!] = comments![_commentIndex].copyWith(vote: -1);
+    comments![_commentIndex!] =
+        comments![_commentIndex].copyWith(vote: (-1).oN);
     update([_id]);
     final CommitVoteRes rult = await Api.commitVote(
       apikey: _item?.apikey ?? '',
@@ -388,7 +389,7 @@ class CommentController extends GetxController {
     final int? _commentIndex = comments?.indexWhere(
         (GalleryComment element) => element.id == rult.commentId.toString());
     comments![_commentIndex!] = comments![_commentIndex]
-        .copyWith(vote: rult.commentVote, score: '${rult.commentScore}');
+        .copyWith(vote: rult.commentVote.oN, score: '${rult.commentScore}');
 
     update();
     logger.t('update CommentController id ${rult.commentId}');

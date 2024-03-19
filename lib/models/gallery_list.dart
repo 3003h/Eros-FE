@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'gallery_provider.dart';
-import 'favcat.dart';
+import 'package:quiver/core.dart';
+
+import 'index.dart';
 
 @immutable
 class GalleryList {
-  
+
   const GalleryList({
     this.gallerys,
     this.nextGid,
@@ -25,8 +26,8 @@ class GalleryList {
 
   factory GalleryList.fromJson(Map<String,dynamic> json) => GalleryList(
     gallerys: json['gallerys'] != null ? (json['gallerys'] as List? ?? []).map((e) => GalleryProvider.fromJson(e as Map<String, dynamic>)).toList() : null,
-    nextGid: json['nextGid'] != null ? json['nextGid'] as String : null,
-    prevGid: json['prevGid'] != null ? json['prevGid'] as String : null,
+    nextGid: json['nextGid']?.toString(),
+    prevGid: json['prevGid']?.toString(),
     maxPage: json['maxPage'] != null ? json['maxPage'] as int : null,
     nextPage: json['nextPage'] != null ? json['nextPage'] as int : null,
     prevPage: json['prevPage'] != null ? json['prevPage'] as int : null,
@@ -53,27 +54,27 @@ class GalleryList {
     favList: favList?.map((e) => e.clone()).toList()
   );
 
-    
+
   GalleryList copyWith({
-    List<GalleryProvider>? gallerys,
-    String? nextGid,
-    String? prevGid,
-    int? maxPage,
-    int? nextPage,
-    int? prevPage,
-    List<Favcat>? favList
+    Optional<List<GalleryProvider>?>? gallerys,
+    Optional<String?>? nextGid,
+    Optional<String?>? prevGid,
+    Optional<int?>? maxPage,
+    Optional<int?>? nextPage,
+    Optional<int?>? prevPage,
+    Optional<List<Favcat>?>? favList
   }) => GalleryList(
-    gallerys: gallerys ?? this.gallerys,
-    nextGid: nextGid ?? this.nextGid,
-    prevGid: prevGid ?? this.prevGid,
-    maxPage: maxPage ?? this.maxPage,
-    nextPage: nextPage ?? this.nextPage,
-    prevPage: prevPage ?? this.prevPage,
-    favList: favList ?? this.favList,
-  );  
+    gallerys: checkOptional(gallerys, () => this.gallerys),
+    nextGid: checkOptional(nextGid, () => this.nextGid),
+    prevGid: checkOptional(prevGid, () => this.prevGid),
+    maxPage: checkOptional(maxPage, () => this.maxPage),
+    nextPage: checkOptional(nextPage, () => this.nextPage),
+    prevPage: checkOptional(prevPage, () => this.prevPage),
+    favList: checkOptional(favList, () => this.favList),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is GalleryList && gallerys == other.gallerys && nextGid == other.nextGid && prevGid == other.prevGid && maxPage == other.maxPage && nextPage == other.nextPage && prevPage == other.prevPage && favList == other.favList;
 
   @override

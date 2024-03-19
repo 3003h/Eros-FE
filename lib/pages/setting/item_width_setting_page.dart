@@ -117,8 +117,8 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                             selectedMode,
                             (ItemConfig itemConfig) {
                               return itemConfig.copyWith(
-                                enableCustomWidth: val,
-                                customWidth: _customWidth.toInt(),
+                                enableCustomWidth: val.oN,
+                                customWidth: _customWidth.toInt().oN,
                               );
                             },
                           );
@@ -139,7 +139,7 @@ class _ItemWidthSettingPageState extends State<ItemWidthSettingPage> {
                         _ehSettingService.setItemConfig(
                             selectedMode,
                             (ItemConfig itemConfig) =>
-                                itemConfig.copyWith(customWidth: val));
+                                itemConfig.copyWith(customWidth: val.oN));
                         setState(() {});
                       },
                     ),

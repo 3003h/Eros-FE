@@ -3,6 +3,7 @@ import 'package:eros_fe/common/global.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
 import 'package:eros_fe/common/service/theme_service.dart';
 import 'package:eros_fe/const/theme_colors.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/generated/l10n.dart';
 import 'package:eros_fe/models/favcat.dart';
 import 'package:eros_fe/network/request.dart';
@@ -122,7 +123,7 @@ class FavController extends GetxController {
                 // 返回数据
                 Get.back(
                     result: favList[_favIndex]
-                        .copyWith(note: _favnoteController.text));
+                        .copyWith(note: _favnoteController.text.oN));
               },
             ),
           ],
@@ -144,7 +145,8 @@ class FavController extends GetxController {
               totNum: fav.totNum,
               onTap: () {
                 // 返回数据
-                Get.back(result: fav.copyWith(note: _favnoteController.text));
+                Get.back(
+                    result: fav.copyWith(note: _favnoteController.text.oN));
               },
             ))).toList();
 

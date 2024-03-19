@@ -38,7 +38,7 @@ class TagController extends GetxController {
         (element) => element.title.trim() == tag.title.trim());
 
     return tag.copyWith(
-        color: _tag?.color, backgrondColor: _tag?.backgrondColor);
+        color: _tag?.color.oN, backgrondColor: _tag?.backgrondColor.oN);
   }
 
   bool needHide(List<SimpleTag> simpleTags) {

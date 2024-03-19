@@ -90,7 +90,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             Get.back(
               id: isLayoutLarge ? 2 : null,
               result: _customProfile.copyWith(
-                lastEditTime: DateTime.now().millisecondsSinceEpoch,
+                lastEditTime: DateTime.now().millisecondsSinceEpoch.oN,
               ),
             );
           },
@@ -124,7 +124,8 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           context,
           listMode: _customProfile.listMode,
           onValueChanged: (ListModeEnum val) {
-            _customProfile = _customProfile.copyWith(listModeValue: val.name);
+            _customProfile =
+                _customProfile.copyWith(listModeValue: val.name.oN);
           },
         ),
       ]),
@@ -137,7 +138,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             initValue: _customProfile.listType,
             onChanged: (GalleryListType value) {
               _customProfile =
-                  _customProfile.copyWith(listTypeValue: value.name);
+                  _customProfile.copyWith(listTypeValue: value.name.oN);
               _listModeIsPopular.value = value == GalleryListType.popular;
             },
           ),
@@ -154,7 +155,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
           onCatNumChanged: (int value) {
             logger.d('onCatNumChanged $value');
-            _customProfile = _customProfile.copyWith(cats: value);
+            _customProfile = _customProfile.copyWith(cats: value.oN);
           },
         ),
       ]),
@@ -163,7 +164,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
         searchTextList:
             _customProfile.searchText?.map((e) => '$e').toList() ?? [],
         onChanged: (List<String> val) {
-          _customProfile = _customProfile.copyWith(searchText: val);
+          _customProfile = _customProfile.copyWith(searchText: val.oN);
         },
       ),
 
@@ -176,7 +177,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
             title: Text(L10n.of(context).s_Advanced_Options),
             value: _enableAdvance.value,
             onChanged: (val) {
-              _customProfile = _customProfile.copyWith(enableAdvance: val);
+              _customProfile = _customProfile.copyWith(enableAdvance: val.oN);
               _enableAdvance.value = val;
             },
           );
@@ -203,7 +204,7 @@ class _CustomProfileSettingPageState extends State<CustomProfileSettingPage> {
                           _customProfile.advSearch ?? const AdvanceSearch(),
                       onChanged: (AdvanceSearch val) {
                         _customProfile =
-                            _customProfile.copyWith(advSearch: val);
+                            _customProfile.copyWith(advSearch: val.oN);
                       },
                     )
                 ],
@@ -572,7 +573,7 @@ class _AdvanceViewState extends State<_AdvanceView> {
               value: _advanceSearch.requireGalleryTorrent ?? false,
               onChanged: (val) {
                 _advanceSearch =
-                    _advanceSearch.copyWith(requireGalleryTorrent: val);
+                    _advanceSearch.copyWith(requireGalleryTorrent: val.oN);
                 widget.onChanged?.call(_advanceSearch);
               },
             ),
@@ -583,7 +584,7 @@ class _AdvanceViewState extends State<_AdvanceView> {
               value: _advanceSearch.browseExpungedGalleries ?? false,
               onChanged: (val) {
                 _advanceSearch =
-                    _advanceSearch.copyWith(browseExpungedGalleries: val);
+                    _advanceSearch.copyWith(browseExpungedGalleries: val.oN);
                 widget.onChanged?.call(_advanceSearch);
               },
             ),
@@ -601,7 +602,7 @@ class _AdvanceViewState extends State<_AdvanceView> {
                     value: _advanceSearch.searchWithMinRating ?? false,
                     onChanged: (val) {
                       _advanceSearch =
-                          _advanceSearch.copyWith(searchWithMinRating: val);
+                          _advanceSearch.copyWith(searchWithMinRating: val.oN);
 
                       setState(() {});
                       widget.onChanged?.call(_advanceSearch);
@@ -615,7 +616,7 @@ class _AdvanceViewState extends State<_AdvanceView> {
                       initValue: _advanceSearch.minRating ?? 2,
                       onChanged: (int value) {
                         _advanceSearch = _advanceSearch.copyWith(
-                            minRating: value == 2 ? null : value);
+                            minRating: value == 2 ? null : value.oN);
                         widget.onChanged?.call(_advanceSearch);
                       },
                     ),
@@ -642,7 +643,7 @@ class _AdvanceViewState extends State<_AdvanceView> {
                     value: _advanceSearch.searchBetweenPage ?? false,
                     onChanged: (val) {
                       _advanceSearch =
-                          _advanceSearch.copyWith(searchBetweenPage: val);
+                          _advanceSearch.copyWith(searchBetweenPage: val.oN);
 
                       widget.onChanged?.call(_advanceSearch);
                       setState(() {});
@@ -663,12 +664,12 @@ class _AdvanceViewState extends State<_AdvanceView> {
                       endPage: _advanceSearch.endPage,
                       onStartPageChanged: (val) {
                         _advanceSearch = _advanceSearch.copyWith(
-                            startPage: val.isEmpty ? null : val);
+                            startPage: val.isEmpty ? null : val.oN);
                         widget.onChanged?.call(_advanceSearch);
                       },
                       onEndPageChanged: (val) {
                         _advanceSearch = _advanceSearch.copyWith(
-                            endPage: val.isEmpty ? null : val);
+                            endPage: val.isEmpty ? null : val.oN);
                         widget.onChanged?.call(_advanceSearch);
                       },
                     ),
@@ -688,8 +689,8 @@ class _AdvanceViewState extends State<_AdvanceView> {
               title: Text(L10n.of(context).language),
               value: _advanceSearch.disableCustomFilterLanguage ?? false,
               onChanged: (val) {
-                _advanceSearch =
-                    _advanceSearch.copyWith(disableCustomFilterLanguage: val);
+                _advanceSearch = _advanceSearch.copyWith(
+                    disableCustomFilterLanguage: val.oN);
                 widget.onChanged?.call(_advanceSearch);
               },
             ),
@@ -699,8 +700,8 @@ class _AdvanceViewState extends State<_AdvanceView> {
               title: Text(L10n.of(context).uploader),
               value: _advanceSearch.disableCustomFilterUploader ?? false,
               onChanged: (val) {
-                _advanceSearch =
-                    _advanceSearch.copyWith(disableCustomFilterUploader: val);
+                _advanceSearch = _advanceSearch.copyWith(
+                    disableCustomFilterUploader: val.oN);
                 widget.onChanged?.call(_advanceSearch);
               },
             ),
@@ -711,7 +712,7 @@ class _AdvanceViewState extends State<_AdvanceView> {
               value: _advanceSearch.disableCustomFilterTags ?? false,
               onChanged: (val) {
                 _advanceSearch =
-                    _advanceSearch.copyWith(disableCustomFilterTags: val);
+                    _advanceSearch.copyWith(disableCustomFilterTags: val.oN);
                 widget.onChanged?.call(_advanceSearch);
               },
             ),

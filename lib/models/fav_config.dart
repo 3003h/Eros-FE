@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class FavConfig {
-  
+
   const FavConfig({
     this.lastIndex,
   });
@@ -22,15 +24,15 @@ class FavConfig {
     lastIndex: lastIndex
   );
 
-    
+
   FavConfig copyWith({
-    int? lastIndex
+    Optional<int?>? lastIndex
   }) => FavConfig(
-    lastIndex: lastIndex ?? this.lastIndex,
-  );  
+    lastIndex: checkOptional(lastIndex, () => this.lastIndex),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is FavConfig && lastIndex == other.lastIndex;
 
   @override

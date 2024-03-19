@@ -138,12 +138,12 @@ class ArchiverDownloadController extends GetxController {
     }
 
     final task = _taskInfo.copyWith(
-      status: statusValue,
-      progress: progress,
-      fileName: fileName != '<null>' ? fileName : null,
-      url: url,
-      timeCreated: timeCreated,
-      resolution: _resolution,
+      status: statusValue.oN,
+      progress: progress.oN,
+      fileName: fileName != '<null>' ? fileName.oN : null,
+      url: url.oN,
+      timeCreated: timeCreated.oN,
+      resolution: _resolution.oN,
     );
 
     archiverTaskMap[_key] = task;
@@ -163,7 +163,7 @@ class ArchiverDownloadController extends GetxController {
         final _taskInfo = archiverTaskMap[_key];
         if (_taskInfo != null) {
           archiverTaskMap[_key] = _taskInfo.copyWith(
-            safUri: safUri.toString(),
+            safUri: safUri.toString().oN,
           );
         }
       }
@@ -242,14 +242,14 @@ class ArchiverDownloadController extends GetxController {
     final String? _taskId = await _downloadArchiverFile(url, _downloadPath);
 
     archiverTaskMap[_tag] = kDefDownloadTaskInfo.copyWith(
-      tag: _tag,
-      gid: gid,
-      type: dlType,
-      taskId: _taskId,
-      title: title,
-      imgUrl: imgUrl,
-      galleryUrl: galleryUrl,
-      savedDir: _downloadPath,
+      tag: _tag.oN,
+      gid: gid.oN,
+      type: dlType.oN,
+      taskId: _taskId.oN,
+      title: title.oN,
+      imgUrl: imgUrl.oN,
+      galleryUrl: galleryUrl.oN,
+      savedDir: _downloadPath.oN,
     );
 
     _downloadViewAnimateListAdd(index: 0);
@@ -408,15 +408,16 @@ class ArchiverDownloadController extends GetxController {
             regExpResolution.firstMatch(downloadTask.filename ?? '')?.group(1);
 
         archiverTaskMap[_taskInfo.tag!] = _taskInfo.copyWith(
-          status: downloadStatusToInt(downloadTask.status),
-          progress: downloadTask.progress,
-          fileName: downloadTask.filename,
-          savedDir: downloadTask.savedDir.contains('saf_temp_archiver')
-              ? null
-              : downloadTask.savedDir,
-          url: downloadTask.url,
-          timeCreated: downloadTask.timeCreated,
-          resolution: _resolution,
+          status: downloadStatusToInt(downloadTask.status).oN,
+          progress: downloadTask.progress.oN,
+          fileName: downloadTask.filename.oN,
+          savedDir: (downloadTask.savedDir.contains('saf_temp_archiver')
+                  ? null
+                  : downloadTask.savedDir)
+              .oN,
+          url: downloadTask.url.oN,
+          timeCreated: downloadTask.timeCreated.oN,
+          resolution: _resolution.oN,
         );
 
         // 更新视图

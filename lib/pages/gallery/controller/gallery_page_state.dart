@@ -75,7 +75,7 @@ class GalleryPageState {
 
   /// 是否已经存在本地收藏中
   set localFav(bool value) {
-    galleryProvider = galleryProvider?.copyWith(localFav: value);
+    galleryProvider = galleryProvider?.copyWith(localFav: value.oN);
   }
 
   bool get localFav => galleryProvider?.localFav ?? false;

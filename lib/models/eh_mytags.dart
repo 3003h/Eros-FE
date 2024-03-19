@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'eh_mytag_set.dart';
-import 'eh_usertag.dart';
+import 'package:quiver/core.dart';
+
+import 'index.dart';
 
 @immutable
 class EhMytags {
-  
+
   const EhMytags({
     required this.tagsets,
     this.canDelete,
@@ -23,8 +24,8 @@ class EhMytags {
     tagsets: (json['tagsets'] as List? ?? []).map((e) => EhMytagSet.fromJson(e as Map<String, dynamic>)).toList(),
     canDelete: json['canDelete'] != null ? json['canDelete'] as bool : null,
     usertags: json['usertags'] != null ? (json['usertags'] as List? ?? []).map((e) => EhUsertag.fromJson(e as Map<String, dynamic>)).toList() : null,
-    apikey: json['apikey'] != null ? json['apikey'] as String : null,
-    apiuid: json['apiuid'] != null ? json['apiuid'] as String : null
+    apikey: json['apikey']?.toString(),
+    apiuid: json['apiuid']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -43,23 +44,23 @@ class EhMytags {
     apiuid: apiuid
   );
 
-    
+
   EhMytags copyWith({
     List<EhMytagSet>? tagsets,
-    bool? canDelete,
-    List<EhUsertag>? usertags,
-    String? apikey,
-    String? apiuid
+    Optional<bool?>? canDelete,
+    Optional<List<EhUsertag>?>? usertags,
+    Optional<String?>? apikey,
+    Optional<String?>? apiuid
   }) => EhMytags(
     tagsets: tagsets ?? this.tagsets,
-    canDelete: canDelete ?? this.canDelete,
-    usertags: usertags ?? this.usertags,
-    apikey: apikey ?? this.apikey,
-    apiuid: apiuid ?? this.apiuid,
-  );  
+    canDelete: checkOptional(canDelete, () => this.canDelete),
+    usertags: checkOptional(usertags, () => this.usertags),
+    apikey: checkOptional(apikey, () => this.apikey),
+    apiuid: checkOptional(apiuid, () => this.apiuid),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is EhMytags && tagsets == other.tagsets && canDelete == other.canDelete && usertags == other.usertags && apikey == other.apikey && apiuid == other.apiuid;
 
   @override

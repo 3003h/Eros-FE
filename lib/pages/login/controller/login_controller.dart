@@ -77,7 +77,7 @@ class LoginController extends GetxController {
     }
 
     if (user != null && user.cookie.isNotEmpty) {
-      userController.user(user.copyWith(username: usernameController.text));
+      userController.user(user.copyWith(username: usernameController.text.oN));
       Api.selEhProfile();
 
       asyncGetUserInfo(user.memberId!);
@@ -118,12 +118,12 @@ class LoginController extends GetxController {
     // cookieJar.saveFromResponse(Uri.parse(EHConst.EH_BASE_URL), cookies);
 
     final user = userController.user.value.copyWith(
-      username: '${memberId.substring(0, 1)}****',
-      memberId: memberId,
-      passHash: _getCookiesValue(cookies, 'ipb_pass_hash'),
-      igneous: _getCookiesValue(cookies, 'igneous'),
-      hathPerks: _getCookiesValue(cookies, 'hath_perks'),
-      sk: _getCookiesValue(cookies, 'sk'),
+      username: '${memberId.substring(0, 1)}****'.oN,
+      memberId: memberId.oN,
+      passHash: _getCookiesValue(cookies, 'ipb_pass_hash').oN,
+      igneous: _getCookiesValue(cookies, 'igneous').oN,
+      hathPerks: _getCookiesValue(cookies, 'hath_perks').oN,
+      sk: _getCookiesValue(cookies, 'sk').oN,
     );
 
     logger.d('user ${user.toJson()}');
@@ -173,12 +173,12 @@ class LoginController extends GetxController {
       }
 
       final user = userController.user.value.copyWith(
-        username: '${memberId.substring(0, 1)}****',
-        memberId: memberId,
-        passHash: _getCookiesValue(cookies, 'ipb_pass_hash'),
-        igneous: _getCookiesValue(cookies, 'igneous'),
-        hathPerks: _getCookiesValue(cookies, 'hath_perks'),
-        sk: _getCookiesValue(cookies, 'sk'),
+        username: '${memberId.substring(0, 1)}****'.oN,
+        memberId: memberId.oN,
+        passHash: _getCookiesValue(cookies, 'ipb_pass_hash').oN,
+        igneous: _getCookiesValue(cookies, 'igneous').oN,
+        hathPerks: _getCookiesValue(cookies, 'hath_perks').oN,
+        sk: _getCookiesValue(cookies, 'sk').oN,
       );
 
       logger.d('user ${user.toJson()}');
@@ -210,8 +210,8 @@ class LoginController extends GetxController {
     }
 
     userController.user(userController.user.value.copyWith(
-      nickName: info?.nickName,
-      avatarUrl: info?.avatarUrl,
+      nickName: info?.nickName.oN,
+      avatarUrl: info?.avatarUrl.oN,
     ));
     userController.update();
   }

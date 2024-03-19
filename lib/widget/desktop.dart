@@ -13,56 +13,54 @@ class Desktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    return Container(
-      child: Stack(
-        children: [
-          MediaQuery(
-              data: mq.copyWith(
-                  padding: mq.padding.copyWith(top: appWindow.titleBarHeight)),
-              child: Positioned.fill(child: child)),
-          Positioned(
-              left: 0,
-              top: 0,
-              right: 0,
-              height: appWindow.titleBarHeight,
-              child: StreamBuilder<DesktopTitle>(
-                  stream: SysTitle.currentStream,
-                  builder: (context, snapshot) {
-                    final data = snapshot.data ?? SysTitle.current;
-                    final titleVisible = data?.titleVisible ?? true;
-                    final buttonVisible = data?.buttonVisible ?? true;
-                    final title = data?.title ?? '';
-                    print("SysTitle.title: $title");
+    return Stack(
+      children: [
+        MediaQuery(
+            data: mq.copyWith(
+                padding: mq.padding.copyWith(top: appWindow.titleBarHeight)),
+            child: Positioned.fill(child: child)),
+        Positioned(
+            left: 0,
+            top: 0,
+            right: 0,
+            height: appWindow.titleBarHeight,
+            child: StreamBuilder<DesktopTitle>(
+                stream: SysTitle.currentStream,
+                builder: (context, snapshot) {
+                  final data = snapshot.data ?? SysTitle.current;
+                  final titleVisible = data?.titleVisible ?? true;
+                  final buttonVisible = data?.buttonVisible ?? true;
+                  final title = data?.title ?? '';
+                  print("SysTitle.title: $title");
 
-                    final titleWidget = titleVisible
-                        ? Text(
-                            title,
-                            style: TextStyle(fontSize: 12),
-                          )
-                        : null;
-                    if (title != '') {
-                      setWindowTitle('$title · Eros-N');
-                    }
+                  final titleWidget = titleVisible
+                      ? Text(
+                          title,
+                          style: TextStyle(fontSize: 12),
+                        )
+                      : null;
+                  if (title != '') {
+                    setWindowTitle('$title · Eros-N');
+                  }
 
-                    return WindowTitleBarBox(
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: MoveWindow(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 13),
-                              child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: titleWidget),
-                            ),
-                          )),
-                          if (buttonVisible) const WindowButtons()
-                        ],
-                      ),
-                    );
-                  })),
-        ],
-      ),
+                  return WindowTitleBarBox(
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: MoveWindow(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 13),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: titleWidget),
+                          ),
+                        )),
+                        if (buttonVisible) const WindowButtons()
+                      ],
+                    ),
+                  );
+                })),
+      ],
     );
   }
 }

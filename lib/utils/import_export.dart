@@ -152,7 +152,7 @@ Future<void> importAppDataFromFile() async {
   Global.profile = profile.copyWith(
     user: user,
     downloadConfig: _newDownloadConfig.copyWith(
-      downloadLocation: oriDownloadConfig.downloadLocation,
+      downloadLocation: oriDownloadConfig.downloadLocation.oN,
     ),
   );
   Global.saveProfile();

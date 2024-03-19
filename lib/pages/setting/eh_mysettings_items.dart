@@ -45,7 +45,7 @@ Widget _buildLoadTypeItem(BuildContext context) {
       simpleActionMap: simpleActionMap,
       initVal: _controller.ehSetting.loadImageThroughHAtH ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(loadImageThroughHAtH: val),
+          _controller.ehSetting.copyWith(loadImageThroughHAtH: val.oN),
     );
   });
 }
@@ -66,7 +66,7 @@ Widget _buildImageSizeItem(BuildContext context) {
       actionMap: actionMap,
       initVal: _controller.ehSetting.imageSize ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(imageSize: val),
+          _controller.ehSetting.copyWith(imageSize: val.oN),
     );
   });
 }
@@ -83,7 +83,7 @@ Widget _buildNameDisplayItem(BuildContext context) {
       actionMap: actionMap,
       initVal: _controller.ehSetting.galleryNameDisplay ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(galleryNameDisplay: val),
+          _controller.ehSetting.copyWith(galleryNameDisplay: val.oN),
     );
   });
 }
@@ -112,7 +112,7 @@ Widget _buildArchiverSettingsItem(BuildContext context) {
       actionMap: actionMap,
       initVal: _controller.ehSetting.archiverSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(archiverSettings: val),
+          _controller.ehSetting.copyWith(archiverSettings: val.oN),
     );
   });
 }
@@ -133,7 +133,7 @@ Widget _buildFrontPageSettingsItem(BuildContext context) {
       actionMap: actionMap,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(frontPageSettings: val),
+          _controller.ehSetting.copyWith(frontPageSettings: val.oN),
     );
   });
 }
@@ -153,7 +153,7 @@ Widget _buildFavoritesSortItem(
       actionMap: actionMap,
       initVal: _controller.ehSetting.frontPageSettings ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(frontPageSettings: val),
+          _controller.ehSetting.copyWith(frontPageSettings: val.oN),
     );
   });
 }
@@ -173,7 +173,7 @@ Widget _buildSearchResultCountItem(BuildContext context) {
       actionMap: actionMap,
       initVal: _controller.ehSetting.searchResultCount ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(searchResultCount: val),
+          _controller.ehSetting.copyWith(searchResultCount: val.oN),
     );
   });
 }
@@ -199,7 +199,7 @@ Widget _buildThumbMouseOverItem(
       simpleActionMap: sActionMap,
       initVal: _controller.ehSetting.mouseOverThumbnails ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(mouseOverThumbnails: val),
+          _controller.ehSetting.copyWith(mouseOverThumbnails: val.oN),
     );
   });
 }
@@ -219,7 +219,7 @@ Widget _buildThumbSizeItem(
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailSize ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(thumbnailSize: val),
+          _controller.ehSetting.copyWith(thumbnailSize: val.oN),
     );
   });
 }
@@ -241,7 +241,7 @@ Widget _buildThumbRowItem(
       actionMap: actionMap,
       initVal: _controller.ehSetting.thumbnailRows ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(thumbnailRows: val),
+          _controller.ehSetting.copyWith(thumbnailRows: val.oN),
     );
   });
 }
@@ -262,7 +262,7 @@ Widget _buildSortOrderComment(
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderComments ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(sortOrderComments: val),
+          _controller.ehSetting.copyWith(sortOrderComments: val.oN),
     );
   });
 }
@@ -282,7 +282,7 @@ Widget _buildShowCommentVotes(
       actionMap: actionMap,
       initVal: _controller.ehSetting.showCommentVotes ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(showCommentVotes: val),
+          _controller.ehSetting.copyWith(showCommentVotes: val.oN),
     );
   });
 }
@@ -302,7 +302,7 @@ Widget _buildSortOrderTags(
       actionMap: actionMap,
       initVal: _controller.ehSetting.sortOrderTags ?? '',
       onValueChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(sortOrderTags: val),
+          _controller.ehSetting.copyWith(sortOrderTags: val.oN),
     );
   });
 }
@@ -321,7 +321,7 @@ Widget _buildShowPageNumbers(
       return CupertinoSwitch(
         value: _controller.ehSetting.showGalleryPageNumbers == '0',
         onChanged: (val) => _controller.ehSetting = _controller.ehSetting
-            .copyWith(showGalleryPageNumbers: val ? '0' : '1'),
+            .copyWith(showGalleryPageNumbers: val ? '0'.oN : '1'.oN),
       );
     }),
   );
@@ -340,8 +340,8 @@ Widget _buildOriginalImages(
     trailing: Obx(() {
       return CupertinoSwitch(
         value: _controller.ehSetting.originalImages == '1',
-        onChanged: (val) => _controller.ehSetting =
-            _controller.ehSetting.copyWith(originalImages: val ? '1' : '0'),
+        onChanged: (val) => _controller.ehSetting = _controller.ehSetting
+            .copyWith(originalImages: val ? '1'.oN : '0'.oN),
       );
     }),
   );
@@ -361,7 +361,7 @@ Widget _buildMPVAlwaysUse(
       return CupertinoSwitch(
         value: _controller.ehSetting.alwaysUseMpv == '1',
         onChanged: (val) => _controller.ehSetting =
-            _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1' : '0'),
+            _controller.ehSetting.copyWith(alwaysUseMpv: val ? '1'.oN : '0'.oN),
       );
     }),
   );
@@ -389,8 +389,8 @@ Widget _buildMPVDisplayStyle(
       actionTitle: 'Multi-Page Viewer Display Style',
       actionMap: actionMap,
       initVal: _controller.ehSetting.mpvStyle ?? '',
-      onValueChanged: (val) =>
-          _controller.ehSetting = _controller.ehSetting.copyWith(mpvStyle: val),
+      onValueChanged: (val) => _controller.ehSetting =
+          _controller.ehSetting.copyWith(mpvStyle: val.oN),
     );
   });
 }
@@ -408,8 +408,8 @@ Widget _buildMPVThumbPane(
     trailing: Obx(() {
       return CupertinoSwitch(
         value: _controller.ehSetting.mpvThumbnailPane == '0',
-        onChanged: (val) => _controller.ehSetting =
-            _controller.ehSetting.copyWith(mpvThumbnailPane: val ? '0' : '1'),
+        onChanged: (val) => _controller.ehSetting = _controller.ehSetting
+            .copyWith(mpvThumbnailPane: val ? '0'.oN : '1'.oN),
       );
     }),
   );
@@ -423,8 +423,8 @@ Widget _buildRatingsItem(
       title: L10n.of(context).uc_rating,
       placeholder: 'RRGGB',
       initValue: _controller.ehSetting.ratings ?? '',
-      onChanged: (val) =>
-          _controller.ehSetting = _controller.ehSetting.copyWith(ratings: val),
+      onChanged: (val) => _controller.ehSetting =
+          _controller.ehSetting.copyWith(ratings: val.oN),
     );
   });
 }
@@ -435,7 +435,7 @@ Widget _buildTagFilteringThreshold(BuildContext context) {
       title: L10n.of(context).uc_tag_ft,
       initValue: _controller.ehSetting.tagFilteringThreshold ?? '',
       onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(tagFilteringThreshold: val),
+          _controller.ehSetting.copyWith(tagFilteringThreshold: val.oN),
     );
   });
 }
@@ -446,7 +446,7 @@ Widget _buildTagWatchingThreshold(BuildContext context) {
       title: L10n.of(context).uc_tag_wt,
       initValue: _controller.ehSetting.tagWatchingThreshold ?? '',
       onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(tagWatchingThreshold: val),
+          _controller.ehSetting.copyWith(tagWatchingThreshold: val.oN),
     );
   });
 }
@@ -462,7 +462,7 @@ Widget _buildExcludedUploaders(BuildContext context) {
           '/${_controller.ehSetting.xuQuotaMax}',
       initValue: _controller.ehSetting.excludedUploaders ?? '',
       onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(excludedUploaders: val),
+          _controller.ehSetting.copyWith(excludedUploaders: val.oN),
     );
   });
 }
@@ -476,7 +476,7 @@ Widget _buildThumbnailScaling(BuildContext context) {
       trailing: const Text('%'),
       initValue: _controller.ehSetting.thumbnailScaling ?? '',
       onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(thumbnailScaling: val),
+          _controller.ehSetting.copyWith(thumbnailScaling: val.oN),
     );
   });
 }
@@ -489,7 +489,7 @@ Widget _buildViewportOverride(BuildContext context) {
       trailing: const Text('px'),
       initValue: _controller.ehSetting.viewportOverride ?? '',
       onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(viewportOverride: val),
+          _controller.ehSetting.copyWith(viewportOverride: val.oN),
     );
   });
 }
@@ -500,7 +500,7 @@ Widget _buildSizeHorizontal(BuildContext context) {
       title: L10n.of(context).uc_img_horiz,
       initValue: _controller.ehSetting.imageSizeHorizontal ?? '',
       onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(imageSizeHorizontal: val),
+          _controller.ehSetting.copyWith(imageSizeHorizontal: val.oN),
     );
   });
 }
@@ -511,7 +511,7 @@ Widget _buildSizeVertical(BuildContext context) {
       title: L10n.of(context).uc_img_vert,
       initValue: _controller.ehSetting.imageSizeVertical ?? '',
       onChanged: (val) => _controller.ehSetting =
-          _controller.ehSetting.copyWith(imageSizeVertical: val),
+          _controller.ehSetting.copyWith(imageSizeVertical: val.oN),
     );
   });
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class CommitVoteRes {
-  
+
   const CommitVoteRes({
     this.commentId,
     this.commentScore,
@@ -32,19 +34,19 @@ class CommitVoteRes {
     commentVote: commentVote
   );
 
-    
+
   CommitVoteRes copyWith({
-    int? commentId,
-    int? commentScore,
-    int? commentVote
+    Optional<int?>? commentId,
+    Optional<int?>? commentScore,
+    Optional<int?>? commentVote
   }) => CommitVoteRes(
-    commentId: commentId ?? this.commentId,
-    commentScore: commentScore ?? this.commentScore,
-    commentVote: commentVote ?? this.commentVote,
-  );  
+    commentId: checkOptional(commentId, () => this.commentId),
+    commentScore: checkOptional(commentScore, () => this.commentScore),
+    commentVote: checkOptional(commentVote, () => this.commentVote),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is CommitVoteRes && commentId == other.commentId && commentScore == other.commentScore && commentVote == other.commentVote;
 
   @override

@@ -14,7 +14,7 @@ class MysqlController extends GetxController {
       Global.profile.mysqlConfig ?? const MySQLConfig(isValidAccount: false);
   set mysqlConfig(MySQLConfig val) {
     Global.profile = Global.profile.copyWith(
-      mysqlConfig: val,
+      mysqlConfig: val.oN,
     );
     Global.saveProfile();
   }
@@ -51,7 +51,7 @@ class MysqlController extends GetxController {
     _connectionInfo = val;
     if (val != null) {
       mysqlConfig = mysqlConfig.copyWith(
-        mysqlConnectionInfo: val,
+        mysqlConnectionInfo: val.oN,
       );
     }
   }
@@ -73,35 +73,35 @@ class MysqlController extends GetxController {
     ever(
         _isValidAccount,
         (val) => mysqlConfig = mysqlConfig.copyWith(
-              isValidAccount: val,
+              isValidAccount: val.oN,
             ));
 
     syncReadProgress = mysqlConfig.syncReadProgress ?? false;
     ever(
         _syncReadProgress,
         (val) => mysqlConfig = mysqlConfig.copyWith(
-              syncReadProgress: val,
+              syncReadProgress: val.oN,
             ));
 
     syncHistory = mysqlConfig.syncHistory ?? false;
     ever(
         _syncHistory,
         (val) => mysqlConfig = mysqlConfig.copyWith(
-              syncHistory: val,
+              syncHistory: val.oN,
             ));
 
     syncGroupProfile = mysqlConfig.syncGroupProfile ?? false;
     ever(
         _syncGroupProfile,
         (val) => mysqlConfig = mysqlConfig.copyWith(
-              syncGroupProfile: val,
+              syncGroupProfile: val.oN,
             ));
 
     syncQuickSearch = mysqlConfig.syncQuickSearch ?? false;
     ever(
         _syncQuickSearch,
         (val) => mysqlConfig = mysqlConfig.copyWith(
-              syncQuickSearch: val,
+              syncQuickSearch: val.oN,
             ));
   }
 
@@ -119,8 +119,8 @@ class MysqlController extends GetxController {
       logger.d('loginMySQL $result');
       if (result == true) {
         mysqlConfig = mysqlConfig.copyWith(
-          isValidAccount: true,
-          mysqlConnectionInfo: connectionInfo,
+          isValidAccount: true.o,
+          mysqlConnectionInfo: connectionInfo.oN,
         );
         isValidAccount = true;
         return true;
@@ -185,9 +185,9 @@ class MysqlController extends GetxController {
   Future<void> uploadHistory(GalleryProvider his) async {
     await connect();
     final _his = his.copyWith(
-      galleryComment: [],
-      galleryImages: [],
-      tagGroup: [],
+      galleryComment: <GalleryComment>[].oN,
+      galleryImages: <GalleryImage>[].oN,
+      tagGroup: <TagGroup>[].oN,
     );
     final _gid = _his.gid;
 

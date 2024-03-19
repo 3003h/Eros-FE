@@ -6,8 +6,8 @@ class AnimatedClipRRect extends StatelessWidget {
     this.curve = Curves.linear,
     required this.borderRadius,
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Duration duration;
   final Curve curve;

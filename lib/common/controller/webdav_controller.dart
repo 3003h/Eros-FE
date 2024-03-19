@@ -44,7 +44,7 @@ class WebdavController extends GetxController {
   WebdavProfile get webdavProfile =>
       Global.profile.webdav ?? const WebdavProfile(url: '');
   set webdavProfile(WebdavProfile val) =>
-      Global.profile = Global.profile.copyWith(webdav: val);
+      Global.profile = Global.profile.copyWith(webdav: val.oN);
 
   final _validAccount = false.obs;
   bool get validAccount => _validAccount.value;
@@ -138,25 +138,25 @@ class WebdavController extends GetxController {
 
     syncHistory = webdavProfile.syncHistory ?? false;
     ever(_syncHistory, (bool val) {
-      webdavProfile = webdavProfile.copyWith(syncHistory: val);
+      webdavProfile = webdavProfile.copyWith(syncHistory: val.oN);
       Global.saveProfile();
     });
 
     syncReadProgress = webdavProfile.syncReadProgress ?? false;
     ever(_syncReadProgress, (bool val) {
-      webdavProfile = webdavProfile.copyWith(syncReadProgress: val);
+      webdavProfile = webdavProfile.copyWith(syncReadProgress: val.oN);
       Global.saveProfile();
     });
 
     syncGroupProfile = webdavProfile.syncGroupProfile ?? false;
     ever(_syncGroupProfile, (bool val) {
-      webdavProfile = webdavProfile.copyWith(syncGroupProfile: val);
+      webdavProfile = webdavProfile.copyWith(syncGroupProfile: val.oN);
       Global.saveProfile();
     });
 
     syncQuickSearch = webdavProfile.syncQuickSearch ?? false;
     ever(_syncQuickSearch, (bool val) {
-      webdavProfile = webdavProfile.copyWith(syncQuickSearch: val);
+      webdavProfile = webdavProfile.copyWith(syncQuickSearch: val.oN);
       Global.saveProfile();
     });
 
@@ -282,9 +282,9 @@ class WebdavController extends GetxController {
     final _path = path.join(Global.tempPath, his.gid);
     final File _file = File(_path);
     final _his = his.copyWith(
-      galleryComment: [],
-      galleryImages: [],
-      tagGroup: [],
+      galleryComment: <GalleryComment>[].o,
+      galleryImages: <GalleryImage>[].o,
+      tagGroup: <TagGroup>[].o,
     );
 
     try {
@@ -360,7 +360,7 @@ class WebdavController extends GetxController {
     final _path = path.join(Global.tempPath, 'read', read.gid);
     final File _file = File(_path);
     final _read = read.copyWith(
-      columnModeVal: '',
+      columnModeVal: ''.o,
     );
     final _text = jsonEncode(_read);
     // final base64Text = base64Encode(utf8.encode(_text));
@@ -369,7 +369,7 @@ class WebdavController extends GetxController {
 
     try {
       await client.writeFromFile(_path, '$kReadDirPath/${read.gid}.json');
-    } on DioError catch (err) {
+    } on DioException catch (err) {
       logger.d('${err.response?.statusCode}');
       if (err.response?.statusCode == 404) {
         logger.d('file 404');
@@ -647,7 +647,7 @@ class WebdavController extends GetxController {
       // 保存账号 rebuild
       WebdavProfile webdavUser =
           WebdavProfile(url: url, user: user, password: pwd);
-      Global.profile = Global.profile.copyWith(webdav: webdavUser);
+      Global.profile = Global.profile.copyWith(webdav: webdavUser.oN);
       Global.saveProfile();
       initClient();
     }

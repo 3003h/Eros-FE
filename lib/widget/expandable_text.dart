@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class ExpandableText extends StatefulWidget {
   const ExpandableText({
-    Key? key,
+    super.key,
     required this.text,
     this.maxLines,
     this.style,
     this.expand = false,
-  }) : super(key: key);
+  });
 
   final String text;
 

@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class DownloadArchiverTaskInfo {
-  
+
   const DownloadArchiverTaskInfo({
     this.tag,
     this.gid,
@@ -41,22 +43,22 @@ class DownloadArchiverTaskInfo {
   final String? safUri;
 
   factory DownloadArchiverTaskInfo.fromJson(Map<String,dynamic> json) => DownloadArchiverTaskInfo(
-    tag: json['tag'] != null ? json['tag'] as String : null,
-    gid: json['gid'] != null ? json['gid'] as String : null,
-    type: json['type'] != null ? json['type'] as String : null,
-    title: json['title'] != null ? json['title'] as String : null,
-    taskId: json['taskId'] != null ? json['taskId'] as String : null,
-    savedDir: json['savedDir'] != null ? json['savedDir'] as String : null,
-    fileName: json['fileName'] != null ? json['fileName'] as String : null,
-    url: json['url'] != null ? json['url'] as String : null,
-    imgUrl: json['imgUrl'] != null ? json['imgUrl'] as String : null,
-    galleryUrl: json['galleryUrl'] != null ? json['galleryUrl'] as String : null,
-    dowmloadType: json['dowmloadType'] != null ? json['dowmloadType'] as String : null,
+    tag: json['tag']?.toString(),
+    gid: json['gid']?.toString(),
+    type: json['type']?.toString(),
+    title: json['title']?.toString(),
+    taskId: json['taskId']?.toString(),
+    savedDir: json['savedDir']?.toString(),
+    fileName: json['fileName']?.toString(),
+    url: json['url']?.toString(),
+    imgUrl: json['imgUrl']?.toString(),
+    galleryUrl: json['galleryUrl']?.toString(),
+    dowmloadType: json['dowmloadType']?.toString(),
     status: json['status'] != null ? json['status'] as int : null,
     progress: json['progress'] != null ? json['progress'] as int : null,
     timeCreated: json['timeCreated'] != null ? json['timeCreated'] as int : null,
-    resolution: json['resolution'] != null ? json['resolution'] as String : null,
-    safUri: json['safUri'] != null ? json['safUri'] as String : null
+    resolution: json['resolution']?.toString(),
+    safUri: json['safUri']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -97,45 +99,45 @@ class DownloadArchiverTaskInfo {
     safUri: safUri
   );
 
-    
+
   DownloadArchiverTaskInfo copyWith({
-    String? tag,
-    String? gid,
-    String? type,
-    String? title,
-    String? taskId,
-    String? savedDir,
-    String? fileName,
-    String? url,
-    String? imgUrl,
-    String? galleryUrl,
-    String? dowmloadType,
-    int? status,
-    int? progress,
-    int? timeCreated,
-    String? resolution,
-    String? safUri
+    Optional<String?>? tag,
+    Optional<String?>? gid,
+    Optional<String?>? type,
+    Optional<String?>? title,
+    Optional<String?>? taskId,
+    Optional<String?>? savedDir,
+    Optional<String?>? fileName,
+    Optional<String?>? url,
+    Optional<String?>? imgUrl,
+    Optional<String?>? galleryUrl,
+    Optional<String?>? dowmloadType,
+    Optional<int?>? status,
+    Optional<int?>? progress,
+    Optional<int?>? timeCreated,
+    Optional<String?>? resolution,
+    Optional<String?>? safUri
   }) => DownloadArchiverTaskInfo(
-    tag: tag ?? this.tag,
-    gid: gid ?? this.gid,
-    type: type ?? this.type,
-    title: title ?? this.title,
-    taskId: taskId ?? this.taskId,
-    savedDir: savedDir ?? this.savedDir,
-    fileName: fileName ?? this.fileName,
-    url: url ?? this.url,
-    imgUrl: imgUrl ?? this.imgUrl,
-    galleryUrl: galleryUrl ?? this.galleryUrl,
-    dowmloadType: dowmloadType ?? this.dowmloadType,
-    status: status ?? this.status,
-    progress: progress ?? this.progress,
-    timeCreated: timeCreated ?? this.timeCreated,
-    resolution: resolution ?? this.resolution,
-    safUri: safUri ?? this.safUri,
-  );  
+    tag: checkOptional(tag, () => this.tag),
+    gid: checkOptional(gid, () => this.gid),
+    type: checkOptional(type, () => this.type),
+    title: checkOptional(title, () => this.title),
+    taskId: checkOptional(taskId, () => this.taskId),
+    savedDir: checkOptional(savedDir, () => this.savedDir),
+    fileName: checkOptional(fileName, () => this.fileName),
+    url: checkOptional(url, () => this.url),
+    imgUrl: checkOptional(imgUrl, () => this.imgUrl),
+    galleryUrl: checkOptional(galleryUrl, () => this.galleryUrl),
+    dowmloadType: checkOptional(dowmloadType, () => this.dowmloadType),
+    status: checkOptional(status, () => this.status),
+    progress: checkOptional(progress, () => this.progress),
+    timeCreated: checkOptional(timeCreated, () => this.timeCreated),
+    resolution: checkOptional(resolution, () => this.resolution),
+    safUri: checkOptional(safUri, () => this.safUri),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is DownloadArchiverTaskInfo && tag == other.tag && gid == other.gid && type == other.type && title == other.title && taskId == other.taskId && savedDir == other.savedDir && fileName == other.fileName && url == other.url && imgUrl == other.imgUrl && galleryUrl == other.galleryUrl && dowmloadType == other.dowmloadType && status == other.status && progress == other.progress && timeCreated == other.timeCreated && resolution == other.resolution && safUri == other.safUri;
 
   @override

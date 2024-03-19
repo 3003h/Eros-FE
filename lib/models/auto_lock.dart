@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class AutoLock {
-  
+
   const AutoLock({
     this.lastLeaveTime,
     this.isLocking,
@@ -27,17 +29,17 @@ class AutoLock {
     isLocking: isLocking
   );
 
-    
+
   AutoLock copyWith({
-    int? lastLeaveTime,
-    bool? isLocking
+    Optional<int?>? lastLeaveTime,
+    Optional<bool?>? isLocking
   }) => AutoLock(
-    lastLeaveTime: lastLeaveTime ?? this.lastLeaveTime,
-    isLocking: isLocking ?? this.isLocking,
-  );  
+    lastLeaveTime: checkOptional(lastLeaveTime, () => this.lastLeaveTime),
+    isLocking: checkOptional(isLocking, () => this.isLocking),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is AutoLock && lastLeaveTime == other.lastLeaveTime && isLocking == other.isLocking;
 
   @override

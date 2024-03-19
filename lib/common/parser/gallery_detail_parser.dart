@@ -139,7 +139,7 @@ List<GalleryComment> parseGalleryComment(Document document) {
       );
 
       _galleryComment.add(galleryComment.copyWith(
-        textList: galleryComment.getTextList(),
+        textList: galleryComment.getTextList().oN,
       ));
     } catch (e, stack) {
       logger.e('解析评论异常\n' + e.toString() + '\n' + stack.toString());

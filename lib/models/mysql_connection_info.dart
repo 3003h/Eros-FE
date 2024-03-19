@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class MysqlConnectionInfo {
-  
+
   const MysqlConnectionInfo({
     required this.host,
     required this.port,
@@ -23,13 +25,13 @@ class MysqlConnectionInfo {
   final String? collation;
 
   factory MysqlConnectionInfo.fromJson(Map<String,dynamic> json) => MysqlConnectionInfo(
-    host: json['host'] as String,
+    host: json['host'].toString(),
     port: json['port'] as int,
-    userName: json['userName'] as String,
-    password: json['password'] as String,
-    databaseName: json['databaseName'] as String,
+    userName: json['userName'].toString(),
+    password: json['password'].toString(),
+    databaseName: json['databaseName'].toString(),
     secure: json['secure'] != null ? json['secure'] as bool : null,
-    collation: json['collation'] != null ? json['collation'] as String : null
+    collation: json['collation']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -52,27 +54,27 @@ class MysqlConnectionInfo {
     collation: collation
   );
 
-    
+
   MysqlConnectionInfo copyWith({
     String? host,
     int? port,
     String? userName,
     String? password,
     String? databaseName,
-    bool? secure,
-    String? collation
+    Optional<bool?>? secure,
+    Optional<String?>? collation
   }) => MysqlConnectionInfo(
     host: host ?? this.host,
     port: port ?? this.port,
     userName: userName ?? this.userName,
     password: password ?? this.password,
     databaseName: databaseName ?? this.databaseName,
-    secure: secure ?? this.secure,
-    collation: collation ?? this.collation,
-  );  
+    secure: checkOptional(secure, () => this.secure),
+    collation: checkOptional(collation, () => this.collation),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is MysqlConnectionInfo && host == other.host && port == other.port && userName == other.userName && password == other.password && databaseName == other.databaseName && secure == other.secure && collation == other.collation;
 
   @override

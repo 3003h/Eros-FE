@@ -43,7 +43,7 @@ class LayoutServices extends GetxService {
     debounce<double>(
       _sideProportion,
       (double val) {
-        _ehLayout = _ehLayout.copyWith(sideProportion: val);
+        _ehLayout = _ehLayout.copyWith(sideProportion: val.oN);
         hiveHelper.setEhLayout(_ehLayout);
       },
       time: const Duration(milliseconds: 3000),

@@ -1,5 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -20,12 +21,12 @@ class ProfileService extends GetxService {
   LayoutConfig get layoutConfig =>
       Global.profile.layoutConfig ?? const LayoutConfig();
   set layoutConfig(LayoutConfig val) =>
-      Global.profile = Global.profile.copyWith(layoutConfig: val);
+      Global.profile = Global.profile.copyWith(layoutConfig: val.oN);
 
   BlockConfig get blockConfig =>
       Global.profile.blockConfig ?? const BlockConfig();
   set blockConfig(BlockConfig val) =>
-      Global.profile = Global.profile.copyWith(blockConfig: val);
+      Global.profile = Global.profile.copyWith(blockConfig: val.oN);
 
   Worker everProfile<T>(RxInterface<T> listener, ValueChanged<T> onChange) {
     return ever<T>(listener, (value) {

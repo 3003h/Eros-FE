@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 class MouseRegionClick extends StatelessWidget {
-  const MouseRegionClick({Key? key, required this.child, this.disable = false})
-      : super(key: key);
+  const MouseRegionClick(
+      {super.key, required this.child, this.disable = false});
   final Widget child;
   final bool disable;
 

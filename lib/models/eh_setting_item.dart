@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class EhSettingItem {
-  
+
   const EhSettingItem({
     this.type,
     this.ser,
@@ -17,10 +19,10 @@ class EhSettingItem {
   final String? name;
 
   factory EhSettingItem.fromJson(Map<String,dynamic> json) => EhSettingItem(
-    type: json['type'] != null ? json['type'] as String : null,
-    ser: json['ser'] != null ? json['ser'] as String : null,
-    value: json['value'] != null ? json['value'] as String : null,
-    name: json['name'] != null ? json['name'] as String : null
+    type: json['type']?.toString(),
+    ser: json['ser']?.toString(),
+    value: json['value']?.toString(),
+    name: json['name']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -37,21 +39,21 @@ class EhSettingItem {
     name: name
   );
 
-    
+
   EhSettingItem copyWith({
-    String? type,
-    String? ser,
-    String? value,
-    String? name
+    Optional<String?>? type,
+    Optional<String?>? ser,
+    Optional<String?>? value,
+    Optional<String?>? name
   }) => EhSettingItem(
-    type: type ?? this.type,
-    ser: ser ?? this.ser,
-    value: value ?? this.value,
-    name: name ?? this.name,
-  );  
+    type: checkOptional(type, () => this.type),
+    ser: checkOptional(ser, () => this.ser),
+    value: checkOptional(value, () => this.value),
+    name: checkOptional(name, () => this.name),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is EhSettingItem && type == other.type && ser == other.ser && value == other.value && name == other.name;
 
   @override

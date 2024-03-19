@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class DnsCache {
-  
+
   const DnsCache({
     this.host,
     this.lastResolve,
@@ -19,11 +21,11 @@ class DnsCache {
   final String? addr;
 
   factory DnsCache.fromJson(Map<String,dynamic> json) => DnsCache(
-    host: json['host'] != null ? json['host'] as String : null,
+    host: json['host']?.toString(),
     lastResolve: json['lastResolve'] != null ? json['lastResolve'] as int : null,
     ttl: json['ttl'] != null ? json['ttl'] as int : null,
     addrs: json['addrs'] != null ? (json['addrs'] as List? ?? []).map((e) => e as dynamic).toList() : null,
-    addr: json['addr'] != null ? json['addr'] as String : null
+    addr: json['addr']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -42,23 +44,23 @@ class DnsCache {
     addr: addr
   );
 
-    
+
   DnsCache copyWith({
-    String? host,
-    int? lastResolve,
-    int? ttl,
-    List<dynamic>? addrs,
-    String? addr
+    Optional<String?>? host,
+    Optional<int?>? lastResolve,
+    Optional<int?>? ttl,
+    Optional<List<dynamic>?>? addrs,
+    Optional<String?>? addr
   }) => DnsCache(
-    host: host ?? this.host,
-    lastResolve: lastResolve ?? this.lastResolve,
-    ttl: ttl ?? this.ttl,
-    addrs: addrs ?? this.addrs,
-    addr: addr ?? this.addr,
-  );  
+    host: checkOptional(host, () => this.host),
+    lastResolve: checkOptional(lastResolve, () => this.lastResolve),
+    ttl: checkOptional(ttl, () => this.ttl),
+    addrs: checkOptional(addrs, () => this.addrs),
+    addr: checkOptional(addr, () => this.addr),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is DnsCache && host == other.host && lastResolve == other.lastResolve && ttl == other.ttl && addrs == other.addrs && addr == other.addr;
 
   @override

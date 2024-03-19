@@ -104,10 +104,10 @@ class BlockController extends GetxController {
 
   void saveBlockRule() {
     ehSettingService.blockConfig = ehSettingService.blockConfig.copyWith(
-      ruleForTitle: ruleForTitle,
-      ruleForUploader: ruleForUploader,
-      ruleForCommentator: ruleForCommentator,
-      ruleForComment: ruleForComment,
+      ruleForTitle: ruleForTitle.oN,
+      ruleForUploader: ruleForUploader.oN,
+      ruleForCommentator: ruleForCommentator.oN,
+      ruleForComment: ruleForComment.oN,
     );
     Global.saveProfile();
   }

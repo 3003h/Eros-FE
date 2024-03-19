@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class ImageHide {
-  
+
   const ImageHide({
     required this.pHash,
     this.imageUrl,
@@ -15,8 +17,8 @@ class ImageHide {
   final int? threshold;
 
   factory ImageHide.fromJson(Map<String,dynamic> json) => ImageHide(
-    pHash: json['pHash'] as String,
-    imageUrl: json['imageUrl'] != null ? json['imageUrl'] as String : null,
+    pHash: json['pHash'].toString(),
+    imageUrl: json['imageUrl']?.toString(),
     threshold: json['threshold'] != null ? json['threshold'] as int : null
   );
   
@@ -32,19 +34,19 @@ class ImageHide {
     threshold: threshold
   );
 
-    
+
   ImageHide copyWith({
     String? pHash,
-    String? imageUrl,
-    int? threshold
+    Optional<String?>? imageUrl,
+    Optional<int?>? threshold
   }) => ImageHide(
     pHash: pHash ?? this.pHash,
-    imageUrl: imageUrl ?? this.imageUrl,
-    threshold: threshold ?? this.threshold,
-  );  
+    imageUrl: checkOptional(imageUrl, () => this.imageUrl),
+    threshold: checkOptional(threshold, () => this.threshold),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is ImageHide && pHash == other.pHash && imageUrl == other.imageUrl && threshold == other.threshold;
 
   @override

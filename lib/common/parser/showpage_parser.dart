@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:eros_fe/component/exception/error.dart';
 import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -53,15 +54,15 @@ GalleryImage paraShowPage(String jsonString) {
       RegExp(r"nl\('(.*?)'\)").firstMatch('${jsonMap['i6']}')?.group(1) ?? '';
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
-    imageUrl: imageUrl,
-    sourceId: _sourceId,
-    imageWidth: width,
-    imageHeight: height,
-    gid: gid,
-    token: token,
+    imageUrl: imageUrl.oN,
+    sourceId: _sourceId.oN,
+    imageWidth: width.oN,
+    imageHeight: height.oN,
+    gid: gid.oN,
+    token: token.oN,
     ser: ser,
-    originImageUrl: originImageUrl,
-    filename: filename,
+    originImageUrl: originImageUrl.oN,
+    filename: filename.oN,
   );
 
   return _reImage;

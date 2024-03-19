@@ -22,7 +22,7 @@ User parseUserProfile(String html) {
   }
 
   return kDefUser.copyWith(
-    avatarUrl: _avatarUrl,
-    nickName: nickName,
+    avatarUrl: _avatarUrl.oN,
+    nickName: nickName.oN,
   );
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class BlockRule {
-  
+
   const BlockRule({
     this.blockType,
     this.enabled,
@@ -17,10 +19,10 @@ class BlockRule {
   final String? ruleText;
 
   factory BlockRule.fromJson(Map<String,dynamic> json) => BlockRule(
-    blockType: json['block_type'] != null ? json['block_type'] as String : null,
+    blockType: json['block_type']?.toString(),
     enabled: json['enabled'] != null ? json['enabled'] as bool : null,
     enableRegex: json['enable_regex'] != null ? json['enable_regex'] as bool : null,
-    ruleText: json['rule_text'] != null ? json['rule_text'] as String : null
+    ruleText: json['rule_text']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -37,21 +39,21 @@ class BlockRule {
     ruleText: ruleText
   );
 
-    
+
   BlockRule copyWith({
-    String? blockType,
-    bool? enabled,
-    bool? enableRegex,
-    String? ruleText
+    Optional<String?>? blockType,
+    Optional<bool?>? enabled,
+    Optional<bool?>? enableRegex,
+    Optional<String?>? ruleText
   }) => BlockRule(
-    blockType: blockType ?? this.blockType,
-    enabled: enabled ?? this.enabled,
-    enableRegex: enableRegex ?? this.enableRegex,
-    ruleText: ruleText ?? this.ruleText,
-  );  
+    blockType: checkOptional(blockType, () => this.blockType),
+    enabled: checkOptional(enabled, () => this.enabled),
+    enableRegex: checkOptional(enableRegex, () => this.enableRegex),
+    ruleText: checkOptional(ruleText, () => this.ruleText),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is BlockRule && blockType == other.blockType && enabled == other.enabled && enableRegex == other.enableRegex && ruleText == other.ruleText;
 
   @override

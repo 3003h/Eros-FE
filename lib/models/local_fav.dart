@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'gallery_provider.dart';
+import 'package:quiver/core.dart';
+
+import 'index.dart';
 
 @immutable
 class LocalFav {
-  
+
   const LocalFav({
     this.gallerys,
   });
@@ -22,15 +24,15 @@ class LocalFav {
     gallerys: gallerys?.map((e) => e.clone()).toList()
   );
 
-    
+
   LocalFav copyWith({
-    List<GalleryProvider>? gallerys
+    Optional<List<GalleryProvider>?>? gallerys
   }) => LocalFav(
-    gallerys: gallerys ?? this.gallerys,
-  );  
+    gallerys: checkOptional(gallerys, () => this.gallerys),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is LocalFav && gallerys == other.gallerys;
 
   @override

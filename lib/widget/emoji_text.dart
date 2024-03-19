@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 
 class EmojiText extends StatelessWidget {
   const EmojiText({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle? style;

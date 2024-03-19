@@ -1,4 +1,5 @@
 import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:html/dom.dart';
@@ -66,16 +67,16 @@ GalleryImage paraImage(String htmlText) {
   logger.t('showKey $showKey');
 
   final GalleryImage _reImage = kDefGalleryImage.copyWith(
-    imageUrl: imageUrl,
-    sourceId: _sourceId,
-    imageWidth: width,
-    imageHeight: height,
-    gid: gid,
-    token: token,
+    imageUrl: imageUrl.oN,
+    sourceId: _sourceId.oN,
+    imageWidth: width.oN,
+    imageHeight: height.oN,
+    gid: gid.oN,
+    token: token.oN,
     ser: ser,
-    originImageUrl: originImageUrl,
-    filename: filename,
-    showKey: showKey,
+    originImageUrl: originImageUrl.oN,
+    filename: filename.oN,
+    showKey: showKey.oN,
   );
 
   return _reImage;

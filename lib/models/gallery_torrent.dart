@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class GalleryTorrent {
-  
+
   const GalleryTorrent({
     this.hash,
     this.added,
@@ -31,17 +33,17 @@ class GalleryTorrent {
   final String? uploader;
 
   factory GalleryTorrent.fromJson(Map<String,dynamic> json) => GalleryTorrent(
-    hash: json['hash'] != null ? json['hash'] as String : null,
-    added: json['added'] != null ? json['added'] as String : null,
-    name: json['name'] != null ? json['name'] as String : null,
-    tsize: json['tsize'] != null ? json['tsize'] as String : null,
-    fsize: json['fsize'] != null ? json['fsize'] as String : null,
-    posted: json['posted'] != null ? json['posted'] as String : null,
-    sizeText: json['sizeText'] != null ? json['sizeText'] as String : null,
-    seeds: json['seeds'] != null ? json['seeds'] as String : null,
-    peerd: json['peerd'] != null ? json['peerd'] as String : null,
-    downloads: json['downloads'] != null ? json['downloads'] as String : null,
-    uploader: json['uploader'] != null ? json['uploader'] as String : null
+    hash: json['hash']?.toString(),
+    added: json['added']?.toString(),
+    name: json['name']?.toString(),
+    tsize: json['tsize']?.toString(),
+    fsize: json['fsize']?.toString(),
+    posted: json['posted']?.toString(),
+    sizeText: json['sizeText']?.toString(),
+    seeds: json['seeds']?.toString(),
+    peerd: json['peerd']?.toString(),
+    downloads: json['downloads']?.toString(),
+    uploader: json['uploader']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -72,35 +74,35 @@ class GalleryTorrent {
     uploader: uploader
   );
 
-    
+
   GalleryTorrent copyWith({
-    String? hash,
-    String? added,
-    String? name,
-    String? tsize,
-    String? fsize,
-    String? posted,
-    String? sizeText,
-    String? seeds,
-    String? peerd,
-    String? downloads,
-    String? uploader
+    Optional<String?>? hash,
+    Optional<String?>? added,
+    Optional<String?>? name,
+    Optional<String?>? tsize,
+    Optional<String?>? fsize,
+    Optional<String?>? posted,
+    Optional<String?>? sizeText,
+    Optional<String?>? seeds,
+    Optional<String?>? peerd,
+    Optional<String?>? downloads,
+    Optional<String?>? uploader
   }) => GalleryTorrent(
-    hash: hash ?? this.hash,
-    added: added ?? this.added,
-    name: name ?? this.name,
-    tsize: tsize ?? this.tsize,
-    fsize: fsize ?? this.fsize,
-    posted: posted ?? this.posted,
-    sizeText: sizeText ?? this.sizeText,
-    seeds: seeds ?? this.seeds,
-    peerd: peerd ?? this.peerd,
-    downloads: downloads ?? this.downloads,
-    uploader: uploader ?? this.uploader,
-  );  
+    hash: checkOptional(hash, () => this.hash),
+    added: checkOptional(added, () => this.added),
+    name: checkOptional(name, () => this.name),
+    tsize: checkOptional(tsize, () => this.tsize),
+    fsize: checkOptional(fsize, () => this.fsize),
+    posted: checkOptional(posted, () => this.posted),
+    sizeText: checkOptional(sizeText, () => this.sizeText),
+    seeds: checkOptional(seeds, () => this.seeds),
+    peerd: checkOptional(peerd, () => this.peerd),
+    downloads: checkOptional(downloads, () => this.downloads),
+    uploader: checkOptional(uploader, () => this.uploader),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is GalleryTorrent && hash == other.hash && added == other.added && name == other.name && tsize == other.tsize && fsize == other.fsize && posted == other.posted && sizeText == other.sizeText && seeds == other.seeds && peerd == other.peerd && downloads == other.downloads && uploader == other.uploader;
 
   @override

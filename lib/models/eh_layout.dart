@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class EhLayout {
-  
+
   const EhLayout({
     this.sideProportion,
   });
@@ -11,7 +13,7 @@ class EhLayout {
   final double? sideProportion;
 
   factory EhLayout.fromJson(Map<String,dynamic> json) => EhLayout(
-    sideProportion: json['sideProportion'] != null ? json['sideProportion'] as double : null
+    sideProportion: json['sideProportion'] != null ? (json['sideProportion'] as num).toDouble() : null
   );
   
   Map<String, dynamic> toJson() => {
@@ -22,15 +24,15 @@ class EhLayout {
     sideProportion: sideProportion
   );
 
-    
+
   EhLayout copyWith({
-    double? sideProportion
+    Optional<double?>? sideProportion
   }) => EhLayout(
-    sideProportion: sideProportion ?? this.sideProportion,
-  );  
+    sideProportion: checkOptional(sideProportion, () => this.sideProportion),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is EhLayout && sideProportion == other.sideProportion;
 
   @override

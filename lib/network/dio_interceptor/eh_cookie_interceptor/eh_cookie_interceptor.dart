@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:eros_fe/common/controller/user_controller.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:get/get.dart' hide Response;
 
@@ -57,13 +58,13 @@ class EhCookieInterceptor extends Interceptor {
       final _newSk = getCookiesValue(_cookies, 'sk') ?? '';
 
       userController.user(userController.user.value.copyWith(
-        memberId: getCookiesValue(_cookies, 'ipb_member_id'),
-        passHash: getCookiesValue(_cookies, 'ipb_pass_hash'),
-        igneous: igneous != 'mystery' && igneous != '' ? igneous : null,
-        hathPerks: getCookiesValue(_cookies, 'hath_perks'),
-        sk: _newSk.isNotEmpty ? _newSk : null,
-        star: getCookiesValue(_cookies, 'star'),
-        yay: getCookiesValue(_cookies, 'yay'),
+        memberId: getCookiesValue(_cookies, 'ipb_member_id')?.oN,
+        passHash: getCookiesValue(_cookies, 'ipb_pass_hash').oN,
+        igneous: igneous != 'mystery' && igneous != '' ? igneous.oN : null,
+        hathPerks: getCookiesValue(_cookies, 'hath_perks').oN,
+        sk: _newSk.isNotEmpty ? _newSk.oN : null,
+        star: getCookiesValue(_cookies, 'star').oN,
+        yay: getCookiesValue(_cookies, 'yay').oN,
       ));
 
       // logger.t('new sk $_newSk');

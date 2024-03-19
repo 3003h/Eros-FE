@@ -75,16 +75,16 @@ class GalleryItemController extends GetxController {
   /// 设置收藏夹
   void setFavTitleAndFavcat({String favTitle = '', String? favcat}) {
     logger.t('设置收藏夹, 原 isFav :[$isFav]');
-    galleryProvider.copyWith(favTitle: favTitle);
+    galleryProvider.copyWith(favTitle: favTitle.oN);
     isFav = favTitle.isNotEmpty;
     logger.t('设置收藏夹, 当前 isFav :[$isFav]');
     if (favcat != null || (favcat?.isNotEmpty ?? false)) {
       favCat = favcat!;
-      galleryProvider.copyWith(favcat: favcat);
+      galleryProvider.copyWith(favcat: favcat.oN);
       logger.t('item set favcat [$favcat]');
     } else {
       favCat = '';
-      galleryProvider.copyWith(favcat: '', favTitle: '');
+      galleryProvider.copyWith(favcat: ''.oN, favTitle: ''.oN);
     }
   }
 
@@ -128,7 +128,7 @@ class GalleryItemController extends GetxController {
   }
 
   set localFav(bool value) {
-    galleryProvider.copyWith(localFav: localFav);
+    galleryProvider.copyWith(localFav: localFav.oN);
     update();
   }
 
@@ -136,7 +136,7 @@ class GalleryItemController extends GetxController {
 
   void firstPutImage(List<GalleryImage> galleryImage) {
     if (galleryImage.isNotEmpty) {
-      galleryProvider.copyWith(galleryImages: galleryImage);
+      galleryProvider.copyWith(galleryImages: galleryImage.oN);
     }
 
     firstPageImage =

@@ -25,14 +25,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.13.0"
-  apn_json2model:
-    dependency: "direct dev"
-    description:
-      name: apn_json2model
-      sha256: "3b851f0f2ee2ec0889ade94b7a63117863bae90acd0b784695269c3da6689ef0"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.3.0"
   archive:
     dependency: "direct main"
     description:
@@ -1363,6 +1355,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.7.1"
+  json_to_model:
+    dependency: "direct dev"
+    description:
+      name: json_to_model
+      sha256: a1e2628df8e9d2b32c4d473a5e923648bed7f267be021a0d3148f4d056d1a5b6
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.2.4"
   keframe:
     dependency: "direct main"
     description:
@@ -1891,7 +1891,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
+      ref: master
       resolved-ref: "2ae8cc996ca039aa607d4a3c088df6b784b352ea"
       url: "https://github.com/honjow/saf.git"
     source: git

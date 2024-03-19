@@ -58,7 +58,7 @@ class GalleryCacheController extends GetxController {
         logger.t('both not null');
         if ((remote.time ?? 0) > (_localCache.time ?? 0)) {
           gCacheMap[gid] = _localCache.copyWith(
-              lastIndex: remote.lastIndex, time: remote.time);
+              lastIndex: remote.lastIndex.oN, time: remote.time.oN);
           yield gCacheMap[gid];
         }
       }
@@ -117,7 +117,8 @@ class GalleryCacheController extends GetxController {
         _uploadRead(_newCache);
       }
     } else {
-      final _newCache = _ori.copyWith(lastIndex: index, time: _time, gid: gid);
+      final _newCache =
+          _ori.copyWith(lastIndex: index.oN, time: _time.oN, gid: gid.oN);
       gCacheMap[gid] = _newCache;
       if (saveToStore) {
         hiveHelper.saveCache(_newCache);

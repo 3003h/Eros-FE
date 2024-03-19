@@ -1,4 +1,5 @@
 import 'package:eros_fe/common/controller/advance_search_controller.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -42,12 +43,12 @@ class GalleryFilterController extends GetxController {
     statrPageCtrl.addListener(() {
       _advanceSearchController.advanceSearch(_advanceSearchController
           .advanceSearch.value
-          .copyWith(startPage: statrPageCtrl.text.trim()));
+          .copyWith(startPage: statrPageCtrl.text.trim().oN));
     });
     endPageCtrl.addListener(() {
       _advanceSearchController.advanceSearch(_advanceSearchController
           .advanceSearch.value
-          .copyWith(endPage: endPageCtrl.text.trim()));
+          .copyWith(endPage: endPageCtrl.text.trim().oN));
     });
   }
 }

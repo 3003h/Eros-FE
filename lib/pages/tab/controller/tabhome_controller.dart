@@ -185,7 +185,7 @@ class TabHomeController extends GetxController {
     ever(tabMap, (Map<String, bool> map) {
       updateItemList(map, tabNameList);
 
-      Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
+      Global.profile = Global.profile.copyWith(tabConfig: _tabConfig.oN);
       Global.saveProfile();
 
       logger.d(
@@ -195,7 +195,7 @@ class TabHomeController extends GetxController {
     ever(tabNameList, (List<String> nameList) {
       updateItemList(tabMap, nameList);
 
-      Global.profile = Global.profile.copyWith(tabConfig: _tabConfig);
+      Global.profile = Global.profile.copyWith(tabConfig: _tabConfig.oN);
       Global.saveProfile();
 
       logger.d(

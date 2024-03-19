@@ -486,7 +486,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               controller.vState.galleryPageController?.uptImageBySer(
                 ser: widget.imageSer,
                 imageCallback: (image) => image.copyWith(
-                  filePath: _image?.filePath,
+                  filePath: _image?.filePath.oN,
                 ),
               );
               return fileImage(_image!.filePath!);
@@ -497,7 +497,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               controller.vState.galleryPageController?.uptImageBySer(
                 ser: widget.imageSer,
                 imageCallback: (image) => image.copyWith(
-                  tempPath: _image?.tempPath,
+                  tempPath: _image?.tempPath.oN,
                 ),
               );
               return fileImage(_image!.tempPath!);
@@ -506,7 +506,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             // 常规情况 加载网络图片
 
             // 图片加载完成
-            final _onLoadCompleted = (ExtendedImageState state) {
+            _onLoadCompleted(ExtendedImageState state) {
               final ImageInfo? imageInfo = state.extendedImageInfo;
               controller.setScale100(imageInfo!, context.mediaQuerySize);
 
@@ -520,7 +520,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   vState.galleryPageController?.uptImageBySer(
                     ser: _image.ser,
                     imageCallback: (image) =>
-                        image.copyWith(completeHeight: true),
+                        image.copyWith(completeHeight: true.oN),
                   );
 
                   logger.t('upt _tmpImage ${_tmpImage.ser}');
@@ -531,7 +531,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               }
 
               controller.onLoadCompleted(widget.imageSer);
-            };
+            }
 
             if (kReleaseMode) {
               logger.d('ImageExt');

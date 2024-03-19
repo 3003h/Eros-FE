@@ -62,7 +62,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
                     return CupertinoSwitch(
                       value: _blockRule.enabled ?? true,
                       onChanged: (val) {
-                        _blockRule = _blockRule.copyWith(enabled: val);
+                        _blockRule = _blockRule.copyWith(enabled: val.oN);
                         setState(() {});
                       },
                     );
@@ -76,7 +76,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
                     return CupertinoSwitch(
                       value: _blockRule.enableRegex ?? false,
                       onChanged: (val) {
-                        _blockRule = _blockRule.copyWith(enableRegex: val);
+                        _blockRule = _blockRule.copyWith(enableRegex: val.oN);
                         controller.currentEnableRegex = val;
                         setState(() {});
                       },
@@ -88,7 +88,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
                       .byName(_blockRule.blockType ?? BlockType.title.name),
                   onChanged: (BlockType value) {
                     controller.latestBlockType = value;
-                    _blockRule = _blockRule.copyWith(blockType: value.name);
+                    _blockRule = _blockRule.copyWith(blockType: value.name.oN);
                   },
                 ),
               ]),
@@ -116,7 +116,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
                     onChanged: (value) {
                       logger.t('value $value');
                       _blockRule = _blockRule.copyWith(
-                          ruleText: value.replaceAll('\n', ' '));
+                          ruleText: value.replaceAll('\n', ' ').oN);
                     },
                   ),
                 ],

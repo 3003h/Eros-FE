@@ -20,8 +20,8 @@ class EhLinkifyText extends StatelessWidget {
     this.semanticsLabel,
     this.textWidthBasis,
     this.selectable,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String text;
 

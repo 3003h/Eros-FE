@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SystemUIOverlay extends StatelessWidget {
-  const SystemUIOverlay({Key? key, this.child}) : super(key: key);
+  const SystemUIOverlay({super.key, this.child});
   final Widget? child;
 
   @override

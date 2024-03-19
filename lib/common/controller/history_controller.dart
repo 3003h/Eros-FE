@@ -41,9 +41,9 @@ class HistoryController extends GetxController {
 
     final int nowTime = DateTime.now().millisecondsSinceEpoch;
     final _item = galleryProvider.copyWith(
-      lastViewTime: updateTime ? nowTime : null,
-      galleryImages: [],
-      galleryComment: [],
+      lastViewTime: updateTime ? nowTime.oN : null,
+      galleryImages: <GalleryImage>[].oN,
+      galleryComment: <GalleryComment>[].oN,
     );
 
     final _eDelFlg =

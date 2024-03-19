@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'favcat.dart';
+import 'package:quiver/core.dart';
+
+import 'index.dart';
 
 @immutable
 class FavAdd {
-  
+
   const FavAdd({
     required this.favcats,
     this.selectFavcat,
@@ -20,10 +22,10 @@ class FavAdd {
 
   factory FavAdd.fromJson(Map<String,dynamic> json) => FavAdd(
     favcats: (json['favcats'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList(),
-    selectFavcat: json['selectFavcat'] != null ? json['selectFavcat'] as String : null,
-    favNote: json['favNote'] != null ? json['favNote'] as String : null,
-    maxNoteSlots: json['maxNoteSlots'] as String,
-    usedNoteSlots: json['usedNoteSlots'] as String
+    selectFavcat: json['selectFavcat']?.toString(),
+    favNote: json['favNote']?.toString(),
+    maxNoteSlots: json['maxNoteSlots'].toString(),
+    usedNoteSlots: json['usedNoteSlots'].toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -42,23 +44,23 @@ class FavAdd {
     usedNoteSlots: usedNoteSlots
   );
 
-    
+
   FavAdd copyWith({
     List<Favcat>? favcats,
-    String? selectFavcat,
-    String? favNote,
+    Optional<String?>? selectFavcat,
+    Optional<String?>? favNote,
     String? maxNoteSlots,
     String? usedNoteSlots
   }) => FavAdd(
     favcats: favcats ?? this.favcats,
-    selectFavcat: selectFavcat ?? this.selectFavcat,
-    favNote: favNote ?? this.favNote,
+    selectFavcat: checkOptional(selectFavcat, () => this.selectFavcat),
+    favNote: checkOptional(favNote, () => this.favNote),
     maxNoteSlots: maxNoteSlots ?? this.maxNoteSlots,
     usedNoteSlots: usedNoteSlots ?? this.usedNoteSlots,
-  );  
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is FavAdd && favcats == other.favcats && selectFavcat == other.selectFavcat && favNote == other.favNote && maxNoteSlots == other.maxNoteSlots && usedNoteSlots == other.usedNoteSlots;
 
   @override

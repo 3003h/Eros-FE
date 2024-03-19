@@ -898,13 +898,13 @@ class DownloadController extends GetxController {
     }
 
     final GalleryImage _imageCopyWith = image.copyWith(
-      sourceId: _image.sourceId,
-      imageUrl: _image.imageUrl,
-      imageWidth: _image.imageWidth,
-      imageHeight: _image.imageHeight,
-      originImageUrl: _image.originImageUrl,
-      filename: _image.filename,
-      showKey: _image.showKey,
+      sourceId: _image.sourceId.oN,
+      imageUrl: _image.imageUrl.oN,
+      imageWidth: _image.imageWidth.oN,
+      imageHeight: _image.imageHeight.oN,
+      originImageUrl: _image.originImageUrl.oN,
+      filename: _image.filename.oN,
+      showKey: _image.showKey.oN,
     );
 
     return _imageCopyWith;

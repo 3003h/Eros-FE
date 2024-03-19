@@ -10,6 +10,7 @@ const double kSize = 50.0;
 /// 静态控件
 class StaticRatingBar extends StatelessWidget {
   const StaticRatingBar({
+    super.key,
     this.rate = kMaxRate,
     this.colorLight = const Color(0xffeeeeee),
     this.colorDark = const Color(0xffFF962E),
@@ -77,6 +78,7 @@ class StaticRatingBar extends StatelessWidget {
 
 class _RatingBarClipper extends CustomClipper<Rect> {
   _RatingBarClipper({required this.width});
+
   final double width;
 
   @override

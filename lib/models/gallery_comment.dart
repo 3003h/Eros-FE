@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class GalleryComment {
-  
+
   const GalleryComment({
     required this.name,
     required this.time,
@@ -37,12 +39,12 @@ class GalleryComment {
   final List<String>? translatedTextList;
 
   factory GalleryComment.fromJson(Map<String,dynamic> json) => GalleryComment(
-    name: json['name'] as String,
-    time: json['time'] as String,
-    score: json['score'] as String,
+    name: json['name'].toString(),
+    time: json['time'].toString(),
+    score: json['score'].toString(),
     vote: json['vote'] != null ? json['vote'] as int : null,
-    id: json['id'] != null ? json['id'] as String : null,
-    memberId: json['memberId'] != null ? json['memberId'] as String : null,
+    id: json['id']?.toString(),
+    memberId: json['memberId']?.toString(),
     canEdit: json['canEdit'] != null ? json['canEdit'] as bool : null,
     canVote: json['canVote'] != null ? json['canVote'] as bool : null,
     showTranslate: json['showTranslate'] != null ? json['showTranslate'] as bool : null,
@@ -83,41 +85,41 @@ class GalleryComment {
     translatedTextList: translatedTextList?.toList()
   );
 
-    
+
   GalleryComment copyWith({
     String? name,
     String? time,
     String? score,
-    int? vote,
-    String? id,
-    String? memberId,
-    bool? canEdit,
-    bool? canVote,
-    bool? showTranslate,
-    List<String>? scoreDetails,
-    dynamic? element,
-    dynamic? translatedElement,
-    List<String>? textList,
-    List<String>? translatedTextList
+    Optional<int?>? vote,
+    Optional<String?>? id,
+    Optional<String?>? memberId,
+    Optional<bool?>? canEdit,
+    Optional<bool?>? canVote,
+    Optional<bool?>? showTranslate,
+    Optional<List<String>?>? scoreDetails,
+    Optional<dynamic?>? element,
+    Optional<dynamic?>? translatedElement,
+    Optional<List<String>?>? textList,
+    Optional<List<String>?>? translatedTextList
   }) => GalleryComment(
     name: name ?? this.name,
     time: time ?? this.time,
     score: score ?? this.score,
-    vote: vote ?? this.vote,
-    id: id ?? this.id,
-    memberId: memberId ?? this.memberId,
-    canEdit: canEdit ?? this.canEdit,
-    canVote: canVote ?? this.canVote,
-    showTranslate: showTranslate ?? this.showTranslate,
-    scoreDetails: scoreDetails ?? this.scoreDetails,
-    element: element ?? this.element,
-    translatedElement: translatedElement ?? this.translatedElement,
-    textList: textList ?? this.textList,
-    translatedTextList: translatedTextList ?? this.translatedTextList,
-  );  
+    vote: checkOptional(vote, () => this.vote),
+    id: checkOptional(id, () => this.id),
+    memberId: checkOptional(memberId, () => this.memberId),
+    canEdit: checkOptional(canEdit, () => this.canEdit),
+    canVote: checkOptional(canVote, () => this.canVote),
+    showTranslate: checkOptional(showTranslate, () => this.showTranslate),
+    scoreDetails: checkOptional(scoreDetails, () => this.scoreDetails),
+    element: checkOptional(element, () => this.element),
+    translatedElement: checkOptional(translatedElement, () => this.translatedElement),
+    textList: checkOptional(textList, () => this.textList),
+    translatedTextList: checkOptional(translatedTextList, () => this.translatedTextList),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is GalleryComment && name == other.name && time == other.time && score == other.score && vote == other.vote && id == other.id && memberId == other.memberId && canEdit == other.canEdit && canVote == other.canVote && showTranslate == other.showTranslate && scoreDetails == other.scoreDetails && element == other.element && translatedElement == other.translatedElement && textList == other.textList && translatedTextList == other.translatedTextList;
 
   @override

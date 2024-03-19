@@ -86,7 +86,7 @@ class WebDavSettingView extends GetView<WebdavController> {
                                 onPressed: () async {
                                   // 登出WebDAV
                                   Global.profile = Global.profile.copyWith(
-                                      webdav: const WebdavProfile(url: ''));
+                                      webdav: const WebdavProfile(url: '').oN);
                                   Global.saveProfile();
                                   controller.initClient();
                                   controller.closeClient();

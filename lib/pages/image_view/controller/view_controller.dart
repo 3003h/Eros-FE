@@ -682,9 +682,9 @@ class ViewExtController extends GetxController {
     _galleryPageController?.uptImageBySer(
       ser: itemSer,
       imageCallback: (image) => image.copyWith(
-        imageUrl: '',
-        changeSource: changeSource,
-        completeCache: false,
+        imageUrl: ''.oN,
+        changeSource: changeSource.oN,
+        completeCache: false.oN,
       ),
     );
 
@@ -1470,7 +1470,7 @@ class ViewExtController extends GetxController {
           _galleryPageController?.uptImageBySer(
               ser: ser,
               imageCallback: (image) {
-                return image.copyWith(downloadProcess: process);
+                return image.copyWith(downloadProcess: process.oN);
               });
           update(['${idProcess}_$ser']);
         },
@@ -1478,9 +1478,9 @@ class ViewExtController extends GetxController {
           _galleryPageController?.uptImageBySer(
               ser: ser,
               imageCallback: (image) => image.copyWith(
-                    tempPath: savePath,
-                    completeCache: true,
-                    changeSource: false,
+                    tempPath: savePath.oN,
+                    completeCache: true.oN,
+                    changeSource: false.oN,
                   ));
         },
       );

@@ -174,18 +174,18 @@ class Api {
       }
 
       galleryProviders[i] = galleryProviders[i].copyWith(
-        englishTitle: _englishTitle,
-        japaneseTitle: _japaneseTitle,
-        rating: _rating,
-        imgUrlL: _imgUrlL,
-        filecount: _filecount,
-        uploader: _uploader,
-        category: _category,
-        tagsFromApi: _tagsFromApi,
-        filesize: _filesize,
-        torrentcount: _torrentcount,
-        torrents: _torrents,
-        translated: _translated,
+        englishTitle: _englishTitle.oN,
+        japaneseTitle: _japaneseTitle.oN,
+        rating: _rating.oN,
+        imgUrlL: _imgUrlL.oN,
+        filecount: _filecount.oN,
+        uploader: _uploader.oN,
+        category: _category.oN,
+        tagsFromApi: _tagsFromApi.oN,
+        filesize: _filesize.oN,
+        torrentcount: _torrentcount.oN,
+        torrents: _torrents.oN,
+        translated: _translated.oN,
       );
     }
 
@@ -396,7 +396,7 @@ class Api {
     final String token = urlRult?.group(4) ?? '';
 
     final GalleryProvider tempProvider =
-        galleryProvider.copyWith(gid: gid, token: token);
+        galleryProvider.copyWith(gid: gid.oN, token: token.oN);
 
     final List<GalleryProvider> reqGalleryItems = <GalleryProvider>[
       tempProvider

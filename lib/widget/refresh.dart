@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 const double kDefaultRefreshTriggerPullDistance = 100.0;
 
 class EhCupertinoSliverRefreshControl extends StatelessWidget {
-  const EhCupertinoSliverRefreshControl({Key? key, this.onRefresh})
-      : super(key: key);
+  const EhCupertinoSliverRefreshControl({super.key, this.onRefresh});
 
   final RefreshCallback? onRefresh;
 

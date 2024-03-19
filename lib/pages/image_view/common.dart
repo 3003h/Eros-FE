@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/network/request.dart';
 import 'package:eros_fe/utils/logger.dart';
@@ -108,12 +109,12 @@ class GalleryPara {
         _url = _imageFetch?.imageUrl ?? '';
 
         _image = _image.copyWith(
-          imageUrl: _url,
-          imageWidth: _imageFetch?.imageWidth,
-          imageHeight: _imageFetch?.imageHeight,
-          originImageUrl: _imageFetch?.originImageUrl,
-          filename: _imageFetch?.filename,
-          showKey: _imageFetch?.showKey,
+          imageUrl: _url.oN,
+          imageWidth: _imageFetch?.imageWidth.oN,
+          imageHeight: _imageFetch?.imageHeight.oN,
+          originImageUrl: _imageFetch?.originImageUrl.oN,
+          filename: _imageFetch?.filename.oN,
+          showKey: _imageFetch?.showKey.oN,
         );
 
         _processingSerSet.remove(_ser);
@@ -133,7 +134,7 @@ class GalleryPara {
       if (_future != null) {
         final GalleryImage? value = await _future;
         // logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
-        yield value?.copyWith(completeCache: true);
+        yield value?.copyWith(completeCache: true.oN);
         _map.remove(_url);
         continue;
       }
@@ -154,7 +155,7 @@ class GalleryPara {
     /// 预缓存图片
     try {
       await precacheImage(imageProvider, Get.context!);
-      return image.copyWith(completeCache: true);
+      return image.copyWith(completeCache: true.oN);
     } catch (e, stack) {
       logger.e('$e /n $stack');
       return null;

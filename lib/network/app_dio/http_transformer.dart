@@ -316,7 +316,7 @@ class MyTagsHttpTransformer extends HttpTransformer {
     // 查询翻译
     final userTags = await mytags.qryFullTagTranslate;
     return DioHttpResponse<EhMytags>.success(
-        mytags.copyWith(usertags: userTags));
+        mytags.copyWith(usertags: userTags.oN));
   }
 }
 
@@ -372,11 +372,11 @@ class UserLoginTransformer extends HttpTransformer {
     }
 
     final User user = kDefUser.copyWith(
-      memberId: cookieMap['ipb_member_id'],
-      passHash: cookieMap['ipb_pass_hash'],
-      igneous: cookieMap['igneous'],
-      hathPerks: cookieMap['hath_perks'],
-      sk: cookieMap['sk'],
+      memberId: cookieMap['ipb_member_id'].oN,
+      passHash: cookieMap['ipb_pass_hash'].oN,
+      igneous: cookieMap['igneous'].oN,
+      hathPerks: cookieMap['hath_perks'].oN,
+      sk: cookieMap['sk'].oN,
     );
     return DioHttpResponse<User>.success(user);
   }

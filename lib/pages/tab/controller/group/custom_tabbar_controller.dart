@@ -25,7 +25,7 @@ class CustomTabbarController extends DefaultTabViewController {
 
   CustomTabConfig? get customTabConfig => Global.profile.customTabConfig;
   set customTabConfig(CustomTabConfig? val) =>
-      Global.profile = Global.profile.copyWith(customTabConfig: val);
+      Global.profile = Global.profile.copyWith(customTabConfig: val.oN);
 
   final RxList<CustomProfile> profiles = <CustomProfile>[].obs;
   Map<String, CustomProfile> get profileMap {
@@ -95,14 +95,14 @@ class CustomTabbarController extends DefaultTabViewController {
         ];
 
     ever<List<CustomProfile>>(profiles, (value) {
-      customTabConfig = customTabConfig?.copyWith(profiles: value) ??
+      customTabConfig = customTabConfig?.copyWith(profiles: value.oN) ??
           CustomTabConfig(profiles: value);
       Global.saveProfile();
     });
 
     index = customTabConfig?.lastIndex ?? 0;
     ever<int>(_index, (value) {
-      customTabConfig = customTabConfig?.copyWith(lastIndex: value) ??
+      customTabConfig = customTabConfig?.copyWith(lastIndex: value.oN) ??
           CustomTabConfig(lastIndex: value);
       Global.saveProfile();
     });
@@ -237,7 +237,8 @@ class CustomTabbarController extends DefaultTabViewController {
     final nowTime = DateTime.now().millisecondsSinceEpoch;
     final _index = delProfiles.indexOf((e) => e.name == profile.name);
     if (_index > -1) {
-      delProfiles[_index] = delProfiles[_index].copyWith(lastEditTime: nowTime);
+      delProfiles[_index] =
+          delProfiles[_index].copyWith(lastEditTime: nowTime.oN);
     } else {
       delProfiles.add(profile);
     }

@@ -1,4 +1,5 @@
 import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/generated/l10n.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/route/routes.dart';
@@ -34,7 +35,7 @@ class AutoLockController extends GetxController {
   int get lastLeaveTime => _lastLeaveTime;
   set lastLeaveTime(int val) {
     _lastLeaveTime = val;
-    autoLock = autoLock.copyWith(lastLeaveTime: val);
+    autoLock = autoLock.copyWith(lastLeaveTime: val.oN);
     Global.saveProfile();
   }
 
@@ -46,7 +47,7 @@ class AutoLockController extends GetxController {
   bool get isLocking => _isLocking;
   set isLocking(bool val) {
     _isLocking = val;
-    autoLock = autoLock.copyWith(isLocking: val);
+    autoLock = autoLock.copyWith(isLocking: val.oN);
     Global.saveProfile();
   }
 

@@ -1,5 +1,6 @@
 import 'package:archive_async/archive_async.dart';
 import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/models/gallery_image.dart';
 import 'package:eros_fe/pages/image_view/view/view_widget.dart';
 import 'package:eros_fe/utils/logger.dart';
@@ -319,8 +320,8 @@ class _DoublePageViewState extends State<DoublePageView> {
             ser: serFirst + 1,
             imageCallback: (GalleryImage image) {
               return image.copyWith(
-                imageWidth: size.width,
-                imageHeight: size.height,
+                imageWidth: size.width.oN,
+                imageHeight: size.height.oN,
               );
             });
       },
@@ -351,8 +352,8 @@ class _DoublePageViewState extends State<DoublePageView> {
             ser: serFirst,
             imageCallback: (GalleryImage image) {
               return image.copyWith(
-                imageWidth: size.width,
-                imageHeight: size.height,
+                imageWidth: size.width.oN,
+                imageHeight: size.height.oN,
               );
             });
       },

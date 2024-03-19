@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:eros_fe/common/exts.dart';
 import 'package:eros_fe/common/service/dns_service.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:get/get.dart';
 

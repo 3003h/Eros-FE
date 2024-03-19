@@ -3,22 +3,20 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:eros_fe/common/controller/tag_controller.dart';
+import 'package:eros_fe/common/service/dns_service.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
-import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/index.dart';
 import 'package:eros_fe/pages/image_view/common.dart';
 import 'package:eros_fe/pages/tab/fetch_list.dart';
 import 'package:eros_fe/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:quiver/core.dart';
 
 import 'common/controller/tag_trans_controller.dart';
 import 'common/controller/webdav_controller.dart';
-import 'common/enum.dart';
-import 'common/global.dart';
-import 'models/index.dart';
 import 'network/api.dart';
 
 extension ExtGC on GalleryCache {
@@ -27,7 +25,7 @@ extension ExtGC on GalleryCache {
       ViewColumnMode.single;
 
   GalleryCache copyWithMode(ViewColumnMode val) =>
-      copyWith(columnModeVal: EnumToString.convertToString(val));
+      copyWith(columnModeVal: EnumToString.convertToString(val).oN);
 }
 
 extension ExtTabList on TabConfig {
@@ -85,59 +83,58 @@ extension ExtComment on GalleryComment {
   String get text => (textList ?? getTextList()).join('');
 
   String get translatedText => (translatedTextList ?? getTextList()).join('');
-
-  DateTime get dateTime => DateFormat('yyyy-MM-dd HH:mm').parse(time);
 }
 
 extension ExtGalleryProvider on GalleryProvider {
   GalleryProvider copyWithAll(GalleryProvider item) {
     return copyWith(
-        token: item.token,
-        showKey: item.showKey,
-        url: item.url,
-        imgUrl: item.imgUrl,
-        imgUrlL: item.imgUrlL,
-        imgHeight: item.imgHeight,
-        imgWidth: item.imgWidth,
-        japaneseTitle: item.japaneseTitle,
-        englishTitle: item.englishTitle,
-        category: item.category,
-        uploader: item.uploader,
-        posted: item.posted,
-        language: item.language,
-        filecount: item.filecount,
-        rating: item.rating,
-        ratingCount: item.ratingCount,
-        torrentcount: item.torrentcount,
-        torrents: item.torrents,
-        filesize: item.filesize,
-        filesizeText: item.filesizeText,
-        visible: item.visible,
-        parent: item.parent,
-        ratingFallBack: item.ratingFallBack,
-        numberOfReviews: item.numberOfReviews,
-        postTime: item.postTime,
-        favoritedCount: item.favoritedCount,
-        favTitle: item.favTitle,
-        favcat: item.favcat,
-        localFav: item.localFav,
-        simpleTags: item.simpleTags,
-        tagsFromApi: item.tagsFromApi?.toList(),
-        translated: item.translated,
-        tagGroup: item.tagGroup,
-        galleryComment: item.galleryComment,
-        galleryImages: item.galleryImages,
-        apikey: item.apikey,
-        apiuid: item.apiuid,
-        isRatinged: item.isRatinged,
-        colorRating: item.colorRating,
-        archiverLink: item.archiverLink,
-        torrentLink: item.torrentLink,
-        lastViewTime: item.lastViewTime,
-        pageOfList: item.pageOfList,
-        favNote: item.favNote,
-        expunged: expunged,
-        chapter: item.chapter);
+      token: item.token.oN,
+      showKey: item.showKey.oN,
+      url: item.url.oN,
+      imgUrl: item.imgUrl.oN,
+      imgUrlL: item.imgUrlL.oN,
+      imgHeight: item.imgHeight.oN,
+      imgWidth: item.imgWidth.oN,
+      japaneseTitle: item.japaneseTitle.oN,
+      englishTitle: item.englishTitle.oN,
+      category: item.category.oN,
+      uploader: item.uploader.oN,
+      posted: item.posted.oN,
+      language: item.language.oN,
+      filecount: item.filecount.oN,
+      rating: item.rating.oN,
+      ratingCount: item.ratingCount.oN,
+      torrentcount: item.torrentcount.oN,
+      torrents: item.torrents.oN,
+      filesize: item.filesize.oN,
+      filesizeText: item.filesizeText.oN,
+      visible: item.visible.oN,
+      parent: item.parent.oN,
+      ratingFallBack: item.ratingFallBack.oN,
+      numberOfReviews: item.numberOfReviews.oN,
+      postTime: item.postTime.oN,
+      favoritedCount: item.favoritedCount.oN,
+      favTitle: item.favTitle.oN,
+      favcat: item.favcat.oN,
+      localFav: item.localFav.oN,
+      simpleTags: item.simpleTags.oN,
+      tagsFromApi: item.tagsFromApi?.toList().oN,
+      translated: item.translated.oN,
+      tagGroup: item.tagGroup.oN,
+      galleryComment: item.galleryComment.oN,
+      galleryImages: item.galleryImages.oN,
+      apikey: item.apikey.oN,
+      apiuid: item.apiuid.oN,
+      isRatinged: item.isRatinged.oN,
+      colorRating: item.colorRating.oN,
+      archiverLink: item.archiverLink.oN,
+      torrentLink: item.torrentLink.oN,
+      lastViewTime: item.lastViewTime.oN,
+      pageOfList: item.pageOfList.oN,
+      favNote: item.favNote.oN,
+      expunged: expunged.oN,
+      chapter: item.chapter.oN,
+    );
   }
 }
 
@@ -344,7 +341,7 @@ extension ExtEhSettings on EhSettings {
 
     final _index = xn.indexWhere((element) => element.name == namespace);
     if (_index > -1) {
-      xn[_index] = xn[_index].copyWith(value: value);
+      xn[_index] = xn[_index].copyWith(value: value.oN);
     }
   }
 
@@ -382,7 +379,7 @@ extension ExtEhSettings on EhSettings {
 
     final _index = xn.indexWhere((element) => element.ser == ser);
     if (_index > -1) {
-      xn[_index] = xn[_index].copyWith(value: value);
+      xn[_index] = xn[_index].copyWith(value: value.oN);
     } else {
       xn.add(EhSettingItem(ser: ser, value: value, type: 'xn'));
     }
@@ -394,7 +391,7 @@ extension ExtEhSettings on EhSettings {
     }
     final _index = xl.indexWhere((element) => element.ser == ser);
     if (_index > -1) {
-      xl[_index] = xl[_index].copyWith(value: value);
+      xl[_index] = xl[_index].copyWith(value: value.oN);
     } else {
       xl.add(EhSettingItem(ser: ser, value: value, type: 'xl'));
     }
@@ -406,7 +403,7 @@ extension ExtEhSettings on EhSettings {
     }
     final _index = favorites.indexWhere((element) => element.ser == ser);
     if (_index > -1) {
-      favorites[_index] = favorites[_index].copyWith(value: value);
+      favorites[_index] = favorites[_index].copyWith(value: value.oN);
     } else {
       favorites.add(EhSettingItem(ser: ser, value: value, type: 'xl'));
     }
@@ -482,16 +479,16 @@ extension ExtGalleryList on GalleryList {
     final _gallerysF = gallerys?.map((e) async {
           final _simpleTagsF = e.simpleTags?.map((e) async {
                 final tr = await trController.getTagTranslateText(e.text!);
-                return e.copyWith(translat: tr ?? e.text);
+                return e.copyWith(translat: (tr ?? e.text).oN);
               }) ??
               [];
           final _simpleTags = Future.wait<SimpleTag>(_simpleTagsF);
-          return e.copyWith(simpleTags: await _simpleTags);
+          return e.copyWith(simpleTags: (await _simpleTags).oN);
         }) ??
         [];
 
     final _gallerys = Future.wait(_gallerysF);
-    return copyWith(gallerys: await _gallerys);
+    return copyWith(gallerys: (await _gallerys).oN);
   }
 }
 
@@ -500,7 +497,7 @@ extension ExtEhMytags on EhMytags {
     final trController = Get.find<TagTransController>();
     final _usertagsFuture = usertags?.map((e) async {
           final tr = await trController.getTranTagWithNameSpase(e.title);
-          return e.copyWith(translate: tr);
+          return e.copyWith(translate: tr.oN);
         }) ??
         [];
 
@@ -553,7 +550,7 @@ extension ExtCustomProfile on CustomProfile {
       GalleryListType.gallery;
 
   CustomProfile copyWithListType(GalleryListType value) =>
-      copyWith(listTypeValue: value.name);
+      copyWith(listTypeValue: value.name.oN);
 
   ListModeEnum get listMode =>
       EnumToString.fromString(ListModeEnum.values, listModeValue ?? '') ??
@@ -592,5 +589,93 @@ extension ExtGalleryTag on GalleryTag {
 
   bool get needHide {
     return Get.find<TagController>().hideTags.contains(this);
+  }
+}
+
+extension EhString on String {
+  String toRealUrl() {
+    final DnsService dnsService = Get.find();
+    final bool enableDoH = dnsService.enableDoH;
+    final bool enableCustomHosts = dnsService.enableCustomHosts;
+    final List<DnsCache> _dohDnsCacheList = dnsService.dohCache;
+    final String host = Uri.parse(this).host;
+    if (host.isEmpty) {
+      return this;
+    }
+    String realHost = host;
+    if (!enableDoH && !enableCustomHosts) {
+      logger.d(' none');
+      return this;
+    } else if (enableDoH && enableCustomHosts) {
+      // 同时开启doh和自定义host的情况
+      logger.d(' both');
+      return this;
+    } else if (enableDoH) {
+      // logger.d(' enableDoH');
+      Get.find<DnsService>().getDoHCache(host);
+      final int _dohDnsCacheIndex = dnsService.dohCache
+          .indexWhere((DnsCache element) => element.host == host);
+      final DnsCache? dohDnsCache =
+          _dohDnsCacheIndex > -1 ? _dohDnsCacheList[_dohDnsCacheIndex] : null;
+      realHost = dohDnsCache?.addr ?? host;
+      final String realUrl = replaceFirst(host, realHost);
+      logger.d('realUrl: $realUrl');
+      return realUrl;
+    }
+    return this;
+  }
+
+  String get handleUrl {
+    return _handleThumbUrlToEh;
+  }
+
+  String get _handleThumbUrlToEh {
+    final EhSettingService _ehSettingService = Get.find();
+
+    // if (startsWith(RegExp(EHConst.REG_URL_PREFIX_THUMB_EX)) &&
+    //     _ehSettingService.redirectThumbLink) {
+    //   return replaceFirst(
+    //     RegExp(EHConst.REG_URL_PREFIX_THUMB_EX),
+    //     EHConst.URL_PREFIX_THUMB_EH,
+    //   );
+    // }
+
+    if (RegExp(EHConst.REG_URL_THUMB).hasMatch(this) &&
+        contains(EHConst.EX_BASE_HOST) &&
+        _ehSettingService.redirectThumbLink) {
+      return replaceFirstMapped(
+        RegExp(EHConst.REG_URL_THUMB),
+        (Match m) => '${EHConst.URL_PREFIX_THUMB_EH}/${m.group(2)}',
+      );
+    }
+
+    return this;
+  }
+
+  String get gid {
+    final RegExp urlRex = RegExp(r'/g/(\d+)/(\w+)/$');
+    final RegExpMatch? urlRult = urlRex.firstMatch(this);
+
+    final String gid = urlRult?.group(1) ?? '';
+    final String token = urlRult?.group(2) ?? '';
+    return gid;
+  }
+}
+
+extension EhT<T> on T {
+  Optional<T> get toOptional {
+    return Optional<T>.of(this);
+  }
+
+  Optional<T> get toOptionalNullable {
+    return Optional<T>.fromNullable(this);
+  }
+
+  Optional<T> get o {
+    return Optional<T>.of(this);
+  }
+
+  Optional<T> get oN {
+    return Optional<T>.fromNullable(this);
   }
 }

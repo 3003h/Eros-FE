@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class GalleryCache {
-  
+
   const GalleryCache({
     this.gid,
     this.lastIndex,
@@ -19,10 +21,10 @@ class GalleryCache {
   final int? time;
 
   factory GalleryCache.fromJson(Map<String,dynamic> json) => GalleryCache(
-    gid: json['gid'] != null ? json['gid'] as String : null,
+    gid: json['gid']?.toString(),
     lastIndex: json['lastIndex'] != null ? json['lastIndex'] as int : null,
-    lastOffset: json['lastOffset'] != null ? json['lastOffset'] as double : null,
-    columnModeVal: json['columnModeVal'] != null ? json['columnModeVal'] as String : null,
+    lastOffset: json['lastOffset'] != null ? (json['lastOffset'] as num).toDouble() : null,
+    columnModeVal: json['columnModeVal']?.toString(),
     time: json['time'] != null ? json['time'] as int : null
   );
   
@@ -42,23 +44,23 @@ class GalleryCache {
     time: time
   );
 
-    
+
   GalleryCache copyWith({
-    String? gid,
-    int? lastIndex,
-    double? lastOffset,
-    String? columnModeVal,
-    int? time
+    Optional<String?>? gid,
+    Optional<int?>? lastIndex,
+    Optional<double?>? lastOffset,
+    Optional<String?>? columnModeVal,
+    Optional<int?>? time
   }) => GalleryCache(
-    gid: gid ?? this.gid,
-    lastIndex: lastIndex ?? this.lastIndex,
-    lastOffset: lastOffset ?? this.lastOffset,
-    columnModeVal: columnModeVal ?? this.columnModeVal,
-    time: time ?? this.time,
-  );  
+    gid: checkOptional(gid, () => this.gid),
+    lastIndex: checkOptional(lastIndex, () => this.lastIndex),
+    lastOffset: checkOptional(lastOffset, () => this.lastOffset),
+    columnModeVal: checkOptional(columnModeVal, () => this.columnModeVal),
+    time: checkOptional(time, () => this.time),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is GalleryCache && gid == other.gid && lastIndex == other.lastIndex && lastOffset == other.lastOffset && columnModeVal == other.columnModeVal && time == other.time;
 
   @override

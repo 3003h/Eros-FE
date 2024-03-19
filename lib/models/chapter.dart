@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class Chapter {
-  
+
   const Chapter({
     required this.page,
     this.author,
@@ -16,8 +18,8 @@ class Chapter {
 
   factory Chapter.fromJson(Map<String,dynamic> json) => Chapter(
     page: json['page'] as int,
-    author: json['author'] != null ? json['author'] as String : null,
-    title: json['title'] != null ? json['title'] as String : null
+    author: json['author']?.toString(),
+    title: json['title']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -32,19 +34,19 @@ class Chapter {
     title: title
   );
 
-    
+
   Chapter copyWith({
     int? page,
-    String? author,
-    String? title
+    Optional<String?>? author,
+    Optional<String?>? title
   }) => Chapter(
     page: page ?? this.page,
-    author: author ?? this.author,
-    title: title ?? this.title,
-  );  
+    author: checkOptional(author, () => this.author),
+    title: checkOptional(title, () => this.title),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is Chapter && page == other.page && author == other.author && title == other.title;
 
   @override

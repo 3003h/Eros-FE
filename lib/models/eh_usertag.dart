@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class EhUsertag {
-  
+
   const EhUsertag({
     required this.title,
     this.tagid,
@@ -29,16 +31,16 @@ class EhUsertag {
   final String? tagWeight;
 
   factory EhUsertag.fromJson(Map<String,dynamic> json) => EhUsertag(
-    title: json['title'] as String,
-    tagid: json['tagid'] != null ? json['tagid'] as String : null,
-    translate: json['translate'] != null ? json['translate'] as String : null,
+    title: json['title'].toString(),
+    tagid: json['tagid']?.toString(),
+    translate: json['translate']?.toString(),
     watch: json['watch'] != null ? json['watch'] as bool : null,
     hide: json['hide'] != null ? json['hide'] as bool : null,
     defaultColor: json['defaultColor'] != null ? json['defaultColor'] as bool : null,
-    colorCode: json['colorCode'] != null ? json['colorCode'] as String : null,
-    borderColor: json['borderColor'] != null ? json['borderColor'] as String : null,
-    textColor: json['textColor'] != null ? json['textColor'] as String : null,
-    tagWeight: json['tagWeight'] != null ? json['tagWeight'] as String : null
+    colorCode: json['colorCode']?.toString(),
+    borderColor: json['borderColor']?.toString(),
+    textColor: json['textColor']?.toString(),
+    tagWeight: json['tagWeight']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -67,33 +69,33 @@ class EhUsertag {
     tagWeight: tagWeight
   );
 
-    
+
   EhUsertag copyWith({
     String? title,
-    String? tagid,
-    String? translate,
-    bool? watch,
-    bool? hide,
-    bool? defaultColor,
-    String? colorCode,
-    String? borderColor,
-    String? textColor,
-    String? tagWeight
+    Optional<String?>? tagid,
+    Optional<String?>? translate,
+    Optional<bool?>? watch,
+    Optional<bool?>? hide,
+    Optional<bool?>? defaultColor,
+    Optional<String?>? colorCode,
+    Optional<String?>? borderColor,
+    Optional<String?>? textColor,
+    Optional<String?>? tagWeight
   }) => EhUsertag(
     title: title ?? this.title,
-    tagid: tagid ?? this.tagid,
-    translate: translate ?? this.translate,
-    watch: watch ?? this.watch,
-    hide: hide ?? this.hide,
-    defaultColor: defaultColor ?? this.defaultColor,
-    colorCode: colorCode ?? this.colorCode,
-    borderColor: borderColor ?? this.borderColor,
-    textColor: textColor ?? this.textColor,
-    tagWeight: tagWeight ?? this.tagWeight,
-  );  
+    tagid: checkOptional(tagid, () => this.tagid),
+    translate: checkOptional(translate, () => this.translate),
+    watch: checkOptional(watch, () => this.watch),
+    hide: checkOptional(hide, () => this.hide),
+    defaultColor: checkOptional(defaultColor, () => this.defaultColor),
+    colorCode: checkOptional(colorCode, () => this.colorCode),
+    borderColor: checkOptional(borderColor, () => this.borderColor),
+    textColor: checkOptional(textColor, () => this.textColor),
+    tagWeight: checkOptional(tagWeight, () => this.tagWeight),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is EhUsertag && title == other.title && tagid == other.tagid && translate == other.translate && watch == other.watch && hide == other.hide && defaultColor == other.defaultColor && colorCode == other.colorCode && borderColor == other.borderColor && textColor == other.textColor && tagWeight == other.tagWeight;
 
   @override

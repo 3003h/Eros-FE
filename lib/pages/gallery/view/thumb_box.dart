@@ -55,7 +55,7 @@ class _ThumbBoxState extends State<ThumbBox> {
             }
             _galleryPageController.uptImageBySer(
               ser: widget.galleryImage.ser,
-              imageCallback: (image) => image.copyWith(hide: isHideImage),
+              imageCallback: (image) => image.copyWith(hide: isHideImage.oN),
             );
           },
         );

@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class CacheConfig {
-  
+
   const CacheConfig({
     this.enable,
     this.maxAge,
@@ -32,19 +34,19 @@ class CacheConfig {
     maxCount: maxCount
   );
 
-    
+
   CacheConfig copyWith({
-    bool? enable,
-    int? maxAge,
-    int? maxCount
+    Optional<bool?>? enable,
+    Optional<int?>? maxAge,
+    Optional<int?>? maxCount
   }) => CacheConfig(
-    enable: enable ?? this.enable,
-    maxAge: maxAge ?? this.maxAge,
-    maxCount: maxCount ?? this.maxCount,
-  );  
+    enable: checkOptional(enable, () => this.enable),
+    maxAge: checkOptional(maxAge, () => this.maxAge),
+    maxCount: checkOptional(maxCount, () => this.maxCount),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is CacheConfig && enable == other.enable && maxAge == other.maxAge && maxCount == other.maxCount;
 
   @override

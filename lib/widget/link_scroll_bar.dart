@@ -41,7 +41,7 @@ class LinkTabItemAction {
 
 class LinkScrollBar extends StatefulWidget {
   LinkScrollBar({
-    Key? key,
+    super.key,
     LinkScrollBarController? controller,
     this.pageController,
     required this.items,
@@ -49,8 +49,7 @@ class LinkScrollBar extends StatefulWidget {
     this.indicatorHeight = kDefIndicatorHeight,
     this.itemPadding = const EdgeInsets.only(left: 10, right: 10),
     this.onItemChange,
-  })  : controller = controller ?? _defaultLinkScrollBarController,
-        super(key: key);
+  }) : controller = controller ?? _defaultLinkScrollBarController;
 
   final List<LinkTabItem> items;
   final int initIndex;

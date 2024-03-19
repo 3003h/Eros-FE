@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:quiver/core.dart';
 
+import 'index.dart';
 
 @immutable
 class MvpImage {
-  
+
   const MvpImage({
     this.n,
     this.k,
@@ -15,9 +17,9 @@ class MvpImage {
   final String? t;
 
   factory MvpImage.fromJson(Map<String,dynamic> json) => MvpImage(
-    n: json['n'] != null ? json['n'] as String : null,
-    k: json['k'] != null ? json['k'] as String : null,
-    t: json['t'] != null ? json['t'] as String : null
+    n: json['n']?.toString(),
+    k: json['k']?.toString(),
+    t: json['t']?.toString()
   );
   
   Map<String, dynamic> toJson() => {
@@ -32,19 +34,19 @@ class MvpImage {
     t: t
   );
 
-    
+
   MvpImage copyWith({
-    String? n,
-    String? k,
-    String? t
+    Optional<String?>? n,
+    Optional<String?>? k,
+    Optional<String?>? t
   }) => MvpImage(
-    n: n ?? this.n,
-    k: k ?? this.k,
-    t: t ?? this.t,
-  );  
+    n: checkOptional(n, () => this.n),
+    k: checkOptional(k, () => this.k),
+    t: checkOptional(t, () => this.t),
+  );
 
   @override
-  bool operator ==(Object other) => identical(this, other) 
+  bool operator ==(Object other) => identical(this, other)
     || other is MvpImage && n == other.n && k == other.k && t == other.t;
 
   @override
