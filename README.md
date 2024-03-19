@@ -43,7 +43,11 @@ Translation
 
 ### Home Page List
 
-<img width="200" src="./screenshot/home.png" >
+<img width="200" src="./screenshot/home.png" > 
+
+### Settings
+
+<img width="200" src="./screenshot/setting.png" >
 
 ### Gallery
 

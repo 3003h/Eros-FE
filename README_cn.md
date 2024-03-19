@@ -43,6 +43,10 @@ ehentai译文数据库
 
 <img width="200" src="./screenshot/home.png" >
 
+### 设置
+
+<img width="200" src="./screenshot/setting.png" >
+
 ### 画廊
 
 <img width="200" src="./screenshot/gallery1.png" > <img width="200" src="./screenshot/gallery2.png" > 
