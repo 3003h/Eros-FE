@@ -1892,10 +1892,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "19789bb10e0a2330f28a72aac15fa2c752cc630d"
+      resolved-ref: "2ae8cc996ca039aa607d4a3c088df6b784b352ea"
       url: "https://github.com/honjow/saf.git"
     source: git
-    version: "1.0.4+2"
+    version: "1.0.4+3"
   scroll_to_index:
     dependency: "direct main"
     description:
