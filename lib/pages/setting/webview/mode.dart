@@ -1,4 +1,4 @@
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/index.dart';
 import 'package:flutter/widgets.dart';
 
 Map<ProxyType, String> getProxyTypeModeMap(BuildContext context) {

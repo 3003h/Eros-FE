@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/utils/p_hash/phash_base.dart' as phash;
+import 'package:eros_fe/utils/p_hash/phash_helper.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/utils/p_hash/phash_base.dart' as phash;
-import 'package:fehviewer/utils/p_hash/phash_helper.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
 
-import '../../fehviewer.dart';
+import '../../index.dart';
 
 // const int kMaxPhashDiff = 10;
 

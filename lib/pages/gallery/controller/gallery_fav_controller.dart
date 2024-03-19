@@ -1,15 +1,15 @@
-import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/pages/controller/fav_controller.dart';
-import 'package:fehviewer/pages/gallery/controller/gallery_page_controller.dart';
-import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/vibrate.dart';
+import 'package:eros_fe/common/controller/cache_controller.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/common/service/controller_tag_service.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/network/api.dart';
+import 'package:eros_fe/pages/controller/fav_controller.dart';
+import 'package:eros_fe/pages/gallery/controller/gallery_page_controller.dart';
+import 'package:eros_fe/pages/item/controller/galleryitem_controller.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/toast.dart';
+import 'package:eros_fe/utils/vibrate.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_state.dart';

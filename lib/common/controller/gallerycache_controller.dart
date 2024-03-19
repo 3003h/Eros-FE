@@ -1,12 +1,12 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:fehviewer/common/controller/mysql_controller.dart';
-import 'package:fehviewer/common/controller/webdav_controller.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/image_view/common.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/controller/mysql_controller.dart';
+import 'package:eros_fe/common/controller/webdav_controller.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/pages/image_view/common.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:get/get.dart';
 import 'package:throttling/throttling.dart';
 

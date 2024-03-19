@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/utils/logger.dart';
 
 import 'app_dio.dart';
 import 'http_response.dart';

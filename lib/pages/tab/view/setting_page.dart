@@ -1,7 +1,7 @@
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/item/user_item.dart';
-import 'package:fehviewer/pages/tab/controller/setting_controller.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/pages/item/user_item.dart';
+import 'package:eros_fe/pages/tab/controller/setting_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

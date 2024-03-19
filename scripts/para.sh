@@ -8,7 +8,7 @@ export macos_archiver_path="${scripts_path}/../build/macos/Build/Products/Releas
 
 export ios_archiver_path="${scripts_path}/../build/ios/archive/fehviewer.xcarchive/Products/Applications/FEhViewer.app"
 
-export ios_nosign_path="${scripts_path}/../build/ios/iphoneos/FEhViewer.app"
+export ios_nosign_path="${scripts_path}/../build/ios/iphoneos/Eros-FE.app"
 
 export ipa_plist_path="${ios_archiver_path}/Info.plist"
 

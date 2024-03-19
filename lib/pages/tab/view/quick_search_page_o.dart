@@ -1,10 +1,10 @@
-import 'package:fehviewer/common/controller/quicksearch_controller.dart';
-import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/controller/webdav_controller.dart';
-import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/common/service/locale_service.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/utils/import_export.dart';
+import 'package:eros_fe/common/controller/quicksearch_controller.dart';
+import 'package:eros_fe/common/controller/tag_trans_controller.dart';
+import 'package:eros_fe/common/controller/webdav_controller.dart';
+import 'package:eros_fe/common/service/layout_service.dart';
+import 'package:eros_fe/common/service/locale_service.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/utils/import_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

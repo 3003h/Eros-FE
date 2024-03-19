@@ -1,6 +1,6 @@
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/toast.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/models/index.dart';
+import 'package:eros_fe/utils/toast.dart';
 import 'package:get/get.dart';
 
 import 'base_controller.dart';
@@ -12,7 +12,8 @@ class LocalFavController extends ProfileController {
     if (galleryProvider == null) {
       return;
     }
-    if (loacalFavs.indexWhere((element) => element.gid == galleryProvider.gid) ==
+    if (loacalFavs
+            .indexWhere((element) => element.gid == galleryProvider.gid) ==
         -1) {
       loacalFavs.insert(
         0,

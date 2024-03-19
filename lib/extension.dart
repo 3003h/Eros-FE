@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/controller/tag_controller.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/pages/image_view/common.dart';
-import 'package:fehviewer/pages/tab/fetch_list.dart';
-import 'package:fehviewer/store/db/entity/tag_translat.dart';
+import 'package:eros_fe/common/controller/tag_controller.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/pages/image_view/common.dart';
+import 'package:eros_fe/pages/tab/fetch_list.dart';
+import 'package:eros_fe/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart' as dom;

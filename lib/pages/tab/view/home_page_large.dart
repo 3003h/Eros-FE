@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
-import 'package:fehviewer/route/app_pages.dart';
-import 'package:fehviewer/route/first_observer.dart';
-import 'package:fehviewer/route/main_observer.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/route/second_observer.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/service/layout_service.dart';
+import 'package:eros_fe/pages/tab/controller/tabhome_controller.dart';
+import 'package:eros_fe/route/app_pages.dart';
+import 'package:eros_fe/route/first_observer.dart';
+import 'package:eros_fe/route/main_observer.dart';
+import 'package:eros_fe/route/routes.dart';
+import 'package:eros_fe/route/second_observer.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

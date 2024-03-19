@@ -1,8 +1,7 @@
-import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/gallery/controller/rate_controller.dart';
+import 'package:eros_fe/common/service/controller_tag_service.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/pages/gallery/controller/rate_controller.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

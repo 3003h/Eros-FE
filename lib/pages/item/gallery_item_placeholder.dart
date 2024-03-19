@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:eros_fe/common/service/theme_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

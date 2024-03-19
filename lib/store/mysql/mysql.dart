@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/store/mysql/const.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/store/mysql/const.dart';
 import 'package:mysql_client/mysql_client.dart';
 
 import 'migration.dart';

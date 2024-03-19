@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/exts.dart';
-import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/exts.dart';
+import 'package:eros_fe/common/service/dns_service.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:get/get.dart';
 
 final EHInterceptor ehInterceptor = EHInterceptor();

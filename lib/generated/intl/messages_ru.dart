@@ -69,7 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "allow_media_scan": MessageLookupByLibrary.simpleMessage(
             "Разрешить видеть папку извне"),
         "always": MessageLookupByLibrary.simpleMessage("Постоянно"),
-        "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
+        "app_title": MessageLookupByLibrary.simpleMessage("Eros-FE"),
         "ask_me": MessageLookupByLibrary.simpleMessage("Спрашивать всегда"),
         "auth_biometricHint":
             MessageLookupByLibrary.simpleMessage("Подтвердите личность"),

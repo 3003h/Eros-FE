@@ -1,4 +1,4 @@
-library fehviewer;
+library eros_fe;
 
 export 'common/enum.dart';
 export 'common/exts.dart';

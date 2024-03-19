@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/controller/cache_controller.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/common/service/layout_service.dart';
-import 'package:fehviewer/common/service/locale_service.dart';
-import 'package:fehviewer/const/locale.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/pages/setting/webview/mode.dart';
-import 'package:fehviewer/utils/import_export.dart';
+import 'package:eros_fe/common/controller/cache_controller.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/common/service/layout_service.dart';
+import 'package:eros_fe/common/service/locale_service.dart';
+import 'package:eros_fe/const/locale.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/pages/setting/setting_items/selector_Item.dart';
+import 'package:eros_fe/pages/setting/webview/mode.dart';
+import 'package:eros_fe/utils/import_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sliver_tools/sliver_tools.dart';

@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/controller/advance_search_controller.dart';
+import 'package:eros_fe/common/controller/advance_search_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

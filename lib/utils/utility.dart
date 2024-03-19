@@ -4,8 +4,8 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/network/api.dart';
+import 'package:eros_fe/component/exception/error.dart';
+import 'package:eros_fe/network/api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:uuid/uuid.dart';
 
-import '../fehviewer.dart';
+import '../index.dart';
 
 const _uuid = Uuid();
 String generateUuidv4() {

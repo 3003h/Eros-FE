@@ -1,4 +1,4 @@
-import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:eros_fe/pages/gallery/controller/archiver_controller.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 

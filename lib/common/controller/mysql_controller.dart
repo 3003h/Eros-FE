@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/store/mysql/mysql.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/store/mysql/mysql.dart';
 import 'package:get/get.dart';
 
 class MysqlController extends GetxController {

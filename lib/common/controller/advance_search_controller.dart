@@ -1,4 +1,4 @@
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/index.dart';
 import 'package:get/get.dart';
 
 import 'base_controller.dart';

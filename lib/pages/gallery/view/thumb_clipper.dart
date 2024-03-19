@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
+import 'package:eros_fe/index.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/fehviewer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

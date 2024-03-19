@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/service/ehsetting_service.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
 import 'package:vibration/vibration.dart';

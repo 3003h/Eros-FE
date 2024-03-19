@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:fehviewer/common/controller/localfav_controller.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/request.dart';
-import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
-import 'package:fehviewer/pages/tab/controller/tabview_controller.dart';
+import 'package:eros_fe/common/controller/localfav_controller.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/network/request.dart';
+import 'package:eros_fe/pages/controller/favorite_sel_controller.dart';
+import 'package:eros_fe/pages/tab/controller/tabview_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

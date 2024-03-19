@@ -1,8 +1,8 @@
-import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
+import 'package:eros_fe/common/service/controller_tag_service.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/network/api.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/toast.dart';
 import 'package:get/get.dart';
 
 import 'gallery_page_controller.dart';

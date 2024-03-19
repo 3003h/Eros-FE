@@ -1,5 +1,5 @@
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/pages/tab/controller/tabhome_controller.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/pages/tab/controller/tabhome_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

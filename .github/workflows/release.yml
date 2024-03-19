@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PACKAGE_NAME: FEhViewer
+  PACKAGE_NAME: Eros-FE
 
 jobs:
   Build_and_upload:
@@ -33,32 +33,32 @@ jobs:
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-apk
-            artifact_path: build/app/outputs/apk/release/FEhViewer*.apk
+            artifact_path: build/app/outputs/apk/release/Eros-FE*.apk
           - target: ios
             os: macos-12
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-ios
-            artifact_path: build/**/FEhViewer*.ipa
+            artifact_path: build/**/Eros-FE*.ipa
           - target: ios
             suffix: -impeller
             os: macos-12
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-ios-impeller
-            artifact_path: build/**/FEhViewer*.ipa
+            artifact_path: build/**/Eros-FE*.ipa
           - target: macos
             os: macos-12
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-mac
-            artifact_path: build/macos/FEhViewer*.zip
+            artifact_path: build/macos/Eros-FE*.zip
           - target: windows
             os: windows-latest
             flutter_version: "3.x"
             flutter_channel: stable
             artifact_name: release-windows
-            artifact_path: build/windows/FEhViewer*.zip
+            artifact_path: build/windows/Eros-FE*.zip
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -278,6 +278,6 @@ jobs:
 #          --header 'Content-Type: application/x-www-form-urlencoded' \
 #          -d parse_mode=markdown \
 #          -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
-#          --data-urlencode text="[FEhViewer_${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})
+#          --data-urlencode text="[Eros-FE_${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})
 #          $changelog" \
 #          -d disable_web_page_preview=true

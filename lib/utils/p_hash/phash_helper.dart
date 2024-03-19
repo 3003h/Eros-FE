@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/isolate.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/isolate.dart';
 
 import 'phash_base.dart';
 

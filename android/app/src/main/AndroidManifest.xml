@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
             android:name="${applicationName}"
-            android:label="FEhViewer"
+            android:label="Eros-FE"
             android:icon="@mipmap/ic_launcher"
             android:localeConfig="@xml/locales_config" tools:targetApi="r">
         <activity

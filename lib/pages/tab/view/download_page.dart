@@ -1,10 +1,10 @@
-import 'package:fehviewer/common/controller/download_controller.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/item/download_archiver_item.dart';
-import 'package:fehviewer/pages/item/download_gallery_item.dart';
-import 'package:fehviewer/pages/tab/controller/download_view_controller.dart';
-import 'package:fehviewer/store/db/entity/gallery_task.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/controller/download_controller.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/pages/item/download_archiver_item.dart';
+import 'package:eros_fe/pages/item/download_gallery_item.dart';
+import 'package:eros_fe/pages/tab/controller/download_view_controller.dart';
+import 'package:eros_fe/store/db/entity/gallery_task.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

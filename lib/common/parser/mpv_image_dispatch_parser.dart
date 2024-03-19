@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/index.dart';
 
 GalleryImage parserMpvImageDispatch(String json) {
   logger.d('================MPV json\n$json');

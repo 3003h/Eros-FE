@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:eros_fe/common/service/dns_service.dart';
+import 'package:eros_fe/common/service/theme_service.dart';
 // import 'package:extended_text/extended_text.dart';
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

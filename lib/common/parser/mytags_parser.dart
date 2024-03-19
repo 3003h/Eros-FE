@@ -1,7 +1,7 @@
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
-import '../../fehviewer.dart';
+import '../../index.dart';
 
 EhMytags parseMyTags(String html) {
   final Document document = parse(html);

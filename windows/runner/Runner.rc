@@ -90,7 +90,7 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.honjow" "\0"
-            VALUE "FileDescription", "FEhViewer" "\0"
+            VALUE "FileDescription", "Eros-FE" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "fehviewer" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2021 com.honjow. All rights reserved." "\0"

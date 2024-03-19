@@ -4,10 +4,10 @@ import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
 import 'package:collection/collection.dart';
-import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/extension.dart';
-import 'package:fehviewer/store/db/entity/gallery_task.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/component/exception/error.dart';
+import 'package:eros_fe/extension.dart';
+import 'package:eros_fe/store/db/entity/gallery_task.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image/image.dart' as pimage;

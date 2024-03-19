@@ -1,14 +1,14 @@
 import 'dart:math';
 
-import 'package:fehviewer/common/controller/advance_search_controller.dart';
-import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/filter/filter.dart';
-import 'package:fehviewer/pages/tab/controller/gallery_filter_controller.dart';
-import 'package:fehviewer/pages/tab/controller/search_page_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/controller/advance_search_controller.dart';
+import 'package:eros_fe/common/service/controller_tag_service.dart';
+import 'package:eros_fe/common/service/theme_service.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/models/index.dart';
+import 'package:eros_fe/pages/filter/filter.dart';
+import 'package:eros_fe/pages/tab/controller/gallery_filter_controller.dart';
+import 'package:eros_fe/pages/tab/controller/search_page_controller.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

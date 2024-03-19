@@ -51,10 +51,10 @@ class L10n {
     return Localizations.of<L10n>(context, L10n);
   }
 
-  /// `FEhViewer`
+  /// `Eros-FE`
   String get app_title {
     return Intl.message(
-      'FEhViewer',
+      'Eros-FE',
       name: 'app_title',
       desc: '',
       args: [],

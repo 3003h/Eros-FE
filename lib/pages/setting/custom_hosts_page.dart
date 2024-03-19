@@ -1,8 +1,8 @@
-import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/component/setting_base.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:eros_fe/common/service/dns_service.dart';
+import 'package:eros_fe/common/service/theme_service.dart';
+import 'package:eros_fe/component/setting_base.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/request.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/network/request.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -10,7 +10,7 @@ import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 const String kGithubUrl =
-    'https://api.github.com/repos/3003h/FEhViewer/releases/latest';
+    'https://api.github.com/repos/3003h/Eros-FE/releases/latest';
 
 class UpdateController extends GetxController {
   final _canUpdate = false.obs;

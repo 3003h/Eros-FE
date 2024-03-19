@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 const String historyBox = 'history_box';

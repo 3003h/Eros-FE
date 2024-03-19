@@ -1,8 +1,7 @@
-import 'package:fehviewer/models/gallery_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../../fehviewer.dart';
+import '../../index.dart';
 import 'controller/galleryitem_controller.dart';
 
 class GalleryItemDebugSimple extends StatelessWidget {

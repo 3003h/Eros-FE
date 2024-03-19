@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../fehviewer.dart';
+import '../index.dart';
 
 final RegExp _chapterPageExp = RegExp(r'^[Pp]?(\d+)\s*[-・·*]?\s+(.*)$');
 final RegExp _chapterNameExp = RegExp(r'^(.+?)[….\-・·*]{3,}(.+)$');

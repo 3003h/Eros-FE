@@ -1,6 +1,6 @@
-import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/pages/gallery/gallery_repository.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/service/controller_tag_service.dart';
+import 'package:eros_fe/pages/gallery/gallery_repository.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:get/get.dart';
 
 import 'controller/archiver_controller.dart';

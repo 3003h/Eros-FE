@@ -1,4 +1,4 @@
-import '../../fehviewer.dart';
+import '../../index.dart';
 
 AdvanceSearch parserAdvanceSearch(String? param) {
   final uri = Uri.parse(param ?? '');

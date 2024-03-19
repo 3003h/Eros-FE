@@ -1,7 +1,7 @@
-import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/service/dns_service.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/models/index.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:get/get.dart';
 
 import '../const/const.dart';

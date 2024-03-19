@@ -69,7 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "allow_media_scan":
             MessageLookupByLibrary.simpleMessage("Allow media scan"),
         "always": MessageLookupByLibrary.simpleMessage("Always"),
-        "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
+        "app_title": MessageLookupByLibrary.simpleMessage("Eros-FE"),
         "ask_me": MessageLookupByLibrary.simpleMessage("Ask for Me"),
         "auth_biometricHint":
             MessageLookupByLibrary.simpleMessage("Verify Identity"),

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/component/exception/error.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/models/index.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:html_unescape/html_unescape.dart';
 
 GalleryImage paraShowPage(String jsonString) {

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:eros_fe/component/quene_task/quene_task.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/store/db/entity/gallery_task.dart';
 import 'package:executor/executor.dart';
-import 'package:fehviewer/component/quene_task/quene_task.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/store/db/entity/gallery_task.dart';
 import 'package:get/get.dart';
 
 /// 轮询周期间隔 单位秒

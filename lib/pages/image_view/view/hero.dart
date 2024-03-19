@@ -1,5 +1,5 @@
+import 'package:eros_fe/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/utils/logger.dart';
 import 'package:flutter/material.dart';
 
 /// make hero better when slide out

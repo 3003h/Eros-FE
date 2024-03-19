@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/models/index.dart';
 import 'package:get/get.dart';
 
 import 'base_service.dart';

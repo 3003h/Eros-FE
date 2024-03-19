@@ -1,7 +1,7 @@
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/pages/setting/controller/web_setting_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/network/api.dart';
+import 'package:eros_fe/pages/setting/controller/web_setting_controller.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

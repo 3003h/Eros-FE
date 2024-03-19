@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/controller/user_controller.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:get/get.dart' hide Response;
 
 class EhCookieInterceptor extends Interceptor {

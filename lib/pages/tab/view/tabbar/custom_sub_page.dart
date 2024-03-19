@@ -1,6 +1,6 @@
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/controller/group/custom_sublist_controller.dart';
-import 'package:fehviewer/pages/tab/controller/group/custom_tabbar_controller.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/pages/tab/controller/group/custom_sublist_controller.dart';
+import 'package:eros_fe/pages/tab/controller/group/custom_tabbar_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

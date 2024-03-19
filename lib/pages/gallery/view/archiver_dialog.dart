@@ -1,6 +1,6 @@
-import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/gallery/controller/archiver_controller.dart';
+import 'package:eros_fe/common/service/controller_tag_service.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

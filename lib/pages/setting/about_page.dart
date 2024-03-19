@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/controller/update_controller.dart';
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/common/controller/update_controller.dart';
+import 'package:eros_fe/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';

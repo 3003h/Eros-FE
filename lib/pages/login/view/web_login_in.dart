@@ -1,8 +1,8 @@
 import 'dart:io' as io;
 
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';

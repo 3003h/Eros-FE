@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 

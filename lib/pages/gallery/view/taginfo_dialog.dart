@@ -1,10 +1,10 @@
-import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/controller_tag_service.dart';
-import 'package:fehviewer/common/service/locale_service.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/gallery/controller/taginfo_controller.dart';
-import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
-import 'package:fehviewer/store/db/entity/tag_translat.dart';
+import 'package:eros_fe/common/controller/tag_trans_controller.dart';
+import 'package:eros_fe/common/service/controller_tag_service.dart';
+import 'package:eros_fe/common/service/locale_service.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/pages/gallery/controller/taginfo_controller.dart';
+import 'package:eros_fe/pages/setting/controller/eh_mytags_controller.dart';
+import 'package:eros_fe/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

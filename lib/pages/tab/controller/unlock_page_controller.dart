@@ -1,6 +1,6 @@
-import 'package:fehviewer/common/controller/auto_lock_controller.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/controller/auto_lock_controller.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

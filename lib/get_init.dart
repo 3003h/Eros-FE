@@ -1,6 +1,6 @@
-import 'package:fehviewer/common/controller/block_controller.dart';
-import 'package:fehviewer/common/controller/image_block_controller.dart';
-import 'package:fehviewer/common/controller/mysql_controller.dart';
+import 'package:eros_fe/common/controller/block_controller.dart';
+import 'package:eros_fe/common/controller/image_block_controller.dart';
+import 'package:eros_fe/common/controller/mysql_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

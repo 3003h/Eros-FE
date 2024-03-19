@@ -1,12 +1,12 @@
 import 'dart:io' as io;
 
 // import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:fehviewer/common/controller/avatar_controller.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
-import 'package:fehviewer/utils/utility.dart';
+import 'package:eros_fe/common/controller/avatar_controller.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/network/api.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/toast.dart';
+import 'package:eros_fe/utils/utility.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as path;

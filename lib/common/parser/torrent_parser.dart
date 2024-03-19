@@ -1,5 +1,5 @@
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/gallery/controller/torrent_controller.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/pages/gallery/controller/torrent_controller.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 

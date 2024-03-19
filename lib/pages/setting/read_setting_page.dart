@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/component/setting_base.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/image_view/common.dart';
-import 'package:fehviewer/pages/image_view/controller/view_controller.dart';
-import 'package:fehviewer/pages/setting/setting_items/selector_Item.dart';
-import 'package:fehviewer/utils/orientation_helper.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/component/setting_base.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/pages/image_view/common.dart';
+import 'package:eros_fe/pages/image_view/controller/view_controller.dart';
+import 'package:eros_fe/pages/setting/setting_items/selector_Item.dart';
+import 'package:eros_fe/utils/orientation_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

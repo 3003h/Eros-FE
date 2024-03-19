@@ -1,17 +1,17 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/component/exception/error.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/network/app_dio/pdio.dart';
+import 'package:eros_fe/pages/image_view/controller/view_state.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/utility.dart';
+import 'package:eros_fe/utils/vibrate.dart';
+import 'package:eros_fe/widget/image/extended_saf_image_privider.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/app_dio/pdio.dart';
-import 'package:fehviewer/pages/image_view/controller/view_state.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/utils/vibrate.dart';
-import 'package:fehviewer/widget/image/extended_saf_image_privider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

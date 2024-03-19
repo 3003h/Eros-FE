@@ -1,6 +1,6 @@
-import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/pages/item/controller/galleryitem_controller.dart';
+import 'package:eros_fe/const/theme_colors.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/pages/item/controller/galleryitem_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

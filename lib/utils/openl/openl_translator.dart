@@ -1,7 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/utils/openl/language.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/utils/openl/language.dart';
 import 'package:http/http.dart' as http;
 
 import '../logger.dart';

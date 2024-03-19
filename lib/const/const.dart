@@ -1,7 +1,7 @@
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -226,7 +226,7 @@ final RegExp regExpMpvThumbName = RegExp(r'[0-9a-f]{40}-(\d+)-(\d+)-(\d+)');
 
 // ignore: avoid_classes_with_only_static_members
 class EHConst {
-  static const String appTitle = 'FEhViewer';
+  static const String appTitle = 'Eros-FE';
 
   // 网页登陆页面
   static const String URL_SIGN_IN =

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/index.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:path/path.dart' if (dart.library.html) 'src/stub/path.dart'

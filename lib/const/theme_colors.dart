@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/colors.dart';
+import 'package:eros_fe/common/colors.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'const.dart';

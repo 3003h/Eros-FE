@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../component/exception/error.dart';
-import '../../../fehviewer.dart';
+import '../../../index.dart';
 import '../../../network/request.dart';
 import 'default_tabview_controller.dart';
 import 'enum.dart';

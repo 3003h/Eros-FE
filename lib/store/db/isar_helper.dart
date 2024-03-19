@@ -1,15 +1,15 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:fehviewer/store/db/entity/gallery_task.dart';
-import 'package:fehviewer/store/db/entity/tag_translate_info.dart';
-import 'package:fehviewer/store/db/entity/view_history.dart';
-import 'package:fehviewer/store/db/isar.dart';
-import 'package:fehviewer/store/db/isar_isolate.dart';
+import 'package:eros_fe/store/db/entity/gallery_task.dart';
+import 'package:eros_fe/store/db/entity/tag_translate_info.dart';
+import 'package:eros_fe/store/db/entity/view_history.dart';
+import 'package:eros_fe/store/db/isar.dart';
+import 'package:eros_fe/store/db/isar_isolate.dart';
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 
-import '../../fehviewer.dart';
+import '../../index.dart';
 import 'entity/gallery_image_task.dart';
 import 'entity/tag_translat.dart';
 

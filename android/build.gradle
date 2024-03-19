@@ -1,28 +1,6 @@
-buildscript {
-    ext.kotlin_version = '1.7.20'
-    repositories {
-//        maven { url "https://maven.aliyun.com/repository/google" }
-//        maven { url "https://maven.aliyun.com/repository/jcenter" }
-//        maven{ url 'https://maven.aliyun.com/nexus/content/groups/public/'}
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
-        // START: FlutterFire Configuration
-        classpath 'com.google.gms:google-services:4.3.14'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
-        // END: FlutterFire Configuration
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
 
 allprojects {
     repositories {
-//        maven { url "https://maven.aliyun.com/repository/google" }
-//        maven { url "https://maven.aliyun.com/repository/jcenter" }
-//        maven{ url 'https://maven.aliyun.com/nexus/content/groups/public/'}
         google()
         mavenCentral()
     }

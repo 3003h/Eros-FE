@@ -1,9 +1,9 @@
-import 'package:fehviewer/common/controller/history_controller.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/pages/tab/controller/default_tabview_controller.dart';
-import 'package:fehviewer/route/routes.dart';
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/common/controller/history_controller.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/models/index.dart';
+import 'package:eros_fe/pages/tab/controller/default_tabview_controller.dart';
+import 'package:eros_fe/route/routes.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

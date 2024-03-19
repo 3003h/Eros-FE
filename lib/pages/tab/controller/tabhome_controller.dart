@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/tab/view/download_page.dart';
-import 'package:fehviewer/pages/tab/view/history_page.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/custom_tabbar_page.dart';
-import 'package:fehviewer/pages/tab/view/tabbar/favorite_tabbar_page.dart';
-import 'package:fehviewer/pages/tab/view/toplist_page.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/pages/tab/view/download_page.dart';
+import 'package:eros_fe/pages/tab/view/history_page.dart';
+import 'package:eros_fe/pages/tab/view/tabbar/custom_tabbar_page.dart';
+import 'package:eros_fe/pages/tab/view/tabbar/favorite_tabbar_page.dart';
+import 'package:eros_fe/pages/tab/view/toplist_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

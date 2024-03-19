@@ -29,6 +29,6 @@ jobs:
           --header 'Content-Type: application/x-www-form-urlencoded' \
           -d parse_mode=markdown \
           -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
-          --data-urlencode text="[${{ github.ref_name }}](https://github.com/honjow/FEhViewer/releases/tag/${{ github.ref_name }})
+          --data-urlencode text="[${{ github.ref_name }}](https://github.com/honjow/Eros-FE/releases/tag/${{ github.ref_name }})
           $changelog" \
           -d disable_web_page_preview=true

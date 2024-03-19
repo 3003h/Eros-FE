@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:fehviewer/utils/logger.dart';
+import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart';
 

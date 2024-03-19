@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:path/path.dart' as path;
 
-import '../../fehviewer.dart';
+import '../../index.dart';
 
 const _kMaxTime = Duration(days: 7);
 const _kSuffix = '.log';

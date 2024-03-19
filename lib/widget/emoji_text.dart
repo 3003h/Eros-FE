@@ -1,4 +1,4 @@
-import 'package:fehviewer/const/const.dart';
+import 'package:eros_fe/const/const.dart';
 import 'package:flutter/cupertino.dart';
 
 class EmojiText extends StatelessWidget {

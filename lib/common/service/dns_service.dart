@@ -1,8 +1,8 @@
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/models/index.dart';
-import 'package:fehviewer/utils/dns_util.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/toast.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/models/index.dart';
+import 'package:eros_fe/utils/dns_util.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/toast.dart';
 import 'package:get/get.dart';
 
 import '../global.dart';

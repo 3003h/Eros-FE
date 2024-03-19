@@ -1,9 +1,9 @@
 import 'package:english_words/english_words.dart';
-import 'package:fehviewer/common/controller/user_controller.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/text_avatar.dart';
+import 'package:eros_fe/common/controller/user_controller.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/const/theme_colors.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/widget/text_avatar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
 import 'package:get/get.dart';

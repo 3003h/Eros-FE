@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:fehviewer/common/controller/auto_lock_controller.dart';
-import 'package:fehviewer/common/controller/log_controller.dart';
-import 'package:fehviewer/common/controller/tag_trans_controller.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/common/service/locale_service.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/widget/system_ui_overlay.dart';
+import 'package:eros_fe/common/controller/auto_lock_controller.dart';
+import 'package:eros_fe/common/controller/log_controller.dart';
+import 'package:eros_fe/common/controller/tag_trans_controller.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/common/service/locale_service.dart';
+import 'package:eros_fe/common/service/theme_service.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/widget/system_ui_overlay.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';

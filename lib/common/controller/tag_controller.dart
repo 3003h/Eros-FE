@@ -1,5 +1,5 @@
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/pages/setting/controller/eh_mytags_controller.dart';
 import 'package:get/get.dart';
 
 class TagController extends GetxController {

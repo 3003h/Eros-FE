@@ -1,4 +1,4 @@
-import 'package:fehviewer/common/service/theme_service.dart';
+import 'package:eros_fe/common/service/theme_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';

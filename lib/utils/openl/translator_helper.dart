@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:fehviewer/config/config.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/utils/openl/openl_translator.dart';
+import 'package:eros_fe/config/config.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/utils/openl/openl_translator.dart';
 import 'package:google_translator/translator.dart';
 import 'package:learning_language/learning_language.dart';
 

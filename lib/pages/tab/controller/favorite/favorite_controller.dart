@@ -1,12 +1,12 @@
 // import 'package:dio/dio.dart';
-// import 'package:fehviewer/common/controller/localfav_controller.dart';
-// import 'package:fehviewer/common/controller/user_controller.dart';
-// import 'package:fehviewer/const/const.dart';
-// import 'package:fehviewer/models/index.dart';
-// import 'package:fehviewer/network/request.dart';
-// import 'package:fehviewer/pages/controller/favorite_sel_controller.dart';
-// import 'package:fehviewer/route/routes.dart';
-// import 'package:fehviewer/utils/logger.dart';
+// import 'package:eros_fe/common/controller/localfav_controller.dart';
+// import 'package:eros_fe/common/controller/user_controller.dart';
+// import 'package:eros_fe/const/const.dart';
+// import 'package:eros_fe/models/index.dart';
+// import 'package:eros_fe/network/request.dart';
+// import 'package:eros_fe/pages/controller/favorite_sel_controller.dart';
+// import 'package:eros_fe/route/routes.dart';
+// import 'package:eros_fe/utils/logger.dart';
 // import 'package:flutter/cupertino.dart';
 // import 'package:get/get.dart';
 //

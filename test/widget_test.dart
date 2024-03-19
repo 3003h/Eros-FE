@@ -1,4 +1,4 @@
-import 'package:fehviewer/main.dart';
+import 'package:eros_fe/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

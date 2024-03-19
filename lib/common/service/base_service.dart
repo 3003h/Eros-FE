@@ -1,6 +1,6 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/models/index.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/models/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 

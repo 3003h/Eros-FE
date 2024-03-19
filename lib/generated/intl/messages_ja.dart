@@ -65,7 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_thumbnails": MessageLookupByLibrary.simpleMessage("サムネイル"),
         "allow_media_scan": MessageLookupByLibrary.simpleMessage("メディアスキャンを許可"),
         "always": MessageLookupByLibrary.simpleMessage("常時"),
-        "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
+        "app_title": MessageLookupByLibrary.simpleMessage("Eros-FE"),
         "ask_me": MessageLookupByLibrary.simpleMessage("手動選択"),
         "auth_biometricHint": MessageLookupByLibrary.simpleMessage("本人確認"),
         "auth_signInTitle": MessageLookupByLibrary.simpleMessage("ログインが必要"),

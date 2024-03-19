@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
 
-import '../../fehviewer.dart';
+import '../../index.dart';
 import 'entity/gallery_image_task.dart';
 import 'entity/gallery_task.dart';
 import 'entity/tag_translat.dart';

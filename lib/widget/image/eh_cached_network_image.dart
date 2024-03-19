@@ -1,8 +1,8 @@
 import 'package:blurhash_ffi/blurhash_ffi.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fehviewer/common/controller/image_block_controller.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/app_dio/dio_file_service.dart';
+import 'package:eros_fe/common/controller/image_block_controller.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/network/app_dio/dio_file_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:fehviewer/models/gallery_provider.dart';
-import 'package:fehviewer/store/db/entity/gallery_image_task.dart';
-import 'package:fehviewer/store/db/entity/gallery_task.dart';
-import 'package:fehviewer/store/db/entity/tag_translat.dart';
-import 'package:fehviewer/store/db/entity/view_history.dart';
+import 'package:eros_fe/models/gallery_provider.dart';
+import 'package:eros_fe/store/db/entity/gallery_image_task.dart';
+import 'package:eros_fe/store/db/entity/gallery_task.dart';
+import 'package:eros_fe/store/db/entity/tag_translat.dart';
+import 'package:eros_fe/store/db/entity/view_history.dart';
 import 'package:isar/isar.dart';
 
 import 'isar.dart';

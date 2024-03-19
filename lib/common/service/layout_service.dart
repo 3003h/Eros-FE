@@ -1,4 +1,4 @@
-import 'package:fehviewer/models/base/eh_models.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
 import 'package:get/get.dart';
 
 import '../global.dart';

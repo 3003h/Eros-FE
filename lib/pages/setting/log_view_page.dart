@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fehviewer/common/controller/log_controller.dart';
-import 'package:fehviewer/common/service/theme_service.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/common/controller/log_controller.dart';
+import 'package:eros_fe/common/service/theme_service.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';

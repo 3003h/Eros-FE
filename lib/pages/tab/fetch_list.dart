@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:fehviewer/common/controller/tag_controller.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/network/request.dart';
+import 'package:eros_fe/common/controller/tag_controller.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/network/request.dart';
 import 'package:get/get.dart';
 
 import '../../utils/logger.dart';

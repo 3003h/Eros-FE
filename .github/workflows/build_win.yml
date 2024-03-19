@@ -44,12 +44,12 @@ jobs:
 
       - name: Build App zip
         run: |
-          $DestDir = "build\windows\FEhViewer"
+          $DestDir = "build\windows\Eros-FE"
           $SrcDir = "build\windows\runner\Release"
           New-Item -Path $DestDir -ItemType Directory
           Copy-Item $SrcDir\* -Recurse $DestDir
           Copy-Item -Filter *.dll -Path windows\* -Destination $DestDir -Force
-          Compress-Archive $DestDir build\windows\FEhViewer.zip
+          Compress-Archive $DestDir build\windows\Eros-FE.zip
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3

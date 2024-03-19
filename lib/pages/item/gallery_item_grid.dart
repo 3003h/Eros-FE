@@ -9,7 +9,7 @@ import '../../common/service/ehsetting_service.dart';
 import '../../common/service/layout_service.dart';
 import '../../common/service/theme_service.dart';
 import '../../const/theme_colors.dart';
-import '../../fehviewer.dart';
+import '../../index.dart';
 import '../../widget/rating_bar.dart';
 import 'controller/galleryitem_controller.dart';
 import 'gallery_item.dart';

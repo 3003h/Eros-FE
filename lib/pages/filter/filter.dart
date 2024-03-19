@@ -1,12 +1,12 @@
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/const/const.dart';
-import 'package:fehviewer/const/theme_colors.dart';
-import 'package:fehviewer/generated/l10n.dart';
-import 'package:fehviewer/pages/filter/gallery_filter_view.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
-import 'package:fehviewer/utils/vibrate.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/component/exception/error.dart';
+import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/const/theme_colors.dart';
+import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/pages/filter/gallery_filter_view.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/utility.dart';
+import 'package:eros_fe/utils/vibrate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 

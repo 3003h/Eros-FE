@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/common/service/dns_service.dart';
-import 'package:fehviewer/models/base/eh_models.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/utility.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/common/service/dns_service.dart';
+import 'package:eros_fe/models/base/eh_models.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/utility.dart';
 import 'package:get/get.dart';
 
 class CustomHttpsProxy {

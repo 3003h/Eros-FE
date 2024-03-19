@@ -63,7 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "all_thumbnails": MessageLookupByLibrary.simpleMessage("所有缩略图"),
         "allow_media_scan": MessageLookupByLibrary.simpleMessage("允许媒体扫描"),
         "always": MessageLookupByLibrary.simpleMessage("始终"),
-        "app_title": MessageLookupByLibrary.simpleMessage("FEhViewer"),
+        "app_title": MessageLookupByLibrary.simpleMessage("Eros-FE"),
         "ask_me": MessageLookupByLibrary.simpleMessage("询问"),
         "auth_biometricHint": MessageLookupByLibrary.simpleMessage("验证身份"),
         "auth_signInTitle": MessageLookupByLibrary.simpleMessage("需要进行身份验证"),

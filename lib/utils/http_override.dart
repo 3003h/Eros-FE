@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:fehviewer/const/const.dart';
-
 class DFHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {

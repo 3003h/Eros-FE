@@ -8,13 +8,13 @@ import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_file_store/dio_cache_interceptor_file_store.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
+import 'package:eros_fe/common/service/ehsetting_service.dart';
+import 'package:eros_fe/component/exception/error.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/network/request.dart';
+import 'package:eros_fe/pages/setting/controller/eh_mysettings_controller.dart';
+import 'package:eros_fe/store/db/entity/tag_translat.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:fehviewer/common/service/ehsetting_service.dart';
-import 'package:fehviewer/component/exception/error.dart';
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/request.dart';
-import 'package:fehviewer/pages/setting/controller/eh_mysettings_controller.dart';
-import 'package:fehviewer/store/db/entity/tag_translat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
@@ -342,7 +342,7 @@ class Api {
   /// 选用feh单独的profile 没有就新建
   static Future<bool?> _selEhProfile() async {
     // 不能带_
-    const kProfileName = 'FEhViewer';
+    const kProfileName = 'Eros-FE';
 
     final uconfig = await getEhSettings(refresh: true);
 

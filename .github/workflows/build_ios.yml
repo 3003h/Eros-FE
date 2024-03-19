@@ -42,17 +42,17 @@ jobs:
         run: find build/ios/Release-iphoneos -name "*.dSYM" | xargs -I \{\} ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/Runner/GoogleService-Info.plist -p ios \{\}
 
       - name: Thin app
-        run: sh scripts/thin-payload.sh build/ios/iphoneos/FEhViewer.app
+        run: sh scripts/thin-payload.sh build/ios/iphoneos/Eros-FE.app
 
       - name: Build ipa
         run: |
           cd build
           mkdir -p Payload
-          mv ios/iphoneos/FEhViewer.app Payload
-          zip -9 FEhViewer.ipa -r Payload
+          mv ios/iphoneos/Eros-FE.app Payload
+          zip -9 Eros-FE.ipa -r Payload
 
       - name: Publish iOS Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: release-ios-nosign
-          path: build/FEhViewer.ipa
+          path: build/Eros-FE.ipa

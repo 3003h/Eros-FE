@@ -1,10 +1,10 @@
-import 'package:fehviewer/fehviewer.dart';
-import 'package:fehviewer/network/api.dart';
-import 'package:fehviewer/network/request.dart';
-import 'package:fehviewer/pages/setting/const.dart';
-import 'package:fehviewer/pages/setting/controller/eh_mytags_controller.dart';
-import 'package:fehviewer/pages/setting/mytags/eh_usertag_edit_dialog.dart';
-import 'package:fehviewer/pages/setting/webview/eh_tagset_edit_dialog.dart';
+import 'package:eros_fe/index.dart';
+import 'package:eros_fe/network/api.dart';
+import 'package:eros_fe/network/request.dart';
+import 'package:eros_fe/pages/setting/const.dart';
+import 'package:eros_fe/pages/setting/controller/eh_mytags_controller.dart';
+import 'package:eros_fe/pages/setting/mytags/eh_usertag_edit_dialog.dart';
+import 'package:eros_fe/pages/setting/webview/eh_tagset_edit_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

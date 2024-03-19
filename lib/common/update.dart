@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/const/storages.dart';
-import 'package:fehviewer/utils/logger.dart';
-import 'package:fehviewer/utils/storage.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/const/storages.dart';
+import 'package:eros_fe/utils/logger.dart';
+import 'package:eros_fe/utils/storage.dart';
 import 'package:path/path.dart' as path;
 
 Future<void> dataUpdate() async {

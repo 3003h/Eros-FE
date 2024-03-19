@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:fehviewer/common/controller/quicksearch_controller.dart';
-import 'package:fehviewer/fehviewer.dart';
+import 'package:eros_fe/common/controller/quicksearch_controller.dart';
+import 'package:eros_fe/index.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:fehviewer/common/global.dart';
-import 'package:fehviewer/utils/logger/pretty_printer.dart';
+import 'package:eros_fe/common/global.dart';
+import 'package:eros_fe/utils/logger/pretty_printer.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
