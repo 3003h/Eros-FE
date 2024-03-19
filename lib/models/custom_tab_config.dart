@@ -16,7 +16,7 @@ class CustomTabConfig {
 
   factory CustomTabConfig.fromJson(Map<String,dynamic> json) => CustomTabConfig(
     profiles: json['profiles'] != null ? (json['profiles'] as List? ?? []).map((e) => CustomProfile.fromJson(e as Map<String, dynamic>)).toList() : null,
-    lastIndex: json['lastIndex'] != null ? json['lastIndex'] as int : null
+    lastIndex: json['lastIndex'] != null ? int.tryParse('${json['lastIndex']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

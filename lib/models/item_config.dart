@@ -18,8 +18,8 @@ class ItemConfig {
 
   factory ItemConfig.fromJson(Map<String,dynamic> json) => ItemConfig(
     type: json['type'].toString(),
-    enableCustomWidth: json['enableCustomWidth'] != null ? json['enableCustomWidth'] as bool : null,
-    customWidth: json['customWidth'] != null ? json['customWidth'] as int : null
+    enableCustomWidth: json['enableCustomWidth'] != null ? bool.tryParse('${json['enableCustomWidth']}', caseSensitive: false) ?? false : null,
+    customWidth: json['customWidth'] != null ? int.tryParse('${json['customWidth']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

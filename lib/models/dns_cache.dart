@@ -22,8 +22,8 @@ class DnsCache {
 
   factory DnsCache.fromJson(Map<String,dynamic> json) => DnsCache(
     host: json['host']?.toString(),
-    lastResolve: json['lastResolve'] != null ? json['lastResolve'] as int : null,
-    ttl: json['ttl'] != null ? json['ttl'] as int : null,
+    lastResolve: json['lastResolve'] != null ? int.tryParse('${json['lastResolve']}') ?? 0 : null,
+    ttl: json['ttl'] != null ? int.tryParse('${json['ttl']}') ?? 0 : null,
     addrs: json['addrs'] != null ? (json['addrs'] as List? ?? []).map((e) => e as dynamic).toList() : null,
     addr: json['addr']?.toString()
   );

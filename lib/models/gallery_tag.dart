@@ -33,11 +33,11 @@ class GalleryTag {
     type: json['type'].toString(),
     tagTranslat: json['tagTranslat'].toString(),
     intro: json['intro']?.toString(),
-    vote: json['vote'] != null ? json['vote'] as int : null,
+    vote: json['vote'] != null ? int.tryParse('${json['vote']}') ?? 0 : null,
     color: json['color']?.toString(),
     backgrondColor: json['backgrondColor']?.toString(),
-    watch: json['watch'] != null ? json['watch'] as bool : null,
-    hide: json['hide'] != null ? json['hide'] as bool : null
+    watch: json['watch'] != null ? bool.tryParse('${json['watch']}', caseSensitive: false) ?? false : null,
+    hide: json['hide'] != null ? bool.tryParse('${json['hide']}', caseSensitive: false) ?? false : null
   );
   
   Map<String, dynamic> toJson() => {

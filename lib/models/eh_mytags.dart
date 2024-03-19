@@ -22,7 +22,7 @@ class EhMytags {
 
   factory EhMytags.fromJson(Map<String,dynamic> json) => EhMytags(
     tagsets: (json['tagsets'] as List? ?? []).map((e) => EhMytagSet.fromJson(e as Map<String, dynamic>)).toList(),
-    canDelete: json['canDelete'] != null ? json['canDelete'] as bool : null,
+    canDelete: json['canDelete'] != null ? bool.tryParse('${json['canDelete']}', caseSensitive: false) ?? false : null,
     usertags: json['usertags'] != null ? (json['usertags'] as List? ?? []).map((e) => EhUsertag.fromJson(e as Map<String, dynamic>)).toList() : null,
     apikey: json['apikey']?.toString(),
     apiuid: json['apiuid']?.toString()

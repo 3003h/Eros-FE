@@ -18,7 +18,7 @@ class Mpv {
 
   factory Mpv.fromJson(Map<String,dynamic> json) => Mpv(
     mpvkey: json['mpvkey']?.toString(),
-    gid: json['gid'] != null ? json['gid'] as int : null,
+    gid: json['gid'] != null ? int.tryParse('${json['gid']}') ?? 0 : null,
     imagelist: json['imagelist'] != null ? (json['imagelist'] as List? ?? []).map((e) => MvpImage.fromJson(e as Map<String, dynamic>)).toList() : null
   );
   

@@ -13,7 +13,7 @@ class FavConfig {
   final int? lastIndex;
 
   factory FavConfig.fromJson(Map<String,dynamic> json) => FavConfig(
-    lastIndex: json['lastIndex'] != null ? json['lastIndex'] as int : null
+    lastIndex: json['lastIndex'] != null ? int.tryParse('${json['lastIndex']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

@@ -15,8 +15,8 @@ class AutoLock {
   final bool? isLocking;
 
   factory AutoLock.fromJson(Map<String,dynamic> json) => AutoLock(
-    lastLeaveTime: json['lastLeaveTime'] != null ? json['lastLeaveTime'] as int : null,
-    isLocking: json['isLocking'] != null ? json['isLocking'] as bool : null
+    lastLeaveTime: json['lastLeaveTime'] != null ? int.tryParse('${json['lastLeaveTime']}') ?? 0 : null,
+    isLocking: json['isLocking'] != null ? bool.tryParse('${json['isLocking']}', caseSensitive: false) ?? false : null
   );
   
   Map<String, dynamic> toJson() => {

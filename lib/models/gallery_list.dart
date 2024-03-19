@@ -28,9 +28,9 @@ class GalleryList {
     gallerys: json['gallerys'] != null ? (json['gallerys'] as List? ?? []).map((e) => GalleryProvider.fromJson(e as Map<String, dynamic>)).toList() : null,
     nextGid: json['nextGid']?.toString(),
     prevGid: json['prevGid']?.toString(),
-    maxPage: json['maxPage'] != null ? json['maxPage'] as int : null,
-    nextPage: json['nextPage'] != null ? json['nextPage'] as int : null,
-    prevPage: json['prevPage'] != null ? json['prevPage'] as int : null,
+    maxPage: json['maxPage'] != null ? int.tryParse('${json['maxPage']}') ?? 0 : null,
+    nextPage: json['nextPage'] != null ? int.tryParse('${json['nextPage']}') ?? 0 : null,
+    prevPage: json['prevPage'] != null ? int.tryParse('${json['prevPage']}') ?? 0 : null,
     favList: json['favList'] != null ? (json['favList'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList() : null
   );
   

@@ -1358,11 +1358,12 @@ packages:
   json_to_model:
     dependency: "direct dev"
     description:
-      name: json_to_model
-      sha256: a1e2628df8e9d2b32c4d473a5e923648bed7f267be021a0d3148f4d056d1a5b6
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.2.4"
+      path: "."
+      ref: dev
+      resolved-ref: eecc10ceb1ffc272a034c812d09b5c5a73194ff4
+      url: "https://github.com/honjow/json_to_model.git"
+    source: git
+    version: "3.3.0"
   keframe:
     dependency: "direct main"
     description:

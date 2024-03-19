@@ -17,7 +17,7 @@ class Chapter {
   final String? title;
 
   factory Chapter.fromJson(Map<String,dynamic> json) => Chapter(
-    page: json['page'] as int,
+    page: int.tryParse('${json['page']}') ?? 0,
     author: json['author']?.toString(),
     title: json['title']?.toString()
   );

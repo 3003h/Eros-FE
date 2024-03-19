@@ -26,11 +26,11 @@ class MysqlConnectionInfo {
 
   factory MysqlConnectionInfo.fromJson(Map<String,dynamic> json) => MysqlConnectionInfo(
     host: json['host'].toString(),
-    port: json['port'] as int,
+    port: int.tryParse('${json['port']}') ?? 0,
     userName: json['userName'].toString(),
     password: json['password'].toString(),
     databaseName: json['databaseName'].toString(),
-    secure: json['secure'] != null ? json['secure'] as bool : null,
+    secure: json['secure'] != null ? bool.tryParse('${json['secure']}', caseSensitive: false) ?? false : null,
     collation: json['collation']?.toString()
   );
   

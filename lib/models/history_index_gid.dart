@@ -15,7 +15,7 @@ class HistoryIndexGid {
   final String? g;
 
   factory HistoryIndexGid.fromJson(Map<String,dynamic> json) => HistoryIndexGid(
-    t: json['t'] != null ? json['t'] as int : null,
+    t: json['t'] != null ? int.tryParse('${json['t']}') ?? 0 : null,
     g: json['g']?.toString()
   );
   

@@ -17,9 +17,9 @@ class CacheConfig {
   final int? maxCount;
 
   factory CacheConfig.fromJson(Map<String,dynamic> json) => CacheConfig(
-    enable: json['enable'] != null ? json['enable'] as bool : null,
-    maxAge: json['maxAge'] != null ? json['maxAge'] as int : null,
-    maxCount: json['maxCount'] != null ? json['maxCount'] as int : null
+    enable: json['enable'] != null ? bool.tryParse('${json['enable']}', caseSensitive: false) ?? false : null,
+    maxAge: json['maxAge'] != null ? int.tryParse('${json['maxAge']}') ?? 0 : null,
+    maxCount: json['maxCount'] != null ? int.tryParse('${json['maxCount']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

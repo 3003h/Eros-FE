@@ -23,9 +23,9 @@ class Uconfig {
   factory Uconfig.fromJson(Map<String,dynamic> json) => Uconfig(
     profilelist: (json['profilelist'] as List? ?? []).map((e) => EhProfile.fromJson(e as Map<String, dynamic>)).toList(),
     profileSelected: json['profileSelected'].toString(),
-    nameDisplay: json['nameDisplay'] != null ? json['nameDisplay'] as int : null,
-    thumbnailSize: json['thumbnailSize'] != null ? json['thumbnailSize'] as int : null,
-    thumbnailRows: json['thumbnailRows'] != null ? json['thumbnailRows'] as int : null
+    nameDisplay: json['nameDisplay'] != null ? int.tryParse('${json['nameDisplay']}') ?? 0 : null,
+    thumbnailSize: json['thumbnailSize'] != null ? int.tryParse('${json['thumbnailSize']}') ?? 0 : null,
+    thumbnailRows: json['thumbnailRows'] != null ? int.tryParse('${json['thumbnailRows']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

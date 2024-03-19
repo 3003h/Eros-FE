@@ -22,10 +22,10 @@ class GalleryCache {
 
   factory GalleryCache.fromJson(Map<String,dynamic> json) => GalleryCache(
     gid: json['gid']?.toString(),
-    lastIndex: json['lastIndex'] != null ? json['lastIndex'] as int : null,
-    lastOffset: json['lastOffset'] != null ? (json['lastOffset'] as num).toDouble() : null,
+    lastIndex: json['lastIndex'] != null ? int.tryParse('${json['lastIndex']}') ?? 0 : null,
+    lastOffset: json['lastOffset'] != null ? double.tryParse('${json['lastOffset']}') ?? 0.0 : null,
     columnModeVal: json['columnModeVal']?.toString(),
-    time: json['time'] != null ? json['time'] as int : null
+    time: json['time'] != null ? int.tryParse('${json['time']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

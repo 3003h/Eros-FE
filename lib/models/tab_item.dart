@@ -16,7 +16,7 @@ class TabItem {
 
   factory TabItem.fromJson(Map<String,dynamic> json) => TabItem(
     name: json['name'].toString(),
-    enable: json['enable'] != null ? json['enable'] as bool : null
+    enable: json['enable'] != null ? bool.tryParse('${json['enable']}', caseSensitive: false) ?? false : null
   );
   
   Map<String, dynamic> toJson() => {

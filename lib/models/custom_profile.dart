@@ -42,14 +42,14 @@ class CustomProfile {
     searchText: json['searchText'] != null ? (json['searchText'] as List? ?? []).map((e) => e as dynamic).toList() : null,
     listTypeValue: json['listTypeValue']?.toString(),
     catsTypeValue: json['catsTypeValue']?.toString(),
-    cats: json['cats'] != null ? json['cats'] as int : null,
-    enableAdvance: json['enableAdvance'] != null ? json['enableAdvance'] as bool : null,
+    cats: json['cats'] != null ? int.tryParse('${json['cats']}') ?? 0 : null,
+    enableAdvance: json['enableAdvance'] != null ? bool.tryParse('${json['enableAdvance']}', caseSensitive: false) ?? false : null,
     advSearchTypeValue: json['advSearchTypeValue']?.toString(),
     advSearch: json['advSearch'] != null ? AdvanceSearch.fromJson(json['advSearch'] as Map<String, dynamic>) : null,
     listModeValue: json['listModeValue']?.toString(),
-    hideTab: json['hideTab'] != null ? json['hideTab'] as bool : null,
+    hideTab: json['hideTab'] != null ? bool.tryParse('${json['hideTab']}', caseSensitive: false) ?? false : null,
     aggregateGroups: json['aggregateGroups'] != null ? (json['aggregateGroups'] as List? ?? []).map((e) => e as String).toList() : null,
-    lastEditTime: json['lastEditTime'] != null ? json['lastEditTime'] as int : null
+    lastEditTime: json['lastEditTime'] != null ? int.tryParse('${json['lastEditTime']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

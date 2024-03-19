@@ -19,7 +19,7 @@ class ImageHide {
   factory ImageHide.fromJson(Map<String,dynamic> json) => ImageHide(
     pHash: json['pHash'].toString(),
     imageUrl: json['imageUrl']?.toString(),
-    threshold: json['threshold'] != null ? json['threshold'] as int : null
+    threshold: json['threshold'] != null ? int.tryParse('${json['threshold']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

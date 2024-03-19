@@ -56,7 +56,7 @@ class Profile {
     theme: json['theme'].toString(),
     searchText: (json['searchText'] as List? ?? []).map((e) => e as dynamic).toList(),
     localFav: LocalFav.fromJson(json['localFav'] as Map<String, dynamic>),
-    enableAdvanceSearch: json['enableAdvanceSearch'] as bool,
+    enableAdvanceSearch: bool.tryParse('${json['enableAdvanceSearch']}', caseSensitive: false) ?? false,
     advanceSearch: AdvanceSearch.fromJson(json['advanceSearch'] as Map<String, dynamic>),
     dnsConfig: DnsConfig.fromJson(json['dnsConfig'] as Map<String, dynamic>),
     downloadConfig: DownloadConfig.fromJson(json['downloadConfig'] as Map<String, dynamic>),

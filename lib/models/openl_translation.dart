@@ -21,7 +21,7 @@ class OpenlTranslation {
   final String? targetLang;
 
   factory OpenlTranslation.fromJson(Map<String,dynamic> json) => OpenlTranslation(
-    status: json['status'] != null ? json['status'] as bool : null,
+    status: json['status'] != null ? bool.tryParse('${json['status']}', caseSensitive: false) ?? false : null,
     text: json['text']?.toString(),
     result: json['result']?.toString(),
     sourceLang: json['source_lang']?.toString(),

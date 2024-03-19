@@ -20,8 +20,8 @@ class BlockRule {
 
   factory BlockRule.fromJson(Map<String,dynamic> json) => BlockRule(
     blockType: json['block_type']?.toString(),
-    enabled: json['enabled'] != null ? json['enabled'] as bool : null,
-    enableRegex: json['enable_regex'] != null ? json['enable_regex'] as bool : null,
+    enabled: json['enabled'] != null ? bool.tryParse('${json['enabled']}', caseSensitive: false) ?? false : null,
+    enableRegex: json['enable_regex'] != null ? bool.tryParse('${json['enable_regex']}', caseSensitive: false) ?? false : null,
     ruleText: json['rule_text']?.toString()
   );
   

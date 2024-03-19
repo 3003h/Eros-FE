@@ -15,7 +15,7 @@ class HistoryIndex {
   final List<HistoryIndexGid>? gids;
 
   factory HistoryIndex.fromJson(Map<String,dynamic> json) => HistoryIndex(
-    time: json['time'] != null ? json['time'] as int : null,
+    time: json['time'] != null ? int.tryParse('${json['time']}') ?? 0 : null,
     gids: json['gids'] != null ? (json['gids'] as List? ?? []).map((e) => HistoryIndexGid.fromJson(e as Map<String, dynamic>)).toList() : null
   );
   

@@ -14,8 +14,9 @@ class EhProfile {
 
   factory EhProfile.fromJson(Map<String, dynamic> json) => EhProfile(
       name: json['name'].toString(),
-      value: json['value'] as int,
-      selected: json['selected'] as bool);
+      value: int.tryParse('${json['value']}') ?? 0,
+      selected:
+          bool.tryParse('${json['selected']}', caseSensitive: false) ?? false);
 
   Map<String, dynamic> toJson() =>
       {'name': name, 'value': value, 'selected': selected};

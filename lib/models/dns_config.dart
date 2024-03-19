@@ -21,9 +21,9 @@ class DnsConfig {
   final List<DnsCache>? dohCache;
 
   factory DnsConfig.fromJson(Map<String,dynamic> json) => DnsConfig(
-    enableDoH: json['enableDoH'] != null ? json['enableDoH'] as bool : null,
-    enableCustomHosts: json['enableCustomHosts'] != null ? json['enableCustomHosts'] as bool : null,
-    enableDomainFronting: json['enableDomainFronting'] != null ? json['enableDomainFronting'] as bool : null,
+    enableDoH: json['enableDoH'] != null ? bool.tryParse('${json['enableDoH']}', caseSensitive: false) ?? false : null,
+    enableCustomHosts: json['enableCustomHosts'] != null ? bool.tryParse('${json['enableCustomHosts']}', caseSensitive: false) ?? false : null,
+    enableDomainFronting: json['enableDomainFronting'] != null ? bool.tryParse('${json['enableDomainFronting']}', caseSensitive: false) ?? false : null,
     hosts: json['hosts'] != null ? (json['hosts'] as List? ?? []).map((e) => DnsCache.fromJson(e as Map<String, dynamic>)).toList() : null,
     dohCache: json['dohCache'] != null ? (json['dohCache'] as List? ?? []).map((e) => DnsCache.fromJson(e as Map<String, dynamic>)).toList() : null
   );

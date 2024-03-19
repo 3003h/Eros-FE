@@ -28,10 +28,10 @@ class WebdavProfile {
     url: json['url'].toString(),
     user: json['user']?.toString(),
     password: json['password']?.toString(),
-    syncHistory: json['syncHistory'] != null ? json['syncHistory'] as bool : null,
-    syncReadProgress: json['syncReadProgress'] != null ? json['syncReadProgress'] as bool : null,
-    syncGroupProfile: json['syncGroupProfile'] != null ? json['syncGroupProfile'] as bool : null,
-    syncQuickSearch: json['syncQuickSearch'] != null ? json['syncQuickSearch'] as bool : null
+    syncHistory: json['syncHistory'] != null ? bool.tryParse('${json['syncHistory']}', caseSensitive: false) ?? false : null,
+    syncReadProgress: json['syncReadProgress'] != null ? bool.tryParse('${json['syncReadProgress']}', caseSensitive: false) ?? false : null,
+    syncGroupProfile: json['syncGroupProfile'] != null ? bool.tryParse('${json['syncGroupProfile']}', caseSensitive: false) ?? false : null,
+    syncQuickSearch: json['syncQuickSearch'] != null ? bool.tryParse('${json['syncQuickSearch']}', caseSensitive: false) ?? false : null
   );
   
   Map<String, dynamic> toJson() => {

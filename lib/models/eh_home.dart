@@ -17,9 +17,9 @@ class EhHome {
   final int? resetCost;
 
   factory EhHome.fromJson(Map<String,dynamic> json) => EhHome(
-    currentLimit: json['currentLimit'] != null ? json['currentLimit'] as int : null,
-    totLimit: json['totLimit'] != null ? json['totLimit'] as int : null,
-    resetCost: json['resetCost'] != null ? json['resetCost'] as int : null
+    currentLimit: json['currentLimit'] != null ? int.tryParse('${json['currentLimit']}') ?? 0 : null,
+    totLimit: json['totLimit'] != null ? int.tryParse('${json['totLimit']}') ?? 0 : null,
+    resetCost: json['resetCost'] != null ? int.tryParse('${json['resetCost']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

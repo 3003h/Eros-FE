@@ -23,11 +23,11 @@ class MysqlConfig {
   final MysqlConnectionInfo? mysqlConnectionInfo;
 
   factory MysqlConfig.fromJson(Map<String,dynamic> json) => MysqlConfig(
-    syncHistory: json['syncHistory'] != null ? json['syncHistory'] as bool : null,
-    syncReadProgress: json['syncReadProgress'] != null ? json['syncReadProgress'] as bool : null,
-    syncGroupProfile: json['syncGroupProfile'] != null ? json['syncGroupProfile'] as bool : null,
-    syncQuickSearch: json['syncQuickSearch'] != null ? json['syncQuickSearch'] as bool : null,
-    isValidAccount: json['isValidAccount'] != null ? json['isValidAccount'] as bool : null,
+    syncHistory: json['syncHistory'] != null ? bool.tryParse('${json['syncHistory']}', caseSensitive: false) ?? false : null,
+    syncReadProgress: json['syncReadProgress'] != null ? bool.tryParse('${json['syncReadProgress']}', caseSensitive: false) ?? false : null,
+    syncGroupProfile: json['syncGroupProfile'] != null ? bool.tryParse('${json['syncGroupProfile']}', caseSensitive: false) ?? false : null,
+    syncQuickSearch: json['syncQuickSearch'] != null ? bool.tryParse('${json['syncQuickSearch']}', caseSensitive: false) ?? false : null,
+    isValidAccount: json['isValidAccount'] != null ? bool.tryParse('${json['isValidAccount']}', caseSensitive: false) ?? false : null,
     mysqlConnectionInfo: json['mysqlConnectionInfo'] != null ? MysqlConnectionInfo.fromJson(json['mysqlConnectionInfo'] as Map<String, dynamic>) : null
   );
   

@@ -23,8 +23,8 @@ class BlockConfig {
   final List<BlockRule>? ruleForComment;
 
   factory BlockConfig.fromJson(Map<String,dynamic> json) => BlockConfig(
-    filterCommentsByScore: json['filter_comments_by_score'] != null ? json['filter_comments_by_score'] as bool : null,
-    scoreFilteringThreshold: json['score_filtering_threshold'] != null ? json['score_filtering_threshold'] as int : null,
+    filterCommentsByScore: json['filter_comments_by_score'] != null ? bool.tryParse('${json['filter_comments_by_score']}', caseSensitive: false) ?? false : null,
+    scoreFilteringThreshold: json['score_filtering_threshold'] != null ? int.tryParse('${json['score_filtering_threshold']}') ?? 0 : null,
     ruleForTitle: json['rule_for_title'] != null ? (json['rule_for_title'] as List? ?? []).map((e) => BlockRule.fromJson(e as Map<String, dynamic>)).toList() : null,
     ruleForUploader: json['rule_for_uploader'] != null ? (json['rule_for_uploader'] as List? ?? []).map((e) => BlockRule.fromJson(e as Map<String, dynamic>)).toList() : null,
     ruleForCommentator: json['rule_for_commentator'] != null ? (json['rule_for_commentator'] as List? ?? []).map((e) => BlockRule.fromJson(e as Map<String, dynamic>)).toList() : null,

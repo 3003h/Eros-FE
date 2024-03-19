@@ -31,16 +31,16 @@ class AdvanceSearch {
   final bool? disableCustomFilterTags;
 
   factory AdvanceSearch.fromJson(Map<String,dynamic> json) => AdvanceSearch(
-    requireGalleryTorrent: json['requireGalleryTorrent'] != null ? json['requireGalleryTorrent'] as bool : null,
-    browseExpungedGalleries: json['browseExpungedGalleries'] != null ? json['browseExpungedGalleries'] as bool : null,
-    searchWithMinRating: json['searchWithMinRating'] != null ? json['searchWithMinRating'] as bool : null,
-    minRating: json['minRating'] != null ? json['minRating'] as int : null,
-    searchBetweenPage: json['searchBetweenPage'] != null ? json['searchBetweenPage'] as bool : null,
+    requireGalleryTorrent: json['requireGalleryTorrent'] != null ? bool.tryParse('${json['requireGalleryTorrent']}', caseSensitive: false) ?? false : null,
+    browseExpungedGalleries: json['browseExpungedGalleries'] != null ? bool.tryParse('${json['browseExpungedGalleries']}', caseSensitive: false) ?? false : null,
+    searchWithMinRating: json['searchWithMinRating'] != null ? bool.tryParse('${json['searchWithMinRating']}', caseSensitive: false) ?? false : null,
+    minRating: json['minRating'] != null ? int.tryParse('${json['minRating']}') ?? 0 : null,
+    searchBetweenPage: json['searchBetweenPage'] != null ? bool.tryParse('${json['searchBetweenPage']}', caseSensitive: false) ?? false : null,
     startPage: json['startPage']?.toString(),
     endPage: json['endPage']?.toString(),
-    disableCustomFilterLanguage: json['disableCustomFilterLanguage'] != null ? json['disableCustomFilterLanguage'] as bool : null,
-    disableCustomFilterUploader: json['disableCustomFilterUploader'] != null ? json['disableCustomFilterUploader'] as bool : null,
-    disableCustomFilterTags: json['disableCustomFilterTags'] != null ? json['disableCustomFilterTags'] as bool : null
+    disableCustomFilterLanguage: json['disableCustomFilterLanguage'] != null ? bool.tryParse('${json['disableCustomFilterLanguage']}', caseSensitive: false) ?? false : null,
+    disableCustomFilterUploader: json['disableCustomFilterUploader'] != null ? bool.tryParse('${json['disableCustomFilterUploader']}', caseSensitive: false) ?? false : null,
+    disableCustomFilterTags: json['disableCustomFilterTags'] != null ? bool.tryParse('${json['disableCustomFilterTags']}', caseSensitive: false) ?? false : null
   );
   
   Map<String, dynamic> toJson() => {

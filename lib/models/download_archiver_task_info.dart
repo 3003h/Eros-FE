@@ -54,9 +54,9 @@ class DownloadArchiverTaskInfo {
     imgUrl: json['imgUrl']?.toString(),
     galleryUrl: json['galleryUrl']?.toString(),
     dowmloadType: json['dowmloadType']?.toString(),
-    status: json['status'] != null ? json['status'] as int : null,
-    progress: json['progress'] != null ? json['progress'] as int : null,
-    timeCreated: json['timeCreated'] != null ? json['timeCreated'] as int : null,
+    status: json['status'] != null ? int.tryParse('${json['status']}') ?? 0 : null,
+    progress: json['progress'] != null ? int.tryParse('${json['progress']}') ?? 0 : null,
+    timeCreated: json['timeCreated'] != null ? int.tryParse('${json['timeCreated']}') ?? 0 : null,
     resolution: json['resolution']?.toString(),
     safUri: json['safUri']?.toString()
   );

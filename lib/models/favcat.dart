@@ -21,7 +21,7 @@ class Favcat {
   factory Favcat.fromJson(Map<String,dynamic> json) => Favcat(
     favId: json['favId'].toString(),
     favTitle: json['favTitle'].toString(),
-    totNum: json['totNum'] != null ? json['totNum'] as int : null,
+    totNum: json['totNum'] != null ? int.tryParse('${json['totNum']}') ?? 0 : null,
     note: json['note']?.toString()
   );
   

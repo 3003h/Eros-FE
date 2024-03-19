@@ -13,7 +13,7 @@ class EhLayout {
   final double? sideProportion;
 
   factory EhLayout.fromJson(Map<String,dynamic> json) => EhLayout(
-    sideProportion: json['sideProportion'] != null ? (json['sideProportion'] as num).toDouble() : null
+    sideProportion: json['sideProportion'] != null ? double.tryParse('${json['sideProportion']}') ?? 0.0 : null
   );
   
   Map<String, dynamic> toJson() => {

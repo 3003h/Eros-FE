@@ -46,7 +46,7 @@ class User {
     star: json['star']?.toString(),
     avatarUrl: json['avatarUrl']?.toString(),
     favcat: json['favcat'] != null ? (json['favcat'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList() : null,
-    lastUptTime: json['lastUptTime'] != null ? json['lastUptTime'] as int : null
+    lastUptTime: json['lastUptTime'] != null ? int.tryParse('${json['lastUptTime']}') ?? 0 : null
   );
   
   Map<String, dynamic> toJson() => {

@@ -21,7 +21,7 @@ class EhMytagSet {
   factory EhMytagSet.fromJson(Map<String,dynamic> json) => EhMytagSet(
     name: json['name'].toString(),
     tagCount: json['tagCount']?.toString(),
-    enable: json['enable'] != null ? json['enable'] as bool : null,
+    enable: json['enable'] != null ? bool.tryParse('${json['enable']}', caseSensitive: false) ?? false : null,
     value: json['value']?.toString()
   );
   
