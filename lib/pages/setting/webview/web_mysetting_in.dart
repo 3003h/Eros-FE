@@ -65,7 +65,7 @@ class InWebMySetting extends StatelessWidget {
       child: SafeArea(
         child: InAppWebView(
           initialUrlRequest: URLRequest(
-            url: Uri.parse(
+            url: WebUri(
               '$baseUrl/uconfig.php',
             ),
             // headers: _httpHeaders,
@@ -96,7 +96,8 @@ class InWebMySetting extends StatelessWidget {
             }
 
             // 写入cookie到dio
-            final _cookies = await _cookieManager.getCookies(url: url);
+            final _cookies =
+                await _cookieManager.getCookies(url: WebUri.uri(url));
 
             final ioCookies = _cookies
                 .map((e) => io.Cookie(e.name, e.value as String)

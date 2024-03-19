@@ -22,7 +22,7 @@ class WebSettingController extends GetxController {
     for (final io.Cookie cookie in Global.profile.user.cookies) {
       logger.t('name:${cookie.name} value:${cookie.value}');
       _cookieManager.setCookie(
-          url: Uri.parse(Api.getBaseUrl()),
+          url: WebUri(Api.getBaseUrl()),
           name: cookie.name,
           value: cookie.value);
     }

@@ -40,7 +40,7 @@ class WebLoginViewIn extends StatelessWidget {
       ),
       child: SafeArea(
         child: InAppWebView(
-          initialUrlRequest: URLRequest(url: Uri.parse(EHConst.URL_SIGN_IN)),
+          initialUrlRequest: URLRequest(url: WebUri(EHConst.URL_SIGN_IN)),
           initialOptions: options,
           onWebViewCreated: (InAppWebViewController webViewController) {
             _controller = webViewController;
@@ -88,7 +88,9 @@ class WebLoginViewIn extends StatelessWidget {
             if (uri.path == '/index.php' && uri.queryParameters.isEmpty) {
               // final Map<String, String> cookieMap = <String, String>{};
               // 返回 cookie
-              _cookieManager.getCookies(url: uri).then((List<Cookie> cookies) {
+              _cookieManager
+                  .getCookies(url: WebUri.uri(uri))
+                  .then((List<Cookie> cookies) {
                 logger.d(' $cookies');
                 // value.forEach((Cookie cookie) =>
                 //     cookieMap[cookie.name] = cookie.value as String);

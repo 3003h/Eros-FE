@@ -51,7 +51,7 @@ class InWebMyTags extends StatelessWidget {
       child: SafeArea(
         child: InAppWebView(
           initialUrlRequest:
-              URLRequest(url: Uri.parse('${Api.getBaseUrl()}/mytags')),
+              URLRequest(url: WebUri('${Api.getBaseUrl()}/mytags')),
           onWebViewCreated: (InAppWebViewController controller) {
             _controller = controller;
           },
