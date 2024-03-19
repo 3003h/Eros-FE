@@ -21,10 +21,6 @@ UI 方面主要参考的[E-HentaiViewer](https://github.com/kayanouriko/E-Hentai
 
 - 一部分是flutter问题，一部分是开发水平问题，只能说尽力优化
 
-**直连不好使**
-
-- 水平有限，后续会去掉域前置功能
-
 ## 感谢
 
 应用借鉴和参考以下项目的部分代码和逻辑进行开发
@@ -45,19 +41,19 @@ ehentai译文数据库
 
 ### 主页列表
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/home1.jpg" >
+<img width="200" src="./screenshot/home.png" >
 
 ### 画廊
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/gallery3.jpg" >
+<img width="200" src="./screenshot/gallery1.png" > <img width="200" src="./screenshot/gallery2.png" > 
 
 ### 搜索
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search2.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/search3.jpg" >
+<img width="200" src="./screenshot/search1.png" > <img width="200" src="./screenshot/search2.png" >
 
 ### 阅读
 
-<img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/read1.jpg" > <img width="200" src="https://raw.githubusercontent.com/honjow/FEhViewer/master/screenshot/read2.jpg" >
+<img width="200" src="./screenshot/read1.png" > <img width="200" src="./screenshot/read2.png" >
 
 ## 功能
 
