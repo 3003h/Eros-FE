@@ -41,11 +41,11 @@ jobs:
             artifact_name: release-ios
             artifact_path: build/**/Eros-FE*.ipa
           - target: ios
-            suffix: -impeller
+            suffix: -canvas
             os: macos-14
             flutter_version: "3.x"
             flutter_channel: stable
-            artifact_name: release-ios-impeller
+            artifact_name: release-ios-canvas
             artifact_path: build/**/Eros-FE*.ipa
           - target: macos
             os: macos-14
@@ -163,10 +163,10 @@ jobs:
 #          grep cronet_http pubspec.yaml
 #          git stash
 
-      - name: ios enable impeller
-        if: matrix.target == 'ios' && matrix.suffix == '-impeller'
+      - name: ios disable impeller
+        if: matrix.target == 'ios' && matrix.suffix == '-canvas'
         run: |
-          sed -i '' '/FLTEnableImpeller/{N;d;}' ios/Runner/Info.plist
+          sed -i '' '/FLTEnableImpeller/{n; s/true/false/;}' ios/Runner/Info.plist
 
       - name: Flutter pub get
         run: |

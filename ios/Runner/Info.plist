@@ -42,7 +42,7 @@
 	<key>FDMaximumConcurrentTasks</key>
 	<integer>5</integer>
 	<key>FLTEnableImpeller</key>
-	<false/>
+	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
