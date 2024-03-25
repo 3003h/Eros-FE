@@ -53,12 +53,12 @@ jobs:
             flutter_channel: stable
             artifact_name: release-mac
             artifact_path: build/macos/Eros-FE*.zip
-#          - target: windows
-#            os: windows-latest
-#            flutter_version: "3.x"
-#            flutter_channel: stable
-#            artifact_name: release-windows
-#            artifact_path: build/windows/Eros-FE*.zip
+          - target: windows
+            os: windows-latest
+            flutter_version: "3.x"
+            flutter_channel: stable
+            artifact_name: release-windows
+            artifact_path: build/windows/Eros-FE*.zip
 
     runs-on: ${{ matrix.os }}
     steps:
