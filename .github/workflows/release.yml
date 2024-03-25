@@ -139,7 +139,7 @@ jobs:
 
       # 安装 Flutter
       - name: Flutter action
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2.12.0
         with:
           flutter-version: ${{ matrix.flutter_version }}
           channel: ${{ matrix.flutter_channel }}
