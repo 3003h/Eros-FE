@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
 import 'package:eros_fe/const/storages.dart';

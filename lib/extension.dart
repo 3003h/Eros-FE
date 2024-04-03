@@ -118,7 +118,7 @@ extension ExtGalleryProvider on GalleryProvider {
       favcat: item.favcat?.oN,
       localFav: item.localFav?.oN,
       simpleTags: item.simpleTags?.oN,
-      tagsFromApi: item.tagsFromApi?.toList()?.oN,
+      tagsFromApi: item.tagsFromApi?.toList().oN,
       translated: item.translated?.oN,
       tagGroup: item.tagGroup?.oN,
       galleryComment: item.galleryComment?.oN,

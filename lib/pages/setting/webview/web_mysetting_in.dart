@@ -8,19 +8,21 @@ import 'package:eros_fe/network/api.dart';
 import 'package:eros_fe/pages/setting/controller/web_setting_controller.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart' hide WebView;
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import 'eh_webview.dart';
 
 class InWebMySetting extends StatelessWidget {
-  final CookieManager _cookieManager = CookieManager.instance();
-  final EhSettingService ehSettingService = Get.find();
+  const InWebMySetting({super.key});
 
   @override
   Widget build(BuildContext context) {
-    InAppWebViewController? _controller;
+    final CookieManager cookieManager = CookieManager.instance();
+    final EhSettingService ehSettingService = Get.find();
+
+    InAppWebViewController? controller;
 
     final baseUrl = Api.getBaseUrl();
 
@@ -43,7 +45,7 @@ class InWebMySetting extends StatelessWidget {
                 size: 22,
               ),
               onPressed: () async {
-                _controller?.reload();
+                controller?.reload();
               },
             ),
             CupertinoButton(
@@ -54,7 +56,7 @@ class InWebMySetting extends StatelessWidget {
               ),
               onPressed: () async {
                 // 保存配置
-                _controller?.evaluateJavascript(
+                controller?.evaluateJavascript(
                     source:
                         'document.querySelector("#apply > input[type=submit]").click();');
               },
@@ -70,18 +72,14 @@ class InWebMySetting extends StatelessWidget {
             ),
             // headers: _httpHeaders,
           ),
-          initialOptions: inAppWebViewOptions,
+          initialSettings: inAppWebViewSettings,
           onWebViewCreated: (InAppWebViewController controller) {
-            _controller = controller;
+            controller = controller;
           },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             final uri = navigationAction.request.url!;
 
             logger.d('to $uri');
-            // if (!(uri.path == '/uconfig.php')) {
-            //   logger.d('阻止打开 $uri');
-            //   return NavigationActionPolicy.CANCEL;
-            // }
             if (uri.host != Api.getBaseHost()) {
               logger.d('阻止打开 $uri');
               return NavigationActionPolicy.CANCEL;
@@ -96,10 +94,10 @@ class InWebMySetting extends StatelessWidget {
             }
 
             // 写入cookie到dio
-            final _cookies =
-                await _cookieManager.getCookies(url: WebUri.uri(url));
+            final cookies =
+                await cookieManager.getCookies(url: WebUri.uri(url));
 
-            final ioCookies = _cookies
+            final ioCookies = cookies
                 .map((e) => io.Cookie(e.name, e.value as String)
                   ..domain = e.domain
                   ..path = e.path
@@ -114,24 +112,6 @@ class InWebMySetting extends StatelessWidget {
                     .firstWhereOrNull((element) => element.name == 'sp')
                     ?.value ??
                 '';
-
-            // _cookieManager.getCookies(url: url).then((value) {
-            //   final List<io.Cookie> _cookies = value
-            //       .map((Cookie e) =>
-            //           io.Cookie(e.name, e.value as String)..domain = e.domain)
-            //       .toList();
-            //
-            //   logger.d('${_cookies.map((e) => e.toString()).join('\n')} ');
-            //
-            //   Global.cookieJar.delete(Uri.parse(Api.getBaseUrl()), true);
-            //   Global.cookieJar
-            //       .saveFromResponse(Uri.parse(Api.getBaseUrl()), _cookies);
-            //
-            //   ehSettingService.selectProfile = _cookies
-            //           .firstWhereOrNull((element) => element.name == 'sp')
-            //           ?.value ??
-            //       '';
-            // });
           },
         ),
       ),

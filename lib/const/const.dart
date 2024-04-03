@@ -378,6 +378,7 @@ class EHConst {
 
   static const int sumCats = 1023;
   static const Map<String, int> cats = {
+    'Misc': 1,
     'Doujinshi': 2,
     'Manga': 4,
     'Artist CG': 8,
@@ -387,7 +388,6 @@ class EHConst {
     'Image Set': 32,
     'Cosplay': 64,
     'Asian Porn': 128,
-    'Misc': 1,
   };
 
   static List<String> catList = <String>[
