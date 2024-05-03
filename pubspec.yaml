@@ -113,7 +113,7 @@ dependencies:
       url: https://github.com/honjow/learning.git
       path: packages/learning_language
   encrypt: ^5.0.1
-  wakelock_plus: 1.1.5
+  wakelock_plus: 1.2.5
   jinja: ^0.5.0
   image: ^4.1.3
   palette_generator: ^0.3.2
