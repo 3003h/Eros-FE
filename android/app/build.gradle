@@ -54,8 +54,8 @@ android {
     defaultConfig {
         applicationId "com.honjow.fehviewer"
         minSdkVersion 21
-        targetSdkVersion 33
-//        multiDexEnabled true
+        //noinspection EditedTargetSdkVersion
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         archivesBaseName = "Eros-FE_$versionName+$versionCode"
