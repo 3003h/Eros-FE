@@ -146,7 +146,6 @@ dependencies:
 #  google_ml_kit: ^0.18.0
   google_mlkit_barcode_scanning: ^0.12.0
 #  google_mlkit_translation: ^0.3.0
-  # google_mlkit_language_id 在iOS上有问题。会闪退或者应用卡死
   google_mlkit_language_id: 0.11.0
   flutter_custom_license_page: ^0.0.3
   flutter_list_view: ^1.1.18

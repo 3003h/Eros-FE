@@ -46,6 +46,7 @@ class FeMySql {
       userName: connectionInfo.userName,
       password: connectionInfo.password,
       databaseName: connectionInfo.databaseName,
+      secure: false,
     );
 
     try {
@@ -63,9 +64,9 @@ class FeMySql {
   Future<bool> testConnect() async {
     await _initCompleter?.future;
     final result = await _conn.execute('SELECT 1');
-    result.rows.forEach((element) {
+    for (final element in result.rows) {
       logger.d(element.assoc());
-    });
+    }
     return result.rows.isNotEmpty;
   }
 
@@ -301,7 +302,7 @@ class FeMySql {
     }
 
     final list = <({String gid, int time})>[];
-    result.rows.forEach((element) {
+    for (final element in result.rows) {
       final row = element.typedAssoc();
       list.add(
         (
@@ -309,7 +310,7 @@ class FeMySql {
           time: row['time'] as int? ?? 0,
         ),
       );
-    });
+    }
 
     return list;
   }
@@ -317,32 +318,32 @@ class FeMySql {
   Future<List<({String gid, int time, String json})>> getHistoryList(
     List<String> subList,
   ) async {
-    final _list = <({String gid, int time, String json})>[];
+    final resultList = <({String gid, int time, String json})>[];
 
-    final _splitList = EHUtils.splitList(subList, 50);
-    for (final _subSubList in _splitList) {
-      logger.t('_subSubList $_subSubList');
+    final splitList = EHUtils.splitList(subList, 50);
+    for (final subSubList in splitList) {
+      logger.t('subSubList $subSubList');
 
       final result = await _conn.execute(
-          'SELECT gid, time, json FROM fe_history WHERE gid IN (${_subSubList.join(',')})');
+          'SELECT gid, time, json FROM fe_history WHERE gid IN (${subSubList.join(',')})');
 
       final rows = result.rows;
       logger.d('rows ${rows.length}');
 
       if (rows.isNotEmpty) {
-        rows.forEach((element) {
+        for (final element in rows) {
           final row = element.typedAssoc();
-          _list.add(
+          resultList.add(
             (
               gid: row['gid'] as String? ?? '',
               time: row['time'] as int? ?? 0,
               json: row['json'] as String? ?? '',
             ),
           );
-        });
+        }
       }
     }
 
-    return _list;
+    return resultList;
   }
 }
