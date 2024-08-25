@@ -117,19 +117,19 @@ class ReadSettingList extends StatelessWidget {
       ]),
 
       // 兼容模式
-      SliverCupertinoListSection.listInsetGrouped(children: [
-        EhCupertinoListTile(
-          title: Text(L10n.of(context).read_view_compatible_mode),
-          trailing: Obx(() {
-            return CupertinoSwitch(
-              value: ehSettingService.readViewCompatibleMode,
-              onChanged: (bool val) {
-                ehSettingService.readViewCompatibleMode = val;
-              },
-            );
-          }),
-        ),
-      ]),
+      // SliverCupertinoListSection.listInsetGrouped(children: [
+      //   EhCupertinoListTile(
+      //     title: Text(L10n.of(context).read_view_compatible_mode),
+      //     trailing: Obx(() {
+      //       return CupertinoSwitch(
+      //         value: ehSettingService.readViewCompatibleMode,
+      //         onChanged: (bool val) {
+      //           ehSettingService.readViewCompatibleMode = val;
+      //         },
+      //       );
+      //     }),
+      //   ),
+      // ]),
     ]);
   }
 }

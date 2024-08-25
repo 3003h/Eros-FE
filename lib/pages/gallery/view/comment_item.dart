@@ -448,11 +448,14 @@ class _CommentUser extends StatelessWidget {
           : avatarSize / 2;
 
       return _ehSettingService.avatarType == AvatarType.boringAvatar
-          ? BoringAvatars(
+          ? BoringAvatar(
               name: _name,
-              colors: [...ThemeColors.catColorList],
+              // colors: [...ThemeColors.catColorList],
+              palette: BoringAvatarPalette(
+                ThemeColors.catColorList..shuffle(),
+              ),
               type: _ehSettingService.boringAvatarsType,
-              square: true,
+              // square: true,
             )
           : TextAvatar(
               name: _name,

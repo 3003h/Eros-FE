@@ -2,7 +2,7 @@ name: eros_fe
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.6.1+541
+version: 1.6.2+542
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -48,10 +48,10 @@ dependencies:
     git:
       url: https://github.com/honjow/flutter_egg.git
   # 从分享菜单打开
-  receive_sharing_intent: #^1.4.5
-    git: https://github.com/Nahrawene-ben-hmida/receive_sharing_intent
+  receive_sharing_intent: ^1.8.0
+#    git: https://github.com/Nahrawene-ben-hmida/receive_sharing_intent
   # 分享
-  share_plus: ^9.0.0
+  share_plus: ^10.0.2
   # 权限检查
   permission_handler: ^11.0.0
   # 缓存
@@ -82,7 +82,7 @@ dependencies:
   google_translator:
     git: https://github.com/aaalkoud/google-translator.git
 #  orientation: ^1.3.0
-  vibration: ^1.7.4-nullsafety.0
+  vibration: ^2.0.0
   device_info_plus: ^10.0.0
   flutter_easyrefresh: ^2.2.1
   flutter_markdown: ^0.7.1
@@ -113,7 +113,7 @@ dependencies:
       url: https://github.com/honjow/learning.git
       path: packages/learning_language
   encrypt: ^5.0.1
-  wakelock_plus: 1.1.6
+  wakelock_plus: ^1.2.8
   jinja: ^0.6.0
   image: ^4.1.3
   palette_generator: ^0.3.2
@@ -163,10 +163,10 @@ dependencies:
   dio_cache_interceptor: ^3.3.1
   dio_cache_interceptor_hive_store: ^3.2.0
   flutter_android_volume_keydown: #^1.0.0
-#    path: ../flutter_android_volume_keydown
-    git:
-      url: https://github.com/honjow/flutter_android_volume_keydown.git
-      ref: dev
+    path: ../flutter_android_volume_keydown
+#    git:
+#      url: https://github.com/honjow/flutter_android_volume_keydown.git
+#      ref: dev
   sentry_flutter: ^8.2.0
   system_network_proxy: #^1.0.2
     git:
@@ -186,13 +186,13 @@ dependencies:
     git:
       url: https://github.com/honjow/saf.git
       ref: master
-  flutter_widget_from_html_core: ^0.14.4
+  flutter_widget_from_html_core: ^0.15.2
   quiver: ^3.2.0 # 工具库
   native_dio_adapter: ^1.0.0+2
   firebase_analytics: ^10.6.3
   firebase_crashlytics: ^3.4.3
-  firebase_performance_dio: ^0.6.0
-  pull_down_button: ^0.9.3
+  firebase_performance_dio: ^0.7.1
+  pull_down_button: ^0.10.1
   dio_cache_interceptor_file_store: ^1.2.2
   flutter_windowmanager: ^0.2.0
   integral_isolates: ^0.5.1
@@ -229,9 +229,9 @@ dev_dependencies:
   cached: ^1.6.1
 
 dependency_overrides:
-  collection: ^1.18.0
-  win32: ^4.0.0
-  js: ^0.7.0
+#  collection: ^1.18.0
+#  win32: ^4.0.0
+#  js: ^0.7.0
   intl: ^0.19.0
 
 flutter_intl:

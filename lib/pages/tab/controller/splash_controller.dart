@@ -25,21 +25,37 @@ class SplashController extends GetxController {
     } else {
       // For sharing or opening urls/text coming from outside the app while the app is in the memory
       _intentDataStreamSubscription =
-          ReceiveSharingIntent.getTextStream().listen((String value) {
-        sharedText = value;
-        logger.d('getTextStream Shared: $sharedText');
-        _startHome(sharedText ?? '', replace: false);
-      }, onError: (err) {
-        logger.e('getTextStream error: $err');
-      });
+          ReceiveSharingIntent.instance.getMediaStream().listen(
+        (List<SharedMediaFile> value) {
+          if (value.isEmpty) {
+            Get.offNamed(EHRoutes.home);
+          } else {
+            _parseSharedMediaFile(value.first);
+          }
+        },
+        onError: (err) {
+          logger.e('getTextStream error: $err');
+        },
+      );
 
       // For sharing or opening urls/text coming from outside the app while the app is closed
-      ReceiveSharingIntent.getInitialText().then((String? value) {
-        // logger.i('value(closed): $value');
-        sharedText = value ?? '';
-        logger.t('Shared: $sharedText');
-        _startHome(sharedText ?? '');
-      });
+      ReceiveSharingIntent.instance.getInitialMedia().then(
+        (List<SharedMediaFile> value) {
+          if (value.isEmpty) {
+            Get.offNamed(EHRoutes.home);
+          } else {
+            _parseSharedMediaFile(value.first);
+          }
+        },
+      );
+    }
+  }
+
+  void _parseSharedMediaFile(SharedMediaFile sharedMediaFile) {
+    if (sharedMediaFile.type == SharedMediaType.text) {
+      sharedText = sharedMediaFile.path;
+      logger.t('Shared: $sharedText');
+      _startHome(sharedText ?? '');
     }
   }
 

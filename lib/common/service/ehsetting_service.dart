@@ -188,10 +188,9 @@ class EhSettingService extends ProfileService {
   bool get showCommentAvatar => _showCommentAvatar.value;
   set showCommentAvatar(bool val) => _showCommentAvatar.value = val;
 
-  final _boringAvatarsType = BoringAvatarsType.beam.obs;
-  BoringAvatarsType get boringAvatarsType => _boringAvatarsType.value;
-  set boringAvatarsType(BoringAvatarsType val) =>
-      _boringAvatarsType.value = val;
+  final _boringAvatarsType = BoringAvatarType.beam.obs;
+  BoringAvatarType get boringAvatarsType => _boringAvatarsType.value;
+  set boringAvatarsType(BoringAvatarType val) => _boringAvatarsType.value = val;
 
   final _avatarBorderRadiusType = AvatarBorderRadiusType.circle.obs;
   AvatarBorderRadiusType get avatarBorderRadiusType =>
@@ -283,8 +282,9 @@ class EhSettingService extends ProfileService {
   }
 
   // readViewCompatibleModes
-  final _readViewCompatibleMode = true.obs;
-  bool get readViewCompatibleMode => _readViewCompatibleMode.value;
+  final _readViewCompatibleMode = false.obs;
+  // bool get readViewCompatibleMode => _readViewCompatibleMode.value;
+  bool get readViewCompatibleMode => false;
   set readViewCompatibleMode(bool val) => _readViewCompatibleMode.value = val;
 
   // translateSearchHistory
@@ -507,8 +507,8 @@ class EhSettingService extends ProfileService {
 
     // _boringAvatarsType
     boringAvatarsType = EnumToString.fromString(
-            BoringAvatarsType.values, ehConfig.boringAvatarsType ?? '') ??
-        BoringAvatarsType.beam;
+            BoringAvatarType.values, ehConfig.boringAvatarsType ?? '') ??
+        BoringAvatarType.beam;
     everFromEnum(_boringAvatarsType, (String value) {
       ehConfig = ehConfig.copyWith(boringAvatarsType: value.oN);
     });
