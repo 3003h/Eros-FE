@@ -3,15 +3,18 @@ import 'dart:async';
 import 'package:eros_fe/config/config.dart';
 import 'package:eros_fe/index.dart';
 import 'package:eros_fe/utils/openl/openl_translator.dart';
+import 'package:google_mlkit_language_id/google_mlkit_language_id.dart';
 import 'package:google_translator/translator.dart';
-import 'package:learning_language/learning_language.dart';
+
+// import 'package:learning_language/learning_language.dart';
 
 import 'language.dart';
 
 TranslatorHelper translatorHelper = TranslatorHelper();
 
 class TranslatorHelper {
-  final _languageIdentifier = LanguageIdentifier();
+  // final _languageIdentifier = LanguageIdentifier();
+  final languageIdentifier = LanguageIdentifier(confidenceThreshold: 0.5);
 
   GoogleTranslator googleTranslator = GoogleTranslator();
 
@@ -19,7 +22,7 @@ class TranslatorHelper {
     return FeConfig.openLapikey;
   }
 
-  Future<OpenlTranslation?> openLtranslate(
+  Future<OpenlTranslation?> openLTranslate(
     String sourceText, {
     String from = 'auto',
     String to = 'en',
@@ -39,7 +42,7 @@ class TranslatorHelper {
     );
   }
 
-  Future<String?> getfallbackService() async {
+  Future<String?> getFallbackService() async {
     final String? apikey = await getOpenLApikey();
     if (apikey == null || apikey.isEmpty) {
       return null;
@@ -56,7 +59,9 @@ class TranslatorHelper {
     logger.d('translateText');
 
     // 通过语言识别器识别语言
-    String sourceLanguage = await _languageIdentifier.identify(sourceText);
+    // String sourceLanguage = await _languageIdentifier.identify(sourceText);
+    String sourceLanguage =
+        await languageIdentifier.identifyLanguage(sourceText);
     logger.d('sourceLanguage: $sourceLanguage');
     if (sourceLanguage == 'und' || sourceLanguage.contains('-')) {
       sourceLanguage = 'auto';
@@ -71,7 +76,7 @@ class TranslatorHelper {
           '';
     }
 
-    OpenlTranslation? result = await openLtranslate(
+    OpenlTranslation? result = await openLTranslate(
       sourceText,
       from: sourceLanguage,
       to: to,
@@ -81,11 +86,11 @@ class TranslatorHelper {
     if (result?.status ?? false) {
       return result?.result ?? '';
     } else {
-      final service = await getfallbackService();
+      final service = await getFallbackService();
       if (service != null) {
         logger.d('getFallbackService $service');
         try {
-          final result = await openLtranslate(
+          final result = await openLTranslate(
             sourceText,
             from: sourceLanguage,
             to: to,
