@@ -451,9 +451,7 @@ class _CommentUser extends StatelessWidget {
           ? BoringAvatar(
               name: _name,
               // colors: [...ThemeColors.catColorList],
-              palette: BoringAvatarPalette(
-                ThemeColors.catColorList..shuffle(),
-              ),
+              palette: ThemeColors.boringAvatarPalette,
               type: _ehSettingService.boringAvatarsType,
               // square: true,
             )

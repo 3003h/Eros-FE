@@ -276,9 +276,7 @@ class _BoringAvatar extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           name: _username,
           // colors: ThemeColors.catColorList,
-          palette: BoringAvatarPalette(
-            ThemeColors.catColorList..shuffle(),
-          ),
+          palette: ThemeColors.boringAvatarPalette,
           type: type,
           // square: true,
         ),
@@ -323,7 +321,7 @@ class _TextAvatar extends StatelessWidget {
         duration: const Duration(milliseconds: 300),
         child: TextAvatar(
           name: _username,
-          colors: ThemeColors.catColorList,
+          colors: ThemeColors.richAvatarColorList,
           type: type,
           radius: radius,
         ),
