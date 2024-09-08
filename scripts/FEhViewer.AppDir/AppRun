@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Set the path to the directory containing the AppRun script
+DIR="$(dirname "$(readlink -f "$0")")"
+# Set environment variables if needed
+export LD_LIBRARY_PATH="$DIR/lib:$DIR/syslib:$LD_LIBRARY_PATH"
+# Run the application binary
+exec "$DIR/fehviewer"
