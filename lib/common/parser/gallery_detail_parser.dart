@@ -373,15 +373,16 @@ List<GalleryImage> parseGalleryImageFromHtml(String response) {
 
 /// 缩略图处理
 List<GalleryImage> parseGalleryImage(Document document) {
-  // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
-  final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
+  // 大图 #gdt > div.gdtl  小图 #gdt > a
+  // TODO(Indekkusu545): 暂不清楚现在大图小图是否统一.
+  final List<Element> picLsit = document.querySelectorAll('#gdt > a');
 
   final List<GalleryImage> galleryImages = [];
 
   if (picLsit.isNotEmpty) {
     // 小图的处理
     for (final Element pic in picLsit) {
-      final String picHref = pic.querySelector('a')?.attributes['href'] ?? '';
+      final String picHref = pic.attributes['href'] ?? '';
       final String style = pic.querySelector('div')?.attributes['style'] ?? '';
       final String picSrcUrl =
           RegExp(r'url\((.+)\)').firstMatch(style)?.group(1) ?? '';
@@ -391,9 +392,9 @@ List<GalleryImage> parseGalleryImage(Document document) {
           RegExp(r'width:(\d+)?px').firstMatch(style)?.group(1) ?? '';
       final String offSet =
           RegExp(r'\) -(\d+)?px ').firstMatch(style)?.group(1) ?? '';
-
-      final Element? imgElem = pic.querySelector('img');
-      final String picSer = imgElem?.attributes['alt']?.trim() ?? '';
+      final String title = pic.querySelector('div')?.attributes['title'] ?? '';
+      final String picSer =
+          RegExp(r'Page (\d+):').firstMatch(title)?.group(1) ?? '';
 
       galleryImages.add(GalleryImage(
         ser: int.parse(picSer),
@@ -430,5 +431,6 @@ List<GalleryImage> parseGalleryImage(Document document) {
     }
   }
 
+  logger.d('galleryImages.length: ${galleryImages.length}');
   return galleryImages;
 }
