@@ -373,13 +373,11 @@ List<GalleryImage> parseGalleryImageFromHtml(String response) {
 
 /// 缩略图处理
 List<GalleryImage> parseGalleryImage(Document document) {
-  // 大图 #gdt > div.gdtl  小图 #gdt > div.gdtm
-  final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
-
   final List<GalleryImage> galleryImages = [];
 
+  // 小图 #gdt > div.gdtm
+  List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtm');
   if (picLsit.isNotEmpty) {
-    // 小图的处理
     for (final Element pic in picLsit) {
       final String picHref = pic.querySelector('a')?.attributes['href'] ?? '';
       final String style = pic.querySelector('div')?.attributes['style'] ?? '';
@@ -405,9 +403,12 @@ List<GalleryImage> parseGalleryImage(Document document) {
         offSet: double.parse(offSet),
       ));
     }
-  } else {
-    final List<Element> picLsit = document.querySelectorAll('#gdt > div.gdtl');
-    // 大图的处理
+    return galleryImages;
+  }
+
+  // 大图 #gdt > div.gdtl
+  picLsit = document.querySelectorAll('#gdt > div.gdtl');
+  if (picLsit.isNotEmpty) {
     for (final Element pic in picLsit) {
       final String picHref = pic.querySelector('a')?.attributes['href'] ?? '';
       final Element? imgElem = pic.querySelector('img');
@@ -428,7 +429,40 @@ List<GalleryImage> parseGalleryImage(Document document) {
         oriHeight: double.parse(height),
       ));
     }
+    return galleryImages;
   }
 
+  // 里站 #gdt > a
+  picLsit = document.querySelectorAll('#gdt > a');
+  if (picLsit.isNotEmpty) {
+    for (final Element pic in picLsit) {
+      final String picHref = pic.attributes['href'] ?? '';
+      final String style = pic.querySelector('div')?.attributes['style'] ?? '';
+      final String picSrcUrl =
+          RegExp(r'url\((.+)\)').firstMatch(style)?.group(1) ?? '';
+      final String height =
+          RegExp(r'height:(\d+)?px').firstMatch(style)?.group(1) ?? '';
+      final String width =
+          RegExp(r'width:(\d+)?px').firstMatch(style)?.group(1) ?? '';
+      final String offSet =
+          RegExp(r'\) -(\d+)?px ').firstMatch(style)?.group(1) ?? '';
+      final String title = pic.querySelector('div')?.attributes['title'] ?? '';
+      final String picSer =
+          RegExp(r'Page (\d+):').firstMatch(title)?.group(1) ?? '';
+
+      galleryImages.add(GalleryImage(
+        ser: int.parse(picSer),
+        largeThumb: false,
+        href: picHref,
+        thumbUrl: picSrcUrl,
+        thumbHeight: double.parse(height),
+        thumbWidth: double.parse(width),
+        offSet: double.parse(offSet),
+      ));
+    }
+    return galleryImages;
+  }
+
+  logger.e('No gallery images found');
   return galleryImages;
 }
