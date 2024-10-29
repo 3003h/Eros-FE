@@ -38,51 +38,51 @@ EhSettings parseEhSettings(String html) {
     }
   }
 
-  final _inputElms = document.getElementsByTagName('input');
+  final inputElms = document.getElementsByTagName('input');
 
   // 解析图片加载设置
-  final uh = _parseUconfigChecked('uh', 2, document);
+  final uh = _parseUConfigChecked('uh', document);
 
   // 图片大小设置
-  final xr = _parseUconfigChecked('xr', 5, document);
-  final rx = _parseUconfigInput('rx', _inputElms);
-  final ry = _parseUconfigInput('ry', _inputElms);
+  final xr = _parseUConfigChecked('xr', document);
+  final rx = _parseUConfigInput('rx', inputElms);
+  final ry = _parseUConfigInput('ry', inputElms);
 
   // 图库的名字显示
-  final tl = _parseUconfigChecked('tl', 1, document);
+  final tl = _parseUConfigChecked('tl', document);
 
   // 归档下载方式
-  final ar = _parseUconfigChecked('ar', 5, document);
+  final ar = _parseUConfigChecked('ar', document);
 
   // 首页样式
-  final dm = _parseUconfigChecked('dm', 4, document);
+  final dm = _parseUConfigChecked('dm', document);
 
   // 首页上看到哪些类别 ct
 
   // 收藏夹中默认排序 fs
-  final fs = _parseUconfigChecked('fs', 1, document);
+  final fs = _parseUConfigChecked('fs', document);
 
   final fav = <EhSettingItem>[];
   for (int idx = 0; idx <= 9; idx++) {
-    final _value = _parseUconfigInput('favorite_$idx', _inputElms);
-    if (_value != null) {
-      fav.add(EhSettingItem(type: 'favorite', ser: '$idx', value: _value));
+    final favValue = _parseUConfigInput('favorite_$idx', inputElms);
+    if (favValue != null) {
+      fav.add(EhSettingItem(type: 'favorite', ser: '$idx', value: favValue));
     }
   }
 
   //
-  final ru = _parseUconfigInput('ru', _inputElms);
+  final ru = _parseUConfigInput('ru', inputElms);
 
   // 排除标签组
   final xn = <EhSettingItem>[];
   for (int idx = 1; idx <= 50; idx++) {
-    final Element? _elm = document.querySelector('#xn_$idx');
-    if (_elm != null) {
+    final Element? elm = document.querySelector('#xn_$idx');
+    if (elm != null) {
       xn.add(EhSettingItem(
         type: 'xn',
         ser: '$idx',
-        value: _elm.attributes['checked'] == 'checked' ? '1' : '0',
-        name: _elm.parent?.text.trim(),
+        value: elm.attributes['checked'] == 'checked' ? '1' : '0',
+        name: elm.parent?.text.trim(),
       ));
     }
   }
@@ -90,14 +90,14 @@ EhSettings parseEhSettings(String html) {
   // 排除语言 xl
   final xl = <EhSettingItem>[];
   for (int idx = 0; idx <= 2303; idx++) {
-    final Element? _elm = document.querySelector('#xl_$idx');
-    if (_elm?.attributes['checked'] == 'checked') {
+    final Element? elmXl = document.querySelector('#xl_$idx');
+    if (elmXl?.attributes['checked'] == 'checked') {
       xl.add(EhSettingItem(type: 'xl', ser: '$idx', value: '1'));
     }
   }
 
-  final ft = _parseUconfigInput('ft', _inputElms);
-  final wt = _parseUconfigInput('wt', _inputElms);
+  final ft = _parseUConfigInput('ft', inputElms);
+  final wt = _parseUConfigInput('wt', inputElms);
 
   final xu = document.querySelector('#xu')?.text.trim();
   // print('xu:$xu');
@@ -113,46 +113,46 @@ EhSettings parseEhSettings(String html) {
 
   // 搜索结果数 rc
   // todo 需要测试无Hath Perk情况
-  final rc = _parseUconfigChecked('rc', 3, document);
+  final rc = _parseUConfigChecked('rc', document);
 
   // lt 鼠标悬停缩略图何时加载
-  final lt = _parseUconfigChecked('lt', 1, document);
+  final lt = _parseUConfigChecked('lt', document);
 
   // ts 缩略图大小
-  final ts = _parseUconfigChecked('ts', 1, document);
+  final ts = _parseUConfigChecked('ts', document);
 
   // tr 行数
-  final tr = _parseUconfigChecked('tr', 3, document);
+  final tr = _parseUConfigChecked('tr', document);
 
-  final tp = _parseUconfigInput('tp', _inputElms);
-  final vp = _parseUconfigInput('vp', _inputElms);
+  final tp = _parseUConfigInput('tp', inputElms);
+  final vp = _parseUConfigInput('vp', inputElms);
 
   // 评论排序方式 cs
-  final cs = _parseUconfigChecked('cs', 2, document);
+  final cs = _parseUConfigChecked('cs', document);
 
   // 显示评论投票数 sc
-  final sc = _parseUconfigChecked('sc', 1, document);
+  final sc = _parseUConfigChecked('sc', document);
 
   // 图库标签排序方式 tb
-  final tb = _parseUconfigChecked('tb', 1, document);
+  final tb = _parseUConfigChecked('tb', document);
 
-  // 显示图库页码 pn
-  final pn = _parseUconfigChecked('pn', 1, document);
+  // 图库缩略图标签 pn
+  final pn = _parseUConfigChecked('pn', document);
 
-  final hh = _parseUconfigInput('hh', _inputElms);
+  final hh = _parseUConfigInput('hh', inputElms);
 
   // 原始图像代替压缩过的版本 oi
-  final oi = _parseUconfigChecked('oi', 1, document);
+  final oi = _parseUConfigChecked('oi', document);
 
   // 总是使用多页查看器 qb
-  final qb = _parseUconfigChecked('qb', 1, document);
+  final qb = _parseUConfigChecked('qb', document);
   // print('mpv qb $qb');
 
   // 显示样式 ms
-  final ms = _parseUconfigChecked('ms', 2, document);
+  final ms = _parseUConfigChecked('ms', document);
 
   // 显示缩略图侧栏 mt
-  final mt = _parseUconfigChecked('mt', 1, document);
+  final mt = _parseUConfigChecked('mt', document);
 
   return EhSettings(
     profilelist: profileSet,
@@ -193,11 +193,11 @@ EhSettings parseEhSettings(String html) {
   );
 }
 
-String _parseUconfigChecked(String name, int max, Document document) {
+String _parseUConfigChecked(String name, Document document, {int max = 10}) {
   int sel = 0;
   for (int idx = 0; idx <= max; idx++) {
-    final Element? _elm = document.querySelector('#${name}_$idx');
-    if (_elm?.attributes['checked'] == 'checked') {
+    final Element? elm = document.querySelector('#${name}_$idx');
+    if (elm?.attributes['checked'] == 'checked') {
       sel = idx;
       break;
     }
@@ -206,7 +206,7 @@ String _parseUconfigChecked(String name, int max, Document document) {
   return sel.toString();
 }
 
-String? _parseUconfigInput(String name, List<Element> inputElms) {
+String? _parseUConfigInput(String name, List<Element> inputElms) {
   return inputElms
       .firstWhereOrNull((elm) => elm.attributes['name'] == name)
       ?.attributes['value'];

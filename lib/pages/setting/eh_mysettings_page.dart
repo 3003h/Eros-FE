@@ -39,7 +39,7 @@ class EhMySettingsPage extends GetView<EhMySettingsController> {
                     size: 22,
                   ),
                   onPressed: () async {
-                    Get.to(() => InWebMySetting());
+                    Get.to(() => const InWebMySetting());
                   },
                 ),
                 CupertinoButton(
@@ -199,7 +199,7 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
           hasLeading: true,
           children: [
             ...kFavList.map((e) {
-              final String _title = controller.ehSetting.favMap['$e'] ?? '';
+              final String favTitle = controller.ehSetting.favMap['$e'] ?? '';
               // logger.d('favMap: $e $_title');
               return CupertinoTextInputListTile(
                 leading: Icon(
@@ -207,10 +207,10 @@ class _ListViewEhMySettingsState extends State<ListViewEhMySettings> {
                   color: ThemeColors.favColor['$e'],
                 ),
                 // textAlign: TextAlign.left,
-                initValue: _title,
+                initValue: favTitle,
                 onChanged: (val) => controller.ehSetting.setFavname('$e', val),
               );
-            }).toList(),
+            }),
           ],
         );
       }),

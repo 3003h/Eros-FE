@@ -188,14 +188,14 @@ class EhMySettingsController extends GetxController {
   }
 
   Future<String?> _dialogGetProfileName({String? text}) async {
-    final _textEditingController = TextEditingController(text: text);
+    final textEditingController = TextEditingController(text: text);
     final name = await showCupertinoDialog<String>(
         context: Get.context!,
         builder: (context) {
           return CupertinoAlertDialog(
             title: const Text('Profile Name'),
             content: CupertinoTextField(
-              controller: _textEditingController,
+              controller: textEditingController,
               decoration: BoxDecoration(
                 color: ehTheme.favnoteTextFieldBackgroundColor,
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -203,12 +203,12 @@ class EhMySettingsController extends GetxController {
             ),
             actions: [
               CupertinoDialogAction(
-                child: Text(L10n.of(context).cancel),
                 onPressed: Get.back,
+                child: Text(L10n.of(context).cancel),
               ),
               CupertinoDialogAction(
                 child: Text(L10n.of(context).ok),
-                onPressed: () => Get.back(result: _textEditingController.text),
+                onPressed: () => Get.back(result: textEditingController.text),
               ),
             ],
           );
@@ -218,15 +218,15 @@ class EhMySettingsController extends GetxController {
   }
 
   Future<bool> _dialogDeleteProfile() async {
-    final rult = await showCupertinoDialog<bool>(
+    final result = await showCupertinoDialog<bool>(
             context: Get.context!,
             builder: (context) {
               return CupertinoAlertDialog(
                 title: const Text('Delete Profile'),
                 actions: [
                   CupertinoDialogAction(
-                    child: Text(L10n.of(context).cancel),
                     onPressed: Get.back,
+                    child: Text(L10n.of(context).cancel),
                   ),
                   CupertinoDialogAction(
                     child: Text(
@@ -242,6 +242,6 @@ class EhMySettingsController extends GetxController {
               );
             }) ??
         false;
-    return rult;
+    return result;
   }
 }
