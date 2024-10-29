@@ -114,14 +114,14 @@ class LoginWebDAV extends GetView<WebdavController> {
                               const BorderRadius.all(Radius.circular(30.0)),
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 10),
-                          child: controller.testingConnect
-                              ? const CupertinoActivityIndicator()
-                              : Text('Test'),
                           color: CupertinoColors.activeOrange,
                           onPressed: () async {
                             // final rult = await controller.pressLoginWebDAV();
                             await controller.testWebDav();
                           },
+                          child: controller.testingConnect
+                              ? const CupertinoActivityIndicator()
+                              : Text('Test'),
                         );
                       }),
                       CupertinoButton(
@@ -130,9 +130,6 @@ class LoginWebDAV extends GetView<WebdavController> {
                             const BorderRadius.all(Radius.circular(30.0)),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 10),
-                        child: controller.loadingLogin
-                            ? const CupertinoActivityIndicator()
-                            : Text(L10n.of(context).login),
                         color: CupertinoColors.activeBlue,
                         onPressed: controller.loadingLogin
                             ? null
@@ -143,6 +140,9 @@ class LoginWebDAV extends GetView<WebdavController> {
                                   Get.back(id: isLayoutLarge ? 2 : null);
                                 }
                               },
+                        child: controller.loadingLogin
+                            ? const CupertinoActivityIndicator()
+                            : Text(L10n.of(context).login),
                       ),
                     ],
                   ),

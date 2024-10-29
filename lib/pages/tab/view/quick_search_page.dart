@@ -46,21 +46,21 @@ class QuickSearchListPage extends StatelessWidget {
             CupertinoButton(
               minSize: 40,
               padding: const EdgeInsets.all(0),
+              onPressed: _showFile,
               child: const Icon(
                 FontAwesomeIcons.solidFileLines,
                 size: 20,
               ),
-              onPressed: _showFile,
             ),
             if (Get.find<WebdavController>().syncQuickSearch)
               CupertinoButton(
                 minSize: 40,
                 padding: const EdgeInsets.all(0),
+                onPressed: quickSearchController.syncQuickSearch,
                 child: const Icon(
                   FontAwesomeIcons.arrowsRotate,
                   size: 20,
                 ),
-                onPressed: quickSearchController.syncQuickSearch,
               ),
           ],
         ),

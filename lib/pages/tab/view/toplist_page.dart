@@ -98,10 +98,10 @@ class _ToplistTabState extends State<ToplistTab> {
           CupertinoButton(
             padding: const EdgeInsets.all(0.0),
             minSize: 40,
-            child: Stack(
+            child: const Stack(
               alignment: Alignment.centerRight,
               // mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
+              children: <Widget>[
                 Icon(
                   CupertinoIcons.sort_down,
                   size: 28,

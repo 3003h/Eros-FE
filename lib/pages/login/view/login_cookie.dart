@@ -74,13 +74,13 @@ class LoginCookie extends GetView<LoginController> {
                     child: GetBuilder<LoginController>(
                       builder: (logic) {
                         return CupertinoButton(
-                          child: logic.loadingLogin
-                              ? const CupertinoActivityIndicator()
-                              : Text(L10n.of(context).login),
                           color: CupertinoColors.activeBlue,
                           onPressed: logic.loadingLogin
                               ? null
                               : logic.pressLoginCookie,
+                          child: logic.loadingLogin
+                              ? const CupertinoActivityIndicator()
+                              : Text(L10n.of(context).login),
                         );
                       },
                     ),
@@ -88,6 +88,7 @@ class LoginCookie extends GetView<LoginController> {
                   CupertinoButton(
                     minSize: 50,
                     padding: const EdgeInsets.all(20),
+                    onPressed: controller.readCookieFromClipboard,
                     child: Column(
                       children: [
                         const Icon(
@@ -98,7 +99,6 @@ class LoginCookie extends GetView<LoginController> {
                             textScaleFactor: 0.8),
                       ],
                     ),
-                    onPressed: controller.readCookieFromClipboard,
                   ),
                 ],
               ),

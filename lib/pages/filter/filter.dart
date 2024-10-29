@@ -70,18 +70,16 @@ class _GalleryCatButtonState extends State<GalleryCatButton> {
   @override
   Widget build(BuildContext context) {
     // loggerNoStack.v('GalleryCatButton build [${widget.text}] [$_value]');
-    return Container(
-      child: GestureDetector(
-        onLongPress: _onLongPress,
-        child: CupertinoButton(
-          padding: const EdgeInsets.all(2.0),
-          onPressed: _onPressed,
-          pressedOpacity: 1.0,
-          child: Text(
-            widget.text,
-            style: TextStyle(color: _textColor),
-          ),
-          color: _color,
+    return GestureDetector(
+      onLongPress: _onLongPress,
+      child: CupertinoButton(
+        padding: const EdgeInsets.all(2.0),
+        onPressed: _onPressed,
+        pressedOpacity: 1.0,
+        color: _color,
+        child: Text(
+          widget.text,
+          style: TextStyle(color: _textColor),
         ),
       ),
     );

@@ -68,11 +68,11 @@ class ImageHideItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 12),
                   child: ClipRRect(
-                    child: Container(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: SizedBox(
                       width: 50,
                       child: EhNetworkImage(imageUrl: imageHide.imageUrl ?? ''),
                     ),
-                    borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
                 Text(
@@ -83,12 +83,13 @@ class ImageHideItem extends StatelessWidget {
           ),
           CupertinoButton(
             // 清除按钮
+            onPressed: onDelete,
+            // 清除按钮
             child: const Icon(
               CupertinoIcons.xmark_circle,
               color: CupertinoColors.systemRed,
               size: 26,
             ),
-            onPressed: onDelete,
           ),
         ],
       ),

@@ -83,11 +83,11 @@ class _DownloadTabState extends State<DownloadTab> {
                   CupertinoButton(
                     minSize: 40,
                     padding: const EdgeInsets.all(0),
+                    onPressed: _showExportDialog,
                     child: const Icon(
                       CupertinoIcons.arrow_up_arrow_down_square_fill,
                       size: 28,
                     ),
-                    onPressed: _showExportDialog,
                   ),
                 ],
               )

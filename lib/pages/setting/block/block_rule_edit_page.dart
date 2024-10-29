@@ -34,10 +34,6 @@ class BlockRuleEditPage extends GetView<BlockController> {
         trailing: CupertinoButton(
           padding: const EdgeInsets.all(0),
           minSize: 40,
-          child: const Icon(
-            CupertinoIcons.check_mark_circled,
-            size: 28,
-          ),
           onPressed: controller.isRegexFormatError
               ? null
               : () async {
@@ -48,6 +44,10 @@ class BlockRuleEditPage extends GetView<BlockController> {
                     result: _blockRule,
                   );
                 },
+          child: const Icon(
+            CupertinoIcons.check_mark_circled,
+            size: 28,
+          ),
         ),
       ),
       child: CustomScrollView(slivers: [

@@ -239,12 +239,6 @@ class ReadButton extends StatelessWidget {
     return Obx(
       () => MouseRegionClick(
         child: CupertinoButton(
-            child: Text(
-              (_pageState.lastIndex > 0)
-                  ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
-                  : L10n.of(context).read.toUpperCase(),
-              style: const TextStyle(fontSize: 15, height: 1.2),
-            ),
             minSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
             borderRadius: BorderRadius.circular(20),
@@ -252,7 +246,13 @@ class ReadButton extends StatelessWidget {
             onPressed: _pageState.enableRead
                 ? () => _toViewPage(_pageState.galleryProvider?.gid ?? '0',
                     _pageState.lastIndex)
-                : null),
+                : null,
+            child: Text(
+              (_pageState.lastIndex > 0)
+                  ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
+                  : L10n.of(context).read.toUpperCase(),
+              style: const TextStyle(fontSize: 15, height: 1.2),
+            )),
       ),
     );
   }
@@ -706,33 +706,31 @@ class TextBtn extends StatelessWidget {
           CupertinoThemeData(primaryColor: color ?? CupertinoColors.systemGrey),
       child: GestureDetector(
         // behavior: HitTestBehavior.opaque,
-        child: Container(
-          // padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: iconPadding,
-                child: MouseRegionClick(
-                  disable: onTap == null && onLongPress == null,
-                  child: CupertinoButton(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Icon(
-                      iconData,
-                      size: iconSize ?? 28,
-                      // color: CupertinoColors.systemGrey3,
-                    ),
-                    onPressed: onTap,
+        onLongPress: onLongPress,
+        // behavior: HitTestBehavior.opaque,
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: iconPadding,
+              child: MouseRegionClick(
+                disable: onTap == null && onLongPress == null,
+                child: CupertinoButton(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  onPressed: onTap,
+                  child: Icon(
+                    iconData,
+                    size: iconSize ?? 28,
+                    // color: CupertinoColors.systemGrey3,
                   ),
                 ),
               ),
-              Text(
-                title ?? '',
-                style: const TextStyle(fontSize: 12, height: 1),
-              ),
-            ],
-          ),
+            ),
+            Text(
+              title ?? '',
+              style: const TextStyle(fontSize: 12, height: 1),
+            ),
+          ],
         ),
-        onLongPress: onLongPress,
       ),
     );
   }

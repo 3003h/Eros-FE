@@ -19,11 +19,11 @@ class LogPage extends GetView<LogService> {
           // 清除按钮
           padding: const EdgeInsets.all(0),
           minSize: 40,
+          onPressed: controller.removeAll,
           child: const Icon(
             CupertinoIcons.trash,
             size: 24,
           ),
-          onPressed: controller.removeAll,
         ),
       ),
       child: CustomScrollView(slivers: [

@@ -137,9 +137,6 @@ class _MysqlLoginState extends State<MysqlLogin> {
                             const BorderRadius.all(Radius.circular(30.0)),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 10),
-                        child: _loadingLogin
-                            ? const CupertinoActivityIndicator()
-                            : Text(L10n.of(context).login),
                         color: CupertinoColors.activeBlue,
                         onPressed: _loadingLogin
                             ? null
@@ -191,6 +188,9 @@ class _MysqlLoginState extends State<MysqlLogin> {
                                   });
                                 }
                               },
+                        child: _loadingLogin
+                            ? const CupertinoActivityIndicator()
+                            : Text(L10n.of(context).login),
                       ),
                     ],
                   ),
