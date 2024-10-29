@@ -48,6 +48,9 @@
         <meta-data
                 android:name="flutterEmbedding"
                 android:value="2"/>
+        <meta-data
+                android:name="io.flutter.embedding.android.EnableImpeller"
+                android:value="true" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"
@@ -93,8 +96,6 @@
 
     </application>
 
-    <!-- 访问电话状态 -->
-<!--    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:ignore="ManifestOrder"/>-->
     <!-- 允许全部网络访问 -->
     <uses-permission android:name="android.permission.INTERNET" tools:ignore="ManifestOrder"/>
     <!-- 获取网络信息状态 -->
