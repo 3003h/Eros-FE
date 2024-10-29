@@ -24,8 +24,8 @@ GalleryImage paraShowPage(String jsonString) {
 
   // final double? width = _xy != null ? double.parse(_xy.group(2)!) : null;
   // final double? height = _xy != null ? double.parse(_xy.group(3)!) : null;
-  final double? width = double.parse('${jsonMap['x']}');
-  final double? height = double.parse('${jsonMap['y']}');
+  final double? width = double.tryParse('${jsonMap['x']}');
+  final double? height = double.tryParse('${jsonMap['y']}');
 
   if (width == null || height == null) {
     throw EhError(type: EhErrorType.parse, error: 'width or height is null');
