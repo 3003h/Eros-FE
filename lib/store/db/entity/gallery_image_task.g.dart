@@ -2165,14 +2165,14 @@ extension GalleryImageTaskQueryProperty
 
 GalleryImageTask _$GalleryImageTaskFromJson(Map<String, dynamic> json) =>
     GalleryImageTask(
-      gid: json['gid'] as int,
+      gid: (json['gid'] as num).toInt(),
       token: json['token'] as String,
       href: json['href'] as String?,
       sourceId: json['sourceId'] as String?,
       imageUrl: json['imageUrl'] as String?,
-      ser: json['ser'] as int,
+      ser: (json['ser'] as num).toInt(),
       filePath: json['filePath'] as String?,
-      status: json['status'] as int?,
+      status: (json['status'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$GalleryImageTaskToJson(GalleryImageTask instance) =>

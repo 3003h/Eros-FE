@@ -746,8 +746,8 @@ extension ViewHistoryQueryProperty
 // **************************************************************************
 
 ViewHistory _$ViewHistoryFromJson(Map<String, dynamic> json) => ViewHistory(
-      gid: json['gid'] as int,
-      lastViewTime: json['lastViewTime'] as int,
+      gid: (json['gid'] as num).toInt(),
+      lastViewTime: (json['lastViewTime'] as num).toInt(),
       galleryProviderText: json['galleryProviderText'] as String,
     );
 

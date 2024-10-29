@@ -3557,16 +3557,16 @@ extension GalleryTaskQueryProperty
 // **************************************************************************
 
 GalleryTask _$GalleryTaskFromJson(Map<String, dynamic> json) => GalleryTask(
-      gid: json['gid'] as int,
+      gid: (json['gid'] as num).toInt(),
       token: json['token'] as String,
       url: json['url'] as String?,
       title: json['title'] as String,
       dirPath: json['dirPath'] as String?,
-      fileCount: json['fileCount'] as int,
-      completCount: json['completCount'] as int?,
-      status: json['status'] as int?,
+      fileCount: (json['fileCount'] as num).toInt(),
+      completCount: (json['completCount'] as num?)?.toInt(),
+      status: (json['status'] as num?)?.toInt(),
       coverImage: json['coverImage'] as String?,
-      addTime: json['addTime'] as int?,
+      addTime: (json['addTime'] as num?)?.toInt(),
       coverUrl: json['coverUrl'] as String?,
       rating: (json['rating'] as num?)?.toDouble(),
       category: json['category'] as String?,
