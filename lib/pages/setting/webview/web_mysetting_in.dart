@@ -22,7 +22,7 @@ class InWebMySetting extends StatelessWidget {
     final CookieManager cookieManager = CookieManager.instance();
     final EhSettingService ehSettingService = Get.find();
 
-    InAppWebViewController? controller;
+    InAppWebViewController? inAppWebViewController;
 
     final baseUrl = Api.getBaseUrl();
 
@@ -41,11 +41,11 @@ class InWebMySetting extends StatelessWidget {
             CupertinoButton(
               padding: const EdgeInsets.all(0),
               child: const Icon(
-                FontAwesomeIcons.redoAlt,
+                FontAwesomeIcons.rotateRight,
                 size: 22,
               ),
               onPressed: () async {
-                controller?.reload();
+                inAppWebViewController?.reload();
               },
             ),
             CupertinoButton(
@@ -56,7 +56,7 @@ class InWebMySetting extends StatelessWidget {
               ),
               onPressed: () async {
                 // 保存配置
-                controller?.evaluateJavascript(
+                inAppWebViewController?.evaluateJavascript(
                     source:
                         'document.querySelector("#apply > input[type=submit]").click();');
               },
@@ -74,7 +74,7 @@ class InWebMySetting extends StatelessWidget {
           ),
           initialSettings: inAppWebViewSettings,
           onWebViewCreated: (InAppWebViewController controller) {
-            controller = controller;
+            inAppWebViewController = controller;
           },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
             final uri = navigationAction.request.url!;
