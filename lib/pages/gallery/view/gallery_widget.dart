@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:eros_fe/common/controller/block_controller.dart';
 import 'package:eros_fe/common/service/controller_tag_service.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
@@ -356,32 +357,33 @@ class TopCommentEx extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 显示最前面两条
-    List<Widget> _topComment(List<GalleryComment>? comments, {int max = 2}) {
-      Iterable<GalleryComment> _comments = comments ?? [];
+    List<Widget> topComment(List<GalleryComment>? comments, {int max = 2}) {
+      Iterable<GalleryComment> commentsToShow = comments ?? [];
 
       // 如果启用了仅显示上传者评论 则只显示上传者的评论，并且忽略评分筛选
       if (_ehSettingService.showOnlyUploaderComment) {
-        final _uploaderId =
-            _comments.firstWhere((element) => element.score.isEmpty).memberId;
-        logger.d('_uploaderId $_uploaderId');
-        if (_uploaderId != null) {
-          _comments =
-              _comments.where((element) => element.memberId == _uploaderId);
+        final uploaderId = commentsToShow
+            .firstWhereOrNull((element) => element.score.isEmpty)
+            ?.memberId;
+        logger.d('_uploaderId $uploaderId');
+        if (uploaderId != null) {
+          commentsToShow =
+              commentsToShow.where((element) => element.memberId == uploaderId);
         } else {
-          _comments =
-              _comments.where((element) => element.name == uploader?.trim());
+          commentsToShow = commentsToShow
+              .where((element) => element.name == uploader?.trim());
         }
 
-        logger.d('_comments.length ${_comments.length}');
+        logger.d('commentsToShow.length ${commentsToShow.length}');
       } else if (_ehSettingService.filterCommentsByScore) {
-        _comments = _comments.where((comment) =>
+        commentsToShow = commentsToShow.where((comment) =>
             comment.score.isEmpty ||
             (int.tryParse(comment.score) ?? 0) >
                 _ehSettingService.scoreFilteringThreshold);
       }
 
       // 根据屏蔽规则过滤评论
-      _comments = _comments.where((element) {
+      commentsToShow = commentsToShow.where((element) {
         return !_blockController.matchRule(
               text: element.text,
               blockType: BlockType.comment,
@@ -392,9 +394,9 @@ class TopCommentEx extends StatelessWidget {
             );
       });
 
-      _comments = _comments.take(max);
+      commentsToShow = commentsToShow.take(max);
 
-      return _comments
+      return commentsToShow
           .map((GalleryComment comment) => CommentItem(
                 galleryComment: comment,
                 simple: true,
@@ -404,7 +406,7 @@ class TopCommentEx extends StatelessWidget {
 
     return Column(
       children: [
-        ..._topComment(comments, max: max),
+        ...topComment(comments, max: max),
         if ((comments?.length ?? 0) > max)
           const Padding(
             padding: EdgeInsets.only(top: 8.0),
