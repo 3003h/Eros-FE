@@ -50,7 +50,7 @@
                 android:value="2"/>
         <meta-data
                 android:name="io.flutter.embedding.android.EnableImpeller"
-                android:value="true" />
+                android:value="false" />
 
         <provider
                 android:name="androidx.core.content.FileProvider"
