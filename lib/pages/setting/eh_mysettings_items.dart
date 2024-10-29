@@ -5,8 +5,8 @@ final _controller = Get.find<EhMySettingsController>();
 Widget _buildSelectedProfileItem(BuildContext context) {
   return Obx(() {
     final Map<String, String> actionMap = <String, String>{};
-    for (final _profile in _controller.ehSetting.profilelist) {
-      actionMap['${_profile.value}'] = _profile.name;
+    for (final ehProfile in _controller.ehSetting.profilelist) {
+      actionMap['${ehProfile.value}'] = ehProfile.name;
     }
     return SelectorCupertinoListTile<String>(
       key: UniqueKey(),
@@ -56,7 +56,7 @@ Widget _buildImageSizeItem(BuildContext context) {
     '5': '2400x',
     '4': '1600x',
     '3': '1280x',
-    '2': '980x',
+    // '2': '980x',
     '1': '780x',
   };
   return Obx(() {
@@ -208,8 +208,12 @@ Widget _buildThumbSizeItem(
   BuildContext context,
 ) {
   final Map<String, String> actionMap = <String, String>{
+    // auto
     '0': L10n.of(context).uc_ts_0,
+    // normal
     '1': L10n.of(context).uc_ts_1,
+    // small
+    '2': L10n.of(context).uc_ts_2,
   };
 
   return Obx(() {
@@ -229,7 +233,7 @@ Widget _buildThumbRowItem(
 ) {
   final Map<String, String> actionMap = <String, String>{
     '0': '4',
-    '1': '10',
+    '1': '8',
     '2': '20',
     '3': '40',
   };
@@ -313,18 +317,30 @@ Widget _buildShowPageNumbers(
   final Map<String, String> actionMap = <String, String>{
     '0': L10n.of(context).uc_pn_0,
     '1': L10n.of(context).uc_pn_1,
+    '2': L10n.of(context).uc_pn_2,
   };
 
-  return EhCupertinoListTile(
-    title: Text(L10n.of(context).uc_show_page_num),
-    trailing: Obx(() {
-      return CupertinoSwitch(
-        value: _controller.ehSetting.showGalleryPageNumbers == '0',
-        onChanged: (val) => _controller.ehSetting = _controller.ehSetting
-            .copyWith(showGalleryPageNumbers: val ? '0'.oN : '1'.oN),
-      );
-    }),
-  );
+  return Obx(() {
+    return SelectorCupertinoListTile<String>(
+      key: UniqueKey(),
+      title: L10n.of(context).uc_show_page_num,
+      actionMap: actionMap,
+      initVal: _controller.ehSetting.showGalleryPageNumbers ?? '0',
+      onValueChanged: (val) => _controller.ehSetting =
+          _controller.ehSetting.copyWith(showGalleryPageNumbers: val.oN),
+    );
+  });
+
+  // return EhCupertinoListTile(
+  //   title: Text(L10n.of(context).uc_show_page_num),
+  //   trailing: Obx(() {
+  //     return CupertinoSwitch(
+  //       value: _controller.ehSetting.showGalleryPageNumbers == '0',
+  //       onChanged: (val) => _controller.ehSetting = _controller.ehSetting
+  //           .copyWith(showGalleryPageNumbers: val ? '0'.oN : '1'.oN),
+  //     );
+  //   }),
+  // );
 }
 
 Widget _buildOriginalImages(

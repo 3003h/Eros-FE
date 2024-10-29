@@ -19,7 +19,7 @@ part 'eh_mysettings_items.dart';
 const kFavList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 class EhMySettingsPage extends GetView<EhMySettingsController> {
-  const EhMySettingsPage({Key? key}) : super(key: key);
+  const EhMySettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

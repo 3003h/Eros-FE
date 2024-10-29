@@ -502,8 +502,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "オリジナル画像を使用しますか？上記の【自動】とは異なる水平解像度を選択し、問題の画像の幅が広い場合、または元の画像が10MB（1年以上前のライブラリは4MB）より大きい場合、サンプルされた画像が使用されます。"),
         "uc_parody": MessageLookupByLibrary.simpleMessage("パロディー"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
-        "uc_pn_0": MessageLookupByLibrary.simpleMessage("いいえ"),
-        "uc_pn_1": MessageLookupByLibrary.simpleMessage("はい"),
+        "uc_pn_0": MessageLookupByLibrary.simpleMessage("None"),
+        "uc_pn_1": MessageLookupByLibrary.simpleMessage("Page Number Only"),
+        "uc_pn_2": MessageLookupByLibrary.simpleMessage("Page Number + Name"),
         "uc_profile": MessageLookupByLibrary.simpleMessage("プロフィール"),
         "uc_qb_0": MessageLookupByLibrary.simpleMessage("いいえ"),
         "uc_qb_1": MessageLookupByLibrary.simpleMessage("はい"),
@@ -522,7 +523,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "インデックス/検索ページとトレント検索ページの1ページあたりの検索結果数を入力してください。(Hath Perk: ページング拡大が必要)"),
         "uc_selected": MessageLookupByLibrary.simpleMessage("選択済み"),
         "uc_set_as_def": MessageLookupByLibrary.simpleMessage("既定に設定"),
-        "uc_show_page_num": MessageLookupByLibrary.simpleMessage("ページ番号を表示"),
+        "uc_show_page_num":
+            MessageLookupByLibrary.simpleMessage("Thumbnail Labeling"),
         "uc_tag": MessageLookupByLibrary.simpleMessage("ギャラリータグ"),
         "uc_tag_ft": MessageLookupByLibrary.simpleMessage("タグフィルタリングしきい値"),
         "uc_tag_ft_desc": MessageLookupByLibrary.simpleMessage(
@@ -543,8 +545,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_thumb_size": MessageLookupByLibrary.simpleMessage("大きさ"),
         "uc_tl_0": MessageLookupByLibrary.simpleMessage("デフォルトタイトル"),
         "uc_tl_1": MessageLookupByLibrary.simpleMessage("日本語タイトル（可能であれば）"),
-        "uc_ts_0": MessageLookupByLibrary.simpleMessage("普通"),
-        "uc_ts_1": MessageLookupByLibrary.simpleMessage("大きい"),
+        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Auto"),
+        "uc_ts_1": MessageLookupByLibrary.simpleMessage("Normal"),
+        "uc_ts_2": MessageLookupByLibrary.simpleMessage("Small "),
         "uc_uh_0": MessageLookupByLibrary.simpleMessage("すべてのクライアント（おすすめ）"),
         "uc_uh_0_s": MessageLookupByLibrary.simpleMessage("すべてのクライアント"),
         "uc_uh_1": MessageLookupByLibrary.simpleMessage(

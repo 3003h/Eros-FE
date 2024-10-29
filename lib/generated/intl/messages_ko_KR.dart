@@ -547,8 +547,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Use original images instead of the resampled versions? Resampled images will still be used if you select a horizonal resolution different than \"Auto\" above and the image in question is wider, or if the original image is larger than 10 MiB (or 4 MiB for galleries older than one year)."),
         "uc_parody": MessageLookupByLibrary.simpleMessage("parody"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
-        "uc_pn_0": MessageLookupByLibrary.simpleMessage("No"),
-        "uc_pn_1": MessageLookupByLibrary.simpleMessage("Yes"),
+        "uc_pn_0": MessageLookupByLibrary.simpleMessage("None"),
+        "uc_pn_1": MessageLookupByLibrary.simpleMessage("Page Number Only"),
+        "uc_pn_2": MessageLookupByLibrary.simpleMessage("Page Number + Name"),
         "uc_profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "uc_qb_0": MessageLookupByLibrary.simpleMessage("Nope"),
         "uc_qb_1": MessageLookupByLibrary.simpleMessage("Yup"),
@@ -571,7 +572,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_selected": MessageLookupByLibrary.simpleMessage("Selected"),
         "uc_set_as_def": MessageLookupByLibrary.simpleMessage("Set as Default"),
         "uc_show_page_num":
-            MessageLookupByLibrary.simpleMessage("Show Page Numbers"),
+            MessageLookupByLibrary.simpleMessage("Thumbnail Labeling"),
         "uc_tag": MessageLookupByLibrary.simpleMessage("Gallery Tags"),
         "uc_tag_ft":
             MessageLookupByLibrary.simpleMessage("Tag Filtering Threshold"),
@@ -598,8 +599,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_tl_0": MessageLookupByLibrary.simpleMessage("Default Title"),
         "uc_tl_1": MessageLookupByLibrary.simpleMessage(
             " Japanese Title (if available)"),
-        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Narmal"),
-        "uc_ts_1": MessageLookupByLibrary.simpleMessage("Large"),
+        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Auto"),
+        "uc_ts_1": MessageLookupByLibrary.simpleMessage("Normal"),
+        "uc_ts_2": MessageLookupByLibrary.simpleMessage("Small"),
         "uc_uh_0":
             MessageLookupByLibrary.simpleMessage("Any client (Recommended)"),
         "uc_uh_0_s": MessageLookupByLibrary.simpleMessage("Any client"),

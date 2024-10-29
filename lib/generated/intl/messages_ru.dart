@@ -619,8 +619,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Use original images instead of the resampled versions? Resampled images will still be used if you select a horizonal resolution different than \"Auto\" above and the image in question is wider, or if the original image is larger than 10 MiB (or 4 MiB for galleries older than one year)."),
         "uc_parody": MessageLookupByLibrary.simpleMessage("parody"),
         "uc_pixels": MessageLookupByLibrary.simpleMessage("pixels"),
-        "uc_pn_0": MessageLookupByLibrary.simpleMessage("Нет"),
-        "uc_pn_1": MessageLookupByLibrary.simpleMessage("Да"),
+        "uc_pn_0": MessageLookupByLibrary.simpleMessage("None"),
+        "uc_pn_1": MessageLookupByLibrary.simpleMessage("Page Number Only"),
+        "uc_pn_2": MessageLookupByLibrary.simpleMessage("Page Number + Name"),
         "uc_profile": MessageLookupByLibrary.simpleMessage("Профиль"),
         "uc_qb_0": MessageLookupByLibrary.simpleMessage("Неа"),
         "uc_qb_1": MessageLookupByLibrary.simpleMessage("Ага"),
@@ -643,7 +644,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "uc_set_as_def": MessageLookupByLibrary.simpleMessage(
             "Установить как профиль по умолчанию"),
         "uc_show_page_num":
-            MessageLookupByLibrary.simpleMessage("Показывать номера страниц"),
+            MessageLookupByLibrary.simpleMessage("Thumbnail Labeling"),
         "uc_tag": MessageLookupByLibrary.simpleMessage("Теги галереи"),
         "uc_tag_ft":
             MessageLookupByLibrary.simpleMessage("Порог фильтрации тегов"),
@@ -672,8 +673,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Название по умолчанию"),
         "uc_tl_1": MessageLookupByLibrary.simpleMessage(
             "Название на японском (если доступно)"),
-        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Нормальный"),
-        "uc_ts_1": MessageLookupByLibrary.simpleMessage("Большой"),
+        "uc_ts_0": MessageLookupByLibrary.simpleMessage("Auto"),
+        "uc_ts_1": MessageLookupByLibrary.simpleMessage("Normal"),
+        "uc_ts_2": MessageLookupByLibrary.simpleMessage("Small"),
         "uc_uh_0": MessageLookupByLibrary.simpleMessage(
             "Любой клиент (Рекомендуется)"),
         "uc_uh_0_s": MessageLookupByLibrary.simpleMessage("Любой клиент"),

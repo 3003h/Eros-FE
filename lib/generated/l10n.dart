@@ -2491,10 +2491,10 @@ class L10n {
     );
   }
 
-  /// `Show Page Numbers`
+  /// `Thumbnail Labeling`
   String get uc_show_page_num {
     return Intl.message(
-      'Show Page Numbers',
+      'Thumbnail Labeling',
       name: 'uc_show_page_num',
       desc: '',
       args: [],
@@ -3081,21 +3081,31 @@ class L10n {
     );
   }
 
-  /// `Normal`
+  /// `Auto`
   String get uc_ts_0 {
     return Intl.message(
-      'Normal',
+      'Auto',
       name: 'uc_ts_0',
       desc: '',
       args: [],
     );
   }
 
-  /// `Large`
+  /// `Normal`
   String get uc_ts_1 {
     return Intl.message(
-      'Large',
+      'Normal',
       name: 'uc_ts_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Small`
+  String get uc_ts_2 {
+    return Intl.message(
+      'Small',
+      name: 'uc_ts_2',
       desc: '',
       args: [],
     );
@@ -3171,21 +3181,31 @@ class L10n {
     );
   }
 
-  /// `No`
+  /// `None`
   String get uc_pn_0 {
     return Intl.message(
-      'No',
+      'None',
       name: 'uc_pn_0',
       desc: '',
       args: [],
     );
   }
 
-  /// `Yes`
+  /// `Page Number Only`
   String get uc_pn_1 {
     return Intl.message(
-      'Yes',
+      'Page Number Only',
       name: 'uc_pn_1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Page Number + Name`
+  String get uc_pn_2 {
+    return Intl.message(
+      'Page Number + Name',
+      name: 'uc_pn_2',
       desc: '',
       args: [],
     );
