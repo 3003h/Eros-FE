@@ -22,11 +22,13 @@ class UpdateController extends GetxController {
 
   set canUpdate(bool val) => _canUpdate.value = val;
 
-  final _isLastVersion = true.obs;
-  bool get isLastVersion => _isLastVersion.value;
-  set isLastVersion(bool val) => _isLastVersion.value = val;
+  final _isLatestVersion = true.obs;
+  bool get isLatestVersion => _isLatestVersion.value;
+  set isLatestVersion(bool val) => _isLatestVersion.value = val;
 
-  String? lastVersion;
+  final _latestVersion = ''.obs;
+  String get latestVersion => _latestVersion.value;
+  set latestVersion(String val) => _latestVersion.value = val;
 
   @override
   void onInit() {
@@ -39,25 +41,25 @@ class UpdateController extends GetxController {
     final currentVersion = packageInfo.version;
 
     isChecking = true;
-    final _response = await getGithubApi(kGithubUrl);
-    final tagName = (_response['tag_name'] as String?)?.trim() ?? '';
-    final body = (_response['body'] as String?)?.trim() ?? '';
-    final htmUrl = (_response['html_url'] as String?)?.trim() ?? '';
+    final response = await getGithubApi(kGithubUrl);
+    final tagName = (response['tag_name'] as String?)?.trim() ?? '';
+    final body = (response['body'] as String?)?.trim() ?? '';
+    final htmUrl = (response['html_url'] as String?)?.trim() ?? '';
     logger.d('tagName $tagName');
     logger.d('body\n$body');
 
-    final regExpTagName = RegExp(r'^([vV])?(\d+\.\d+\.\d+)\+(\d+)');
+    final regExpTagName = RegExp(r'^([vV])?(\d+\.\d+\.\d+)\+?(\d+)?');
     final match = regExpTagName.firstMatch(tagName);
     final remoteVersion = match?.group(2) ?? '';
     logger.d('remoteVersion $remoteVersion  , currentVersion $currentVersion');
     final compare = versionStringCompare(
-        preVersion: currentVersion, lastVersion: remoteVersion);
-    lastVersion = remoteVersion;
+        preVersion: currentVersion, latestVersion: remoteVersion);
+    latestVersion = remoteVersion;
 
     isChecking = false;
 
     if (compare >= 0) {
-      isLastVersion = true;
+      isLatestVersion = true;
     }
 
     if (showDialog) {
@@ -66,7 +68,7 @@ class UpdateController extends GetxController {
         title: remoteVersion,
         // contentText: body,
         content: IntrinsicHeight(
-          child: Container(
+          child: SizedBox(
             height: 300,
             child: SingleChildScrollView(
               child: MarkdownBody(
@@ -117,9 +119,9 @@ class UpdateController extends GetxController {
   }
 }
 
-int versionStringCompare({String preVersion = '', String lastVersion = ''}) {
+int versionStringCompare({String preVersion = '', String latestVersion = ''}) {
   final sources = preVersion.split('.');
-  final dests = lastVersion.split('.');
+  final dests = latestVersion.split('.');
   final maxL = max(sources.length, dests.length);
   var result = 0;
   for (int i = 0; i < maxL; i++) {

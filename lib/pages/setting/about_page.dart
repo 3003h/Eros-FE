@@ -18,18 +18,18 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UpdateController _updateController = Get.put(UpdateController());
+    final UpdateController updateController = Get.put(UpdateController());
 
-    List<Widget> _buildList() {
-      final List<Widget> _list = <Widget>[];
-      _list.add(
+    List<Widget> buildList() {
+      final List<Widget> listW = <Widget>[];
+      listW.add(
         EhCupertinoListTile(
           title: Text(L10n.of(context).app_title),
           subtitle: const Text('An unofficial e-hentai app'),
         ),
       );
       if (!Platform.isWindows || !Platform.isLinux) {
-        _list.add(
+        listW.add(
           EhCupertinoListTile(
             title: Text(L10n.of(context).version),
             additionalInfo: Text(
@@ -38,27 +38,29 @@ class AboutPage extends StatelessWidget {
         );
       }
       if (!Platform.isWindows || !Platform.isLinux) {
-        _list.add(
+        listW.add(
           EhCupertinoListTile(
             title: Text(L10n.of(context).check_for_update),
             trailing: Obx(() {
-              if (_updateController.isChecking) {
+              if (updateController.isChecking) {
                 return const CupertinoActivityIndicator();
               } else {
                 return const CupertinoListTileChevron();
               }
             }),
             onTap: () {
-              _updateController.checkUpdate(showDialog: true);
+              updateController.checkUpdate(showDialog: true);
             },
-            subtitle: Text(!_updateController.isLastVersion
-                ? L10n.of(context)
-                    .update_to_version(_updateController.lastVersion ?? '')
-                : '${L10n.of(context).latest_version} ${_updateController.lastVersion ?? ''}'),
+            subtitle: Obx(() {
+              return Text(!updateController.isLatestVersion
+                  ? L10n.of(context)
+                      .update_to_version(updateController.latestVersion ?? '')
+                  : '${L10n.of(context).latest_version} ${updateController.latestVersion ?? ''}');
+            }),
           ),
         );
       }
-      _list.add(
+      listW.add(
         EhCupertinoListTile(
           title: Text(L10n.of(context).license),
           trailing: const CupertinoListTileChevron(),
@@ -67,7 +69,7 @@ class AboutPage extends StatelessWidget {
           },
         ),
       );
-      return _list;
+      return listW;
     }
 
     return CupertinoPageScaffold(
@@ -88,9 +90,9 @@ class AboutPage extends StatelessWidget {
                 // header: Text('测试测试测试'),
                 // footer: Text('测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测'),
                 itemBuilder: (context, index) {
-                  return _buildList()[index];
+                  return buildList()[index];
                 },
-                itemCount: _buildList().length,
+                itemCount: buildList().length,
               ),
             ]),
           ),
