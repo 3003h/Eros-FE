@@ -117,7 +117,7 @@ abstract class TabViewController extends GetxController {
 
   // 请求一批画廊数据
   Future<GalleryList?> fetchData({bool refresh = false}) async {
-    logger.d('super fetchData ....');
+    // logger.d('super fetchData ....');
     cancelToken = CancelToken();
     return null;
   }

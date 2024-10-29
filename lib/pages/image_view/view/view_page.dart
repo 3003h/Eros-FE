@@ -364,9 +364,9 @@ class _DoublePageViewState extends State<DoublePageView> {
 ///  显示顶栏 底栏 slider等
 class ImagePlugins extends GetView<ViewExtController> {
   const ImagePlugins({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 
@@ -379,35 +379,33 @@ class ImagePlugins extends GetView<ViewExtController> {
         kSliderBarHeight +
         (vState.showThumbList ? kThumbListViewHeight : 0);
 
-    return Container(
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          child,
-          GetBuilder<ViewExtController>(
-            id: idViewBar,
-            builder: (logic) {
-              return Stack(
-                children: [
-                  AnimatedPositioned(
-                    curve: Curves.fastOutSlowIn,
-                    duration: const Duration(milliseconds: 300),
-                    top: logic.vState.topBarOffset,
-                    // top: 50,
-                    child: const ViewTopBar(),
-                  ),
-                  AnimatedPositioned(
-                    curve: Curves.fastOutSlowIn,
-                    duration: const Duration(milliseconds: 300),
-                    bottom: logic.vState.bottomBarOffset,
-                    child: const ViewBottomBar(),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        GetBuilder<ViewExtController>(
+          id: idViewBar,
+          builder: (logic) {
+            return Stack(
+              children: [
+                AnimatedPositioned(
+                  curve: Curves.fastOutSlowIn,
+                  duration: const Duration(milliseconds: 300),
+                  top: logic.vState.topBarOffset,
+                  // top: 50,
+                  child: const ViewTopBar(),
+                ),
+                AnimatedPositioned(
+                  curve: Curves.fastOutSlowIn,
+                  duration: const Duration(milliseconds: 300),
+                  bottom: logic.vState.bottomBarOffset,
+                  child: const ViewBottomBar(),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }

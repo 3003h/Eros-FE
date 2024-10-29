@@ -442,11 +442,11 @@ List<GalleryImage> parseGalleryImage(Document document) {
       // 对 label 不为空设置的处理
       final divElm = pic.querySelector('div');
       final childrenElms = divElm?.children;
-      logger.d('>>>> childrenElms count: ${childrenElms?.length}');
+      // logger.d('>>>> childrenElms count: ${childrenElms?.length}');
       final hasChildren = childrenElms?.isNotEmpty ?? false;
       final destDivElm = hasChildren ? childrenElms![0] : divElm;
       final String style = destDivElm?.attributes['style'] ?? '';
-      logger.d('>>>> style: $style');
+      // logger.d('>>>> style: $style');
 
       final String picSrcUrl =
           RegExp(r'url\((.+)\)').firstMatch(style)?.group(1) ?? '';
