@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class EhTagSetEditDialog extends StatelessWidget {
-  const EhTagSetEditDialog({Key? key, required this.text, required this.title})
-      : super(key: key);
+  const EhTagSetEditDialog({super.key, required this.text, required this.title});
   final String title;
   final String text;
 

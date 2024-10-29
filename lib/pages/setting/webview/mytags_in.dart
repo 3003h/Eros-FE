@@ -14,7 +14,7 @@ class InWebMyTags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    InAppWebViewController? _controller;
+    InAppWebViewController? inAppWebViewController;
 
     final CupertinoPageScaffold cpf = CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -30,7 +30,7 @@ class InWebMyTags extends StatelessWidget {
                 size: 22,
               ),
               onPressed: () async {
-                _controller?.reload();
+                inAppWebViewController?.reload();
               },
             ),
           ],
@@ -41,7 +41,7 @@ class InWebMyTags extends StatelessWidget {
           initialUrlRequest:
               URLRequest(url: WebUri('${Api.getBaseUrl()}/mytags')),
           onWebViewCreated: (InAppWebViewController controller) {
-            _controller = controller;
+            inAppWebViewController = controller;
           },
           initialSettings: inAppWebViewSettings,
           shouldOverrideUrlLoading: (controller, navigationAction) async {
