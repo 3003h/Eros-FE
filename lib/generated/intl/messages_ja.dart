@@ -108,8 +108,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("真っ黒モード"),
         "date_or_offset": MessageLookupByLibrary.simpleMessage("日付やオフセット"),
         "default_avatar_style": MessageLookupByLibrary.simpleMessage("スタイル"),
-        "default_favorites":
-            MessageLookupByLibrary.simpleMessage("既定のお気に入りリスト"),
         "delete": MessageLookupByLibrary.simpleMessage("削除"),
         "delete_task": MessageLookupByLibrary.simpleMessage("タスクの削除"),
         "delete_task_and_content":
@@ -220,7 +218,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("ローカル"),
         "login": MessageLookupByLibrary.simpleMessage("ログイン"),
         "login_web": MessageLookupByLibrary.simpleMessage("Webでログイン"),
-        "manually_sel_favorites": MessageLookupByLibrary.simpleMessage("手動選択"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大履歴"),
         "min": MessageLookupByLibrary.simpleMessage("分"),
         "model": m1,
@@ -242,6 +239,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("オフ"),
         "ok": MessageLookupByLibrary.simpleMessage("OK"),
         "on": MessageLookupByLibrary.simpleMessage("オン"),
+        "one_step_favorite":
+            MessageLookupByLibrary.simpleMessage("One Step Favorite"),
+        "one_step_favorite_desc": MessageLookupByLibrary.simpleMessage(
+            "Quickly add gallery to favorite, short press to save to the last selected favorite, long press to display the favorite dialog."),
         "open_supported_links":
             MessageLookupByLibrary.simpleMessage("Open supported links"),
         "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(

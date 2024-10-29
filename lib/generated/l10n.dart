@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -1601,21 +1600,21 @@ class L10n {
     );
   }
 
-  /// `Default Favorites`
-  String get default_favorites {
+  /// `One Step Favorite`
+  String get one_step_favorite {
     return Intl.message(
-      'Default Favorites',
-      name: 'default_favorites',
+      'One Step Favorite',
+      name: 'one_step_favorite',
       desc: '',
       args: [],
     );
   }
 
-  /// `Manually select favorites`
-  String get manually_sel_favorites {
+  /// `Quickly add gallery to favorite, short press to save to the last selected favorite, long press to display the favorite dialog.`
+  String get one_step_favorite_desc {
     return Intl.message(
-      'Manually select favorites',
-      name: 'manually_sel_favorites',
+      'Quickly add gallery to favorite, short press to save to the last selected favorite, long press to display the favorite dialog.',
+      name: 'one_step_favorite_desc',
       desc: '',
       args: [],
     );

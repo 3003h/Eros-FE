@@ -124,8 +124,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Date or Offset"),
         "default_avatar_style":
             MessageLookupByLibrary.simpleMessage("Стиль аватара по умолчанию"),
-        "default_favorites":
-            MessageLookupByLibrary.simpleMessage("Избранное по умолчанию"),
         "delete": MessageLookupByLibrary.simpleMessage("Удалить"),
         "delete_task":
             MessageLookupByLibrary.simpleMessage("Менеджер загрузок"),
@@ -260,8 +258,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "login": MessageLookupByLibrary.simpleMessage("Войти"),
         "login_web":
             MessageLookupByLibrary.simpleMessage("Войти через браузер"),
-        "manually_sel_favorites": MessageLookupByLibrary.simpleMessage(
-            "Вручную выбирать группу избранного"),
         "max_history": MessageLookupByLibrary.simpleMessage("Maximum history"),
         "min": MessageLookupByLibrary.simpleMessage("минут"),
         "model": m1,
@@ -286,6 +282,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("Выключены"),
         "ok": MessageLookupByLibrary.simpleMessage("ОК"),
         "on": MessageLookupByLibrary.simpleMessage("Включены"),
+        "one_step_favorite":
+            MessageLookupByLibrary.simpleMessage("One Step Favorite"),
+        "one_step_favorite_desc": MessageLookupByLibrary.simpleMessage(
+            "Quickly add gallery to favorite, short press to save to the last selected favorite, long press to display the favorite dialog."),
         "open_supported_links": MessageLookupByLibrary.simpleMessage(
             "Открывать поддерживаемые ссылки"),
         "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(

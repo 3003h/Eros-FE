@@ -51,12 +51,12 @@ class ListViewEhSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool _isLogin = userController.isLogin;
-    Future<EhHome?> _futureImageLimits = getEhHome(refresh: true);
+    final bool isLogin = userController.isLogin;
+    Future<EhHome?> futureImageLimits = getEhHome(refresh: true);
 
     return MultiSliver(children: [
       SliverCupertinoListSection.listInsetGrouped(children: [
-        if (_isLogin)
+        if (isLogin)
           EhCupertinoListTile(
             title: Text(L10n.of(context).galery_site),
             trailing: Obx(() {
@@ -65,8 +65,10 @@ class ListViewEhSetting extends StatelessWidget {
                     ? EHConst.EX_BASE_HOST
                     : EHConst.EH_BASE_HOST,
                 children: const {
-                  EHConst.EH_BASE_HOST: Text('E-Hentai', textScaleFactor: 0.8),
-                  EHConst.EX_BASE_HOST: Text('ExHentai', textScaleFactor: 0.8)
+                  EHConst.EH_BASE_HOST:
+                      Text('E-Hentai', textScaler: TextScaler.linear(0.8)),
+                  EHConst.EX_BASE_HOST:
+                      Text('ExHentai', textScaler: TextScaler.linear(0.8)),
                 },
                 onValueChanged: (String? val) {
                   if (val != null) {
@@ -100,7 +102,7 @@ class ListViewEhSetting extends StatelessWidget {
             );
           }),
         ),
-        if (_isLogin)
+        if (isLogin)
           const EhCupertinoListTile(
             title: Text('Cookie'),
             trailing: CupertinoListTileChevron(),
@@ -116,7 +118,7 @@ class ListViewEhSetting extends StatelessWidget {
             );
           }),
         ),
-        if (_isLogin)
+        if (isLogin)
           EhCupertinoListTile(
             title: Text(L10n.of(context).ehentai_settings),
             subtitle: Text(L10n.of(context).setting_on_website),
@@ -128,7 +130,7 @@ class ListViewEhSetting extends StatelessWidget {
               );
             },
           ),
-        if (_isLogin)
+        if (isLogin)
           EhCupertinoListTile(
             title: Text(L10n.of(context).ehentai_my_tags),
             subtitle: Text(L10n.of(context).mytags_on_website),
@@ -140,10 +142,10 @@ class ListViewEhSetting extends StatelessWidget {
               );
             },
           ),
-        if (_isLogin)
+        if (isLogin)
           StatefulBuilder(builder: (context, setState) {
             return FutureBuilder<EhHome?>(
-                future: _futureImageLimits,
+                future: futureImageLimits,
                 initialData: hiveHelper.getEhHome(),
                 builder: (context, snapshot) {
                   EhHome? ehHome = snapshot.data;
@@ -171,7 +173,7 @@ class ListViewEhSetting extends StatelessWidget {
                         : const CupertinoListTileChevron(),
                     onTap: () {
                       setState(() {
-                        _futureImageLimits = getEhHome(refresh: true);
+                        futureImageLimits = getEhHome(refresh: true);
                       });
                     },
                   );
@@ -182,7 +184,7 @@ class ListViewEhSetting extends StatelessWidget {
       // 云服务
       SliverCupertinoListSection.listInsetGrouped(children: [
         EhCupertinoListTile(
-          title: Text('WebDAV'),
+          title: const Text('WebDAV'),
           trailing: const CupertinoListTileChevron(),
           onTap: () {
             Get.toNamed(
@@ -192,7 +194,7 @@ class ListViewEhSetting extends StatelessWidget {
           },
         ),
         EhCupertinoListTile(
-          title: Text('MySQL Sync'),
+          title: const Text('MySQL Sync'),
           trailing: const CupertinoListTileChevron(),
           onTap: () {
             Get.toNamed(
@@ -211,6 +213,7 @@ class ListViewEhSetting extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done &&
             (snapshot.data ?? false)) {
           return SliverCupertinoListSection.listInsetGrouped(
+            footer: Text(L10n.of(context).open_supported_links_summary),
             children: [
               EhCupertinoListTile(
                 title: Text(L10n.of(context).open_supported_links),
@@ -221,7 +224,6 @@ class ListViewEhSetting extends StatelessWidget {
                 },
               ),
             ],
-            footer: Text(L10n.of(context).open_supported_links_summary),
           );
         } else {
           return const SizedBox.shrink();
@@ -230,13 +232,19 @@ class ListViewEhSetting extends StatelessWidget {
 
       SliverCupertinoListSection.listInsetGrouped(children: [
         EhCupertinoListTile(
-          title: Text(L10n.of(context).default_favorites),
-          subtitle: Text(L10n.of(context).manually_sel_favorites),
+          title: Text(L10n.of(context).one_step_favorite),
+          subtitle: Text(
+            L10n.of(context).one_step_favorite_desc,
+            maxLines: 4,
+          ),
           trailing: Obx(() {
-            return CupertinoSwitch(
-              value: _ehSettingService.isFavLongTap.value,
-              onChanged: (bool val) =>
-                  _ehSettingService.isFavLongTap.value = val,
+            return Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: CupertinoSwitch(
+                value: _ehSettingService.isFavLongTap.value,
+                onChanged: (bool val) =>
+                    _ehSettingService.isFavLongTap.value = val,
+              ),
             );
           }),
         ),

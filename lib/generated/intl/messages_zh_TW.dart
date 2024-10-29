@@ -106,7 +106,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "date_or_offset": MessageLookupByLibrary.simpleMessage("日期或偏移量"),
         "default_avatar_style":
             MessageLookupByLibrary.simpleMessage("Default avatar style"),
-        "default_favorites": MessageLookupByLibrary.simpleMessage("預設收藏夾"),
         "delete": MessageLookupByLibrary.simpleMessage("刪除"),
         "delete_task": MessageLookupByLibrary.simpleMessage("刪除工作"),
         "delete_task_and_content":
@@ -219,8 +218,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("登入"),
         "login_web": MessageLookupByLibrary.simpleMessage("透過網頁登入"),
-        "manually_sel_favorites":
-            MessageLookupByLibrary.simpleMessage("手動選擇收藏夾"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大歷史紀錄"),
         "min": MessageLookupByLibrary.simpleMessage("分鐘"),
         "model": m1,
@@ -241,6 +238,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("關閉"),
         "ok": MessageLookupByLibrary.simpleMessage("確定"),
         "on": MessageLookupByLibrary.simpleMessage("打開"),
+        "one_step_favorite":
+            MessageLookupByLibrary.simpleMessage("One Step Favorite"),
+        "one_step_favorite_desc": MessageLookupByLibrary.simpleMessage(
+            "Quickly add gallery to favorite, short press to save to the last selected favorite, long press to display the favorite dialog."),
         "open_supported_links":
             MessageLookupByLibrary.simpleMessage("Open supported links"),
         "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(

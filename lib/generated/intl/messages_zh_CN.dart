@@ -103,7 +103,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "dark_mode_effect": MessageLookupByLibrary.simpleMessage("深色模式效果"),
         "date_or_offset": MessageLookupByLibrary.simpleMessage("日期或偏移量"),
         "default_avatar_style": MessageLookupByLibrary.simpleMessage("默认头像样式"),
-        "default_favorites": MessageLookupByLibrary.simpleMessage("默认收藏夹设置"),
         "delete": MessageLookupByLibrary.simpleMessage("删除"),
         "delete_task": MessageLookupByLibrary.simpleMessage("删除任务"),
         "delete_task_and_content":
@@ -208,7 +207,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("本地收藏"),
         "login": MessageLookupByLibrary.simpleMessage("登录"),
         "login_web": MessageLookupByLibrary.simpleMessage("通过网页登录"),
-        "manually_sel_favorites": MessageLookupByLibrary.simpleMessage("手动选择"),
         "max_history": MessageLookupByLibrary.simpleMessage("最大历史记录"),
         "min": MessageLookupByLibrary.simpleMessage("分钟"),
         "model": m1,
@@ -229,6 +227,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("关闭"),
         "ok": MessageLookupByLibrary.simpleMessage("确定"),
         "on": MessageLookupByLibrary.simpleMessage("打开"),
+        "one_step_favorite": MessageLookupByLibrary.simpleMessage("单点收藏"),
+        "one_step_favorite_desc": MessageLookupByLibrary.simpleMessage(
+            "快速将画廊添加到收藏夹，短按保存到上次选择的收藏夹，长按显示收藏夹对话框"),
         "open_supported_links": MessageLookupByLibrary.simpleMessage("打开支持的链接"),
         "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(
             "从 Android 12 开始, 应用只有在获得批准的情况下，才能作为网络链接的处理应用。否则会使用默认浏览器处理。您可以在此手动批准"),

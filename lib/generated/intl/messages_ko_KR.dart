@@ -113,7 +113,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Date or Offset"),
         "default_avatar_style":
             MessageLookupByLibrary.simpleMessage("Default avatar style"),
-        "default_favorites": MessageLookupByLibrary.simpleMessage("기본 즐겨찾기"),
         "delete": MessageLookupByLibrary.simpleMessage("지우기"),
         "delete_task": MessageLookupByLibrary.simpleMessage("Delete Task"),
         "delete_task_and_content":
@@ -233,8 +232,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "local_favorite": MessageLookupByLibrary.simpleMessage("로컬 즐겨찾기"),
         "login": MessageLookupByLibrary.simpleMessage("로그인"),
         "login_web": MessageLookupByLibrary.simpleMessage("웹 로그인"),
-        "manually_sel_favorites":
-            MessageLookupByLibrary.simpleMessage("수동으로 즐겨찾기 선택"),
         "max_history": MessageLookupByLibrary.simpleMessage("최대 방문 기록"),
         "min": MessageLookupByLibrary.simpleMessage("분"),
         "model": m1,
@@ -256,6 +253,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "off": MessageLookupByLibrary.simpleMessage("꺼짐"),
         "ok": MessageLookupByLibrary.simpleMessage("확인"),
         "on": MessageLookupByLibrary.simpleMessage("켜짐"),
+        "one_step_favorite":
+            MessageLookupByLibrary.simpleMessage("One Step Favorite"),
+        "one_step_favorite_desc": MessageLookupByLibrary.simpleMessage(
+            "Quickly add gallery to favorite, short press to save to the last selected favorite, long press to display the favorite dialog."),
         "open_supported_links":
             MessageLookupByLibrary.simpleMessage("Open supported links"),
         "open_supported_links_summary": MessageLookupByLibrary.simpleMessage(
