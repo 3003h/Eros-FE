@@ -183,7 +183,7 @@ class EhPrettyPrinter extends LogPrinter {
     if (match == null) {
       return false;
     }
-    return match.group(2)!.startsWith('package:fehviewer/utils/logger/');
+    return match.group(2)!.startsWith('package:eros_fe/utils/logger/');
   }
 
   String getTime() {
