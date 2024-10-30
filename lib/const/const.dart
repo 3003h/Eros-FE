@@ -463,7 +463,7 @@ class EHConst {
     'vietnamese': 'VI',
   };
 
-  static const String fontFamily = 'miui';
+  static const String fontFamily = 'MiSans';
 
   static final List<String> fontFamilyFallback = GetPlatform.isIOS
       ? [
@@ -472,7 +472,10 @@ class EHConst {
           'Heiti SC',
         ]
       : [
-          // 'miui',
+          'MiSans',
+          'HarmonyOSSans',
+          'OPPO Sans',
+          'miui',
           'Inter',
           'Source Han Sans SC VF',
           'Noto Sans CJK SC',

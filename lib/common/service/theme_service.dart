@@ -31,9 +31,9 @@ class ThemeService extends ProfileService {
       case ThemesModeEnum.system:
         return platformBrightness.value == Brightness.dark
             ? _getDarkTheme
-            : ThemeColors.ligthTheme;
+            : ThemeColors.lightTheme;
       case ThemesModeEnum.lightMode:
-        return ThemeColors.ligthTheme;
+        return ThemeColors.lightTheme;
       case ThemesModeEnum.darkMode:
         return _getDarkTheme;
       default:

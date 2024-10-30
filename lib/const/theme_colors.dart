@@ -1,14 +1,14 @@
+import 'package:chinese_font_library/chinese_font_library.dart';
 import 'package:eros_fe/common/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
 
-import 'const.dart';
-
 final ehTextTheme = const CupertinoTextThemeData().copyWith(
-  textStyle: const CupertinoTextThemeData().textStyle.copyWith(
-        // fontFamily: EHConst.fontFamily,
-        fontFamilyFallback: EHConst.fontFamilyFallback,
-      ),
+  // textStyle: const CupertinoTextThemeData().textStyle.copyWith(
+  //       // fontFamily: EHConst.fontFamily,
+  //       fontFamilyFallback: EHConst.fontFamilyFallback,
+  //     ),
+  textStyle: const CupertinoTextThemeData().textStyle.useSystemChineseFont(),
 );
 
 enum ThemesModeEnum {
@@ -17,7 +17,7 @@ enum ThemesModeEnum {
   darkMode,
 }
 
-class CustTheme {
+class CustomTheme {
   late CupertinoThemeData themeData;
 }
 
@@ -178,7 +178,7 @@ class ThemeColors {
 
   /// 主题配置
   /// 浅色主题
-  static CupertinoThemeData ligthTheme = CupertinoThemeData(
+  static CupertinoThemeData lightTheme = CupertinoThemeData(
     brightness: Brightness.light,
     barBackgroundColor: navigationBarBackground,
     textTheme: ehTextTheme,
@@ -186,7 +186,7 @@ class ThemeColors {
   );
 
   /// 浅色主题
-  static CupertinoThemeData ligthThemeSecondary = CupertinoThemeData(
+  static CupertinoThemeData lightThemeSecondary = CupertinoThemeData(
     brightness: Brightness.light,
     barBackgroundColor: navigationBarBackground,
     scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,

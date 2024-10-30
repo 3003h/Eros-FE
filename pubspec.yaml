@@ -181,7 +181,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   extended_nested_scroll_view: ^6.0.0
   shared_storage: ^0.8.0
-  mime: ^2.0.0
+  mime: ^1.0.0
   saf:
     git:
       url: https://github.com/honjow/saf.git
@@ -200,6 +200,7 @@ dependencies:
   mysql_client: ^0.0.27
   blurhash_ffi: ^1.2.2
   cached_annotation: ^1.6.0
+  chinese_font_library: ^1.2.0
 
 dev_dependencies:
 #  flutter_test:
@@ -225,7 +226,7 @@ dev_dependencies:
   json_annotation: ^4.8.1
   copy_with_extension_gen: ^5.0.0
   isar_generator: ^3.0.0
-  flutter_lints: ^5.0.0
+  flutter_lints: ^4.0.0
   cached: ^1.6.1
 
 dependency_overrides:
