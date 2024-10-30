@@ -83,12 +83,12 @@ Future<int?> syncReadProgress(
 /// 画廊下载项
 class DownloadGalleryItem extends GetView<DownloadViewController> {
   const DownloadGalleryItem({
-    Key? key,
+    super.key,
     required this.galleryTask,
     required this.taskIndex,
     this.speed,
     this.errInfo,
-  }) : super(key: key);
+  });
 
   final GalleryTask galleryTask;
   final int taskIndex;
@@ -104,7 +104,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         : null;
 
     final status = TaskStatus(galleryTask.status ?? 0);
-    final _complete = status == TaskStatus.complete;
+    final complete = status == TaskStatus.complete;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -173,13 +173,13 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         );
       },
       onLongPress: () => controller.onLongPress(taskIndex, task: galleryTask),
-      child: _buildCardItem(context, _complete, addTime: addTime),
+      child: _buildCardItem(context, complete, addTime: addTime),
     );
   }
 
   Widget _buildCardItem(
     BuildContext context,
-    bool _complete, {
+    bool complete, {
     String? addTime,
   }) {
     return Container(
@@ -212,7 +212,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
           ),
           // 右侧
           Expanded(
-            child: _buildItemInfo(context, _complete, addTime: addTime)
+            child: _buildItemInfo(context, complete, addTime: addTime)
                 .paddingSymmetric(vertical: 4),
           ),
         ],

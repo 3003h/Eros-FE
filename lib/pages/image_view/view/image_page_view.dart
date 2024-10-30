@@ -16,7 +16,7 @@ import '../controller/view_controller.dart';
 import 'view_image.dart';
 
 class ImagePageView extends GetView<ViewExtController> {
-  const ImagePageView({Key? key, this.reverse = false}) : super(key: key);
+  const ImagePageView({super.key, this.reverse = false});
   final bool reverse;
 
   @override
@@ -38,7 +38,6 @@ class ImagePageView extends GetView<ViewExtController> {
 
     // 上下滑动图片 返回
     return ExtendedImageSlidePage(
-      child: imageView,
       slideAxis: SlideAxis.vertical,
       slideType: SlideType.wholePage,
       resetPageDuration: const Duration(milliseconds: 300),
@@ -55,6 +54,7 @@ class ImagePageView extends GetView<ViewExtController> {
           controller.update([idViewBar]);
         }
       },
+      child: imageView,
     );
   }
 

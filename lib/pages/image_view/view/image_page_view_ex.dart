@@ -12,7 +12,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class ImagePhotoView extends GetView<ViewExtController> {
-  const ImagePhotoView({Key? key, this.reverse = false}) : super(key: key);
+  const ImagePhotoView({super.key, this.reverse = false});
   final bool reverse;
 
   ViewExtState get vState => controller.vState;

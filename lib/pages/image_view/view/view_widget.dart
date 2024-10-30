@@ -231,7 +231,7 @@ class ViewLoading extends StatelessWidget {
     if (debugLable != null && kDebugMode) {
       logger.t('build ViewLoading $debugLable');
     }
-    final loadWidget = _ViewLoadingCupertion(
+    final loadWidget = _ViewLoading(
       ser: ser,
       progress: progress,
       animationEnabled: animationEnabled ?? true,
@@ -313,7 +313,7 @@ class ImageExt extends GetView<ViewExtController> {
                     (loadingProgress?.expectedTotalBytes ?? 1)
                 : null;
 
-            return _ViewLoadingCupertion(progress: progress, ser: ser);
+            return _ViewLoading(progress: progress, ser: ser);
 
           ///if you don't want override completed widget
           ///please return null or state.completedWidget
@@ -357,7 +357,7 @@ class ImageExt extends GetView<ViewExtController> {
 
             if (reload) {
               // return const SizedBox.shrink();
-              return _ViewLoadingCupertion(ser: ser);
+              return _ViewLoading(ser: ser);
             } else {
               return Container(
                 alignment: Alignment.center,
@@ -456,7 +456,7 @@ class ImageExtProvider extends GetView<ViewExtController> {
                     (loadingProgress?.expectedTotalBytes ?? 1)
                 : null;
 
-            return _ViewLoadingCupertion(progress: progress, ser: ser);
+            return _ViewLoading(progress: progress, ser: ser);
 
           case LoadState.completed:
             fadeAnimationController.forward();
@@ -495,7 +495,7 @@ class ImageExtProvider extends GetView<ViewExtController> {
 
             if (reload) {
               // return const SizedBox.shrink();
-              return _ViewLoadingCupertion(ser: ser);
+              return _ViewLoading(ser: ser);
             } else {
               return Container(
                 alignment: Alignment.center,
@@ -618,8 +618,127 @@ class _ImageWithHideState extends State<ImageWithHide> {
   }
 }
 
-class _ViewLoadingCupertion extends StatelessWidget {
-  const _ViewLoadingCupertion({
+class _ViewLoading extends StatelessWidget {
+  const _ViewLoading({
+    super.key,
+    this.progress,
+    this.ser,
+    this.animationEnabled = true,
+  });
+
+  final double? progress;
+  final int? ser;
+  final bool animationEnabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return _ViewLoadingLine(
+      progress: progress,
+      ser: ser,
+      animationEnabled: animationEnabled,
+    );
+
+    // return _ViewLoadingCupertino(
+    //   progress: progress,
+    //   ser: ser,
+    //   animationEnabled: animationEnabled,
+    // );
+  }
+}
+
+class _ViewLoadingLine extends StatelessWidget {
+  const _ViewLoadingLine({
+    super.key,
+    this.progress,
+    this.ser,
+    this.animationEnabled = true,
+  });
+
+  final double? progress;
+  final int? ser;
+  final bool animationEnabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // constraints: BoxConstraints(
+      //   maxHeight: context.mediaQueryShortestSide,
+      //   minWidth: context.width / 2 - kPageViewPadding,
+      // ),
+      // width: context.width / 2 - kPageViewPadding,
+      // height: 90,
+      // width: 90,
+      alignment: Alignment.center,
+      child: SizedBox(
+        width: (context.width * 0.8) - kPageViewPadding,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        backgroundColor: CupertinoDynamicColor.resolve(
+                            CupertinoColors.secondarySystemFill, context),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          CupertinoDynamicColor.resolve(
+                              CupertinoColors.systemGrey, context),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 50,
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${((progress ?? 0) * 100).round()} %',
+                      style: const TextStyle(
+                        color: CupertinoColors.systemGrey6,
+                        height: 1,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Text(
+                      '${ser ?? ''}',
+                      style: const TextStyle(
+                        color: CupertinoColors.systemGrey6,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ViewLoadingCupertino extends StatelessWidget {
+  const _ViewLoadingCupertino({
     super.key,
     this.progress,
     this.ser,
@@ -685,8 +804,8 @@ class _ViewLoadingCupertion extends StatelessWidget {
   }
 }
 
-class _ViewLoading extends StatelessWidget {
-  const _ViewLoading({
+class _ViewLoadingOld extends StatelessWidget {
+  const _ViewLoadingOld({
     super.key,
     this.progress,
     required this.ser,
@@ -1461,15 +1580,15 @@ class _FutureThumblState extends State<FutureThumbl> {
               return builderrorWidget();
             }
 
-            final _image = snapshot.data;
-            if (_image != null &&
-                _image.thumbUrl != null &&
-                _image.thumbUrl!.isNotEmpty) {
-              logger.t('${_image.ser}  ${_image.thumbUrl}');
+            final image = snapshot.data;
+            if (image != null &&
+                image.thumbUrl != null &&
+                image.thumbUrl!.isNotEmpty) {
+              logger.t('${image.ser}  ${image.thumbUrl}');
 
-              if (_image.largeThumb ?? false) {
+              if (image.largeThumb ?? false) {
                 return EhNetworkImage(
-                  imageUrl: _image.thumbUrl ?? '',
+                  imageUrl: image.thumbUrl ?? '',
                   placeholder: (_, __) {
                     return buildPlaceholder();
                   },
@@ -1480,8 +1599,7 @@ class _FutureThumblState extends State<FutureThumbl> {
               } else {
                 return LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
-                  final imageSize =
-                      Size(_image.thumbWidth!, _image.thumbHeight!);
+                  final imageSize = Size(image.thumbWidth!, image.thumbHeight!);
                   final size =
                       Size(constraints.maxWidth, constraints.maxHeight);
                   final FittedSizes fittedSizes =
@@ -1491,23 +1609,23 @@ class _FutureThumblState extends State<FutureThumbl> {
                   //     '${fittedSizes.source} ${fittedSizes.destination} $_subWidth $_subHeight');
 
                   return ExtendedImageRect(
-                    url: _image.thumbUrl!,
+                    url: image.thumbUrl!,
                     height: fittedSizes.destination.height,
                     width: fittedSizes.destination.width,
                     sourceRect: Rect.fromLTWH(
-                      _image.offSet! + 1,
+                      image.offSet! + 1,
                       1.0,
-                      _image.thumbWidth! - 2,
-                      _image.thumbHeight! - 2,
+                      image.thumbWidth! - 2,
+                      image.thumbHeight! - 2,
                     ),
                     onLoadComplet: () =>
                         logic.handOnLoadCompletExtendedImageRect(
-                            url: _image.thumbUrl!),
+                            url: image.thumbUrl!),
                   );
                 });
               }
             } else {
-              logger.d('error ${_image?.ser}');
+              logger.d('error ${image?.ser}');
               return builderrorWidget();
             }
           } else {

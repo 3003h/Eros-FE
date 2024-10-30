@@ -16,7 +16,7 @@ import '../controller/view_controller.dart';
 import 'view_image.dart';
 
 class ImageListView extends StatefulWidget {
-  const ImageListView({Key? key}) : super(key: key);
+  const ImageListView({super.key});
 
   @override
   State<ImageListView> createState() => _ImageListViewState();
@@ -145,7 +145,7 @@ class _ImageListViewState extends State<ImageListView> {
               final vState = logic.vState;
 
               // 计算容器高度
-              double? _height = () {
+              double? height = () {
                 // 从已下载进入阅读的情况 imageMap 会未初始化
                 try {
                   if (vState.imageMap?[itemSer]?.hide ?? false) {
@@ -166,19 +166,19 @@ class _ImageListViewState extends State<ImageListView> {
                       (context.width / _curImage.imageWidth!);
                 } on Exception catch (_) {
                   // 根据缩略图进行计算
-                  final _curImage = vState.imageMap?[itemSer];
-                  return _curImage!.thumbHeight! *
-                      (context.width / _curImage.thumbWidth!);
+                  final curImage = vState.imageMap?[itemSer];
+                  return curImage!.thumbHeight! *
+                      (context.width / curImage.thumbWidth!);
                 } catch (e) {
                   return null;
                 }
               }();
 
-              if (_height != null) {
-                _height += vState.showPageInterval ? 8 : 0;
+              if (height != null) {
+                height += vState.showPageInterval ? 8 : 0;
               }
 
-              loggerSimple.v('builder itemBuilder $itemSer $_height');
+              loggerSimple.t('builder itemBuilder $itemSer $height');
 
               final viewImage = ViewImage(
                 imageSer: itemSer,
@@ -246,7 +246,7 @@ class _ImageListViewState extends State<ImageListView> {
               return AnimatedContainer(
                 padding:
                     EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
-                height: _height ?? context.mediaQueryShortestSide,
+                height: height ?? context.mediaQueryShortestSide,
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.ease,
                 // child: !kDebugMode ? viewImage : viewImage2,

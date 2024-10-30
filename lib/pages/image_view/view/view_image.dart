@@ -24,14 +24,14 @@ typedef DoubleClickAnimationListener = void Function();
 
 class ViewImage extends StatefulWidget {
   const ViewImage({
-    Key? key,
+    super.key,
     required this.imageSer,
     this.initialScale = 1.0,
     this.enableDoubleTap = true,
     this.mode = ExtendedImageMode.gesture,
     this.enableSlideOutPage = true,
     this.imageSizeChanged,
-  }) : super(key: key);
+  });
 
   final int imageSer;
   final double initialScale;
@@ -41,7 +41,7 @@ class ViewImage extends StatefulWidget {
   final ValueChanged<Size>? imageSizeChanged;
 
   @override
-  _ViewImageState createState() => _ViewImageState();
+  State<ViewImage> createState() => _ViewImageState();
 }
 
 class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
@@ -127,7 +127,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   /// 双击事件
   DoubleTap get _onDoubleTap => (ExtendedImageGestureState state) {
         ///you can use define pointerDownPosition as you can,
-        ///default value is double tap pointer down postion.
+        ///default value is double tap pointer down position.
         final Offset? pointerDownPosition = state.pointerDownPosition;
         final double begin = state.gestureDetails?.totalScale ?? 0.0;
         double end;
@@ -170,7 +170,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Widget _image = () {
+    Widget image = () {
       switch (vState.loadFrom) {
         case LoadFrom.download:
           // 从已下载查看
@@ -190,8 +190,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
 
     return Obx(() {
       return HeroMode(
-        child: _image,
         enabled: widget.imageSer == controller.vState.currentItemIndex + 1,
+        child: image,
       );
     });
   }
@@ -200,7 +200,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   Widget fileImage(String path) {
     final Size size = MediaQuery.of(context).size;
 
-    final loadStateChanged = (ExtendedImageState state) {
+    Widget? loadStateChanged(ExtendedImageState state) {
       final ImageInfo? imageInfo = state.extendedImageInfo;
       widget.imageSizeChanged?.call(Size(
           imageInfo?.image.width.toDouble() ?? 0.0,
@@ -246,7 +246,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           debugLable: '### Widget fileImage 加载图片文件',
         );
       }
-    };
+      return null;
+    }
 
     return path.isContentUri
         ? ExtendedImage(
@@ -506,7 +507,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             // 常规情况 加载网络图片
 
             // 图片加载完成
-            _onLoadCompleted(ExtendedImageState state) {
+            void onLoadCompleted(ExtendedImageState state) {
               final ImageInfo? imageInfo = state.extendedImageInfo;
               controller.setScale100(imageInfo!, context.mediaQuerySize);
 
@@ -545,7 +546,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                     controller.reloadImage(widget.imageSer, changeSource: true),
                 fadeAnimationController: _fadeAnimationController,
                 initGestureConfigHandler: _initGestureConfigHandler,
-                onLoadCompleted: _onLoadCompleted,
+                onLoadCompleted: onLoadCompleted,
               );
             }
 
@@ -575,7 +576,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   controller.reloadImage(widget.imageSer, changeSource: true),
               fadeAnimationController: _fadeAnimationController,
               initGestureConfigHandler: _initGestureConfigHandler,
-              onLoadCompleted: _onLoadCompleted,
+              onLoadCompleted: onLoadCompleted,
             );
 
             return image;
@@ -592,16 +593,16 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   }
 
   Widget _buildErr(Object? e) {
-    String _errInfo = '';
+    String errInfo = '';
     logger.e('${e.runtimeType}');
     if (e is DioException) {
       final DioException dioErr = e;
       logger.e('${dioErr.error}');
-      _errInfo = dioErr.type.toString();
+      errInfo = dioErr.type.toString();
     } else if (e is EhError) {
       final EhError ehErr = e;
       logger.e('$ehErr');
-      _errInfo = ehErr.type.toString();
+      errInfo = ehErr.type.toString();
       if (ehErr.type == EhErrorType.image509) {
         return ViewErr509(ser: widget.imageSer);
       }
@@ -609,10 +610,10 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       if (e is BadRequestException && e.code == 429) {
         return ViewErr429(ser: widget.imageSer);
       } else {
-        _errInfo = e.message;
+        errInfo = e.message;
       }
     } else {
-      _errInfo = e.toString();
+      errInfo = e.toString();
     }
 
     if ((vState.errCountMap[widget.imageSer] ?? 0) < vState.retryCount) {
@@ -626,7 +627,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           '${widget.imageSer} 重试 第 ${vState.errCountMap[widget.imageSer]} 次');
     }
     if ((vState.errCountMap[widget.imageSer] ?? 0) >= vState.retryCount) {
-      return ViewError(ser: widget.imageSer, errInfo: _errInfo);
+      return ViewError(ser: widget.imageSer, errInfo: errInfo);
     } else {
       return ViewLoading(
         debugLable: '重试',
