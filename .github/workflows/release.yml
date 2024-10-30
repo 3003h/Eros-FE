@@ -27,6 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        target: ["android", "ios", "macos", "windows"]
         flutter_version: ["3.22.x"]
         flutter_channel: ["stable"]
         include:
