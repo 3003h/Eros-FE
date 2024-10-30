@@ -76,7 +76,7 @@ Future<void> main() async {
           // ..debug = kDebugMode
           ..diagnosticLevel = SentryLevel.warning;
       },
-      appRunner: () => runApp(MyApp()),
+      appRunner: () => runApp(const MyApp()),
     );
   } else {
     runApp(MyApp());
