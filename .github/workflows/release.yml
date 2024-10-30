@@ -20,7 +20,6 @@ concurrency:
 
 env:
   PACKAGE_NAME: Eros-FE
-  FLUTTER_VERSION: "3.22.x"
 
 jobs:
   Build_and_upload:
@@ -28,36 +27,28 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        flutter_version: ["3.22.x"]
+        flutter_channel: ["stable"]
         include:
           - target: android
             os: ubuntu-latest
-            flutter_version: ${{ env.FLUTTER_VERSION }}
-            flutter_channel: stable
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/Eros-FE*.apk
           - target: ios
             os: macos-14
-            flutter_version: ${{ env.FLUTTER_VERSION }}
-            flutter_channel: stable
             artifact_name: release-ios
             artifact_path: build/**/Eros-FE*.ipa
           - target: ios
             suffix: -canvas
             os: macos-14
-            flutter_version: ${{ env.FLUTTER_VERSION }}
-            flutter_channel: stable
             artifact_name: release-ios-canvas
             artifact_path: build/**/Eros-FE*.ipa
           - target: macos
             os: macos-14
-            flutter_version: ${{ env.FLUTTER_VERSION }}
-            flutter_channel: stable
             artifact_name: release-mac
             artifact_path: build/macos/Eros-FE*.zip
           - target: windows
             os: windows-latest
-            flutter_version: ${{ env.FLUTTER_VERSION }}
-            flutter_channel: stable
             artifact_name: release-windows
             artifact_path: build/windows/Eros-FE*.zip
 
