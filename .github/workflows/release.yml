@@ -39,11 +39,6 @@ jobs:
             os: macos-14
             artifact_name: release-ios
             artifact_path: build/**/Eros-FE*.ipa
-          - target: ios
-            suffix: -canvas
-            os: macos-14
-            artifact_name: release-ios-canvas
-            artifact_path: build/**/Eros-FE*.ipa
           - target: macos
             os: macos-14
             artifact_name: release-mac
