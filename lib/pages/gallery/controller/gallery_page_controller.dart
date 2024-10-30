@@ -54,7 +54,9 @@ class GalleryPageController extends GetxController
 
     logger.t('GalleryPageController $pageCtrlTag onInit');
 
-    final galleryRepository = Get.find<GalleryRepository>();
+    final tag = pageCtrlTag;
+    logger.d('>>>> get GalleryRepository tag $tag');
+    final galleryRepository = Get.find<GalleryRepository>(tag: tag);
     bool isStateFromCache = false;
 
     if (galleryRepository.url != null && galleryRepository.url!.isNotEmpty) {
@@ -457,8 +459,8 @@ class GalleryPageController extends GetxController
           gState.hideNavigationBtn) {
         gState.hideNavigationBtn = false;
       }
-    } catch (_) {
-      logger.e('$_');
+    } catch (e, stack) {
+      logger.e('$e, $stack');
     }
   }
 

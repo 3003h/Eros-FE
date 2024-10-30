@@ -227,9 +227,9 @@ class GalleryUploader extends StatelessWidget {
 
 class ReadButton extends StatelessWidget {
   ReadButton({
-    Key? key,
+    super.key,
     required this.gid,
-  }) : super(key: key);
+  });
   final String gid;
 
   final GalleryPageController _pageController = Get.find(tag: pageCtrlTag);

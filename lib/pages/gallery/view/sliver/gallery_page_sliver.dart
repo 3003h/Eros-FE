@@ -41,7 +41,14 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _controller = Get.put(GalleryPageController(), tag: _tag);
+    // _controller = Get.put(GalleryPageController(), tag: _tag);
+
+    Get.lazyPut<GalleryPageController>(
+      () => GalleryPageController(),
+      tag: _tag,
+      fenix: true,
+    );
+    _controller = Get.find(tag: _tag);
 
     _controller.scrollController = PrimaryScrollController.of(context);
     _controller.scrollController
@@ -53,7 +60,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
     final dynamic tabTag = pageState.galleryRepository?.tabTag;
     final GalleryProvider? galleryProvider = pageState.galleryProvider;
 
-    final _slivers = <Widget>[
+    final sliversW = <Widget>[
       // 导航栏
       buildCupertinoSliverNavigationBar(context, galleryProvider),
       // 下拉刷新
@@ -230,7 +237,7 @@ class _GallerySliverPageState extends State<GallerySliverPage> {
     Widget body = CustomScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       controller: GetPlatform.isDesktop ? _controller.scrollController : null,
-      slivers: _slivers,
+      slivers: sliversW,
     );
 
     body = SizeCacheWidget(

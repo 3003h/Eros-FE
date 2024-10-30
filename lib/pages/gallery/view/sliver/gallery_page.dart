@@ -36,7 +36,13 @@ class _GalleryPageState extends State<GalleryPage> {
   @override
   void initState() {
     super.initState();
-    _controller = Get.put(GalleryPageController(), tag: _tag);
+    // _controller = Get.put(GalleryPageController(), tag: _tag);
+    Get.lazyPut<GalleryPageController>(
+      () => GalleryPageController(),
+      tag: _tag,
+      fenix: true,
+    );
+    _controller = Get.find(tag: _tag);
     initPageController(tag: _tag);
   }
 
@@ -125,6 +131,7 @@ class GalleryNavigationBar extends StatelessWidget {
           Widget coverOpacity = AnimatedOpacity(
             opacity: pageState.hideNavigationBtn ? 0.0 : 1.0,
             duration: 300.milliseconds,
+            curve: Curves.ease,
             child: GetBuilder<GalleryPageController>(
               id: GetIds.PAGE_VIEW_HEADER,
               tag: pageCtrlTag,
@@ -135,7 +142,6 @@ class GalleryNavigationBar extends StatelessWidget {
                 );
               },
             ),
-            curve: Curves.ease,
           );
 
           return coverOpacity;
