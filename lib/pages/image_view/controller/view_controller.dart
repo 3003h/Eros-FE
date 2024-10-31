@@ -250,15 +250,16 @@ class ViewExtController extends GetxController {
     }
 
     logger.t('旋转设置');
-    final ReadOrientation? _orientation = _ehSettingService.orientation.value;
+    final ReadOrientation? orientation = _ehSettingService.orientation.value;
     // logger.d(' $_orientation');
-    if (_orientation != ReadOrientation.system &&
-        _orientation != ReadOrientation.auto) {
+    if (orientation != ReadOrientation.system &&
+        orientation != ReadOrientation.auto) {
       OrientationHelper.setPreferredOrientations(
-          [orientationMap[_orientation] ?? DeviceOrientation.portraitUp]);
+          [orientationMap[orientation] ?? DeviceOrientation.portraitUp]);
     }
 
-    vState.sliderValue = vState.currentItemIndex / 1.0;
+    // vState.sliderValue = vState.currentItemIndex / 1.0;
+    _setPageSliderValue(updateSlider: true);
 
     // setFullscreen();
     400.milliseconds.delay(() => setFullscreen());
@@ -396,6 +397,24 @@ class ViewExtController extends GetxController {
       });
     }
 
+    // if (vState.currentItemIndex >= vState.fileCount - 1) {
+    //   vState.sliderValue = (vState.fileCount - 1).toDouble();
+    // } else if (vState.currentItemIndex < 0) {
+    //   vState.sliderValue = 1.0;
+    // } else {
+    //   vState.sliderValue = vState.currentItemIndex.toDouble();
+    // }
+    _setPageSliderValue();
+
+    update([idViewTopBar, idViewPageSlider]);
+    if (vState.syncThumbList) {
+      thumbScrollTo();
+    }
+  }
+
+  void _setPageSliderValue({bool updateSlider = false}) {
+    logger.d(
+        '>>> _setPageSliderValue currentItemIndex ${vState.currentItemIndex}');
     if (vState.currentItemIndex >= vState.fileCount - 1) {
       vState.sliderValue = (vState.fileCount - 1).toDouble();
     } else if (vState.currentItemIndex < 0) {
@@ -403,9 +422,9 @@ class ViewExtController extends GetxController {
     } else {
       vState.sliderValue = vState.currentItemIndex.toDouble();
     }
-    update([idViewTopBar, idViewPageSlider]);
-    if (vState.syncThumbList) {
-      thumbScrollTo();
+    logger.d('>>> _setPageSliderValue ${vState.sliderValue}');
+    if (updateSlider) {
+      update([idViewTopBar, idViewPageSlider]);
     }
   }
 

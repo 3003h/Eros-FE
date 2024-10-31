@@ -102,7 +102,7 @@ class ViewExtState {
     ehSettingService.viewColumnMode = val;
   }
 
-  /// pageview下实际的index
+  /// pageView下实际的index
   int get pageIndex {
     switch (columnMode) {
       case ViewColumnMode.single:
@@ -116,7 +116,7 @@ class ViewExtState {
     }
   }
 
-  /// pageview下实际能翻页的总数
+  /// pageView下实际能翻页的总数
   int get pageCount {
     final int imageCount = fileCount;
     switch (columnMode) {
@@ -178,13 +178,13 @@ class ViewExtState {
 
   /// 顶栏偏移
   double get topBarOffset {
-    final _paddingTop = Get.context!.mediaQueryPadding.top;
+    final paddingTop = Get.context!.mediaQueryPadding.top;
 
-    final double _offsetTopHide = kTopBarHeight + _paddingTop;
+    final double offsetTopHide = kTopBarHeight + paddingTop;
     if (showBar) {
       return 0;
     } else {
-      return -_offsetTopHide - 10;
+      return -offsetTopHide - 10;
     }
   }
 
@@ -227,8 +227,8 @@ class ViewExtState {
   int maxImageIndex = 0;
 
   bool get isScrolling {
-    final _first = speedList.firstOrNull ?? 0.00;
-    return speedList.any((element) => element != _first);
+    final first = speedList.firstOrNull ?? 0.00;
+    return speedList.any((element) => element != first);
   }
 
   Map<String, AsyncArchive> asyncArchiveMap = {};

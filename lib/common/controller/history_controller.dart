@@ -312,7 +312,7 @@ class HistoryController extends GetxController {
       return;
     }
 
-    logger.d('listRemote ${listRemote.length}');
+    logger.t('listRemote ${listRemote.length}');
 
     // 比较远程和本地的差异
     // final combinedList = <HistoryIndexGid?>{...listRemote, ...listLocal};
@@ -359,7 +359,7 @@ class HistoryController extends GetxController {
       },
     );
 
-    logger.d('localNewer ${localNewer.length} ${localNewer.map((e) => e?.g)}');
+    logger.t('localNewer ${localNewer.length} ${localNewer.map((e) => e?.g)}');
 
     await downloadRemoteHistories(remoteNewer.toSet().toList());
 
