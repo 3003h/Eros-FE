@@ -670,7 +670,7 @@ class _ViewLoadingLine extends StatelessWidget {
       // width: 90,
       alignment: Alignment.center,
       child: SizedBox(
-        width: (context.width * 0.8) - kPageViewPadding,
+        width: (context.width * 0.5) + 100 - kPageViewPadding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
