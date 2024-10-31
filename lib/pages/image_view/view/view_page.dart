@@ -6,7 +6,6 @@ import 'package:eros_fe/pages/image_view/view/view_widget.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -136,7 +135,7 @@ class ViewKeyboardListener extends GetView<ViewExtController> {
 }
 
 class ImageView extends StatelessWidget {
-  const ImageView({Key? key}) : super(key: key);
+  const ImageView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -149,14 +148,14 @@ class ImageView extends StatelessWidget {
             return const ImageListView();
           case ViewMode.leftToRight:
             return const ImagePageView();
-            return kReleaseMode
-                ? const ImagePageView()
-                : const ImagePhotoView();
+          // return kReleaseMode
+          //     ? const ImagePageView()
+          //     : const ImagePhotoView();
           case ViewMode.rightToLeft:
             return const ImagePageView(reverse: true);
-            return kReleaseMode
-                ? const ImagePageView(reverse: true)
-                : const ImagePhotoView(reverse: true);
+          // return kReleaseMode
+          //     ? const ImagePageView(reverse: true)
+          //     : const ImagePhotoView(reverse: true);
           default:
             return const ImagePhotoView();
         }

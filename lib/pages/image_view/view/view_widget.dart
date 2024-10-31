@@ -332,10 +332,10 @@ class ImageExt extends GetView<ViewExtController> {
             if (checkPHashHide || checkQRCodeHide) {
               image = ImageWithHide(
                 url: url,
-                child: image,
                 ser: ser,
                 checkPHashHide: checkPHashHide,
                 checkQRCodeHide: checkQRCodeHide,
+                child: image,
               );
             }
 

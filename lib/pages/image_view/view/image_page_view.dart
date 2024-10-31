@@ -36,7 +36,7 @@ class ImagePageView extends GetView<ViewExtController> {
 
     // return imageView;
 
-    // 上下滑动图片 返回
+    // 上下滑动手势 返回
     return ExtendedImageSlidePage(
       slideAxis: SlideAxis.vertical,
       slideType: SlideType.wholePage,

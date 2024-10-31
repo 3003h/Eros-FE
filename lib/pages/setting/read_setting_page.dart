@@ -118,17 +118,13 @@ class ReadSettingList extends StatelessWidget {
         ],
       ),
 
-      Obx(() {
-        return SliverCupertinoListSection.listInsetGrouped(
-          footer: const Text('实验性功能'),
-          children: [
-            _buildPageTypeItem(context),
-            if (ehSettingService.pageViewType ==
-                PageViewType.extendedImageGesturePageView)
-              _buildEnableSlideOutPageItem(context),
-          ],
-        );
-      }),
+      SliverCupertinoListSection.listInsetGrouped(
+        footer: const Text('Experimental feature'),
+        children: [
+          _buildPageTypeItem(context),
+          _buildEnableSlideOutPageItem(context),
+        ],
+      ),
 
       // 兼容模式
       // SliverCupertinoListSection.listInsetGrouped(children: [
@@ -161,7 +157,8 @@ Widget _buildPageTypeItem(
     PageViewType.preloadPageView: 'PreloadPageView',
   };
 
-  final EhSettingService ehSettingService = Get.find();
+  // final EhSettingService ehSettingService = Get.find();
+  final ViewExtController viewExtController = Get.find();
 
   return Obx(() {
     return SelectorCupertinoListTile<PageViewType>(
@@ -169,9 +166,11 @@ Widget _buildPageTypeItem(
       title: 'PageViewType',
       actionMap: actionMap,
       simpleActionMap: simpleActionMap,
-      initVal: ehSettingService.pageViewType ??
-          PageViewType.extendedImageGesturePageView,
-      onValueChanged: (val) => ehSettingService.pageViewType = val,
+      initVal: viewExtController.pageViewType,
+      onValueChanged: (val) {
+        viewExtController.pageViewType = val;
+        viewExtController.update([idSlidePage]);
+      },
     );
   });
 }
@@ -179,14 +178,17 @@ Widget _buildPageTypeItem(
 Widget _buildEnableSlideOutPageItem(
   BuildContext context,
 ) {
-  final EhSettingService ehSettingService = Get.find();
+  final ViewExtController viewExtController = Get.find();
 
   return EhCupertinoListTile(
-    title: Text('Enable Slide Out Page'),
+    title: Text('Slide Out Page'),
     trailing: Obx(() {
       return CupertinoSwitch(
-        value: ehSettingService.enableSlideOutPage,
-        onChanged: (val) => ehSettingService.enableSlideOutPage = val,
+        value: viewExtController.enableSlideOutPage,
+        onChanged: (val) {
+          viewExtController.enableSlideOutPage = val;
+          viewExtController.update([idSlidePage]);
+        },
       );
     }),
   );

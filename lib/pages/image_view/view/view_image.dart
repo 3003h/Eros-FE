@@ -538,21 +538,21 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               controller.onLoadCompleted(widget.imageSer);
             }
 
-            if (kReleaseMode) {
-              logger.d('ImageExt');
-              return ImageExt(
-                url: imageData?.imageUrl ?? '',
-                onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
-                ser: widget.imageSer,
-                mode: widget.mode,
-                enableSlideOutPage: widget.enableSlideOutPage,
-                reloadImage: () =>
-                    controller.reloadImage(widget.imageSer, changeSource: true),
-                fadeAnimationController: _fadeAnimationController,
-                initGestureConfigHandler: _initGestureConfigHandler,
-                onLoadCompleted: onLoadCompleted,
-              );
-            }
+            // if (kReleaseMode) {
+            //   logger.d('ImageExt');
+            //   return ImageExt(
+            //     url: imageData?.imageUrl ?? '',
+            //     onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
+            //     ser: widget.imageSer,
+            //     mode: widget.mode,
+            //     enableSlideOutPage: widget.enableSlideOutPage,
+            //     reloadImage: () =>
+            //         controller.reloadImage(widget.imageSer, changeSource: true),
+            //     fadeAnimationController: _fadeAnimationController,
+            //     initGestureConfigHandler: _initGestureConfigHandler,
+            //     onLoadCompleted: onLoadCompleted,
+            //   );
+            // }
 
             logger.t('ImageExtProvider');
             Widget image = ImageExtProvider(
