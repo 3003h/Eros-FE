@@ -132,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("输入具体日期或偏移量 / GID"),
         "expand": MessageLookupByLibrary.simpleMessage("展开"),
+        "experimental_feature": MessageLookupByLibrary.simpleMessage("实验性功能"),
         "export": MessageLookupByLibrary.simpleMessage("导出"),
         "export_app_data": MessageLookupByLibrary.simpleMessage("导出应用数据"),
         "export_app_data_summary":
@@ -249,6 +250,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "p_Torrent": MessageLookupByLibrary.simpleMessage("种子"),
         "page_range": MessageLookupByLibrary.simpleMessage("跳转范围"),
         "page_range_error": MessageLookupByLibrary.simpleMessage("输入范围有误"),
+        "page_view_type": MessageLookupByLibrary.simpleMessage("页面视图类型"),
         "passwd": MessageLookupByLibrary.simpleMessage("密码"),
         "paused": MessageLookupByLibrary.simpleMessage("已暂停"),
         "phash_block_list": MessageLookupByLibrary.simpleMessage("感知哈希屏蔽列表"),
@@ -332,6 +334,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("仅显示上传者评论"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("显示页面间隔"),
         "skip": MessageLookupByLibrary.simpleMessage("跳过"),
+        "slide_out_page": MessageLookupByLibrary.simpleMessage("拖动返回"),
         "sync_group": MessageLookupByLibrary.simpleMessage("同步分组"),
         "sync_history": MessageLookupByLibrary.simpleMessage("同步历史记录"),
         "sync_quick_search": MessageLookupByLibrary.simpleMessage("同步快速搜索"),

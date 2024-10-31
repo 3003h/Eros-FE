@@ -147,6 +147,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("펼치기"),
+        "experimental_feature":
+            MessageLookupByLibrary.simpleMessage("Experimental feature"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
         "export_app_data":
             MessageLookupByLibrary.simpleMessage("Export App Data"),
@@ -277,6 +279,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "p_Torrent": MessageLookupByLibrary.simpleMessage("토렌트"),
         "page_range": MessageLookupByLibrary.simpleMessage("페이지 범위"),
         "page_range_error": MessageLookupByLibrary.simpleMessage("페이지 범위 오류"),
+        "page_view_type":
+            MessageLookupByLibrary.simpleMessage("Page View Type"),
         "passwd": MessageLookupByLibrary.simpleMessage("비밀번호"),
         "paused": MessageLookupByLibrary.simpleMessage("Paused"),
         "phash_block_list":
@@ -373,6 +377,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Show Only Uploader Comment"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("페이지 간격 표시"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
+        "slide_out_page":
+            MessageLookupByLibrary.simpleMessage("Slide Out Page"),
         "sync_group": MessageLookupByLibrary.simpleMessage("Sync group"),
         "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
         "sync_quick_search":

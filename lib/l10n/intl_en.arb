@@ -440,5 +440,8 @@
   "title": "Title",
   "comment": "Comment",
   "commentator": "Commentator",
-  "regex_format_error": "Regex format error"
+  "regex_format_error": "Regex format error",
+  "experimental_feature": "Experimental feature",
+  "page_view_type": "Page View Type",
+  "slide_out_page": "Slide Out Page"
 }

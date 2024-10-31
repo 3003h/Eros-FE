@@ -158,6 +158,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("Expand"),
+        "experimental_feature":
+            MessageLookupByLibrary.simpleMessage("Experimental feature"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
         "export_app_data":
             MessageLookupByLibrary.simpleMessage("Export App Data"),
@@ -299,6 +301,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range": MessageLookupByLibrary.simpleMessage("Page range"),
         "page_range_error":
             MessageLookupByLibrary.simpleMessage("Page range error"),
+        "page_view_type":
+            MessageLookupByLibrary.simpleMessage("Page View Type"),
         "passwd": MessageLookupByLibrary.simpleMessage("Password"),
         "paused": MessageLookupByLibrary.simpleMessage("Paused"),
         "phash_block_list":
@@ -409,6 +413,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_page_interval":
             MessageLookupByLibrary.simpleMessage("Show page interval"),
         "skip": MessageLookupByLibrary.simpleMessage("Skip"),
+        "slide_out_page":
+            MessageLookupByLibrary.simpleMessage("Slide Out Page"),
         "sync_group": MessageLookupByLibrary.simpleMessage("Sync group"),
         "sync_history": MessageLookupByLibrary.simpleMessage("Sync history"),
         "sync_quick_search":

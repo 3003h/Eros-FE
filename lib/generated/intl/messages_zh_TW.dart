@@ -136,6 +136,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("輸入具體日期或偏移量 / GID"),
         "expand": MessageLookupByLibrary.simpleMessage("Expand"),
+        "experimental_feature":
+            MessageLookupByLibrary.simpleMessage("Experimental feature"),
         "export": MessageLookupByLibrary.simpleMessage("導出"),
         "export_app_data": MessageLookupByLibrary.simpleMessage("導出應用數據"),
         "export_app_data_summary":
@@ -264,6 +266,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "p_Torrent": MessageLookupByLibrary.simpleMessage("種子"),
         "page_range": MessageLookupByLibrary.simpleMessage("頁數範圍"),
         "page_range_error": MessageLookupByLibrary.simpleMessage("頁數範圍錯誤"),
+        "page_view_type":
+            MessageLookupByLibrary.simpleMessage("Page View Type"),
         "passwd": MessageLookupByLibrary.simpleMessage("密碼"),
         "paused": MessageLookupByLibrary.simpleMessage("暫停"),
         "phash_block_list": MessageLookupByLibrary.simpleMessage("感知哈希屏蔽列表"),
@@ -352,6 +356,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Show Only Uploader Comment"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("顯示頁面間隔"),
         "skip": MessageLookupByLibrary.simpleMessage("跳過"),
+        "slide_out_page":
+            MessageLookupByLibrary.simpleMessage("Slide Out Page"),
         "sync_group": MessageLookupByLibrary.simpleMessage("同步分组"),
         "sync_history": MessageLookupByLibrary.simpleMessage("同步紀錄"),
         "sync_quick_search": MessageLookupByLibrary.simpleMessage("同步快速搜索"),

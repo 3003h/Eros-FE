@@ -119,7 +119,7 @@ class ReadSettingList extends StatelessWidget {
       ),
 
       SliverCupertinoListSection.listInsetGrouped(
-        footer: const Text('Experimental feature'),
+        footer: Text(L10n.of(context).experimental_feature),
         children: [
           _buildPageTypeItem(context),
           _buildEnableSlideOutPageItem(context),
@@ -157,19 +157,23 @@ Widget _buildPageTypeItem(
     PageViewType.preloadPageView: 'PreloadPageView',
   };
 
-  // final EhSettingService ehSettingService = Get.find();
-  final ViewExtController viewExtController = Get.find();
+  final EhSettingService ehSettingService = Get.find();
+  // final ViewExtController viewExtController = Get.find();
 
   return Obx(() {
     return SelectorCupertinoListTile<PageViewType>(
       // key: UniqueKey(),
-      title: 'PageViewType',
+      title: L10n.of(context).page_view_type,
       actionMap: actionMap,
       simpleActionMap: simpleActionMap,
-      initVal: viewExtController.pageViewType,
+      initVal: ehSettingService.pageViewType,
       onValueChanged: (val) {
-        viewExtController.pageViewType = val;
-        viewExtController.update([idSlidePage]);
+        ehSettingService.pageViewType = val;
+        // viewExtController.update([idSlidePage]);
+        if (Get.isRegistered<ViewExtController>()) {
+          Get.find<ViewExtController>().resetPageController();
+          Get.find<ViewExtController>().update([idSlidePage]);
+        }
       },
     );
   });
@@ -178,16 +182,21 @@ Widget _buildPageTypeItem(
 Widget _buildEnableSlideOutPageItem(
   BuildContext context,
 ) {
-  final ViewExtController viewExtController = Get.find();
+  // final ViewExtController viewExtController = Get.find();
+  final EhSettingService ehSettingService = Get.find();
 
   return EhCupertinoListTile(
-    title: Text('Slide Out Page'),
+    title: Text(L10n.of(context).slide_out_page),
     trailing: Obx(() {
       return CupertinoSwitch(
-        value: viewExtController.enableSlideOutPage,
+        value: ehSettingService.enableSlideOutPage,
         onChanged: (val) {
-          viewExtController.enableSlideOutPage = val;
-          viewExtController.update([idSlidePage]);
+          ehSettingService.enableSlideOutPage = val;
+          if (Get.isRegistered<ViewExtController>()) {
+            Get.find<ViewExtController>().resetPageController();
+            Get.find<ViewExtController>()
+                .update([idSlidePage, idImagePageView]);
+          }
         },
       );
     }),

@@ -163,6 +163,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("Enter date or offset or gid"),
         "expand": MessageLookupByLibrary.simpleMessage("Показать"),
+        "experimental_feature":
+            MessageLookupByLibrary.simpleMessage("Experimental feature"),
         "export": MessageLookupByLibrary.simpleMessage("Экспортировать"),
         "export_app_data":
             MessageLookupByLibrary.simpleMessage("Export App Data"),
@@ -310,6 +312,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "page_range": MessageLookupByLibrary.simpleMessage("Диапазон страниц"),
         "page_range_error":
             MessageLookupByLibrary.simpleMessage("Ошибка в диапазоне страниц"),
+        "page_view_type":
+            MessageLookupByLibrary.simpleMessage("Page View Type"),
         "passwd": MessageLookupByLibrary.simpleMessage("Пароль"),
         "paused": MessageLookupByLibrary.simpleMessage("На паузе"),
         "phash_block_list":
@@ -425,6 +429,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "show_page_interval": MessageLookupByLibrary.simpleMessage(
             "Показывать интервал между страницами"),
         "skip": MessageLookupByLibrary.simpleMessage("Пропустить"),
+        "slide_out_page":
+            MessageLookupByLibrary.simpleMessage("Slide Out Page"),
         "sync_group":
             MessageLookupByLibrary.simpleMessage("Синхронизация группы"),
         "sync_history":

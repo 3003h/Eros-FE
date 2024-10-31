@@ -440,5 +440,8 @@
   "title": "タイトル",
   "comment": "コメント",
   "commentator": "コメンター",
-  "regex_format_error": "Regexフォーマットエラー"
+  "regex_format_error": "Regexフォーマットエラー",
+  "experimental_feature": "Experimental feature",
+  "page_view_type": "Page View Type",
+  "slide_out_page": "Slide Out Page"
 }

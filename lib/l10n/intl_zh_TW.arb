@@ -440,5 +440,8 @@
   "title": "标题",
   "comment": "评论",
   "commentator": "评论者",
-  "regex_format_error": "Regex format error"
+  "regex_format_error": "Regex format error",
+  "experimental_feature": "Experimental feature",
+  "page_view_type": "Page View Type",
+  "slide_out_page": "Slide Out Page"
 }

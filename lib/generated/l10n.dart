@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -4479,6 +4480,36 @@ class L10n {
     return Intl.message(
       'Regex format error',
       name: 'regex_format_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Experimental feature`
+  String get experimental_feature {
+    return Intl.message(
+      'Experimental feature',
+      name: 'experimental_feature',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Page View Type`
+  String get page_view_type {
+    return Intl.message(
+      'Page View Type',
+      name: 'page_view_type',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Slide Out Page`
+  String get slide_out_page {
+    return Intl.message(
+      'Slide Out Page',
+      name: 'slide_out_page',
       desc: '',
       args: [],
     );

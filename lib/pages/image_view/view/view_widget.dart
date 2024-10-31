@@ -661,13 +661,10 @@ class _ViewLoadingLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // constraints: BoxConstraints(
-      //   maxHeight: context.mediaQueryShortestSide,
-      //   minWidth: context.width / 2 - kPageViewPadding,
-      // ),
-      // width: context.width / 2 - kPageViewPadding,
-      // height: 90,
-      // width: 90,
+      constraints: BoxConstraints(
+        maxHeight: context.mediaQueryShortestSide,
+        minWidth: context.width / 2 - kPageViewPadding,
+      ),
       alignment: Alignment.center,
       child: SizedBox(
         width: (context.width * 0.5) + 100 - kPageViewPadding,
@@ -945,10 +942,10 @@ class ViewTopBar extends GetView<ViewExtController> {
                             onTap: () {
                               controller.tapShare(context);
                             },
-                            child: SizedBox(
+                            child: const SizedBox(
                               width: 40,
                               height: kBottomBarButtonHeight,
-                              child: const Icon(
+                              child: Icon(
                                 FontAwesomeIcons.share,
                                 color: CupertinoColors.systemGrey6,
                                 size: 22,

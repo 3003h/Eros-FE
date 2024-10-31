@@ -139,6 +139,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "enter_date_or_offset_or_gid":
             MessageLookupByLibrary.simpleMessage("特定の日付やオフセット/GIDを入力"),
         "expand": MessageLookupByLibrary.simpleMessage("表示"),
+        "experimental_feature":
+            MessageLookupByLibrary.simpleMessage("Experimental feature"),
         "export": MessageLookupByLibrary.simpleMessage("エクスポート"),
         "export_app_data": MessageLookupByLibrary.simpleMessage("データをエクスポート"),
         "export_app_data_summary":
@@ -264,6 +266,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "p_Torrent": MessageLookupByLibrary.simpleMessage("トレント"),
         "page_range": MessageLookupByLibrary.simpleMessage("ページ範囲"),
         "page_range_error": MessageLookupByLibrary.simpleMessage("入力範囲エラー"),
+        "page_view_type":
+            MessageLookupByLibrary.simpleMessage("Page View Type"),
         "passwd": MessageLookupByLibrary.simpleMessage("パスワード"),
         "paused": MessageLookupByLibrary.simpleMessage("一時停止"),
         "phash_block_list": MessageLookupByLibrary.simpleMessage("ブロックリスト"),
@@ -356,6 +360,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("アップローダのコメントのみ"),
         "show_page_interval": MessageLookupByLibrary.simpleMessage("間紙"),
         "skip": MessageLookupByLibrary.simpleMessage("スキップ"),
+        "slide_out_page":
+            MessageLookupByLibrary.simpleMessage("Slide Out Page"),
         "sync_group": MessageLookupByLibrary.simpleMessage("グループ同期"),
         "sync_history": MessageLookupByLibrary.simpleMessage("履歴同期"),
         "sync_quick_search": MessageLookupByLibrary.simpleMessage("クイック検索同期"),
