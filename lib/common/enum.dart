@@ -51,3 +51,10 @@ enum BlockType {
   commentator,
   comment,
 }
+
+enum PageViewType {
+  photoView,
+  preloadPhotoView,
+  preloadPageView,
+  extendedImageGesturePageView,
+}

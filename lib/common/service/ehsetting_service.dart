@@ -282,10 +282,15 @@ class EhSettingService extends ProfileService {
   }
 
   // readViewCompatibleModes
-  final _readViewCompatibleMode = false.obs;
+  final _readViewCompatibleMode = true.obs;
   // bool get readViewCompatibleMode => _readViewCompatibleMode.value;
-  bool get readViewCompatibleMode => false;
+  bool get readViewCompatibleMode => true;
   set readViewCompatibleMode(bool val) => _readViewCompatibleMode.value = val;
+
+  // pageViewType
+  final _pageViewType = PageViewType.extendedImageGesturePageView.obs;
+  PageViewType get pageViewType => _pageViewType.value;
+  set pageViewType(PageViewType val) => _pageViewType.value = val;
 
   // translateSearchHistory
   final _translateSearchHistory = true.obs;
@@ -332,7 +337,20 @@ class EhSettingService extends ProfileService {
   int get pHashThreshold => _pHashThreshold.value;
   set pHashThreshold(int val) => _pHashThreshold.value = val;
 
+  // enableSlideOutPage
+  final _enableSlideOutPage = true.obs;
+  bool get enableSlideOutPage => _enableSlideOutPage.value;
+  set enableSlideOutPage(bool val) => _enableSlideOutPage.value = val;
+
   void _initEhConfig() {
+    // pageViewType
+    pageViewType = EnumToString.fromString(
+            PageViewType.values, ehConfig.pageViewType ?? '') ??
+        pageViewType;
+    everFromEnum(_pageViewType, (String value) {
+      ehConfig = ehConfig.copyWith(pageViewType: value.oN);
+    });
+
     // pHashThreshold
     pHashThreshold = ehConfig.pHashThreshold ?? pHashThreshold;
     everProfile<int>(_pHashThreshold, (val) {
@@ -773,6 +791,8 @@ class EhSettingService extends ProfileService {
     everProfile<bool>(_showCommentAvatar, (value) {
       ehConfig = ehConfig.copyWith(showCommentAvatar: value.oN);
     });
+
+    // _enableSlideOutPage
   }
 
   ///

@@ -66,5 +66,7 @@
   "showGalleryTags?": true,
   "hideGalleryThumbnails?": false,
   "horizontalThumbnails?": false,
-  "pHashThreshold?" : 10
+  "pHashThreshold?": 10,
+  "pageViewType?": "",
+  "enableSlideOutPage?": true
 }

@@ -57,64 +57,78 @@ class ReadSettingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // iPad不显示旋转设置
-    final bool _hideOrientationItem = GetPlatform.isIOS && context.isTablet;
+    final bool hideOrientationItem = GetPlatform.isIOS && context.isTablet;
 
     return MultiSliver(children: [
-      SliverCupertinoListSection.listInsetGrouped(children: [
-        _buildViewModeItem(context),
-        if (!_hideOrientationItem) ReadOrientationItem(),
-        _buildDoublePageItem(context),
-        EhCupertinoListTile(
-          title: Text(L10n.of(context).show_page_interval),
-          trailing: Obx(() {
-            return CupertinoSwitch(
-              value: ehSettingService.showPageInterval.value,
-              onChanged: (bool val) {
-                ehSettingService.showPageInterval.value = val;
-                if (Get.isRegistered<ViewExtController>()) {
-                  Get.find<ViewExtController>().resetPageController();
-                  Get.find<ViewExtController>().update([idSlidePage]);
-                }
-              },
-            );
-          }),
-        ),
-        // turn_page_anima
-        EhCupertinoListTile(
-          title: Text(L10n.of(context).turn_page_anima),
-          trailing: Obx(() {
-            return CupertinoSwitch(
-              value: ehSettingService.turnPageAnimations,
-              onChanged: (bool val) {
-                ehSettingService.turnPageAnimations = val;
-              },
-            );
-          }),
-        ),
-        // volume_key_turn_page
-        if (GetPlatform.isAndroid)
+      SliverCupertinoListSection.listInsetGrouped(
+        children: [
+          _buildViewModeItem(context),
+          if (!hideOrientationItem) const ReadOrientationItem(),
+          _buildDoublePageItem(context),
           EhCupertinoListTile(
-            title: Text(L10n.of(context).volume_key_turn_page),
+            title: Text(L10n.of(context).show_page_interval),
             trailing: Obx(() {
               return CupertinoSwitch(
-                value: ehSettingService.volumnTurnPage,
+                value: ehSettingService.showPageInterval.value,
                 onChanged: (bool val) {
-                  ehSettingService.volumnTurnPage = val;
+                  ehSettingService.showPageInterval.value = val;
+                  if (Get.isRegistered<ViewExtController>()) {
+                    Get.find<ViewExtController>().resetPageController();
+                    Get.find<ViewExtController>().update([idSlidePage]);
+                  }
                 },
               );
             }),
           ),
-        // fullscreen
-        EhCupertinoListTile(
-          title: Text(L10n.of(context).fullscreen),
-          trailing: Obx(() {
-            return CupertinoSwitch(
-              value: ehSettingService.viewFullscreen,
-              onChanged: onViewFullscreenChanged,
-            );
-          }),
-        ),
-      ]),
+          // turn_page_anima
+          EhCupertinoListTile(
+            title: Text(L10n.of(context).turn_page_anima),
+            trailing: Obx(() {
+              return CupertinoSwitch(
+                value: ehSettingService.turnPageAnimations,
+                onChanged: (bool val) {
+                  ehSettingService.turnPageAnimations = val;
+                },
+              );
+            }),
+          ),
+          // volume_key_turn_page
+          if (GetPlatform.isAndroid)
+            EhCupertinoListTile(
+              title: Text(L10n.of(context).volume_key_turn_page),
+              trailing: Obx(() {
+                return CupertinoSwitch(
+                  value: ehSettingService.volumnTurnPage,
+                  onChanged: (bool val) {
+                    ehSettingService.volumnTurnPage = val;
+                  },
+                );
+              }),
+            ),
+          // fullscreen
+          EhCupertinoListTile(
+            title: Text(L10n.of(context).fullscreen),
+            trailing: Obx(() {
+              return CupertinoSwitch(
+                value: ehSettingService.viewFullscreen,
+                onChanged: onViewFullscreenChanged,
+              );
+            }),
+          ),
+        ],
+      ),
+
+      Obx(() {
+        return SliverCupertinoListSection.listInsetGrouped(
+          footer: const Text('实验性功能'),
+          children: [
+            _buildPageTypeItem(context),
+            if (ehSettingService.pageViewType ==
+                PageViewType.extendedImageGesturePageView)
+              _buildEnableSlideOutPageItem(context),
+          ],
+        );
+      }),
 
       // 兼容模式
       // SliverCupertinoListSection.listInsetGrouped(children: [
@@ -134,9 +148,53 @@ class ReadSettingList extends StatelessWidget {
   }
 }
 
+Widget _buildPageTypeItem(
+  BuildContext context,
+) {
+  final Map<PageViewType, String> actionMap = <PageViewType, String>{
+    PageViewType.extendedImageGesturePageView: 'ExtendedImage (Default)',
+    PageViewType.preloadPageView: 'PreloadPageView',
+  };
+
+  final Map<PageViewType, String> simpleActionMap = <PageViewType, String>{
+    PageViewType.extendedImageGesturePageView: 'ExtendedImage',
+    PageViewType.preloadPageView: 'PreloadPageView',
+  };
+
+  final EhSettingService ehSettingService = Get.find();
+
+  return Obx(() {
+    return SelectorCupertinoListTile<PageViewType>(
+      // key: UniqueKey(),
+      title: 'PageViewType',
+      actionMap: actionMap,
+      simpleActionMap: simpleActionMap,
+      initVal: ehSettingService.pageViewType ??
+          PageViewType.extendedImageGesturePageView,
+      onValueChanged: (val) => ehSettingService.pageViewType = val,
+    );
+  });
+}
+
+Widget _buildEnableSlideOutPageItem(
+  BuildContext context,
+) {
+  final EhSettingService ehSettingService = Get.find();
+
+  return EhCupertinoListTile(
+    title: Text('Enable Slide Out Page'),
+    trailing: Obx(() {
+      return CupertinoSwitch(
+        value: ehSettingService.enableSlideOutPage,
+        onChanged: (val) => ehSettingService.enableSlideOutPage = val,
+      );
+    }),
+  );
+}
+
 /// 阅读方向模式切换
 Widget _buildViewModeItem(BuildContext context) {
-  final String _title = L10n.of(context).reading_direction;
+  final String title = L10n.of(context).reading_direction;
   final EhSettingService ehSettingService = Get.find();
 
   final Map<ViewMode, String> modeMap = <ViewMode, String>{
@@ -145,7 +203,7 @@ Widget _buildViewModeItem(BuildContext context) {
     ViewMode.topToBottom: L10n.of(context).top_to_bottom,
   };
 
-  List<Widget> _getModeList() {
+  List<Widget> getModeList() {
     return List<Widget>.from(modeMap.keys.map((ViewMode element) {
       return CupertinoActionSheetAction(
           onPressed: () {
@@ -155,7 +213,7 @@ Widget _buildViewModeItem(BuildContext context) {
     }).toList());
   }
 
-  Future<ViewMode?> _showDialog(BuildContext context) {
+  Future<ViewMode?> showDialog(BuildContext context) {
     return showCupertinoModalPopup<ViewMode>(
         context: context,
         builder: (BuildContext context) {
@@ -166,7 +224,7 @@ Widget _buildViewModeItem(BuildContext context) {
                 },
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
-              ..._getModeList(),
+              ...getModeList(),
             ],
           );
           return dialog;
@@ -174,18 +232,18 @@ Widget _buildViewModeItem(BuildContext context) {
   }
 
   return Obx(() => EhCupertinoListTile(
-        title: Text(_title),
+        title: Text(title),
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(modeMap[ehSettingService.viewMode.value] ?? ''),
         onTap: () async {
           logger.t('tap ModeItem');
-          final ViewMode? _result = await _showDialog(context);
-          if (_result != null) {
+          final ViewMode? result = await showDialog(context);
+          if (result != null) {
             // ignore: unnecessary_string_interpolations
-            logger.t('${EnumToString.convertToString(_result)}');
-            ehSettingService.viewMode.value = _result;
+            logger.t('${EnumToString.convertToString(result)}');
+            ehSettingService.viewMode.value = result;
             if (Get.isRegistered<ViewExtController>()) {
-              Get.find<ViewExtController>().handOnViewModeChanged(_result);
+              Get.find<ViewExtController>().handOnViewModeChanged(result);
             }
           }
         },
@@ -193,19 +251,22 @@ Widget _buildViewModeItem(BuildContext context) {
 }
 
 class ReadOrientationItem extends StatelessWidget {
-  final String _title = L10n.of(Get.context!).screen_orientation;
-  final EhSettingService ehSettingService = Get.find();
+  const ReadOrientationItem({super.key});
 
-  final Map<ReadOrientation, String> modeMap = <ReadOrientation, String>{
-    ReadOrientation.system: L10n.of(Get.context!).orientation_system,
-    ReadOrientation.portraitUp: L10n.of(Get.context!).orientation_portraitUp,
-    ReadOrientation.landscapeLeft:
-        L10n.of(Get.context!).orientation_landscapeLeft,
-    ReadOrientation.landscapeRight:
-        L10n.of(Get.context!).orientation_landscapeRight,
-  };
+  EhSettingService get ehSettingService => Get.find();
 
-  List<Widget> get modeList {
+  Map<ReadOrientation, String> getModeMap(BuildContext context) =>
+      <ReadOrientation, String>{
+        ReadOrientation.system: L10n.of(context).orientation_system,
+        ReadOrientation.portraitUp:
+            L10n.of(Get.context!).orientation_portraitUp,
+        ReadOrientation.landscapeLeft:
+            L10n.of(Get.context!).orientation_landscapeLeft,
+        ReadOrientation.landscapeRight:
+            L10n.of(Get.context!).orientation_landscapeRight,
+      };
+
+  List<Widget> getModeList(Map<ReadOrientation, String> modeMap) {
     return List<Widget>.from(modeMap.keys.map((ReadOrientation element) {
       return CupertinoActionSheetAction(
           onPressed: () {
@@ -216,6 +277,8 @@ class ReadOrientationItem extends StatelessWidget {
   }
 
   Future<ReadOrientation?> _showDialog(BuildContext context) {
+    final modeList = getModeList(getModeMap(context));
+
     return showCupertinoModalPopup<ReadOrientation>(
         context: context,
         builder: (BuildContext context) {
@@ -235,21 +298,23 @@ class ReadOrientationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String title = L10n.of(Get.context!).screen_orientation;
+    final modeMap = getModeMap(context);
     return Obx(() => EhCupertinoListTile(
-          title: Text(_title),
+          title: Text(title),
           trailing: const CupertinoListTileChevron(),
           additionalInfo:
               Text(modeMap[ehSettingService.orientation.value] ?? ''),
           onTap: () async {
             logger.t('tap ModeItem');
-            final ReadOrientation? _result = await _showDialog(context);
-            if (_result != null) {
-              ehSettingService.orientation.value = _result;
-              if (_result != ReadOrientation.system &&
-                  _result != ReadOrientation.auto) {
+            final ReadOrientation? result = await _showDialog(context);
+            if (result != null) {
+              ehSettingService.orientation.value = result;
+              if (result != ReadOrientation.system &&
+                  result != ReadOrientation.auto) {
                 OrientationHelper.setPreferredOrientations(
-                    [orientationMap[_result] ?? DeviceOrientation.portraitUp]);
-              } else if (_result == ReadOrientation.system) {
+                    [orientationMap[result] ?? DeviceOrientation.portraitUp]);
+              } else if (result == ReadOrientation.system) {
                 OrientationHelper.setPreferredOrientations(
                     DeviceOrientation.values);
               }
@@ -261,7 +326,7 @@ class ReadOrientationItem extends StatelessWidget {
 
 /// 双页设置切换
 Widget _buildDoublePageItem(BuildContext context) {
-  final String _title = L10n.of(context).double_page_model;
+  final String title = L10n.of(context).double_page_model;
   final EhSettingService ehSettingService = Get.find();
 
   final Map<ViewColumnMode, String> actionMap = <ViewColumnMode, String>{
@@ -270,7 +335,7 @@ Widget _buildDoublePageItem(BuildContext context) {
     ViewColumnMode.evenLeft: L10n.of(context).model('B'),
   };
 
-  Widget _getTempPage(String ser) {
+  Widget getTempPage(String ser) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 2),
       height: 100,
@@ -289,7 +354,7 @@ Widget _buildDoublePageItem(BuildContext context) {
     );
   }
 
-  Widget _getDivider() {
+  Widget getDivider() {
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 6),
@@ -302,23 +367,23 @@ Widget _buildDoublePageItem(BuildContext context) {
   }
 
   final modeB = [
-    _getTempPage('1'),
-    _getDivider(),
-    _getTempPage('2'),
-    _getTempPage('3'),
-    _getDivider(),
-    _getTempPage('4'),
-    _getTempPage('5'),
+    getTempPage('1'),
+    getDivider(),
+    getTempPage('2'),
+    getTempPage('3'),
+    getDivider(),
+    getTempPage('4'),
+    getTempPage('5'),
   ];
 
   final modeA = [
-    _getTempPage('1'),
-    _getTempPage('2'),
-    _getDivider(),
-    _getTempPage('3'),
-    _getTempPage('4'),
-    _getDivider(),
-    _getTempPage('5'),
+    getTempPage('1'),
+    getTempPage('2'),
+    getDivider(),
+    getTempPage('3'),
+    getTempPage('4'),
+    getDivider(),
+    getTempPage('5'),
   ];
 
   final Map<ViewColumnMode, Widget> actionWidgetMap = <ViewColumnMode, Widget>{
@@ -327,7 +392,7 @@ Widget _buildDoublePageItem(BuildContext context) {
       children: [
         Text(
           L10n.of(context).model('A'),
-          textScaleFactor: 0.8,
+          textScaler: const TextScaler.linear(0.8),
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 4),
@@ -346,7 +411,7 @@ Widget _buildDoublePageItem(BuildContext context) {
       children: [
         Text(
           L10n.of(context).model('B'),
-          textScaleFactor: 0.8,
+          textScaler: const TextScaler.linear(0.8),
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 4),
@@ -365,7 +430,7 @@ Widget _buildDoublePageItem(BuildContext context) {
 
   return Obx(() {
     return SelectorCupertinoListTile<ViewColumnMode>(
-      title: _title,
+      title: title,
       actionMap: actionMap,
       actionWidgetMap: actionWidgetMap,
       initVal: ehSettingService.viewColumnMode,

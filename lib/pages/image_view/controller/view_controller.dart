@@ -72,13 +72,6 @@ const String idProcess = 'Process';
 const int _speedMaxCount = 50;
 const int _speedInv = 10;
 
-enum PageViewType {
-  photoView,
-  preloadPhotoView,
-  preloadPageView,
-  extendedImageGesturePageView,
-}
-
 /// 支持在线以及本地（已下载）阅读的组件
 class ViewExtController extends GetxController {
   ViewExtController();
@@ -105,9 +98,13 @@ class ViewExtController extends GetxController {
   late final ArchiverDownloadController archiverDownloadController;
 
   // 使用 PhotoView
-  PageViewType get pageViewType => _ehSettingService.readViewCompatibleMode
-      ? PageViewType.extendedImageGesturePageView
-      : PageViewType.preloadPageView;
+  // PageViewType get pageViewType => _ehSettingService.readViewCompatibleMode
+  //     ? PageViewType.extendedImageGesturePageView
+  //     : PageViewType.preloadPageView;
+  PageViewType get pageViewType => _ehSettingService.pageViewType;
+
+  // enableSlideOutPage
+  bool get enableSlideOutPage => _ehSettingService.enableSlideOutPage;
 
   Map<String, DownloadArchiverTaskInfo> get archiverTaskMap =>
       archiverDownloadController.archiverTaskMap;
