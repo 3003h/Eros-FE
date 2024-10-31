@@ -230,7 +230,7 @@ class ImagePageView extends GetView<ViewExtController> {
                 initialScale: PhotoViewComputedScale.contained * 1.0,
                 minScale: PhotoViewComputedScale.contained * 1.0,
                 maxScale: PhotoViewComputedScale.contained * 2.0,
-                scaleStateCycle: lisviewScaleStateCycle,
+                scaleStateCycle: listViewScaleStateCycle,
                 child: DoublePageView(
                   pageIndex: pageIndex,
                   key: ValueKey(controller.vState.columnMode),

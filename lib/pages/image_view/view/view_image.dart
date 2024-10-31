@@ -243,7 +243,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           duration: vState.viewMode != ViewMode.topToBottom
               ? const Duration(milliseconds: 100)
               : null,
-          debugLable: '### Widget fileImage 加载图片文件',
+          debugLabel: '### Widget fileImage 加载图片文件',
         );
       }
       return null;
@@ -322,7 +322,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 return ViewError(ser: widget.imageSer, errInfo: errInfo);
               } else {
                 return ViewLoading(
-                  debugLable: 'archiverImage 重试',
+                  debugLabel: 'archiverImage 重试',
                   ser: widget.imageSer,
                   duration: vState.viewMode != ViewMode.topToBottom
                       ? const Duration(milliseconds: 50)
@@ -449,7 +449,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             return image;
           } else {
             return ViewLoading(
-              debugLable: 'FutureBuilder 加载画廊页数据',
+              debugLabel: 'FutureBuilder 加载画廊页数据',
               ser: widget.imageSer,
               duration: vState.viewMode != ViewMode.topToBottom
                   ? const Duration(milliseconds: 200)
@@ -586,7 +586,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             return image;
           } else {
             return ViewLoading(
-              debugLable: 'FutureBuilder 加载画廊页数据',
+              debugLabel: 'FutureBuilder 加载画廊页数据',
               ser: widget.imageSer,
               duration: vState.viewMode != ViewMode.topToBottom
                   ? const Duration(milliseconds: 200)
@@ -634,7 +634,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
       return ViewError(ser: widget.imageSer, errInfo: errInfo);
     } else {
       return ViewLoading(
-        debugLable: '重试',
+        debugLabel: '重试',
         ser: widget.imageSer,
         duration: vState.viewMode != ViewMode.topToBottom
             ? const Duration(milliseconds: 100)

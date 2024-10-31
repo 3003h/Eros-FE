@@ -218,18 +218,18 @@ class ViewLoading extends StatelessWidget {
     this.duration,
     this.progress,
     this.animationEnabled,
-    this.debugLable,
+    this.debugLabel,
   });
   final int? ser;
   final Duration? duration;
   final double? progress;
   final bool? animationEnabled;
-  final String? debugLable;
+  final String? debugLabel;
 
   @override
   Widget build(BuildContext context) {
-    if (debugLable != null && kDebugMode) {
-      logger.t('build ViewLoading $debugLable');
+    if (debugLabel != null && kDebugMode) {
+      logger.t('build ViewLoading $debugLabel');
     }
     final loadWidget = _ViewLoading(
       ser: ser,

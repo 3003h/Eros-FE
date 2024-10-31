@@ -39,10 +39,10 @@ class ViewRepository {
 }
 
 class ViewPage extends StatefulWidget {
-  const ViewPage({Key? key}) : super(key: key);
+  const ViewPage({super.key});
 
   @override
-  _ViewPageState createState() => _ViewPageState();
+  State<ViewPage> createState() => _ViewPageState();
 }
 
 class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
@@ -92,7 +92,7 @@ class _ViewPageState extends State<ViewPage> with TickerProviderStateMixin {
 }
 
 class ViewKeyboardListener extends GetView<ViewExtController> {
-  const ViewKeyboardListener({required this.child, Key? key}) : super(key: key);
+  const ViewKeyboardListener({required this.child, super.key});
 
   final Widget child;
 
@@ -165,7 +165,7 @@ class ImageView extends StatelessWidget {
   }
 }
 
-PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
+PhotoViewScaleState listViewScaleStateCycle(PhotoViewScaleState actual) {
   logger.d('actual $actual');
   switch (actual) {
     case PhotoViewScaleState.initial:
@@ -184,9 +184,9 @@ PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
 
 class DoublePageView extends StatefulWidget {
   const DoublePageView({
-    Key? key,
+    super.key,
     required this.pageIndex,
-  }) : super(key: key);
+  });
 
   final int pageIndex;
 
@@ -272,7 +272,7 @@ class _DoublePageViewState extends State<DoublePageView> {
           child: buildViewImageSecond(),
         );
 
-    final List<Widget> _pageList = <Widget>[
+    final List<Widget> pageList = <Widget>[
       if (showFirst) showSecond ? imageFirst() : Expanded(child: imageFirst()),
       if (showSecond)
         showFirst ? imageSecond() : Expanded(child: imageSecond()),
@@ -281,7 +281,7 @@ class _DoublePageViewState extends State<DoublePageView> {
     Widget doubleView = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
-      children: reverse ? _pageList.reversed.toList() : _pageList,
+      children: reverse ? pageList.reversed.toList() : pageList,
     );
 
     doubleView = AspectRatio(
@@ -295,7 +295,7 @@ class _DoublePageViewState extends State<DoublePageView> {
     //   },
     //   child: _pageList.length > 1 ? Center(child: doubleView) : doubleView,
     // );
-    return _pageList.length > 1 ? Center(child: doubleView) : doubleView;
+    return pageList.length > 1 ? Center(child: doubleView) : doubleView;
   }
 
   ViewImage buildViewImageSecond() {
@@ -413,9 +413,9 @@ class ImagePlugins extends GetView<ViewExtController> {
 /// 控制触摸手势事件
 class ImageGestureDetector extends GetView<ViewExtController> {
   const ImageGestureDetector({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
   final Widget child;
 
   static const lrRatio = 1 / 3;

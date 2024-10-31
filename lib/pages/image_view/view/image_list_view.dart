@@ -1,4 +1,3 @@
-import 'package:english_words/english_words.dart';
 import 'package:eros_fe/const/const.dart';
 import 'package:eros_fe/pages/image_view/view/view_widget.dart';
 import 'package:eros_fe/utils/logger.dart';
@@ -13,6 +12,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../controller/view_controller.dart';
+import '../controller/view_state.dart';
 import 'view_image.dart';
 
 class ImageListView extends StatefulWidget {
@@ -31,7 +31,7 @@ class _ImageListViewState extends State<ImageListView> {
   Widget build(BuildContext context) {
     final vState = controller.vState;
 
-    final words = generateWordPairs().take(500).toList();
+    // final words = generateWordPairs().take(500).toList();
 
     Widget listView = ScrollablePositionedList.builder(
       minCacheExtent: 0.0,
@@ -71,16 +71,16 @@ class _ImageListViewState extends State<ImageListView> {
     //   ),
     // );
     //
-    Widget imageListview = Container(
+    Widget imageListView = Container(
       color: CupertinoTheme.of(context).scaffoldBackgroundColor,
       child: listView,
     );
 
     // return InteractiveViewer(
-    //   child: imageListview,
+    //   child: imageListView,
     // );
     //
-    // return imageListview;
+    // return imageListView;
 
     return PhotoViewGallery.builder(
       itemCount: 1,
@@ -90,7 +90,7 @@ class _ImageListViewState extends State<ImageListView> {
           initialScale: PhotoViewComputedScale.contained * 1.0,
           minScale: PhotoViewComputedScale.contained * 1.0,
           maxScale: PhotoViewComputedScale.contained * 3.0,
-          scaleStateCycle: lisviewScaleStateCycle,
+          scaleStateCycle: listViewScaleStateCycle,
           // child: Center(
           //   child: Container(
           //     width: 100,
@@ -100,7 +100,7 @@ class _ImageListViewState extends State<ImageListView> {
           //     child: Text('AAAAA'),
           //   ),
           // ),
-          child: imageListview,
+          child: imageListView,
           // onTapDown: (context, details, controllerValue) {
           //   logger.d('${controllerValue.scale}');
           // },
@@ -109,13 +109,41 @@ class _ImageListViewState extends State<ImageListView> {
     );
   }
 
-  PhotoViewScaleState lisviewScaleStateCycle(PhotoViewScaleState actual) {
+  PhotoViewScaleState listViewScaleStateCycle(PhotoViewScaleState actual) {
     logger.d('actual $actual');
     switch (actual) {
       case PhotoViewScaleState.initial:
         return PhotoViewScaleState.originalSize;
       default:
         return PhotoViewScaleState.initial;
+    }
+  }
+
+  // 计算图片容器高度
+  double? calcHeight(int itemSer, ViewExtState vState) {
+    // 从已下载进入阅读的情况 imageMap 会未初始化
+    try {
+      if (vState.imageMap?[itemSer]?.hide ?? false) {
+        return 150.0;
+      }
+    } catch (_) {}
+
+    // 如果存在缓存的图片尺寸信息
+    if (vState.imageSizeMap[itemSer] != null) {
+      final imageSize = vState.imageSizeMap[itemSer]!;
+      return imageSize.height * (context.width / imageSize.width);
+    }
+
+    // 不存在则根据大图进行计算
+    try {
+      final curImage = vState.imageMap?[itemSer];
+      return curImage!.imageHeight! * (context.width / curImage.imageWidth!);
+    } on Exception catch (_) {
+      // 根据缩略图进行计算
+      final curImage = vState.imageMap?[itemSer];
+      return curImage!.thumbHeight! * (context.width / curImage.thumbWidth!);
+    } catch (e) {
+      return null;
     }
   }
 
@@ -140,39 +168,12 @@ class _ImageListViewState extends State<ImageListView> {
         child: GetBuilder<ViewExtController>(
             id: '$idImageListView$itemSer',
             builder: (logic) {
-              loggerSimple.v('builder itemBuilder $itemSer');
+              loggerSimple.t('builder itemBuilder $itemSer');
 
               final vState = logic.vState;
 
               // 计算容器高度
-              double? height = () {
-                // 从已下载进入阅读的情况 imageMap 会未初始化
-                try {
-                  if (vState.imageMap?[itemSer]?.hide ?? false) {
-                    return 150.0;
-                  }
-                } catch (_) {}
-
-                // 如果存在缓存的图片尺寸信息
-                if (vState.imageSizeMap[itemSer] != null) {
-                  final imageSize = vState.imageSizeMap[itemSer]!;
-                  return imageSize.height * (context.width / imageSize.width);
-                }
-
-                // 不存在则根据大图进行计算
-                try {
-                  final _curImage = vState.imageMap?[itemSer];
-                  return _curImage!.imageHeight! *
-                      (context.width / _curImage.imageWidth!);
-                } on Exception catch (_) {
-                  // 根据缩略图进行计算
-                  final curImage = vState.imageMap?[itemSer];
-                  return curImage!.thumbHeight! *
-                      (context.width / curImage.thumbWidth!);
-                } catch (e) {
-                  return null;
-                }
-              }();
+              double? height = calcHeight(itemSer, vState);
 
               if (height != null) {
                 height += vState.showPageInterval ? 8 : 0;
@@ -238,7 +239,7 @@ class _ImageListViewState extends State<ImageListView> {
                         duration: vState.viewMode != ViewMode.topToBottom
                             ? const Duration(milliseconds: 100)
                             : null,
-                        debugLable: '### Widget fileImage 加载图片文件',
+                        debugLabel: '### Widget fileImage 加载图片文件',
                       );
                     }
                   });
@@ -257,6 +258,18 @@ class _ImageListViewState extends State<ImageListView> {
     };
   }
 
+  double? calcHeight2(int itemSer, ViewExtState vState) {
+    try {
+      final curImage = vState.imageMap?[itemSer];
+      return curImage!.imageHeight! * (context.width / curImage.imageWidth!);
+    } on Exception catch (_) {
+      final curImage = vState.imageMap?[itemSer];
+      return curImage!.thumbHeight! * (context.width / curImage.thumbWidth!);
+    } catch (e) {
+      return null;
+    }
+  }
+
   Widget Function(BuildContext context, int index) itemBuilder2() {
     return (BuildContext context, int index) {
       final int itemSer = index + 1;
@@ -273,28 +286,16 @@ class _ImageListViewState extends State<ImageListView> {
               id: '$idImageListView$itemSer',
               builder: (logic) {
                 final vState = logic.vState;
-                double? _height = () {
-                  try {
-                    final _curImage = vState.imageMap?[itemSer];
-                    return _curImage!.imageHeight! *
-                        (context.width / _curImage.imageWidth!);
-                  } on Exception catch (_) {
-                    final _curImage = vState.imageMap?[itemSer];
-                    return _curImage!.thumbHeight! *
-                        (context.width / _curImage.thumbWidth!);
-                  } catch (e) {
-                    return null;
-                  }
-                }();
+                double? height = calcHeight2(itemSer, vState);
 
-                if (_height != null) {
-                  _height += vState.showPageInterval ? 8 : 0;
+                if (height != null) {
+                  height += vState.showPageInterval ? 8 : 0;
                 }
 
                 return Container(
                   padding:
                       EdgeInsets.only(bottom: vState.showPageInterval ? 8 : 0),
-                  height: _height,
+                  height: height,
                   child: ViewImage(
                     imageSer: itemSer,
                     enableDoubleTap: false,
