@@ -99,13 +99,13 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         final Size size = MediaQuery.of(context).size;
         double? initialScale = widget.initialScale;
 
-        final _imageInfo = state.extendedImageInfo;
-        if (_imageInfo != null) {
+        final imageInfo = state.extendedImageInfo;
+        if (imageInfo != null) {
           initialScale = initScale(
               size: size,
               initialScale: initialScale,
-              imageSize: Size(_imageInfo.image.width.toDouble(),
-                  _imageInfo.image.height.toDouble()));
+              imageSize: Size(imageInfo.image.width.toDouble(),
+                  imageInfo.image.height.toDouble()));
 
           vState.doubleTapScales[0] = initialScale ?? vState.doubleTapScales[0];
           vState.doubleTapScales[1] = initialScale != null
@@ -283,12 +283,12 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError || snapshot.data == null) {
-              String _errInfo = '';
+              String errInfo = '';
               logger.e('${snapshot.error.runtimeType}');
               if (snapshot.error is EhError) {
                 final EhError ehErr = snapshot.error as EhError;
                 logger.e('$ehErr');
-                _errInfo = ehErr.type.toString();
+                errInfo = ehErr.type.toString();
                 if (ehErr.type == EhErrorType.image509) {
                   return ViewErr509(ser: widget.imageSer);
                 }
@@ -297,12 +297,12 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 if (e is BadRequestException && e.code == 429) {
                   return ViewErr429(ser: widget.imageSer);
                 } else {
-                  _errInfo = e.message;
+                  errInfo = e.message;
                 }
               } else {
                 logger.e(
                     'other error: ${snapshot.error}\n${snapshot.stackTrace}');
-                _errInfo = snapshot.error.toString();
+                errInfo = snapshot.error.toString();
               }
 
               if ((vState.errCountMap[widget.imageSer] ?? 0) <
@@ -319,7 +319,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               }
               if ((vState.errCountMap[widget.imageSer] ?? 0) >=
                   vState.retryCount) {
-                return ViewError(ser: widget.imageSer, errInfo: _errInfo);
+                return ViewError(ser: widget.imageSer, errInfo: errInfo);
               } else {
                 return ViewLoading(
                   debugLable: 'archiverImage 重试',
@@ -330,9 +330,9 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                 );
               }
             }
-            final File _file = snapshot.data!;
+            final File file = snapshot.data!;
 
-            Widget image = fileImage(_file.path);
+            Widget image = fileImage(file.path);
 
             return image;
           } else {
@@ -357,23 +357,23 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             onLongPress: () async {
               logger.t('long press');
               vibrateUtil.medium();
-              final GalleryImage? _currentImage =
+              final GalleryImage? currentImage =
                   vState.pageState?.imageMap[widget.imageSer];
 
-              logger.d('_currentImage ${_currentImage?.toJson()}');
+              logger.d('_currentImage ${currentImage?.toJson()}');
 
               // TODO(3003h): 对于已下载的图片，保存到相册时，从已下载读取.
               showImageSheet(
                 context,
                 () =>
                     controller.reloadImage(widget.imageSer, changeSource: true),
-                imageUrl: _currentImage?.imageUrl ?? '',
-                filePath: _currentImage?.filePath ?? _currentImage?.tempPath,
-                origImageUrl: _currentImage?.originImageUrl,
+                imageUrl: currentImage?.imageUrl ?? '',
+                filePath: currentImage?.filePath ?? currentImage?.tempPath,
+                origImageUrl: currentImage?.originImageUrl,
                 title: '${vState.pageState?.mainTitle} [${widget.imageSer}]',
                 ser: widget.imageSer,
                 gid: vState.pageState?.gid,
-                filename: _currentImage?.filename,
+                filename: currentImage?.filename,
                 isLocal: vState.loadFrom == LoadFrom.download ||
                     vState.loadFrom == LoadFrom.archiver,
               );
@@ -384,24 +384,27 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   }
 
   Widget _buildViewImageWidget() {
-    final GalleryImage? _image = vState.pageState?.imageMap[widget.imageSer];
-    logger.t('_image ${_image?.toJson()}');
+    final GalleryImage? imageFromState =
+        vState.pageState?.imageMap[widget.imageSer];
+    logger.t('imageFromState ${imageFromState?.toJson()}');
 
-    if (_image?.hide ?? false) {
+    if (imageFromState?.hide ?? false) {
       return ViewAD(ser: widget.imageSer);
     }
 
-    if ((_image?.completeCache ?? false) && !(_image?.changeSource ?? false)) {
+    if ((imageFromState?.completeCache ?? false) &&
+        !(imageFromState?.changeSource ?? false)) {
       // 图片文件已下载 加载显示本地图片文件
-      if (_image?.tempPath?.isNotEmpty ?? false) {
+      if (imageFromState?.tempPath?.isNotEmpty ?? false) {
         logger.t('${widget.imageSer} filePath 不为空，加载图片文件');
-        return fileImage(_image!.tempPath!);
+        return fileImage(imageFromState!.tempPath!);
       }
 
-      if (_image?.imageUrl != null && (_image?.downloadProcess == null)) {
+      if (imageFromState?.imageUrl != null &&
+          (imageFromState?.downloadProcess == null)) {
         controller.downloadImage(
             ser: widget.imageSer,
-            url: _image!.imageUrl!,
+            url: imageFromState!.imageUrl!,
             onError: (e) {
               _buildErr(e);
             });
@@ -418,25 +421,25 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             if (snapshot.hasError || snapshot.data == null) {
               return _buildErr(snapshot.error);
             }
-            final GalleryImage? _image = snapshot.data;
+            final GalleryImage? imageData = snapshot.data;
 
             // 图片文件已下载 加载显示本地图片文件
-            if (_image?.filePath?.isNotEmpty ?? false) {
-              logger.d('file... ${_image?.filePath}');
-              return fileImage(_image!.filePath!);
+            if (imageData?.filePath?.isNotEmpty ?? false) {
+              logger.d('file... ${imageData?.filePath}');
+              return fileImage(imageData!.filePath!);
             }
 
-            if (_image?.tempPath?.isNotEmpty ?? false) {
-              logger.d('file... ${_image?.tempPath}');
-              return fileImage(_image!.tempPath!);
+            if (imageData?.tempPath?.isNotEmpty ?? false) {
+              logger.d('file... ${imageData?.tempPath}');
+              return fileImage(imageData!.tempPath!);
             }
 
-            if (_image?.imageUrl != null) {
+            if (imageData?.imageUrl != null) {
               logger.d('downloadImage...');
 
               controller.downloadImage(
                 ser: widget.imageSer,
-                url: _image!.imageUrl!,
+                url: imageData!.imageUrl!,
                 reset: true,
               );
             }
@@ -457,10 +460,11 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   }
 
   Widget _buildViewImageWidgetProvider() {
-    final GalleryImage? _image = vState.pageState?.imageMap[widget.imageSer];
-    logger.t('_image ${_image?.toJson()}');
+    final GalleryImage? imageFromState =
+        vState.pageState?.imageMap[widget.imageSer];
+    logger.t('imageFromState ${imageFromState?.toJson()}');
 
-    if (_image?.hide ?? false) {
+    if (imageFromState?.hide ?? false) {
       return ViewAD(ser: widget.imageSer);
     }
 
@@ -473,35 +477,35 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               logger.e('${snapshot.error}\n${snapshot.stackTrace}');
               return _buildErr(snapshot.error);
             }
-            final GalleryImage? _image = snapshot.data;
+            final GalleryImage? imageData = snapshot.data;
 
-            final GalleryImage? _currentImage =
+            final GalleryImage? currentImageData =
                 vState.pageState?.imageMap[widget.imageSer];
 
             // logger.d(
-            //     '_currentImage ${_currentImage?.toJson()}\n_image ${_image?.toJson()}');
+            //     'currentImageData ${currentImageData?.toJson()}\nimageData ${imageData?.toJson()}');
 
             // 图片文件已下载 加载显示本地图片文件
-            if (_image?.filePath?.isNotEmpty ?? false) {
-              logger.d('图片文件已下载 file... ${_image?.filePath}');
+            if (imageData?.filePath?.isNotEmpty ?? false) {
+              logger.d('图片文件已下载 file... ${imageData?.filePath}');
               controller.vState.galleryPageController?.uptImageBySer(
                 ser: widget.imageSer,
                 imageCallback: (image) => image.copyWith(
-                  filePath: _image?.filePath.oN,
+                  filePath: imageData?.filePath.oN,
                 ),
               );
-              return fileImage(_image!.filePath!);
+              return fileImage(imageData!.filePath!);
             }
 
-            if (_image?.tempPath?.isNotEmpty ?? false) {
-              logger.t('tempPath file... ${_image?.tempPath}');
+            if (imageData?.tempPath?.isNotEmpty ?? false) {
+              logger.t('tempPath file... ${imageData?.tempPath}');
               controller.vState.galleryPageController?.uptImageBySer(
                 ser: widget.imageSer,
                 imageCallback: (image) => image.copyWith(
-                  tempPath: _image?.tempPath.oN,
+                  tempPath: imageData?.tempPath.oN,
                 ),
               );
-              return fileImage(_image!.tempPath!);
+              return fileImage(imageData!.tempPath!);
             }
 
             // 常规情况 加载网络图片
@@ -515,19 +519,19 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
                   imageInfo.image.width.toDouble(),
                   imageInfo.image.height.toDouble()));
 
-              if (_image != null) {
-                final GalleryImage? _tmpImage = vState.imageMap?[_image.ser];
-                if (_tmpImage != null && !(_tmpImage.completeHeight ?? false)) {
+              if (imageData != null) {
+                final GalleryImage? tmpImage = vState.imageMap?[imageData.ser];
+                if (tmpImage != null && !(tmpImage.completeHeight ?? false)) {
                   vState.galleryPageController?.uptImageBySer(
-                    ser: _image.ser,
+                    ser: imageData.ser,
                     imageCallback: (image) =>
                         image.copyWith(completeHeight: true.oN),
                   );
 
-                  logger.t('upt _tmpImage ${_tmpImage.ser}');
+                  logger.t('upt _tmpImage ${tmpImage.ser}');
                   Future.delayed(const Duration(milliseconds: 100)).then(
                       (value) => controller.update(
-                          [idSlidePage, '$idImageListView${_image.ser}']));
+                          [idSlidePage, '$idImageListView${imageData.ser}']));
                 }
               }
 
@@ -537,7 +541,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             if (kReleaseMode) {
               logger.d('ImageExt');
               return ImageExt(
-                url: _image?.imageUrl ?? '',
+                url: imageData?.imageUrl ?? '',
                 onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
                 ser: widget.imageSer,
                 mode: widget.mode,
@@ -554,7 +558,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
             Widget image = ImageExtProvider(
               image: ExtendedResizeImage.resizeIfNeeded(
                 provider: ExtendedNetworkImageProvider(
-                  _image?.imageUrl ?? '',
+                  imageData?.imageUrl ?? '',
                   timeLimit: const Duration(seconds: 10),
                   cache: true,
                 ),
@@ -563,7 +567,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               //   checkQRCodeHide: checkQRCodeHide,
               //   checkPHashHide: checkPHashHide,
               //   imageProvider: ExtendedNetworkImageProvider(
-              //     _image?.imageUrl ?? '',
+              //     imageData?.imageUrl ?? '',
               //     timeLimit: const Duration(seconds: 10),
               //     cache: true,
               //   ),
@@ -646,26 +650,26 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     return GetBuilder<ViewExtController>(
       id: '${idProcess}_${widget.imageSer}',
       builder: (controller) {
-        final _image = controller.vState.imageMap?[widget.imageSer];
-        if (_image == null) {
+        final image = controller.vState.imageMap?[widget.imageSer];
+        if (image == null) {
           return const SizedBox.shrink();
         }
 
-        if (_image.errorInfo?.isNotEmpty ?? false) {
+        if (image.errorInfo?.isNotEmpty ?? false) {
           return ViewError(
             ser: widget.imageSer,
-            errInfo: _image.errorInfo,
+            errInfo: image.errorInfo,
           );
         }
 
-        final process = _image.downloadProcess ?? 0.0;
+        final process = image.downloadProcess ?? 0.0;
         if (process < 1.0) {
           return ViewLoading(
             ser: widget.imageSer,
             progress: process,
           );
         } else {
-          return fileImage(_image.tempPath!);
+          return fileImage(image.tempPath!);
         }
       },
     );
