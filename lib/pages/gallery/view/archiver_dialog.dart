@@ -1,5 +1,5 @@
 import 'package:eros_fe/common/service/controller_tag_service.dart';
-import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/index.dart';
 import 'package:eros_fe/pages/gallery/controller/archiver_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +8,13 @@ import 'package:get/get.dart';
 const double kIconSize = 16.5;
 
 class ArchiverView extends StatelessWidget {
-  const ArchiverView({Key? key}) : super(key: key);
+  const ArchiverView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final ArchiverController controller = Get.find(tag: pageCtrlTag);
 
-    final Map<String, String> typedesc = {
+    final Map<String, String> typeDesc = {
       'res': 'Resample Archive',
       'org': 'Original Archive',
     };
@@ -35,6 +35,11 @@ class ArchiverView extends StatelessWidget {
                       children: [
                         ClipOval(
                           child: Container(
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                            width: kIconSize,
+                            height: kIconSize,
+                            alignment: Alignment.center,
                             child: Text(
                               'G',
                               style: TextStyle(
@@ -46,14 +51,9 @@ class ArchiverView extends StatelessWidget {
                                 fontSize: 10,
                               ),
                             ),
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondaryLabel, context),
-                            width: kIconSize,
-                            height: kIconSize,
-                            alignment: Alignment.center,
                           ),
                         ).paddingSymmetric(horizontal: 4.0),
-                        Text(state?.gp ?? ''),
+                        Text(state?.gp?.numberFormat ?? ''),
                       ],
                     ),
                     const SizedBox(width: 10),
@@ -62,6 +62,11 @@ class ArchiverView extends StatelessWidget {
                       children: [
                         ClipOval(
                           child: Container(
+                            color: CupertinoDynamicColor.resolve(
+                                CupertinoColors.secondaryLabel, context),
+                            width: kIconSize,
+                            height: kIconSize,
+                            alignment: Alignment.center,
                             child: Text(
                               'C',
                               style: TextStyle(
@@ -73,14 +78,9 @@ class ArchiverView extends StatelessWidget {
                                 fontSize: 10,
                               ),
                             ),
-                            color: CupertinoDynamicColor.resolve(
-                                CupertinoColors.secondaryLabel, context),
-                            width: kIconSize,
-                            height: kIconSize,
-                            alignment: Alignment.center,
                           ),
                         ).paddingSymmetric(horizontal: 4.0),
-                        Text(state?.credits ?? ''),
+                        Text(state?.credits?.numberFormat ?? ''),
                       ],
                     ),
                   ],
@@ -101,15 +101,15 @@ class ArchiverView extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(0),
                   itemBuilder: (_, int index) {
-                    final ArchiverProviderItem? _item = state?.dlItems?[index];
+                    final ArchiverProviderItem? item = state?.dlItems?[index];
                     return CupertinoButton(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Column(
                         children: <Widget>[
-                          Text(typedesc[_item?.dltype] ?? '')
+                          Text(typeDesc[item?.dltype] ?? '')
                               .paddingOnly(bottom: 2.0),
                           Text(
-                            '${_item?.size ?? ''}    ${_item?.price ?? ''}',
+                            '${item?.size ?? ''}    ${item?.price ?? ''}',
                             textAlign: TextAlign.start,
                             style: const TextStyle(
                               fontSize: 10,
@@ -120,12 +120,12 @@ class ArchiverView extends StatelessWidget {
                         ],
                       ),
                       onPressed: () async {
-                        if (_item == null) {
+                        if (item == null) {
                           return;
                         }
                         controller.downloadLoacal(
-                            dltype: _item.dltype ?? '',
-                            dlcheck: typedesc[_item.dltype] ?? '');
+                            dltype: item.dltype ?? '',
+                            dlcheck: typeDesc[item.dltype] ?? '');
                       },
                     );
                   },
@@ -186,10 +186,10 @@ class ArchiverView extends StatelessWidget {
 
 class HatHListView extends StatelessWidget {
   const HatHListView({
-    Key? key,
+    super.key,
     required this.controller,
     required this.state,
-  }) : super(key: key);
+  });
 
   final ArchiverController controller;
   final ArchiverProvider? state;
@@ -202,14 +202,14 @@ class HatHListView extends StatelessWidget {
       child: ListView.separated(
         padding: const EdgeInsets.all(0),
         itemBuilder: (_, int index) {
-          final ArchiverProviderItem? _item = state?.hItems?[index];
+          final ArchiverProviderItem? item = state?.hItems?[index];
           return CupertinoButton(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Column(
               children: <Widget>[
-                Text(_item?.resolution ?? '').paddingOnly(bottom: 2.0),
+                Text(item?.resolution ?? '').paddingOnly(bottom: 2.0),
                 Text(
-                  '${_item?.size ?? ''}    ${_item?.price ?? ''}',
+                  '${item?.size ?? ''}    ${item?.price ?? ''}',
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                     fontSize: 10,
@@ -220,7 +220,7 @@ class HatHListView extends StatelessWidget {
               ],
             ),
             onPressed: () {
-              controller.downloadRemote(_item!.dlres!);
+              controller.downloadRemote(item!.dlres!);
               Get.back();
             },
           );
@@ -250,14 +250,14 @@ class HatHGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget>? _items = state?.hItems!
-        .map((_item) => CupertinoButton(
+    final List<Widget>? items = state?.hItems!
+        .map((item) => CupertinoButton(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Column(
                 children: <Widget>[
-                  Text(_item.resolution ?? '').paddingOnly(bottom: 2.0),
+                  Text(item.resolution ?? '').paddingOnly(bottom: 2.0),
                   Text(
-                    '${_item.size}   ${_item.price}',
+                    '${item.size}   ${item.price}',
                     textAlign: TextAlign.start,
                     style: const TextStyle(
                       fontSize: 10,
@@ -268,7 +268,7 @@ class HatHGridView extends StatelessWidget {
                 ],
               ),
               onPressed: () {
-                controller.downloadRemote(_item.dlres!);
+                controller.downloadRemote(item.dlres!);
                 Get.back();
               },
             ))
@@ -283,7 +283,7 @@ class HatHGridView extends StatelessWidget {
         shrinkWrap: true,
         crossAxisCount: 2,
         childAspectRatio: 2.0,
-        children: _items!,
+        children: items!,
       ),
     );
   }

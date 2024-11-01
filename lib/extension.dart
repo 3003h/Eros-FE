@@ -356,13 +356,13 @@ extension ExtEhSettings on EhSettings {
   }
 
   Map<String, String> get favMap {
-    final _map = <String, String>{};
+    final map = <String, String>{};
     for (final _fav in favorites) {
       if (_fav.ser != null) {
-        _map[_fav.ser!] = _fav.value ?? '';
+        map[_fav.ser!] = _fav.value ?? '';
       }
     }
-    return _map;
+    return map;
   }
 
   Map<String, bool> get xlBoolMap {
@@ -476,33 +476,33 @@ extension ExtEhSettings on EhSettings {
 extension ExtGalleryList on GalleryList {
   Future<GalleryList> get qrySimpleTagTranslate async {
     final trController = Get.find<TagTransController>();
-    final _gallerysF = gallerys?.map((e) async {
-          final _simpleTagsF = e.simpleTags?.map((e) async {
+    final galleryFuture = gallerys?.map((e) async {
+          final simpleTagsFuture = e.simpleTags?.map((e) async {
                 final tr = await trController.getTagTranslateText(e.text!);
                 return e.copyWith(translat: (tr ?? e.text).oN);
               }) ??
               [];
-          final _simpleTags = Future.wait<SimpleTag>(_simpleTagsF);
-          return e.copyWith(simpleTags: (await _simpleTags).oN);
+          final simpleTags = Future.wait<SimpleTag>(simpleTagsFuture);
+          return e.copyWith(simpleTags: (await simpleTags).oN);
         }) ??
         [];
 
-    final _gallerys = Future.wait(_gallerysF);
-    return copyWith(gallerys: (await _gallerys).oN);
+    final galleryList = Future.wait(galleryFuture);
+    return copyWith(gallerys: (await galleryList).oN);
   }
 }
 
 extension ExtEhMytags on EhMytags {
   Future<List<EhUsertag>> get qryFullTagTranslate async {
     final trController = Get.find<TagTransController>();
-    final _usertagsFuture = usertags?.map((e) async {
+    final userTagsFuture = usertags?.map((e) async {
           final tr = await trController.getTranTagWithNameSpase(e.title);
           return e.copyWith(translate: tr.oN);
         }) ??
         [];
 
-    final _userTags = Future.wait(_usertagsFuture);
-    return await _userTags;
+    final userTags = Future.wait(userTagsFuture);
+    return await userTags;
   }
 }
 
@@ -597,7 +597,7 @@ extension EhString on String {
     final DnsService dnsService = Get.find();
     final bool enableDoH = dnsService.enableDoH;
     final bool enableCustomHosts = dnsService.enableCustomHosts;
-    final List<DnsCache> _dohDnsCacheList = dnsService.dohCache;
+    final List<DnsCache> dohDnsCacheList = dnsService.dohCache;
     final String host = Uri.parse(this).host;
     if (host.isEmpty) {
       return this;
@@ -613,10 +613,10 @@ extension EhString on String {
     } else if (enableDoH) {
       // logger.d(' enableDoH');
       Get.find<DnsService>().getDoHCache(host);
-      final int _dohDnsCacheIndex = dnsService.dohCache
+      final int dohDnsCacheIndex = dnsService.dohCache
           .indexWhere((DnsCache element) => element.host == host);
       final DnsCache? dohDnsCache =
-          _dohDnsCacheIndex > -1 ? _dohDnsCacheList[_dohDnsCacheIndex] : null;
+          dohDnsCacheIndex > -1 ? dohDnsCacheList[dohDnsCacheIndex] : null;
       realHost = dohDnsCache?.addr ?? host;
       final String realUrl = replaceFirst(host, realHost);
       logger.d('realUrl: $realUrl');
@@ -659,6 +659,11 @@ extension EhString on String {
     final String gid = urlRult?.group(1) ?? '';
     final String token = urlRult?.group(2) ?? '';
     return gid;
+  }
+
+  String get numberFormat {
+    return replaceAllMapped(
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
   }
 }
 

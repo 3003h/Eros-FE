@@ -158,9 +158,11 @@ class ListViewEhSetting extends StatelessWidget {
                     title: Text(L10n.of(context).image_limits),
                     additionalInfo: Text(ehHome == null
                         ? ''
-                        : '${ehHome.currentLimit ?? ''} / ${ehHome.totLimit ?? ''}'),
+                        : '${ehHome.currentLimit ?? ''} / ${ehHome.totLimit ?? ''}'
+                            .numberFormat),
                     subtitle: Text(
-                        '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP'),
+                        '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP'
+                            .numberFormat),
                     trailing: snapshot.connectionState != ConnectionState.done
                         ? CupertinoActivityIndicator(
                             radius: (CupertinoTheme.of(context)
