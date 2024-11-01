@@ -13,16 +13,19 @@ class EhCookieInterceptor extends Interceptor {
       final cookieHeader =
           options.headers[HttpHeaders.cookieHeader] as String? ?? '';
       final cookiesString = cookieHeader.isNotEmpty ? cookieHeader : 'nw=1';
-      logger.t('${options.uri} befor checkCookies:$cookiesString');
-      final _cookies = cookiesString
+      logger.t('${options.uri} before checkCookies:$cookiesString');
+      final cookies = cookiesString
           .split(';')
           .map((str) => Cookie.fromSetCookieValue(str))
           .toList();
-      logger.t('_cookies:$_cookies');
+      logger.t('_cookies:$cookies');
 
-      checkCookies(_cookies);
-      logger.t('after checkCookies:$_cookies');
-      options.headers[HttpHeaders.cookieHeader] = getCookies(_cookies);
+      checkCookies(cookies);
+      logger.t('after checkCookies:$cookies');
+
+      saveCookieToUser(cookies);
+
+      options.headers[HttpHeaders.cookieHeader] = getCookies(cookies);
     } catch (e, stack) {
       logger.e('$e\n$stack');
     }
@@ -35,7 +38,7 @@ class EhCookieInterceptor extends Interceptor {
     _saveCookies(response)
         .then((_) => super.onResponse(response, handler))
         .catchError((e, StackTrace? stackTrace) {
-      DioError err = DioError(
+      DioException err = DioException(
           requestOptions: response.requestOptions,
           error: e,
           stackTrace: stackTrace);
@@ -43,33 +46,20 @@ class EhCookieInterceptor extends Interceptor {
     });
   }
 
+  // 保存cookie
   Future<void> _saveCookies(Response response) async {
-    final UserController userController = Get.find();
+    logger.t('response.headers: ${response.headers}');
+    final setCookiesFromResponse =
+        response.headers[HttpHeaders.setCookieHeader];
 
-    final cookies = response.headers[HttpHeaders.setCookieHeader];
+    if (setCookiesFromResponse != null) {
+      logger.t('set-cookie:$setCookiesFromResponse');
+      final setCookies = setCookiesFromResponse
+          .map((str) => Cookie.fromSetCookieValue(str))
+          .toList();
+      logger.d('_set setCookiesFromResponse $setCookies');
 
-    if (cookies != null) {
-      logger.t('set-cookie:$cookies');
-      final _cookies =
-          cookies.map((str) => Cookie.fromSetCookieValue(str)).toList();
-      logger.t('_set cookies $_cookies');
-
-      final igneous = getCookiesValue(_cookies, 'igneous');
-      final _newSk = getCookiesValue(_cookies, 'sk') ?? '';
-
-      userController.user(userController.user.value.copyWith(
-        memberId: getCookiesValue(_cookies, 'ipb_member_id')?.oN,
-        passHash: getCookiesValue(_cookies, 'ipb_pass_hash')?.oN,
-        igneous: igneous != 'mystery' && igneous != '' ? igneous?.oN : null,
-        hathPerks: getCookiesValue(_cookies, 'hath_perks')?.oN,
-        sk: _newSk.isNotEmpty ? _newSk.oN : null,
-        star: getCookiesValue(_cookies, 'star')?.oN,
-        yay: getCookiesValue(_cookies, 'yay')?.oN,
-      ));
-
-      // logger.t('new sk $_newSk');
-
-      logger.t('${userController.user.value.toJson()}');
+      saveCookieToUser(setCookies);
     }
   }
 
@@ -81,12 +71,13 @@ class EhCookieInterceptor extends Interceptor {
     return cookies.firstWhereOrNull((e) => e.name == name)?.value;
   }
 
+  // 检查并处理cookie
   void checkCookies(List<Cookie> cookies) {
     final UserController userController = Get.find();
 
-    final _nw = cookies.firstWhereOrNull((element) => element.name == 'nw');
-    if (_nw != null) {
-      _nw.value = '1';
+    final nw = cookies.firstWhereOrNull((element) => element.name == 'nw');
+    if (nw != null) {
+      nw.value = '1';
     } else {
       cookies.add(Cookie('nw', '1'));
     }
@@ -95,78 +86,46 @@ class EhCookieInterceptor extends Interceptor {
       return;
     }
 
-    final memberId = userController.user.value.memberId;
-    if (memberId != null && memberId.isNotEmpty) {
-      final _c = cookies
-          .firstWhereOrNull((element) => element.name == 'ipb_member_id');
-      if (_c != null) {
-        _c.value = memberId;
-      } else {
-        cookies.add(Cookie('ipb_member_id', memberId));
-      }
-    }
+    final user = userController.user.value;
 
-    final passHash = userController.user.value.passHash;
-    if (passHash != null && passHash.isNotEmpty) {
-      final _c = cookies
-          .firstWhereOrNull((element) => element.name == 'ipb_pass_hash');
-      if (_c != null) {
-        _c.value = passHash;
-      } else {
-        cookies.add(Cookie('ipb_pass_hash', passHash));
-      }
-    }
+    updateCookie(cookies, 'ipb_member_id', user.memberId);
+    updateCookie(cookies, 'ipb_pass_hash', user.passHash);
+    updateCookie(cookies, 'igneous', user.igneous);
+    updateCookie(cookies, 'hath_perks', user.hathPerks);
+    updateCookie(cookies, 'sk', user.sk);
+    updateCookie(cookies, 'star', user.star);
+    updateCookie(cookies, 'yay', user.yay);
+    updateCookie(cookies, 'iq', user.iq);
+  }
 
-    final igneous = userController.user.value.igneous;
-    if (igneous != null && igneous.isNotEmpty) {
-      final _c =
-          cookies.firstWhereOrNull((element) => element.name == 'igneous');
-      if (_c != null) {
-        _c.value = igneous;
+  void updateCookie(List<Cookie> cookies, String name, String? value) {
+    if (value != null && value.isNotEmpty) {
+      final tempCookie =
+          cookies.firstWhereOrNull((element) => element.name == name);
+      if (tempCookie != null) {
+        tempCookie.value = value;
       } else {
-        cookies.add(Cookie('igneous', igneous));
+        cookies.add(Cookie(name, value));
       }
     }
+  }
 
-    final hathPerks = userController.user.value.hathPerks;
-    if (hathPerks != null && hathPerks.isNotEmpty) {
-      final _c =
-          cookies.firstWhereOrNull((element) => element.name == 'hath_perks');
-      if (_c != null) {
-        _c.value = hathPerks;
-      } else {
-        cookies.add(Cookie('hath_perks', hathPerks));
-      }
-    }
+  void saveCookieToUser(List<Cookie> cookies) {
+    final UserController userController = Get.find();
+    final igneous = getCookiesValue(cookies, 'igneous');
+    final newSk = getCookiesValue(cookies, 'sk') ?? '';
 
-    final sk = userController.user.value.sk;
-    if (sk != null && sk.isNotEmpty) {
-      final _c = cookies.firstWhereOrNull((element) => element.name == 'sk');
-      if (_c != null) {
-        _c.value = sk;
-      } else {
-        cookies.add(Cookie('sk', sk));
-      }
-    }
+    userController.user(userController.user.value.copyWith(
+      memberId: getCookiesValue(cookies, 'ipb_member_id')?.oN,
+      passHash: getCookiesValue(cookies, 'ipb_pass_hash')?.oN,
+      igneous: igneous != 'mystery' && igneous != '' ? igneous?.oN : null,
+      hathPerks: getCookiesValue(cookies, 'hath_perks')?.oN,
+      sk: newSk.isNotEmpty ? newSk.oN : null,
+      star: getCookiesValue(cookies, 'star')?.oN,
+      yay: getCookiesValue(cookies, 'yay')?.oN,
+      iq: getCookiesValue(cookies, 'iq')?.oN,
+    ));
 
-    final star = userController.user.value.star;
-    if (star != null && star.isNotEmpty) {
-      final _c = cookies.firstWhereOrNull((element) => element.name == 'star');
-      if (_c != null) {
-        _c.value = star;
-      } else {
-        cookies.add(Cookie('star', star));
-      }
-    }
-
-    final yay = userController.user.value.yay;
-    if (yay != null && yay.isNotEmpty) {
-      final _c = cookies.firstWhereOrNull((element) => element.name == 'yay');
-      if (_c != null) {
-        _c.value = yay;
-      } else {
-        cookies.add(Cookie('star', yay));
-      }
-    }
+    logger.t('user: ${userController.user.value.toJson()}');
   }
 }

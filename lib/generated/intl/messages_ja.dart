@@ -172,6 +172,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide_thumbnails": MessageLookupByLibrary.simpleMessage("サムネイル（非表示）"),
         "hide_top_bar_on_scroll":
             MessageLookupByLibrary.simpleMessage("スクロール時にトップバーを隠す"),
+        "high_resolution_images_limited": MessageLookupByLibrary.simpleMessage(
+            "High Resolution Images Limited"),
         "horizontal_thumbnails":
             MessageLookupByLibrary.simpleMessage("水平サムネイル"),
         "host": MessageLookupByLibrary.simpleMessage("Host"),

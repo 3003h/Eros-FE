@@ -443,5 +443,6 @@
   "regex_format_error": "正则表达式格式错误",
   "experimental_feature": "实验性功能",
   "page_view_type": "页面视图类型",
-  "slide_out_page": "拖动返回"
+  "slide_out_page": "拖动返回",
+  "high_resolution_images_limited": "高分辨率图片限制"
 }

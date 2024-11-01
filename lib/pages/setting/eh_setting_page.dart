@@ -154,15 +154,36 @@ class ListViewEhSetting extends StatelessWidget {
                       hiveHelper.setEhHome(ehHome);
                     }
                   }
+                  final currentLimit = ehHome?.currentLimit ?? 0;
+                  final totLimit = ehHome?.totLimit ?? 0;
+                  String additionalInfoText = '';
+                  if (totLimit > 0) {
+                    additionalInfoText =
+                        '$currentLimit / $totLimit'.numberFormat;
+                  }
+                  String subtitleText = '';
+                  // if (ehHome?.highResolutionLimited ?? false) {
+                  //   subtitleText =
+                  //       L10n.of(context).high_resolution_images_limited;
+                  // }
+                  if (ehHome?.resetCost != null) {
+                    if (subtitleText.isNotEmpty) {
+                      subtitleText += '\n';
+                    }
+                    subtitleText +=
+                        '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP'
+                            .numberFormat;
+                  }
+
                   return EhCupertinoListTile(
                     title: Text(L10n.of(context).image_limits),
-                    additionalInfo: Text(ehHome == null
-                        ? ''
-                        : '${ehHome.currentLimit ?? ''} / ${ehHome.totLimit ?? ''}'
-                            .numberFormat),
-                    subtitle: Text(
-                        '${L10n.of(context).reset_cost}: ${ehHome?.resetCost ?? 0} GP'
-                            .numberFormat),
+                    additionalInfo: Text(additionalInfoText),
+                    subtitle: subtitleText.isNotEmpty
+                        ? Text(
+                            subtitleText,
+                            maxLines: 5,
+                          )
+                        : null,
                     trailing: snapshot.connectionState != ConnectionState.done
                         ? CupertinoActivityIndicator(
                             radius: (CupertinoTheme.of(context)

@@ -16,6 +16,7 @@ class User {
     this.sk,
     this.yay,
     this.star,
+    this.iq,
     this.avatarUrl,
     this.favcat,
     this.lastUptTime,
@@ -30,6 +31,7 @@ class User {
   final String? sk;
   final String? yay;
   final String? star;
+  final String? iq;
   final String? avatarUrl;
   final List<Favcat>? favcat;
   final int? lastUptTime;
@@ -44,6 +46,7 @@ class User {
     sk: json['sk']?.toString(),
     yay: json['yay']?.toString(),
     star: json['star']?.toString(),
+    iq: json['iq']?.toString(),
     avatarUrl: json['avatarUrl']?.toString(),
     favcat: json['favcat'] != null ? (json['favcat'] as List? ?? []).map((e) => Favcat.fromJson(e as Map<String, dynamic>)).toList() : null,
     lastUptTime: json['lastUptTime'] != null ? int.tryParse('${json['lastUptTime']}') ?? 0 : null
@@ -59,6 +62,7 @@ class User {
     'sk': sk,
     'yay': yay,
     'star': star,
+    'iq': iq,
     'avatarUrl': avatarUrl,
     'favcat': favcat?.map((e) => e.toJson()).toList(),
     'lastUptTime': lastUptTime
@@ -74,6 +78,7 @@ class User {
     sk: sk,
     yay: yay,
     star: star,
+    iq: iq,
     avatarUrl: avatarUrl,
     favcat: favcat?.map((e) => e.clone()).toList(),
     lastUptTime: lastUptTime
@@ -90,6 +95,7 @@ class User {
     Optional<String?>? sk,
     Optional<String?>? yay,
     Optional<String?>? star,
+    Optional<String?>? iq,
     Optional<String?>? avatarUrl,
     Optional<List<Favcat>?>? favcat,
     Optional<int?>? lastUptTime
@@ -103,6 +109,7 @@ class User {
     sk: checkOptional(sk, () => this.sk),
     yay: checkOptional(yay, () => this.yay),
     star: checkOptional(star, () => this.star),
+    iq: checkOptional(iq, () => this.iq),
     avatarUrl: checkOptional(avatarUrl, () => this.avatarUrl),
     favcat: checkOptional(favcat, () => this.favcat),
     lastUptTime: checkOptional(lastUptTime, () => this.lastUptTime),
@@ -110,8 +117,8 @@ class User {
 
   @override
   bool operator ==(Object other) => identical(this, other)
-    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && hathPerks == other.hathPerks && sk == other.sk && yay == other.yay && star == other.star && avatarUrl == other.avatarUrl && favcat == other.favcat && lastUptTime == other.lastUptTime;
+    || other is User && username == other.username && nickName == other.nickName && memberId == other.memberId && passHash == other.passHash && igneous == other.igneous && hathPerks == other.hathPerks && sk == other.sk && yay == other.yay && star == other.star && iq == other.iq && avatarUrl == other.avatarUrl && favcat == other.favcat && lastUptTime == other.lastUptTime;
 
   @override
-  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ hathPerks.hashCode ^ sk.hashCode ^ yay.hashCode ^ star.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode ^ lastUptTime.hashCode;
+  int get hashCode => username.hashCode ^ nickName.hashCode ^ memberId.hashCode ^ passHash.hashCode ^ igneous.hashCode ^ hathPerks.hashCode ^ sk.hashCode ^ yay.hashCode ^ star.hashCode ^ iq.hashCode ^ avatarUrl.hashCode ^ favcat.hashCode ^ lastUptTime.hashCode;
 }

@@ -4514,6 +4514,16 @@ class L10n {
       args: [],
     );
   }
+
+  /// `High Resolution Images Limited`
+  String get high_resolution_images_limited {
+    return Intl.message(
+      'High Resolution Images Limited',
+      name: 'high_resolution_images_limited',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<L10n> {

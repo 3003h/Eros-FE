@@ -905,12 +905,12 @@ Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
 Future<void> showUserCookie() async {
   final List<String> _c = Global.profile.user.cookie.split(';');
 
-  final List<Cookie> _cookies =
+  final List<Cookie> cookies =
       _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
 
-  final String _cookieString =
-      _cookies.map((e) => '${e.name}=${e.value}').join('\n');
-  logger.d('$_cookieString ');
+  final String cookieString =
+      cookies.map((e) => '${e.name}=${e.value}').join('\n');
+  logger.d('$cookieString ');
 
   return showCupertinoDialog<void>(
     context: Get.context!,
@@ -930,7 +930,7 @@ Future<void> showUserCookie() async {
               CupertinoFormSection.insetGrouped(
                 margin: const EdgeInsetsDirectional.fromSTEB(0, 0.0, 0, 5.0),
                 backgroundColor: Colors.transparent,
-                children: _cookies
+                children: cookies
                     .map((e) => CupertinoTextFormFieldRow(
                           prefix: Text(
                             e.name,
@@ -958,7 +958,7 @@ Future<void> showUserCookie() async {
           CupertinoDialogAction(
             child: Text(L10n.of(context).copy),
             onPressed: () {
-              Clipboard.setData(ClipboardData(text: _cookieString));
+              Clipboard.setData(ClipboardData(text: cookieString));
               Get.back();
               showToast(L10n.of(context).copied_to_clipboard);
             },

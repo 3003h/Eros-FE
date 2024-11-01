@@ -140,7 +140,7 @@ extension ExtGalleryProvider on GalleryProvider {
 
 extension ExtUser on User {
   String get cookie {
-    final _list = <Cookie>[
+    final cookieList = <Cookie>[
       Cookie('ipb_member_id', memberId ?? ''),
       Cookie('ipb_pass_hash', passHash ?? ''),
       Cookie('igneous', igneous ?? ''),
@@ -148,16 +148,17 @@ extension ExtUser on User {
       Cookie('hath_perks', hathPerks ?? ''),
       Cookie('star', star ?? ''),
       Cookie('yay', yay ?? ''),
+      Cookie('iq', iq ?? ''),
     ];
 
-    return _list
+    return cookieList
         .whereNot((e) => e.value.isEmpty)
         .map((e) => '${e.name}=${e.value}')
         .join('; ');
   }
 
   List<Cookie> get cookies {
-    final _list = <Cookie>[
+    final cookieList = <Cookie>[
       Cookie('ipb_member_id', memberId ?? ''),
       Cookie('ipb_pass_hash', passHash ?? ''),
       Cookie('igneous', igneous ?? ''),
@@ -165,9 +166,10 @@ extension ExtUser on User {
       Cookie('hath_perks', hathPerks ?? ''),
       Cookie('star', star ?? ''),
       Cookie('yay', yay ?? ''),
+      Cookie('iq', iq ?? ''),
     ];
 
-    return _list.whereNot((e) => e.value.isEmpty).toList();
+    return cookieList.whereNot((e) => e.value.isEmpty).toList();
   }
 }
 

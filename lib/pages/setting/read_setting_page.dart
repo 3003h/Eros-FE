@@ -21,7 +21,7 @@ class ReadSettingPage extends StatelessWidget {
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(L10n.of(context).eh),
+        middle: Text(L10n.of(context).read_setting),
       ),
       child: CustomScrollView(slivers: [
         SliverSafeArea(sliver: ReadSettingList()),

@@ -1,5 +1,7 @@
 {
   "currentLimit?": 0,
   "totLimit?": 5000,
-  "resetCost?": 100
+  "resetCost?": 100,
+  "high-resolutionLimited?": true,
+  "unlockCost?": 20000
 }

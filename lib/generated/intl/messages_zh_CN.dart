@@ -164,6 +164,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "hide_thumbnails": MessageLookupByLibrary.simpleMessage("隐藏缩略图"),
         "hide_top_bar_on_scroll":
             MessageLookupByLibrary.simpleMessage("滚动时隐藏顶栏"),
+        "high_resolution_images_limited":
+            MessageLookupByLibrary.simpleMessage("高分辨率图片限制"),
         "horizontal_thumbnails": MessageLookupByLibrary.simpleMessage("水平缩略图"),
         "host": MessageLookupByLibrary.simpleMessage("地址"),
         "hours": MessageLookupByLibrary.simpleMessage("小时"),
