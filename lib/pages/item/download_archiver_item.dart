@@ -24,7 +24,7 @@ final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
 
 class DownloadArchiverItem extends GetView<DownloadViewController> {
   DownloadArchiverItem({
-    Key? key,
+    super.key,
     required this.index,
     required this.archiverTaskInfo,
   })  : title = archiverTaskInfo.title ?? '',
@@ -41,8 +41,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
             ? DateTime.fromMillisecondsSinceEpoch(
                 archiverTaskInfo.timeCreated ?? 0)
             : null,
-        resolution = archiverTaskInfo.resolution,
-        super(key: key);
+        resolution = archiverTaskInfo.resolution;
 
   final String title;
   final int progress;
@@ -210,7 +209,9 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
 
   Future<void> _onTap(BuildContext context) async {
     logger
-        .d('gid: $galleryGid\npath:\n$filePath\n${filePath.realArchiverPath}');
+        .d('<<>>>>>>> archiverTaskInfo.savedDir: ${archiverTaskInfo.savedDir}');
+    logger.d(
+        '<<>>>>>>> gid: $galleryGid\npath: \nfilePath: $filePath\nrealArchiverPath: ${filePath.realArchiverPath}');
     if (galleryGid == null) {
       return;
     }
@@ -264,7 +265,7 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
 
   Widget _buildCover() {
     return GestureDetector(
-      child: Container(
+      child: SizedBox(
         width: 74,
         child: coverUrl != null && coverUrl!.isNotEmpty
             ? DownloadItemCoverImage(

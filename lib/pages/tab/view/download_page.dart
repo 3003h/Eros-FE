@@ -21,10 +21,10 @@ const Border _kDefaultNavBarBorder = Border(
 );
 
 class DownloadTab extends StatefulWidget {
-  const DownloadTab({Key? key}) : super(key: key);
+  const DownloadTab({super.key});
 
   @override
-  _DownloadTabState createState() => _DownloadTabState();
+  State<DownloadTab> createState() => _DownloadTabState();
 }
 
 class _DownloadTabState extends State<DownloadTab> {
@@ -164,20 +164,15 @@ class _DownloadTabState extends State<DownloadTab> {
 }
 
 class DownloadArchiverView extends StatefulWidget {
-  const DownloadArchiverView();
+  const DownloadArchiverView({super.key});
 
   @override
-  _DownloadArchiverViewState createState() => _DownloadArchiverViewState();
+  State<DownloadArchiverView> createState() => _DownloadArchiverViewState();
 }
 
 class _DownloadArchiverViewState extends State<DownloadArchiverView>
     with AutomaticKeepAliveClientMixin {
   final DownloadViewController controller = Get.find();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,10 +197,10 @@ class _DownloadArchiverViewState extends State<DownloadArchiverView>
 }
 
 class DownloadGalleryView extends StatefulWidget {
-  const DownloadGalleryView();
+  const DownloadGalleryView({super.key});
 
   @override
-  _DownloadGalleryViewState createState() => _DownloadGalleryViewState();
+  State<DownloadGalleryView> createState() => _DownloadGalleryViewState();
 }
 
 class _DownloadGalleryViewState extends State<DownloadGalleryView>
@@ -246,81 +241,81 @@ class _DownloadGalleryViewState extends State<DownloadGalleryView>
 }
 
 Widget downloadItemBuilder(
-    BuildContext context, int _taskIndex, Animation<double> animation) {
+    BuildContext context, int taskIndex, Animation<double> animation) {
   return _buildAnimatedListItem(
     animation,
-    child: _downloadItemBuilder(context, _taskIndex),
+    child: _downloadItemBuilder(context, taskIndex),
   );
 }
 
 Widget downloadDelItemBuilder(
-    BuildContext context, int _taskIndex, Animation<double> animation) {
+    BuildContext context, int taskIndex, Animation<double> animation) {
   return _buildDelAnimatedListItem(
     animation,
-    child: _downloadItemBuilder(context, _taskIndex),
+    child: _downloadItemBuilder(context, taskIndex),
   );
 }
 
 Widget downloadArchiverItemBuilder(
-    BuildContext context, int _taskIndex, Animation<double> animation) {
+    BuildContext context, int taskIndex, Animation<double> animation) {
   return _buildAnimatedListItem(
     animation,
-    child: _downloadArciverItemBuilder(context, _taskIndex),
+    child: _downloadArchiverItemBuilder(context, taskIndex),
   );
 }
 
 Widget downloadArchiverDelItemBuilder(
-    BuildContext context, int _taskIndex, Animation<double> animation) {
+    BuildContext context, int taskIndex, Animation<double> animation) {
   return _buildDelAnimatedListItem(
     animation,
-    child: _downloadArciverItemBuilder(context, _taskIndex),
+    child: _downloadArchiverItemBuilder(context, taskIndex),
   );
 }
 
-Widget _downloadItemBuilder(BuildContext context, int _taskIndex) {
+Widget _downloadItemBuilder(BuildContext context, int taskIndex) {
   final DownloadViewController controller = Get.find();
-  if (controller.galleryTasks.length - 1 < _taskIndex) {
+  if (controller.galleryTasks.length - 1 < taskIndex) {
     return const SizedBox.shrink();
   }
 
-  final gid = controller.galleryTasks[_taskIndex].gid;
+  final gid = controller.galleryTasks[taskIndex].gid;
   return GetBuilder<DownloadViewController>(
     id: '${idDownloadGalleryItem}_$gid',
     builder: (logic) {
       logger.t('rebuild DownloadGalleryItem_$gid');
 
-      final GalleryTask _taskInfo = logic.galleryTasks[_taskIndex];
-      final String? _speed = logic.downloadSpeedMap[_taskInfo.gid];
-      final String? _errInfo = logic.errInfoMap[_taskInfo.gid];
+      final GalleryTask taskInfo = logic.galleryTasks[taskIndex];
+      final String? speed = logic.downloadSpeedMap[taskInfo.gid];
+      final String? errInfo = logic.errInfoMap[taskInfo.gid];
 
       return DownloadGalleryItem(
-        galleryTask: _taskInfo,
-        taskIndex: _taskIndex,
-        speed: _speed,
-        errInfo: _errInfo,
+        galleryTask: taskInfo,
+        taskIndex: taskIndex,
+        speed: speed,
+        errInfo: errInfo,
       );
     },
   );
 }
 
-Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
+Widget _downloadArchiverItemBuilder(BuildContext context, int taskIndex) {
   final DownloadViewController controller = Get.find();
-  if (controller.archiverTasks.length - 1 < _taskIndex) {
+  if (controller.archiverTasks.length - 1 < taskIndex) {
     return const SizedBox.shrink();
   }
 
-  final _tag = controller.archiverTasks[_taskIndex].tag;
+  final tag = controller.archiverTasks[taskIndex].tag;
   return GetBuilder<DownloadViewController>(
-    id: '${idDownloadArchiverItem}_$_tag',
+    id: '${idDownloadArchiverItem}_$tag',
     builder: (logic) {
-      final _taskInfo = logic.archiverTasks[_taskIndex];
+      final archiveTaskInfo = logic.archiverTasks[taskIndex];
       return GestureDetector(
         onLongPress: () =>
-            logic.onLongPress(_taskIndex, type: DownloadType.archiver),
+            logic.onLongPress(taskIndex, type: DownloadType.archiver),
         behavior: HitTestBehavior.opaque,
         child: DownloadArchiverItem(
-          archiverTaskInfo: _taskInfo,
-          index: _taskIndex,
+          archiverTaskInfo: archiveTaskInfo,
+          index: taskIndex,
         ),
       );
     },
@@ -328,19 +323,19 @@ Widget _downloadArciverItemBuilder(BuildContext context, int _taskIndex) {
 }
 
 Widget _buildDelAnimatedListItem(
-  Animation<double> _animation, {
+  Animation<double> animation, {
   required Widget child,
 }) {
   return FadeTransition(
-    opacity: _animation.drive(
+    opacity: animation.drive(
         CurveTween(curve: const Interval(0.0, 1.0, curve: Curves.easeOut))),
     child: SizeTransition(
-      sizeFactor: _animation.drive(
+      sizeFactor: animation.drive(
           CurveTween(curve: const Interval(0.0, 1.0, curve: Curves.easeOut))),
       child: SlideTransition(
         position: Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero)
             .animate(CurvedAnimation(
-                parent: _animation,
+                parent: animation,
                 curve: const Interval(0.4, 1.0, curve: Curves.easeOut))),
         child: child,
       ),

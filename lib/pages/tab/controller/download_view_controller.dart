@@ -121,55 +121,55 @@ class DownloadViewController extends GetxController {
 
   // Archiver恢复任务
   Future<void> resumeArchiverDownload(int index) async {
-    final String? _oriTaskId = archiverTasks[index].taskId;
-    final int? _oriStatus = archiverTasks[index].status;
+    final String? oriTaskId = archiverTasks[index].taskId;
+    final int? oriStatus = archiverTasks[index].status;
 
-    String? _newTaskId;
-    if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.paused)) {
-      _newTaskId = await FlutterDownloader.resume(taskId: _oriTaskId ?? '');
-    } else if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.failed)) {
-      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskId ?? '');
+    String? newTaskId;
+    if (oriStatus == downloadStatusToInt(DownloadTaskStatus.paused)) {
+      newTaskId = await FlutterDownloader.resume(taskId: oriTaskId ?? '');
+    } else if (oriStatus == downloadStatusToInt(DownloadTaskStatus.failed)) {
+      newTaskId = await FlutterDownloader.retry(taskId: oriTaskId ?? '');
     }
 
-    if (_newTaskId == null) {
+    if (newTaskId == null) {
       return;
     }
 
-    logger.d('oriTaskid $_oriTaskId,  newTaskId $_newTaskId');
-    if (_newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
+    logger.d('oriTaskId $oriTaskId,  newTaskId $newTaskId');
+    if (newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
-              .copyWith(taskId: _newTaskId.oN);
+              .copyWith(taskId: newTaskId.oN);
     }
   }
 
   // Archiver重试任务
   Future<void> retryArchiverDownload(int index) async {
     logger.d('Archiver重试任务');
-    final _oriTask = archiverTasks[index];
-    final String? _oriTaskid = _oriTask.taskId;
-    final int? _oriStatus = archiverTasks[index].status;
+    final oriTask = archiverTasks[index];
+    final String? oriTaskId = oriTask.taskId;
+    final int? oriStatus = archiverTasks[index].status;
 
-    String? _newTaskId;
-    if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.paused)) {
-      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
-    } else if (_oriStatus == downloadStatusToInt(DownloadTaskStatus.failed)) {
-      _newTaskId = await FlutterDownloader.retry(taskId: _oriTaskid ?? '');
+    String? newTaskId;
+    if (oriStatus == downloadStatusToInt(DownloadTaskStatus.paused)) {
+      newTaskId = await FlutterDownloader.retry(taskId: oriTaskId ?? '');
+    } else if (oriStatus == downloadStatusToInt(DownloadTaskStatus.failed)) {
+      newTaskId = await FlutterDownloader.retry(taskId: oriTaskId ?? '');
     }
 
-    if (_newTaskId == null || _newTaskId.isEmpty) {
+    if (newTaskId == null || newTaskId.isEmpty) {
       // await retryArchiverDownload(index);
-      logger.d('url ${_oriTask.gid} ${_oriTask.url}');
+      logger.d('url ${oriTask.gid} ${oriTask.url}');
       return;
     }
 
-    logger.d('oriTaskid $_oriTaskid, newTaskid $_newTaskId');
-    if (_newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
+    logger.d('oriTaskId $oriTaskId, newTaskid $newTaskId');
+    if (newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController
               .archiverTaskMap[archiverTasks[index].tag!]!
-              .copyWith(taskId: _newTaskId.oN);
+              .copyWith(taskId: newTaskId.oN);
     }
   }
 
@@ -178,17 +178,17 @@ class DownloadViewController extends GetxController {
     int index, {
     bool shouldDeleteContent = true,
   }) {
-    final String? _oriTaskid = archiverTasks[index].taskId;
-    final String? _tag = archiverTasks[index].tag;
+    final String? oriTaskId = archiverTasks[index].taskId;
+    final String? tag = archiverTasks[index].tag;
 
     animatedArchiverListKey.currentState?.removeItem(
         index,
         (context, animation) =>
             downloadArchiverDelItemBuilder(context, index, animation));
 
-    _archiverDownloadController.removeTask(_tag);
+    _archiverDownloadController.removeTask(tag);
     FlutterDownloader.remove(
-      taskId: _oriTaskid ?? '',
+      taskId: oriTaskId ?? '',
       shouldDeleteContent: shouldDeleteContent,
     );
     update([idDownloadArchiverView]);
@@ -196,20 +196,20 @@ class DownloadViewController extends GetxController {
 
   // 打开Archiver文件
   Future<void> openArchiverTaskFile(int index) async {
-    final String? _oriTaskid = archiverTasks[index].taskId;
+    final String? oriTaskId = archiverTasks[index].taskId;
 
     // final _result = await OpenFile.open('');
     FlutterDownloader.open(
-      taskId: _oriTaskid ?? '',
+      taskId: oriTaskId ?? '',
     );
   }
 
   // 导出Archiver文件
   Future<void> exportArchiverTaskFile(int index) async {
-    final String? _oriTaskId = archiverTasks[index].taskId;
+    final String? oriTaskId = archiverTasks[index].taskId;
 
     FlutterDownloader.open(
-      taskId: _oriTaskId ?? '',
+      taskId: oriTaskId ?? '',
     );
   }
 
@@ -218,9 +218,9 @@ class DownloadViewController extends GetxController {
     int index, {
     bool shouldDeleteContent = true,
   }) {
-    final GalleryTask _task = galleryTasks[index];
+    final GalleryTask task = galleryTasks[index];
     _downloadController.removeDownloadGalleryTask(
-      gid: _task.gid,
+      gid: task.gid,
       shouldDeleteContent: shouldDeleteContent,
     );
     animatedGalleryListKey.currentState?.removeItem(
@@ -452,27 +452,27 @@ class DownloadViewController extends GetxController {
       return null;
     }
 
-    final _zipPath = await _exportGallery(context, () => _compZip(task));
+    final zipPath = await _exportGallery(context, () => _compZip(task));
 
-    if (_zipPath != null) {
-      Share.shareXFiles([XFile(_zipPath)]);
+    if (zipPath != null) {
+      Share.shareXFiles([XFile(zipPath)]);
     }
     return null;
   }
 
   Future<String?> _compZip(GalleryTask task) async {
-    final _tempPath = path.join(Global.extStoreTempPath, 'export_temp');
-    Directory _tempDir = Directory(_tempPath);
-    if (_tempDir.existsSync()) {
-      _tempDir.deleteSync(recursive: true);
+    final tempPath = path.join(Global.extStoreTempPath, 'export_temp');
+    Directory tempDir = Directory(tempPath);
+    if (tempDir.existsSync()) {
+      tempDir.deleteSync(recursive: true);
     }
-    _tempDir.createSync(recursive: true);
+    tempDir.createSync(recursive: true);
 
     // 打包zip
     final encoder = ZipFileEncoder();
-    final _zipPath = path.join(
+    final zipPath = path.join(
         Global.extStoreTempPath, 'zip', '${task.gid}_${task.title}.zip');
-    encoder.create(_zipPath);
+    encoder.create(zipPath);
 
     if (task.realDirPath?.isContentUri ?? false) {
       // SAF list files
@@ -491,17 +491,17 @@ class DownloadViewController extends GetxController {
         if (bytes == null) {
           continue;
         }
-        final _filePath = path.join(_tempPath, domFile.name);
-        File(_filePath).writeAsBytesSync(bytes);
-        encoder.addFile(File(_filePath));
+        final filePath = path.join(tempPath, domFile.name);
+        File(filePath).writeAsBytesSync(bytes);
+        encoder.addFile(File(filePath));
       }
     } else {
       // 添加文件
-      final _galleryDir = Directory(task.realDirPath!);
-      for (final _file in _galleryDir.listSync()) {
-        if ((await FileSystemEntity.type(_file.path)) ==
+      final galleryDir = Directory(task.realDirPath!);
+      for (final imgFile in galleryDir.listSync()) {
+        if ((await FileSystemEntity.type(imgFile.path)) ==
             FileSystemEntityType.file) {
-          final srcFile = File(_file.path);
+          final srcFile = File(imgFile.path);
           encoder.addFile(srcFile);
         }
       }
@@ -509,12 +509,12 @@ class DownloadViewController extends GetxController {
 
     if (kDebugMode) {
       // _zipPath len
-      final _file = File(_zipPath);
-      logger.d('zip file len ${_file.lengthSync()}');
+      final file = File(zipPath);
+      logger.d('zip file len ${file.lengthSync()}');
     }
 
     encoder.close();
-    return _zipPath;
+    return zipPath;
   }
 
   Future<String?> _exportEpub(BuildContext context, GalleryTask task) async {
@@ -523,34 +523,34 @@ class DownloadViewController extends GetxController {
       return null;
     }
 
-    final _exportFilePath =
+    final exportFilePath =
         await _exportGallery(context, () => _buildEpub(task));
 
-    if (_exportFilePath != null) {
-      Share.shareXFiles([XFile(_exportFilePath)]);
+    if (exportFilePath != null) {
+      Share.shareXFiles([XFile(exportFilePath)]);
     }
     return null;
   }
 
   Future<String?> _buildEpub(GalleryTask task) async {
     loggerTime.t('start buildEpub');
-    final _tempEpubPath = await buildEpub(task);
+    final tempEpubPath = await buildEpub(task);
     loggerTime.t('end buildEpub');
 
     final title = task.title.replaceAll(RegExp(r'[/:*"<>|]'), '_');
 
     // 打包epub文件
-    final _epubPath =
+    final epubPath =
         path.join(Global.extStoreTempPath, 'epub', '${task.gid}_$title.epub');
-    await compute(isolateCompactDirToZip, [_epubPath, _tempEpubPath]);
+    await compute(isolateCompactDirToZip, [epubPath, tempEpubPath]);
 
     if (kDebugMode) {
       // _epubPath len
-      final _file = File(_epubPath);
-      logger.d('epub file len ${_file.lengthSync()}');
+      final file = File(epubPath);
+      logger.d('epub file len ${file.lengthSync()}');
     }
 
-    return _epubPath;
+    return epubPath;
   }
 
   // gallery 暂停任务
@@ -702,30 +702,29 @@ class DownloadViewController extends GetxController {
   }
 
   String _getLocalFilePath() {
-    final DateTime _now = DateTime.now();
+    final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
-    final String _nowTime = formatter.format(_now);
-    return path.join(Global.appDocPath, 'FEhDownloadTask_$_nowTime.zip');
+    final String nowTime = formatter.format(now);
+    return path.join(Global.appDocPath, 'FEhDownloadTask_$nowTime.zip');
   }
 
   Future shareTaskInfoFile() async {
-    final _tempFilePath = await _writeTaskInfoFile();
-    if (_tempFilePath != null) {
-      Share.shareXFiles([XFile(_tempFilePath)]);
+    final tempFilePath = await _writeTaskInfoFile();
+    if (tempFilePath != null) {
+      Share.shareXFiles([XFile(tempFilePath)]);
     }
   }
 
   Future exportTaskInfoFile() async {
     try {
-      final _tempFilePath = await _writeTaskInfoFile();
+      final tempFilePath = await _writeTaskInfoFile();
       await requestManageExternalStoragePermission();
-      if (_tempFilePath != null) {
-        final _saveToDirPath = await FilePicker.platform.getDirectoryPath();
-        logger.d('$_saveToDirPath');
-        if (_saveToDirPath != null) {
-          final _dstPath =
-              path.join(_saveToDirPath, path.basename(_tempFilePath));
-          File(_tempFilePath).copySync(_dstPath);
+      if (tempFilePath != null) {
+        final saveToDirPath = await FilePicker.platform.getDirectoryPath();
+        logger.d('$saveToDirPath');
+        if (saveToDirPath != null) {
+          final dstPath = path.join(saveToDirPath, path.basename(tempFilePath));
+          File(tempFilePath).copySync(dstPath);
         }
       }
     } catch (e) {
@@ -757,7 +756,7 @@ Future<String?> _exportGallery(
   FunctionExport funExport, {
   FunctionExport? funcCancel,
 }) async {
-  Future<String?> _showExportDialog() async {
+  Future<String?> showExportDialog() async {
     return await showCupertinoDialog<String?>(
       context: context,
       builder: (BuildContext context) {
@@ -791,5 +790,5 @@ Future<String?> _exportGallery(
     );
   }
 
-  return await _showExportDialog();
+  return await showExportDialog();
 }

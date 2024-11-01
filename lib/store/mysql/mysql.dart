@@ -93,10 +93,10 @@ class FeMySql {
   }
 
   Future<void> migrate() async {
-    logger.d('migrate');
+    logger.t('migrate');
 
     final version = await getVersion();
-    logger.d('version $version');
+    logger.t('version $version');
     if (version == null) {
       logger.d('version is null, insertVersion');
       await insertVersion();

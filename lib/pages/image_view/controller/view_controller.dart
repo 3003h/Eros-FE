@@ -648,18 +648,17 @@ class ViewExtController extends GetxController {
         return null;
       }
 
-      // final filePath = path.join(task.savedDir ?? '', task.fileName);
       late final String? filePath;
       if (task.savedDir?.isContentUri ?? false) {
-        final _uri = task.safUri ??
+        final uri = task.safUri ??
             '${task.savedDir}%2F${Uri.encodeComponent(task.fileName ?? '')}';
-        final result = await safCacheSingle(Uri.parse(_uri));
+        final result = await safCacheSingle(Uri.parse(uri));
         filePath = result.cachePath;
         safCacheDirectory = result.parentPath;
       } else {
         filePath = path.join(task.savedDir ?? '', task.fileName);
       }
-      // logger.d('filePath $filePath');
+      logger.d('filePath $filePath');
       if (filePath == null) {
         throw Exception('filePath is null');
       }
