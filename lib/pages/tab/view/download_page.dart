@@ -1,5 +1,6 @@
 import 'package:eros_fe/common/controller/download_controller.dart';
 import 'package:eros_fe/generated/l10n.dart';
+import 'package:eros_fe/models/download_archiver_task_info.dart';
 import 'package:eros_fe/pages/item/download_archiver_item.dart';
 import 'package:eros_fe/pages/item/download_gallery_item.dart';
 import 'package:eros_fe/pages/tab/controller/download_view_controller.dart';
@@ -308,7 +309,8 @@ Widget _downloadArchiverItemBuilder(BuildContext context, int taskIndex) {
   return GetBuilder<DownloadViewController>(
     id: '${idDownloadArchiverItem}_$tag',
     builder: (logic) {
-      final archiveTaskInfo = logic.archiverTasks[taskIndex];
+      final DownloadArchiverTaskInfo archiveTaskInfo =
+          logic.archiverTasks[taskIndex];
       return GestureDetector(
         onLongPress: () =>
             logic.onLongPress(taskIndex, type: DownloadType.archiver),

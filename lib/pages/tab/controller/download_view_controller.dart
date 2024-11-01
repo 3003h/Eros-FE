@@ -144,7 +144,7 @@ class DownloadViewController extends GetxController {
     }
   }
 
-  // Archiver重试任务
+  // Archiver 重试任务
   Future<void> retryArchiverDownload(int index) async {
     logger.d('Archiver重试任务');
     final oriTask = archiverTasks[index];
@@ -164,7 +164,7 @@ class DownloadViewController extends GetxController {
       return;
     }
 
-    logger.d('oriTaskId $oriTaskId, newTaskid $newTaskId');
+    logger.d('oriTaskId $oriTaskId, newTaskId $newTaskId');
     if (newTaskId.isNotEmpty && archiverTasks[index].tag != null) {
       _archiverDownloadController.archiverTaskMap[archiverTasks[index].tag!] =
           _archiverDownloadController

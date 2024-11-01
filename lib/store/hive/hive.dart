@@ -258,17 +258,18 @@ class HiveHelper {
       return null;
     }
 
-    final _map = <String, DownloadArchiverTaskInfo>{};
+    final map = <String, DownloadArchiverTaskInfo>{};
 
     for (final entry in _archiverTaskBox.toMap().entries) {
-      final _takInfo = DownloadArchiverTaskInfo.fromJson(
+      final takInfo = DownloadArchiverTaskInfo.fromJson(
           jsonDecode(entry.value) as Map<String, dynamic>);
-      if (_takInfo.tag != null) {
-        _map[_takInfo.tag!] = _takInfo;
+      logger.t('get archiverTask ${takInfo.toJson()}');
+      if (takInfo.tag != null) {
+        map[takInfo.tag!] = takInfo;
       }
     }
 
-    return _map;
+    return map;
   }
 
   GalleryCache? getCache(String gid) {
@@ -294,7 +295,7 @@ class HiveHelper {
     }
     // logger.d('get profile $val');
 
-    final Profile _profileObj =
+    final Profile profileObj =
         Profile.fromJson(jsonDecode(val) as Map<String, dynamic>);
 
     // logger.d(' ${_profileObj.layoutConfig?.toJson()}');
@@ -319,7 +320,7 @@ class HiveHelper {
     // );
     // return _profile;
 
-    return _profileObj;
+    return profileObj;
   }
 
   set profile(Profile? val) {

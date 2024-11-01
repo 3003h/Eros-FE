@@ -33,7 +33,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
         coverUrl = archiverTaskInfo.imgUrl,
         galleryUrl = archiverTaskInfo.galleryUrl,
         galleryGid = archiverTaskInfo.gid,
-        filePath = (archiverTaskInfo.savedDir?.isContentUri ?? false)
+        filePath = (archiverTaskInfo.savedDir == null ||
+                (archiverTaskInfo.savedDir?.isContentUri ?? false))
             ? archiverTaskInfo.safUri ?? ''
             : path.join(
                 archiverTaskInfo.savedDir ?? '', archiverTaskInfo.fileName),
@@ -208,6 +209,8 @@ class DownloadArchiverItem extends GetView<DownloadViewController> {
   }
 
   Future<void> _onTap(BuildContext context) async {
+    logger.d('<<>>>>>>> archiverTaskInfo: ${archiverTaskInfo.toJson()}');
+
     logger
         .d('<<>>>>>>> archiverTaskInfo.savedDir: ${archiverTaskInfo.savedDir}');
     logger.d(
