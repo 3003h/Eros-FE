@@ -223,15 +223,17 @@ class NavigatorUtil {
         fenix: true,
       );
 
-      //命名路由
+      // 不同显示模式下的跳转方式
       if (isLayoutLarge) {
+        //  大屏幕模式
+        // pushPageCtrl 前获取当前的tag
+        final curTag = pageCtrlTag;
         Get.find<ControllerTagService>().pushPageCtrl(gid: gid);
-
         logger.t('topSecondRoute: $topSecondRoute');
+        // 如果当前已经打开了画廊页面
         if (topSecondRoute == EHRoutes.galleryPage) {
           logger.d('topSecondRoute == EHRoutes.galleryPage');
-          final curTag = pageCtrlTag;
-          logger.t(
+          logger.d(
               'curTag $curTag  isReg:${Get.isRegistered<GalleryPageController>(tag: curTag)}');
           if (Get.isRegistered<GalleryPageController>(tag: curTag) &&
               Get.find<GalleryPageController>(tag: curTag).gState.gid == gid) {
@@ -260,6 +262,7 @@ class NavigatorUtil {
           );
         }
       } else {
+        // 一般模式
         Get.find<ControllerTagService>().pushPageCtrl(gid: gid);
         await Get.toNamed(
           EHRoutes.galleryPage,
