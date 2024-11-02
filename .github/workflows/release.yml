@@ -251,7 +251,7 @@ jobs:
       - name: Upload to release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios*/*.ipa,/tmp/artifacts/release-mac/*.zip"
+          artifacts: "/tmp/artifacts/release-apk/*.apk,/tmp/artifacts/release-ios*/*.ipa,/tmp/artifacts/release-*/*.zip"
           tag: ${{ github.ref_name }}
           bodyFile: changelog/v${{ env.app_version }}.md
           prerelease: contains(github.ref, 'pre')
