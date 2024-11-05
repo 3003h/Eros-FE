@@ -1615,7 +1615,7 @@ class _FutureThumblState extends State<FutureThumbl> {
                       image.thumbWidth! - 2,
                       image.thumbHeight! - 2,
                     ),
-                    onLoadComplet: () =>
+                    onLoadComplete: () =>
                         logic.handOnLoadCompletExtendedImageRect(
                             url: image.thumbUrl!),
                   );

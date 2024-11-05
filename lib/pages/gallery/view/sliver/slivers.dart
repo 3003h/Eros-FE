@@ -294,7 +294,7 @@ class ThumbHorizontalList extends StatelessWidget {
             galleryImageList: images,
             index: index,
             gid: gid,
-            onLoadComplet: () {
+            onLoadComplete: () {
               final thumbUrl = images[index].thumbUrl ?? '';
             },
             referer: referer,
@@ -309,11 +309,11 @@ class ThumbHorizontalList extends StatelessWidget {
 
 class ThumbSliverGrid extends StatelessWidget {
   const ThumbSliverGrid({
-    Key? key,
+    super.key,
     required this.images,
     required this.gid,
     this.referer,
-  }) : super(key: key);
+  });
   final List<GalleryImage> images;
   final String gid;
   final String? referer;
@@ -333,7 +333,7 @@ class ThumbSliverGrid extends StatelessWidget {
             galleryImageList: images,
             index: index,
             gid: gid,
-            onLoadComplet: () {
+            onLoadComplete: () {
               final thumbUrl = images[index].thumbUrl ?? '';
             },
             referer: referer,

@@ -176,25 +176,25 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
 
 class ExtendedImageRect extends StatefulWidget {
   const ExtendedImageRect({
-    Key? key,
+    super.key,
     required this.url,
     this.sourceRect,
     this.height,
     this.width,
     this.fit,
-    this.onLoadComplet,
+    this.onLoadComplete,
     this.httpHeaders,
-  }) : super(key: key);
+  });
   final String url;
   final Rect? sourceRect;
   final double? height;
   final double? width;
   final BoxFit? fit;
-  final VoidCallback? onLoadComplet;
+  final VoidCallback? onLoadComplete;
   final Map<String, String>? httpHeaders;
 
   @override
-  _ExtendedImageRectState createState() => _ExtendedImageRectState();
+  State<ExtendedImageRect> createState() => _ExtendedImageRectState();
 }
 
 class _ExtendedImageRectState extends State<ExtendedImageRect> {
@@ -216,7 +216,7 @@ class _ExtendedImageRectState extends State<ExtendedImageRect> {
 
   Future<ImageInfo> getImageInfo(ImageProvider imageProvider) {
     Completer<ImageInfo> completer = Completer();
-    imageProvider.resolve(ImageConfiguration()).addListener(
+    imageProvider.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(
         (ImageInfo info, bool _) {
           completer.complete(info);
@@ -226,16 +226,21 @@ class _ExtendedImageRectState extends State<ExtendedImageRect> {
     return completer.future;
   }
 
+  late Future<ImageInfo> imgFuture;
+
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
         cacheManager: imageCacheManager(ser: null),
         imageBuilder: (BuildContext context, ImageProvider imageProvider) {
+          imgFuture = getImageInfo(imageProvider);
           return FutureBuilder(
-              future: getImageInfo(imageProvider),
+              future: imgFuture,
               builder:
                   (BuildContext context, AsyncSnapshot<ImageInfo> snapshot) {
                 if (snapshot.data != null) {
+                  final imageInfo = snapshot.data!;
+                  logger.d('url: ${widget.url} imageInfo: $imageInfo');
                   return ExtendedRawImage(
                     image: snapshot.data!.image,
                     width: widget.sourceRect?.width,
@@ -276,11 +281,22 @@ class _ExtendedImageRectState extends State<ExtendedImageRect> {
           String url,
           dynamic error,
         ) {
-          return Container(
-            alignment: Alignment.center,
-            child: const Icon(
-              Icons.error,
-              color: Colors.red,
+          logger.e('error: ${error.runtimeType}, $error');
+          return GestureDetector(
+            onTap: () {
+              logger.d('reload');
+              setState(() {
+                imgFuture = getImageInfo(
+                  CachedNetworkImageProvider(widget.url, headers: _httpHeaders),
+                );
+              });
+            },
+            child: Container(
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
             ),
           );
         });

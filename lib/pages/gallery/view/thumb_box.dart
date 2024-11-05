@@ -8,22 +8,21 @@ import 'package:get/get.dart';
 
 class ThumbBox extends StatefulWidget {
   ThumbBox({
-    Key? key,
+    super.key,
     required this.index,
     required List<GalleryImage> galleryImageList,
     required this.gid,
-    this.onLoadComplet,
+    this.onLoadComplete,
     this.referer,
   })  : galleryImage = galleryImageList[index],
         hrefs = List<String>.from(
-            galleryImageList.map((GalleryImage e) => e.href).toList()),
-        super(key: key);
+            galleryImageList.map((GalleryImage e) => e.href).toList());
 
   final int index;
   final String gid;
   final List<String> hrefs;
   final GalleryImage galleryImage;
-  final VoidCallback? onLoadComplet;
+  final VoidCallback? onLoadComplete;
   final String? referer;
 
   @override
@@ -38,8 +37,9 @@ class _ThumbBoxState extends State<ThumbBox> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildImage() {
+    Widget buildImage() {
       if (widget.galleryImage.largeThumb ?? false) {
+        logger.t('ser: ${widget.galleryImage.ser} largeThumb');
         // 缩略大图
         Widget image = EhNetworkImage(
           httpHeaders: {if (widget.referer != null) 'Referer': widget.referer!},
@@ -65,6 +65,7 @@ class _ThumbBoxState extends State<ThumbBox> {
                 (widget.galleryImage.oriHeight ?? 400),
             child: image);
       } else {
+        // logger.d('ser: ${widget.galleryImage.ser} smallThumb');
         // 缩略小图 需要切割
         return AspectRatio(
           aspectRatio: (widget.galleryImage.thumbWidth ?? 300) /
@@ -84,7 +85,7 @@ class _ThumbBoxState extends State<ThumbBox> {
                 url: widget.galleryImage.thumbUrl!,
                 height: fittedSizes.destination.height,
                 width: fittedSizes.destination.width,
-                onLoadComplet: widget.onLoadComplet,
+                onLoadComplete: widget.onLoadComplete,
                 sourceRect: Rect.fromLTWH(
                   widget.galleryImage.offSet! + 1,
                   1.0,
@@ -159,38 +160,36 @@ class _ThumbBoxState extends State<ThumbBox> {
               });
         }
       },
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: Hero(
-                    tag: '${widget.index + 1}',
-                    createRectTween: (Rect? begin, Rect? end) {
-                      final tween =
-                          MaterialRectCenterArcTween(begin: begin, end: end);
-                      return tween;
-                    },
-                    child: _buildImage(),
-                  ),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Hero(
+                  tag: '${widget.index + 1}',
+                  createRectTween: (Rect? begin, Rect? end) {
+                    final tween =
+                        MaterialRectCenterArcTween(begin: begin, end: end);
+                    return tween;
+                  },
+                  child: buildImage(),
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                '${widget.galleryImage.ser}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey, context),
-                ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              '${widget.galleryImage.ser}',
+              style: TextStyle(
+                fontSize: 14,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey, context),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
