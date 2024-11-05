@@ -219,7 +219,9 @@ class _ExtendedImageRectState extends State<ExtendedImageRect> {
     imageProvider.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(
         (ImageInfo info, bool _) {
-          completer.complete(info);
+          if (!completer.isCompleted) {
+            completer.complete(info);
+          }
         },
       ),
     );
