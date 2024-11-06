@@ -37,6 +37,7 @@ jobs:
             artifact_path: build/app/outputs/apk/release/Eros-FE*.apk
           - target: ios
             os: macos-14
+            flutter_version: "3.x"
             artifact_name: release-ios
             artifact_path: build/**/Eros-FE*.ipa
           - target: macos
@@ -155,6 +156,11 @@ jobs:
         if: matrix.target == 'ios' && matrix.suffix == '-canvas'
         run: |
           sed -i '' '/FLTEnableImpeller/{n; s/true/false/;}' ios/Runner/Info.plist
+
+      - name: ios update dependencies
+        if: matrix.target == 'ios'
+        run: |
+          sed -i '' 's/flutter_inappwebview: .*/flutter_inappwebview: ^6.1.5/' pubspec.yaml
 
       - name: Flutter pub get
         run: |
