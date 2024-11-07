@@ -106,7 +106,7 @@ class GalleryCacheController extends GetxController {
       return;
     }
     final GalleryCache? _ori = await listenGalleryCache(gid, sync: false).first;
-    logger.d('_ori ${_ori?.toJson()}');
+    logger.t('_ori ${_ori?.toJson()}');
     final _time = DateTime.now().millisecondsSinceEpoch;
     if (_ori == null) {
       final _newCache = GalleryCache(gid: gid, lastIndex: index, time: _time);

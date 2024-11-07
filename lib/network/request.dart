@@ -44,7 +44,7 @@ Future<GalleryList?> getGallery({
   AdvanceSearch? advanceSearch,
   bool globalSearch = false,
 }) async {
-  final AdvanceSearchController _searchController = Get.find();
+  final AdvanceSearchController searchController = Get.find();
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
 
   logger.t('globalSearch $globalSearch');
@@ -106,13 +106,13 @@ Future<GalleryList?> getGallery({
       _params['advsearch'] = 1;
       _params.addAll(advanceSearch.param);
     }
-  } else if (globalSearch && _searchController.enableAdvance) {
+  } else if (globalSearch && searchController.enableAdvance) {
     _params['advsearch'] = 1;
-    _params.addAll(_searchController.advanceSearchMap);
+    _params.addAll(searchController.advanceSearchMap);
   }
 
   if (search != null && isFav) {
-    _params.addAll(_searchController.favSearchMap);
+    _params.addAll(searchController.favSearchMap);
   }
 
   logger.t('url:$_url $_params');

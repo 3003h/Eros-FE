@@ -240,9 +240,9 @@ class _ExtendedImageRectState extends State<ExtendedImageRect> {
               future: imgFuture,
               builder:
                   (BuildContext context, AsyncSnapshot<ImageInfo> snapshot) {
-                if (snapshot.data != null) {
-                  final imageInfo = snapshot.data!;
-                  logger.d('url: ${widget.url} imageInfo: $imageInfo');
+                final imageInfo = snapshot.data;
+                if (imageInfo != null) {
+                  logger.t('url: ${widget.url} imageInfo: $imageInfo');
                   return ExtendedRawImage(
                     image: snapshot.data!.image,
                     width: widget.sourceRect?.width,

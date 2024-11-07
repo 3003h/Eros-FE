@@ -533,7 +533,7 @@ class ViewExtController extends GetxController {
   }
 
   Future<String?> _getTaskDirPath(int gid) async {
-    logger.d('vState.realDirPath ${vState.realDirPath} gid:${vState.gid} $gid');
+    logger.t('vState.realDirPath ${vState.realDirPath} gid:${vState.gid} $gid');
     if (vState.gid == gid.toString() &&
         vState.realDirPath != null &&
         vState.realDirPath!.isNotEmpty) {
@@ -555,7 +555,7 @@ class ViewExtController extends GetxController {
     int itemSer, {
     bool changeSource = false,
   }) async {
-    logger.d('fetchImage ser:$itemSer');
+    logger.t('fetchImage ser:$itemSer');
 
     // 首先检查下载记录中是否有记录
     vState.dirPath ??=

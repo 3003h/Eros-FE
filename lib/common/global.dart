@@ -195,7 +195,7 @@ class Global {
     isFirstOpen =
         !(StorageUtil().getBool(STORAGE_DEVICE_ALREADY_OPEN_KEY) ?? false);
     if (isFirstOpen) {
-      creatDirs();
+      createDirs();
       StorageUtil().setBool(STORAGE_DEVICE_ALREADY_OPEN_KEY, true);
     }
 
@@ -223,7 +223,7 @@ class Global {
     Get.find<EhSettingService>().setProxy();
   }
 
-  static void creatDirs() {
+  static void createDirs() {
     final Directory downloadDir = Directory(path.join(appDocPath, 'Download'));
     downloadDir.create();
   }
