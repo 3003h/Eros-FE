@@ -15,16 +15,35 @@ class RateLimitConfig {
 }
 
 class TokenBucketInterceptor extends Interceptor {
-  TokenBucketInterceptor({
+  // 使用 factory 构造函数创建单例
+  factory TokenBucketInterceptor({
+    required int defaultMaxTokens,
+    required Duration defaultRefillDuration,
+    bool globalLimit = true,
+    Map<String, RateLimitConfig> hostConfig = const {},
+  }) {
+    return _instance ??= TokenBucketInterceptor._internal(
+      defaultMaxTokens: defaultMaxTokens,
+      defaultRefillDuration: defaultRefillDuration,
+      globalLimit: globalLimit,
+      hostConfig: hostConfig,
+    );
+  }
+
+  // 私有的命名构造函数
+  TokenBucketInterceptor._internal({
     required this.defaultMaxTokens,
     required this.defaultRefillDuration,
     this.globalLimit = true,
-    this.hostConfig = const {}, // 可选的特定主机配置
+    this.hostConfig = const {},
   }) : _globalAvailableTokens = defaultMaxTokens {
     if (globalLimit) {
       _startGlobalRefillTimer();
     }
   }
+
+  static TokenBucketInterceptor? _instance;
+
   final int defaultMaxTokens; // 默认令牌桶最大容量
   final Duration defaultRefillDuration; // 默认令牌补充时间
   final bool globalLimit; // 是否全局限制
@@ -43,6 +62,7 @@ class TokenBucketInterceptor extends Interceptor {
     _globalRefillTimer = Timer.periodic(defaultRefillDuration, (_) {
       if (_globalAvailableTokens < defaultMaxTokens) {
         _globalAvailableTokens++;
+        logger.d('补充全局令牌, 剩余 $_globalAvailableTokens');
       }
     });
   }
@@ -53,6 +73,7 @@ class TokenBucketInterceptor extends Interceptor {
     _hostRefillTimers[host] = Timer.periodic(refillDuration, (_) {
       if (_hostAvailableTokens[host]! < maxTokens) {
         _hostAvailableTokens[host] = _hostAvailableTokens[host]! + 1;
+        logger.d('补充 $host 令牌, 剩余 ${_hostAvailableTokens[host]}');
       }
     });
   }

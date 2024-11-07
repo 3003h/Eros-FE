@@ -15,6 +15,7 @@ import 'package:eros_fe/const/const.dart';
 import 'package:eros_fe/network/app_dio/proxy.dart';
 import 'package:eros_fe/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:eros_fe/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
+import 'package:eros_fe/network/dio_interceptor/rate_limit/rate_limit_interceptor.dart';
 import 'package:eros_fe/network/dio_interceptor/rate_limit/token_bucket_nterceptor.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:firebase_performance_dio/firebase_performance_dio.dart';
@@ -91,28 +92,61 @@ class AppDio with DioMixin implements Dio {
 
     interceptors.add(EhCookieInterceptor());
 
-    // 限频
+    // 限频 普通
+    interceptors.add(RateLimitInterceptor(
+      rateLimitInterval: const Duration(milliseconds: 500),
+      globalLimit: false,
+    ));
+
+    // 限频 桶令牌
     interceptors.add(
       TokenBucketInterceptor(
-        defaultMaxTokens: 5, // 默认令牌桶最大容量
+        defaultMaxTokens: 4, // 默认令牌桶最大容量
         defaultRefillDuration: const Duration(seconds: 1), // 默认令牌补充间隔时间
         globalLimit: false, // 是否全局限制
         hostConfig: {
           'ehgt.org': RateLimitConfig(
             maxTokens: 5,
-            refillDuration: const Duration(milliseconds: 300),
+            refillDuration: const Duration(milliseconds: 500),
+          ),
+          's.exhentai.org': RateLimitConfig(
+            maxTokens: 5,
+            refillDuration: const Duration(milliseconds: 500),
           ),
           'e-hentai.org': RateLimitConfig(
-            maxTokens: 3,
+            maxTokens: 5,
             refillDuration: const Duration(seconds: 1),
           ),
           'exhentai.org': RateLimitConfig(
-            maxTokens: 3,
+            maxTokens: 5,
             refillDuration: const Duration(seconds: 1),
           ),
         },
       ),
     );
+
+    // 限频 滑动窗口
+    // interceptors.add(
+    //   SlidingWindowInterceptor(
+    //     defaultMaxRequests: 3, // 默认时间窗口内最大请求数
+    //     defaultWindowDuration: const Duration(seconds: 2), // 默认时间窗口时长
+    //     globalLimit: true, // false表示按主机限流
+    //     hostConfig: {
+    //       'ehgt.org': SlidingWindowConfig(
+    //         maxRequests: 4,
+    //         windowDuration: const Duration(milliseconds: 800),
+    //       ),
+    //       'e-hentai.org': SlidingWindowConfig(
+    //         maxRequests: 3,
+    //         windowDuration: const Duration(seconds: 1),
+    //       ),
+    //       'exhentai.org': SlidingWindowConfig(
+    //         maxRequests: 3,
+    //         windowDuration: const Duration(seconds: 1),
+    //       ),
+    //     },
+    //   ),
+    // );
 
     // if (kDebugMode) {
     //   interceptors.add(LogInterceptor(

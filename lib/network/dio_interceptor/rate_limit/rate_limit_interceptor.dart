@@ -4,8 +4,25 @@ import 'dart:collection';
 import 'package:dio/dio.dart';
 
 class RateLimitInterceptor extends Interceptor {
-  RateLimitInterceptor(
-      {required this.rateLimitInterval, this.globalLimit = true});
+  // 使用 factory 构造函数创建单例
+  factory RateLimitInterceptor({
+    required Duration rateLimitInterval,
+    bool globalLimit = true,
+  }) {
+    return _instance ??= RateLimitInterceptor._internal(
+      rateLimitInterval: rateLimitInterval,
+      globalLimit: globalLimit,
+    );
+  }
+
+  // 私有的命名构造函数
+  RateLimitInterceptor._internal({
+    required this.rateLimitInterval,
+    this.globalLimit = true,
+  });
+
+  static RateLimitInterceptor? _instance;
+
   final Duration rateLimitInterval; // 请求间隔时间
   final bool globalLimit; // 是否为全局限频
   DateTime _lastGlobalRequestTime =
@@ -60,7 +77,9 @@ class RateLimitInterceptor extends Interceptor {
 
   // 处理队列中的请求
   void _processQueue() {
-    if (_isProcessingQueue) return;
+    if (_isProcessingQueue) {
+      return;
+    }
     _isProcessingQueue = true;
 
     Timer.periodic(rateLimitInterval, (timer) {
