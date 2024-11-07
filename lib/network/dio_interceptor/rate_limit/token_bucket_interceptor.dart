@@ -4,18 +4,18 @@ import 'package:dio/dio.dart';
 import 'package:eros_fe/index.dart';
 
 class RateLimitConfig {
-  // 令牌补充间隔时间
-
   RateLimitConfig({
     required this.maxTokens,
     required this.refillDuration,
+    this.isExactMatch = false,
   });
+
   final int maxTokens; // 令牌桶的最大容量
-  final Duration refillDuration;
+  final Duration refillDuration; // 令牌补充间隔时间
+  final bool isExactMatch; // 是否为全匹配
 }
 
 class TokenBucketInterceptor extends Interceptor {
-  // 使用 factory 构造函数创建单例
   factory TokenBucketInterceptor({
     required int defaultMaxTokens,
     required Duration defaultRefillDuration,
@@ -30,7 +30,6 @@ class TokenBucketInterceptor extends Interceptor {
     );
   }
 
-  // 私有的命名构造函数
   TokenBucketInterceptor._internal({
     required this.defaultMaxTokens,
     required this.defaultRefillDuration,
@@ -44,11 +43,9 @@ class TokenBucketInterceptor extends Interceptor {
 
   static TokenBucketInterceptor? _instance;
 
-  final int defaultMaxTokens; // 默认令牌桶最大容量
-  final Duration defaultRefillDuration; // 默认令牌补充时间
-  final bool globalLimit; // 是否全局限制
-
-  // 特定主机配置
+  final int defaultMaxTokens;
+  final Duration defaultRefillDuration;
+  final bool globalLimit;
   final Map<String, RateLimitConfig> hostConfig;
 
   int _globalAvailableTokens;
@@ -56,24 +53,30 @@ class TokenBucketInterceptor extends Interceptor {
 
   final Map<String, int> _hostAvailableTokens = {};
   final Map<String, Timer> _hostRefillTimers = {};
+  final Map<String, int> _groupAvailableTokens = {};
 
-  // 启动全局限频令牌桶
   void _startGlobalRefillTimer() {
     _globalRefillTimer = Timer.periodic(defaultRefillDuration, (_) {
       if (_globalAvailableTokens < defaultMaxTokens) {
         _globalAvailableTokens++;
-        logger.d('补充全局令牌, 剩余 $_globalAvailableTokens');
       }
     });
   }
 
-  // 启动按主机限频令牌桶
   void _startHostRefillTimer(
       String host, int maxTokens, Duration refillDuration) {
     _hostRefillTimers[host] = Timer.periodic(refillDuration, (_) {
       if (_hostAvailableTokens[host]! < maxTokens) {
         _hostAvailableTokens[host] = _hostAvailableTokens[host]! + 1;
-        logger.d('补充 $host 令牌, 剩余 ${_hostAvailableTokens[host]}');
+      }
+    });
+  }
+
+  void _startGroupRefillTimer(
+      String group, int maxTokens, Duration refillDuration) {
+    _hostRefillTimers[group] = Timer.periodic(refillDuration, (_) {
+      if (_groupAvailableTokens[group]! < maxTokens) {
+        _groupAvailableTokens[group] = _groupAvailableTokens[group]! + 1;
       }
     });
   }
@@ -82,8 +85,6 @@ class TokenBucketInterceptor extends Interceptor {
   Future<void> onRequest(
       RequestOptions options, RequestInterceptorHandler handler) async {
     final host = options.uri.host;
-
-    logger.d('host: $host');
 
     if (globalLimit) {
       await _acquireTokenGlobally();
@@ -94,40 +95,65 @@ class TokenBucketInterceptor extends Interceptor {
     handler.next(options);
   }
 
-  // 获取全局限频令牌
   Future<void> _acquireTokenGlobally() async {
     while (_globalAvailableTokens <= 0) {
-      logger.d('等待令牌补充');
+      logger.d('等待全局令牌补充');
       await Future.delayed(defaultRefillDuration);
     }
     _globalAvailableTokens--;
-    logger.d('获取全局令牌成功, 剩余 $_globalAvailableTokens');
+    logger.t('获取全局令牌, 剩余 $_globalAvailableTokens');
   }
 
-  // 获取按主机限频令牌
   Future<void> _acquireTokenPerHost(String host) async {
-    final config = hostConfig[host] ??
-        RateLimitConfig(
-          maxTokens: defaultMaxTokens,
-          refillDuration: defaultRefillDuration,
-        );
+    final config = _getHostConfig(host);
 
-    // 初始化主机的令牌桶及定时器
-    if (!_hostAvailableTokens.containsKey(host)) {
-      _hostAvailableTokens[host] = config.maxTokens;
-      _startHostRefillTimer(host, config.maxTokens, config.refillDuration);
-    }
+    if (config.isExactMatch) {
+      if (!_hostAvailableTokens.containsKey(host)) {
+        _hostAvailableTokens[host] = config.maxTokens;
+        _startHostRefillTimer(host, config.maxTokens, config.refillDuration);
+      }
 
-    // 检查令牌
-    while (_hostAvailableTokens[host]! <= 0) {
-      logger.d('等待 $host 令牌补充');
-      await Future.delayed(config.refillDuration);
+      while (_hostAvailableTokens[host]! <= 0) {
+        logger.d('等待令牌补充 $host');
+        await Future.delayed(config.refillDuration);
+      }
+      _hostAvailableTokens[host] = _hostAvailableTokens[host]! - 1;
+      logger.d('获取令牌 $host, 剩余 ${_hostAvailableTokens[host]}');
+    } else {
+      final group = hostConfig.keys.firstWhere(
+          (pattern) => RegExp(pattern).hasMatch(host),
+          orElse: () => host);
+      if (!_groupAvailableTokens.containsKey(group)) {
+        _groupAvailableTokens[group] = config.maxTokens;
+        _startGroupRefillTimer(group, config.maxTokens, config.refillDuration);
+      }
+
+      while (_groupAvailableTokens[group]! <= 0) {
+        logger.d('等待令牌补充 $group');
+        await Future.delayed(config.refillDuration);
+      }
+      _groupAvailableTokens[group] = _groupAvailableTokens[group]! - 1;
+      logger.t('获取令牌 $group, 剩余 ${_groupAvailableTokens[group]}');
     }
-    _hostAvailableTokens[host] = _hostAvailableTokens[host]! - 1;
-    logger.d('获取 $host 令牌成功, 剩余 ${_hostAvailableTokens[host]}');
   }
 
-  // 清理所有定时器
+  RateLimitConfig _getHostConfig(String host) {
+    logger.t('获取 $host 的限频配置');
+    for (final entry in hostConfig.entries) {
+      final pattern = entry.key;
+      final config = entry.value;
+      if (config.isExactMatch && pattern == host) {
+        return config;
+      } else if (!config.isExactMatch && RegExp(pattern).hasMatch(host)) {
+        return config;
+      }
+    }
+    return RateLimitConfig(
+      maxTokens: defaultMaxTokens,
+      refillDuration: defaultRefillDuration,
+    );
+  }
+
   void dispose() {
     _globalRefillTimer?.cancel();
     for (final timer in _hostRefillTimers.values) {

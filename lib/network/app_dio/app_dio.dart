@@ -16,7 +16,7 @@ import 'package:eros_fe/network/app_dio/proxy.dart';
 import 'package:eros_fe/network/dio_interceptor/domain_fronting/domain_fronting.dart';
 import 'package:eros_fe/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_interceptor.dart';
 import 'package:eros_fe/network/dio_interceptor/rate_limit/rate_limit_interceptor.dart';
-import 'package:eros_fe/network/dio_interceptor/rate_limit/token_bucket_nterceptor.dart';
+import 'package:eros_fe/network/dio_interceptor/rate_limit/token_bucket_interceptor.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:firebase_performance_dio/firebase_performance_dio.dart';
 import 'package:get/get.dart' hide Response;
@@ -94,25 +94,29 @@ class AppDio with DioMixin implements Dio {
 
     // 限频 普通
     interceptors.add(RateLimitInterceptor(
-      rateLimitInterval: const Duration(milliseconds: 500),
+      rateLimitInterval: const Duration(milliseconds: 200),
       globalLimit: false,
     ));
+
+    // 缩略图请求的限频配置
+    final thumbRateLimitConfig = RateLimitConfig(
+      maxTokens: 5,
+      refillDuration: const Duration(milliseconds: 600),
+    );
 
     // 限频 桶令牌
     interceptors.add(
       TokenBucketInterceptor(
-        defaultMaxTokens: 4, // 默认令牌桶最大容量
-        defaultRefillDuration: const Duration(seconds: 1), // 默认令牌补充间隔时间
+        defaultMaxTokens: 5, // 默认令牌桶最大容量
+        defaultRefillDuration: const Duration(seconds: 500), // 默认令牌补充间隔时间
         globalLimit: false, // 是否全局限制
         hostConfig: {
-          'ehgt.org': RateLimitConfig(
-            maxTokens: 5,
-            refillDuration: const Duration(milliseconds: 500),
-          ),
-          's.exhentai.org': RateLimitConfig(
-            maxTokens: 5,
-            refillDuration: const Duration(milliseconds: 500),
-          ),
+          // 缩略图 详情页
+          r'^(?!-)[a-zA-Z0-9-]{1,63}(?<!-).hath.network$': thumbRateLimitConfig,
+          // 缩略图
+          'ehgt.org': thumbRateLimitConfig,
+          // 缩略图 (封面?)
+          's.exhentai.org': thumbRateLimitConfig,
           'e-hentai.org': RateLimitConfig(
             maxTokens: 5,
             refillDuration: const Duration(seconds: 1),
