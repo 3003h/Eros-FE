@@ -16,6 +16,7 @@ import '../../network/app_dio/dio_http_cli.dart';
 import '../../network/app_dio/http_response.dart';
 import '../../network/app_dio/http_transformer.dart';
 
+/// 实现 Dio 的 FileService， 用于 Flutter Cache Manager
 class DioFileService extends FileService {
   DioFileService({this.ser});
   final int? ser;
