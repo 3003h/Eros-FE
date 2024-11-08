@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:eros_fe/common/global.dart';
 import 'package:eros_fe/common/service/dns_service.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
@@ -173,17 +172,17 @@ class AppDio with DioMixin implements Dio {
     ));
 
     // RetryInterceptor
-    interceptors.add(RetryInterceptor(
-      dio: this,
-      logPrint: logger.t, // specify log function (optional)
-      retries: 3, // retry count (optional)
-      retryDelays: const [
-        // set delays between retries (optional)
-        Duration(seconds: 1), // wait 1 sec before first retry
-        Duration(seconds: 2), // wait 2 sec before second retry
-        Duration(seconds: 3), // wait 3 sec before third retry
-      ],
-    ));
+    // interceptors.add(RetryInterceptor(
+    //   dio: this,
+    //   logPrint: logger.t, // specify log function (optional)
+    //   retries: 3, // retry count (optional)
+    //   retryDelays: const [
+    //     // set delays between retries (optional)
+    //     Duration(seconds: 1), // wait 1 sec before first retry
+    //     Duration(seconds: 2), // wait 2 sec before second retry
+    //     Duration(seconds: 3), // wait 3 sec before third retry
+    //   ],
+    // ));
 
     if (dioConfig?.interceptors?.isNotEmpty ?? false) {
       interceptors.addAll(interceptors);
