@@ -100,8 +100,8 @@ class AppDio with DioMixin implements Dio {
 
     // 缩略图请求的限频配置
     final thumbRateLimitConfig = RateLimitConfig(
-      maxTokens: 5,
-      refillDuration: const Duration(milliseconds: 600),
+      maxTokens: 10,
+      refillDuration: const Duration(milliseconds: 500),
     );
 
     // 限频 桶令牌

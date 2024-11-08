@@ -97,7 +97,7 @@ class TokenBucketInterceptor extends Interceptor {
 
   Future<void> _acquireTokenGlobally() async {
     while (_globalAvailableTokens <= 0) {
-      logger.d('等待全局令牌补充');
+      logger.w('等待全局令牌补充');
       await Future.delayed(defaultRefillDuration);
     }
     _globalAvailableTokens--;
@@ -114,7 +114,7 @@ class TokenBucketInterceptor extends Interceptor {
       }
 
       while (_hostAvailableTokens[host]! <= 0) {
-        logger.d('等待令牌补充 $host');
+        logger.w('等待令牌补充 $host');
         await Future.delayed(config.refillDuration);
       }
       _hostAvailableTokens[host] = _hostAvailableTokens[host]! - 1;
@@ -129,7 +129,7 @@ class TokenBucketInterceptor extends Interceptor {
       }
 
       while (_groupAvailableTokens[group]! <= 0) {
-        logger.d('等待令牌补充 $group');
+        logger.w('等待令牌补充 $group');
         await Future.delayed(config.refillDuration);
       }
       _groupAvailableTokens[group] = _groupAvailableTokens[group]! - 1;
