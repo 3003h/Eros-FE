@@ -49,10 +49,24 @@ class PHashImageListPage extends GetView<ImageBlockController> {
 }
 
 class ImageHideItem extends StatelessWidget {
-  const ImageHideItem({Key? key, required this.imageHide, this.onDelete})
-      : super(key: key);
+  ImageHideItem({
+    super.key,
+    required this.imageHide,
+    this.onDelete,
+  }) : sourceRect = (imageHide.left != null &&
+                imageHide.top != null &&
+                imageHide.width != null &&
+                imageHide.height != null)
+            ? Rect.fromLTWH(
+                imageHide.left!.toDouble(),
+                imageHide.top!.toDouble(),
+                imageHide.width!.toDouble(),
+                imageHide.height!.toDouble(),
+              )
+            : null;
   final ImageHide imageHide;
   final VoidCallback? onDelete;
+  final Rect? sourceRect;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +85,10 @@ class ImageHideItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                     child: SizedBox(
                       width: 50,
-                      child: EhNetworkImage(imageUrl: imageHide.imageUrl ?? ''),
+                      child: EhNetworkImage(
+                        imageUrl: imageHide.imageUrl ?? '',
+                        sourceRect: sourceRect,
+                      ),
                     ),
                   ),
                 ),

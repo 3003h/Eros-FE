@@ -549,6 +549,7 @@ class ImageWithHide extends StatefulWidget {
     required this.ser,
     this.checkPHashHide = false,
     this.checkQRCodeHide = false,
+    this.sourceRect,
   });
   final String url;
   final Widget child;
@@ -556,6 +557,8 @@ class ImageWithHide extends StatefulWidget {
 
   final bool checkPHashHide;
   final bool checkQRCodeHide;
+
+  final Rect? sourceRect;
 
   @override
   State<ImageWithHide> createState() => _ImageWithHideState();

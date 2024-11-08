@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eros_fe/common/controller/image_block_controller.dart';
 import 'package:eros_fe/index.dart';
 import 'package:eros_fe/network/app_dio/dio_file_service.dart';
+import 'package:eros_fe/widget/image/rect_image_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,7 @@ class EhCachedNetworkImage extends StatelessWidget {
     this.onHideFlagChanged,
     this.ser,
     this.blurHash = false,
+    this.sourceRect,
   });
 
   final String imageUrl;
@@ -47,23 +49,51 @@ class EhCachedNetworkImage extends StatelessWidget {
 
   final int? ser;
 
+  final Rect? sourceRect;
+
   final ImageBlockController imageHideController = Get.find();
 
   Future<bool> _future() async {
-    if (checkPHashHide && checkQRCodeHide) {
-      return await imageHideController.checkPHashHide(imageUrl) ||
-          await imageHideController.checkQRCodeHide(imageUrl);
-    }
+    // if (checkPHashHide && checkQRCodeHide) {
+    //   return await imageHideController.checkPHashHide(
+    //         imageUrl,
+    //         sourceRect: sourceRect,
+    //       ) ||
+    //       await imageHideController.checkQRCodeHide(
+    //         imageUrl,
+    //         sourceRect: sourceRect,
+    //       );
+    // }
+    // if (checkPHashHide) {
+    //   return await imageHideController.checkPHashHide(imageUrl,
+    //       sourceRect: sourceRect);
+    // } else {
+    //   return await imageHideController.checkQRCodeHide(imageUrl,
+    //       sourceRect: sourceRect);
+    // }
+    bool result = false;
     if (checkPHashHide) {
-      return await imageHideController.checkPHashHide(imageUrl);
-    } else {
-      return await imageHideController.checkQRCodeHide(imageUrl);
+      result = await imageHideController.checkPHashHide(imageUrl,
+          sourceRect: sourceRect);
     }
+    if (checkQRCodeHide) {
+      result = await imageHideController.checkQRCodeHide(imageUrl,
+          sourceRect: sourceRect);
+    }
+    return result;
   }
 
   ImageWidgetBuilder get imageWidgetBuilder => (context, imageProvider) {
         if (blurHash) {
           imageProvider = BlurhashTheImage(imageProvider);
+        }
+
+        if (sourceRect != null) {
+          logger.t('sourceRect $sourceRect');
+          imageProvider = RectImageProvider(
+            imageProvider,
+            sourceRect!,
+          );
         }
 
         final octoImage = OctoImage(
@@ -108,20 +138,20 @@ class EhCachedNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _httpHeaders = {
+    final imgHttpHeaders = {
       'Cookie': Global.profile.user.cookie,
       'Host': Uri.parse(imageUrl).host,
       'User-Agent': EHConst.CHROME_USER_AGENT,
       'Accept-Encoding': 'gzip, deflate, br'
     };
     if (httpHeaders != null) {
-      _httpHeaders.addAll(httpHeaders!);
+      imgHttpHeaders.addAll(httpHeaders!);
     }
 
     final image = CachedNetworkImage(
       cacheManager: imageCacheManager(ser: ser),
       imageBuilder: imageWidgetBuilder,
-      httpHeaders: _httpHeaders,
+      httpHeaders: imgHttpHeaders,
       width: width,
       height: height,
       fit: fit,

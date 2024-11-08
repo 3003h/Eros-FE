@@ -11,12 +11,11 @@ import 'saf_image_provider.dart';
 class ExtendedSafImageProvider extends SafUriImage
     with ExtendedImageProvider<SafUriImage> {
   const ExtendedSafImageProvider(
-    Uri uri, {
-    double scale = 1.0,
+    super.uri, {
+    super.scale,
     this.cacheRawData = false,
     this.imageCacheName,
-  })  : assert(!kIsWeb, 'not support on web'),
-        super(uri, scale: scale);
+  }) : assert(!kIsWeb, 'not support on web');
 
   /// Whether cache raw data if you need to get raw data directly.
   /// For example, we need raw image data to edit,

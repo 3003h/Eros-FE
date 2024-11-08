@@ -38,6 +38,44 @@ class _ThumbBoxState extends State<ThumbBox> {
   @override
   Widget build(BuildContext context) {
     Widget buildImage() {
+      Widget image = EhNetworkImage(
+        httpHeaders: {if (widget.referer != null) 'Referer': widget.referer!},
+        imageUrl: widget.galleryImage.thumbUrl ?? '',
+        progressIndicatorBuilder: (_, __, ___) {
+          return const CupertinoActivityIndicator();
+        },
+        fit: BoxFit.cover,
+        checkHide: true,
+        onHideFlagChanged: (isHideImage) {
+          if (isHideImage) {
+            logger.d('hide ser: ${widget.galleryImage.ser} val:$isHideImage');
+          }
+          _galleryPageController.uptImageBySer(
+            ser: widget.galleryImage.ser,
+            imageCallback: (image) => image.copyWith(hide: isHideImage.oN),
+          );
+        },
+        sourceRect: widget.galleryImage.offSet != null
+            ? Rect.fromLTWH(
+                widget.galleryImage.offSet! + 1,
+                1.0,
+                widget.galleryImage.thumbWidth! - 2,
+                widget.galleryImage.thumbHeight! - 2,
+              )
+            : null,
+      );
+
+      return AspectRatio(
+          aspectRatio: (widget.galleryImage.thumbWidth ??
+                  widget.galleryImage.oriWidth ??
+                  300) /
+              (widget.galleryImage.thumbHeight ??
+                  widget.galleryImage.oriHeight ??
+                  400),
+          child: image);
+    }
+
+    Widget buildImageOld() {
       if (widget.galleryImage.largeThumb ?? false) {
         logger.t('ser: ${widget.galleryImage.ser} largeThumb');
         // 缩略大图
@@ -66,7 +104,37 @@ class _ThumbBoxState extends State<ThumbBox> {
             child: image);
       } else {
         // logger.d('ser: ${widget.galleryImage.ser} smallThumb');
-        // 缩略小图 需要切割
+        // 缩略连续图 需要切割
+        Widget image = EhNetworkImage(
+          httpHeaders: {if (widget.referer != null) 'Referer': widget.referer!},
+          imageUrl: widget.galleryImage.thumbUrl ?? '',
+          progressIndicatorBuilder: (_, __, ___) {
+            return const CupertinoActivityIndicator();
+          },
+          fit: BoxFit.cover,
+          checkHide: true,
+          onHideFlagChanged: (isHideImage) {
+            if (isHideImage) {
+              logger.d('hide ser: ${widget.galleryImage.ser} val:$isHideImage');
+            }
+            _galleryPageController.uptImageBySer(
+              ser: widget.galleryImage.ser,
+              imageCallback: (image) => image.copyWith(hide: isHideImage.oN),
+            );
+          },
+          sourceRect: Rect.fromLTWH(
+            widget.galleryImage.offSet! + 1,
+            1.0,
+            widget.galleryImage.thumbWidth! - 2,
+            widget.galleryImage.thumbHeight! - 2,
+          ),
+        );
+
+        return AspectRatio(
+            aspectRatio: (widget.galleryImage.thumbWidth ?? 300) /
+                (widget.galleryImage.thumbHeight ?? 400),
+            child: image);
+
         return AspectRatio(
           aspectRatio: (widget.galleryImage.thumbWidth ?? 300) /
               (widget.galleryImage.thumbHeight ?? 400),
@@ -106,59 +174,72 @@ class _ThumbBoxState extends State<ThumbBox> {
             widget.galleryImage.ser - 1, widget.gid);
       },
       onLongPress: () {
-        if (widget.galleryImage.largeThumb ?? false) {
-          showCupertinoModalPopup(
-              context: context,
-              builder: (context) {
-                return CupertinoActionSheet(
-                  message: Column(
-                    children: [
-                      // Text(galleryImage.thumbUrl ?? ''),
-                      FutureBuilder<BigInt>(
-                          future: imageHideController.calculatePHash(
-                              widget.galleryImage.thumbUrl ?? ''),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                !snapshot.hasError &&
-                                snapshot.data != null) {
-                              return SelectableText(
-                                  'hash: ${snapshot.data!.toRadixString(16)}');
-                            } else {
-                              return const CupertinoActivityIndicator();
-                            }
-                          }),
-                    ],
-                  ),
-                  title: Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(6),
-                      child: Container(
-                        constraints: const BoxConstraints(maxHeight: 100),
-                        child: EhNetworkImage(
-                            imageUrl: widget.galleryImage.thumbUrl ?? ''),
+        Rect? sourceRect;
+        if (widget.galleryImage.offSet != null) {
+          sourceRect = Rect.fromLTWH(
+            widget.galleryImage.offSet! + 1,
+            1.0,
+            widget.galleryImage.thumbWidth! - 2,
+            widget.galleryImage.thumbHeight! - 2,
+          );
+        }
+        showCupertinoModalPopup(
+            context: context,
+            builder: (context) {
+              return CupertinoActionSheet(
+                message: Column(
+                  children: [
+                    // Text(galleryImage.thumbUrl ?? ''),
+                    FutureBuilder<BigInt>(
+                        future: imageHideController.calculatePHash(
+                          widget.galleryImage.thumbUrl ?? '',
+                          sourceRect: sourceRect,
+                        ),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              !snapshot.hasError &&
+                              snapshot.data != null) {
+                            return SelectableText(
+                                'hash: ${snapshot.data!.toRadixString(16)}');
+                          } else {
+                            return const CupertinoActivityIndicator();
+                          }
+                        }),
+                  ],
+                ),
+                title: Center(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Container(
+                      constraints: const BoxConstraints(maxHeight: 100),
+                      child: EhNetworkImage(
+                        imageUrl: widget.galleryImage.thumbUrl ?? '',
+                        sourceRect: sourceRect,
                       ),
                     ),
                   ),
-                  cancelButton: CupertinoActionSheetAction(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: Text(L10n.of(context).cancel)),
-                  actions: [
-                    CupertinoActionSheetAction(
-                      onPressed: () async {
-                        Get.back();
-                        await imageHideController.addCustomImageHide(
-                            widget.galleryImage.thumbUrl ?? '');
-                        setState(() {});
-                      },
-                      child: Text(L10n.of(context).add_to_phash_block_list),
-                    ),
-                  ],
-                );
-              });
-        }
+                ),
+                cancelButton: CupertinoActionSheetAction(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: Text(L10n.of(context).cancel)),
+                actions: [
+                  CupertinoActionSheetAction(
+                    onPressed: () async {
+                      Get.back();
+                      await imageHideController.addCustomImageHide(
+                        widget.galleryImage.thumbUrl ?? '',
+                        sourceRect: sourceRect,
+                      );
+                      setState(() {});
+                    },
+                    child: Text(L10n.of(context).add_to_phash_block_list),
+                  ),
+                ],
+              );
+            });
       },
       child: Column(
         children: <Widget>[

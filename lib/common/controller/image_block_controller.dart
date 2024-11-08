@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' hide Image;
 
 import 'package:collection/collection.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
@@ -7,6 +8,7 @@ import 'package:eros_fe/utils/p_hash/phash_helper.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_barcode_scanning/google_mlkit_barcode_scanning.dart';
+import 'package:image/image.dart';
 
 import '../../index.dart';
 
@@ -27,7 +29,7 @@ class ImageBlockController extends GetxController {
     }, time: const Duration(seconds: 2));
   }
 
-  Future<void> addCustomImageHide(String imageUrl) async {
+  Future<void> addCustomImageHide(String imageUrl, {Rect? sourceRect}) async {
     if (customBlockList.any((e) => e.imageUrl == imageUrl)) {
       return;
     }
@@ -41,18 +43,41 @@ class ImageBlockController extends GetxController {
         headers: {'cookie': Global.profile.user.cookie});
 
     final data = imageFile.readAsBytesSync();
-    final pHash = phash.calculatePHash(phash.getValidImage(data));
+    final image = phash.getValidImage(data);
+
+    // 如果提供了 sourceRect 参数，则裁剪图像
+    Image processedImage = image;
+    if (sourceRect != null) {
+      processedImage = copyCrop(
+        image,
+        x: sourceRect.left.toInt(),
+        y: sourceRect.top.toInt(),
+        width: sourceRect.width.toInt(),
+        height: sourceRect.height.toInt(),
+      );
+    }
+
+    final pHash = phash.calculatePHash(processedImage);
     if (customBlockList.any((e) => e.pHash == pHash.toRadixString(16))) {
       return;
     }
 
     customBlockList.insert(
-        0, ImageHide(pHash: pHash.toRadixString(16), imageUrl: imageUrl));
+        0,
+        ImageHide(
+          pHash: pHash.toRadixString(16),
+          imageUrl: imageUrl,
+          left: sourceRect?.left.toInt(),
+          top: sourceRect?.top.toInt(),
+          width: sourceRect?.width.toInt(),
+          height: sourceRect?.height.toInt(),
+        ));
   }
 
-  Future<bool> checkPHashHide(String url) async {
-    BigInt? hash = await calculatePHash(url);
-    loggerSimple.v('checkHide url:$url hash:${hash.toRadixString(16)}');
+  Future<bool> checkPHashHide(String url, {Rect? sourceRect}) async {
+    BigInt? hash = await calculatePHash(url, sourceRect: sourceRect);
+    // BigInt? hash = BigInt.one;
+    loggerSimple.t('checkHide url:$url hash:${hash.toRadixString(16)}');
 
     return customBlockList.any(
       (e) {
@@ -67,8 +92,8 @@ class ImageBlockController extends GetxController {
     );
   }
 
-  Future<bool> checkQRCodeHide(String url) async {
-    final barcode = await scanQRCodeFromUrl(url);
+  Future<bool> checkQRCodeHide(String url, {Rect? sourceRect}) async {
+    final barcode = await scanQRCodeFromUrl(url, sourceRect: sourceRect);
     if (barcode != null) {
       logger.d('barcode ${barcode.type} ${barcode.displayValue} , url: $url');
     }
@@ -76,22 +101,37 @@ class ImageBlockController extends GetxController {
     return barcode?.type == BarcodeType.url;
   }
 
-  Future<BigInt> calculatePHash(String url) async {
+  Future<BigInt> calculatePHash(String url, {Rect? sourceRect}) async {
     logger.t('calculatePHash url:$url');
     BigInt? hash;
-    if (pHashMap.containsKey(url)) {
-      hash = pHashMap[url]!;
+
+    late final String key;
+    if (sourceRect != null) {
+      key =
+          '$url#${sourceRect.left}_${sourceRect.top}_${sourceRect.width}_${sourceRect.height}';
+    } else {
+      key = url;
+    }
+
+    if (pHashMap.containsKey(key)) {
+      hash = pHashMap[key]!;
     }
 
     if (hash == null) {
-      hash = await pHashHelper.calculatePHashFromUrl(url);
-      pHashMap[url] = hash;
+      hash = await pHashHelper.calculatePHashFromUrl(
+        url,
+        sourceRect: sourceRect,
+      );
+      pHashMap[key] = hash;
     }
 
     return hash;
   }
 
-  Future<Barcode?> scanQRCodeFromUrl(String imageUrl) async {
+  Future<Barcode?> scanQRCodeFromUrl(
+    String imageUrl, {
+    Rect? sourceRect,
+  }) async {
     File? imageFile;
     if (await cachedImageExists(imageUrl)) {
       imageFile = await getCachedImageFile(imageUrl);

@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 
 class NetworkExtendedImage extends StatefulWidget {
   const NetworkExtendedImage({
-    Key? key,
+    super.key,
     required this.url,
     this.height,
     this.width,
@@ -26,7 +26,8 @@ class NetworkExtendedImage extends StatefulWidget {
     this.onLoadCompleted,
     this.checkPHashHide = false,
     this.checkQRCodeHide = false,
-  }) : super(key: key);
+    this.sourceRect,
+  });
   final String url;
   final double? height;
   final double? width;
@@ -43,8 +44,10 @@ class NetworkExtendedImage extends StatefulWidget {
   final bool checkPHashHide;
   final bool checkQRCodeHide;
 
+  final Rect? sourceRect;
+
   @override
-  _NetworkExtendedImageState createState() => _NetworkExtendedImageState();
+  State<NetworkExtendedImage> createState() => _NetworkExtendedImageState();
 }
 
 class _NetworkExtendedImageState extends State<NetworkExtendedImage>
@@ -119,7 +122,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
             logger.t(
                 'widget.checkPHashHide   widget.checkQRCodeHide ${widget.checkPHashHide}  ${widget.checkQRCodeHide}');
             if (widget.checkPHashHide || widget.checkQRCodeHide) {
-              Future<bool> _future() async {
+              Future<bool> checkFuture() async {
                 if (!widget.checkQRCodeHide) {
                   return await imageHideController
                       .checkPHashHide(widget.url.handleUrl);
@@ -134,7 +137,7 @@ class _NetworkExtendedImageState extends State<NetworkExtendedImage>
               }
 
               return FutureBuilder<bool>(
-                  future: _future(),
+                  future: checkFuture(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       final showCustomWidget = snapshot.data ?? false;
@@ -285,6 +288,7 @@ class _ExtendedImageRectState extends State<ExtendedImageRect> {
         ) {
           logger.e('error: ${error.runtimeType}, $error');
           return GestureDetector(
+            behavior: HitTestBehavior.deferToChild,
             onTap: () {
               logger.d('reload');
               setState(() {

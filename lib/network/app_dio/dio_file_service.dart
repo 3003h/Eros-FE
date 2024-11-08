@@ -26,7 +26,7 @@ class DioFileService extends FileService {
     String url, {
     Map<String, String>? headers,
   }) async {
-    logger.t('DioFileService url $url');
+    logger.d('DioFileService url $url');
     if (ser == null) {
       return await loadDio(url, headers: headers);
     } else {
