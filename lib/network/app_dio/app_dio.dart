@@ -99,15 +99,15 @@ class AppDio with DioMixin implements Dio {
 
     // 缩略图请求的限频配置
     final thumbRateLimitConfig = RateLimitConfig(
-      maxTokens: 10,
-      refillDuration: const Duration(milliseconds: 500),
+      maxTokens: 20,
+      refillDuration: const Duration(milliseconds: 400),
     );
 
     // 限频 桶令牌
     interceptors.add(
       TokenBucketInterceptor(
-        defaultMaxTokens: 5, // 默认令牌桶最大容量
-        defaultRefillDuration: const Duration(seconds: 500), // 默认令牌补充间隔时间
+        defaultMaxTokens: 10, // 默认令牌桶最大容量
+        defaultRefillDuration: const Duration(milliseconds: 500), // 默认令牌补充间隔时间
         globalLimit: false, // 是否全局限制
         hostConfig: {
           // 缩略图 详情页
@@ -118,11 +118,11 @@ class AppDio with DioMixin implements Dio {
           's.exhentai.org': thumbRateLimitConfig,
           'e-hentai.org': RateLimitConfig(
             maxTokens: 5,
-            refillDuration: const Duration(seconds: 1),
+            refillDuration: const Duration(milliseconds: 800),
           ),
           'exhentai.org': RateLimitConfig(
             maxTokens: 5,
-            refillDuration: const Duration(seconds: 1),
+            refillDuration: const Duration(milliseconds: 800),
           ),
         },
       ),
