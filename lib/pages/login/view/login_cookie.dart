@@ -8,11 +8,11 @@ import 'package:get/get.dart';
 import '../controller/login_controller.dart';
 
 class LoginCookie extends GetView<LoginController> {
-  const LoginCookie({Key? key}) : super(key: key);
+  const LoginCookie({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _placeholderStyle = kTextStyle.copyWith(
+    final placeholderStyle = kTextStyle.copyWith(
       fontWeight: FontWeight.w400,
       color: CupertinoColors.placeholderText,
     );
@@ -45,7 +45,7 @@ class LoginCookie extends GetView<LoginController> {
                       CupertinoTextFormFieldRow(
                         controller: controller.idController,
                         style: kTextStyle,
-                        placeholderStyle: _placeholderStyle,
+                        placeholderStyle: placeholderStyle,
                         // prefix: Text(''),
                         placeholder: 'ibp_member_id',
                         onEditingComplete: () {
@@ -56,17 +56,17 @@ class LoginCookie extends GetView<LoginController> {
                       CupertinoTextFormFieldRow(
                         controller: controller.hashController,
                         style: kTextStyle,
-                        placeholderStyle: _placeholderStyle,
+                        placeholderStyle: placeholderStyle,
                         // prefix: Text(''),
                         placeholder: 'ibp_pass_hash',
                       ),
-                      CupertinoTextFormFieldRow(
-                        controller: controller.igneousController,
-                        style: kTextStyle,
-                        placeholderStyle: _placeholderStyle,
-                        // prefix: Text(''),
-                        placeholder: 'igneous',
-                      ),
+                      // CupertinoTextFormFieldRow(
+                      //   controller: controller.igneousController,
+                      //   style: kTextStyle,
+                      //   placeholderStyle: _placeholderStyle,
+                      //   // prefix: Text(''),
+                      //   placeholder: 'igneous',
+                      // ),
                     ],
                   ),
                   SizedBox(

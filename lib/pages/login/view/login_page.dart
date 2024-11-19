@@ -12,7 +12,7 @@ class LoginPage extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    final _placeholderStyle = kTextStyle.copyWith(
+    final placeholderStyle = kTextStyle.copyWith(
       fontWeight: FontWeight.w400,
       color: CupertinoColors.placeholderText,
     );
@@ -47,7 +47,7 @@ class LoginPage extends GetView<LoginController> {
                       CupertinoTextFormFieldRow(
                         controller: controller.usernameController,
                         style: kTextStyle,
-                        placeholderStyle: _placeholderStyle,
+                        placeholderStyle: placeholderStyle,
                         prefix: Row(
                           children: [
                             const Icon(
@@ -69,7 +69,7 @@ class LoginPage extends GetView<LoginController> {
                           return CupertinoTextFormFieldRow(
                             controller: controller.passwdController,
                             style: kTextStyle,
-                            placeholderStyle: _placeholderStyle,
+                            placeholderStyle: placeholderStyle,
                             prefix: Row(
                               children: [
                                 GestureDetector(

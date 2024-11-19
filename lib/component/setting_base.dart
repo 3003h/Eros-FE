@@ -903,10 +903,10 @@ Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
 }
 
 Future<void> showUserCookie() async {
-  final List<String> _c = Global.profile.user.cookie.split(';');
+  final List<String> c = Global.profile.user.cookie.split(';');
 
   final List<Cookie> cookies =
-      _c.map((e) => Cookie.fromSetCookieValue(e)).toList();
+      c.map((e) => Cookie.fromSetCookieValue(e)).toList();
 
   final String cookieString =
       cookies.map((e) => '${e.name}=${e.value}').join('\n');
@@ -970,7 +970,7 @@ Future<void> showUserCookie() async {
 }
 
 class ItemSpace extends StatelessWidget {
-  const ItemSpace({Key? key}) : super(key: key);
+  const ItemSpace({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -979,8 +979,7 @@ class ItemSpace extends StatelessWidget {
 }
 
 class GroupItem extends StatelessWidget {
-  const GroupItem({Key? key, this.title, this.child, this.desc, this.descTop})
-      : super(key: key);
+  const GroupItem({super.key, this.title, this.child, this.desc, this.descTop});
   final String? title;
   final Widget? child;
   final String? desc;

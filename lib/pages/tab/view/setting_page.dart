@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class SettingTab extends GetView<SettingViewController> {
-  const SettingTab({Key? key}) : super(key: key);
+  const SettingTab({super.key});
 
   @override
   Widget build(BuildContext context) {

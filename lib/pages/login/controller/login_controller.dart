@@ -33,7 +33,7 @@ class LoginController extends GetxController {
   final TextEditingController hashController = TextEditingController();
 
   // igneous
-  final TextEditingController igneousController = TextEditingController();
+  // final TextEditingController igneousController = TextEditingController();
 
   final UserController userController = Get.find();
 
@@ -94,7 +94,7 @@ class LoginController extends GetxController {
 
     final memberId = idController.text.trim();
     final passHash = hashController.text.trim();
-    final igneous = igneousController.text.trim();
+    // final igneous = igneousController.text.trim();
 
     if (memberId.isEmpty || passHash.isEmpty) {
       showToast('ibp_member_id or ibp_pass_hash is empty');
@@ -109,7 +109,7 @@ class LoginController extends GetxController {
     final List<Cookie> cookies = <Cookie>[
       Cookie('ipb_member_id', memberId),
       Cookie('ipb_pass_hash', passHash),
-      if (igneous.isNotEmpty) Cookie('igneous', igneous),
+      // if (igneous.isNotEmpty) Cookie('igneous', igneous),
     ];
 
     // final PersistCookieJar cookieJar = await Api.cookieJar;
@@ -238,10 +238,10 @@ class LoginController extends GetxController {
           hashController.text = _text;
           continue;
         }
-        if (kMatchIgneous.hasMatch(_text)) {
-          logger.d('igneous:$_text');
-          igneousController.text = _text;
-        }
+        // if (kMatchIgneous.hasMatch(_text)) {
+        //   logger.d('igneous:$_text');
+        //   igneousController.text = _text;
+        // }
       }
       return;
     }
@@ -258,7 +258,7 @@ class LoginController extends GetxController {
       }
       idController.text = cookieMap['ipb_member_id'] ?? '';
       hashController.text = cookieMap['ipb_pass_hash'] ?? '';
-      igneousController.text = cookieMap['igneous'] ?? '';
+      // igneousController.text = cookieMap['igneous'] ?? '';
     } catch (e) {
       logger.e('$e');
     }
