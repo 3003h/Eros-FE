@@ -24,7 +24,7 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
     with AutomaticKeepAliveClientMixin {
   late final FavoriteSubListController _favoriteSubListController;
   final EhTabController ehTabController = EhTabController();
-  final controller = Get.find<FavoriteTabberController>();
+  final controller = Get.find<FavoriteTabBarController>();
 
   @override
   void initState() {

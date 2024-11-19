@@ -219,35 +219,35 @@ class LoginController extends GetxController {
   Future<void> readCookieFromClipboard() async {
     final kMatchMenberId = RegExp(r'^\d+$');
     final kMatchPassHash = RegExp(r'^[\da-f]{32}$');
-    final kMatchIgneous = RegExp(r'^[\da-f]+$');
+    // final kMatchIgneous = RegExp(r'^[\da-f]+$');
 
-    final String _clipText =
+    final String clipText =
         (await Clipboard.getData(Clipboard.kTextPlain))?.text ?? '';
     // logger.d('Clipboard:\n' + _clipText);
-    if (!_clipText.contains('{')) {
-      final textArray = _clipText.split(RegExp(r'[\s:;&=]'));
+    if (!clipText.contains('{')) {
+      final textArray = clipText.split(RegExp(r'[\s:;&=]'));
       logger.d('textArray:$textArray');
-      for (final _text in textArray) {
-        if (kMatchMenberId.hasMatch(_text)) {
-          logger.d('id:$_text');
-          idController.text = _text;
+      for (final text in textArray) {
+        if (kMatchMenberId.hasMatch(text)) {
+          logger.d('id:$text');
+          idController.text = text;
           continue;
         }
-        if (kMatchPassHash.hasMatch(_text)) {
-          logger.d('passHash:$_text');
-          hashController.text = _text;
+        if (kMatchPassHash.hasMatch(text)) {
+          logger.d('passHash:$text');
+          hashController.text = text;
           continue;
         }
-        // if (kMatchIgneous.hasMatch(_text)) {
-        //   logger.d('igneous:$_text');
-        //   igneousController.text = _text;
+        // if (kMatchIgneous.hasMatch(text)) {
+        //   logger.d('igneous:$text');
+        //   igneousController.text = text;
         // }
       }
       return;
     }
 
     try {
-      final jsonObj = jsonDecode(_clipText);
+      final jsonObj = jsonDecode(clipText);
       final cookieList = jsonObj as List;
       final cookieMap = <String, String>{};
       for (final cookie in cookieList) {

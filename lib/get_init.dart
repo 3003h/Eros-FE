@@ -77,7 +77,7 @@ void getinit() {
   Get.lazyPut(() => DownloadViewController(), fenix: true);
   // Get.lazyPut(() => FavoriteViewController(), fenix: true);
   Get.lazyPut(() => TopListViewController(), fenix: true);
-  Get.lazyPut(() => FavoriteTabberController(), fenix: true);
+  Get.lazyPut(() => FavoriteTabBarController(), fenix: true);
   Get.lazyPut(() => CustomTabbarController(), fenix: true);
   Get.lazyPut(() => SettingViewController(), fenix: true);
   Get.lazyPut(() => FavoriteSelectorController(), fenix: true);

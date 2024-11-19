@@ -27,7 +27,7 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
   final EhTabController ehTabController = EhTabController();
   final LinkScrollBarController linkScrollBarController =
       LinkScrollBarController();
-  final controller = Get.find<FavoriteTabberController>();
+  final controller = Get.find<FavoriteTabBarController>();
   late PageController pageController;
 
   final EhSettingService _ehSettingService = Get.find();
@@ -292,7 +292,7 @@ class FavoriteTabBar extends StatelessWidget {
 
   final PageController pageController;
   final LinkScrollBarController linkScrollBarController;
-  final FavoriteTabberController controller;
+  final FavoriteTabBarController controller;
 
   @override
   Widget build(BuildContext context) {

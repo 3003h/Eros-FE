@@ -1,7 +1,9 @@
+import 'package:cookie_jar/src/jar/persist.dart';
 import 'package:eros_fe/common/controller/base_controller.dart';
 import 'package:eros_fe/common/global.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
 import 'package:eros_fe/const/const.dart';
+import 'package:eros_fe/extension.dart';
 import 'package:eros_fe/generated/l10n.dart';
 import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/network/api.dart';
@@ -37,10 +39,10 @@ class UserController extends ProfileController {
       user,
       (User value) {
         Global.profile = Global.profile.copyWith(user: value);
-        if (Get.isRegistered<FavoriteTabberController>()) {
-          logger.d('everProfile User  => update FavoriteTabberController');
-          Get.find<FavoriteTabberController>().onInit();
-          Get.find<FavoriteTabberController>().update();
+        if (Get.isRegistered<FavoriteTabBarController>()) {
+          logger.d('everProfile User  => update FavoriteTabBarController');
+          Get.find<FavoriteTabBarController>().onInit();
+          Get.find<FavoriteTabBarController>().update();
         }
       },
     );
@@ -49,6 +51,7 @@ class UserController extends ProfileController {
   Future<void> showLogOutDialog(BuildContext context) async {
     return showCupertinoDialog<void>(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text('Logout'),
@@ -73,5 +76,17 @@ class UserController extends ProfileController {
         );
       },
     );
+  }
+
+  Future<void> removeIgneous() async {
+    user(user.value.copyWith(igneous: ''.oN));
+    final PersistCookieJar cookieJar = await Api.cookieJar;
+    final uri = Uri.parse(Api.getBaseUrl());
+    final cookies = await cookieJar.loadForRequest(uri);
+    cookies.removeWhere((element) {
+      return element.name == 'igneous';
+    });
+    logger.d('removeIgneous: $cookies');
+    await cookieJar.saveFromResponse(uri, cookies);
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eros_fe/common/controller/user_controller.dart';
 import 'package:eros_fe/common/service/dns_service.dart';
 import 'package:eros_fe/common/service/theme_service.dart';
 // import 'package:extended_text/extended_text.dart';
@@ -908,25 +909,32 @@ Future<void> showUserCookie() async {
   final List<Cookie> cookies =
       c.map((e) => Cookie.fromSetCookieValue(e)).toList();
 
+  final userController = Get.find<UserController>();
+
   final String cookieString =
       cookies.map((e) => '${e.name}=${e.value}').join('\n');
   logger.d('$cookieString ');
 
   return showCupertinoDialog<void>(
     context: Get.context!,
+    barrierDismissible: true,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
         title: const Text('Cookie'),
         content: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Column(
             children: [
-              Text(
-                L10n.of(context).KEEP_IT_SAFE,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  L10n.of(context).KEEP_IT_SAFE,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ).paddingOnly(bottom: 4),
+              ),
               CupertinoFormSection.insetGrouped(
                 margin: const EdgeInsetsDirectional.fromSTEB(0, 0.0, 0, 5.0),
                 backgroundColor: Colors.transparent,
@@ -946,21 +954,28 @@ Future<void> showUserCookie() async {
                     .toList(),
               ),
             ],
-          ).paddingSymmetric(vertical: 8),
+          ),
         ),
         actions: <Widget>[
-          CupertinoDialogAction(
-            child: Text(L10n.of(context).cancel),
-            onPressed: () {
-              Get.back();
-            },
-          ),
+          // CupertinoDialogAction(
+          //   child: Text(L10n.of(context).cancel),
+          //   onPressed: () {
+          //     Get.back();
+          //   },
+          // ),
           CupertinoDialogAction(
             child: Text(L10n.of(context).copy),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: cookieString));
               Get.back();
               showToast(L10n.of(context).copied_to_clipboard);
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text('Refresh igneous'),
+            onPressed: () {
+              Get.back();
+              userController.removeIgneous();
             },
           ),
         ],

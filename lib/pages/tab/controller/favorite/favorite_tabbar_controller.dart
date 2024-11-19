@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../default_tabview_controller.dart';
 import 'favorite_sublist_controller.dart';
 
-class FavoriteTabberController extends DefaultTabViewController {
+class FavoriteTabBarController extends DefaultTabViewController {
   final FavoriteSelectorController favoriteSelectorController = Get.find();
   final UserController userController = Get.find();
 
