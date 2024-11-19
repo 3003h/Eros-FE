@@ -299,6 +299,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "redirect_thumb_link_summary": MessageLookupByLibrary.simpleMessage(
             "Redirect Thumb Link To ehgt.org"),
         "redownload": MessageLookupByLibrary.simpleMessage("再ダウンロード"),
+        "refresh_igneous":
+            MessageLookupByLibrary.simpleMessage("Refresh Igneous"),
         "regex": MessageLookupByLibrary.simpleMessage("Regex"),
         "regex_format_error":
             MessageLookupByLibrary.simpleMessage("Regexフォーマットエラー"),

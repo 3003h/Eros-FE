@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -4520,6 +4519,16 @@ class L10n {
     return Intl.message(
       'High Resolution Images Limited',
       name: 'high_resolution_images_limited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh Igneous`
+  String get refresh_igneous {
+    return Intl.message(
+      'Refresh Igneous',
+      name: 'refresh_igneous',
       desc: '',
       args: [],
     );

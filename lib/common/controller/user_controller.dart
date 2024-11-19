@@ -1,4 +1,3 @@
-import 'package:cookie_jar/src/jar/persist.dart';
 import 'package:eros_fe/common/controller/base_controller.dart';
 import 'package:eros_fe/common/global.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
@@ -80,13 +79,14 @@ class UserController extends ProfileController {
 
   Future<void> removeIgneous() async {
     user(user.value.copyWith(igneous: ''.oN));
-    final PersistCookieJar cookieJar = await Api.cookieJar;
+    final cookieJar = await Api.cookieJar;
     final uri = Uri.parse(Api.getBaseUrl());
     final cookies = await cookieJar.loadForRequest(uri);
     cookies.removeWhere((element) {
       return element.name == 'igneous';
     });
     logger.d('removeIgneous: $cookies');
+    await cookieJar.deleteAll();
     await cookieJar.saveFromResponse(uri, cookies);
   }
 }

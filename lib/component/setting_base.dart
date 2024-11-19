@@ -972,7 +972,7 @@ Future<void> showUserCookie() async {
             },
           ),
           CupertinoDialogAction(
-            child: Text('Refresh igneous'),
+            child: Text(L10n.of(context).refresh_igneous),
             onPressed: () {
               Get.back();
               userController.removeIgneous();
