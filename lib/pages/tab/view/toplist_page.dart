@@ -244,7 +244,7 @@ class _ToplistTabState extends State<ToplistTab> {
             lastComplete: controller.lastComplete,
             centerKey: centerKey,
             key: controller.sliverAnimatedListKey,
-            lastTopitemIndex: controller.lastTopitemIndex,
+            lastTopItemIndex: controller.lastTopitemIndex,
           );
         }
 

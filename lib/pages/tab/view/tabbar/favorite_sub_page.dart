@@ -120,7 +120,8 @@ class _FavoriteSubPageState extends State<FavoriteSubPage>
               _favoriteSubListController.heroTag,
               next: logic.next,
               lastComplete: _favoriteSubListController.lastComplete,
-              key: _favoriteSubListController.sliverAnimatedListKey,
+              // key: _favoriteSubListController.sliverAnimatedListKey,
+              keepPosition: _favoriteSubListController.keepPosition,
             );
           }
 

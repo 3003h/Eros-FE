@@ -386,10 +386,10 @@ abstract class TabViewController extends GetxController {
     change(state, status: RxStatus.success());
     logger.d('prevGid: $prevGid, prevPage $prevPage,  afterJump: $afterJump');
     if ((prevGid.isNotEmpty || prevPage >= 0) && afterJump) {
-      logger.t('loadPrevious');
+      logger.d('>>>>> loadPrevious');
       await loadPrevious();
     } else {
-      logger.t('reloadData');
+      logger.d('>>>>> reloadData');
       await reloadData();
     }
   }

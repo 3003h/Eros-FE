@@ -106,7 +106,7 @@ class SearchImagePage extends GetView<SearchImageController> {
               lastComplete: controller.lastComplete,
               // centerKey: centerKey,
               key: controller.sliverAnimatedListKey,
-              lastTopitemIndex: controller.lastTopitemIndex,
+              lastTopItemIndex: controller.lastTopitemIndex,
             );
           }
 
