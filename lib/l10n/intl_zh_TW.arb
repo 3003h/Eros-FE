@@ -378,7 +378,7 @@
   "image_limits": "圖片限制",
   "reset_cost": "重設花費",
   "image_block": "圖片封鎖",
-  "QR_code_block": "封鎖含有二維碼的圖片",
+  "QR_code_block": "封鎖含有QR Code的圖片",
   "phash_check": "感知雜湊檢查 (封鎖相似圖片)",
   "phash_block_list": "感知雜湊封鎖列表",
   "add_to_phash_block_list": "添加到感知雜湊封鎖列表",
