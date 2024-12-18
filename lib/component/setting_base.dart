@@ -281,147 +281,147 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
 }
 
 /// 类型
-class SlidingSegmentedItem<T> extends StatefulWidget {
-  const SlidingSegmentedItem(
-    this.title, {
-    required this.intValue,
-    required this.slidingChildren,
-    this.onValueChanged,
-    this.desc,
-    super.key,
-    this.hideDivider = false,
-    this.icon,
-    this.iconIndent = 0.0,
-    this.onTap,
-  });
-
-  final T? intValue;
-  final ValueChanged<T?>? onValueChanged;
-  final Map<T, Widget> slidingChildren;
-  final String title;
-  final String? desc;
-  final bool hideDivider;
-  final Widget? icon;
-  final double iconIndent;
-  // 点击回调
-  final VoidCallback? onTap;
-
-  @override
-  State<SlidingSegmentedItem<T>> createState() =>
-      _SlidingSegmentedItemState<T>();
-}
-
-class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
-  String? _desc;
-
-  late Color _color;
-  late Color _pBackgroundColor;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _color = CupertinoDynamicColor.resolve(
-        ehTheme.itemBackgroundColor!, Get.context!);
-    _pBackgroundColor = _color;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    T value = widget.intValue ?? widget.slidingChildren.keys.first;
-
-    final Color color =
-        CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
-    if (_pBackgroundColor.value != color.value) {
-      _color = color;
-      _pBackgroundColor = color;
-    }
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: widget.onTap,
-      onTapDown: widget.onTap != null ? (_) => _updatePressedColor() : null,
-      onTapUp: (_) {
-        Future.delayed(const Duration(milliseconds: 80), () {
-          _updateNormalColor();
-        });
-      },
-      child: Container(
-        color: _color,
-        child: Column(
-          children: <Widget>[
-            Container(
-              constraints: const BoxConstraints(
-                minHeight: kItemHeight,
-              ),
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: SafeArea(
-                child: Row(
-                  children: <Widget>[
-                    if (widget.icon != null) widget.icon!,
-                    Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              widget.title,
-                              style: const TextStyle(
-                                height: 1.15,
-                              ),
-                            ),
-                            if (_desc != null || widget.desc != null)
-                              Text(
-                                _desc ?? widget.desc ?? '',
-                                style: const TextStyle(
-                                    fontSize: kSummaryFontSize,
-                                    color: CupertinoColors.systemGrey),
-                              ).paddingOnly(top: 2.0),
-                          ]),
-                    ),
-                    CupertinoSlidingSegmentedControl<T>(
-                      groupValue: value,
-                      children: widget.slidingChildren,
-                      onValueChanged: (T? val) {
-                        widget.onValueChanged?.call(val);
-                      },
-                    ),
-                    if (widget.onTap != null)
-                      const Icon(
-                        CupertinoIcons.forward,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            if (!widget.hideDivider)
-              Divider(
-                indent: 20 + widget.iconIndent,
-                height: kDividerHeight,
-                color: CupertinoDynamicColor.resolve(
-                    CupertinoColors.systemGrey4, context),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _updateNormalColor() {
-    setState(() {
-      _color =
-          CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
-    });
-  }
-
-  void _updatePressedColor() {
-    setState(() {
-      _color = getPressedColor(context);
-    });
-  }
-}
+// class SlidingSegmentedItem<T> extends StatefulWidget {
+//   const SlidingSegmentedItem(
+//     this.title, {
+//     required this.intValue,
+//     required this.slidingChildren,
+//     this.onValueChanged,
+//     this.desc,
+//     super.key,
+//     this.hideDivider = false,
+//     this.icon,
+//     this.iconIndent = 0.0,
+//     this.onTap,
+//   });
+//
+//   final T? intValue;
+//   final ValueChanged<T?>? onValueChanged;
+//   final Map<T, Widget> slidingChildren;
+//   final String title;
+//   final String? desc;
+//   final bool hideDivider;
+//   final Widget? icon;
+//   final double iconIndent;
+//   // 点击回调
+//   final VoidCallback? onTap;
+//
+//   @override
+//   State<SlidingSegmentedItem<T>> createState() =>
+//       _SlidingSegmentedItemState<T>();
+// }
+//
+// class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
+//   String? _desc;
+//
+//   late Color _color;
+//   late Color _pBackgroundColor;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//
+//     _color = CupertinoDynamicColor.resolve(
+//         ehTheme.itemBackgroundColor!, Get.context!);
+//     _pBackgroundColor = _color;
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     T value = widget.intValue ?? widget.slidingChildren.keys.first;
+//
+//     final Color color =
+//         CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
+//     if (_pBackgroundColor.value != color.value) {
+//       _color = color;
+//       _pBackgroundColor = color;
+//     }
+//
+//     return GestureDetector(
+//       behavior: HitTestBehavior.opaque,
+//       onTap: widget.onTap,
+//       onTapDown: widget.onTap != null ? (_) => _updatePressedColor() : null,
+//       onTapUp: (_) {
+//         Future.delayed(const Duration(milliseconds: 80), () {
+//           _updateNormalColor();
+//         });
+//       },
+//       child: Container(
+//         color: _color,
+//         child: Column(
+//           children: <Widget>[
+//             Container(
+//               constraints: const BoxConstraints(
+//                 minHeight: kItemHeight,
+//               ),
+//               alignment: Alignment.centerLeft,
+//               padding: const EdgeInsets.symmetric(horizontal: 20.0),
+//               child: SafeArea(
+//                 child: Row(
+//                   children: <Widget>[
+//                     if (widget.icon != null) widget.icon!,
+//                     Expanded(
+//                       child: Column(
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: <Widget>[
+//                             Text(
+//                               widget.title,
+//                               style: const TextStyle(
+//                                 height: 1.15,
+//                               ),
+//                             ),
+//                             if (_desc != null || widget.desc != null)
+//                               Text(
+//                                 _desc ?? widget.desc ?? '',
+//                                 style: const TextStyle(
+//                                     fontSize: kSummaryFontSize,
+//                                     color: CupertinoColors.systemGrey),
+//                               ).paddingOnly(top: 2.0),
+//                           ]),
+//                     ),
+//                     CupertinoSlidingSegmentedControl<T>(
+//                       groupValue: value,
+//                       children: widget.slidingChildren,
+//                       onValueChanged: (T? val) {
+//                         widget.onValueChanged?.call(val);
+//                       },
+//                     ),
+//                     if (widget.onTap != null)
+//                       const Icon(
+//                         CupertinoIcons.forward,
+//                         color: CupertinoColors.systemGrey,
+//                       ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//             if (!widget.hideDivider)
+//               Divider(
+//                 indent: 20 + widget.iconIndent,
+//                 height: kDividerHeight,
+//                 color: CupertinoDynamicColor.resolve(
+//                     CupertinoColors.systemGrey4, context),
+//               ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   void _updateNormalColor() {
+//     setState(() {
+//       _color =
+//           CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
+//     });
+//   }
+//
+//   void _updatePressedColor() {
+//     setState(() {
+//       _color = getPressedColor(context);
+//     });
+//   }
+// }
 
 /// 开关类型
 class TextSwitchItem extends StatefulWidget {
