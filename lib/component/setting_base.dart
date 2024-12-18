@@ -23,14 +23,14 @@ Color getPressedColor(BuildContext context) {
 
 class BarsItem extends StatelessWidget {
   const BarsItem({
-    Key? key,
+    super.key,
     required this.title,
     this.maxLines = 1,
     this.titleSize,
     this.descSize,
     this.desc,
     this.hideDivider = false,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? desc;
@@ -41,7 +41,7 @@ class BarsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _kDescStyle = TextStyle(
+    const kDescStyle = TextStyle(
         fontSize: kSummaryFontSize,
         height: 1.1,
         color: CupertinoColors.systemGrey);
@@ -77,7 +77,7 @@ class BarsItem extends StatelessWidget {
                         Text(
                           desc ?? '',
                           maxLines: null,
-                          style: _kDescStyle,
+                          style: kDescStyle,
                         ).paddingOnly(top: 6.0)
                     ],
                   ),
@@ -107,7 +107,7 @@ class BarsItem extends StatelessWidget {
 /// 选择类型的设置项
 class SelectorSettingItem extends StatefulWidget {
   const SelectorSettingItem({
-    Key? key,
+    super.key,
     this.onTap,
     required this.title,
     this.titleColor,
@@ -119,7 +119,7 @@ class SelectorSettingItem extends StatefulWidget {
     this.valueFlex = 0,
     this.maxLines = 1,
     this.suffix,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? selector;
@@ -137,7 +137,7 @@ class SelectorSettingItem extends StatefulWidget {
   final VoidCallback? onLongPress;
 
   @override
-  _SelectorSettingItemState createState() => _SelectorSettingItemState();
+  State<SelectorSettingItem> createState() => _SelectorSettingItemState();
 }
 
 class _SelectorSettingItemState extends State<SelectorSettingItem> {
@@ -252,8 +252,6 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
     );
 
     return GestureDetector(
-      child: container,
-      // 不可见区域有效
       behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
@@ -264,6 +262,7 @@ class _SelectorSettingItemState extends State<SelectorSettingItem> {
         });
       },
       onTapCancel: () => _updateNormalColor(),
+      child: container,
     );
   }
 
@@ -289,12 +288,12 @@ class SlidingSegmentedItem<T> extends StatefulWidget {
     required this.slidingChildren,
     this.onValueChanged,
     this.desc,
-    Key? key,
+    super.key,
     this.hideDivider = false,
     this.icon,
     this.iconIndent = 0.0,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final T? intValue;
   final ValueChanged<T?>? onValueChanged;
@@ -308,7 +307,7 @@ class SlidingSegmentedItem<T> extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  _SlidingSegmentedItemState<T> createState() =>
+  State<SlidingSegmentedItem<T>> createState() =>
       _SlidingSegmentedItemState<T>();
 }
 
@@ -329,7 +328,7 @@ class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
 
   @override
   Widget build(BuildContext context) {
-    T _value = widget.intValue ?? widget.slidingChildren.keys.first;
+    T value = widget.intValue ?? widget.slidingChildren.keys.first;
 
     final Color color =
         CupertinoDynamicColor.resolve(ehTheme.itemBackgroundColor!, context);
@@ -382,7 +381,7 @@ class _SlidingSegmentedItemState<T> extends State<SlidingSegmentedItem<T>> {
                           ]),
                     ),
                     CupertinoSlidingSegmentedControl<T>(
-                      groupValue: _value,
+                      groupValue: value,
                       children: widget.slidingChildren,
                       onValueChanged: (T? val) {
                         widget.onValueChanged?.call(val);
@@ -432,13 +431,13 @@ class TextSwitchItem extends StatefulWidget {
     this.onChanged,
     this.desc,
     this.descOn,
-    Key? key,
+    super.key,
     this.hideDivider = false,
     this.icon,
     this.iconIndent = 0.0,
     this.suffix,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final bool value;
   final ValueChanged<bool>? onChanged;
@@ -453,7 +452,7 @@ class TextSwitchItem extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  _TextSwitchItemState createState() => _TextSwitchItemState();
+  State<TextSwitchItem> createState() => _TextSwitchItemState();
 }
 
 class _TextSwitchItemState extends State<TextSwitchItem> {
@@ -581,11 +580,11 @@ class TextItem extends StatefulWidget {
     this.title, {
     this.subTitle,
     this.onTap,
-    Key? key,
+    super.key,
     this.hideDivider = false,
     this.cupertinoFormRow = false,
     this.textColor,
-  }) : super(key: key);
+  });
 
   final String title;
   final String? subTitle;
@@ -596,7 +595,7 @@ class TextItem extends StatefulWidget {
   final Color? textColor;
 
   @override
-  _TextItemState createState() => _TextItemState();
+  State<TextItem> createState() => _TextItemState();
 }
 
 class _TextItemState extends State<TextItem> {
@@ -668,7 +667,6 @@ class _TextItemState extends State<TextItem> {
     );
 
     item = GestureDetector(
-      child: item,
       behavior: HitTestBehavior.translucent,
       onTap: widget.onTap,
       onTapDown: (_) => _updatePressedColor(),
@@ -678,6 +676,7 @@ class _TextItemState extends State<TextItem> {
         });
       },
       onTapCancel: () => _updateNormalColor(),
+      child: item,
     );
 
     if (widget.cupertinoFormRow) {
@@ -705,7 +704,7 @@ class _TextItemState extends State<TextItem> {
 class TextInputItem extends StatefulWidget {
   const TextInputItem({
     this.title,
-    Key? key,
+    super.key,
     this.hideDivider = false,
     this.maxLines = 1,
     this.onChanged,
@@ -718,7 +717,7 @@ class TextInputItem extends StatefulWidget {
     this.textController,
     this.obscureText,
     this.keyboardType,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String? initValue;
@@ -824,63 +823,61 @@ class _TextInputItemState extends State<TextInputItem> {
 }
 
 Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
-  final TextEditingController _hostController = TextEditingController();
-  final TextEditingController _addrController = TextEditingController();
+  final TextEditingController hostController = TextEditingController();
+  final TextEditingController addrController = TextEditingController();
   final DnsService dnsConfigController = Get.find();
-  final FocusNode _nodeAddr = FocusNode();
+  final FocusNode nodeAddr = FocusNode();
   return showCupertinoDialog<void>(
     context: context,
     builder: (BuildContext context) {
-      final bool _isAddNew = index == null;
-      if (!_isAddNew) {
-        _hostController.text = dnsConfigController.hosts[index].host ?? '';
-        _addrController.text = dnsConfigController.hosts[index].addr ?? '';
+      final bool isAddNew = index == null;
+      if (!isAddNew) {
+        hostController.text = dnsConfigController.hosts[index].host ?? '';
+        addrController.text = dnsConfigController.hosts[index].addr ?? '';
       }
 
       return CupertinoAlertDialog(
-        content: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                enabled: _isAddNew,
-                clearButtonMode: _isAddNew
-                    ? OverlayVisibilityMode.editing
-                    : OverlayVisibilityMode.never,
-                controller: _hostController,
-                placeholder: 'Host',
-                autofocus: _isAddNew,
-                onEditingComplete: () {
-                  // 点击键盘完成
-                  FocusScope.of(context).requestFocus(_nodeAddr);
-                },
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CupertinoTextField(
+              decoration: BoxDecoration(
+                color: ehTheme.textFieldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               ),
-              Container(
-                height: 10,
+              enabled: isAddNew,
+              clearButtonMode: isAddNew
+                  ? OverlayVisibilityMode.editing
+                  : OverlayVisibilityMode.never,
+              controller: hostController,
+              placeholder: 'Host',
+              autofocus: isAddNew,
+              onEditingComplete: () {
+                // 点击键盘完成
+                FocusScope.of(context).requestFocus(nodeAddr);
+              },
+            ),
+            Container(
+              height: 10,
+            ),
+            CupertinoTextField(
+              decoration: BoxDecoration(
+                color: ehTheme.textFieldBackgroundColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
               ),
-              CupertinoTextField(
-                decoration: BoxDecoration(
-                  color: ehTheme.textFieldBackgroundColor,
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                clearButtonMode: OverlayVisibilityMode.editing,
-                controller: _addrController,
-                placeholder: 'Addr',
-                focusNode: _nodeAddr,
-                autofocus: !_isAddNew,
-                onEditingComplete: () {
-                  // 点击键盘完成
-                  if (dnsConfigController.addCustomHost(
-                      _hostController.text.trim(), _addrController.text.trim()))
-                    Get.back();
-                },
-              ),
-            ],
-          ),
+              clearButtonMode: OverlayVisibilityMode.editing,
+              controller: addrController,
+              placeholder: 'Addr',
+              focusNode: nodeAddr,
+              autofocus: !isAddNew,
+              onEditingComplete: () {
+                // 点击键盘完成
+                if (dnsConfigController.addCustomHost(
+                    hostController.text.trim(), addrController.text.trim()))
+                  Get.back();
+              },
+            ),
+          ],
         ),
         actions: <Widget>[
           CupertinoDialogAction(
@@ -893,7 +890,7 @@ Future<void> showCustomHostEditer(BuildContext context, {int? index}) async {
             child: Text(L10n.of(context).ok),
             onPressed: () {
               if (dnsConfigController.addCustomHost(
-                  _hostController.text.trim(), _addrController.text.trim()))
+                  hostController.text.trim(), addrController.text.trim()))
                 Get.back();
             },
           ),
@@ -1072,7 +1069,7 @@ class GroupItem extends StatelessWidget {
 class CupertinoTextInputListTile extends StatefulWidget {
   const CupertinoTextInputListTile({
     this.title,
-    Key? key,
+    super.key,
     this.maxLines = 1,
     this.onChanged,
     this.initValue,
@@ -1084,7 +1081,7 @@ class CupertinoTextInputListTile extends StatefulWidget {
     this.textController,
     this.obscureText,
     this.keyboardType,
-  }) : super(key: key);
+  });
 
   final String? title;
   final String? initValue;
