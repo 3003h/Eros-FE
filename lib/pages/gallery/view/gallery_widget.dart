@@ -239,21 +239,20 @@ class ReadButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => MouseRegionClick(
-        child: CupertinoButton(
+        child: CupertinoButton.filled(
             minSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
             borderRadius: BorderRadius.circular(20),
-            color: CupertinoColors.activeBlue,
+            // color: CupertinoColors.activeBlue,
             onPressed: _pageState.enableRead
                 ? () => _toViewPage(_pageState.galleryProvider?.gid ?? '0',
                     _pageState.lastIndex)
                 : null,
             child: Text(
-              (_pageState.lastIndex > 0)
-                  ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
-                  : L10n.of(context).read.toUpperCase(),
-              style: const TextStyle(fontSize: 15, height: 1.2),
-            )),
+                (_pageState.lastIndex > 0)
+                    ? '${L10n.of(context).read.toUpperCase()} ${_pageState.lastIndex + 1}'
+                    : L10n.of(context).read.toUpperCase(),
+                style: const TextStyle(fontSize: 15, height: 1.2))),
       ),
     );
   }

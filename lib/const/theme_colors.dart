@@ -182,6 +182,7 @@ class ThemeColors {
     brightness: Brightness.light,
     barBackgroundColor: navigationBarBackground,
     textTheme: ehTextTheme,
+    primaryColor: CupertinoColors.systemBlue,
     // scaffoldBackgroundColor: CupertinoColors.secondarySystemBackground,
   );
 

@@ -36,8 +36,6 @@ class ThemeService extends ProfileService {
         return ThemeColors.lightTheme;
       case ThemesModeEnum.darkMode:
         return _getDarkTheme;
-      default:
-        return null;
     }
   }
 

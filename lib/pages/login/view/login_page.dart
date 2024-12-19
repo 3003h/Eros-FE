@@ -97,13 +97,16 @@ class LoginPage extends GetView<LoginController> {
                     height: 50,
                     child: GetBuilder<LoginController>(
                       builder: (logic) {
-                        return CupertinoButton(
-                          color: CupertinoColors.activeBlue,
+                        return CupertinoButton.filled(
+                          // color: CupertinoColors.activeBlue,
                           onPressed:
                               logic.loadingLogin ? null : logic.pressLogin,
                           child: logic.loadingLogin
                               ? const CupertinoActivityIndicator()
-                              : Text(L10n.of(context).login),
+                              : Text(
+                                  L10n.of(context).login,
+                                  style: const TextStyle(height: 1.2),
+                                ),
                         );
                       },
                     ),

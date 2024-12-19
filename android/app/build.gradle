@@ -116,7 +116,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.20"
-    implementation "androidx.startup:startup-runtime:1.1.1"
+    implementation "androidx.startup:startup-runtime:1.2.0"
     implementation 'com.google.mlkit:barcode-scanning:17.3.0'
 }
 
@@ -129,5 +129,5 @@ configurations.configureEach {
 ext {
     compileSdkVersion   = 34
     targetSdkVersion    = 34
-    appCompatVersion    = "1.7.0"
+    appCompatVersion    = "1.9.0"
 }
