@@ -258,7 +258,7 @@ class JumpButton extends StatelessWidget {
               // '${max(1, controller.curPage + 1)}',
               '1',
               textAlign: TextAlign.center,
-              textScaleFactor: 0.9,
+              textScaler: const TextScaler.linear(0.9),
               // textScaler: const TextScaler.linear(0.9),
               style: TextStyle(
                   height: 1.3,

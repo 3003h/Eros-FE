@@ -85,8 +85,11 @@ class LicensePage extends StatelessWidget {
 }
 
 class _LicensePage extends StatelessWidget {
-  const _LicensePage(
-      {super.key, required this.currentPackage, required this.packageLicenses});
+  const _LicensePage({
+    super.key,
+    required this.currentPackage,
+    required this.packageLicenses,
+  });
   final String currentPackage;
   final List<LicenseEntry> packageLicenses;
 
@@ -109,7 +112,7 @@ class _LicensePage extends StatelessWidget {
                   .paragraphs
                   .map((paragraph) => paragraph.text)
                   .join('\n'),
-              textScaleFactor: 0.8,
+              textScaler: const TextScaler.linear(0.8),
             ),
           );
         },

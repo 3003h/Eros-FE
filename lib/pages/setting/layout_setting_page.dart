@@ -53,9 +53,10 @@ class LayoutSettingList extends StatelessWidget {
               return CupertinoSlidingSegmentedControl<bool>(
                 groupValue: _ehSettingService.isPureDarkTheme,
                 children: {
-                  false:
-                      Text(L10n.of(context).gray_black, textScaleFactor: 0.8),
-                  true: Text(L10n.of(context).pure_black, textScaleFactor: 0.8)
+                  false: Text(L10n.of(context).gray_black,
+                      textScaler: const TextScaler.linear(0.8)),
+                  true: Text(L10n.of(context).pure_black,
+                      textScaler: const TextScaler.linear(0.8))
                 },
                 onValueChanged: (bool? val) {
                   if (val != null) {

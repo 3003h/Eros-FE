@@ -96,7 +96,7 @@ class LoginCookie extends GetView<LoginController> {
                           size: 30,
                         ),
                         Text(L10n.of(context).read_from_clipboard,
-                            textScaleFactor: 0.8),
+                            textScaler: const TextScaler.linear(0.8)),
                       ],
                     ),
                   ),

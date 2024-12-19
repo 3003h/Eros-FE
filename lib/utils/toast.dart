@@ -38,7 +38,7 @@ void showToast(
             children: [
               Text(
                 msg,
-                textScaleFactor: 0.8,
+                textScaler: const TextScaler.linear(0.8),
                 style: CupertinoTheme.of(Get.context!).textTheme.textStyle,
               ),
             ],
@@ -79,7 +79,7 @@ void show509Toast() {
               ),
               Text(
                 'IMAGE 509',
-                textScaleFactor: 0.8,
+                textScaler: const TextScaler.linear(0.8),
                 style: CupertinoTheme.of(Get.context!).textTheme.textStyle,
               ),
             ],
@@ -120,7 +120,7 @@ void show429Toast() {
               ),
               Text(
                 '429, Too Many Requests',
-                textScaleFactor: 0.8,
+                textScaler: const TextScaler.linear(0.8),
                 style: CupertinoTheme.of(Get.context!).textTheme.textStyle,
               ),
             ],
@@ -173,7 +173,7 @@ void showActionToast(String msg, {IconData? icon, VoidCallback? onPressed}) {
                 children: [
                   Text(
                     msg,
-                    textScaleFactor: 0.8,
+                    textScaler: const TextScaler.linear(0.8),
                     style: CupertinoTheme.of(Get.context!).textTheme.textStyle,
                     softWrap: true,
                   ),

@@ -70,7 +70,7 @@ class TextAvatar extends StatelessWidget {
         return borderAvatar(
           child: Text(
             '${name.substring(0, 1).toUpperCase()}${name.substring(1, 2)}',
-            textScaleFactor: 0.75,
+            textScaler: const TextScaler.linear(0.75),
             maxLines: 1,
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -94,7 +94,7 @@ class TextAvatar extends StatelessWidget {
           alignment: Alignment.center,
           child: Text(
             '${name.substring(0, 1).toUpperCase()}${name.substring(1, 2)}',
-            textScaleFactor: 0.8,
+            textScaler: const TextScaler.linear(0.8),
             maxLines: 1,
             style: TextStyle(
               color: CupertinoDynamicColor.resolve(
