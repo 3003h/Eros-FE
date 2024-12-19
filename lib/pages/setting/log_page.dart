@@ -26,17 +26,19 @@ class LogPage extends GetView<LogService> {
           ),
         ),
       ),
-      child: CustomScrollView(slivers: [
-        SliverSafeArea(
-          bottom: false,
-          sliver:
-              CupertinoSliverRefreshControl(onRefresh: controller.refreshFiles),
-        ),
-        const SliverSafeArea(
-          top: false,
-          sliver: LogListView(),
-        ),
-      ]),
+      child: CustomScrollView(
+        slivers: [
+          SliverSafeArea(
+            bottom: false,
+            sliver: CupertinoSliverRefreshControl(
+                onRefresh: controller.refreshFiles),
+          ),
+          const SliverSafeArea(
+            top: false,
+            sliver: LogListView(),
+          ),
+        ],
+      ),
     );
   }
 }

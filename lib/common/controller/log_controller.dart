@@ -52,6 +52,7 @@ class LogService extends GetxController {
     isLoading = true;
     logFiles.value = await compute(loadFilesIsolate, logPath);
     isLoading = false;
+    logger.d('loadFiles');
   }
 
   Future<void> refreshFiles() async {

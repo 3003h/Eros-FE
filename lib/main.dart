@@ -79,7 +79,7 @@ Future<void> main() async {
       appRunner: () => runApp(const MyApp()),
     );
   } else {
-    runApp(MyApp());
+    runApp(const MyApp());
   }
 
   if (GetPlatform.isDesktop) {

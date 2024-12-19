@@ -137,7 +137,7 @@ class DownloadSetting extends StatelessWidget {
 
 /// 下载原图
 Widget _buildDownloadOrigImageItem(BuildContext context) {
-  final String _title = L10n.of(context).download_ori_image;
+  final String title = L10n.of(context).download_ori_image;
   final EhSettingService ehSettingService = Get.find();
 
   final Map<DownloadOrigImageType, String> modeMap =
@@ -148,7 +148,7 @@ Widget _buildDownloadOrigImageItem(BuildContext context) {
   };
   return Obx(() {
     return SelectorCupertinoListTile<DownloadOrigImageType>(
-      title: _title,
+      title: title,
       actionMap: modeMap,
       initVal: ehSettingService.downloadOrigType,
       onValueChanged: (val) => ehSettingService.downloadOrigType = val,
@@ -158,7 +158,7 @@ Widget _buildDownloadOrigImageItem(BuildContext context) {
 
 /// 预载图片数量
 Widget _buildPreloadImageItem(BuildContext context) {
-  final String _title = L10n.of(context).preload_image;
+  final String title = L10n.of(context).preload_image;
   final EhSettingService ehSettingService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
@@ -190,13 +190,13 @@ Widget _buildPreloadImageItem(BuildContext context) {
   }
 
   return Obx(() => EhCupertinoListTile(
-        title: Text(_title),
+        title: Text(title),
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(ehSettingService.preloadImage.toString()),
         onTap: () async {
-          final int? _result = await _showActionSheet(context);
-          if (_result != null) {
-            ehSettingService.preloadImage(_result);
+          final int? result = await _showActionSheet(context);
+          if (result != null) {
+            ehSettingService.preloadImage(result);
           }
         },
       ));
@@ -204,7 +204,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
 
 /// 同时下载图片数量
 Widget _buildMultiDownloadItem(BuildContext context) {
-  final String _title = L10n.of(context).multi_download;
+  final String title = L10n.of(context).multi_download;
   final EhSettingService ehSettingService = Get.find();
 
   List<Widget> _getModeList(BuildContext context) {
@@ -236,14 +236,14 @@ Widget _buildMultiDownloadItem(BuildContext context) {
   }
 
   return Obx(() => EhCupertinoListTile(
-        title: Text(_title),
+        title: Text(title),
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(ehSettingService.multiDownload.toString()),
         onTap: () async {
-          final int? _result = await _showActionSheet(context);
-          if (_result != null) {
-            if (ehSettingService.multiDownload != _result) {
-              ehSettingService.multiDownload = _result;
+          final int? result = await _showActionSheet(context);
+          if (result != null) {
+            if (ehSettingService.multiDownload != result) {
+              ehSettingService.multiDownload = result;
               Get.find<DownloadController>().resetConcurrency();
             }
           }

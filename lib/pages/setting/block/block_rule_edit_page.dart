@@ -11,12 +11,12 @@ class BlockRuleEditPage extends GetView<BlockController> {
 
   @override
   Widget build(BuildContext context) {
-    final String _title = L10n.of(context).edit_block_rule;
+    final String title = L10n.of(context).edit_block_rule;
 
-    final BlockRule? _blockRuleFromArg =
+    final BlockRule? blockRuleFromArg =
         Get.arguments is BlockRule ? Get.arguments as BlockRule : null;
 
-    BlockRule _blockRule = _blockRuleFromArg ??
+    BlockRule blockRule = blockRuleFromArg ??
         BlockRule(
           ruleText: '',
           blockType: controller.latestBlockType?.name ?? BlockType.title.name,
@@ -24,13 +24,13 @@ class BlockRuleEditPage extends GetView<BlockController> {
           enableRegex: controller.latestEnableRegex ?? false,
         );
 
-    controller.blockRuleTextEditingController.text = _blockRule.ruleText ?? '';
-    controller.currentEnableRegex = _blockRule.enableRegex ?? false;
+    controller.blockRuleTextEditingController.text = blockRule.ruleText ?? '';
+    controller.currentEnableRegex = blockRule.enableRegex ?? false;
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
-        middle: Text(_title),
+        middle: Text(title),
         trailing: CupertinoButton(
           padding: const EdgeInsets.all(0),
           minSize: 40,
@@ -38,10 +38,10 @@ class BlockRuleEditPage extends GetView<BlockController> {
               ? null
               : () async {
                   FocusScope.of(context).requestFocus(FocusNode());
-                  logger.d('_blockRule ${_blockRule.toJson()}');
+                  logger.d('blockRule ${blockRule.toJson()}');
                   Get.back<BlockRule>(
                     id: isLayoutLarge ? 2 : null,
-                    result: _blockRule,
+                    result: blockRule,
                   );
                 },
           child: const Icon(
@@ -60,9 +60,9 @@ class BlockRuleEditPage extends GetView<BlockController> {
                   title: Text(L10n.of(context).enable),
                   trailing: StatefulBuilder(builder: (context, setState) {
                     return CupertinoSwitch(
-                      value: _blockRule.enabled ?? true,
+                      value: blockRule.enabled ?? true,
                       onChanged: (val) {
-                        _blockRule = _blockRule.copyWith(enabled: val.oN);
+                        blockRule = blockRule.copyWith(enabled: val.oN);
                         setState(() {});
                       },
                     );
@@ -74,9 +74,9 @@ class BlockRuleEditPage extends GetView<BlockController> {
                   title: Text(L10n.of(context).regex),
                   trailing: StatefulBuilder(builder: (context, setState) {
                     return CupertinoSwitch(
-                      value: _blockRule.enableRegex ?? false,
+                      value: blockRule.enableRegex ?? false,
                       onChanged: (val) {
-                        _blockRule = _blockRule.copyWith(enableRegex: val.oN);
+                        blockRule = blockRule.copyWith(enableRegex: val.oN);
                         controller.currentEnableRegex = val;
                         setState(() {});
                       },
@@ -85,10 +85,10 @@ class BlockRuleEditPage extends GetView<BlockController> {
                 ),
                 _BlockTypeSelector(
                   initValue: BlockType.values
-                      .byName(_blockRule.blockType ?? BlockType.title.name),
+                      .byName(blockRule.blockType ?? BlockType.title.name),
                   onChanged: (BlockType value) {
                     controller.latestBlockType = value;
-                    _blockRule = _blockRule.copyWith(blockType: value.name.oN);
+                    blockRule = blockRule.copyWith(blockType: value.name.oN);
                   },
                 ),
               ]),
@@ -115,7 +115,7 @@ class BlockRuleEditPage extends GetView<BlockController> {
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
                       logger.t('value $value');
-                      _blockRule = _blockRule.copyWith(
+                      blockRule = blockRule.copyWith(
                           ruleText: value.replaceAll('\n', ' ').oN);
                     },
                   ),
