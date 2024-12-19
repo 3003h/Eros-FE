@@ -113,6 +113,9 @@ class _LicensePage extends StatelessWidget {
                   .map((paragraph) => paragraph.text)
                   .join('\n'),
               textScaler: const TextScaler.linear(0.8),
+              // 等宽字体
+              style: const TextStyle(
+                  fontFamilyFallback: EHConst.monoFontFamilyFallback),
             ),
           );
         },
