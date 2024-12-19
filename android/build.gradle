@@ -6,14 +6,31 @@ allprojects {
     }
 }
 
-// 临时解决 error: resource android:attr/lStar not found
+// 临时解决依赖子项目的问题
 subprojects {
     afterEvaluate { project ->
         if (project.plugins.hasPlugin("com.android.application") ||
                 project.plugins.hasPlugin("com.android.library")) {
+            def javaVersion = JavaVersion.VERSION_17
             project.android {
+                // 解决 error: resource android:attr/lStar not found
                 compileSdkVersion 34
                 buildToolsVersion "34.0.0"
+
+                // 解决 namespace 问题
+                if (namespace == null) {
+                    namespace project.group
+                }
+
+                compileOptions {
+                    sourceCompatibility javaVersion
+                    targetCompatibility javaVersion
+                }
+                tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                    kotlinOptions {
+                        jvmTarget = javaVersion.toString()
+                    }
+                }
             }
         }
     }

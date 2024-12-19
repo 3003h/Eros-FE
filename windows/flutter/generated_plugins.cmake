@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   bitsdojo_window_windows
   firebase_core
+  flutter_inappwebview_windows
   isar_flutter_libs
   local_auth_windows
   permission_handler_windows
