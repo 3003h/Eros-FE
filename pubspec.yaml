@@ -2,7 +2,7 @@ name: eros_fe
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.7.7+552
+version: 1.8.0+553
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -117,10 +117,10 @@ dependencies:
   jinja: ^0.6.0
   image: ^4.1.3
   palette_generator: ^0.3.2
-  getwidget: ^4.0.0
+  getwidget: ^5.0.0
   open_filex: ^4.1.1
   flustars: ^2.0.1
-  dio_smart_retry: ^6.0.0
+#  dio_smart_retry: ^7.0.1
   flutter_smart_dialog: ^4.5.4
   system_proxy: ^0.1.0
   easy_animated_tabbar: ^0.0.1
@@ -161,7 +161,7 @@ dependencies:
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.0-dev.8
   dio_cache_interceptor: ^3.3.1
-  dio_cache_interceptor_hive_store: ^3.2.0
+  dio_cache_interceptor_hive_store: ^4.0.0
   flutter_android_volume_keydown: #^1.0.0
 #    path: ../flutter_android_volume_keydown
     git:
@@ -181,7 +181,7 @@ dependencies:
   flutter_keyboard_visibility: ^6.0.0
   extended_nested_scroll_view: ^6.0.0
   shared_storage: ^0.8.0
-  mime: ^1.0.0
+  mime: ^2.0.0
   saf:
     git:
       url: https://github.com/honjow/saf.git
@@ -210,7 +210,7 @@ dev_dependencies:
   # flutter pub run build_runner watch --delete-conflicting-outputs
 
   # flutter pub run intl_utils:generate
-  intl_utils: ^2.5.1
+  intl_utils: ^2.8.7
 
   # flutter pub run apn_json2model
 #  apn_json2model: ^2.3.0
@@ -226,14 +226,18 @@ dev_dependencies:
   json_annotation: ^4.8.1
   copy_with_extension_gen: ^5.0.0
   isar_generator: ^3.0.0
-  flutter_lints: ^4.0.0
+#  flutter_lints: ^5.0.0
   cached: ^1.6.1
 
 dependency_overrides:
-#  collection: ^1.18.0
+  collection: ^1.19.0
 #  win32: ^4.0.0
 #  js: ^0.7.0
-  intl: ^0.19.0
+#  intl: ^0.19.0
+  meta: ^1.14.0
+  mime: ^2.0.0
+  intl_utils: ^2.8.7
+  analyzer: ^6.0.0
 
 flutter_intl:
   enabled: true
