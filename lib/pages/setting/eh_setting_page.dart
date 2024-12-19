@@ -65,10 +65,14 @@ class ListViewEhSetting extends StatelessWidget {
                     ? EHConst.EX_BASE_HOST
                     : EHConst.EH_BASE_HOST,
                 children: const {
-                  EHConst.EH_BASE_HOST:
-                      Text('E-Hentai', textScaler: TextScaler.linear(0.8)),
-                  EHConst.EX_BASE_HOST:
-                      Text('ExHentai', textScaler: TextScaler.linear(0.8)),
+                  EHConst.EH_BASE_HOST: Text(
+                    'E-Hentai',
+                    textScaler: TextScaler.linear(0.9),
+                  ),
+                  EHConst.EX_BASE_HOST: Text(
+                    'ExHentai',
+                    textScaler: TextScaler.linear(0.9),
+                  ),
                 },
                 onValueChanged: (String? val) {
                   if (val != null) {
