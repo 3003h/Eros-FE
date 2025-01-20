@@ -23,7 +23,7 @@ final funcLog = () => Logger(
       printer: EhPrettyPrinter(
         // lineLength: 100,
         colors: false,
-        // printTime: true,
+        printTime: true,
       ),
       output: _outPut,
     );

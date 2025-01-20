@@ -14,6 +14,11 @@ const _kSuffix = '.log';
 class LogService extends GetxController {
   final logFiles = <File>[].obs;
 
+  // 添加自动滚动控制
+  final _autoScroll = true.obs;
+  bool get autoScroll => _autoScroll.value;
+  set autoScroll(bool val) => _autoScroll.value = val;
+
   final _curFileName = 'eh.log'.obs;
   String get curFileName => _curFileName.value;
   set curFileName(String val) => _curFileName.value = val;
