@@ -17,7 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_boring_avatars/flutter_boring_avatars.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
@@ -898,9 +898,10 @@ class EhSettingService extends ProfileService {
   void applyBlurredInRecentTasks() {
     if (Platform.isAndroid) {
       if (blurredInRecentTasks) {
-        FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+        FlutterWindowManagerPlus.addFlags(FlutterWindowManagerPlus.FLAG_SECURE);
       } else {
-        FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+        FlutterWindowManagerPlus.clearFlags(
+            FlutterWindowManagerPlus.FLAG_SECURE);
       }
     }
   }

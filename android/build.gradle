@@ -14,8 +14,11 @@ subprojects {
             def javaVersion = JavaVersion.VERSION_17
             project.android {
                 // 解决 error: resource android:attr/lStar not found
-                compileSdkVersion 34
-                buildToolsVersion "34.0.0"
+                compileSdkVersion 35
+                // buildToolsVersion "35.0.0"
+                defaultConfig {
+                    minSdkVersion 21
+                }
 
                 // 解决 namespace 问题
                 if (namespace == null) {

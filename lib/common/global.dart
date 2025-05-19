@@ -24,7 +24,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart' as iaw;
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:logger/logger.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:system_network_proxy/system_network_proxy.dart';

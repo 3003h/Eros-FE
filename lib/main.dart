@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:flutter_windowmanager_plus/flutter_windowmanager_plus.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:oktoast/oktoast.dart';
@@ -152,7 +152,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         await _autoLockController.checkLock();
 
         // resumed 时清除 FLAG_SECURE ,避免无法截屏
-        FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+        FlutterWindowManagerPlus.clearFlags(
+            FlutterWindowManagerPlus.FLAG_SECURE);
 
         if (context.mounted) {
           _ehSettingService.chkClipboardLink(context);

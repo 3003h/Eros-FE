@@ -10,7 +10,7 @@ import 'package:eros_fe/pages/tab/controller/favorite/favorite_tabbar_controller
 import 'package:eros_fe/utils/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:webview_cookie_manager_plus/webview_cookie_manager_plus.dart';
 
 class UserController extends ProfileController {
   bool get isLogin =>

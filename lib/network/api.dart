@@ -18,7 +18,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response, FormData;
 import 'package:html_unescape/html_unescape.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:share_plus/share_plus.dart';
@@ -636,13 +636,13 @@ class Api {
 
       if (Platform.isAndroid || !isCached) {
         // Android 直接使用缓存路径的图片文件, 或者非缓存图片（通常为下载原图）
-        result = await ImageGallerySaver.saveFile(
+        result = await ImageGallerySaverPlus.saveFile(
           file.path,
           name: realFileName,
         );
       } else {
         // iOS 不能直接使用缓存路径的图片文件， 所以需要先读取文件内容
-        result = await ImageGallerySaver.saveImage(
+        result = await ImageGallerySaverPlus.saveImage(
           file.readAsBytesSync(),
           name: realFileName,
           quality: 100,
@@ -744,7 +744,7 @@ class Api {
       throw EhError(error: 'File not found');
     }
 
-    final result = await ImageGallerySaver.saveFile(file.path);
+    final result = await ImageGallerySaverPlus.saveFile(file.path);
     logger.d('${result.runtimeType} $result');
 
     if (result == null || result == '') {
