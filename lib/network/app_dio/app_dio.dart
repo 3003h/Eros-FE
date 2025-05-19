@@ -228,6 +228,7 @@ class AppDio with DioMixin implements Dio {
     Map<String, dynamic>? queryParameters,
     CancelToken? cancelToken,
     bool deleteOnError = true,
+    FileAccessMode fileAccessMode = FileAccessMode.write,
     String lengthHeader = Headers.contentLengthHeader,
     Object? data,
     Options? options,
@@ -297,7 +298,11 @@ class AppDio with DioMixin implements Dio {
     // Shouldn't call file.writeAsBytesSync(list, flush: flush),
     // because it can write all bytes by once. Consider that the file is
     // a very big size (up to 1 Gigabytes), it will be expensive in memory.
-    RandomAccessFile raf = file.openSync(mode: FileMode.write);
+    RandomAccessFile raf = file.openSync(
+      mode: fileAccessMode == FileAccessMode.write
+          ? FileMode.write
+          : FileMode.append,
+    );
 
     // Create a Completer to notify the success/error state.
     final completer = Completer<Response>();
