@@ -46,26 +46,26 @@ class LayoutSettingList extends StatelessWidget {
         _buildThemeItem(context),
 
         // dark_mode_effect
-        if (!kReleaseMode)
-          EhCupertinoListTile(
-            title: Text(L10n.of(context).dark_mode_effect),
-            trailing: Obx(() {
-              return CupertinoSlidingSegmentedControl<bool>(
-                groupValue: _ehSettingService.isPureDarkTheme,
-                children: {
-                  false: Text(L10n.of(context).gray_black,
-                      textScaler: const TextScaler.linear(0.8)),
-                  true: Text(L10n.of(context).pure_black,
-                      textScaler: const TextScaler.linear(0.8))
-                },
-                onValueChanged: (bool? val) {
-                  if (val != null) {
-                    _ehSettingService.isPureDarkTheme = val;
-                  }
-                },
-              );
-            }),
-          ),
+        // if (!kReleaseMode)
+        //   EhCupertinoListTile(
+        //     title: Text(L10n.of(context).dark_mode_effect),
+        //     trailing: Obx(() {
+        //       return CupertinoSlidingSegmentedControl<bool>(
+        //         groupValue: _ehSettingService.isPureDarkTheme,
+        //         children: {
+        //           false: Text(L10n.of(context).gray_black,
+        //               textScaler: const TextScaler.linear(0.8)),
+        //           true: Text(L10n.of(context).pure_black,
+        //               textScaler: const TextScaler.linear(0.8))
+        //         },
+        //         onValueChanged: (bool? val) {
+        //           if (val != null) {
+        //             _ehSettingService.isPureDarkTheme = val;
+        //           }
+        //         },
+        //       );
+        //     }),
+        //   ),
 
         if (context.isTablet) _buildTableLayoutItem(context),
 

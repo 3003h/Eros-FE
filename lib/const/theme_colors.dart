@@ -343,7 +343,7 @@ class ThemeColors {
   static const CupertinoDynamicColor navigationBarBackground =
       CupertinoDynamicColor.withBrightness(
     debugLabel: 'navigationBarBackground',
-    color: Color.fromARGB(200, 249, 249, 249),
+    color: Color.fromARGB(200, 255, 255, 255),
     darkColor: Color.fromARGB(200, 20, 20, 20),
   );
 
@@ -352,7 +352,7 @@ class ThemeColors {
     debugLabel: 'navigationBarBackgroundGray',
     // color: Color.fromARGB(230, 35, 35, 35),
     color: Color.fromARGB(200, 249, 249, 249),
-    darkColor: Color.fromARGB(200, 25, 25, 25),
+    darkColor: Color.fromARGB(200, 20, 20, 20),
     // color: Color.fromARGB(222, 186, 27, 27),
     // darkColor: Color.fromARGB(230, 21, 212, 75),
   );

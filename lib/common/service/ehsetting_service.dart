@@ -46,7 +46,8 @@ class EhSettingService extends ProfileService {
   Rx<TagIntroImgLv> tagIntroImgLv = TagIntroImgLv.nonh.obs;
 
   final _isPureDarkTheme = false.obs;
-  bool get isPureDarkTheme => _isPureDarkTheme.value;
+  // bool get isPureDarkTheme => _isPureDarkTheme.value;
+  bool get isPureDarkTheme => false;
   set isPureDarkTheme(bool val) => _isPureDarkTheme.value = val;
 
   final _blurredInRecentTasks = false.obs;
