@@ -322,7 +322,6 @@ class CustomTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final barBackgroundColor = CupertinoTheme.of(context).barBackgroundColor;
-    final rgb = opacity > 0.9 ? 255.0 : null;
     return Stack(
       // fit: StackFit.expand,
       alignment: Alignment.topCenter,
@@ -332,11 +331,7 @@ class CustomTabBar extends StatelessWidget {
           ehTheme.isDarkMode;
           return Blur(
             blur: 10,
-            blurColor: barBackgroundColor.withValues(
-              red: rgb,
-              green: rgb,
-              blue: rgb,
-            ),
+            blurColor: barBackgroundColor,
             colorOpacity: kEnableImpeller ? 1.0 : opacity,
             child: Container(
               height: kTopTabbarHeight,
