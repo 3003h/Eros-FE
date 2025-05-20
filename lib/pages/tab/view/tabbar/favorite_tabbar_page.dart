@@ -60,38 +60,22 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
     double offset,
     double maxExtentCallBackValue,
   ) {
+    final navBarOpacity = 1.0 -
+        (offset / (kMinInteractiveDimensionCupertino - 1)).clamp(0.0, 1.0);
+    final customBarOpacity = navBarOpacity;
     return SizedBox(
       height: maxExtentCallBackValue,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
         children: [
-          Expanded(
-            child: getNavigationBar(context),
-          ),
-          Stack(
-            // fit: StackFit.expand,
-            alignment: Alignment.topCenter,
-            children: [
-              Obx(() {
-                // 不要删除这行
-                ehTheme.isDarkMode;
-                return Blur(
-                  blur: 10,
-                  blurColor: CupertinoTheme.of(context)
-                      .barBackgroundColor
-                      .withOpacity(1),
-                  colorOpacity: kEnableImpeller ? 1.0 : 0.7,
-                  child: Container(
-                    height: kTopTabbarHeight,
-                  ),
-                );
-              }),
-              FavoriteTabBar(
-                pageController: pageController,
-                linkScrollBarController: linkScrollBarController,
-                controller: controller,
-              ),
-            ],
+          getNavigationBar(context, opacity: navBarOpacity),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: FavoriteTabBar(
+              pageController: pageController,
+              linkScrollBarController: linkScrollBarController,
+              controller: controller,
+              opacity: customBarOpacity,
+            ),
           ),
         ],
       ),
@@ -162,121 +146,132 @@ class _FavoriteTabTabBarPageState extends State<FavoriteTabTabBarPage> {
     });
   }
 
-  Widget getNavigationBar(BuildContext context) {
+  Widget getNavigationBar(BuildContext context, {double? opacity}) {
     return Obx(() {
       return CupertinoNavigationBar(
         backgroundColor: kEnableImpeller
             ? CupertinoTheme.of(context).barBackgroundColor.withOpacity(1)
             : null,
         transitionBetweenRoutes: false,
-        border: Border(
-          bottom: BorderSide(
-            color:
-                CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.2),
-            width: 0.1, // 0.0 means one physical pixel
+        border: null,
+        // border: Border(
+        //   bottom: BorderSide(
+        //     color:
+        //         CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.2),
+        //     width: 0.1, // 0.0 means one physical pixel
+        //   ),
+        // ),
+        padding: const EdgeInsetsDirectional.only(end: 4),
+        middle: Opacity(
+          opacity: opacity ?? 1.0,
+          child: GestureDetector(
+            onTap: () => controller.scrollToTop(context),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(L10n.of(context).tab_favorite),
+                Obx(() {
+                  if (controller.isBackgroundRefresh) {
+                    return const CupertinoActivityIndicator(
+                      radius: 10,
+                    ).paddingSymmetric(horizontal: 8);
+                  } else {
+                    return const SizedBox();
+                  }
+                }),
+              ],
+            ),
           ),
         ),
-        padding: const EdgeInsetsDirectional.only(end: 4),
-        middle: GestureDetector(
-          onTap: () => controller.scrollToTop(context),
+        leading: Opacity(
+          opacity: opacity ?? 1.0,
+          child: controller.getLeading(context),
+        ),
+        trailing: Opacity(
+          opacity: opacity ?? 1.0,
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(L10n.of(context).tab_favorite),
+              // 搜索按钮
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  // FontAwesomeIcons.magnifyingGlass,
+                  CupertinoIcons.search,
+                  size: 28,
+                ),
+                onPressed: () {
+                  final bool fromTabItem = Get.find<TabHomeController>()
+                          .tabMap[controller.heroTag ?? ''] ??
+                      false;
+                  NavigatorUtil.goSearchPage(
+                      searchType: SearchType.favorite,
+                      fromTabItem: fromTabItem);
+                },
+              ),
+              CupertinoButton(
+                padding: const EdgeInsets.all(0.0),
+                minSize: 40,
+                child: Stack(
+                  alignment: Alignment.centerRight,
+                  // mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    // const Icon(
+                    //   FontAwesomeIcons.arrowDownWideShort,
+                    //   size: 20,
+                    // ),
+                    const Icon(
+                      CupertinoIcons.sort_down,
+                      size: 28,
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        controller.orderText,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                onPressed: () => controller.setOrder(context),
+              ),
               Obx(() {
-                if (controller.isBackgroundRefresh) {
-                  return const CupertinoActivityIndicator(
-                    radius: 10,
-                  ).paddingSymmetric(horizontal: 8);
+                if (controller.afterJump) {
+                  return CupertinoButton(
+                    minSize: 40,
+                    padding: const EdgeInsets.all(0),
+                    child: const Icon(
+                      CupertinoIcons.arrow_up_circle,
+                      size: 28,
+                    ),
+                    onPressed: () {
+                      controller.jumpToTop();
+                    },
+                  );
                 } else {
                   return const SizedBox();
                 }
               }),
+              CupertinoButton(
+                minSize: 40,
+                padding: const EdgeInsets.all(0),
+                child: const Icon(
+                  CupertinoIcons.arrow_uturn_down_circle,
+                  size: 28,
+                ),
+                onPressed: () {
+                  controller.showJumpDialog(context);
+                },
+              ),
+              // PageSelectorButton(controller: controller),
             ],
-          ),
+          ).paddingOnly(right: 4),
         ),
-        leading: controller.getLeading(context),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            // 搜索按钮
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                // FontAwesomeIcons.magnifyingGlass,
-                CupertinoIcons.search,
-                size: 28,
-              ),
-              onPressed: () {
-                final bool fromTabItem = Get.find<TabHomeController>()
-                        .tabMap[controller.heroTag ?? ''] ??
-                    false;
-                NavigatorUtil.goSearchPage(
-                    searchType: SearchType.favorite, fromTabItem: fromTabItem);
-              },
-            ),
-            CupertinoButton(
-              padding: const EdgeInsets.all(0.0),
-              minSize: 40,
-              child: Stack(
-                alignment: Alignment.centerRight,
-                // mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  // const Icon(
-                  //   FontAwesomeIcons.arrowDownWideShort,
-                  //   size: 20,
-                  // ),
-                  const Icon(
-                    CupertinoIcons.sort_down,
-                    size: 28,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      controller.orderText,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              onPressed: () => controller.setOrder(context),
-            ),
-            Obx(() {
-              if (controller.afterJump) {
-                return CupertinoButton(
-                  minSize: 40,
-                  padding: const EdgeInsets.all(0),
-                  child: const Icon(
-                    CupertinoIcons.arrow_up_circle,
-                    size: 28,
-                  ),
-                  onPressed: () {
-                    controller.jumpToTop();
-                  },
-                );
-              } else {
-                return const SizedBox();
-              }
-            }),
-            CupertinoButton(
-              minSize: 40,
-              padding: const EdgeInsets.all(0),
-              child: const Icon(
-                CupertinoIcons.arrow_uturn_down_circle,
-                size: 28,
-              ),
-              onPressed: () {
-                controller.showJumpDialog(context);
-              },
-            ),
-            // PageSelectorButton(controller: controller),
-          ],
-        ).paddingOnly(right: 4),
       );
     });
   }
@@ -288,106 +283,134 @@ class FavoriteTabBar extends StatelessWidget {
     required this.pageController,
     required this.linkScrollBarController,
     required this.controller,
+    this.opacity = 0.0,
   });
 
   final PageController pageController;
   final LinkScrollBarController linkScrollBarController;
   final FavoriteTabBarController controller;
+  final double opacity;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: kDefaultNavBarBorder,
-      ),
-      padding: EdgeInsets.only(
-        left: context.mediaQueryPadding.left,
-        right: context.mediaQueryPadding.right,
-      ),
-      child: SizedBox(
-        height: kTopTabbarHeight,
-        child: Obx(() {
-          return Row(
-            children: [
-              Expanded(
-                child: LinkScrollBar(
-                  pageController: pageController,
-                  controller: linkScrollBarController,
-                  items: controller.favcatList
-                      .map((e) => LinkTabItem(
-                            title: e.favTitle,
-                            // icon: LineIcons.dotCircleAlt,
-                          ))
-                      .toList(),
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 8),
-                  initIndex: controller.index,
-                  onItemChange: (index) => pageController.animateToPage(index,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.ease),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // 刷新按钮
-                    if (GetPlatform.isDesktop)
-                      Builder(builder: (context) {
-                        bool isRefresh = false;
-                        return StatefulBuilder(builder: (context, setState) {
-                          return CupertinoButton(
-                            minSize: 40,
-                            padding: const EdgeInsets.all(0),
-                            child: isRefresh
-                                ? const CupertinoActivityIndicator(radius: 10)
-                                : const Icon(
-                                    FontAwesomeIcons.rotateRight,
-                                    size: 20,
-                                  ),
-                            onPressed: () async {
-                              setState(() {
-                                isRefresh = true;
-                              });
-                              try {
-                                await controller.reloadData();
-                              } finally {
-                                setState(() {
-                                  isRefresh = false;
-                                });
-                              }
-                            },
-                          );
-                        });
-                      }),
-                    if (controller.showBarsBtn)
-                      CupertinoButton(
-                        minSize: 40,
-                        padding: const EdgeInsets.all(0),
-                        child: const Icon(
-                          FontAwesomeIcons.bars,
-                          size: 20,
-                        ),
-                        onPressed: () async {
-                          // 跳转收藏夹选择页
-                          final result = await Get.toNamed(
-                            EHRoutes.selFavorite,
-                            id: isLayoutLarge ? 1 : null,
-                          );
-                          if (result != null && result is Favcat) {
-                            final index = controller.favcatList.indexWhere(
-                                (element) => element.favId == result.favId);
-                            pageController.jumpToPage(index);
-                          }
-                        },
-                      ),
-                  ],
-                ),
-              ),
-            ],
+    final barBackgroundColor = CupertinoTheme.of(context).barBackgroundColor;
+    final rgb = opacity > 0.9 ? 255.0 : null;
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Obx(() {
+          // 不要删除这行
+          ehTheme.isDarkMode;
+          return Blur(
+            blur: 10,
+            blurColor: barBackgroundColor.withValues(
+              red: rgb,
+              green: rgb,
+              blue: rgb,
+            ),
+            colorOpacity: kEnableImpeller ? 1.0 : opacity,
+            child: Container(
+              height: kTopTabbarHeight,
+            ),
           );
         }),
-      ),
+        Container(
+          decoration: const BoxDecoration(
+            border: kDefaultNavBarBorder,
+          ),
+          padding: EdgeInsets.only(
+            left: context.mediaQueryPadding.left,
+            right: context.mediaQueryPadding.right,
+          ),
+          child: SizedBox(
+            height: kTopTabbarHeight,
+            child: Obx(() {
+              return Row(
+                children: [
+                  Expanded(
+                    child: LinkScrollBar(
+                      pageController: pageController,
+                      controller: linkScrollBarController,
+                      items: controller.favcatList
+                          .map((e) => LinkTabItem(
+                                title: e.favTitle,
+                                // icon: LineIcons.dotCircleAlt,
+                              ))
+                          .toList(),
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 8),
+                      initIndex: controller.index,
+                      onItemChange: (index) => pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.ease),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // 刷新按钮
+                        if (GetPlatform.isDesktop)
+                          Builder(builder: (context) {
+                            bool isRefresh = false;
+                            return StatefulBuilder(
+                                builder: (context, setState) {
+                              return CupertinoButton(
+                                minSize: 40,
+                                padding: const EdgeInsets.all(0),
+                                child: isRefresh
+                                    ? const CupertinoActivityIndicator(
+                                        radius: 10)
+                                    : const Icon(
+                                        FontAwesomeIcons.rotateRight,
+                                        size: 20,
+                                      ),
+                                onPressed: () async {
+                                  setState(() {
+                                    isRefresh = true;
+                                  });
+                                  try {
+                                    await controller.reloadData();
+                                  } finally {
+                                    setState(() {
+                                      isRefresh = false;
+                                    });
+                                  }
+                                },
+                              );
+                            });
+                          }),
+                        if (controller.showBarsBtn)
+                          CupertinoButton(
+                            minSize: 40,
+                            padding: const EdgeInsets.all(0),
+                            child: const Icon(
+                              FontAwesomeIcons.bars,
+                              size: 20,
+                            ),
+                            onPressed: () async {
+                              // 跳转收藏夹选择页
+                              final result = await Get.toNamed(
+                                EHRoutes.selFavorite,
+                                id: isLayoutLarge ? 1 : null,
+                              );
+                              if (result != null && result is Favcat) {
+                                final index = controller.favcatList.indexWhere(
+                                    (element) => element.favId == result.favId);
+                                pageController.jumpToPage(index);
+                              }
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }),
+          ),
+        ),
+      ],
     );
   }
 }
