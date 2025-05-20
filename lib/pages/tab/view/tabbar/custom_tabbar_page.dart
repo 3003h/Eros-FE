@@ -129,101 +129,136 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
     double offset,
     double maxExtentCallBackValue,
   ) {
+    // final navBarHeight = maxExtentCallBackValue -
+    //     kTopTabbarHeight -
+    //     context.mediaQueryPadding.top;
+    final navBarOpacity = 1.0 -
+        (offset / (kMinInteractiveDimensionCupertino - 1)).clamp(0.0, 1.0);
+    // customBarOpacity 为 navBarOpacity 缩放
+    // final customBarOpacity = navBarOpacity * 0.9 + 0.1;
+    final customBarOpacity = navBarOpacity;
+    // logger.d(
+    //     'navBarOpacity: $navBarOpacity, customBarOpacity: $customBarOpacity');
+
     return SizedBox(
       height: maxExtentCallBackValue,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      // child: Column(
+      //   mainAxisSize: MainAxisSize.min,
+      //   children: [
+      //     // 原导航栏
+      //     Expanded(
+      //       child: getNavigationBar(context),
+      //     ),
+      //     // top tabBar
+      //     CustomTabBar(controller: controller),
+      //   ],
+      // ),
+      child: Stack(
         children: [
-          // 原导航栏
-          Expanded(
-            child: getNavigationBar(context),
+          // 导航栏
+          getNavigationBar(context, opacity: navBarOpacity),
+          // TabBar固定在底部
+          Align(
+            alignment: Alignment.bottomCenter,
+            child:
+                CustomTabBar(controller: controller, opacity: customBarOpacity),
           ),
-          // top tabBar
-          CustomTabBar(controller: controller),
         ],
       ),
     );
   }
 
-  CupertinoNavigationBar getNavigationBar(BuildContext context) {
+  CupertinoNavigationBar getNavigationBar(
+    BuildContext context, {
+    double? opacity,
+  }) {
     return CupertinoNavigationBar(
       transitionBetweenRoutes: false,
       backgroundColor: kEnableImpeller
           ? CupertinoTheme.of(context).barBackgroundColor.withOpacity(1)
           : null,
-      // border: null,
-      border: Border(
-        bottom: BorderSide(
-          color: CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.2),
-          width: 0.1, // 0.0 means one physical pixel
+      border: null,
+      // border: Border(
+      //   bottom: BorderSide(
+      //     color: CupertinoTheme.of(context).barBackgroundColor.withOpacity(0.2),
+      //     width: 0.1, // 0.0 means one physical pixel
+      //   ),
+      // ),
+      padding: const EdgeInsetsDirectional.only(end: 4),
+      middle: Opacity(
+        opacity: opacity ?? 1.0,
+        child: GestureDetector(
+          onTap: () => controller.scrollToTop(context),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(L10n.of(context).tab_gallery),
+              Obx(() {
+                if (controller.isBackgroundRefresh) {
+                  return const CupertinoActivityIndicator(
+                    radius: 10,
+                  ).paddingSymmetric(horizontal: 8);
+                } else {
+                  return const SizedBox();
+                }
+              }),
+            ],
+          ),
         ),
       ),
-      padding: const EdgeInsetsDirectional.only(end: 4),
-      middle: GestureDetector(
-        onTap: () => controller.scrollToTop(context),
+      leading: Opacity(
+        opacity: opacity ?? 1.0,
+        child: controller.getLeading(context),
+      ),
+      trailing: Opacity(
+        opacity: opacity ?? 1.0,
         child: Row(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(L10n.of(context).tab_gallery),
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                CupertinoIcons.search,
+                size: 28,
+              ),
+              onPressed: () {
+                NavigatorUtil.goSearchPage();
+              },
+            ),
+            // 页码跳转按钮
+            // JumpButton(controller: controller),
             Obx(() {
-              if (controller.isBackgroundRefresh) {
-                return const CupertinoActivityIndicator(
-                  radius: 10,
-                ).paddingSymmetric(horizontal: 8);
+              if (controller.afterJump) {
+                return CupertinoButton(
+                  minSize: 40,
+                  padding: const EdgeInsets.all(0),
+                  child: const Icon(
+                    CupertinoIcons.arrow_up_circle,
+                    size: 28,
+                  ),
+                  onPressed: () {
+                    controller.jumpToTop();
+                  },
+                );
               } else {
                 return const SizedBox();
               }
             }),
+            CupertinoButton(
+              minSize: 40,
+              padding: const EdgeInsets.all(0),
+              child: const Icon(
+                CupertinoIcons.arrow_uturn_down_circle,
+                size: 28,
+              ),
+              onPressed: () {
+                controller.showJumpDialog(context);
+              },
+            ),
           ],
         ),
-      ),
-      leading: controller.getLeading(context),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              CupertinoIcons.search,
-              size: 28,
-            ),
-            onPressed: () {
-              NavigatorUtil.goSearchPage();
-            },
-          ),
-          // 页码跳转按钮
-          // JumpButton(controller: controller),
-          Obx(() {
-            if (controller.afterJump) {
-              return CupertinoButton(
-                minSize: 40,
-                padding: const EdgeInsets.all(0),
-                child: const Icon(
-                  CupertinoIcons.arrow_up_circle,
-                  size: 28,
-                ),
-                onPressed: () {
-                  controller.jumpToTop();
-                },
-              );
-            } else {
-              return const SizedBox();
-            }
-          }),
-          CupertinoButton(
-            minSize: 40,
-            padding: const EdgeInsets.all(0),
-            child: const Icon(
-              CupertinoIcons.arrow_uturn_down_circle,
-              size: 28,
-            ),
-            onPressed: () {
-              controller.showJumpDialog(context);
-            },
-          ),
-        ],
       ),
     );
   }
@@ -278,12 +313,16 @@ class CustomTabBar extends StatelessWidget {
   const CustomTabBar({
     super.key,
     required this.controller,
+    this.opacity = 0.0,
   });
 
   final CustomTabbarController controller;
+  final double opacity;
 
   @override
   Widget build(BuildContext context) {
+    final barBackgroundColor = CupertinoTheme.of(context).barBackgroundColor;
+    final rgb = opacity > 0.9 ? 255.0 : null;
     return Stack(
       // fit: StackFit.expand,
       alignment: Alignment.topCenter,
@@ -293,9 +332,12 @@ class CustomTabBar extends StatelessWidget {
           ehTheme.isDarkMode;
           return Blur(
             blur: 10,
-            blurColor:
-                CupertinoTheme.of(context).barBackgroundColor.withOpacity(1),
-            colorOpacity: kEnableImpeller ? 1.0 : 0.7,
+            blurColor: barBackgroundColor.withValues(
+              red: rgb,
+              green: rgb,
+              blue: rgb,
+            ),
+            colorOpacity: kEnableImpeller ? 1.0 : opacity,
             child: Container(
               height: kTopTabbarHeight,
             ),

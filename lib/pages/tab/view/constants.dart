@@ -3,11 +3,10 @@ import 'package:flutter/cupertino.dart';
 const double kNavBarBackButtonTapWidth = 50.0;
 const double kNavBarLargeTitleHeightExtension = 52.0;
 
-
 const double kTopTabbarHeight = kMinInteractiveDimensionCupertino;
 
 const double kHeaderMaxHeight =
-    kMinInteractiveDimensionCupertino + kTopTabbarHeight + 8;
+    kMinInteractiveDimensionCupertino + kTopTabbarHeight - 2.0;
 
 const Color _kDefaultNavBarBorderColor = Color(0x4D000000);
 const Border kDefaultNavBarBorder = Border(
