@@ -237,13 +237,13 @@ dev_dependencies:
   cached: ^1.6.1
 
 dependency_overrides:
-  collection: ^1.19.0
+#  collection: ^1.19.0
 #  win32: ^4.0.0
 #  js: ^0.7.0
 #  intl: ^0.19.0
-  meta: ^1.14.0
-  mime: ^2.0.0
-  intl_utils: ^2.8.7
+#  meta: ^1.14.0
+#  mime: ^2.0.0
+#  intl_utils: ^2.8.7
   analyzer: ^6.0.0
 
 flutter_intl:
