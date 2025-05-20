@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:blur/blur.dart';
 import 'package:english_words/english_words.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
@@ -131,14 +129,30 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
     double offset,
     double maxExtentCallBackValue,
   ) {
+    // final navBarHeight = maxExtentCallBackValue -
+    //     kTopTabbarHeight -
+    //     context.mediaQueryPadding.top;
     final navBarOpacity = 1.0 -
         (offset / (kMinInteractiveDimensionCupertino - 1)).clamp(0.0, 1.0);
     // customBarOpacity 为 navBarOpacity 缩放
     // final customBarOpacity = navBarOpacity * 0.9 + 0.1;
     final customBarOpacity = navBarOpacity;
+    // logger.d(
+    //     'navBarOpacity: $navBarOpacity, customBarOpacity: $customBarOpacity');
 
     return SizedBox(
       height: maxExtentCallBackValue,
+      // child: Column(
+      //   mainAxisSize: MainAxisSize.min,
+      //   children: [
+      //     // 原导航栏
+      //     Expanded(
+      //       child: getNavigationBar(context),
+      //     ),
+      //     // top tabBar
+      //     CustomTabBar(controller: controller),
+      //   ],
+      // ),
       child: Stack(
         children: [
           // 导航栏
@@ -146,10 +160,8 @@ class _CustomTabbarListState extends State<CustomTabbarList> {
           // TabBar固定在底部
           Align(
             alignment: Alignment.bottomCenter,
-            child: CustomTabBar(
-              controller: controller,
-              opacity: customBarOpacity,
-            ),
+            child:
+                CustomTabBar(controller: controller, opacity: customBarOpacity),
           ),
         ],
       ),
@@ -320,13 +332,11 @@ class CustomTabBar extends StatelessWidget {
           ehTheme.isDarkMode;
           return Blur(
             blur: 10,
-            blurColor: Platform.isAndroid
-                ? barBackgroundColor.withValues(
-                    red: rgb,
-                    green: rgb,
-                    blue: rgb,
-                  )
-                : barBackgroundColor.withValues(alpha: rgb),
+            blurColor: barBackgroundColor.withValues(
+              red: rgb,
+              green: rgb,
+              blue: rgb,
+            ),
             colorOpacity: kEnableImpeller ? 1.0 : opacity,
             child: Container(
               height: kTopTabbarHeight,

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:blur/blur.dart';
 import 'package:eros_fe/common/service/ehsetting_service.dart';
 import 'package:eros_fe/common/service/layout_service.dart';
@@ -305,13 +303,11 @@ class FavoriteTabBar extends StatelessWidget {
           ehTheme.isDarkMode;
           return Blur(
             blur: 10,
-            blurColor: Platform.isAndroid
-                ? barBackgroundColor.withValues(
-                    red: rgb,
-                    green: rgb,
-                    blue: rgb,
-                  )
-                : barBackgroundColor.withValues(alpha: rgb),
+            blurColor: barBackgroundColor.withValues(
+              red: rgb,
+              green: rgb,
+              blue: rgb,
+            ),
             colorOpacity: kEnableImpeller ? 1.0 : opacity,
             child: Container(
               height: kTopTabbarHeight,
