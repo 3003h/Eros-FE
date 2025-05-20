@@ -50,12 +50,12 @@ abstract class _$GalleryTaskCWProxy {
   /// GalleryTask(...).copyWith(id: 12, name: "My name")
   /// ````
   GalleryTask call({
-    int? gid,
-    String? token,
+    int gid,
+    String token,
     String? url,
-    String? title,
+    String title,
     String? dirPath,
-    int? fileCount,
+    int fileCount,
     int? completCount,
     int? status,
     String? coverImage,
@@ -162,11 +162,11 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
     Object? showKey = const $CopyWithPlaceholder(),
   }) {
     return GalleryTask(
-      gid: gid == const $CopyWithPlaceholder() || gid == null
+      gid: gid == const $CopyWithPlaceholder()
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
           : gid as int,
-      token: token == const $CopyWithPlaceholder() || token == null
+      token: token == const $CopyWithPlaceholder()
           ? _value.token
           // ignore: cast_nullable_to_non_nullable
           : token as String,
@@ -174,7 +174,7 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
           ? _value.url
           // ignore: cast_nullable_to_non_nullable
           : url as String?,
-      title: title == const $CopyWithPlaceholder() || title == null
+      title: title == const $CopyWithPlaceholder()
           ? _value.title
           // ignore: cast_nullable_to_non_nullable
           : title as String,
@@ -182,7 +182,7 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
           ? _value.dirPath
           // ignore: cast_nullable_to_non_nullable
           : dirPath as String?,
-      fileCount: fileCount == const $CopyWithPlaceholder() || fileCount == null
+      fileCount: fileCount == const $CopyWithPlaceholder()
           ? _value.fileCount
           // ignore: cast_nullable_to_non_nullable
           : fileCount as int,

@@ -20,9 +20,9 @@ abstract class _$ViewHistoryCWProxy {
   /// ViewHistory(...).copyWith(id: 12, name: "My name")
   /// ````
   ViewHistory call({
-    int? gid,
-    int? lastViewTime,
-    String? galleryProviderText,
+    int gid,
+    int lastViewTime,
+    String galleryProviderText,
   });
 }
 
@@ -57,21 +57,18 @@ class _$ViewHistoryCWProxyImpl implements _$ViewHistoryCWProxy {
     Object? galleryProviderText = const $CopyWithPlaceholder(),
   }) {
     return ViewHistory(
-      gid: gid == const $CopyWithPlaceholder() || gid == null
+      gid: gid == const $CopyWithPlaceholder()
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
           : gid as int,
-      lastViewTime:
-          lastViewTime == const $CopyWithPlaceholder() || lastViewTime == null
-              ? _value.lastViewTime
-              // ignore: cast_nullable_to_non_nullable
-              : lastViewTime as int,
-      galleryProviderText:
-          galleryProviderText == const $CopyWithPlaceholder() ||
-                  galleryProviderText == null
-              ? _value.galleryProviderText
-              // ignore: cast_nullable_to_non_nullable
-              : galleryProviderText as String,
+      lastViewTime: lastViewTime == const $CopyWithPlaceholder()
+          ? _value.lastViewTime
+          // ignore: cast_nullable_to_non_nullable
+          : lastViewTime as int,
+      galleryProviderText: galleryProviderText == const $CopyWithPlaceholder()
+          ? _value.galleryProviderText
+          // ignore: cast_nullable_to_non_nullable
+          : galleryProviderText as String,
     );
   }
 }

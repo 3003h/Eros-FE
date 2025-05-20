@@ -1561,7 +1561,7 @@ class DownloadController extends GetxController {
     );
 
     final GalleryImageTask imageTask = oriImageTask?.copyWith(
-          token: image.token,
+          token: image.token ?? '',
           href: image.href,
           imageUrl: image.imageUrl,
           sourceId: image.sourceId,

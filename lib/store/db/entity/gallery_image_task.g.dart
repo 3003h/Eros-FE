@@ -30,12 +30,12 @@ abstract class _$GalleryImageTaskCWProxy {
   /// GalleryImageTask(...).copyWith(id: 12, name: "My name")
   /// ````
   GalleryImageTask call({
-    int? gid,
-    String? token,
+    int gid,
+    String token,
     String? href,
     String? sourceId,
     String? imageUrl,
-    int? ser,
+    int ser,
     String? filePath,
     int? status,
   });
@@ -90,11 +90,11 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
     Object? status = const $CopyWithPlaceholder(),
   }) {
     return GalleryImageTask(
-      gid: gid == const $CopyWithPlaceholder() || gid == null
+      gid: gid == const $CopyWithPlaceholder()
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
           : gid as int,
-      token: token == const $CopyWithPlaceholder() || token == null
+      token: token == const $CopyWithPlaceholder()
           ? _value.token
           // ignore: cast_nullable_to_non_nullable
           : token as String,
@@ -110,7 +110,7 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
           ? _value.imageUrl
           // ignore: cast_nullable_to_non_nullable
           : imageUrl as String?,
-      ser: ser == const $CopyWithPlaceholder() || ser == null
+      ser: ser == const $CopyWithPlaceholder()
           ? _value.ser
           // ignore: cast_nullable_to_non_nullable
           : ser as int,

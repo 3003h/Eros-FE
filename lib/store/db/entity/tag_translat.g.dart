@@ -26,12 +26,12 @@ abstract class _$TagTranslatCWProxy {
   /// TagTranslat(...).copyWith(id: 12, name: "My name")
   /// ````
   TagTranslat call({
-    String? namespace,
-    String? key,
+    String namespace,
+    String key,
     String? name,
     String? intro,
     String? links,
-    int? lastUseTime,
+    int lastUseTime,
   });
 }
 
@@ -76,11 +76,11 @@ class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
     Object? lastUseTime = const $CopyWithPlaceholder(),
   }) {
     return TagTranslat(
-      namespace: namespace == const $CopyWithPlaceholder() || namespace == null
+      namespace: namespace == const $CopyWithPlaceholder()
           ? _value.namespace
           // ignore: cast_nullable_to_non_nullable
           : namespace as String,
-      key: key == const $CopyWithPlaceholder() || key == null
+      key: key == const $CopyWithPlaceholder()
           ? _value.key
           // ignore: cast_nullable_to_non_nullable
           : key as String,
@@ -96,11 +96,10 @@ class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
           ? _value.links
           // ignore: cast_nullable_to_non_nullable
           : links as String?,
-      lastUseTime:
-          lastUseTime == const $CopyWithPlaceholder() || lastUseTime == null
-              ? _value.lastUseTime
-              // ignore: cast_nullable_to_non_nullable
-              : lastUseTime as int,
+      lastUseTime: lastUseTime == const $CopyWithPlaceholder()
+          ? _value.lastUseTime
+          // ignore: cast_nullable_to_non_nullable
+          : lastUseTime as int,
     );
   }
 }
