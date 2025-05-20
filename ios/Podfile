@@ -1,6 +1,6 @@
 
 # source 'https://github.com/CocoaPods/Specs.git'
-$iOSVersion = '12.0'
+$iOSVersion = '15.5'
 platform :ios, $iOSVersion
 # Pod::PICKER_MEDIA = false, Pod::PICKER_AUDIO = false
 
