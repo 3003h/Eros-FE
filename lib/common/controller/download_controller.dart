@@ -387,6 +387,11 @@ class DownloadController extends GetxController {
       coverImage: coverImg,
     );
 
+    final _task = dState.galleryTaskMap[gid];
+    if (_task != null) {
+      isarHelper.putGalleryTaskIsolate(_task);
+    }
+
     return dState.galleryTaskMap[gid];
   }
 
@@ -1251,7 +1256,12 @@ class DownloadController extends GetxController {
   Future<void> rebuildGalleryTasks() async {
     final _tasks = await isarHelper.findAllGalleryTasksIsolate();
 
-    _tasks.forEach((task) => _writeTaskInfoFile(task));
+    _tasks.forEach((task) async {
+      if (task.coverImage == null) {
+        await isarHelper.updateGalleryTaskCover(task.gid);
+      }
+      _writeTaskInfoFile(task);
+    });
   }
 
   // final Completer<bool> _showKeyCompleter = Completer<bool>();
@@ -1403,7 +1413,11 @@ class DownloadController extends GetxController {
               cancelToken: _cancelToken,
               reDownload: itemSer > 1 && itemSer < _maxCompleteSer + 2,
               onDownloadCompleteWithFileName: (String fileName) =>
-                  _onDownloadComplete(fileName, galleryTask.gid, itemSer),
+                  _onDownloadComplete(
+                fileName,
+                galleryTask.gid,
+                itemSer,
+              ),
             );
           } on DioException catch (e) {
             // 忽略 [DioErrorType.cancel]
@@ -1472,10 +1486,14 @@ class DownloadController extends GetxController {
     logger.t(
         'listComplete:  ${listComplete.length}: ${listComplete.map((e) => e.ser).join(',')}');
 
+    final coverImg =
+        listComplete.firstWhereOrNull((element) => element.ser == 1)?.filePath;
+    logger.d('_onDownloadComplete coverImg: $coverImg');
+
     final GalleryTask? _task = galleryTaskUpdate(
       gid,
       countComplete: listComplete.length,
-      coverImg: itemSer == 1 ? fileName : null,
+      coverImg: coverImg,
     );
     if (_task?.fileCount == listComplete.length) {
       galleryTaskComplete(gid);

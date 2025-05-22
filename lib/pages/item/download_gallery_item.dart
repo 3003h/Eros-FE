@@ -112,7 +112,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         final List<GalleryImageTask> imageTasks =
             await controller.getImageTasks(galleryTask.gid);
         final GalleryTask? gTask = controller.galleryTaskMap[galleryTask.gid];
-        if (gTask == null) {
+        if (gTask == null || gTask.status != TaskStatus.complete.value) {
           return;
         }
 
@@ -248,6 +248,7 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
     );
   }
 
+  // 封面
   Widget _buildCover({bool cardType = false}) {
     return GestureDetector(
       child: Padding(

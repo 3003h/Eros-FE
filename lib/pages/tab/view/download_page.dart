@@ -82,7 +82,7 @@ class _DownloadTabState extends State<DownloadTab> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CupertinoButton(
-                    minSize: 40,
+                    minimumSize: const Size(40, 40),
                     padding: const EdgeInsets.all(0),
                     onPressed: _showExportDialog,
                     child: const Icon(

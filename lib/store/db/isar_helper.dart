@@ -240,6 +240,26 @@ class IsarHelper {
     }
   }
 
+  Future<void> updateGalleryTaskCover(
+    int gid,
+  ) async {
+    final galleryTask = await findGalleryTaskByGid(gid);
+    final imageTask = findImageTaskAllByGidSerSync(gid, 1);
+    if (imageTask == null) {
+      return;
+    }
+    if (imageTask.filePath == null) {
+      return;
+    }
+
+    if (galleryTask != null) {
+      await isar.writeTxn(() async {
+        await isar.galleryTasks
+            .put(galleryTask.copyWith(coverImage: imageTask.filePath));
+      });
+    }
+  }
+
   Future<void> updateGalleryTaskIsolate(
     int gid,
     GalleryTask Function(GalleryTask) func,
