@@ -99,7 +99,7 @@ class _AllThumbnailsPageState extends State<AllThumbnailsPage> {
                         top: context.mediaQueryPadding.top +
                             kMinInteractiveDimensionCupertino),
                     sliver: CupertinoSliverRefreshControl(
-                      onRefresh: controller.fetchPriviewsPrevious,
+                      onRefresh: controller.fetchPreviewsPrevious,
                     ),
                   ),
 
@@ -180,7 +180,7 @@ class _AllThumbnailsPageState extends State<AllThumbnailsPage> {
                                 previewList[index].ser < _count) {
                               controller.fetchThumbnailsNext();
                             } else if (previewList[index].ser >= _count) {
-                              controller.fetchFinsh();
+                              controller.fetchFinish();
                             }
                             return Center(
                               key: index == 0 ? controller.globalKey : null,

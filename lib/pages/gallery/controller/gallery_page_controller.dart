@@ -490,14 +490,14 @@ class GalleryPageController extends GetxController
   }
 
   /// 加载下一页缩略图
-  Future<void> _loarMordPriview({CancelToken? cancelToken}) async {
+  Future<void> _loadMordPreview({CancelToken? cancelToken}) async {
     // 增加延时 避免build期间进行 setState
     await Future<void>.delayed(const Duration(milliseconds: 0));
 
-    logger.t(
+    logger.d(
         '获取更多预览 ${gState.galleryProvider?.url} : ${gState.currentImagePage}');
 
-    final List<GalleryImage> _moreGalleryImageList = await getGalleryImage(
+    final List<GalleryImage> _moreGalleryImageList = await getGalleryImageList(
       gState.galleryProvider?.url ?? '',
       page: gState.currentImagePage + 1,
       cancelToken: cancelToken,
@@ -526,7 +526,7 @@ class GalleryPageController extends GetxController
 
     gState.mapLoadImagesForSer.putIfAbsent(
         page,
-        () => getGalleryImage(
+        () => getGalleryImageList(
               gState.galleryProvider?.url ?? '',
               page: page,
               cancelToken: cancelToken,
@@ -556,7 +556,7 @@ class GalleryPageController extends GetxController
 
     while (index > _galleryImageList.length - 1) {
       logger.d(' index = $index ; len = ${_galleryImageList.length}');
-      await _loarMordPriview();
+      await _loadMordPreview();
     }
     return true;
   }

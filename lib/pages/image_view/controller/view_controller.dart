@@ -413,7 +413,7 @@ class ViewExtController extends GetxController {
   }
 
   void _setPageSliderValue({bool updateSlider = false}) {
-    logger.d(
+    logger.t(
         '>>> _setPageSliderValue currentItemIndex ${vState.currentItemIndex}');
     if (vState.currentItemIndex >= vState.fileCount - 1) {
       vState.sliderValue = (vState.fileCount - 1).toDouble();
@@ -422,7 +422,7 @@ class ViewExtController extends GetxController {
     } else {
       vState.sliderValue = vState.currentItemIndex.toDouble();
     }
-    logger.d('>>> _setPageSliderValue ${vState.sliderValue}');
+    logger.t('>>> _setPageSliderValue ${vState.sliderValue}');
     if (updateSlider) {
       update([idViewTopBar, idViewPageSlider]);
     }

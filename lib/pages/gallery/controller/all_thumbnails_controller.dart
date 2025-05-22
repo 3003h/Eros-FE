@@ -74,20 +74,20 @@ class AllThumbnailsPageController extends GetxController
     final Size size = box!.size;
 
     final MediaQueryData _mq = MediaQuery.of(Get.context!);
-    final Size _screensize = _mq.size;
+    final Size _screenSize = _mq.size;
     final double _paddingLeft = _mq.padding.left;
     final double _paddingRight = _mq.padding.right;
     final double _paddingTop = _mq.padding.top;
 
     // 每行数量
-    final int itemCountCross = (_screensize.width -
+    final int itemCountCross = (_screenSize.width -
             kCrossAxisSpacing -
             _paddingRight -
             _paddingLeft) ~/
         size.width;
 
     // 单屏幕列数
-    final int itemCountCrossMain = (_screensize.height -
+    final int itemCountCrossMain = (_screenSize.height -
             _paddingTop -
             kMinInteractiveDimensionCupertino) ~/
         size.height;
@@ -129,7 +129,7 @@ class AllThumbnailsPageController extends GetxController
     isLoadingNext = true;
     // update();
 
-    final List<GalleryImage> _nextGalleryImageList = await getGalleryImage(
+    final List<GalleryImage> _nextGalleryImageList = await getGalleryImageList(
       _pageState.galleryProvider?.url ?? '',
       page: _pageState.currentImagePage + 1,
       cancelToken: moreGalleryImageCancelToken,
@@ -151,7 +151,7 @@ class AllThumbnailsPageController extends GetxController
 
     change(([], _images), status: RxStatus.loading());
 
-    final List<GalleryImage> _galleryImageList = await getGalleryImage(
+    final List<GalleryImage> _galleryImageList = await getGalleryImageList(
       _pageState.galleryProvider?.url ?? '',
       page: fromPage - 1,
       cancelToken: moreGalleryImageCancelToken,
@@ -167,7 +167,7 @@ class AllThumbnailsPageController extends GetxController
   }
 
   // 获取上一页预览图
-  Future<void> fetchPriviewsPrevious() async {
+  Future<void> fetchPreviewsPrevious() async {
     if (isLoadingPrevious) {
       return;
     }
@@ -179,7 +179,8 @@ class AllThumbnailsPageController extends GetxController
     isLoadingPrevious = true;
     // update();
 
-    final List<GalleryImage> _previousGalleryImageList = await getGalleryImage(
+    final List<GalleryImage> _previousGalleryImageList =
+        await getGalleryImageList(
       _pageState.galleryProvider?.url ?? '',
       page: _pageState.currentImagePage - 1,
       cancelToken: moreGalleryImageCancelToken,
@@ -203,7 +204,7 @@ class AllThumbnailsPageController extends GetxController
   }
 
   // 没有更多预览
-  Future<void> fetchFinsh() async {
+  Future<void> fetchFinish() async {
     if (isLoadFinsh) {
       return;
     }
