@@ -202,8 +202,9 @@ class Global {
     isDBinappSupportPath = StorageUtil().getBool(IS_DB_IN_SUPPORT_DIR) ?? false;
 
     if (Platform.isAndroid) {
-      await iaw.AndroidInAppWebViewController.setWebContentsDebuggingEnabled(
-          true);
+      // await iaw.AndroidInAppWebViewController.setWebContentsDebuggingEnabled(
+      //     true);
+      await iaw.InAppWebViewController.setWebContentsDebuggingEnabled(true);
     }
 
     // 数据更新

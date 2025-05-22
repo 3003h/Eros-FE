@@ -24,7 +24,7 @@ class ImagePageView extends GetView<ViewExtController> {
     final imageView = GetBuilder<ViewExtController>(
       id: idSlidePage,
       builder: (logic) {
-        logger.t('logic.pageViewType ${logic.pageViewType}');
+        logger.d('logic.pageViewType ${logic.pageViewType}');
 
         if (logic.vState.columnMode != ViewColumnMode.single) {
           return _buildDoubleView(logic, context);
@@ -60,6 +60,8 @@ class ImagePageView extends GetView<ViewExtController> {
 
   /// 单页模式
   Widget _buildSingleView(ViewExtController logic, BuildContext context) {
+    logger.d('单页模式 ${logic.pageViewType}');
+
     /// 单页模式
     switch (logic.pageViewType) {
       case PageViewType.photoView:

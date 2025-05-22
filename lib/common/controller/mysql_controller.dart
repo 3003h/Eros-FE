@@ -146,7 +146,7 @@ class MysqlController extends GetxController {
   // 上传进度
   Future<void> uploadRead(GalleryCache read) async {
     await connect();
-    logger.d('mysql uploadRead ${read.toJson()}');
+    logger.t('mysql uploadRead ${read.toJson()}');
     final gid = read.gid;
 
     if (gid == null || gid.isEmpty) {

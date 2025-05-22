@@ -929,6 +929,8 @@ class DownloadController extends GetxController {
       refresh: isRefresh, // 刷新画廊后加载缩略图不能从缓存读取，否则在改变每页数量后加载画廊会出错
     );
 
+    logger.t('获取到的图片列表 ${_moreImageList.length}');
+
     return _moreImageList;
   }
 

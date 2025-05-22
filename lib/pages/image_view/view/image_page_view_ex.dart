@@ -56,8 +56,10 @@ class ImagePhotoView extends GetView<ViewExtController> {
                 builder: (BuildContext context, int pageIndex) {
                   final ser = pageIndex + 1;
                   return PhotoViewGalleryPageOptions(
-                    imageProvider:
-                        getEhImageProvider('${gid}_${ser}_$key', ser: ser),
+                    imageProvider: getEhImageProvider(
+                      '${gid}_${ser}_$key',
+                      ser: ser,
+                    ),
                     filterQuality: FilterQuality.medium,
                     initialScale: PhotoViewComputedScale.contained,
                     minScale: PhotoViewComputedScale.contained * 0.8,
