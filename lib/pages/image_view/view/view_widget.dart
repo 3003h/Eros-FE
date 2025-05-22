@@ -219,22 +219,25 @@ class ViewLoading extends StatelessWidget {
     this.progress,
     this.animationEnabled,
     this.debugLabel,
+    this.label,
   });
   final int? ser;
   final Duration? duration;
   final double? progress;
   final bool? animationEnabled;
   final String? debugLabel;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
     if (debugLabel != null && kDebugMode) {
-      logger.t('build ViewLoading $debugLabel');
+      logger.d('build ViewLoading $debugLabel, label:$label');
     }
     final loadWidget = _ViewLoading(
       ser: ser,
       progress: progress,
       animationEnabled: animationEnabled ?? true,
+      label: label,
     );
 
     if (duration == null) {
@@ -357,7 +360,10 @@ class ImageExt extends GetView<ViewExtController> {
 
             if (reload) {
               // return const SizedBox.shrink();
-              return _ViewLoading(ser: ser);
+              return _ViewLoading(
+                ser: ser,
+                label: 'Try reload ...',
+              );
             } else {
               return Container(
                 alignment: Alignment.center,
@@ -447,6 +453,8 @@ class ImageExtProvider extends GetView<ViewExtController> {
       initGestureConfigHandler: initGestureConfigHandler,
       onDoubleTap: onDoubleTap,
       loadStateChanged: (ExtendedImageState state) {
+        logger.d(
+            'loadStateChanged ser:$ser, state:${state.extendedImageLoadState}, image:$image');
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
             fadeAnimationController.reset();
@@ -456,7 +464,11 @@ class ImageExtProvider extends GetView<ViewExtController> {
                     (loadingProgress?.expectedTotalBytes ?? 1)
                 : null;
 
-            return _ViewLoading(progress: progress, ser: ser);
+            return _ViewLoading(
+              progress: progress,
+              ser: ser,
+              label: 'Loading from network ...',
+            );
 
           case LoadState.completed:
             fadeAnimationController.forward();
@@ -495,7 +507,7 @@ class ImageExtProvider extends GetView<ViewExtController> {
 
             if (reload) {
               // return const SizedBox.shrink();
-              return _ViewLoading(ser: ser);
+              return _ViewLoading(ser: ser, label: 'Try reload ...');
             } else {
               return Container(
                 alignment: Alignment.center,
@@ -532,9 +544,6 @@ class ImageExtProvider extends GetView<ViewExtController> {
                 ),
               );
             }
-
-          default:
-            return null;
         }
       },
     );
@@ -627,11 +636,13 @@ class _ViewLoading extends StatelessWidget {
     this.progress,
     this.ser,
     this.animationEnabled = true,
+    this.label,
   });
 
   final double? progress;
   final int? ser;
   final bool animationEnabled;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -639,6 +650,7 @@ class _ViewLoading extends StatelessWidget {
       progress: progress,
       ser: ser,
       animationEnabled: animationEnabled,
+      label: label,
     );
 
     // return _ViewLoadingCupertino(
@@ -655,11 +667,13 @@ class _ViewLoadingLine extends StatelessWidget {
     this.progress,
     this.ser,
     this.animationEnabled = true,
+    this.label,
   });
 
   final double? progress;
   final int? ser;
   final bool animationEnabled;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -687,6 +701,7 @@ class _ViewLoadingLine extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
                         value: progress,
+                        semanticsLabel: 'Loading',
                         backgroundColor: CupertinoDynamicColor.resolve(
                             CupertinoColors.secondarySystemFill, context),
                         valueColor: AlwaysStoppedAnimation<Color>(
@@ -701,7 +716,9 @@ class _ViewLoadingLine extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     alignment: Alignment.center,
                     child: Text(
-                      '${((progress ?? 0) * 100).round()} %',
+                      (progress ?? 0) > 0
+                          ? '${((progress ?? 0) * 100).round()} %'
+                          : '',
                       style: const TextStyle(
                         color: CupertinoColors.systemGrey6,
                         height: 1,
@@ -724,6 +741,25 @@ class _ViewLoadingLine extends StatelessWidget {
                       style: const TextStyle(
                         color: CupertinoColors.systemGrey6,
                         height: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Text(
+                      label ?? '',
+                      style: const TextStyle(
+                        color: CupertinoColors.systemGrey6,
+                        height: 1,
+                        fontSize: 12,
                       ),
                     ),
                   ),

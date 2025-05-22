@@ -10,6 +10,7 @@ import 'package:eros_fe/pages/image_view/controller/view_state.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:eros_fe/utils/utility.dart';
 import 'package:eros_fe/utils/vibrate.dart';
+import 'package:eros_fe/widget/image/eh_cached_network_image.dart';
 import 'package:eros_fe/widget/image/extended_saf_image_privider.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/foundation.dart';
@@ -171,6 +172,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Widget image = () {
+      logger.t('build image ${widget.imageSer}, loadFrom: ${vState.loadFrom}');
       switch (vState.loadFrom) {
         case LoadFrom.download:
           // 从已下载查看
@@ -181,8 +183,6 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
           return getViewImage();
         case LoadFrom.archiver:
           return archiverImage();
-        default:
-          return const Text('None');
       }
     }();
 
@@ -244,6 +244,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               ? const Duration(milliseconds: 100)
               : null,
           debugLabel: '### Widget fileImage 加载图片文件',
+          label: 'Loading image file ...',
         );
       }
       return null;
@@ -460,7 +461,8 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
   Widget _buildViewImageWidgetProvider() {
     final GalleryImage? imageFromState =
         vState.pageState?.imageMap[widget.imageSer];
-    logger.t('imageFromState ${imageFromState?.toJson()}');
+    logger.d(
+        'ser: ${widget.imageSer}, imageFromState ${imageFromState?.toJson()}');
 
     if (imageFromState?.hide ?? false) {
       return ViewAD(ser: widget.imageSer);
@@ -470,126 +472,145 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
     return FutureBuilder<GalleryImage?>(
         future: controller.imageFutureMap[widget.imageSer],
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError || snapshot.data == null) {
-              logger.e('${snapshot.error}\n${snapshot.stackTrace}');
-              return _buildErr(snapshot.error);
-            }
-            final GalleryImage? imageData = snapshot.data;
-
-            final GalleryImage? currentImageData =
-                vState.pageState?.imageMap[widget.imageSer];
-
-            // logger.d(
-            //     'currentImageData ${currentImageData?.toJson()}\nimageData ${imageData?.toJson()}');
-
-            // 图片文件已下载 加载显示本地图片文件
-            if (imageData?.filePath?.isNotEmpty ?? false) {
-              logger.d('图片文件已下载 file... ${imageData?.filePath}');
-              controller.vState.galleryPageController?.uptImageBySer(
+          logger.d(
+              'FutureBuilder ser:${widget.imageSer}, snapshot.connectionState: ${snapshot.connectionState}');
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              logger.d(
+                  'FutureBuilder 加载画廊页数据 ser:${widget.imageSer}, snapshot.connectionState: ${snapshot.connectionState}');
+              return ViewLoading(
+                debugLabel: 'FutureBuilder 加载画廊页数据',
                 ser: widget.imageSer,
-                imageCallback: (image) => image.copyWith(
-                  filePath: imageData?.filePath.oN,
-                ),
+                duration: vState.viewMode != ViewMode.topToBottom
+                    ? const Duration(milliseconds: 200)
+                    : null,
               );
-              return fileImage(imageData!.filePath!);
-            }
+            case ConnectionState.done:
+              if (snapshot.hasError || snapshot.data == null) {
+                logger.e('${snapshot.error}\n${snapshot.stackTrace}');
+                return _buildErr(snapshot.error);
+              }
+              final GalleryImage? imageData = snapshot.data;
 
-            if (imageData?.tempPath?.isNotEmpty ?? false) {
-              logger.t('tempPath file... ${imageData?.tempPath}');
-              controller.vState.galleryPageController?.uptImageBySer(
-                ser: widget.imageSer,
-                imageCallback: (image) => image.copyWith(
-                  tempPath: imageData?.tempPath.oN,
-                ),
-              );
-              return fileImage(imageData!.tempPath!);
-            }
+              final GalleryImage? currentImageData =
+                  vState.pageState?.imageMap[widget.imageSer];
 
-            // 常规情况 加载网络图片
+              logger.d('currentImageData ${currentImageData?.toJson()}\n'
+                  'imageData        ${imageData?.toJson()}');
 
-            // 图片加载完成
-            void onLoadCompleted(ExtendedImageState state) {
-              final ImageInfo? imageInfo = state.extendedImageInfo;
-              controller.setScale100(imageInfo!, context.mediaQuerySize);
-
-              widget.imageSizeChanged?.call(Size(
-                  imageInfo.image.width.toDouble(),
-                  imageInfo.image.height.toDouble()));
-
-              if (imageData != null) {
-                final GalleryImage? tmpImage = vState.imageMap?[imageData.ser];
-                if (tmpImage != null && !(tmpImage.completeHeight ?? false)) {
-                  vState.galleryPageController?.uptImageBySer(
-                    ser: imageData.ser,
-                    imageCallback: (image) =>
-                        image.copyWith(completeHeight: true.oN),
-                  );
-
-                  logger.t('upt _tmpImage ${tmpImage.ser}');
-                  Future.delayed(const Duration(milliseconds: 100)).then(
-                      (value) => controller.update(
-                          [idSlidePage, '$idImageListView${imageData.ser}']));
-                }
+              // 图片文件已下载 加载显示本地图片文件
+              if (imageData?.filePath?.isNotEmpty ?? false) {
+                logger.d('图片文件已下载 file... ${imageData?.filePath}');
+                controller.vState.galleryPageController?.uptImageBySer(
+                  ser: widget.imageSer,
+                  imageCallback: (image) => image.copyWith(
+                    filePath: imageData?.filePath.oN,
+                  ),
+                );
+                return fileImage(imageData!.filePath!);
               }
 
-              controller.onLoadCompleted(widget.imageSer);
-            }
+              if (imageData?.tempPath?.isNotEmpty ?? false) {
+                logger.t('tempPath file... ${imageData?.tempPath}');
+                controller.vState.galleryPageController?.uptImageBySer(
+                  ser: widget.imageSer,
+                  imageCallback: (image) => image.copyWith(
+                    tempPath: imageData?.tempPath.oN,
+                  ),
+                );
+                return fileImage(imageData!.tempPath!);
+              }
 
-            // if (kReleaseMode) {
-            //   logger.d('ImageExt');
-            //   return ImageExt(
-            //     url: imageData?.imageUrl ?? '',
-            //     onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
-            //     ser: widget.imageSer,
-            //     mode: widget.mode,
-            //     enableSlideOutPage: widget.enableSlideOutPage,
-            //     reloadImage: () =>
-            //         controller.reloadImage(widget.imageSer, changeSource: true),
-            //     fadeAnimationController: _fadeAnimationController,
-            //     initGestureConfigHandler: _initGestureConfigHandler,
-            //     onLoadCompleted: onLoadCompleted,
-            //   );
-            // }
+              // 常规情况 加载网络图片
+              // 图片加载完成
+              void onLoadCompleted(ExtendedImageState state) {
+                final ImageInfo? imageInfo = state.extendedImageInfo;
+                controller.setScale100(imageInfo!, context.mediaQuerySize);
 
-            logger.t('ImageExtProvider');
-            Widget image = ImageExtProvider(
-              image: ExtendedResizeImage.resizeIfNeeded(
-                provider: ExtendedNetworkImageProvider(
-                  imageData?.imageUrl ?? '',
-                  timeLimit: const Duration(seconds: 10),
-                  cache: true,
+                widget.imageSizeChanged?.call(Size(
+                    imageInfo.image.width.toDouble(),
+                    imageInfo.image.height.toDouble()));
+
+                if (imageData != null) {
+                  final GalleryImage? tmpImage =
+                      vState.imageMap?[imageData.ser];
+                  if (tmpImage != null && !(tmpImage.completeHeight ?? false)) {
+                    vState.galleryPageController?.uptImageBySer(
+                      ser: imageData.ser,
+                      imageCallback: (image) =>
+                          image.copyWith(completeHeight: true.oN),
+                    );
+
+                    logger.t('upt _tmpImage ${tmpImage.ser}');
+                    Future.delayed(const Duration(milliseconds: 100)).then(
+                        (value) => controller.update(
+                            [idSlidePage, '$idImageListView${imageData.ser}']));
+                  }
+                }
+
+                controller.onLoadCompleted(widget.imageSer);
+              }
+
+              // if (kReleaseMode) {
+              //   logger.d('ImageExt');
+              //   return ImageExt(
+              //     url: imageData?.imageUrl ?? '',
+              //     onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
+              //     ser: widget.imageSer,
+              //     mode: widget.mode,
+              //     enableSlideOutPage: widget.enableSlideOutPage,
+              //     reloadImage: () =>
+              //         controller.reloadImage(widget.imageSer, changeSource: true),
+              //     fadeAnimationController: _fadeAnimationController,
+              //     initGestureConfigHandler: _initGestureConfigHandler,
+              //     onLoadCompleted: onLoadCompleted,
+              //   );
+              // }
+
+              logger.d('ImageExtProvider, imageUrl: ${imageData?.imageUrl}');
+              Widget image = ImageExtProvider(
+                image: ExtendedResizeImage.resizeIfNeeded(
+                  provider: ExtendedNetworkImageProvider(
+                    imageData?.imageUrl ?? '',
+                    timeLimit: const Duration(seconds: 10),
+                    cache: false,
+                    retries: 5,
+                    timeRetry: const Duration(seconds: 5),
+                    printError: true,
+                    cacheRawData: true,
+                  ),
+                  // provider: getEhImageProvider(
+                  //   imageData?.imageUrl ?? '',
+                  //   ser: widget.imageSer,
+                  // ),
                 ),
-              ),
-              // image: EhCheckHideImage(
-              //   checkQRCodeHide: checkQRCodeHide,
-              //   checkPHashHide: checkPHashHide,
-              //   imageProvider: ExtendedNetworkImageProvider(
-              //     imageData?.imageUrl ?? '',
-              //     timeLimit: const Duration(seconds: 10),
-              //     cache: true,
-              //   ),
-              // ),
-              onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
-              ser: widget.imageSer,
-              mode: widget.mode,
-              enableSlideOutPage: widget.enableSlideOutPage,
-              reloadImage: () =>
-                  controller.reloadImage(widget.imageSer, changeSource: true),
-              fadeAnimationController: _fadeAnimationController,
-              initGestureConfigHandler: _initGestureConfigHandler,
-              onLoadCompleted: onLoadCompleted,
-            );
+                // image: getEhImageProvider(
+                //   imageData?.imageUrl ?? '',
+                //   ser: widget.imageSer,
+                // ),
+                // image: EhCheckHideImage(
+                //   checkQRCodeHide: checkQRCodeHide,
+                //   checkPHashHide: checkPHashHide,
+                //   imageProvider: ExtendedNetworkImageProvider(
+                //     imageData?.imageUrl ?? '',
+                //     timeLimit: const Duration(seconds: 10),
+                //     cache: true,
+                //   ),
+                // ),
+                onDoubleTap: widget.enableDoubleTap ? _onDoubleTap : null,
+                ser: widget.imageSer,
+                mode: widget.mode,
+                enableSlideOutPage: widget.enableSlideOutPage,
+                reloadImage: () =>
+                    controller.reloadImage(widget.imageSer, changeSource: true),
+                fadeAnimationController: _fadeAnimationController,
+                initGestureConfigHandler: _initGestureConfigHandler,
+                onLoadCompleted: onLoadCompleted,
+              );
 
-            return image;
-          } else {
-            return ViewLoading(
-              debugLabel: 'FutureBuilder 加载画廊页数据',
-              ser: widget.imageSer,
-              duration: vState.viewMode != ViewMode.topToBottom
-                  ? const Duration(milliseconds: 200)
-                  : null,
-            );
+              return image;
           }
         });
   }
