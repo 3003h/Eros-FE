@@ -129,7 +129,7 @@ class TokenBucketInterceptor extends Interceptor {
       }
 
       while (_groupAvailableTokens[group]! <= 0) {
-        logger.w('等待令牌补充 $group');
+        // logger.w('等待令牌补充 $group');
         await Future.delayed(config.refillDuration);
       }
       _groupAvailableTokens[group] = _groupAvailableTokens[group]! - 1;

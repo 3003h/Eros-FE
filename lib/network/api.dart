@@ -53,7 +53,7 @@ class Api {
       ),
     ),
     // store: MemCacheStore(),
-    policy: CachePolicy.refresh,
+    policy: CachePolicy.request,
     hitCacheOnErrorExcept: [401, 403, 503],
     maxStale: const Duration(days: 3),
     priority: CachePriority.normal,

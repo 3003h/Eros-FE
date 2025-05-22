@@ -20,7 +20,9 @@ import 'app_dio/pdio.dart';
 Options getCacheOptions({bool forceRefresh = false}) {
   final options = Api.cacheOption
       .copyWith(
-        policy: forceRefresh ? CachePolicy.refresh : CachePolicy.request,
+        policy: forceRefresh
+            ? CachePolicy.refreshForceCache
+            : CachePolicy.forceCache,
       )
       .toOptions();
 
@@ -246,7 +248,8 @@ Future<GalleryImage?> fetchImageInfoByApi(
       showKey == null ||
       showKey.isEmpty ||
       (sourceId?.isNotEmpty ?? false)) {
-    logger.t('OOOOOOOld : showKey $showKey, sourceId $sourceId, isMpv $isMpv');
+    logger.d(
+        '使用常规请求，解析html: href $href,showKey $showKey, sourceId $sourceId, isMpv $isMpv, refresh $refresh');
     final _image = await _fetchImageInfo(
       href,
       refresh: refresh,
@@ -261,10 +264,10 @@ Future<GalleryImage?> fetchImageInfoByApi(
 
   final RegExp regExp =
       RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
-  final RegExpMatch? regRult = regExp.firstMatch(href);
-  final int gid = int.parse(regRult?.group(2) ?? '0');
-  final String imgkey = regRult?.group(1) ?? '';
-  final int page = int.parse(regRult?.group(3) ?? '0');
+  final RegExpMatch? regResult = regExp.firstMatch(href);
+  final int gid = int.parse(regResult?.group(2) ?? '0');
+  final String imgkey = regResult?.group(1) ?? '';
+  final int page = int.parse(regResult?.group(3) ?? '0');
 
   final Map<String, Object> reqMap = {
     'method': 'showpage',
@@ -274,18 +277,12 @@ Future<GalleryImage?> fetchImageInfoByApi(
     'showkey': showKey,
   };
 
-  // const url = '/api.php';
-  // DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   final String reqJsonStr = jsonEncode(reqMap);
 
   // 请求api
   final response = await postEhApi(reqJsonStr, forceRefresh: refresh);
 
   final image = paraShowPage(response);
-  // if (image.imageUrl!.endsWith('/509.gif') ||
-  //     image.imageUrl!.endsWith('/509s.gif')) {
-  //   throw EhError(type: EhErrorType.image509);
-  // }
   if (RegExp(EHConst.REG_509_URL).hasMatch(image.imageUrl ?? '')) {
     throw EhError(type: EhErrorType.image509);
   }
@@ -304,7 +301,7 @@ Future<GalleryImage?> _fetchImageInfo(
     if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
   };
 
-  logger.t('fetchImageInfo: href $href, refresh $refresh, sourceId $sourceId, '
+  logger.d('fetchImageInfo: href $href, refresh $refresh, sourceId $sourceId, '
       'debugLabel $debugLabel');
 
   String mpvSer = '1';
@@ -327,6 +324,7 @@ Future<GalleryImage?> _fetchImageInfo(
   );
 
   if (httpResponse.ok && httpResponse.data is GalleryImage) {
+    logger.d('url $href, fetchImageInfo ok');
     return (httpResponse.data as GalleryImage).copyWith(href: href.oN);
   } else {
     // logger.d('error.runtimeType: ${httpResponse.error.runtimeType}');
@@ -334,12 +332,13 @@ Future<GalleryImage?> _fetchImageInfo(
   }
 }
 
-Future<List<GalleryImage>> getGalleryImage(
+Future<List<GalleryImage>> getGalleryImageList(
   String inUrl, {
   int? page,
   bool refresh = false,
   CancelToken? cancelToken,
 }) async {
+  logger.d('getGalleryImageList: $inUrl, page $page, refresh $refresh');
   final Map<String, dynamic> _params = {
     if (page != null) 'p': page,
   };

@@ -94,7 +94,7 @@ class GalleryPara {
       String _url = '';
       if (_image.imageUrl?.isEmpty ?? true) {
         if (showKey == null) {
-          logger.d('showKey is null, skip precache');
+          logger.d('ser $_ser, showKey is null, skip precache');
           continue;
         }
 
@@ -127,7 +127,10 @@ class GalleryPara {
         continue;
       }
 
-      _map.putIfAbsent(_url, () => _precacheSingleImage(_url, _image));
+      _map.putIfAbsent(_url, () {
+        logger.d('ser $_ser, 开始预载图片 $_url');
+        return _precacheSingleImage(_url, _image);
+      });
 
       final Future<GalleryImage?>? _future = _map[_url];
 
@@ -145,6 +148,7 @@ class GalleryPara {
     String url,
     GalleryImage image,
   ) async {
+    logger.t('_precacheSingleImage, 开始预载图片 $url');
     final ImageProvider imageProvider = ExtendedNetworkImageProvider(
       url,
       cache: true,
