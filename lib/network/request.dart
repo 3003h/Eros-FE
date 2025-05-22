@@ -17,16 +17,24 @@ import 'package:http_parser/http_parser.dart' as http_parser;
 import 'api.dart';
 import 'app_dio/pdio.dart';
 
-Options getCacheOptions({bool forceRefresh = false}) {
+Options getCacheOptions({
+  bool refresh = false,
+  bool forceCache = true,
+}) {
   final options = Api.cacheOption
       .copyWith(
-        policy: forceRefresh
-            ? CachePolicy.refreshForceCache
-            : CachePolicy.forceCache,
+        policy: refresh ? CachePolicy.refresh : CachePolicy.request,
       )
       .toOptions();
 
-  return options;
+  final forceCacheOptions = Api.cacheOption
+      .copyWith(
+        policy:
+            refresh ? CachePolicy.refreshForceCache : CachePolicy.forceCache,
+      )
+      .toOptions();
+
+  return forceCache ? forceCacheOptions : options;
 }
 
 Future<GalleryList?> getGallery({
@@ -124,7 +132,7 @@ Future<GalleryList?> getGallery({
     queryParameters: _params,
     httpTransformer:
         isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
     cancelToken: cancelToken,
   );
 
@@ -138,7 +146,7 @@ Future<GalleryList?> getGallery({
       queryParameters: _params,
       httpTransformer:
           isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
-      options: getCacheOptions(forceRefresh: true),
+      options: getCacheOptions(refresh: true),
       cancelToken: cancelToken,
     );
   }
@@ -155,7 +163,7 @@ Future<GalleryList?> getGallery({
       queryParameters: _params,
       httpTransformer:
           isFav ? FavoriteListHttpTransformer() : GalleryListHttpTransformer(),
-      options: getCacheOptions(forceRefresh: false)
+      options: getCacheOptions(refresh: false)
         ..followRedirects = true
         ..validateStatus = (status) => (status ?? 0) < 500,
       cancelToken: cancelToken,
@@ -216,7 +224,7 @@ Future<GalleryProvider?> getGalleryDetail({
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     httpTransformer: GalleryHttpTransformer(),
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
     cancelToken: cancelToken,
   );
   logger.t('httpResponse.ok ${httpResponse.ok}');
@@ -319,7 +327,7 @@ Future<GalleryImage?> _fetchImageInfo(
     httpTransformer: isMpv
         ? GalleryMpvImageHttpTransformer(mpvSer, sourceId: sourceId)
         : GalleryImageHttpTransformer(),
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
     cancelToken: cancelToken,
   );
 
@@ -348,7 +356,7 @@ Future<List<GalleryImage>> getGalleryImageList(
     inUrl,
     queryParameters: _params,
     httpTransformer: GalleryImageListHttpTransformer(),
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
     cancelToken: cancelToken,
   );
 
@@ -392,7 +400,7 @@ Future<String> postArchiverRemoteDownload(
     url,
     data: formData,
     httpTransformer: GalleryArchiverRemoteDownloadResponseTransformer(),
-    options: getCacheOptions(forceRefresh: true),
+    options: getCacheOptions(refresh: true),
   );
 
   if (httpResponse.ok && httpResponse.data is String) {
@@ -417,7 +425,7 @@ Future<String> postArchiverLocalDownload(
     url,
     data: formData,
     httpTransformer: GalleryArchiverLocalDownloadResponseTransformer(),
-    options: getCacheOptions(forceRefresh: true),
+    options: getCacheOptions(refresh: true),
   );
 
   if (httpResponse.ok && httpResponse.data is String) {
@@ -439,7 +447,7 @@ Future<EhSettings?> getEhSettings(
     httpResponse = await dioHttpClient.get(
       url,
       httpTransformer: UconfigHttpTransformer(),
-      options: getCacheOptions(forceRefresh: refresh || i > 0),
+      options: getCacheOptions(refresh: refresh || i > 0),
     );
 
     if (selectProfile == null) {
@@ -474,7 +482,7 @@ Future<EhMytags?> getMyTags(
       url,
       queryParameters: _params,
       httpTransformer: MyTagsHttpTransformer(),
-      options: getCacheOptions(forceRefresh: refresh || i > 0),
+      options: getCacheOptions(refresh: refresh || i > 0),
     );
 
     if (selectTagset == null) {
@@ -587,7 +595,7 @@ Future<bool> actionMytags({
     queryParameters: queryParameters,
     data: formData,
     httpTransformer: TagActionTransformer(),
-    options: getCacheOptions(forceRefresh: true)
+    options: getCacheOptions(refresh: true)
       ..followRedirects = false
       ..validateStatus = (status) => (status ?? 0) < 500,
   );
@@ -621,7 +629,7 @@ Future<EhSettings?> postEhProfile({
     data: formData,
     // data: _dataString,
     httpTransformer: UconfigHttpTransformer(),
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
   );
 
   if (httpResponse.ok && httpResponse.data is EhSettings) {
@@ -696,7 +704,7 @@ Future<T?> getEhApi<T>({
     url,
     data: data,
     httpTransformer: httpTransformer,
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
   );
 
   if (httpResponse.ok && httpResponse.data is T) {
@@ -770,7 +778,7 @@ Future<void> ehDownload({
         }
       },
       cancelToken: cancelToken,
-      options: getCacheOptions(forceRefresh: false),
+      options: getCacheOptions(refresh: false, forceCache: false),
     );
   } on CancelException catch (e) {
     logger.d('cancel');
@@ -797,7 +805,7 @@ Future<User?> userLogin(String username, String passwd) async {
     queryParameters: {'act': 'Login', 'CODE': '01'},
     data: formData,
     httpTransformer: UserLoginTransformer(),
-    options: getCacheOptions(forceRefresh: true)
+    options: getCacheOptions(refresh: true)
       ..headers?['referer'] =
           'https://forums.e-hentai.org/index.php?act=Login&CODE=00',
   );
@@ -818,7 +826,7 @@ Future<User?> getUserInfo(String userId, {bool forceRefresh = true}) async {
     url,
     queryParameters: {'showuser': userId},
     httpTransformer: UserInfoPageTransformer(),
-    options: getCacheOptions(forceRefresh: forceRefresh)
+    options: getCacheOptions(refresh: forceRefresh)
       ..headers?['referer'] = 'https://forums.e-hentai.org/index.php',
   );
 
@@ -861,7 +869,7 @@ Future<bool?> postComment({
             response.statusCode == 303);
       },
     ),
-    options: getCacheOptions(forceRefresh: true)
+    options: getCacheOptions(refresh: true)
       ..followRedirects = true
       ..validateStatus = (status) => (status ?? 0) < 500,
   );
@@ -898,7 +906,7 @@ Future<void> galleryAddFavorite(
     url,
     queryParameters: _params,
     data: formData,
-    options: getCacheOptions(forceRefresh: true),
+    options: getCacheOptions(refresh: true),
   );
 }
 
@@ -918,7 +926,7 @@ Future<FavAdd> galleryGetFavorite(
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     queryParameters: _params,
-    options: getCacheOptions(forceRefresh: true),
+    options: getCacheOptions(refresh: true),
     httpTransformer: HttpTransformerBuilder(
       (response) async {
         final favAdd = await compute(parserAddFavPage, response.data as String);
@@ -936,8 +944,8 @@ Future<FavAdd> galleryGetFavorite(
 
 Future<Map> getGithubApi(String url) async {
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
-  DioHttpResponse httpResponse = await dioHttpClient.get(url,
-      options: getCacheOptions(forceRefresh: true));
+  DioHttpResponse httpResponse =
+      await dioHttpClient.get(url, options: getCacheOptions(refresh: true));
   if (httpResponse.ok && httpResponse.data is Map) {
     return httpResponse.data as Map;
   } else {
@@ -951,7 +959,7 @@ Future<void> getExIgneous() async {
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
-    options: getCacheOptions(forceRefresh: true),
+    options: getCacheOptions(refresh: true),
   );
   if (!httpResponse.ok) {
     throw httpResponse.error ?? HttpException('getExIgneous error');
@@ -973,7 +981,7 @@ Future<String> getTorrentToken(
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
     queryParameters: _params,
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
     httpTransformer: HttpTransformerBuilder(
       (response) {
         final RegExp rTorrentTk =
@@ -999,7 +1007,7 @@ Future<TorrentProvider> getTorrent(
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
     httpTransformer: HttpTransformerBuilder(
       (response) async {
         final torrentProvider =
@@ -1022,7 +1030,7 @@ Future<ArchiverProvider> getArchiver(
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     url,
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
     httpTransformer: HttpTransformerBuilder(
       (response) async {
         final archiverProvider =
@@ -1050,7 +1058,7 @@ Future<String> postEhApi(
   DioHttpResponse httpResponse = await dioHttpClient.post(
     url,
     data: data,
-    options: getCacheOptions(forceRefresh: forceRefresh),
+    options: getCacheOptions(refresh: forceRefresh),
   );
   if (httpResponse.ok && httpResponse.data is String) {
     return httpResponse.data as String;
@@ -1093,7 +1101,7 @@ Future<GalleryList?> searchImage(
       },
     ),
     options: getCacheOptions(
-      forceRefresh: true,
+      refresh: true,
     )
       ..followRedirects = false
       ..validateStatus = (status) => (status ?? 0) < 500,
@@ -1109,7 +1117,7 @@ Future<GalleryList?> searchImage(
   httpResponse = await dioHttpClient.get(
     location,
     httpTransformer: GalleryListHttpTransformer(),
-    options: getCacheOptions(forceRefresh: true),
+    options: getCacheOptions(refresh: true),
     cancelToken: cancelToken,
   );
 
@@ -1133,7 +1141,7 @@ Future<EhHome?> getEhHome({bool refresh = false}) async {
         return DioHttpResponse<EhHome>.success(ehHome);
       },
     ),
-    options: getCacheOptions(forceRefresh: refresh),
+    options: getCacheOptions(refresh: refresh),
   );
 
   if (httpResponse.ok && httpResponse.data is EhHome) {
