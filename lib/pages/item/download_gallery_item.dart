@@ -577,16 +577,19 @@ class DownloadItemCoverImage extends StatelessWidget {
           return null;
         };
 
+        const filterQuality = FilterQuality.medium;
         return (filePath?.isContentUri ?? false)
             ? ExtendedImage(
                 image: ExtendedSafImageProvider(Uri.parse(filePath!)),
                 fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
                 loadStateChanged: loadStateChanged,
+                filterQuality: filterQuality,
               )
             : ExtendedImage.file(
                 File(filePath!),
                 fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
                 loadStateChanged: loadStateChanged,
+                filterQuality: filterQuality,
               );
       } else if (url != null) {
         return EhNetworkImage(
