@@ -76,11 +76,11 @@ class Api {
     return (Get.find<EhSettingService>().isSiteEx.value) ? 'EH' : 'EX';
   }
 
-  static _printCookie() async {
-    final List<io.Cookie> _cookies =
-        await (await cookieJar).loadForRequest(Uri.parse(getBaseUrl()));
-    logger.t('${_cookies.map((e) => '$e').join('\n')} ');
-  }
+  // static printCookie() async {
+  //   final List<io.Cookie> _cookies =
+  //       await (await cookieJar).loadForRequest(Uri.parse(getBaseUrl()));
+  //   logger.t('${_cookies.map((e) => '$e').join('\n')} ');
+  // }
 
   /// 通过api请求获取更多信息
   /// 例如
@@ -213,7 +213,7 @@ class Api {
       'rating': rating,
     };
     final String reqJsonStr = jsonEncode(reqMap);
-    logger.d('$reqJsonStr');
+    logger.d('setRating reqJsonStr: $reqJsonStr');
     final rult = await postEhApi(reqJsonStr);
     // logger.d('$rult');
     final Map<String, dynamic> rultMap =
@@ -264,7 +264,7 @@ class Api {
     };
     final String reqJsonStr = jsonEncode(reqMap);
     final rult = await postEhApi(reqJsonStr);
-    logger.d('$rult');
+    logger.d('tagGallery rult: $rult');
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
     return rultMap;
@@ -319,7 +319,7 @@ class Api {
     };
     final String reqJsonStr = jsonEncode(reqMap);
     final rult = await postEhApi(reqJsonStr);
-    logger.d('$rult');
+    logger.d('setUserTag rult: $rult');
     final Map<String, dynamic> rultMap =
         jsonDecode(rult.toString()) as Map<String, dynamic>;
     return rultMap;
@@ -494,7 +494,7 @@ class Api {
 
     final response = await postEhApi(reqJsonStr);
 
-    final dynamic rultJson = jsonDecode('$response');
+    final dynamic rultJson = jsonDecode(response);
 
     final RegExp regImageUrl = RegExp('<img[^>]*src=\"([^\"]+)\" style');
     final String imageUrl =
@@ -722,7 +722,12 @@ class Api {
       realFileName = '$gid-$realFileName';
     }
 
-    await Share.shareXFiles([XFile(file.path)], subject: realFileName);
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path)],
+        subject: realFileName,
+      ),
+    );
   }
 
   // 保存本地图片到相册
@@ -763,6 +768,8 @@ class Api {
       throw EhError(error: 'File not found');
     }
 
-    await Share.shareXFiles([XFile(imagePath)]);
+    await SharePlus.instance.share(
+      ShareParams(files: [XFile(imagePath)]),
+    );
   }
 }
