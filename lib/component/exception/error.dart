@@ -12,6 +12,8 @@ enum EhErrorType {
   imageHide,
 
   parse,
+
+  keyMismatch,
 }
 
 class EhError implements Exception {

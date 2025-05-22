@@ -267,8 +267,8 @@ Future<GalleryImage?> fetchImageInfoByApi(
     return _image;
   }
 
-  logger.t(
-      'fetchImageInfoByApi: href $href, refresh $refresh, sourceId $sourceId');
+  logger.d(
+      'fetchImageInfoByApi: href $href, refresh $refresh, sourceId $sourceId, showKey $showKey');
 
   final RegExp regExp =
       RegExp(r'https://e[-x]hentai.org/s/([0-9a-z]+)/(\d+)-(\d+)');
@@ -285,12 +285,23 @@ Future<GalleryImage?> fetchImageInfoByApi(
     'showkey': showKey,
   };
 
+  logger.d('fetchImageInfoByApi: reqMap $reqMap');
+
   final String reqJsonStr = jsonEncode(reqMap);
 
   // 请求api
   final response = await postEhApi(reqJsonStr, forceRefresh: refresh);
 
-  final image = paraShowPage(response);
+  final jsonMap = jsonDecode(response) as Map<String, dynamic>;
+
+  if (jsonMap['error'] != null && jsonMap['error'] is String) {
+    if (jsonMap['error'] == 'Key mismatch') {
+      throw EhError(type: EhErrorType.keyMismatch, error: jsonMap['error']);
+    }
+    throw EhError(type: EhErrorType.parse, error: jsonMap['error']);
+  }
+
+  final image = paraShowPageJson(jsonMap);
   if (RegExp(EHConst.REG_509_URL).hasMatch(image.imageUrl ?? '')) {
     throw EhError(type: EhErrorType.image509);
   }

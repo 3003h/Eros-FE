@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:eros_fe/component/exception/error.dart';
 import 'package:eros_fe/const/const.dart';
 import 'package:eros_fe/extension.dart';
@@ -7,15 +5,14 @@ import 'package:eros_fe/models/index.dart';
 import 'package:eros_fe/utils/logger.dart';
 import 'package:html_unescape/html_unescape.dart';
 
-GalleryImage paraShowPage(String jsonString) {
+GalleryImage paraShowPageJson(Map<String, dynamic> jsonMap) {
   final HtmlUnescape htmlUnescape = HtmlUnescape();
-  final jsonMap = jsonDecode(jsonString) as Map<String, dynamic>;
-
   final RegExp regImageUrl = RegExp(r'<img[^>]*src="([^"]+)" style');
   final String imageUrl =
       regImageUrl.firstMatch('${jsonMap['i3']}')?.group(1) ?? '';
 
-  logger.t('largeImageUrl $imageUrl');
+  logger.d('largeImageUrl $imageUrl');
+  logger.d('jsonMap $jsonMap');
 
   final RegExpMatch? _xy = RegExp(r'(\S+)\s+::\s+(\d+)\s+x\s+(\d+)(\s+::)?')
       .firstMatch('${jsonMap['i']}');

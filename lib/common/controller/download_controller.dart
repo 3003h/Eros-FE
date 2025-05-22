@@ -883,13 +883,34 @@ class DownloadController extends GetxController {
   }) async {
     final String? _sourceId = changeSource ? sourceId : '';
 
-    final GalleryImage? _image = await fetchImageInfoByApi(
-      href,
-      refresh: changeSource,
-      sourceId: _sourceId,
-      cancelToken: cancelToken,
-      showKey: showKey,
-    );
+    GalleryImage? _image;
+
+    try {
+      _image = await fetchImageInfoByApi(
+        href,
+        refresh: changeSource,
+        sourceId: _sourceId,
+        cancelToken: cancelToken,
+        showKey: showKey,
+      );
+    } on EhError catch (e) {
+      logger.e('获取图片信息失败 $e');
+      if (e.type == EhErrorType.keyMismatch) {
+        logger.d('showkey 不匹配，更新 showkey');
+        _updateShowKey(gid, '', updateDB: true);
+        _image = await fetchImageInfoByApi(
+          href,
+          refresh: changeSource,
+          sourceId: _sourceId,
+          cancelToken: cancelToken,
+        );
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      logger.e('获取图片信息失败 $e');
+      rethrow;
+    }
 
     logger.t('_image from fetch ${_image?.toJson()}');
 
