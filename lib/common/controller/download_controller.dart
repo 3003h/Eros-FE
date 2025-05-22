@@ -83,6 +83,18 @@ class TaskStatus {
   }
 }
 
+/// 用于传递下载信息的数据类
+class _ImageDownloadInfo {
+  _ImageDownloadInfo({
+    required this.imageUrl,
+    required this.updatedImage,
+    required this.fileNameWithoutExtension,
+  });
+  final String imageUrl;
+  final GalleryImage updatedImage;
+  final String fileNameWithoutExtension;
+}
+
 class DownloadController extends GetxController {
   final DownloadState dState = DownloadState();
 
@@ -573,23 +585,88 @@ class DownloadController extends GetxController {
       logger.t('${image.ser} redownload ');
     }
 
-    late String _targetImageUrl;
-    late GalleryImage _uptImage;
-    String fileNameWithoutExtension = '';
+    // 获取下载URL和更新后的图片信息
+    final downloadInfo = await _getImageDownloadInfo(
+      image,
+      imageTask,
+      gid,
+      maxSer,
+      downloadOrigImage: downloadOrigImage,
+      reDownload: reDownload,
+      cancelToken: cancelToken,
+      showKey: showKey,
+    );
+
+    // 定义下载进度回调
+    final ProgressCallback _progressCallback = (int count, int total) {
+      dState.downloadCounts['${gid}_${image.ser}'] = count;
+    };
+
+    try {
+      // 下载图片
+      await _downloadToPath(
+        downloadInfo.imageUrl,
+        downloadParentPath,
+        downloadInfo.fileNameWithoutExtension,
+        cancelToken: cancelToken,
+        onDownloadCompleteWithFileName: (fileName) async {
+          await _putImageTask(
+            gid,
+            downloadInfo.updatedImage,
+            fileName: fileName,
+            status: TaskStatus.complete.value,
+          );
+          onDownloadCompleteWithFileName?.call(fileName);
+        },
+        progressCallback: _progressCallback,
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 403) {
+        await _handleExpiredLink(
+          image,
+          gid,
+          downloadParentPath,
+          downloadInfo.fileNameWithoutExtension,
+          downloadOrigImage,
+          cancelToken,
+          _progressCallback,
+          onDownloadCompleteWithFileName,
+          downloadInfo.updatedImage.sourceId,
+          showKey,
+        );
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  /// 获取下载URL和更新的图片信息
+  Future<_ImageDownloadInfo> _getImageDownloadInfo(
+    GalleryImage image,
+    GalleryImageTask? imageTask,
+    int gid,
+    int maxSer, {
+    bool downloadOrigImage = false,
+    bool reDownload = false,
+    CancelToken? cancelToken,
+    String? showKey,
+  }) async {
+    late String imageUrl;
+    late GalleryImage updatedImage;
+    late String fileNameWithoutExtension;
 
     // 存在imageTask的 用原url下载
     final bool useOldUrl = imageTask != null &&
         imageTask.imageUrl != null &&
         (imageTask.imageUrl?.isNotEmpty ?? false);
-
     final String? imageUrlFromTask = imageTask?.imageUrl;
 
     // 使用原有url下载
     if (useOldUrl && !reDownload && imageUrlFromTask != null) {
       logger.t('使用原有url下载 ${image.ser} DL $imageUrlFromTask');
 
-      _targetImageUrl = imageUrlFromTask;
-      _uptImage = image;
+      imageUrl = imageUrlFromTask;
+      updatedImage = image;
       if (imageTask.filePath != null && imageTask.filePath!.isNotEmpty) {
         fileNameWithoutExtension =
             path.basenameWithoutExtension(imageTask.filePath!);
@@ -626,13 +703,13 @@ class DownloadController extends GetxController {
       }
 
       // 目标下载地址
-      _targetImageUrl = downloadOrigImage
+      imageUrl = downloadOrigImage
           ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
           : imageFetched.imageUrl!;
-      _uptImage = imageFetched;
+      updatedImage = imageFetched;
 
       logger.t(
-          'downloadOrigImage:$downloadOrigImage\nDownload _targetImageUrl:$_targetImageUrl');
+          'downloadOrigImage:$downloadOrigImage\nDownload imageUrl:$imageUrl');
 
       fileNameWithoutExtension =
           _genFileNameWithoutExtension(imageFetched, maxSer);
@@ -648,76 +725,69 @@ class DownloadController extends GetxController {
       throw EhError(error: 'get image url error');
     }
 
-    // 定义下载进度回调
-    final ProgressCallback _progressCallback = (int count, int total) {
-      dState.downloadCounts['${gid}_${image.ser}'] = count;
-    };
+    return _ImageDownloadInfo(
+      imageUrl: imageUrl,
+      updatedImage: updatedImage,
+      fileNameWithoutExtension: fileNameWithoutExtension,
+    );
+  }
 
-    try {
-      // 下载图片
-      await _downloadToPath(
-        _targetImageUrl,
-        downloadParentPath,
-        fileNameWithoutExtension,
-        cancelToken: cancelToken,
-        onDownloadCompleteWithFileName: (fileName) async {
-          await _putImageTask(
-            gid,
-            _uptImage,
-            fileName: fileName,
-            status: TaskStatus.complete.value,
-          );
-          onDownloadCompleteWithFileName?.call(fileName);
-        },
-        progressCallback: _progressCallback,
-      );
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 403) {
-        logger.d('403 $gid.${image.ser}下载链接已经失效 需要更新 ${image.href}');
-        final GalleryImage imageFetched = await _fetchImageInfo(
-          image.href!,
-          itemSer: image.ser,
-          image: image,
-          gid: gid,
-          cancelToken: cancelToken,
-          sourceId: _uptImage.sourceId,
-          changeSource: true,
-        );
+  /// 处理过期链接的子函数
+  Future<void> _handleExpiredLink(
+    GalleryImage image,
+    int gid,
+    String downloadParentPath,
+    String fileNameWithoutExtension,
+    bool downloadOrigImage,
+    CancelToken? cancelToken,
+    ProgressCallback progressCallback,
+    ValueChanged<String>? onDownloadCompleteWithFileName,
+    String? sourceId,
+    String? showKey,
+  ) async {
+    logger.d('403 $gid.${image.ser}下载链接已经失效 需要更新 ${image.href}');
+    final GalleryImage imageFetched = await _fetchImageInfo(
+      image.href!,
+      itemSer: image.ser,
+      image: image,
+      gid: gid,
+      cancelToken: cancelToken,
+      sourceId: sourceId,
+      changeSource: true,
+      showKey: showKey,
+    );
 
-        // 更新 showkey
-        final _showKey = imageFetched.showKey;
-        if (_showKey != null) {
-          _updateShowKey(gid, _showKey, updateDB: true);
-        }
-
-        _targetImageUrl = ehSettingService.downloadOrigImage
-            ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
-            : imageFetched.imageUrl!;
-
-        logger.d('重下载 _targetImageUrl:$_targetImageUrl');
-
-        _addAllImages(gid, [imageFetched]);
-        await _putImageTask(gid, imageFetched,
-            status: TaskStatus.running.value);
-
-        await _downloadToPath(
-          _targetImageUrl,
-          downloadParentPath,
-          fileNameWithoutExtension,
-          cancelToken: cancelToken,
-          onDownloadCompleteWithFileName: (fileName) async {
-            await _putImageTask(
-              gid,
-              imageFetched,
-              fileName: fileName,
-              status: TaskStatus.complete.value,
-            );
-            onDownloadCompleteWithFileName?.call(fileName);
-          },
-          progressCallback: _progressCallback,
-        );
-      }
+    // 更新 showkey
+    final _showKey = imageFetched.showKey;
+    if (_showKey != null) {
+      _updateShowKey(gid, _showKey, updateDB: true);
     }
+
+    final newImageUrl = downloadOrigImage
+        ? imageFetched.originImageUrl ?? imageFetched.imageUrl!
+        : imageFetched.imageUrl!;
+
+    logger.d('重下载 imageUrl:$newImageUrl');
+
+    _addAllImages(gid, [imageFetched]);
+    await _putImageTask(gid, imageFetched, status: TaskStatus.running.value);
+
+    await _downloadToPath(
+      newImageUrl,
+      downloadParentPath,
+      fileNameWithoutExtension,
+      cancelToken: cancelToken,
+      onDownloadCompleteWithFileName: (fileName) async {
+        await _putImageTask(
+          gid,
+          imageFetched,
+          fileName: fileName,
+          status: TaskStatus.complete.value,
+        );
+        onDownloadCompleteWithFileName?.call(fileName);
+      },
+      progressCallback: progressCallback,
+    );
   }
 
   // 下载文件到指定路径
