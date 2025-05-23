@@ -11,8 +11,8 @@ GalleryImage paraShowPageJson(Map<String, dynamic> jsonMap) {
   final String imageUrl =
       regImageUrl.firstMatch('${jsonMap['i3']}')?.group(1) ?? '';
 
-  logger.d('largeImageUrl $imageUrl');
-  logger.d('jsonMap $jsonMap');
+  logger.t('largeImageUrl $imageUrl');
+  logger.t('jsonMap $jsonMap');
 
   final RegExpMatch? _xy = RegExp(r'(\S+)\s+::\s+(\d+)\s+x\s+(\d+)(\s+::)?')
       .firstMatch('${jsonMap['i']}');

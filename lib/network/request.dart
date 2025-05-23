@@ -267,7 +267,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
     return _image;
   }
 
-  logger.d(
+  logger.t(
       'fetchImageInfoByApi: href $href, refresh $refresh, sourceId $sourceId, showKey $showKey');
 
   final RegExp regExp =
@@ -285,7 +285,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
     'showkey': showKey,
   };
 
-  logger.d('fetchImageInfoByApi: reqMap $reqMap');
+  logger.t('fetchImageInfoByApi: reqMap $reqMap');
 
   final String reqJsonStr = jsonEncode(reqMap);
 
@@ -320,7 +320,7 @@ Future<GalleryImage?> _fetchImageInfo(
     if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
   };
 
-  logger.d('fetchImageInfo: href $href, refresh $refresh, sourceId $sourceId, '
+  logger.t('fetchImageInfo: href $href, refresh $refresh, sourceId $sourceId, '
       'debugLabel $debugLabel');
 
   String mpvSer = '1';
@@ -343,7 +343,7 @@ Future<GalleryImage?> _fetchImageInfo(
   );
 
   if (httpResponse.ok && httpResponse.data is GalleryImage) {
-    logger.d('url $href, fetchImageInfo ok');
+    logger.t('url $href, fetchImageInfo ok');
     return (httpResponse.data as GalleryImage).copyWith(href: href.oN);
   } else {
     // logger.d('error.runtimeType: ${httpResponse.error.runtimeType}');
@@ -357,7 +357,7 @@ Future<List<GalleryImage>> getGalleryImageList(
   bool refresh = false,
   CancelToken? cancelToken,
 }) async {
-  logger.d('getGalleryImageList: $inUrl, page $page, refresh $refresh');
+  logger.t('getGalleryImageList: $inUrl, page $page, refresh $refresh');
   final Map<String, dynamic> _params = {
     if (page != null) 'p': page,
   };

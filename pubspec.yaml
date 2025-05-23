@@ -208,6 +208,8 @@ dependencies:
   blurhash_ffi: ^1.2.2
   cached_annotation: ^1.6.0
   chinese_font_library: ^1.2.0
+  path_provider: ^2.1.5
+  path: ^1.9.1
 
 dev_dependencies:
 #  flutter_test:
@@ -233,7 +235,7 @@ dev_dependencies:
   json_annotation: ^4.8.1
   copy_with_extension_gen: ^6.0.0
   isar_generator: ^3.0.0
-#  flutter_lints: ^5.0.0
+  flutter_lints: ^5.0.0
   cached: ^1.6.1
 
 dependency_overrides:
