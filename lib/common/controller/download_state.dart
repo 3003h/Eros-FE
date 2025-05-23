@@ -23,7 +23,9 @@ class DownloadState {
   DownloadState();
   final RxMap<int, GalleryTask> galleryTaskMap = <int, GalleryTask>{}.obs;
 
-  List<GalleryTask> get galleryTasks => galleryTaskMap.values.toList();
+  List<GalleryTask> get galleryTasks => galleryTaskMap.values.toList()
+    ..sort((b, a) => (a.addTime ?? 0).compareTo(b.addTime ?? 0));
+
   final downloadSpeeds = <int, String>{};
 
   final errInfoMap = <int, String>{};
@@ -33,8 +35,8 @@ class DownloadState {
   QueueTask queueTask = QueueTask();
   final Map<int, TaskCancelToken> taskCancelTokens = {};
 
-  final downloadMap = <int, List<GalleryImage>>{};
-  final cancelTokenMap = <int, CancelToken>{};
+  final Map<int, List<GalleryImage>> downloadMap = <int, List<GalleryImage>>{};
+  final Map<int, CancelToken> cancelTokenMap = <int, CancelToken>{};
   final showKeyMap = <int, String>{};
   final showKeyCompleteMap = <int, Completer>{};
 
@@ -46,4 +48,7 @@ class DownloadState {
   final Map<int, List<int>> lastCounts = {};
 
   final Map<int, int> noSpeed = {};
+
+  // 画廊任务额外信息 - 新增
+  final Map<int, Map<String, dynamic>> galleryTaskExtraInfo = {};
 }

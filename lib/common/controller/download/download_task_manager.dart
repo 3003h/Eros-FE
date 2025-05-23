@@ -52,8 +52,10 @@ class DownloadTaskManager {
   final StorageAdapter storageAdapter;
 
   /// 更新任务为已完成
-  Future<GalleryTask?> galleryTaskComplete(int gid,
-      {Function? cancelTimerCallback}) async {
+  Future<GalleryTask?> galleryTaskComplete(
+    int gid, {
+    Function? cancelTimerCallback,
+  }) async {
     if (dState.galleryTaskMap[gid]?.status == TaskStatus.complete.value) {
       return null;
     }
@@ -101,28 +103,62 @@ class DownloadTaskManager {
         await isarHelper.findGalleryTaskByGidIsolate(gid);
     if (galleryTask != null) {
       logger.d('恢复任务 $gid showKey:${galleryTask.showKey}');
+
+      // 确保任务状态为enqueued，这样在进入槽位管理器时才能正确处理
+      final resumeTask = galleryTask.copyWith(
+        status: TaskStatus.enqueued.value, // 重要：设置状态为enqueued而不是running
+      );
+
+      // 更新内存中的任务
+      dState.galleryTaskMap[gid] = resumeTask;
+
+      // 保存到数据库
+      await isarHelper.putGalleryTaskIsolate(resumeTask);
+      logger.d('任务状态已重置为enqueued: gid=$gid');
+
       if (addGalleryTaskCallback != null) {
-        Function.apply(addGalleryTaskCallback, [galleryTask]);
+        logger.d('调用恢复任务回调: gid=$gid');
+        Function.apply(addGalleryTaskCallback, [resumeTask]); // 传递更新后的任务
       }
     }
   }
 
   /// 重下任务
-  Future<void> galleryTaskRestart(int gid,
-      {Function? addGalleryTaskCallback}) async {
+  Future<void> galleryTaskRestart(
+    int gid, {
+    Function? addGalleryTaskCallback,
+  }) async {
+    logger.d('开始重启任务: gid=$gid');
     isarHelper.removeImageTask(gid);
 
     final GalleryTask? galleryTask =
         await isarHelper.findGalleryTaskByGidIsolate(gid);
     if (galleryTask != null) {
-      logger.d('重下任务 $gid ${galleryTask.url}');
+      logger.d(
+          '重下任务: gid=$gid, 原状态=${galleryTask.status}, url=${galleryTask.url}');
       cacheController.clearDioCache(
           path: '${Api.getBaseUrl()}${galleryTask.url}');
-      final reTask = galleryTask.copyWith(completCount: 0);
+
+      // 重置任务状态为enqueued，并将完成数置为0
+      final reTask = galleryTask.copyWith(
+        completCount: 0,
+        status: TaskStatus.enqueued.value, // 关键修改：重置状态为enqueued
+      );
+
+      logger.d(
+          '任务状态已重置: gid=$gid, 新状态=${reTask.status}(${TaskStatus.enqueued.value})');
       dState.galleryTaskMap[gid] = reTask;
+
+      // 保存到数据库
+      await isarHelper.putGalleryTaskIsolate(reTask);
+      logger.d('重置后的任务已保存到数据库: gid=$gid');
+
       if (addGalleryTaskCallback != null) {
+        logger.d('调用添加任务回调: gid=$gid');
         Function.apply(addGalleryTaskCallback, [reTask]);
       }
+    } else {
+      logger.e('重下任务失败: 找不到任务 gid=$gid');
     }
   }
 
@@ -157,16 +193,26 @@ class DownloadTaskManager {
     int gid,
     TaskStatus status,
   ) async {
+    loggerSimple.d(
+        '===== DownloadTaskManager更新状态: gid=$gid, 状态=$status (${status.value})');
     if (dState.galleryTaskMap.containsKey(gid) &&
         dState.galleryTaskMap[gid] != null) {
+      final oldTask = dState.galleryTaskMap[gid];
+      final oldStatus = oldTask?.status;
+      loggerSimple.d('原任务状态: gid=$gid, 状态=$oldStatus');
+
       dState.galleryTaskMap[gid] =
           dState.galleryTaskMap[gid]!.copyWith(status: status.value);
-      logger.t('set $gid status $status');
+      loggerSimple.d('更新内存状态: gid=$gid, 新状态=${status.value}');
 
       final task = dState.galleryTaskMap[gid];
       if (task != null) {
-        isarHelper.putGalleryTaskIsolate(task);
+        loggerSimple.d('保存到数据库: gid=$gid');
+        await isarHelper.putGalleryTaskIsolate(task);
+        loggerSimple.d('数据库保存完成: gid=$gid');
       }
+    } else {
+      logger.e('找不到任务: gid=$gid');
     }
 
     return dState.galleryTaskMap[gid];

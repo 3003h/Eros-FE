@@ -92,6 +92,11 @@ class EhSettingService extends ProfileService {
   int get multiDownload => _multiDownload.value;
   set multiDownload(int val) => _multiDownload.value = val;
 
+  /// 同时下载的画廊数
+  final RxInt _concurrentGalleries = 1.obs;
+  int get concurrentGalleries => _concurrentGalleries.value;
+  set concurrentGalleries(int val) => _concurrentGalleries.value = val;
+
   // 允许媒体扫描
   final RxBool _allowMediaScan = false.obs;
   bool get allowMediaScan => _allowMediaScan.value;
@@ -817,6 +822,15 @@ class EhSettingService extends ProfileService {
         : multiDownload;
     everProfile<int>(_multiDownload, (value) {
       downloadConfig = downloadConfig.copyWith(multiDownload: value.oN);
+    });
+
+    // concurrentGalleries
+    concurrentGalleries = (downloadConfig.concurrentGalleries != null &&
+            downloadConfig.concurrentGalleries! > 0)
+        ? downloadConfig.concurrentGalleries!
+        : concurrentGalleries;
+    everProfile<int>(_concurrentGalleries, (value) {
+      downloadConfig = downloadConfig.copyWith(concurrentGalleries: value.oN);
     });
 
     allowMediaScan = downloadConfig.allowMediaScan ?? allowMediaScan;

@@ -1710,11 +1710,21 @@ class L10n {
     );
   }
 
-  /// `multi Download`
+  /// `Multi download`
   String get multi_download {
     return Intl.message(
-      'multi Download',
+      'Multi download',
       name: 'multi_download',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Concurrent galleries`
+  String get concurrent_galleries {
+    return Intl.message(
+      'Concurrent galleries',
+      name: 'concurrent_galleries',
       desc: '',
       args: [],
     );

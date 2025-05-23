@@ -336,6 +336,14 @@ class EHConst {
     if (Global.inDebugMode) 100,
   ];
 
+  static List<int> concurrentGalleries = <int>[
+    1,
+    2,
+    3,
+    4,
+    5,
+  ];
+
   static List<int> webDAVConnections = multiDownload;
 
   static int cleanDataVer = 1;

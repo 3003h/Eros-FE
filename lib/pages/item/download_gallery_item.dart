@@ -530,14 +530,14 @@ class DownloadGalleryItem extends GetView<DownloadViewController> {
         width: minSize,
         height: minSize,
         child: const CupertinoActivityIndicator(
-          radius: 12,
+          radius: 10,
         ),
       ),
       TaskStatus.undefined: Container(
         width: minSize,
         height: minSize,
         child: const CupertinoActivityIndicator(
-          radius: 12,
+          radius: 10,
         ),
       ),
     };
@@ -552,8 +552,8 @@ class DownloadItemCoverImage extends StatelessWidget {
     this.url,
     this.filePath,
     this.cardType = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String? filePath;
   final String? url;
@@ -565,7 +565,7 @@ class DownloadItemCoverImage extends StatelessWidget {
 
     Widget image = () {
       if (filePath != null) {
-        final loadStateChanged = (ExtendedImageState state) {
+        Widget? loadStateChanged(ExtendedImageState state) {
           if (state.extendedImageLoadState == LoadState.loading) {
             return Container(
               alignment: Alignment.center,
@@ -575,22 +575,18 @@ class DownloadItemCoverImage extends StatelessWidget {
             );
           }
           return null;
-        };
+        }
 
-        const filterQuality = FilterQuality.medium;
-        return (filePath?.isContentUri ?? false)
-            ? ExtendedImage(
-                image: ExtendedSafImageProvider(Uri.parse(filePath!)),
-                fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
-                loadStateChanged: loadStateChanged,
-                filterQuality: filterQuality,
-              )
-            : ExtendedImage.file(
-                File(filePath!),
-                fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
-                loadStateChanged: loadStateChanged,
-                filterQuality: filterQuality,
-              );
+        const filterQuality = FilterQuality.high;
+        final image = ((filePath?.isContentUri ?? false)
+            ? ExtendedSafImageProvider(Uri.parse(filePath!))
+            : ExtendedFileImageProvider(File(filePath!))) as ImageProvider;
+        return ExtendedImage(
+          image: image,
+          fit: cardType ? BoxFit.cover : BoxFit.fitWidth,
+          loadStateChanged: loadStateChanged,
+          filterQuality: filterQuality,
+        );
       } else if (url != null) {
         return EhNetworkImage(
           imageUrl: url!,

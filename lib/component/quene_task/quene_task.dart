@@ -43,15 +43,15 @@ class QueueTask {
         continue;
       }
 
-      _TaskInfo _taskInfo = _queue.removeFirst();
-      if (_taskInfo.taskCancelToken != null &&
-          _taskInfo.taskCancelToken!.isCancelled) {
-        logger.d('task ${_taskInfo.taskName} isCancelled');
+      final taskInfo = _queue.removeFirst();
+      if (taskInfo.taskCancelToken != null &&
+          taskInfo.taskCancelToken!.isCancelled) {
+        logger.d('task ${taskInfo.taskName} isCancelled');
         continue;
       }
 
       _taskCount += 1;
-      await _taskInfo.workTask.call(name: _taskInfo.taskName);
+      await taskInfo.workTask.call(name: taskInfo.taskName);
       _taskCount -= 1;
     }
     _exec();

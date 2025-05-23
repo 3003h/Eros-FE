@@ -419,7 +419,7 @@ class ImageDownloadProcessor {
     }
 
     if (tImage == null && url != null) {
-      loggerSimple.t('ser:$itemSer 所在页尚未获取， 开始获取');
+      logger.d('ser:$itemSer 所在页尚未获取， 开始获取');
       final imageList = await fetchImageList(
         ser: itemSer,
         fileCount: fileCount,
@@ -427,7 +427,8 @@ class ImageDownloadProcessor {
         url: url,
         cancelToken: cancelToken,
       );
-      loggerSimple.t('imageList.length: ${imageList.length}');
+      logger.d(
+          'imageList.length: ${imageList.length}, sers: ${imageList.map((e) => e.ser).join(',')}');
       if (addAllImagesCallback != null) {
         addAllImagesCallback(gid, imageList);
       }
@@ -523,9 +524,9 @@ class ImageDownloadProcessor {
     required int firstPageCount,
     CancelToken? cancelToken,
   }) async {
-    logger.t('firstPageCount $firstPageCount');
+    logger.d('firstPageCount $firstPageCount');
     final int page = (ser - 1) ~/ firstPageCount;
-    logger.t('ser:$ser 所在页码为$page');
+    logger.d('ser:$ser 所在页码为$page');
 
     final List<GalleryImage> moreImageList = await getGalleryImageList(
       url,

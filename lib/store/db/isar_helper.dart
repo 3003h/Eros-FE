@@ -58,10 +58,10 @@ class IsarHelper {
     compute(iAddHistory, galleryProvider);
   }
 
-  Future<void> removeHistory(String gid) async {
-    final _gid = int.tryParse(gid) ?? 0;
+  Future<void> removeHistory(String gidStr) async {
+    final gid = int.tryParse(gidStr) ?? 0;
     await isar.writeTxn(() async {
-      await isar.viewHistorys.delete(_gid);
+      await isar.viewHistorys.delete(gid);
     });
   }
 

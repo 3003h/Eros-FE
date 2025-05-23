@@ -106,6 +106,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("Wheel"),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "commentator": MessageLookupByLibrary.simpleMessage("Commentator"),
+        "concurrent_galleries":
+            MessageLookupByLibrary.simpleMessage("Concurrent galleries"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
         "copy": MessageLookupByLibrary.simpleMessage("Copy"),
@@ -257,7 +259,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "more_thumbnails":
             MessageLookupByLibrary.simpleMessage("More Thumbnails"),
         "multi_download":
-            MessageLookupByLibrary.simpleMessage("multi Download"),
+            MessageLookupByLibrary.simpleMessage("Multi download"),
         "mytags_on_website":
             MessageLookupByLibrary.simpleMessage("My Tags on Website"),
         "native_http_client_adapter":

@@ -106,6 +106,7 @@ class DownloadSetting extends StatelessWidget {
 
         _buildPreloadImageItem(context),
         _buildMultiDownloadItem(context),
+        _buildConcurrentGalleriesItem(context),
         _buildDownloadOrigImageItem(context),
 
         //
@@ -161,7 +162,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
   final String title = L10n.of(context).preload_image;
   final EhSettingService ehSettingService = Get.find();
 
-  List<Widget> _getModeList(BuildContext context) {
+  List<Widget> getModeList(BuildContext context) {
     return List<Widget>.from(EHConst.preloadImage.map((int element) {
       return CupertinoActionSheetAction(
           onPressed: () {
@@ -171,7 +172,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
     }).toList());
   }
 
-  Future<int?> _showActionSheet(BuildContext context) {
+  Future<int?> showActionSheet(BuildContext context) {
     return showCupertinoModalPopup<int>(
         context: context,
         builder: (BuildContext context) {
@@ -182,7 +183,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
                 },
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
-              ..._getModeList(context),
+              ...getModeList(context),
             ],
           );
           return dialog;
@@ -194,7 +195,7 @@ Widget _buildPreloadImageItem(BuildContext context) {
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(ehSettingService.preloadImage.toString()),
         onTap: () async {
-          final int? result = await _showActionSheet(context);
+          final int? result = await showActionSheet(context);
           if (result != null) {
             ehSettingService.preloadImage(result);
           }
@@ -207,7 +208,7 @@ Widget _buildMultiDownloadItem(BuildContext context) {
   final String title = L10n.of(context).multi_download;
   final EhSettingService ehSettingService = Get.find();
 
-  List<Widget> _getModeList(BuildContext context) {
+  List<Widget> getModeList(BuildContext context) {
     return List<Widget>.from(EHConst.multiDownload.map((int element) {
       return CupertinoActionSheetAction(
           onPressed: () {
@@ -217,7 +218,7 @@ Widget _buildMultiDownloadItem(BuildContext context) {
     }).toList());
   }
 
-  Future<int?> _showActionSheet(BuildContext context) {
+  Future<int?> showActionSheet(BuildContext context) {
     return showCupertinoModalPopup<int>(
         context: context,
         builder: (BuildContext context) {
@@ -228,7 +229,7 @@ Widget _buildMultiDownloadItem(BuildContext context) {
                 },
                 child: Text(L10n.of(context).cancel)),
             actions: <Widget>[
-              ..._getModeList(context),
+              ...getModeList(context),
             ],
           );
           return dialog;
@@ -240,10 +241,59 @@ Widget _buildMultiDownloadItem(BuildContext context) {
         trailing: const CupertinoListTileChevron(),
         additionalInfo: Text(ehSettingService.multiDownload.toString()),
         onTap: () async {
-          final int? result = await _showActionSheet(context);
+          final int? result = await showActionSheet(context);
           if (result != null) {
             if (ehSettingService.multiDownload != result) {
               ehSettingService.multiDownload = result;
+              Get.find<DownloadController>().resetConcurrency();
+            }
+          }
+        },
+      ));
+}
+
+/// 同时下载画廊数
+Widget _buildConcurrentGalleriesItem(BuildContext context) {
+  final String title = L10n.of(context).concurrent_galleries;
+  final EhSettingService ehSettingService = Get.find();
+
+  List<Widget> getModeList(BuildContext context) {
+    return List<Widget>.from(EHConst.concurrentGalleries.map((int element) {
+      return CupertinoActionSheetAction(
+          onPressed: () {
+            Get.back(result: element);
+          },
+          child: Text('$element'));
+    }).toList());
+  }
+
+  Future<int?> showActionSheet(BuildContext context) {
+    return showCupertinoModalPopup<int>(
+        context: context,
+        builder: (BuildContext context) {
+          final CupertinoActionSheet dialog = CupertinoActionSheet(
+            cancelButton: CupertinoActionSheetAction(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(L10n.of(context).cancel)),
+            actions: <Widget>[
+              ...getModeList(context),
+            ],
+          );
+          return dialog;
+        });
+  }
+
+  return Obx(() => EhCupertinoListTile(
+        title: Text(title),
+        trailing: const CupertinoListTileChevron(),
+        additionalInfo: Text(ehSettingService.concurrentGalleries.toString()),
+        onTap: () async {
+          final int? result = await showActionSheet(context);
+          if (result != null) {
+            if (ehSettingService.concurrentGalleries != result) {
+              ehSettingService.concurrentGalleries = result;
               Get.find<DownloadController>().resetConcurrency();
             }
           }

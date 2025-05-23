@@ -4,5 +4,6 @@
   "downloadLocation?" : "",
   "downloadOrigImage?": false,
   "downloadOrigImageType?": "",
-  "allowMediaScan?": false
+  "allowMediaScan?": false,
+  "concurrentGalleries?": 1
 }
