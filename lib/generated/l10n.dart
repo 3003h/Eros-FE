@@ -1720,10 +1720,10 @@ class L10n {
     );
   }
 
-  /// `Concurrent galleries`
+  /// `Max concurrent gallery downloads`
   String get concurrent_galleries {
     return Intl.message(
-      'Concurrent galleries',
+      'Max concurrent gallery downloads',
       name: 'concurrent_galleries',
       desc: '',
       args: [],

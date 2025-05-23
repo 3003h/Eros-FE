@@ -108,6 +108,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("wheel"),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "commentator": MessageLookupByLibrary.simpleMessage("Commentator"),
+        "concurrent_galleries": MessageLookupByLibrary.simpleMessage(
+            "Макс. одновременных загрузок галерей"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Скопировано в буфер обмена"),
         "copy": MessageLookupByLibrary.simpleMessage("Копировать"),

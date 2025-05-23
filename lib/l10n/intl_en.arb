@@ -166,7 +166,7 @@
   "input_empty": "Input empty",
   "allow_media_scan": "Allow media scan",
   "multi_download": "Multi download",
-  "concurrent_galleries": "Concurrent galleries",
+  "concurrent_galleries": "Max concurrent gallery downloads",
   "downloaded": "Downloaded",
   "downloading": "Downloading",
   "paused": "Paused",

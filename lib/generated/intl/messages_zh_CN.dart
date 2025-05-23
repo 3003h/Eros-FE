@@ -93,7 +93,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("色盘"),
         "comment": MessageLookupByLibrary.simpleMessage("评论"),
         "commentator": MessageLookupByLibrary.simpleMessage("评论者"),
-        "concurrent_galleries": MessageLookupByLibrary.simpleMessage("同时下载画廊数"),
+        "concurrent_galleries":
+            MessageLookupByLibrary.simpleMessage("同时下载画廊任务数"),
         "copied_to_clipboard": MessageLookupByLibrary.simpleMessage("已复制到剪贴板"),
         "copy": MessageLookupByLibrary.simpleMessage("复制"),
         "current_site": m0,

@@ -166,7 +166,7 @@
   "input_empty": "输入空",
   "allow_media_scan": "允许媒体扫描",
   "multi_download": "同时下载图片数量",
-  "concurrent_galleries": "同时下载画廊数",
+  "concurrent_galleries": "同时下载画廊任务数",
   "downloaded": "已下载",
   "downloading": "下载中",
   "paused": "已暂停",

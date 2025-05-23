@@ -106,8 +106,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "color_picker_wheel": MessageLookupByLibrary.simpleMessage("Wheel"),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "commentator": MessageLookupByLibrary.simpleMessage("Commentator"),
-        "concurrent_galleries":
-            MessageLookupByLibrary.simpleMessage("Concurrent galleries"),
+        "concurrent_galleries": MessageLookupByLibrary.simpleMessage(
+            "Max concurrent gallery downloads"),
         "copied_to_clipboard":
             MessageLookupByLibrary.simpleMessage("Copied to clipboard"),
         "copy": MessageLookupByLibrary.simpleMessage("Copy"),

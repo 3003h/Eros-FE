@@ -166,6 +166,7 @@
   "input_empty": "入力は空です",
   "allow_media_scan": "メディアスキャンを許可",
   "multi_download": "マルチダウンロード",
+  "concurrent_galleries": "同時ギャラリーダウンロード数",
   "downloaded": "ダウンロード済み",
   "downloading": "ダウンロード中",
   "paused": "一時停止",

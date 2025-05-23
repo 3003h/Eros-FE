@@ -166,6 +166,7 @@
   "input_empty": "Буфер обмена пуст",
   "allow_media_scan": "Разрешить видеть папку извне",
   "multi_download": "Многопоточная загрузка",
+  "concurrent_galleries": "Макс. одновременных загрузок галерей",
   "downloaded": "Скачано",
   "downloading": "Скачивание",
   "paused": "На паузе",
