@@ -663,13 +663,13 @@ class _AdvanceViewState extends State<_AdvanceView> {
                       startPage: _advanceSearch.startPage,
                       endPage: _advanceSearch.endPage,
                       onStartPageChanged: (val) {
-                        _advanceSearch = _advanceSearch.copyWith(
-                            startPage: val.isEmpty ? null : val.oN);
+                        _advanceSearch =
+                            _advanceSearch.copyWith(startPage: val.trim().oN);
                         widget.onChanged?.call(_advanceSearch);
                       },
                       onEndPageChanged: (val) {
-                        _advanceSearch = _advanceSearch.copyWith(
-                            endPage: val.isEmpty ? null : val.oN);
+                        _advanceSearch =
+                            _advanceSearch.copyWith(endPage: val.trim().oN);
                         widget.onChanged?.call(_advanceSearch);
                       },
                     ),
