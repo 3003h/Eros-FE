@@ -19,6 +19,9 @@ const int kCheckMaxCount = 10;
 // 无速度多少个周期后重试
 const int kRetryThresholdTime = 10;
 
+// 达到此次数后才换源下载
+const int kMaxReDownloadRetries = 3;
+
 class DownloadState {
   DownloadState();
   final RxMap<int, GalleryTask> galleryTaskMap = <int, GalleryTask>{}.obs;
@@ -48,6 +51,9 @@ class DownloadState {
   final Map<int, List<int>> lastCounts = {};
 
   final Map<int, int> noSpeed = {};
+
+  // 重试计数器：key: "gid_ser", value: 重试次数
+  final Map<String, int> reDownloadCounts = {};
 
   // 画廊任务额外信息 - 新增
   final Map<int, Map<String, dynamic>> galleryTaskExtraInfo = {};

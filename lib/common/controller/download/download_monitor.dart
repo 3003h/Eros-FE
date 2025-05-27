@@ -140,12 +140,15 @@ class DownloadMonitor {
 
       // 达到重试阈值时执行重试
       if ((dState.noSpeed[gid] ?? 0) > kRetryThresholdTime) {
-        logger.d('检测到下载停滞，正在重试 gid:$gid, 时间:${DateTime.now()}');
+        logger.d('monitor 检测到下载停滞，正在重试 gid:$gid, 时间:${DateTime.now()}');
 
         // 如果提供了回调则调用
         if (onRetryNeededCallback != null) {
           Function.apply(onRetryNeededCallback, [gid]);
         }
+
+        // 重置计数器，避免重复触发重试
+        dState.noSpeed[gid] = 0;
       }
     } else {
       // 有速度时重置无速度计数

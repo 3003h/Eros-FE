@@ -101,9 +101,9 @@ class GalleryActions extends StatelessWidget {
 
 class DownloadGalleryButton extends StatelessWidget {
   const DownloadGalleryButton({
-    Key? key,
+    super.key,
     required this.pageController,
-  }) : super(key: key);
+  });
 
   final GalleryPageController pageController;
 
@@ -153,12 +153,20 @@ class DownloadGalleryButton extends StatelessWidget {
           // onTap: toDownloadPage,
           // onLongPress: toDownloadPage,
         ),
+        TaskStatus.enqueued: TextBtn(
+          FontAwesomeIcons.play,
+          iconSize: 16,
+          title: L10n.of(context).downloading,
+          onTap: () =>
+              _downloadController.galleryTaskResume(int.parse(pageStat.gid)),
+        ),
       };
 
-      final _dlWidget = Stack(
+      final dlWidget = Stack(
         alignment: AlignmentDirectional.center,
         children: [
           Container(
+            padding: const EdgeInsets.only(bottom: 20),
             child: Obx(() {
               return SleekCircularSlider(
                 appearance: CircularSliderAppearance(
@@ -183,15 +191,12 @@ class DownloadGalleryButton extends StatelessWidget {
                 initialValue: pageStat.downloadProcess,
               );
             }),
-            padding: const EdgeInsets.only(bottom: 19),
           ),
           iconMap[pageStat.downloadState] ?? const SizedBox(),
         ],
       );
 
-      return iconMap.keys.contains(pageStat.downloadState)
-          ? _dlWidget
-          : defIcon;
+      return iconMap.keys.contains(pageStat.downloadState) ? dlWidget : defIcon;
     });
   }
 }

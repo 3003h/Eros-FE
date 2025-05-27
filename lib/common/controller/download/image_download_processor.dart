@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -35,7 +36,7 @@ class ImageDownloadProcessor {
 
   /// 下载图片流程控制
   Future<void> downloadImageFlow(
-    GalleryImage image,
+    GalleryImage preImage,
     GalleryImageTask? imageTask,
     int gid,
     String downloadParentPath,
@@ -49,14 +50,14 @@ class ImageDownloadProcessor {
             int gid, GalleryImage image, String? fileName, int? status)?
         putImageTaskCallback,
   }) async {
-    loggerSimple.t('${image.ser} start');
+    loggerSimple.t('${preImage.ser} start');
     if (reDownload) {
-      logger.t('${image.ser} redownload ');
+      logger.t('${preImage.ser} redownload ');
     }
 
     // 获取下载URL和更新后的图片信息
     final downloadInfo = await getImageDownloadInfo(
-      image,
+      preImage,
       imageTask,
       gid,
       maxSer,
@@ -72,9 +73,14 @@ class ImageDownloadProcessor {
       },
     );
 
+    if (downloadInfo.updatedImage.sourceId?.isEmpty ?? true) {
+      logger.d(
+          '>>>> downloadInfo.updatedImage.sourceId is empty, gid: $gid, ser: ${preImage.ser}');
+    }
+
     // 定义下载进度回调
     void progressCallback(int count, int total) {
-      dState.downloadCounts['${gid}_${image.ser}'] = count;
+      dState.downloadCounts['${gid}_${preImage.ser}'] = count;
     }
 
     try {
@@ -85,6 +91,9 @@ class ImageDownloadProcessor {
         downloadInfo.fileNameWithoutExtension,
         cancelToken: cancelToken,
         onDownloadCompleteWithFileName: (fileName) async {
+          // 下载成功，重置重试计数
+          resetReDownloadCount(gid, preImage.ser);
+
           if (putImageTaskCallback != null) {
             await putImageTaskCallback(
               gid,
@@ -100,7 +109,7 @@ class ImageDownloadProcessor {
     } on DioException catch (e) {
       if (e.response?.statusCode == 403) {
         await handleExpiredLink(
-          image,
+          preImage,
           gid,
           downloadParentPath,
           downloadInfo.fileNameWithoutExtension,
@@ -120,7 +129,7 @@ class ImageDownloadProcessor {
 
   /// 获取下载URL和更新的图片信息
   Future<ImageDownloadInfo> getImageDownloadInfo(
-    GalleryImage image,
+    GalleryImage preImage,
     GalleryImageTask? imageTask,
     int gid,
     int maxSer, {
@@ -144,33 +153,53 @@ class ImageDownloadProcessor {
 
     // 使用原有url下载
     if (useOldUrl && !reDownload && imageUrlFromTask != null) {
-      logger.t('使用原有url下载 ${image.ser} DL $imageUrlFromTask');
+      logger.t('使用原有url下载 ${preImage.ser} DL $imageUrlFromTask');
 
       imageUrl = imageUrlFromTask;
-      updatedImage = image;
+      updatedImage = preImage;
       if (imageTask.filePath != null && imageTask.filePath!.isNotEmpty) {
         fileNameWithoutExtension =
             path.basenameWithoutExtension(imageTask.filePath!);
       } else {
-        fileNameWithoutExtension = genFileNameWithoutExtension(image, maxSer);
+        fileNameWithoutExtension =
+            genFileNameWithoutExtension(preImage, maxSer);
       }
-    } else if (image.href != null) {
+    } else if (preImage.href != null) {
       logger.t('获取新的图片url');
       if (reDownload) {
         logger.d(
-            '重下载 ${image.ser}, 清除缓存 ${image.href} , sourceId:${imageTask?.sourceId}');
-        cacheController.clearDioCache(path: image.href ?? '');
+            '重下载 ${preImage.ser}, 清除缓存 ${preImage.href} , sourceId:${imageTask?.sourceId}');
+        cacheController.clearDioCache(path: preImage.href ?? '');
+        logger.d(
+            'reDownload >>>>>>>>>>>>>>>> imageTask : ${jsonEncode(imageTask)}, preImage: ${jsonEncode(preImage)}');
+
+        // 增加重试计数
+        incrementReDownloadCount(gid, preImage.ser);
+      }
+
+      // 根据重试次数决定是否使用sourceId
+      String? sourceIdToUse;
+      if (reDownload && shouldUseSourceId(gid, preImage.ser)) {
+        sourceIdToUse = imageTask?.sourceId;
+        logger.d('Reached retry limit, using source change: '
+            'gid=$gid, ser=${preImage.ser}, sourceId=$sourceIdToUse');
+      } else {
+        sourceIdToUse = null;
+        if (reDownload) {
+          logger.d(
+              'Not reached retry threshold, continuing with original source: '
+              'gid=$gid, ser=${preImage.ser}, retryCount=${getReDownloadCount(gid, preImage.ser)}');
+        }
       }
 
       // 否则先请求解析新的图片地址
       final GalleryImage imageFetched = await fetchImageInfo(
-        image.href!,
-        itemSer: image.ser,
-        image: image,
+        preImage.href!,
+        itemSer: preImage.ser,
+        image: preImage,
         gid: gid,
         cancelToken: cancelToken,
-        changeSource: reDownload,
-        sourceId: imageTask?.sourceId,
+        sourceId: sourceIdToUse, // 使用计算后的sourceId
         showKey: showKey,
       );
 
@@ -178,9 +207,9 @@ class ImageDownloadProcessor {
         throw EhError(error: 'get imageUrl error');
       }
       // 更新 showkey
-      final showKey0 = imageFetched.showKey;
-      if (showKey0 != null && updateShowKeyCallback != null) {
-        updateShowKeyCallback(gid, showKey0, updateDB: true);
+      final resShowKey = imageFetched.showKey;
+      if (resShowKey != null && updateShowKeyCallback != null) {
+        updateShowKeyCallback(gid, resShowKey, updateDB: true);
       }
 
       // 目标下载地址
@@ -237,21 +266,37 @@ class ImageDownloadProcessor {
         putImageTaskCallback,
   }) async {
     logger.d('403 $gid.${image.ser}下载链接已经失效 需要更新 ${image.href}');
+
+    // 增加重试计数（403错误视为重试）
+    incrementReDownloadCount(gid, image.ser);
+
+    // 根据重试次数决定是否使用sourceId
+    String? sourceIdToUse;
+    if (shouldUseSourceId(gid, image.ser)) {
+      sourceIdToUse = sourceId;
+      logger.d('Reached retry limit due to 403 error, using source change: '
+          'gid=$gid, ser=${image.ser}, sourceId=$sourceIdToUse');
+    } else {
+      sourceIdToUse = null;
+      logger.d(
+          'Not reached retry threshold for 403 error, continuing with original source: '
+          'gid=$gid, ser=${image.ser}, retryCount=${getReDownloadCount(gid, image.ser)}');
+    }
+
     final GalleryImage imageFetched = await fetchImageInfo(
       image.href!,
       itemSer: image.ser,
       image: image,
       gid: gid,
       cancelToken: cancelToken,
-      sourceId: sourceId,
-      changeSource: true,
+      sourceId: sourceIdToUse, // 使用计算后的sourceId
       showKey: showKey,
     );
 
     // 更新 showkey
-    final showKey0 = imageFetched.showKey;
-    if (showKey0 != null) {
-      dState.showKeyMap[gid] = showKey0;
+    final resShowKey = imageFetched.showKey;
+    if (resShowKey != null) {
+      dState.showKeyMap[gid] = resShowKey;
       if (!(dState.showKeyCompleteMap[gid]?.isCompleted ?? false)) {
         dState.showKeyCompleteMap[gid]?.complete(true);
       }
@@ -278,6 +323,9 @@ class ImageDownloadProcessor {
       fileNameWithoutExtension,
       cancelToken: cancelToken,
       onDownloadCompleteWithFileName: (fileName) async {
+        // 下载成功，重置重试计数
+        resetReDownloadCount(gid, image.ser);
+
         if (putImageTaskCallback != null) {
           await putImageTaskCallback(
             gid,
@@ -460,20 +508,18 @@ class ImageDownloadProcessor {
     required int itemSer,
     required GalleryImage image,
     required int gid,
-    bool changeSource = false,
     String? sourceId,
     CancelToken? cancelToken,
     String? showKey,
   }) async {
-    final String? sourceId0 = changeSource ? sourceId : '';
-
-    GalleryImage? image0;
+    GalleryImage? resultImage;
+    final refresh = sourceId?.isNotEmpty ?? false;
 
     try {
-      image0 = await fetchImageInfoByApi(
+      resultImage = await fetchImageInfoByApi(
         href,
-        refresh: changeSource,
-        sourceId: sourceId0,
+        refresh: refresh,
+        sourceId: sourceId,
         cancelToken: cancelToken,
         showKey: showKey,
       );
@@ -482,10 +528,10 @@ class ImageDownloadProcessor {
       if (e.type == EhErrorType.keyMismatch) {
         logger.d('showkey 不匹配，更新 showkey');
         // 需要外部传入回调函数来更新showkey
-        image0 = await fetchImageInfoByApi(
+        resultImage = await fetchImageInfoByApi(
           href,
-          refresh: changeSource,
-          sourceId: sourceId0,
+          refresh: refresh,
+          sourceId: sourceId,
           cancelToken: cancelToken,
         );
       } else {
@@ -496,20 +542,20 @@ class ImageDownloadProcessor {
       rethrow;
     }
 
-    logger.t('_image from fetch ${image0?.toJson()}');
+    logger.t('_image from fetch ${resultImage?.toJson()}');
 
-    if (image0 == null) {
+    if (resultImage == null) {
       return image;
     }
 
     final GalleryImage imageCopyWith = image.copyWith(
-      sourceId: image0.sourceId.oN,
-      imageUrl: image0.imageUrl.oN,
-      imageWidth: image0.imageWidth.oN,
-      imageHeight: image0.imageHeight.oN,
-      originImageUrl: image0.originImageUrl.oN,
-      filename: image0.filename.oN,
-      showKey: image0.showKey.oN,
+      sourceId: resultImage.sourceId.oN,
+      imageUrl: resultImage.imageUrl.oN,
+      imageWidth: resultImage.imageWidth.oN,
+      imageHeight: resultImage.imageHeight.oN,
+      originImageUrl: resultImage.originImageUrl.oN,
+      filename: resultImage.filename.oN,
+      showKey: resultImage.showKey.oN,
     );
 
     return imageCopyWith;
@@ -546,5 +592,44 @@ class ImageDownloadProcessor {
         ? sp.sprintf('%0${'$maxSer'.length}d', [galleryImage.ser])
         : sp.sprintf('%0${_kDefNameLen}d', [galleryImage.ser]);
     return fileNameWithoutExtension;
+  }
+
+  // ==================== 重试管理方法 ====================
+
+  /// 获取重试次数
+  int getReDownloadCount(int gid, int ser) {
+    final key = '${gid}_$ser';
+    return dState.reDownloadCounts[key] ?? 0;
+  }
+
+  /// 增加重试次数
+  void incrementReDownloadCount(int gid, int ser) {
+    final key = '${gid}_$ser';
+    dState.reDownloadCounts[key] = getReDownloadCount(gid, ser) + 1;
+    logger.d(
+        'Image retry count updated: gid=$gid, ser=$ser, count=${dState.reDownloadCounts[key]}');
+  }
+
+  /// 重置重试次数
+  void resetReDownloadCount(int gid, int ser) {
+    final key = '${gid}_$ser';
+    dState.reDownloadCounts.remove(key);
+    logger.t('Reset image retry count: gid=$gid, ser=$ser');
+  }
+
+  /// 清理指定画廊的所有重试计数
+  void clearGalleryReDownloadCounts(int gid) {
+    dState.reDownloadCounts
+        .removeWhere((key, value) => key.startsWith('${gid}_'));
+    logger.d('Cleared all retry counts for gallery: gid=$gid');
+  }
+
+  /// 判断是否应该使用换源
+  bool shouldUseSourceId(int gid, int ser) {
+    final count = getReDownloadCount(gid, ser);
+    final shouldUse = count >= kMaxReDownloadRetries;
+    logger.d(
+        'Source change decision: gid=$gid, ser=$ser, retryCount=$count, threshold=$kMaxReDownloadRetries, useSourceId=$shouldUse');
+    return shouldUse;
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:eros_fe/common/controller/download/download_monitor.dart' as dm;
 import 'package:eros_fe/common/controller/download/download_path_manager.dart';
@@ -210,6 +211,9 @@ class DownloadController extends GetxController {
     );
     _updateDownloadView(['DownloadGalleryItem_$gid']);
 
+    // 清理该画廊的所有重试计数
+    imageProcessor.clearGalleryReDownloadCounts(gid);
+
     // 通知槽位管理器状态变化
     logger.d('通知槽位管理器画廊任务完成: gid=$gid');
     await gallerySlotManager.onGalleryStatusChanged(gid, TaskStatus.complete);
@@ -311,7 +315,7 @@ class DownloadController extends GetxController {
     // 获取当前任务状态和信息用于记录
     GalleryTask? oldTask = dState.galleryTaskMap[gid];
     int? oldStatus = oldTask?.status;
-    logger.d('当前任务: gid=$gid, 旧状态=${oldStatus}, 任务=${oldTask?.title}');
+    logger.d('当前任务: gid=$gid, 旧状态=$oldStatus, 任务=${oldTask?.title}');
 
     // 通过taskManager更新状态
     final task = await taskManager.galleryTaskUpdateStatus(gid, status);
@@ -332,6 +336,9 @@ class DownloadController extends GetxController {
     required int gid,
     bool shouldDeleteContent = true,
   }) async {
+    // 清理该画廊的所有重试计数
+    imageProcessor.clearGalleryReDownloadCounts(gid);
+
     await taskManager.removeDownloadGalleryTask(
       gid: gid,
       shouldDeleteContent: shouldDeleteContent,
@@ -396,6 +403,7 @@ class DownloadController extends GetxController {
     dState.noSpeed.clear();
     dState.downloadSpeeds.clear();
     dState.preComplete.clear();
+    dState.reDownloadCounts.clear(); // 清理所有重试计数
 
     // 保存数据库中的状态更改
     for (final gid in runningTaskGids) {
@@ -489,7 +497,7 @@ class DownloadController extends GetxController {
 
   GalleryImage? _getImageObj(int gid, int ser) {
     logger.d('获取图片对象: gid=$gid, ser=$ser');
-    logger.d(
+    logger.t(
         'downloadMap: ${dState.downloadMap[gid]?.map((e) => e.ser).join(',')}');
     return dState.downloadMap[gid]
         ?.firstWhereOrNull((element) => element.ser == ser);
@@ -502,7 +510,7 @@ class DownloadController extends GetxController {
 
   // 根据gid初始化下载任务计时器
   void _initDownloadStateChkTimer(int gid) {
-    loggerSimple.d('初始化下载计时器: gid=$gid');
+    logger.d('初始化下载计时器: gid=$gid');
 
     // 直接提供回调函数，取代download_monitor内部默认实现
     // 这样可以避免重复调用checkDownloadStall和updateDownloadSpeed
@@ -670,7 +678,7 @@ class DownloadController extends GetxController {
     }
 
     // 初始化下载计时控制
-    logger.d('初始化下载计时器: gid=${galleryTask.gid}');
+    // logger.d('初始化下载计时器: gid=${galleryTask.gid}');
     _initDownloadStateChkTimer(galleryTask.gid);
 
     final List<GalleryImageTask> imageTasksOri =
@@ -865,8 +873,9 @@ class DownloadController extends GetxController {
             TaskStatus.complete.value,
           );
 
+    loggerSimple.d('已完成图片: gid=$gid, 数量=${listComplete.length}');
     loggerSimple.d(
-        '已完成图片: gid=$gid, 数量=${listComplete.length}, 序号列表=${listComplete.map((e) => e.ser).join(',')}');
+        '序号列表=${listComplete.map((e) => e.ser).sorted((a, b) => a.compareTo(b)).join(',')}');
 
     final coverImg =
         listComplete.firstWhereOrNull((element) => element.ser == 1)?.filePath;
@@ -879,7 +888,7 @@ class DownloadController extends GetxController {
     );
 
     if (task != null) {
-      loggerSimple.d(
+      loggerSimple.t(
           '检查画廊是否完成: gid=$gid, 已完成=${listComplete.length}/${task.fileCount}');
 
       if (task.fileCount == listComplete.length) {

@@ -258,13 +258,15 @@ Future<GalleryImage?> fetchImageInfoByApi(
       (sourceId?.isNotEmpty ?? false)) {
     logger.d(
         '使用常规请求，解析html: href $href,showKey $showKey, sourceId $sourceId, isMpv $isMpv, refresh $refresh');
-    final _image = await _fetchImageInfo(
+    final resultImage = await _fetchImageInfo(
       href,
       refresh: refresh,
       sourceId: sourceId,
       cancelToken: cancelToken,
     );
-    return _image;
+    logger.t('fetchImageInfoByApi html: resultImage ${resultImage?.toJson()}');
+    logger.d('res sourceId ${resultImage?.sourceId}');
+    return resultImage;
   }
 
   logger.t(
@@ -292,6 +294,8 @@ Future<GalleryImage?> fetchImageInfoByApi(
   // 请求api
   final response = await postEhApi(reqJsonStr, forceRefresh: refresh);
 
+  logger.t('fetchImageInfoByApi: response $response');
+
   final jsonMap = jsonDecode(response) as Map<String, dynamic>;
 
   if (jsonMap['error'] != null && jsonMap['error'] is String) {
@@ -302,6 +306,8 @@ Future<GalleryImage?> fetchImageInfoByApi(
   }
 
   final image = paraShowPageJson(jsonMap);
+  logger.t('fetchImageInfoByApi: image ${image.toJson()}');
+  logger.d('res sourceId : ${image.sourceId}');
   if (RegExp(EHConst.REG_509_URL).hasMatch(image.imageUrl ?? '')) {
     throw EhError(type: EhErrorType.image509);
   }
@@ -316,7 +322,7 @@ Future<GalleryImage?> _fetchImageInfo(
   CancelToken? cancelToken,
   String? debugLabel,
 }) async {
-  final Map<String, dynamic> _params = {
+  final Map<String, dynamic> params = {
     if (sourceId != null && sourceId.trim().isNotEmpty) 'nl': sourceId,
   };
 
@@ -334,7 +340,7 @@ Future<GalleryImage?> _fetchImageInfo(
   DioHttpClient dioHttpClient = DioHttpClient(dioConfig: globalDioConfig);
   DioHttpResponse httpResponse = await dioHttpClient.get(
     href,
-    queryParameters: _params,
+    queryParameters: params,
     httpTransformer: isMpv
         ? GalleryMpvImageHttpTransformer(mpvSer, sourceId: sourceId)
         : GalleryImageHttpTransformer(),

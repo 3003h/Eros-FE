@@ -14,10 +14,10 @@ GalleryImage paraShowPageJson(Map<String, dynamic> jsonMap) {
   logger.t('largeImageUrl $imageUrl');
   logger.t('jsonMap $jsonMap');
 
-  final RegExpMatch? _xy = RegExp(r'(\S+)\s+::\s+(\d+)\s+x\s+(\d+)(\s+::)?')
+  final RegExpMatch? xy = RegExp(r'(\S+)\s+::\s+(\d+)\s+x\s+(\d+)(\s+::)?')
       .firstMatch('${jsonMap['i']}');
 
-  final String? filename = _xy != null ? _xy.group(1)?.trim() : null;
+  final String? filename = xy?.group(1)?.trim();
 
   // final double? width = _xy != null ? double.parse(_xy.group(2)!) : null;
   // final double? height = _xy != null ? double.parse(_xy.group(3)!) : null;
@@ -31,9 +31,9 @@ GalleryImage paraShowPageJson(Map<String, dynamic> jsonMap) {
   final RegExp urlRegExp =
       RegExp(r'https?://e[-x]hentai.org/g/([0-9]+)/([0-9a-z]+)/?');
 
-  final RegExpMatch? urlRult = urlRegExp.firstMatch('${jsonMap['i5']}');
-  final gid = urlRult?.group(1) ?? '';
-  final token = urlRult?.group(2) ?? '';
+  final RegExpMatch? urlResult = urlRegExp.firstMatch('${jsonMap['i5']}');
+  final gid = urlResult?.group(1) ?? '';
+  final token = urlResult?.group(2) ?? '';
 
   final int ser = int.parse('${jsonMap['p']}');
 
@@ -47,12 +47,12 @@ GalleryImage paraShowPageJson(Map<String, dynamic> jsonMap) {
   }
   logger.t('======>>>> originImageUrl: $originImageUrl');
 
-  final String _sourceId =
+  final String sourceId =
       RegExp(r"nl\('(.*?)'\)").firstMatch('${jsonMap['i6']}')?.group(1) ?? '';
 
-  final GalleryImage _reImage = kDefGalleryImage.copyWith(
+  final GalleryImage reImage = kDefGalleryImage.copyWith(
     imageUrl: imageUrl.oN,
-    sourceId: _sourceId.oN,
+    sourceId: sourceId.oN,
     imageWidth: width.oN,
     imageHeight: height.oN,
     gid: gid.oN,
@@ -62,5 +62,5 @@ GalleryImage paraShowPageJson(Map<String, dynamic> jsonMap) {
     filename: filename.oN,
   );
 
-  return _reImage;
+  return reImage;
 }
