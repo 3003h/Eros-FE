@@ -166,11 +166,11 @@ class GalleryTitle extends StatelessWidget {
     ///
     /// 20210107 改用SelectableText测试
 
-    return GestureDetector(
-      child: SelectableText(
+    return SelectionArea(
+      child: Text(
         title,
         maxLines: 6,
-        minLines: 1,
+        // minLines: 1,
         textAlign: TextAlign.left,
         // 对齐方式
         // overflow: TextOverflow.ellipsis, // 超出部分省略号

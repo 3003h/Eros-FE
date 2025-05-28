@@ -106,25 +106,27 @@ class GalleryNavigationBar extends StatelessWidget {
     final GalleryProvider? provider = pageState.galleryProvider;
     return CupertinoSliverNavigationBar(
       padding: const EdgeInsetsDirectional.only(end: 10),
-      largeTitle: GetBuilder<GalleryPageController>(
-        id: GetIds.PAGE_VIEW_HEADER,
-        tag: pageCtrlTag,
-        builder: (logic) {
-          return SelectableText(
-            logic.gState.subTitle,
-            textAlign: TextAlign.start,
-            maxLines: 3,
-            minLines: 1,
-            style: TextStyle(
-              fontSize: 11,
-              height: 1.2,
-              color: CupertinoDynamicColor.resolve(
-                  CupertinoColors.secondaryLabel, context),
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-            ),
-          );
-        },
+      largeTitle: SelectionArea(
+        child: GetBuilder<GalleryPageController>(
+          id: GetIds.PAGE_VIEW_HEADER,
+          tag: pageCtrlTag,
+          builder: (logic) {
+            return Text(
+              logic.gState.subTitle,
+              textAlign: TextAlign.start,
+              maxLines: 3,
+              // minLines: 1,
+              style: TextStyle(
+                fontSize: 11,
+                height: 1.2,
+                color: CupertinoDynamicColor.resolve(
+                    CupertinoColors.secondaryLabel, context),
+                fontWeight: FontWeight.normal,
+                fontStyle: FontStyle.italic,
+              ),
+            );
+          },
+        ),
       ),
       middle: Obx(
         () {
