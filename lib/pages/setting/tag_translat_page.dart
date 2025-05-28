@@ -121,7 +121,7 @@ class ListViewTagTranslate extends StatelessWidget {
 
 /// 标签介绍图片切换
 Widget _buildTagIntroImgLvItem(BuildContext context) {
-  const String _title = '标签介绍图片';
+  const String title = '标签介绍图片';
   final EhSettingService ehSettingService = Get.find();
 
   final Map<TagIntroImgLv, String> descMap = <TagIntroImgLv, String>{
@@ -133,7 +133,7 @@ Widget _buildTagIntroImgLvItem(BuildContext context) {
 
   return Obx(() {
     return SelectorCupertinoListTile<TagIntroImgLv>(
-      title: _title,
+      title: title,
       actionMap: descMap,
       initVal: ehSettingService.tagIntroImgLv.value,
       onValueChanged: (val) => ehSettingService.tagIntroImgLv.value = val,
@@ -143,7 +143,7 @@ Widget _buildTagIntroImgLvItem(BuildContext context) {
 
 /// 自动更新策略切换
 Widget _buildTagTranslateDataUpdateModeItem(BuildContext context) {
-  const String _title = '自动更新策略';
+  const String title = '自动更新策略';
   final EhSettingService ehSettingService = Get.find();
 
   final Map<TagTranslateDataUpdateMode, String> modeMap =
@@ -154,7 +154,7 @@ Widget _buildTagTranslateDataUpdateModeItem(BuildContext context) {
 
   return Obx(() {
     return SelectorCupertinoListTile<TagTranslateDataUpdateMode>(
-      title: _title,
+      title: title,
       actionMap: modeMap,
       initVal: ehSettingService.tagTranslateDataUpdateMode,
       onValueChanged: (val) =>

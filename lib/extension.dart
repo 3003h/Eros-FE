@@ -30,11 +30,11 @@ extension ExtGC on GalleryCache {
 
 extension ExtTabList on TabConfig {
   Map<String, bool> get tabMap {
-    final Map<String, bool> _map = <String, bool>{};
+    final Map<String, bool> map = <String, bool>{};
     for (final TabItem item in tabItemList) {
-      _map[item.name] = item.enable ?? false;
+      map[item.name] = item.enable ?? false;
     }
-    return _map;
+    return map;
   }
 
   List<String> get tabNameList {
@@ -70,14 +70,14 @@ extension ExtComment on GalleryComment {
       return textList!;
     }
 
-    final _textList = <String>[];
+    final textListTemp = <String>[];
 
     final dom.Element? body = element as dom.Element?;
     if (body != null) {
-      _parseText(body, _textList);
+      _parseText(body, textListTemp);
     }
 
-    return _textList;
+    return textListTemp;
   }
 
   String get text => (textList ?? getTextList()).join('');
@@ -175,7 +175,7 @@ extension ExtUser on User {
 
 extension ExtTagTranlat on TagTranslat {
   String? get nameNotMD {
-    final reg = RegExp(r'!\[(\S+)?\]\(.+?\)(\S+)');
+    final reg = RegExp(r'!\[(\S+)?\]\(.+?\)\s+?(\S+)');
     final match = reg.allMatches(name ?? '');
     if (match.isNotEmpty) {
       return name?.replaceAllMapped(reg, (match) => match.group(2) ?? '') ??
@@ -186,7 +186,7 @@ extension ExtTagTranlat on TagTranslat {
   }
 
   /// 根据不同图片级别， 处理tag简介中的图片
-  String? get introMDimage {
+  String? get introMdImage {
     final EhSettingService ehSettingService = Get.find();
 
     // 匹配R18g
@@ -200,23 +200,23 @@ extension ExtTagTranlat on TagTranslat {
 
     final lv = ehSettingService.tagIntroImgLv.value;
 
-    String? _remove(RegExp regExp, String? text) {
+    String? remove(RegExp regExp, String? text) {
       final match = regExp.allMatches(text ?? '');
       if (match.isNotEmpty) {
-        final rult = text?.replaceAllMapped(regExp, (match) => '') ?? text;
-        return rult;
+        final result = text?.replaceAllMapped(regExp, (match) => '') ?? text;
+        return result;
       } else {
         return text;
       }
     }
 
-    String? _fix(RegExp regExp, String? text) {
+    String? fix(RegExp regExp, String? text) {
       final match = regExp.allMatches(text ?? '');
       if (match.isNotEmpty) {
-        final rult = text?.replaceAllMapped(
+        final result = text?.replaceAllMapped(
                 regExp, (match) => '![${match.group(2)}](${match.group(3)})') ??
             text;
-        return rult;
+        return result;
       } else {
         return text;
       }
@@ -225,16 +225,16 @@ extension ExtTagTranlat on TagTranslat {
     switch (lv) {
       case TagIntroImgLv.disable:
         // 去除所有
-        return _remove(regAll, intro);
+        return remove(regAll, intro);
       case TagIntroImgLv.nonh:
         // 去除R18和r18g
-        return _remove(regR18And18g, intro);
+        return remove(regR18And18g, intro);
       case TagIntroImgLv.r18:
         // 去除R18g, 把r18的格式修正
-        return _fix(regR18And18g, _remove(regR18g, intro));
+        return fix(regR18And18g, remove(regR18g, intro));
       case TagIntroImgLv.r18g:
         // 把r18和r18g的格式修正
-        return _fix(regR18And18g, intro);
+        return fix(regR18And18g, intro);
     }
   }
 
@@ -317,23 +317,23 @@ extension ExtensionWidget on Widget {
 
 extension ExtEhSettings on EhSettings {
   Map<String, String> get xnMap {
-    final _map = <String, String>{};
+    final map = <String, String>{};
     for (final _x in xn) {
       if (_x.ser != null) {
-        _map[_x.ser!] = _x.value ?? '';
+        map[_x.ser!] = _x.value ?? '';
       }
     }
-    return _map;
+    return map;
   }
 
   Map<String, EhSettingItem> get xnItemMap {
-    final _map = <String, EhSettingItem>{};
+    final map = <String, EhSettingItem>{};
     for (final _x in xn) {
       if (_x.ser != null) {
-        _map[_x.name!] = _x;
+        map[_x.name!] = _x;
       }
     }
-    return _map;
+    return map;
   }
 
   void setXnItem(String namespace, String? value) {
@@ -341,20 +341,20 @@ extension ExtEhSettings on EhSettings {
       return;
     }
 
-    final _index = xn.indexWhere((element) => element.name == namespace);
-    if (_index > -1) {
-      xn[_index] = xn[_index].copyWith(value: value.oN);
+    final index = xn.indexWhere((element) => element.name == namespace);
+    if (index > -1) {
+      xn[index] = xn[index].copyWith(value: value.oN);
     }
   }
 
   Map<String, String> get xlMap {
-    final _map = <String, String>{};
+    final map = <String, String>{};
     for (final _x in xl) {
       if (_x.ser != null) {
-        _map[_x.ser!] = _x.value ?? '';
+        map[_x.ser!] = _x.value ?? '';
       }
     }
-    return _map;
+    return map;
   }
 
   Map<String, String> get favMap {
@@ -379,9 +379,9 @@ extension ExtEhSettings on EhSettings {
       return;
     }
 
-    final _index = xn.indexWhere((element) => element.ser == ser);
-    if (_index > -1) {
-      xn[_index] = xn[_index].copyWith(value: value.oN);
+    final index = xn.indexWhere((element) => element.ser == ser);
+    if (index > -1) {
+      xn[index] = xn[index].copyWith(value: value.oN);
     } else {
       xn.add(EhSettingItem(ser: ser, value: value, type: 'xn'));
     }
@@ -391,9 +391,9 @@ extension ExtEhSettings on EhSettings {
     if (value == null) {
       return;
     }
-    final _index = xl.indexWhere((element) => element.ser == ser);
-    if (_index > -1) {
-      xl[_index] = xl[_index].copyWith(value: value.oN);
+    final index = xl.indexWhere((element) => element.ser == ser);
+    if (index > -1) {
+      xl[index] = xl[index].copyWith(value: value.oN);
     } else {
       xl.add(EhSettingItem(ser: ser, value: value, type: 'xl'));
     }
@@ -403,9 +403,9 @@ extension ExtEhSettings on EhSettings {
     if (value == null) {
       return;
     }
-    final _index = favorites.indexWhere((element) => element.ser == ser);
-    if (_index > -1) {
-      favorites[_index] = favorites[_index].copyWith(value: value.oN);
+    final index = favorites.indexWhere((element) => element.ser == ser);
+    if (index > -1) {
+      favorites[index] = favorites[index].copyWith(value: value.oN);
     } else {
       favorites.add(EhSettingItem(ser: ser, value: value, type: 'xl'));
     }
@@ -632,7 +632,7 @@ extension EhString on String {
   }
 
   String get _handleThumbUrlToEh {
-    final EhSettingService _ehSettingService = Get.find();
+    final EhSettingService ehSettingService = Get.find();
 
     // if (startsWith(RegExp(EHConst.REG_URL_PREFIX_THUMB_EX)) &&
     //     _ehSettingService.redirectThumbLink) {
@@ -644,7 +644,7 @@ extension EhString on String {
 
     if (RegExp(EHConst.REG_URL_THUMB).hasMatch(this) &&
         contains(EHConst.EX_BASE_HOST) &&
-        _ehSettingService.redirectThumbLink) {
+        ehSettingService.redirectThumbLink) {
       return replaceFirstMapped(
         RegExp(EHConst.REG_URL_THUMB),
         (Match m) => '${EHConst.URL_PREFIX_THUMB_EH}/${m.group(2)}',

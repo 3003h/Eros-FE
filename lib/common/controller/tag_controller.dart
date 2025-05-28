@@ -12,11 +12,6 @@ class TagController extends GetxController {
   EhMyTagsController get ehMyTagsController => Get.find();
 
   @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
   void onReady() {
     initTags();
   }
@@ -31,14 +26,14 @@ class TagController extends GetxController {
 
   /// 获取tag颜色
   GalleryTag getColorCode(GalleryTag tag) {
-    GalleryTag? _tag;
-    _tag = galleryTags.firstWhereOrNull(
+    GalleryTag? tag0;
+    tag0 = galleryTags.firstWhereOrNull(
         (element) => element.title == '${tag.type}:${tag.title}');
-    _tag ??= galleryTags.firstWhereOrNull(
+    tag0 ??= galleryTags.firstWhereOrNull(
         (element) => element.title.trim() == tag.title.trim());
 
     return tag.copyWith(
-        color: _tag?.color.oN, backgrondColor: _tag?.backgrondColor.oN);
+        color: tag0?.color.oN, backgrondColor: tag0?.backgrondColor.oN);
   }
 
   bool needHide(List<SimpleTag> simpleTags) {
@@ -47,14 +42,14 @@ class TagController extends GetxController {
         final RegExp rpfx = RegExp(r'(\w+):"?([^$]+)\$?"?');
         final RegExpMatch? rult =
             rpfx.firstMatch(simpleTag.text!.toLowerCase());
-        String _nameSpase = rult?.group(1) ?? '';
-        if (_nameSpase.length == 1) {
-          _nameSpase = EHConst.prefixToNameSpaceMap[_nameSpase] ?? _nameSpase;
+        String nameSpase = rult?.group(1) ?? '';
+        if (nameSpase.length == 1) {
+          nameSpase = EHConst.prefixToNameSpaceMap[nameSpase] ?? nameSpase;
         }
 
-        final String _tag = rult?.group(2) ?? '';
+        final String tag = rult?.group(2) ?? '';
 
-        return hideTags.any((hideTag) => hideTag.title == _tag.trim());
+        return hideTags.any((hideTag) => hideTag.title == tag.trim());
       } else {
         return hideTags.any((hideTag) => hideTag.title == simpleTag.text);
       }
@@ -74,28 +69,28 @@ class TagController extends GetxController {
         continue;
       }
 
-      late GalleryTag _gTags;
+      late GalleryTag gTags;
 
       if (simpleTag.text!.contains(':')) {
         final RegExp rpfx = RegExp(r'(\w+):"?([^$]+)\$?"?');
         final RegExpMatch? rult =
             rpfx.firstMatch(simpleTag.text!.toLowerCase());
-        String _nameSpase = rult?.group(1) ?? '';
-        if (_nameSpase.length == 1) {
-          _nameSpase = EHConst.prefixToNameSpaceMap[_nameSpase] ?? _nameSpase;
+        String nameSpase = rult?.group(1) ?? '';
+        if (nameSpase.length == 1) {
+          nameSpase = EHConst.prefixToNameSpaceMap[nameSpase] ?? nameSpase;
         }
 
-        final String _tag = rult?.group(2) ?? '';
+        final String tag = rult?.group(2) ?? '';
 
-        _gTags = GalleryTag(
-          title: _tag.trim(),
+        gTags = GalleryTag(
+          title: tag.trim(),
           color: simpleTag.color,
           backgrondColor: simpleTag.backgrondColor,
-          type: _nameSpase,
+          type: nameSpase,
           tagTranslat: '',
         );
       } else {
-        _gTags = GalleryTag(
+        gTags = GalleryTag(
           title: simpleTag.text?.trim() ?? '',
           color: simpleTag.color,
           backgrondColor: simpleTag.backgrondColor,
@@ -105,7 +100,7 @@ class TagController extends GetxController {
       }
 
       // logger.d('${_gTags.toJson()}');
-      _addGalleryTag(_gTags);
+      _addGalleryTag(gTags);
     }
   }
 
@@ -119,23 +114,23 @@ class TagController extends GetxController {
     for (final tag in tags) {
       final RegExp rpfx = RegExp(r'(\w+):"?([^$]+)\$?"?');
       final RegExpMatch? rult = rpfx.firstMatch(tag.title.toLowerCase());
-      String _nameSpase = rult?.group(1) ?? '';
-      if (_nameSpase.length == 1) {
-        _nameSpase = EHConst.prefixToNameSpaceMap[_nameSpase] ?? _nameSpase;
+      String nameSpase = rult?.group(1) ?? '';
+      if (nameSpase.length == 1) {
+        nameSpase = EHConst.prefixToNameSpaceMap[nameSpase] ?? nameSpase;
       }
 
-      final String _tag = rult?.group(2) ?? '';
+      final String tagStr = rult?.group(2) ?? '';
 
-      final _gTags = GalleryTag(
-        title: _tag,
+      final gTags = GalleryTag(
+        title: tagStr,
         color: tag.textColor,
         backgrondColor: tag.colorCode,
-        type: _nameSpase,
+        type: nameSpase,
         tagTranslat: '',
         hide: tag.hide,
         watch: tag.watch,
       );
-      _addGalleryTag(_gTags);
+      _addGalleryTag(gTags);
     }
   }
 

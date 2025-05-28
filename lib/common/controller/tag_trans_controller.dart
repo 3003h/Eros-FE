@@ -51,13 +51,13 @@ class TagTransController extends GetxController {
       apiUrl = kApiUrl;
     }
 
-    final _urlJson = await getGithubApi(apiUrl);
+    final urlJson = await getGithubApi(apiUrl);
 
-    final _publishedTime = '${_urlJson['published_at']}';
-    final _tagName = '${_urlJson['tag_name']}';
+    final publishedTime = '${urlJson['published_at']}';
+    final tagName = '${urlJson['tag_name']}';
 
     // 远程版本号
-    _remoteVer = '$_tagName $_publishedTime';
+    _remoteVer = '$tagName $publishedTime';
 
     // 获取当前本地版本
     final String localVer = ehSettingService.tagTranslatVer.value;
@@ -69,7 +69,7 @@ class TagTransController extends GetxController {
       return false;
     }
 
-    final List<dynamic> assList = _urlJson['assets'] as List<dynamic>;
+    final List<dynamic> assList = urlJson['assets'] as List<dynamic>;
     final Map<String, String> assMap = <String, String>{};
     for (final dynamic assets in assList) {
       assMap[assets['name'] as String? ?? ''] =
@@ -121,21 +121,21 @@ class TagTransController extends GetxController {
     final List<TagTranslat> tagTranslats = <TagTranslat>[];
 
     for (final data in listData) {
-      loggerNoStack.v('${data['namespace']}  ${data['count']}');
-      final String _namespace = data['namespace'] as String;
+      loggerNoStack.t('${data['namespace']}  ${data['count']}');
+      final String namespace = data['namespace'] as String;
       Map mapC = data['data'] as Map;
       mapC.forEach((key, value) {
-        final String _key = key as String;
-        final String _name = (value['name'] ?? '') as String;
-        final String _intro = (value['intro'] ?? '') as String;
-        final String _links = (value['links'] ?? '') as String;
+        final String keyName = key as String;
+        final String name = (value['name'] ?? '') as String;
+        final String intro = (value['intro'] ?? '') as String;
+        final String links = (value['links'] ?? '') as String;
 
         tagTranslats.add(TagTranslat(
-            namespace: _namespace,
-            key: _key,
-            name: _name,
-            intro: _intro,
-            links: _links));
+            namespace: namespace,
+            key: keyName,
+            name: name,
+            intro: intro,
+            links: links));
       });
     }
 
@@ -151,23 +151,25 @@ class TagTransController extends GetxController {
     return tr?.nameNotMD ?? key;
   }
 
-  Future<String?> getTranTagWithNameSpase(String tag,
-      {String namespace = ''}) async {
+  Future<String?> getTranTagWithNameSpase(
+    String tag, {
+    String namespace = '',
+  }) async {
     if (tag.contains(':')) {
       final RegExp rpfx = RegExp(r'(\w+):"?([^\$]+)\$?"?');
       final RegExpMatch? rult = rpfx.firstMatch(tag.toLowerCase());
-      String _nameSpase = rult?.group(1) ?? '';
-      if (_nameSpase.length == 1) {
-        _nameSpase = EHConst.prefixToNameSpaceMap[_nameSpase] ?? _nameSpase;
+      String nameSpase = rult?.group(1) ?? '';
+      if (nameSpase.length == 1) {
+        nameSpase = EHConst.prefixToNameSpaceMap[nameSpase] ?? nameSpase;
       }
 
-      final String _tag = rult?.group(2) ?? '';
-      final String _nameSpaseTran =
-          EHConst.translateTagType[_nameSpase] ?? _nameSpase;
-      final String _transTag =
-          await _getTagTransStr(_tag, namespace: _nameSpase) ?? _tag;
+      final String tag0 = rult?.group(2) ?? '';
+      final String nameSpaseTran =
+          EHConst.translateTagType[nameSpase] ?? nameSpase;
+      final String transTag =
+          await _getTagTransStr(tag0, namespace: nameSpase) ?? tag0;
 
-      return '$_nameSpaseTran:$_transTag';
+      return '$nameSpaseTran:$transTag';
     } else {
       return await _getTagTransStr(tag.toLowerCase(), namespace: namespace);
     }
@@ -198,13 +200,13 @@ class TagTransController extends GetxController {
 
     logger.t(array.map((e) => '[$e]').join(''));
 
-    final _translateList = [];
+    final translateList = [];
     for (final text in array) {
       final String? translate = await getTranTagWithNameSpase(text);
-      _translateList.add(translate ?? text);
+      translateList.add(translate ?? text);
     }
 
-    return _translateList.join('   ');
+    return translateList.join('   ');
   }
 
   Future<String?> getTagTranslateText(
@@ -216,60 +218,59 @@ class TagTransController extends GetxController {
       final RegExp regPfx = RegExp(r'(\w):(.+)');
       final RegExpMatch? rult = regPfx.firstMatch(text.toLowerCase());
       final String pfx = rult?.group(1) ?? '';
-      final String? _nameSpase = EHConst.prefixToNameSpaceMap[pfx];
-      final String _tag = rult?.group(2) ?? '';
-      final String? _transTag =
-          await _getTagTransStr(_tag, namespace: _nameSpase);
+      final String? nameSpase = EHConst.prefixToNameSpaceMap[pfx];
+      final String tag = rult?.group(2) ?? '';
+      final String? transTag = await _getTagTransStr(tag, namespace: nameSpase);
 
-      if (_transTag == null) {
+      if (transTag == null) {
         return text;
       }
 
       if (ignoreNamespace) {
-        return _transTag;
+        return transTag;
       } else {
-        return '$pfx:$_transTag';
+        return '$pfx:$transTag';
       }
 
       // return _transTag != null ? '$pfx:$_transTag' : text;
     } else {
-      String? _tempNamespace;
+      String? tempNamespace;
       if (_namespaces.contains(namespace)) {
-        _tempNamespace = namespace;
+        tempNamespace = namespace;
       }
       return await _getTagTransStr(text.toLowerCase(),
-          namespace: _tempNamespace);
+          namespace: tempNamespace);
     }
   }
 
   Future<TagTranslat?> getTagTranslate(String text, String namespace) async {
-    final TagTranslat? _translates =
+    final TagTranslat? translates =
         await isarHelper.findTagTranslate(text, namespace: namespace);
 
-    logger.d(_translates?.intro);
+    logger.d(translates?.intro);
     // 查询code字段
     final qryMap = {};
     final RegExp regCode = RegExp(r'`(([\w:]+\s+?)*[\w:]+)`');
-    final matches = regCode.allMatches(_translates?.intro ?? '');
+    final matches = regCode.allMatches(translates?.intro ?? '');
     for (final match in matches) {
-      final _ori = match.group(1);
-      if (_ori != null) {
-        final _translateCode = await getTagTranslateText(
-          _ori,
+      final ori = match.group(1);
+      if (ori != null) {
+        final translateCode = await getTagTranslateText(
+          ori,
           ignoreNamespace: true,
         );
-        if (_translateCode != null && _translateCode != _ori) {
-          logger.t('match $_ori $_translateCode');
-          qryMap[_ori] = _translateCode;
+        if (translateCode != null && translateCode != ori) {
+          logger.t('match $ori $translateCode');
+          qryMap[ori] = translateCode;
         }
       }
     }
 
-    final _intro = _translates?.intro?.replaceAllMapped(regCode,
+    final intro = translates?.intro?.replaceAllMapped(regCode,
         (match) => ' `${qryMap[match.group(1)]} (${match.group(1)})` ');
-    logger.t(_intro);
+    logger.t(intro);
 
-    return _translates?.copyWith(intro: _intro);
+    return translates?.copyWith(intro: intro);
   }
 
   Future<List<TagTranslat>> getTagTranslatesLike(
@@ -279,10 +280,10 @@ class TagTransController extends GetxController {
       return [];
     }
 
-    final List<TagTranslat> _translates =
+    final List<TagTranslat> translates =
         await isarHelper.findTagTranslateContains(text, limit);
 
-    return _translates;
+    return translates;
   }
 
   Future<void> tapTagTranslate(TagTranslat tagTranslat) async {

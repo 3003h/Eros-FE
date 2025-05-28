@@ -234,7 +234,7 @@ class _TagDialogViewState extends State<TagDialogView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       MarkdownBody(
-                        data: _taginfo?.introMDimage ?? '',
+                        data: _taginfo?.introMdImage ?? '',
                         selectable: true,
                         onTapLink: (String text, String? href, String title) {
                           onOpenUrl(url: href);
