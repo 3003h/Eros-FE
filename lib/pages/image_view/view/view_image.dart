@@ -497,7 +497,7 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               final GalleryImage? currentImageData =
                   vState.pageState?.imageMap[widget.imageSer];
 
-              logger.d('currentImageData ${currentImageData?.toJson()}\n'
+              logger.t('currentImageData ${currentImageData?.toJson()}\n'
                   'imageData        ${imageData?.toJson()}');
 
               // 图片文件已下载 加载显示本地图片文件
@@ -569,17 +569,17 @@ class _ViewImageState extends State<ViewImage> with TickerProviderStateMixin {
               //   );
               // }
 
-              logger.d('ImageExtProvider, imageUrl: ${imageData?.imageUrl}');
+              logger.t('ImageExtProvider, imageUrl: ${imageData?.imageUrl}');
               Widget image = ImageExtProvider(
                 image: ExtendedResizeImage.resizeIfNeeded(
                   provider: ExtendedNetworkImageProvider(
                     imageData?.imageUrl ?? '',
-                    timeLimit: const Duration(seconds: 10),
-                    cache: false,
-                    retries: 5,
-                    timeRetry: const Duration(seconds: 5),
+                    timeLimit: const Duration(seconds: 5),
+                    cache: true,
+                    retries: 2,
+                    timeRetry: const Duration(seconds: 2),
                     printError: true,
-                    cacheRawData: true,
+                    cacheKey: imageData?.cacheKey,
                   ),
                   // provider: getEhImageProvider(
                   //   imageData?.imageUrl ?? '',

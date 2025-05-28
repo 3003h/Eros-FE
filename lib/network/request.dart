@@ -258,7 +258,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
       (sourceId?.isNotEmpty ?? false)) {
     logger.d(
         '使用常规请求，解析html: href $href,showKey $showKey, sourceId $sourceId, isMpv $isMpv, refresh $refresh');
-    final resultImage = await _fetchImageInfo(
+    final resultImage = await fetchImageInfoByHtml(
       href,
       refresh: refresh,
       sourceId: sourceId,
@@ -315,7 +315,7 @@ Future<GalleryImage?> fetchImageInfoByApi(
   return image;
 }
 
-Future<GalleryImage?> _fetchImageInfo(
+Future<GalleryImage?> fetchImageInfoByHtml(
   String href, {
   bool refresh = false,
   String? sourceId,

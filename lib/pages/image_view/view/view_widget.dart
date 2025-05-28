@@ -453,7 +453,7 @@ class ImageExtProvider extends GetView<ViewExtController> {
       initGestureConfigHandler: initGestureConfigHandler,
       onDoubleTap: onDoubleTap,
       loadStateChanged: (ExtendedImageState state) {
-        logger.d(
+        logger.t(
             'loadStateChanged ser:$ser, state:${state.extendedImageLoadState}, image:$image');
         switch (state.extendedImageLoadState) {
           case LoadState.loading:

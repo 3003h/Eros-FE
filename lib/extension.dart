@@ -686,3 +686,16 @@ extension EhT<T> on T {
     return Optional<T>.fromNullable(this);
   }
 }
+
+extension GalleryImageExt on GalleryImage {
+  String getCacheKey(String url) {
+    final bool isOriginImage = url == originImageUrl;
+    final regExpXres = RegExp(r'xres=(\d+)');
+    final xres = regExpXres.firstMatch(url)?.group(1) ?? '';
+    return '${Uri.encodeComponent(href ?? '')}_${isOriginImage ? 'origin' : xres}';
+  }
+
+  String get cacheKey {
+    return getCacheKey(imageUrl ?? '');
+  }
+}

@@ -65,80 +65,80 @@ class GalleryPara {
     }
 
     for (int add = 1; add < max + 1; add++) {
-      final int _ser = itemSer + add;
+      final int ser = itemSer + add;
 
-      logger.t('开始预载 ser $_ser');
+      logger.t('开始预载 ser $ser');
 
-      if (_processingSerSet.contains(_ser)) {
+      if (_processingSerSet.contains(ser)) {
         continue;
       }
 
-      final GalleryImage? _imageTemp = imageMap[_ser];
-      if (_imageTemp == null) {
+      final GalleryImage? imageTemp = imageMap[ser];
+      if (imageTemp == null) {
         // yield null;
         continue;
       }
 
-      GalleryImage _image = _imageTemp;
+      GalleryImage image = imageTemp;
 
-      if (_image.completeCache ?? false) {
-        logger.t('ser $_ser 已预载完成 跳过');
+      if (image.completeCache ?? false) {
+        logger.t('ser $ser 已预载完成 跳过');
         continue;
       }
 
-      if (_image.startPrecache ?? false) {
-        logger.t('ser $_ser 已开始预载 跳过');
+      if (image.startPrecache ?? false) {
+        logger.t('ser $ser 已开始预载 跳过');
         continue;
       }
 
-      String _url = '';
-      if (_image.imageUrl?.isEmpty ?? true) {
+      String url = '';
+      if (image.imageUrl?.isEmpty ?? true) {
         if (showKey == null) {
-          logger.d('ser $_ser, showKey is null, skip precache');
+          logger.d('ser $ser, showKey is null, skip precache');
           continue;
         }
 
-        _processingSerSet.add(_ser);
-        final String _href = imageMap[_ser]?.href ?? '';
+        _processingSerSet.add(ser);
+        final String href = imageMap[ser]?.href ?? '';
 
         // paraImageLageInfoFromHtml
-        // final GalleryImage? _imageFetch = await fetchImageInfo(_href);
-        final GalleryImage? _imageFetch =
-            await fetchImageInfoByApi(_href, showKey: showKey);
+        final GalleryImage? imageFetch = await fetchImageInfoByHtml(href);
+        // final GalleryImage? imageFetch =
+        //     await fetchImageInfoByApi(href, showKey: showKey);
 
-        _url = _imageFetch?.imageUrl ?? '';
+        url = imageFetch?.imageUrl ?? '';
 
-        _image = _image.copyWith(
-          imageUrl: _url.oN,
-          imageWidth: _imageFetch?.imageWidth.oN,
-          imageHeight: _imageFetch?.imageHeight.oN,
-          originImageUrl: _imageFetch?.originImageUrl.oN,
-          filename: _imageFetch?.filename.oN,
-          showKey: _imageFetch?.showKey.oN,
+        image = image.copyWith(
+          imageUrl: url.oN,
+          imageWidth: imageFetch?.imageWidth.oN,
+          imageHeight: imageFetch?.imageHeight.oN,
+          originImageUrl: imageFetch?.originImageUrl.oN,
+          filename: imageFetch?.filename.oN,
+          showKey: imageFetch?.showKey.oN,
         );
 
-        _processingSerSet.remove(_ser);
+        _processingSerSet.remove(ser);
       }
 
-      _url = _image.imageUrl ?? '';
+      url = image.imageUrl ?? '';
 
-      if (_url.isEmpty) {
+      if (url.isEmpty) {
         // yield null;
         continue;
       }
 
-      _map.putIfAbsent(_url, () {
-        logger.d('ser $_ser, 开始预载图片 $_url');
-        return _precacheSingleImage(_url, _image);
+      _map.putIfAbsent(url, () {
+        logger.d('ser $ser, 开始预载图片 $url');
+        return _precacheSingleImage(url, image);
       });
 
-      final Future<GalleryImage?>? _future = _map[_url];
+      final Future<GalleryImage?>? futureImage = _map[url];
 
-      if (_future != null) {
-        final GalleryImage? value = await _future;
+      if (futureImage != null) {
+        final GalleryImage? value = await futureImage;
         // logger.d('yield rult ser ${value?.ser}  ${value?.toJson()}');
         yield value?.copyWith(completeCache: true.oN);
-        _map.remove(_url);
+        _map.remove(url);
         continue;
       }
     }
@@ -148,10 +148,12 @@ class GalleryPara {
     String url,
     GalleryImage image,
   ) async {
-    logger.t('_precacheSingleImage, 开始预载图片 $url');
+    final cacheKey = image.getCacheKey(url);
+    logger.d('_precacheSingleImage, 开始预载图片 $url,\ncacheKey: $cacheKey');
     final ImageProvider imageProvider = ExtendedNetworkImageProvider(
       url,
       cache: true,
+      cacheKey: cacheKey,
       retries: 5,
       timeLimit: const Duration(seconds: 5),
     );
@@ -159,6 +161,7 @@ class GalleryPara {
     /// 预缓存图片
     try {
       await precacheImage(imageProvider, Get.context!);
+      logger.d('预载图片完成 $url');
       return image.copyWith(completeCache: true.oN);
     } catch (e, stack) {
       logger.e('$e /n $stack');
