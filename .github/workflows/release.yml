@@ -37,7 +37,7 @@ jobs:
             artifact_path: build/app/outputs/apk/release/Eros-FE*.apk
           - target: ios
             os: macos-14
-            flutter_version: "3.x"
+            flutter_version: "3.32.0"
             artifact_name: release-ios
             artifact_path: build/**/Eros-FE*.ipa
           - target: macos
