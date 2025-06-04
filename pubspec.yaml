@@ -2,7 +2,7 @@ name: eros_fe
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.9.0+562
+version: 1.9.0+563
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -235,7 +235,7 @@ dev_dependencies:
   json_annotation: ^4.8.1
   copy_with_extension_gen: ^6.0.0
   isar_generator: ^3.0.0
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   cached: ^1.6.1
 
 dependency_overrides:
