@@ -13,7 +13,6 @@ import 'package:eros_fe/pages/image_view/view/view_page.dart';
 import 'package:eros_fe/pages/tab/controller/search_page_controller.dart';
 import 'package:eros_fe/pages/tab/view/list/tab_base.dart';
 import 'package:eros_fe/route/first_observer.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get/get.dart';
 
 import '../pages/image_view/controller/view_controller.dart';
@@ -201,20 +200,6 @@ class NavigatorUtil {
       // item点击跳转方式
       logger.t('goGalleryPage fromItem tabTag=$tabTag');
       gid = galleryProvider?.gid;
-
-      Global.analytics?.logSelectItem(
-        itemListName: 'GalleryList',
-        itemListId: tabTag.toString(),
-        items: [
-          AnalyticsEventItem(
-            itemId: gid,
-            itemCategory: galleryProvider?.category,
-            itemName: galleryProvider?.englishTitle,
-            itemVariant: galleryProvider?.japaneseTitle,
-            quantity: int.tryParse(galleryProvider?.filecount ?? '0'),
-          ),
-        ],
-      );
 
       // Get.replace(GalleryRepository(item: galleryProvider, tabTag: tabTag));
       Get.lazyReplace(

@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "76.0.0"
-  _flutterfire_internals:
-    dependency: transitive
-    description:
-      name: _flutterfire_internals
-      sha256: "214e6f07e2a44f45972e0365c7b537eaeaddb4598db0778dd4ac64b4acd3f5b1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.55"
   _macros:
     dependency: transitive
     description: dart
@@ -623,14 +615,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
-  fake_async:
-    dependency: transitive
-    description:
-      name: fake_async
-      sha256: "5368f224a74523e8d2e7399ea1638b37aecfca824a3cc4dfdf77bf1fa905ac44"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.3"
   ffi:
     dependency: transitive
     description:
@@ -655,102 +639,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.1.9"
-  firebase_analytics:
-    dependency: "direct main"
-    description:
-      name: firebase_analytics
-      sha256: b5b31727ad7c7f41e139637d1d582e435fd14054abcbd162c64476f90737105c
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.4.6"
-  firebase_analytics_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_analytics_platform_interface
-      sha256: "86817ee7db6377e09830467932c31644713d8e8915cefff64610ad735612bc7d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.6"
-  firebase_analytics_web:
-    dependency: transitive
-    description:
-      name: firebase_analytics_web
-      sha256: "4914e184a6aa37811d976db59f95fa8fda1d58db49ab7f73d4d8aac9dd9b19b7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.10+12"
-  firebase_core:
-    dependency: transitive
-    description:
-      name: firebase_core
-      sha256: "8cfe3c900512399ce8d50fcc817e5758ff8615eeb6fa5c846a4cc47bbf6353b6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.13.1"
-  firebase_core_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_core_platform_interface
-      sha256: d7253d255ff10f85cfd2adaba9ac17bae878fa3ba577462451163bd9f1d1f0bf
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.4.0"
-  firebase_core_web:
-    dependency: transitive
-    description:
-      name: firebase_core_web
-      sha256: ddd72baa6f727e5b23f32d9af23d7d453d67946f380bd9c21daf474ee0f7326e
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.23.0"
-  firebase_crashlytics:
-    dependency: "direct main"
-    description:
-      name: firebase_crashlytics
-      sha256: "49d20b1dd87bb42746e27b5c72c1e3a3d84ae6415d062f8b31ecb71a35d36d0c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.3.6"
-  firebase_crashlytics_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_crashlytics_platform_interface
-      sha256: "0a5b2c9a662db7563482547b31da06a3951277cbfb42af12c5b52a15456ea951"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.8.6"
-  firebase_performance:
-    dependency: transitive
-    description:
-      name: firebase_performance
-      sha256: "960f6043dc1723521bb5a569cdcb495b98df902f59804917bc71a671b800270c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.10.1+6"
-  firebase_performance_dio:
-    dependency: "direct main"
-    description:
-      name: firebase_performance_dio
-      sha256: aeec00853f9538feeac11edeceaefdd7115b099df9beee9b2fe53dc1236fdb33
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.1"
-  firebase_performance_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_performance_platform_interface
-      sha256: c85abc1cf6f5592854e0151583a9e6e13c15b295cb5c1a0915784799e27a8b55
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.5+6"
-  firebase_performance_web:
-    dependency: transitive
-    description:
-      name: firebase_performance_web
-      sha256: "963d454bb6af78e1aba10bdc1c3ec4c483e145d050e5dcf92160a4aeb224160d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.7+12"
   fixnum:
     dependency: transitive
     description:
@@ -1053,11 +941,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.3"
-  flutter_test:
-    dependency: transitive
-    description: flutter
-    source: sdk
-    version: "0.0.0"
   flutter_vibrate:
     dependency: "direct main"
     description:
@@ -1410,30 +1293,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  leak_tracker:
-    dependency: transitive
-    description:
-      name: leak_tracker
-      sha256: "6bb818ecbdffe216e81182c2f0714a2e62b593f4a4f13098713ff1685dfb6ab0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.0.9"
-  leak_tracker_flutter_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_flutter_testing
-      sha256: f8b613e7e6a13ec79cfdc0e97638fddb3ab848452eff057653abd3edba760573
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.9"
-  leak_tracker_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_testing
-      sha256: "6ba465d5d76e67ddf503e1161d1f4a6bc42306f9d66ca1e8f079a47290fb06d3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   linked_scroll_controller:
     dependency: "direct main"
     description:
@@ -2272,10 +2131,10 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: fb31f383e2ee25fbbfe06b40fe21e1e458d14080e3c67e7ba0acfde4df4e0bbd
+      sha256: "522f00f556e73044315fa4585ec3270f1808a4b186c936e612cab0b565ff1e00"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.4"
+    version: "0.7.6"
   textwrap:
     dependency: transitive
     description:
@@ -2436,14 +2295,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0+2"
-  vm_service:
-    dependency: transitive
-    description:
-      name: vm_service
-      sha256: ddfa8d30d89985b96407efce8acbdd124701f96741f2d981ca860662f1c0dc02
-      url: "https://pub.dev"
-    source: hosted
-    version: "15.0.0"
   wakelock_plus:
     dependency: "direct main"
     description:

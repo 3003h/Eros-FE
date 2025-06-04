@@ -15,8 +15,6 @@ import 'package:eros_fe/store/hive/hive_cache.dart';
 import 'package:eros_fe/utils/http_override.dart';
 import 'package:eros_fe/utils/storage.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -113,9 +111,6 @@ class Global {
   User get user => profile.user;
 
   set user(User val) => profile = profile.copyWith(user: val);
-
-  static FirebaseApp? firebaseApp;
-  static FirebaseAnalytics? analytics;
 
   // init
   static Future<void> init() async {

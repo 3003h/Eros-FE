@@ -113,7 +113,6 @@ class SearchPageController extends DefaultTabViewController {
     resetResultPage();
 
     searchText = searchTextController.text.trim();
-    Global.analytics?.logSearch(searchTerm: searchText);
 
     if (searchText.isNotEmpty) {
       _addHistory();

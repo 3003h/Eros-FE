@@ -15,7 +15,6 @@ import 'package:eros_fe/network/app_dio/pdio.dart';
 import 'package:eros_fe/network/request.dart';
 import 'package:eros_fe/pages/gallery/gallery_repository.dart';
 import 'package:eros_fe/pages/gallery/view/const.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:synchronized/synchronized.dart';
@@ -118,18 +117,7 @@ class GalleryPageController extends GetxController
     // _galleryCacheController.addGalleryPageState(gState);
   }
 
-  void _analytics(GalleryProvider? item) {
-    Global.analytics?.logViewItem(items: [
-      AnalyticsEventItem(
-        itemListName: 'Gallery',
-        itemId: item?.gid,
-        itemCategory: item?.category,
-        quantity: int.tryParse(item?.filecount ?? '0'),
-        itemName: item?.englishTitle,
-        itemVariant: item?.japaneseTitle,
-      ),
-    ]);
-  }
+  void _analytics(GalleryProvider? item) {}
 
   Future<void> _loadData({bool refresh = false, bool showError = true}) async {
     try {

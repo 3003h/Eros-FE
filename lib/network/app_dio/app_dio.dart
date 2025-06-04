@@ -17,7 +17,6 @@ import 'package:eros_fe/network/dio_interceptor/eh_cookie_interceptor/eh_cookie_
 import 'package:eros_fe/network/dio_interceptor/rate_limit/rate_limit_interceptor.dart';
 import 'package:eros_fe/network/dio_interceptor/rate_limit/token_bucket_interceptor.dart';
 import 'package:eros_fe/utils/logger.dart';
-import 'package:firebase_performance_dio/firebase_performance_dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:native_dio_adapter/native_dio_adapter.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -78,10 +77,6 @@ class AppDio with DioMixin implements Dio {
     // );
 
     interceptors.add(DioCacheInterceptor(options: Api.cacheOption));
-
-    if (Global.enableFirebase) {
-      interceptors.add(DioFirebasePerformanceInterceptor());
-    }
 
     // Cookie管理
     if (dioConfig?.cookiesPath?.isNotEmpty ?? false) {
