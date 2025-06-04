@@ -159,10 +159,10 @@ jobs:
         run: |
           sed -i '' '/FLTEnableImpeller/{n; s/true/false/;}' ios/Runner/Info.plist
 
-      - name: ios update dependencies
-        if: matrix.target == 'ios'
-        run: |
-          sed -i '' 's/flutter_inappwebview: .*/flutter_inappwebview: ^6.1.5/' pubspec.yaml
+      # - name: ios update dependencies
+      #   if: matrix.target == 'ios'
+      #   run: |
+      #     sed -i '' 's/flutter_inappwebview: .*/flutter_inappwebview: ^6.1.5/' pubspec.yaml
 
       - name: Flutter pub get
         run: |
@@ -189,9 +189,9 @@ jobs:
           cd ios && pod update && pod install --repo-update && cd ..
           flutter build ios --release --no-codesign
 
-      - name: upload-symbols
-        if: matrix.target == 'ios'
-        run: find build/ios/Release-iphoneos -name "*.dSYM" | xargs -I \{\} ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/Runner/GoogleService-Info.plist -p ios \{\}
+      # - name: upload-symbols
+      #   if: matrix.target == 'ios'
+      #   run: find build/ios/Release-iphoneos -name "*.dSYM" | xargs -I \{\} ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/Runner/GoogleService-Info.plist -p ios \{\}
 
       - name: Thin app
         if: matrix.target == 'ios'
