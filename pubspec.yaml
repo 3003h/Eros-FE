@@ -2,7 +2,7 @@ name: eros_fe
 description: An unofficial e-hentai app
 
 publish_to: 'none'
-version: 1.9.0+563
+version: 1.9.0+564
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -69,7 +69,8 @@ dependencies:
   # 震动
   flutter_vibrate: #^1.3.0
     git:
-      url: https://github.com/nespjin/flutter_vibrate.git
+      url: https://github.com/PhantomRay/flutter_vibrate.git
+      ref: wip/fix-ios-build
   vibration: ^3.1.3
   # 文件选择
   file_picker: ^10.1.9

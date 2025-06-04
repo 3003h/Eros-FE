@@ -1062,9 +1062,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: e4e9e9269ebbf39d7189754cad797587e6a3a73a
-      url: "https://github.com/nespjin/flutter_vibrate.git"
+      ref: "wip/fix-ios-build"
+      resolved-ref: ff17bbcba4bd2f7152810c52695e9b39eedbb1d3
+      url: "https://github.com/PhantomRay/flutter_vibrate.git"
     source: git
     version: "1.3.0"
   flutter_web_plugins:
