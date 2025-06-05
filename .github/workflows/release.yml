@@ -36,12 +36,12 @@ jobs:
             artifact_name: release-apk
             artifact_path: build/app/outputs/apk/release/Eros-FE*.apk
           - target: ios
-            os: macos-14
+            os: macos-15
             flutter_version: "3.x"
             artifact_name: release-ios
             artifact_path: build/**/Eros-FE*.ipa
           - target: macos
-            os: macos-14
+            os: macos-15
             flutter_version: "3.x"
             artifact_name: release-mac
             artifact_path: build/macos/Eros-FE*.zip
@@ -91,7 +91,7 @@ jobs:
 
       # git-crypt unlock
       - name: Unlock secrets (MacOS)
-        if: matrix.os == 'macos-14'
+        if: matrix.os == 'macos-15'
         run: |
           brew install git-crypt
           echo $GIT_CRYPT_KEY | base64 -d -o grypt.key
