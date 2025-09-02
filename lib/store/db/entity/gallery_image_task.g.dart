@@ -23,12 +23,13 @@ abstract class _$GalleryImageTaskCWProxy {
 
   GalleryImageTask status(int? status);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `GalleryImageTask(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `GalleryImageTask(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// GalleryImageTask(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   GalleryImageTask call({
     int gid,
     String token,
@@ -41,44 +42,46 @@ abstract class _$GalleryImageTaskCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfGalleryImageTask.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfGalleryImageTask.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfGalleryImageTask.copyWith(...)` or call `instanceOfGalleryImageTask.copyWith.fieldName(value)` for a single field.
 class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
   const _$GalleryImageTaskCWProxyImpl(this._value);
 
   final GalleryImageTask _value;
 
   @override
-  GalleryImageTask gid(int gid) => this(gid: gid);
+  GalleryImageTask gid(int gid) => call(gid: gid);
 
   @override
-  GalleryImageTask token(String token) => this(token: token);
+  GalleryImageTask token(String token) => call(token: token);
 
   @override
-  GalleryImageTask href(String? href) => this(href: href);
+  GalleryImageTask href(String? href) => call(href: href);
 
   @override
-  GalleryImageTask sourceId(String? sourceId) => this(sourceId: sourceId);
+  GalleryImageTask sourceId(String? sourceId) => call(sourceId: sourceId);
 
   @override
-  GalleryImageTask imageUrl(String? imageUrl) => this(imageUrl: imageUrl);
+  GalleryImageTask imageUrl(String? imageUrl) => call(imageUrl: imageUrl);
 
   @override
-  GalleryImageTask ser(int ser) => this(ser: ser);
+  GalleryImageTask ser(int ser) => call(ser: ser);
 
   @override
-  GalleryImageTask filePath(String? filePath) => this(filePath: filePath);
+  GalleryImageTask filePath(String? filePath) => call(filePath: filePath);
 
   @override
-  GalleryImageTask status(int? status) => this(status: status);
+  GalleryImageTask status(int? status) => call(status: status);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `GalleryImageTask(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `GalleryImageTask(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// GalleryImageTask(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   GalleryImageTask call({
     Object? gid = const $CopyWithPlaceholder(),
     Object? token = const $CopyWithPlaceholder(),
@@ -90,11 +93,11 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
     Object? status = const $CopyWithPlaceholder(),
   }) {
     return GalleryImageTask(
-      gid: gid == const $CopyWithPlaceholder()
+      gid: gid == const $CopyWithPlaceholder() || gid == null
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
           : gid as int,
-      token: token == const $CopyWithPlaceholder()
+      token: token == const $CopyWithPlaceholder() || token == null
           ? _value.token
           // ignore: cast_nullable_to_non_nullable
           : token as String,
@@ -110,7 +113,7 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
           ? _value.imageUrl
           // ignore: cast_nullable_to_non_nullable
           : imageUrl as String?,
-      ser: ser == const $CopyWithPlaceholder()
+      ser: ser == const $CopyWithPlaceholder() || ser == null
           ? _value.ser
           // ignore: cast_nullable_to_non_nullable
           : ser as int,
@@ -127,7 +130,8 @@ class _$GalleryImageTaskCWProxyImpl implements _$GalleryImageTaskCWProxy {
 }
 
 extension $GalleryImageTaskCopyWith on GalleryImageTask {
-  /// Returns a callable class that can be used as follows: `instanceOfGalleryImageTask.copyWith(...)` or like so:`instanceOfGalleryImageTask.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfGalleryImageTask.copyWith(...)` or `instanceOfGalleryImageTask.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$GalleryImageTaskCWProxy get copyWith => _$GalleryImageTaskCWProxyImpl(this);
 }
@@ -231,7 +235,7 @@ const GalleryImageTaskSchema = CollectionSchema(
   getId: _galleryImageTaskGetId,
   getLinks: _galleryImageTaskGetLinks,
   attach: _galleryImageTaskAttach,
-  version: '3.1.0+1',
+  version: '3.3.0-dev.1',
 );
 
 int _galleryImageTaskEstimateSize(

@@ -7,7 +7,7 @@ import 'package:eros_fe/store/db/entity/view_history.dart';
 import 'package:eros_fe/store/db/isar.dart';
 import 'package:eros_fe/store/db/isar_isolate.dart';
 import 'package:flutter/foundation.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 import '../../index.dart';
 import 'entity/gallery_image_task.dart';

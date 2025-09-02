@@ -19,12 +19,13 @@ abstract class _$TagTranslatCWProxy {
 
   TagTranslat lastUseTime(int lastUseTime);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TagTranslat(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TagTranslat(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// TagTranslat(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   TagTranslat call({
     String namespace,
     String key,
@@ -35,38 +36,40 @@ abstract class _$TagTranslatCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfTagTranslat.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfTagTranslat.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfTagTranslat.copyWith(...)` or call `instanceOfTagTranslat.copyWith.fieldName(value)` for a single field.
 class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
   const _$TagTranslatCWProxyImpl(this._value);
 
   final TagTranslat _value;
 
   @override
-  TagTranslat namespace(String namespace) => this(namespace: namespace);
+  TagTranslat namespace(String namespace) => call(namespace: namespace);
 
   @override
-  TagTranslat key(String key) => this(key: key);
+  TagTranslat key(String key) => call(key: key);
 
   @override
-  TagTranslat name(String? name) => this(name: name);
+  TagTranslat name(String? name) => call(name: name);
 
   @override
-  TagTranslat intro(String? intro) => this(intro: intro);
+  TagTranslat intro(String? intro) => call(intro: intro);
 
   @override
-  TagTranslat links(String? links) => this(links: links);
+  TagTranslat links(String? links) => call(links: links);
 
   @override
-  TagTranslat lastUseTime(int lastUseTime) => this(lastUseTime: lastUseTime);
+  TagTranslat lastUseTime(int lastUseTime) => call(lastUseTime: lastUseTime);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TagTranslat(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TagTranslat(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// TagTranslat(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   TagTranslat call({
     Object? namespace = const $CopyWithPlaceholder(),
     Object? key = const $CopyWithPlaceholder(),
@@ -76,11 +79,11 @@ class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
     Object? lastUseTime = const $CopyWithPlaceholder(),
   }) {
     return TagTranslat(
-      namespace: namespace == const $CopyWithPlaceholder()
+      namespace: namespace == const $CopyWithPlaceholder() || namespace == null
           ? _value.namespace
           // ignore: cast_nullable_to_non_nullable
           : namespace as String,
-      key: key == const $CopyWithPlaceholder()
+      key: key == const $CopyWithPlaceholder() || key == null
           ? _value.key
           // ignore: cast_nullable_to_non_nullable
           : key as String,
@@ -96,16 +99,18 @@ class _$TagTranslatCWProxyImpl implements _$TagTranslatCWProxy {
           ? _value.links
           // ignore: cast_nullable_to_non_nullable
           : links as String?,
-      lastUseTime: lastUseTime == const $CopyWithPlaceholder()
-          ? _value.lastUseTime
-          // ignore: cast_nullable_to_non_nullable
-          : lastUseTime as int,
+      lastUseTime:
+          lastUseTime == const $CopyWithPlaceholder() || lastUseTime == null
+              ? _value.lastUseTime
+              // ignore: cast_nullable_to_non_nullable
+              : lastUseTime as int,
     );
   }
 }
 
 extension $TagTranslatCopyWith on TagTranslat {
-  /// Returns a callable class that can be used as follows: `instanceOfTagTranslat.copyWith(...)` or like so:`instanceOfTagTranslat.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfTagTranslat.copyWith(...)` or `instanceOfTagTranslat.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$TagTranslatCWProxy get copyWith => _$TagTranslatCWProxyImpl(this);
 }
@@ -238,7 +243,7 @@ const TagTranslatSchema = CollectionSchema(
   getId: _tagTranslatGetId,
   getLinks: _tagTranslatGetLinks,
   attach: _tagTranslatAttach,
-  version: '3.1.0+1',
+  version: '3.3.0-dev.1',
 );
 
 int _tagTranslatEstimateSize(

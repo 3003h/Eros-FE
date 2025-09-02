@@ -7,74 +7,81 @@ part of 'view_history.dart';
 // **************************************************************************
 
 abstract class _$ViewHistoryCWProxy {
-  ViewHistory gid(int gid);
+  ViewHistory gid(Id gid);
 
   ViewHistory lastViewTime(int lastViewTime);
 
   ViewHistory galleryProviderText(String galleryProviderText);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ViewHistory(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ViewHistory(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ViewHistory(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ViewHistory call({
-    int gid,
+    Id gid,
     int lastViewTime,
     String galleryProviderText,
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfViewHistory.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfViewHistory.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfViewHistory.copyWith(...)` or call `instanceOfViewHistory.copyWith.fieldName(value)` for a single field.
 class _$ViewHistoryCWProxyImpl implements _$ViewHistoryCWProxy {
   const _$ViewHistoryCWProxyImpl(this._value);
 
   final ViewHistory _value;
 
   @override
-  ViewHistory gid(int gid) => this(gid: gid);
+  ViewHistory gid(Id gid) => call(gid: gid);
 
   @override
   ViewHistory lastViewTime(int lastViewTime) =>
-      this(lastViewTime: lastViewTime);
+      call(lastViewTime: lastViewTime);
 
   @override
   ViewHistory galleryProviderText(String galleryProviderText) =>
-      this(galleryProviderText: galleryProviderText);
+      call(galleryProviderText: galleryProviderText);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ViewHistory(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ViewHistory(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ViewHistory(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ViewHistory call({
     Object? gid = const $CopyWithPlaceholder(),
     Object? lastViewTime = const $CopyWithPlaceholder(),
     Object? galleryProviderText = const $CopyWithPlaceholder(),
   }) {
     return ViewHistory(
-      gid: gid == const $CopyWithPlaceholder()
+      gid: gid == const $CopyWithPlaceholder() || gid == null
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
-          : gid as int,
-      lastViewTime: lastViewTime == const $CopyWithPlaceholder()
-          ? _value.lastViewTime
-          // ignore: cast_nullable_to_non_nullable
-          : lastViewTime as int,
-      galleryProviderText: galleryProviderText == const $CopyWithPlaceholder()
-          ? _value.galleryProviderText
-          // ignore: cast_nullable_to_non_nullable
-          : galleryProviderText as String,
+          : gid as Id,
+      lastViewTime:
+          lastViewTime == const $CopyWithPlaceholder() || lastViewTime == null
+              ? _value.lastViewTime
+              // ignore: cast_nullable_to_non_nullable
+              : lastViewTime as int,
+      galleryProviderText:
+          galleryProviderText == const $CopyWithPlaceholder() ||
+                  galleryProviderText == null
+              ? _value.galleryProviderText
+              // ignore: cast_nullable_to_non_nullable
+              : galleryProviderText as String,
     );
   }
 }
 
 extension $ViewHistoryCopyWith on ViewHistory {
-  /// Returns a callable class that can be used as follows: `instanceOfViewHistory.copyWith(...)` or like so:`instanceOfViewHistory.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfViewHistory.copyWith(...)` or `instanceOfViewHistory.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$ViewHistoryCWProxy get copyWith => _$ViewHistoryCWProxyImpl(this);
 }
@@ -130,7 +137,7 @@ const ViewHistorySchema = CollectionSchema(
   getId: _viewHistoryGetId,
   getLinks: _viewHistoryGetLinks,
   attach: _viewHistoryAttach,
-  version: '3.1.0+1',
+  version: '3.3.0-dev.1',
 );
 
 int _viewHistoryEstimateSize(

@@ -9,18 +9,20 @@ part of 'tag_translate_info.dart';
 abstract class _$TagTranslateInfoCWProxy {
   TagTranslateInfo localVersion(String? localVersion);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TagTranslateInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TagTranslateInfo(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// TagTranslateInfo(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   TagTranslateInfo call({
     String? localVersion,
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfTagTranslateInfo.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfTagTranslateInfo.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfTagTranslateInfo.copyWith(...)` or call `instanceOfTagTranslateInfo.copyWith.fieldName(value)` for a single field.
 class _$TagTranslateInfoCWProxyImpl implements _$TagTranslateInfoCWProxy {
   const _$TagTranslateInfoCWProxyImpl(this._value);
 
@@ -28,16 +30,17 @@ class _$TagTranslateInfoCWProxyImpl implements _$TagTranslateInfoCWProxy {
 
   @override
   TagTranslateInfo localVersion(String? localVersion) =>
-      this(localVersion: localVersion);
+      call(localVersion: localVersion);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TagTranslateInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TagTranslateInfo(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// TagTranslateInfo(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   TagTranslateInfo call({
     Object? localVersion = const $CopyWithPlaceholder(),
   }) {
@@ -51,7 +54,8 @@ class _$TagTranslateInfoCWProxyImpl implements _$TagTranslateInfoCWProxy {
 }
 
 extension $TagTranslateInfoCopyWith on TagTranslateInfo {
-  /// Returns a callable class that can be used as follows: `instanceOfTagTranslateInfo.copyWith(...)` or like so:`instanceOfTagTranslateInfo.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfTagTranslateInfo.copyWith(...)` or `instanceOfTagTranslateInfo.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$TagTranslateInfoCWProxy get copyWith => _$TagTranslateInfoCWProxyImpl(this);
 }
@@ -88,7 +92,7 @@ const TagTranslateInfoSchema = CollectionSchema(
   getId: _tagTranslateInfoGetId,
   getLinks: _tagTranslateInfoGetLinks,
   attach: _tagTranslateInfoAttach,
-  version: '3.1.0+1',
+  version: '3.3.0-dev.1',
 );
 
 int _tagTranslateInfoEstimateSize(

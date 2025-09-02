@@ -7,7 +7,7 @@ part of 'gallery_task.dart';
 // **************************************************************************
 
 abstract class _$GalleryTaskCWProxy {
-  GalleryTask gid(int gid);
+  GalleryTask gid(Id gid);
 
   GalleryTask token(String token);
 
@@ -43,14 +43,15 @@ abstract class _$GalleryTaskCWProxy {
 
   GalleryTask showKey(String? showKey);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `GalleryTask(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `GalleryTask(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// GalleryTask(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   GalleryTask call({
-    int gid,
+    Id gid,
     String token,
     String? url,
     String title,
@@ -71,76 +72,78 @@ abstract class _$GalleryTaskCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfGalleryTask.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfGalleryTask.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfGalleryTask.copyWith(...)` or call `instanceOfGalleryTask.copyWith.fieldName(value)` for a single field.
 class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
   const _$GalleryTaskCWProxyImpl(this._value);
 
   final GalleryTask _value;
 
   @override
-  GalleryTask gid(int gid) => this(gid: gid);
+  GalleryTask gid(Id gid) => call(gid: gid);
 
   @override
-  GalleryTask token(String token) => this(token: token);
+  GalleryTask token(String token) => call(token: token);
 
   @override
-  GalleryTask url(String? url) => this(url: url);
+  GalleryTask url(String? url) => call(url: url);
 
   @override
-  GalleryTask title(String title) => this(title: title);
+  GalleryTask title(String title) => call(title: title);
 
   @override
-  GalleryTask dirPath(String? dirPath) => this(dirPath: dirPath);
+  GalleryTask dirPath(String? dirPath) => call(dirPath: dirPath);
 
   @override
-  GalleryTask fileCount(int fileCount) => this(fileCount: fileCount);
+  GalleryTask fileCount(int fileCount) => call(fileCount: fileCount);
 
   @override
   GalleryTask completCount(int? completCount) =>
-      this(completCount: completCount);
+      call(completCount: completCount);
 
   @override
-  GalleryTask status(int? status) => this(status: status);
+  GalleryTask status(int? status) => call(status: status);
 
   @override
-  GalleryTask coverImage(String? coverImage) => this(coverImage: coverImage);
+  GalleryTask coverImage(String? coverImage) => call(coverImage: coverImage);
 
   @override
-  GalleryTask addTime(int? addTime) => this(addTime: addTime);
+  GalleryTask addTime(int? addTime) => call(addTime: addTime);
 
   @override
-  GalleryTask coverUrl(String? coverUrl) => this(coverUrl: coverUrl);
+  GalleryTask coverUrl(String? coverUrl) => call(coverUrl: coverUrl);
 
   @override
-  GalleryTask rating(double? rating) => this(rating: rating);
+  GalleryTask rating(double? rating) => call(rating: rating);
 
   @override
-  GalleryTask category(String? category) => this(category: category);
+  GalleryTask category(String? category) => call(category: category);
 
   @override
-  GalleryTask uploader(String? uploader) => this(uploader: uploader);
+  GalleryTask uploader(String? uploader) => call(uploader: uploader);
 
   @override
-  GalleryTask jsonString(String? jsonString) => this(jsonString: jsonString);
+  GalleryTask jsonString(String? jsonString) => call(jsonString: jsonString);
 
   @override
-  GalleryTask tag(String? tag) => this(tag: tag);
+  GalleryTask tag(String? tag) => call(tag: tag);
 
   @override
   GalleryTask downloadOrigImage(bool? downloadOrigImage) =>
-      this(downloadOrigImage: downloadOrigImage);
+      call(downloadOrigImage: downloadOrigImage);
 
   @override
-  GalleryTask showKey(String? showKey) => this(showKey: showKey);
+  GalleryTask showKey(String? showKey) => call(showKey: showKey);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `GalleryTask(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `GalleryTask(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// GalleryTask(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   GalleryTask call({
     Object? gid = const $CopyWithPlaceholder(),
     Object? token = const $CopyWithPlaceholder(),
@@ -162,11 +165,11 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
     Object? showKey = const $CopyWithPlaceholder(),
   }) {
     return GalleryTask(
-      gid: gid == const $CopyWithPlaceholder()
+      gid: gid == const $CopyWithPlaceholder() || gid == null
           ? _value.gid
           // ignore: cast_nullable_to_non_nullable
-          : gid as int,
-      token: token == const $CopyWithPlaceholder()
+          : gid as Id,
+      token: token == const $CopyWithPlaceholder() || token == null
           ? _value.token
           // ignore: cast_nullable_to_non_nullable
           : token as String,
@@ -174,7 +177,7 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
           ? _value.url
           // ignore: cast_nullable_to_non_nullable
           : url as String?,
-      title: title == const $CopyWithPlaceholder()
+      title: title == const $CopyWithPlaceholder() || title == null
           ? _value.title
           // ignore: cast_nullable_to_non_nullable
           : title as String,
@@ -182,7 +185,7 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
           ? _value.dirPath
           // ignore: cast_nullable_to_non_nullable
           : dirPath as String?,
-      fileCount: fileCount == const $CopyWithPlaceholder()
+      fileCount: fileCount == const $CopyWithPlaceholder() || fileCount == null
           ? _value.fileCount
           // ignore: cast_nullable_to_non_nullable
           : fileCount as int,
@@ -239,7 +242,8 @@ class _$GalleryTaskCWProxyImpl implements _$GalleryTaskCWProxy {
 }
 
 extension $GalleryTaskCopyWith on GalleryTask {
-  /// Returns a callable class that can be used as follows: `instanceOfGalleryTask.copyWith(...)` or like so:`instanceOfGalleryTask.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfGalleryTask.copyWith(...)` or `instanceOfGalleryTask.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$GalleryTaskCWProxy get copyWith => _$GalleryTaskCWProxyImpl(this);
 }
@@ -361,7 +365,7 @@ const GalleryTaskSchema = CollectionSchema(
   getId: _galleryTaskGetId,
   getLinks: _galleryTaskGetLinks,
   attach: _galleryTaskAttach,
-  version: '3.1.0+1',
+  version: '3.3.0-dev.1',
 );
 
 int _galleryTaskEstimateSize(

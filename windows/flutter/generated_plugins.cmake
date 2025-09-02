@@ -5,7 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   bitsdojo_window_windows
   flutter_inappwebview_windows
-  isar_flutter_libs
+  isar_community_flutter_libs
   local_auth_windows
   permission_handler_windows
   sentry_flutter

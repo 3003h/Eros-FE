@@ -9,7 +9,7 @@ import bitsdojo_window_macos
 import device_info_plus
 import file_picker
 import flutter_inappwebview_macos
-import isar_flutter_libs
+import isar_community_flutter_libs
 import local_auth_darwin
 import package_info_plus
 import path_provider_foundation

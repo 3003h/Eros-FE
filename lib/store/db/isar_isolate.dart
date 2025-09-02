@@ -5,7 +5,7 @@ import 'package:eros_fe/store/db/entity/gallery_image_task.dart';
 import 'package:eros_fe/store/db/entity/gallery_task.dart';
 import 'package:eros_fe/store/db/entity/tag_translat.dart';
 import 'package:eros_fe/store/db/entity/view_history.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
 import 'isar.dart';
 
