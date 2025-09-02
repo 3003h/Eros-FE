@@ -1,4 +1,3 @@
-
 # source 'https://github.com/CocoaPods/Specs.git'
 $iOSVersion = '15.5'
 platform :ios, $iOSVersion

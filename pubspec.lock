@@ -1179,27 +1179,25 @@ packages:
   isar_community:
     dependency: "direct main"
     description:
-      path: "packages/isar_community"
-      ref: migrating-to-source_gen-3
-      resolved-ref: "331d1260386f7e13fdfb260d14b033456d7b91a9"
-      url: "https://github.com/callumw-k/isar-community.git"
-    source: git
+      name: isar_community
+      sha256: "2d94a5a0f5aa50e201095f2c0152fcc0383e1b262f7500683bd6508040b4185b"
+      url: "https://pub.dev"
+    source: hosted
     version: "3.3.0-dev.1"
   isar_community_flutter_libs:
     dependency: "direct main"
     description:
-      path: "packages/isar_community_flutter_libs"
-      ref: migrating-to-source_gen-3
-      resolved-ref: "331d1260386f7e13fdfb260d14b033456d7b91a9"
-      url: "https://github.com/callumw-k/isar-community.git"
-    source: git
+      name: isar_community_flutter_libs
+      sha256: "4e9fe0ff08fbf297c9a34cf5a3914c67ea07ab33eeeaee1d0dda3a285c38608e"
+      url: "https://pub.dev"
+    source: hosted
     version: "3.3.0-dev.1"
   isar_community_generator:
     dependency: "direct dev"
     description:
       path: "packages/isar_community_generator"
       ref: migrating-to-source_gen-3
-      resolved-ref: "331d1260386f7e13fdfb260d14b033456d7b91a9"
+      resolved-ref: "5d357fa45b9578290a05681b04bc4f96b26e11eb"
       url: "https://github.com/callumw-k/isar-community.git"
     source: git
     version: "3.3.0-dev.1"
@@ -1247,10 +1245,10 @@ packages:
     dependency: transitive
     description:
       name: js
-      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
+      sha256: "53385261521cc4a0c4658fd0ad07a7d14591cf8fc33abbceae306ddb974888dc"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.7"
+    version: "0.7.2"
   json_annotation:
     dependency: "direct dev"
     description:
@@ -1634,10 +1632,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: "07c8f0b1913bcde1ff0d26e57ace2f3012ccbf2b204e070290dad3bb22797646"
+      sha256: "1a97266a94f7350d30ae522c0af07890c70b8e62c71e8e3920d1db4d23c057d1"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "7.0.1"
   photo_view:
     dependency: "direct main"
     description:
@@ -2396,10 +2394,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226
+      sha256: "971043b3a0d3da28727e40ed3e0b5d18b742fa5a68665cca88e74b7876d5e025"
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
+    version: "6.6.1"
   xxh3:
     dependency: transitive
     description:

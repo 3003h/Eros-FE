@@ -14,7 +14,7 @@ PODS:
     - FlutterMacOS
     - OrderedSet (~> 6.0.3)
   - FlutterMacOS (1.0.0)
-  - isar_flutter_libs (1.0.0):
+  - isar_community_flutter_libs (1.0.0):
     - FlutterMacOS
   - local_auth_darwin (0.0.1):
     - Flutter
@@ -55,7 +55,7 @@ DEPENDENCIES:
   - file_picker (from `Flutter/ephemeral/.symlinks/plugins/file_picker/macos`)
   - flutter_inappwebview_macos (from `Flutter/ephemeral/.symlinks/plugins/flutter_inappwebview_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - isar_flutter_libs (from `Flutter/ephemeral/.symlinks/plugins/isar_flutter_libs/macos`)
+  - isar_community_flutter_libs (from `Flutter/ephemeral/.symlinks/plugins/isar_community_flutter_libs/macos`)
   - local_auth_darwin (from `Flutter/ephemeral/.symlinks/plugins/local_auth_darwin/darwin`)
   - objective_c (from `Flutter/ephemeral/.symlinks/plugins/objective_c/macos`)
   - package_info_plus (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus/macos`)
@@ -88,8 +88,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/flutter_inappwebview_macos/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
-  isar_flutter_libs:
-    :path: Flutter/ephemeral/.symlinks/plugins/isar_flutter_libs/macos
+  isar_community_flutter_libs:
+    :path: Flutter/ephemeral/.symlinks/plugins/isar_community_flutter_libs/macos
   local_auth_darwin:
     :path: Flutter/ephemeral/.symlinks/plugins/local_auth_darwin/darwin
   objective_c:
@@ -120,9 +120,9 @@ SPEC CHECKSUMS:
   device_info_plus: 1b14eed9bf95428983aed283a8d51cce3d8c4215
   file_picker: e716a70a9fe5fd9e09ebc922d7541464289443af
   flutter_inappwebview_macos: bdf207b8f4ebd58e86ae06cd96b147de99a67c9b
-  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  isar_flutter_libs: 43385c99864c168fadba7c9adeddc5d38838ca6a
-  local_auth_darwin: 66e40372f1c29f383a314c738c7446e2f7fdadc3
+  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+  isar_community_flutter_libs: d3749f6775866378fc78328b10f1397a05fba673
+  local_auth_darwin: fa4b06454df7df8e97c18d7ee55151c57e7af0de
   objective_c: e5f8194456e8fc943e034d1af00510a1bc29c067
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
   package_info_plus: 12f1c5c2cfe8727ca46cbd0b26677728972d9a5b

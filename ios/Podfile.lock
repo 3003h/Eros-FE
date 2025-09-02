@@ -97,7 +97,7 @@ PODS:
   - GTMSessionFetcher/Core (3.5.0)
   - image_gallery_saver_plus (0.0.1):
     - Flutter
-  - isar_flutter_libs (1.0.0):
+  - isar_community_flutter_libs (1.0.0):
     - Flutter
   - local_auth_darwin (0.0.1):
     - Flutter
@@ -149,9 +149,9 @@ PODS:
   - PromisesObjC (2.4.0)
   - receive_sharing_intent (1.8.1):
     - Flutter
-  - SDWebImage (5.21.0):
-    - SDWebImage/Core (= 5.21.0)
-  - SDWebImage/Core (5.21.0)
+  - SDWebImage (5.21.2):
+    - SDWebImage/Core (= 5.21.2)
+  - SDWebImage/Core (5.21.2)
   - Sentry/HybridSDK (8.46.0)
   - sentry_flutter (8.14.2):
     - Flutter
@@ -194,7 +194,7 @@ DEPENDENCIES:
   - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
   - google_mlkit_language_id (from `.symlinks/plugins/google_mlkit_language_id/ios`)
   - image_gallery_saver_plus (from `.symlinks/plugins/image_gallery_saver_plus/ios`)
-  - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
+  - isar_community_flutter_libs (from `.symlinks/plugins/isar_community_flutter_libs/ios`)
   - local_auth_darwin (from `.symlinks/plugins/local_auth_darwin/darwin`)
   - objective_c (from `.symlinks/plugins/objective_c/ios`)
   - open_by_default (from `.symlinks/plugins/open_by_default/ios`)
@@ -265,8 +265,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_mlkit_language_id/ios"
   image_gallery_saver_plus:
     :path: ".symlinks/plugins/image_gallery_saver_plus/ios"
-  isar_flutter_libs:
-    :path: ".symlinks/plugins/isar_flutter_libs/ios"
+  isar_community_flutter_libs:
+    :path: ".symlinks/plugins/isar_community_flutter_libs/ios"
   local_auth_darwin:
     :path: ".symlinks/plugins/local_auth_darwin/darwin"
   objective_c:
@@ -326,7 +326,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   image_gallery_saver_plus: 782ade975fe6a4600b53e7c1983e3a2979d1e9e5
-  isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
+  isar_community_flutter_libs: cf478bdca01f7fb2bde0320930a785456748f1ad
   local_auth_darwin: fa4b06454df7df8e97c18d7ee55151c57e7af0de
   MLImage: 0ad1c5f50edd027672d8b26b0fee78a8b4a0fc56
   MLKitBarcodeScanning: 0a3064da0a7f49ac24ceb3cb46a5bc67496facd2
@@ -344,7 +344,7 @@ SPEC CHECKSUMS:
   permission_handler_apple: 9878588469a2b0d0fc1e048d9f43605f92e6cec2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   receive_sharing_intent: 79c848f5b045674ad60b9fea3bafea59962ad2c1
-  SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
+  SDWebImage: 9f177d83116802728e122410fb25ad88f5c7608a
   Sentry: da60d980b197a46db0b35ea12cb8f39af48d8854
   sentry_flutter: 2df8b0aab7e4aba81261c230cbea31c82a62dd1b
   share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
@@ -358,6 +358,6 @@ SPEC CHECKSUMS:
   wakelock_plus: 76957ab028e12bfa4e66813c99e46637f367fc7e
   webview_cookie_manager_plus: bb56cf9e53c086a22a2aa033ec6ce374da3095b6
 
-PODFILE CHECKSUM: 42a19980792784b8ba31a1864625f79131431523
+PODFILE CHECKSUM: ca1a7c9ffd4eec07c3590f0922b3cae5e6934d81
 
 COCOAPODS: 1.16.2
