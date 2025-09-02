@@ -122,7 +122,9 @@ dependencies:
   jinja: ^0.6.0
   image: ^4.1.3
   palette_generator: ^0.3.2
-  getwidget: ^6.0.0
+  getwidget: #^6.0.0
+    git:
+      url: https://github.com/w3ggy/getwidget.git
   open_filex: ^4.1.1
   flustars: ^2.0.1
 #  dio_smart_retry: ^7.0.1

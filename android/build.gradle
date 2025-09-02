@@ -14,10 +14,10 @@ subprojects {
             def javaVersion = JavaVersion.VERSION_17
             project.android {
                 // 解决 error: resource android:attr/lStar not found
-                compileSdkVersion 35
+                compileSdkVersion 36
                 // buildToolsVersion "35.0.0"
                 defaultConfig {
-                    minSdkVersion 21
+                    minSdkVersion flutter.minSdkVersion
                 }
 
                 // 解决 namespace 问题
